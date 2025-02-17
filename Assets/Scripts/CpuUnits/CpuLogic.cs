@@ -7,21 +7,23 @@ public class CpuLogic : MonoBehaviour
     [SerializeField] SpriteRenderer _Renderer;
     [SerializeField] Rigidbody2D _Body;
     //npc private values
-    [SerializeField] int Speed;
+    private float _Speed;
     void Start()
     {
         _Renderer.sprite = Stats._Sprite;
+        _Speed = Stats._Speed;
     }
     void Update()
     {
         RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.right, Stats._StopDistance);
         Debug.DrawRay(transform.position, transform.right * Stats._StopDistance, Color.red);
 
-        if (hit.collider != null)
+        if (hit.collider != null && hit.collider != GetComponent<Collider2D>())
         {
             switch (hit.collider.tag)
             {
                 case "Cpu":
+                    _Speed = 0; 
                     Debug.Log("Cpu hit");
                     break;
 
@@ -38,6 +40,6 @@ public class CpuLogic : MonoBehaviour
 
     void FixedUpdate()
     {
-        _Body.linearVelocity = new Vector2(Stats._Speed, _Body.linearVelocity.y);
+        _Body.linearVelocity = new Vector2(_Speed, _Body.linearVelocity.y);
     }
 }

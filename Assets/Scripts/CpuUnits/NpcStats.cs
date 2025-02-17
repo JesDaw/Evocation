@@ -6,6 +6,7 @@ public class NpcStats : ScriptableObject
     public Sprite _Sprite;
     public int _Health;
     public int _Attack;
+    public float _AttackSpeed;
     public float _Speed;
     public float _StopDistance;
 }
