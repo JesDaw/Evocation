@@ -1,7 +1,6 @@
 using UnityEngine;
 using TMPro;
 
-[CreateAssetMenu(fileName = "gameplaySystems", menuName = "Systems/Timer&Money", order = 1)]
 public class gameplaySystems : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI timerText;
