@@ -1,45 +1,88 @@
+using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public class CpuLogic : MonoBehaviour
 {
-    public NpcStats Stats;
-    [Header("Object's components")]
+    public ScriptableStats ScrStats;
+    [SerializeField] Stats _Stats;
+    //this is for testing
+    [Header("Req Components")]
+    [SerializeField] Transform _Raycast;
     [SerializeField] SpriteRenderer _Renderer;
     [SerializeField] Rigidbody2D _Body;
-    //npc private values
-    private float _Speed;
+    private bool AlreadyAttacked = false;
     void Start()
     {
-        _Renderer.sprite = Stats._Sprite;
-        _Speed = Stats._Speed;
+        //Set Stats class to ScriptableObject
+        _Stats._Clan = ScrStats._Clan;
+        gameObject.tag = _Stats._Clan;
+        _Stats._Health = ScrStats._Health;
+        _Stats._Attack = ScrStats._Attack;
+        _Stats._AttackSpeed = ScrStats._AttackSpeed;
+        _Stats._Speed = ScrStats._Speed;
+
+        //just looks better if they slightyoffset
+        float randomNumber = Random.Range(-0.3f, 0.3f);
+        _Stats._StopDistance = ScrStats._StopDistance + randomNumber;
+        _Stats._CpuPriority = ScrStats._CpuPriority;
+        
+        _Renderer.sprite = ScrStats._Sprite;
     }
     void Update()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.right, Stats._StopDistance);
-        Debug.DrawRay(transform.position, transform.right * Stats._StopDistance, Color.red);
-
-        if (hit.collider != null && hit.collider != GetComponent<Collider2D>())
+        RaycastHit2D[] hits = Physics2D.RaycastAll(_Raycast.position, transform.right, _Stats._StopDistance);
+        Debug.DrawRay(_Raycast.position, transform.right * _Stats._StopDistance, Color.red);
+        
+        //what to do when detect something
+        if (hits.Length > 0)
         {
-            switch (hit.collider.tag)
+            int SavedIndex = -1;
+            for (int I = 0; I < _Stats._CpuPriority.Count; I++)
             {
-                case "Cpu":
-                    _Speed = 0; 
-                    Debug.Log("Cpu hit");
+                for (int II = 0; II < hits.Length; II++)
+                {
+                    if (hits[II].collider.CompareTag(_Stats._CpuPriority[I]))
+                    {
+                        SavedIndex = II;
+                        break;
+                    }
+                }
+                if (SavedIndex != -1)
+                {
                     break;
-
-                case "Player":
-                    Debug.Log("Player hit");
-                    break;
-
-                default:
-                    Debug.Log("Raycast hit object: " + hit.collider.name + " with tag: " + hit.collider.tag);
-                    break;
+                }
             }
+
+            if (SavedIndex == -1) return;
+
+            _Stats._Speed = 0;
+
+            Stats EnemyStats = hits[SavedIndex].collider.gameObject.GetComponent<Stats>();
+            if (EnemyStats == null) return;
+            
+            if (AlreadyAttacked) return;
+            StartCoroutine(AttackCooldown());
+
+            Debug.Log("Attacked Enemy" + hits[SavedIndex].collider.gameObject.name);
+
+            EnemyStats.Attack(_Stats._Attack);
         }
+        else
+        {
+            _Stats._Speed = ScrStats._Speed;
+        }
+    }
+
+    IEnumerator AttackCooldown()
+    {
+        AlreadyAttacked = true;
+        yield return new WaitForSeconds(_Stats._AttackSpeed);
+        AlreadyAttacked = false;
     }
 
     void FixedUpdate()
     {
-        _Body.linearVelocity = new Vector2(_Speed, _Body.linearVelocity.y);
+        _Body.linearVelocity = new Vector2(_Stats._Speed * transform.right.x, _Body.linearVelocity.y);
     }
 }

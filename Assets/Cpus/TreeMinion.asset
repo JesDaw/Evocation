@@ -10,10 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 238e13654c5efff43b776bb1e518c913, type: 3}
-  m_Name: DefaultEnemy
+  m_Name: TreeMinion
   m_EditorClassIdentifier: 
+  _CpuPriority:
+  - Player
+  - LavaBros
   _Sprite: {fileID: 21300000, guid: e0cf53159a01e624ebd3b49183584687, type: 3}
-  _Health: 10
-  _Attack: 10
+  _Clan: TreeGang
+  _Health: 40
+  _Attack: 5
+  _AttackSpeed: 2
   _Speed: 5
   _StopDistance: 2
