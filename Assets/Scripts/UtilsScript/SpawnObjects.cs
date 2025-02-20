@@ -23,8 +23,16 @@ public class SpawnObjects : MonoBehaviour
         CpuLogic ObjectLogic = CreatedObject.GetComponent<CpuLogic>();
         if (ObjectLogic != null) ObjectLogic.ScrStats = AttachedStats;
 
-        yield return new WaitForSeconds(CoolDown);
+        //rotate apperance if on other side
+        if (CreatedObject.transform.childCount > 0 && CreatedObject.transform.GetChild(0).name == "CpuApperance")
+        {
+            if(CreatedObject.transform.rotation.z > 0)
+            {
+                CreatedObject.transform.GetChild(0).rotation = new Quaternion(0, 1, 0, 0);
+            }
+        }
 
+        yield return new WaitForSeconds(CoolDown);
         if (!StopFlag) StartCoroutine(SpawnLoop());
     }
 }
