@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
@@ -15,15 +16,27 @@ public class CameraController : MonoBehaviour
     private SpriteRenderer mapRenderer;
     private float mapMinX, mapMaxX, mapMinY, mapMaxY;
 
+    private PlayerInput playerInput; //using unity input sys
+    private Vector2 moveInput;
+    private float zoomInput;
 
     private void Awake()
     {
+        playerInput = new PlayerInput();
+        playerInput.Camera.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
+        playerInput.Camera.Move.canceled += ctx => moveInput = Vector2.zero;
+        playerInput.Camera.Zoom.performed += ctx => zoomInput = ctx.ReadValue<float>();
+        playerInput.Camera.Zoom.canceled += ctx => zoomInput = 0f;
+
         mapMinX = mapRenderer.transform.position.x - mapRenderer.bounds.size.x / 2f;
         mapMaxX = mapRenderer.transform.position.x + mapRenderer.bounds.size.x / 2f;
 
         mapMinY = mapRenderer.transform.position.y - mapRenderer.bounds.size.y / 2f;
         mapMaxY = mapRenderer.transform.position.y + mapRenderer.bounds.size.y / 2f;
     }
+
+    private void OnEnable() => playerInput.Enable();
+    private void OnDisable() => playerInput.Disable();
 
     // Update is called once per frame
     void Update()
@@ -34,17 +47,12 @@ public class CameraController : MonoBehaviour
 
     private void MoveCamera()
     {
-        float moveX = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime; //A/D right and left
-        float moveY = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime; //W/D up and down
-
-        Vector3 newPosition = cam.transform.position + new Vector3(moveX, moveY, 0);
-        cam.transform.position = ClampCamera(newPosition);
+        Vector3 moveVector = new Vector3(moveInput.x, moveInput.y, 0) * moveSpeed * Time.deltaTime;
+        cam.transform.position = ClampCamera(cam.transform.position + moveVector);
     }
 
     private void Zoom()
     {
-        float scroll = Input.GetAxis("Mouse ScrollWheel");
-
         if (scroll != 0)
         {
             float newSize = cam.orthographicSize - scroll * zoomStep;
