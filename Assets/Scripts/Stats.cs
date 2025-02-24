@@ -37,9 +37,14 @@ public class Stats : MonoBehaviour
         }
     }
 
-    public void AddStatusEffect()
+    public void AddStatusEffect(StatusEffect _effect)
     {
-        //_StatusEffects.Add()
+        _StatusEffects.Add(_effect);
     }
+
+    //IEnumerator ApplyStatus(StatusEffect _effect)
+    //{
+        //yield return new WaitForSeconds(_effect.Length);
+    //}
 }
     
