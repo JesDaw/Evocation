@@ -1498,7 +1498,7 @@ Transform:
   m_GameObject: {fileID: 503140896}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.3211231, y: 0.21572469, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2502,7 +2502,7 @@ Transform:
   m_GameObject: {fileID: 1165808164}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.3211231, y: 0.21572469, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2521,6 +2521,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LifeCount: {fileID: 11400000, guid: 134620333c1634a509ab78576b5ad9ac, type: 2}
+  PlayerDeath:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1165808166}
+        m_TargetAssemblyTypeName: PlayerLivesManager, Assembly-CSharp
+        m_MethodName: LooseLife
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  PlayerSpawn:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1165808166}
+        m_TargetAssemblyTypeName: PlayerLivesManager, Assembly-CSharp
+        m_MethodName: GainLife
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  MaxLives: {fileID: 0}
 --- !u!1 &1216897151
 GameObject:
   m_ObjectHideFlags: 0
@@ -2963,6 +2994,48 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   CustomBlends: {fileID: 0}
+--- !u!1 &1286219333 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7171526487586730302, guid: 44638b8df426a44b88a251c3815bfea1, type: 3}
+  m_PrefabInstance: {fileID: 3318317894266489136}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1286219339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286219333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e04091fb59721b64188e07ceb7d885e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _CpuPriority: []
+  _Clan: 
+  _Health: 1
+  _Attack: 0
+  _AttackSpeed: 0
+  _Speed: 0
+  _StopDistance: 0
+  OnDeath:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11500000, guid: 3bf598356f44d4b33b657b0b93764dad, type: 3}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnDamage:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1293617362
 GameObject:
   m_ObjectHideFlags: 0
@@ -5258,7 +5331,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7171526487586730302, guid: 44638b8df426a44b88a251c3815bfea1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1286219339}
   m_SourcePrefab: {fileID: 100100000, guid: 44638b8df426a44b88a251c3815bfea1, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
