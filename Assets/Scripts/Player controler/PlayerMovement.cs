@@ -29,8 +29,11 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         //horizontal = Input.GetAxisRaw("Horizontal");
-        horizontal = moveActions.ReadValue<Vector2>().x;
-        rb.linearVelocity = new Vector2(horizontal * speed, rb.linearVelocity.y);
+        if (isClimbing != true)
+        {
+            horizontal = moveActions.ReadValue<Vector2>().x;
+            rb.linearVelocity = new Vector2(horizontal * speed, rb.linearVelocity.y);
+        }
 
         RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.up, distance, whatIsLadder);
 
