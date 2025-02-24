@@ -189,6 +189,7 @@ GameObject:
   - component: {fileID: 7366473325460829132}
   - component: {fileID: 2391128896491098164}
   - component: {fileID: 8642845343927698181}
+  - component: {fileID: 2577912291365627502}
   - component: {fileID: 8455048207438629725}
   - component: {fileID: 4459471441712610284}
   m_Layer: 6
@@ -247,21 +248,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  OnDamage:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2391128896491098164}
-        m_TargetAssemblyTypeName: CpuHealthBar, Assembly-CSharp
-        m_MethodName: UpdateHealth
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &2391128896491098164
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,12 +283,67 @@ MonoBehaviour:
   _AttackSpeed: 0
   _Speed: 0
   _StopDistance: 0
+  _KnockBackMax: 0
+  _KnockBackHealth: 0
+  _KnockBackVelocity: 0
   OnDeath:
     m_PersistentCalls:
       m_Calls: []
   OnDamage:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2391128896491098164}
+        m_TargetAssemblyTypeName: CpuHealthBar, Assembly-CSharp
+        m_MethodName: UpdateHealth
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnKnocked:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2577912291365627502}
+        m_TargetAssemblyTypeName: ApplyForce, Assembly-CSharp
+        m_MethodName: ApplyForceToRigidbody
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 7366473325460829132}
+        m_TargetAssemblyTypeName: CpuLogic, Assembly-CSharp
+        m_MethodName: ApplyTempSpeed
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2577912291365627502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2248256087404518340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4fa4aec0bcf8a348b1a3e0b23170ac3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _body: {fileID: 4459471441712610284}
 --- !u!58 &8455048207438629725
 CircleCollider2D:
   m_ObjectHideFlags: 0

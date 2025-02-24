@@ -19,6 +19,13 @@ public class SpawnObjects : MonoBehaviour
 
     IEnumerator SpawnLoop()
     {
+        if(StopFlag) yield break;
+        Spawn();
+        yield return new WaitForSeconds(CoolDown);
+        StartCoroutine(SpawnLoop());
+    }
+    public void Spawn()
+    {
         GameObject CreatedObject = Instantiate(_Object, this.transform.position, this.transform.rotation, _Container);
         CpuLogic ObjectLogic = CreatedObject.GetComponent<CpuLogic>();
         if (ObjectLogic != null) ObjectLogic.ScrStats = AttachedStats;
@@ -31,8 +38,5 @@ public class SpawnObjects : MonoBehaviour
                 CreatedObject.transform.GetChild(0).rotation = new Quaternion(0, 1, 0, 0);
             }
         }
-
-        yield return new WaitForSeconds(CoolDown);
-        if (!StopFlag) StartCoroutine(SpawnLoop());
     }
 }

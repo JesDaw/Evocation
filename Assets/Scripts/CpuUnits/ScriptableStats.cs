@@ -12,7 +12,7 @@ public class ScriptableStats : ScriptableObject
     public float _AttackSpeed;
     public float _Speed;
     public float _StopDistance;
-    public float _KnockBackAmount;
+    public float _KnockBackVelocity;
     public float _KnockBackHealth;
 }
     

@@ -14,8 +14,8 @@ public class CpuLogic : MonoBehaviour
     [SerializeField] Rigidbody2D _Body;
     [Header("Events")]
     [SerializeField] UnityEvent OnSpawn;
-    [SerializeField] UnityEvent OnDamage;
-    private bool AlreadyAttacked = false;
+    private bool _AlreadyAttacked = false;
+    private bool _Freeze = false;
     void Start()
     {
         //Set Stats class to ScriptableObject
@@ -30,6 +30,9 @@ public class CpuLogic : MonoBehaviour
         float randomNumber = Random.Range(-0.3f, 0.3f);
         _Stats._StopDistance = ScrStats._StopDistance + randomNumber;
         _Stats._CpuPriority = ScrStats._CpuPriority;
+        _Stats._KnockBackHealth = ScrStats._KnockBackHealth;
+        _Stats._KnockBackVelocity = ScrStats._KnockBackVelocity;
+        _Stats._KnockBackMax = ScrStats._KnockBackHealth;
         
         _Renderer.sprite = ScrStats._Sprite;
 
@@ -37,6 +40,8 @@ public class CpuLogic : MonoBehaviour
     }
     void Update()
     {
+        if(_Freeze) return;
+
         RaycastHit2D[] hits = Physics2D.RaycastAll(_Raycast.position, transform.right, _Stats._StopDistance);
         Debug.DrawRay(_Raycast.position, transform.right * _Stats._StopDistance, Color.red);
         
@@ -67,25 +72,41 @@ public class CpuLogic : MonoBehaviour
             Stats EnemyStats = hits[SavedIndex].collider.gameObject.GetComponent<Stats>();
             if (EnemyStats == null) return;
             
-            if (AlreadyAttacked) return;
+            if (_AlreadyAttacked) return;
             StartCoroutine(AttackCooldown());
 
             Debug.Log("Attacked Enemy" + hits[SavedIndex].collider.gameObject.name);
 
-            EnemyStats.Attack(_Stats._Attack);
-            OnDamage.Invoke();
+            //if you're wondering why I'm passing in position
+            //it's because of the knockback (see Stats.cs)
+            EnemyStats.Attack(_Stats._Attack, this.gameObject.transform.position);
         }
         else
         {
             _Stats._Speed = ScrStats._Speed;
         }
     }
+    public void ApplyTempSpeed(Vector2 _SpeedInfo)
+    {
+        StartCoroutine(TempSpeed(_SpeedInfo.x));
+    }
+    IEnumerator TempSpeed(float _TempSpeed)
+    {
+        Debug.Log(_TempSpeed);
+
+        _Stats._Speed = _TempSpeed;
+        _Freeze = true;
+        
+        //magic number, i'll update this if he wants
+        yield return new WaitForSeconds(0.7f);
+        _Freeze = false;
+    }
 
     IEnumerator AttackCooldown()
     {
-        AlreadyAttacked = true;
+        _AlreadyAttacked = true;
         yield return new WaitForSeconds(_Stats._AttackSpeed);
-        AlreadyAttacked = false;
+        _AlreadyAttacked = false;
     }
 
     void FixedUpdate()

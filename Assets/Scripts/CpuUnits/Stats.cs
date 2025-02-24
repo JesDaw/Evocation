@@ -11,18 +11,30 @@ public class Stats : MonoBehaviour
     public float _AttackSpeed;
     public float _Speed;
     public float _StopDistance;
-    [SerializeField] UnityEvent OnDeath;
-    [SerializeField] UnityEvent OnDamageOther;
+    public float _KnockBackMax;
+    public float _KnockBackHealth;
+    public float _KnockBackVelocity;
+    [SerializeField] UnityEvent OnDeath, OnDamage;
+    [SerializeField] UnityEvent<Vector2> OnKnocked;
 
-    public void Attack(int _Damage)
+    public void Attack(int _Damage, Vector3 _EnemyPos)
     {
-        OnDamageOther.Invoke();
-
         _Health -= _Damage;
+        _KnockBackHealth -= _Damage;
+
+        OnDamage.Invoke();
         if(_Health <= 0)
         {
             OnDeath.Invoke();
             Destroy(gameObject);
+        }
+
+        if(_KnockBackHealth <= 0)
+        {
+            _KnockBackHealth = _KnockBackMax;
+
+            Vector3 _direction = (_EnemyPos - this.transform.position).normalized;
+            OnKnocked.Invoke(new Vector2(_direction.x * _KnockBackVelocity, _KnockBackVelocity));
         }
     }
 }
