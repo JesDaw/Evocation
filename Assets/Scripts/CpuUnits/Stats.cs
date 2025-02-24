@@ -2,6 +2,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+public class StatusEffects
+{
+    public string Status;
+    public float Damage;
+    public float Tick;
+    public UnityEvent OnTick;
+}
+
 public class Stats : MonoBehaviour
 {
     public List<string> _CpuPriority;
@@ -14,6 +22,7 @@ public class Stats : MonoBehaviour
     public float _KnockBackMax;
     public float _KnockBackHealth;
     public float _KnockBackVelocity;
+    public List<StatusEffects> _StatusEffects;
     [SerializeField] UnityEvent OnDeath, OnDamage;
     [SerializeField] UnityEvent<Vector2> OnKnocked;
 

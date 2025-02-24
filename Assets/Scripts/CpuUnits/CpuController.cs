@@ -4,7 +4,8 @@ using UnityEngine.Events;
 
 public class CpuController : MonoBehaviour
 {
-    public UnityEvent SpawnNormal;
+    public InputAction _SpawnCommand;
+    public UnityEvent<int> _SpawnNormal;
 
     void Update()
     {

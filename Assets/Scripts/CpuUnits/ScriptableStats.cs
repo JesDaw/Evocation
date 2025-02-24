@@ -15,7 +15,7 @@ public class ScriptableStats : ScriptableObject
     public float _StopDistance;
     public float _KnockBackVelocity;
     public float _KnockBackHealth;
-    public enum AttackType {Projectile, AOE, Direct}
+    public enum AttackType {Projectile, Direct}
     public AttackType _AttackType = AttackType.Direct;
 }
     
