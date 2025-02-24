@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CpuLogic : MonoBehaviour
 {
@@ -11,6 +12,9 @@ public class CpuLogic : MonoBehaviour
     [SerializeField] Transform _Raycast;
     [SerializeField] SpriteRenderer _Renderer;
     [SerializeField] Rigidbody2D _Body;
+    [Header("Events")]
+    [SerializeField] UnityEvent OnSpawn;
+    [SerializeField] UnityEvent OnDamage;
     private bool AlreadyAttacked = false;
     void Start()
     {
@@ -28,6 +32,8 @@ public class CpuLogic : MonoBehaviour
         _Stats._CpuPriority = ScrStats._CpuPriority;
         
         _Renderer.sprite = ScrStats._Sprite;
+
+        OnSpawn.Invoke();
     }
     void Update()
     {
@@ -67,6 +73,7 @@ public class CpuLogic : MonoBehaviour
             Debug.Log("Attacked Enemy" + hits[SavedIndex].collider.gameObject.name);
 
             EnemyStats.Attack(_Stats._Attack);
+            OnDamage.Invoke();
         }
         else
         {

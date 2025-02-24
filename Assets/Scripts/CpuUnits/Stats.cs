@@ -12,11 +12,11 @@ public class Stats : MonoBehaviour
     public float _Speed;
     public float _StopDistance;
     [SerializeField] UnityEvent OnDeath;
-    [SerializeField] UnityEvent OnDamage;
+    [SerializeField] UnityEvent OnDamageOther;
 
     public void Attack(int _Damage)
     {
-        OnDamage.Invoke();
+        OnDamageOther.Invoke();
 
         _Health -= _Damage;
         if(_Health <= 0)
