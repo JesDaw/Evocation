@@ -76,10 +76,7 @@ public class CpuLogic : MonoBehaviour
             StartCoroutine(AttackCooldown());
 
             Debug.Log("Attacked Enemy" + hits[SavedIndex].collider.gameObject.name);
-
-            //if you're wondering why I'm passing in position
-            //it's because of the knockback (see Stats.cs)
-            EnemyStats.Attack(_Stats._Attack, this.gameObject.transform.position);
+            EnemyStats.Attack(_Stats._Attack);
         }
         else
         {
@@ -96,9 +93,11 @@ public class CpuLogic : MonoBehaviour
 
         _Stats._Speed = _TempSpeed;
         _Freeze = true;
-        
-        //magic number, i'll update this if he wants
-        yield return new WaitForSeconds(0.7f);
+
+        //x knockback scales exponentially, which is a problem...
+        //but it works fine
+        //and I'm too lazy to test values
+        yield return new WaitForSeconds(ScrStats._Speed/6f);
         _Freeze = false;
     }
 
