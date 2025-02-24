@@ -12,6 +12,8 @@ public class CpuLogic : MonoBehaviour
     [SerializeField] SpriteRenderer _Renderer;
     [SerializeField] Rigidbody2D _Body;
     private bool AlreadyAttacked = false;
+
+    //initialize stats of NPC
     void Start()
     {
         //Set Stats class to ScriptableObject
@@ -81,6 +83,7 @@ public class CpuLogic : MonoBehaviour
         AlreadyAttacked = false;
     }
 
+    //normilize walk speed
     void FixedUpdate()
     {
         _Body.linearVelocity = new Vector2(_Stats._Speed * transform.right.x, _Body.linearVelocity.y);

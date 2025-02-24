@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 
+
 // Countdown timer functioality 
 // takes a number of seconds and a UI object from unity interface
 // convrts seconds to minuts and seconds and counts down to 0 from there 
@@ -8,7 +9,7 @@ using TMPro;
 public class Timer : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI timerText;
-    [SerializeField] float remainingTimeSeconds;
+    public FloatVariable remainingTimeSeconds;
     void Update()
     {
         Countdown();
@@ -18,21 +19,21 @@ public class Timer : MonoBehaviour
     //counts down that stops at 0
     void Countdown()
     {
-        if (remainingTimeSeconds > 0)
+        if (remainingTimeSeconds._Value > 0)
         {
-            remainingTimeSeconds -= Time.deltaTime; 
+            remainingTimeSeconds._Value -= Time.deltaTime; 
         }
         else 
         {
-            remainingTimeSeconds = 0;
+            remainingTimeSeconds._Value = 0;
         }
     }
 
     // conversion from seconds to minuts and seconds and desplays it in UI
     void DesplayTime()
     {
-        int minutes = Mathf.FloorToInt(remainingTimeSeconds / 60);
-        int seconds = Mathf.FloorToInt(remainingTimeSeconds % 60);
+        int minutes = Mathf.FloorToInt(remainingTimeSeconds._Value / 60);
+        int seconds = Mathf.FloorToInt(remainingTimeSeconds._Value % 60);
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 }
