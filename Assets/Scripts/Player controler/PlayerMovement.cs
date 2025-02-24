@@ -36,7 +36,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (hitInfo.collider != null)
         {
-            if (Input.GetKeyDown(KeyCode.UpArrow))
+            if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
             {
                 isClimbing = true;
             }
