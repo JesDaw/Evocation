@@ -28,6 +28,10 @@ public class CpuLogic : MonoBehaviour
         float randomNumber = Random.Range(-0.3f, 0.3f);
         _Stats._StopDistance = ScrStats._StopDistance + randomNumber;
         _Stats._CpuPriority = ScrStats._CpuPriority;
+        _Stats._KnockBackHealth = ScrStats._KnockBackHealth;
+        _Stats._KnockBackMax = ScrStats._KnockBackHealth;
+        _Stats._KnockBackVelocity = ScrStats._KnockBackVelocity;
+        _Stats._KnockBackTime = ScrStats._KnockBackTime;
         
         _Renderer.sprite = ScrStats._Sprite;
     }
@@ -74,6 +78,24 @@ public class CpuLogic : MonoBehaviour
         {
             _Stats._Speed = ScrStats._Speed;
         }
+    }
+    public void ApplyTempSpeed(Vector2 _SpeedInfo)
+    {
+        if(_Freeze) return;
+        StartCoroutine(TempSpeed(_SpeedInfo.x));
+    }
+    IEnumerator TempSpeed(float _TempSpeed)
+    {
+        Debug.Log(_TempSpeed);
+
+        _Stats._Speed = _TempSpeed;
+        _Freeze = true;
+
+        //if you know phycis you can prob use some
+        //magic to calculate this
+        //but i'm studpi
+        yield return new WaitForSeconds(_Stats._KnockBackTime);
+        _Freeze = false;
     }
 
     IEnumerator AttackCooldown()

@@ -11,6 +11,9 @@ GameObject:
   - component: {fileID: 8878333553698331049}
   - component: {fileID: 7366473325460829132}
   - component: {fileID: 8642845343927698181}
+  - component: {fileID: 2391128896491098164}
+  - component: {fileID: 8722308089154224410}
+  - component: {fileID: 5857035005370880108}
   - component: {fileID: 8455048207438629725}
   - component: {fileID: 4459471441712610284}
   m_Layer: 6
@@ -56,6 +59,40 @@ MonoBehaviour:
   _Renderer: {fileID: 1835736808589767493}
   _Body: {fileID: 4459471441712610284}
 --- !u!114 &8642845343927698181
+  _Stats: {fileID: 8722308089154224410}
+  _Raycast: {fileID: 3871249974143792539}
+  _Renderer: {fileID: 1835736808589767493}
+  _Body: {fileID: 4459471441712610284}
+  OnSpawn:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2391128896491098164}
+        m_TargetAssemblyTypeName: CpuHealthBar, Assembly-CSharp
+        m_MethodName: SetHealth
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2391128896491098164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2248256087404518340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3da0f5b7c70ecb4194af07b8bde4060, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Stats: {fileID: 8722308089154224410}
+  _Slider: {fileID: 9032567184142671317}
+--- !u!114 &8722308089154224410
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -67,21 +104,65 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e04091fb59721b64188e07ceb7d885e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _CpuPriority:
-  - 
-  - 
+  _CpuPriority: []
   _Clan: 
-  _Health: 0
+  _Health: 1
   _Attack: 0
   _AttackSpeed: 0
   _Speed: 0
   _StopDistance: 0
+  _KnockBackHealth: 0
+  _KnockBackVelocity: 0
+  _KnockBackTime: 0
+  _StatusEffects: []
   OnDeath:
     m_PersistentCalls:
       m_Calls: []
   OnDamage:
     m_PersistentCalls:
       m_Calls: []
+  OnKnocked:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7366473325460829132}
+        m_TargetAssemblyTypeName: CpuLogic, Assembly-CSharp
+        m_MethodName: ApplyTempSpeed
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 5857035005370880108}
+        m_TargetAssemblyTypeName: ApplyForce, Assembly-CSharp
+        m_MethodName: ApplyForceToRigidbody
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &5857035005370880108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2248256087404518340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4fa4aec0bcf8a348b1a3e0b23170ac3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _body: {fileID: 4459471441712610284}
+  _yLock: 0
+  _xLock: 1
 --- !u!58 &8455048207438629725
 CircleCollider2D:
   m_ObjectHideFlags: 0
