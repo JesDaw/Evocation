@@ -14,7 +14,6 @@ public class Stats : MonoBehaviour
     public float _KnockBackMax;
     public float _KnockBackHealth;
     public float _KnockBackVelocity;
-    public float _KnockBackTime;
     public List<StatusEffect> _StatusEffects;
     [SerializeField] UnityEvent OnDeath, OnDamage;
     [SerializeField] UnityEvent<Vector2> OnKnocked;
