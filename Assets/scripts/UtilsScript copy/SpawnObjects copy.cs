@@ -19,6 +19,13 @@ public class SpawnObjects : MonoBehaviour
 
     IEnumerator SpawnLoop()
     {
+        if(StopFlag) yield break;
+        Spawn();
+        yield return new WaitForSeconds(CoolDown);
+        StartCoroutine(SpawnLoop());
+    }
+    public void Spawn()
+    {
         GameObject CreatedObject = Instantiate(_Object, this.transform.position, this.transform.rotation, _Container);
         CpuLogic ObjectLogic = CreatedObject.GetComponent<CpuLogic>();
         if (ObjectLogic != null) ObjectLogic.ScrStats = AttachedStats;
@@ -29,10 +36,16 @@ public class SpawnObjects : MonoBehaviour
             if(CreatedObject.transform.rotation.z > 0)
             {
                 CreatedObject.transform.GetChild(0).rotation = new Quaternion(0, 1, 0, 0);
+                
             }
+            
+            //randomize y pos
+            CreatedObject.transform.GetChild(0).position = new Vector3
+            (
+                CreatedObject.transform.GetChild(0).position.x,
+                CreatedObject.transform.GetChild(0).position.y + Random.Range(-0.5f, 0.5f),
+                CreatedObject.transform.GetChild(0).position.z
+            );
         }
-
-        yield return new WaitForSeconds(CoolDown);
-        if (!StopFlag) StartCoroutine(SpawnLoop());
     }
 }
