@@ -91,6 +91,9 @@
                     "type": "Button",
                     "id": "79feb061-5bf8-435f-8302-f13ccb8d736a",
                     "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1003,109 +1006,6 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "TrackedDeviceOrientation",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "Camera",
-            "id": "65afb6a0-52b4-48cc-a938-7e7e3634f1ee",
-            "actions": [
-                {
-                    "name": "Move",
-                    "type": "Value",
-                    "id": "8f25e3b8-e049-46e4-bb0e-16373be8dd4b",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "Zoom",
-                    "type": "Value",
-                    "id": "a08dbe3c-d92d-4463-9b10-11d82a2be446",
-                    "expectedControlType": "Axis",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "2D Vector",
-                    "id": "80c1ba2b-58cf-48c8-ab3f-6b85782a720d",
-                    "path": "2DVector",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "up",
-                    "id": "bc0aa110-26d2-4d2a-a57d-e071261b3ac7",
-                    "path": "<Keyboard>/w",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "603a8ef1-b73c-4ec6-a15e-77ebd39dc910",
-                    "path": "<Keyboard>/s",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "left",
-                    "id": "9be6a030-e8d2-4505-836b-17d60e45d7db",
-                    "path": "<Keyboard>/a",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "6541b7ba-c21f-45e1-95f8-245abe596b64",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "",
-                    "id": "fb3ce4f2-52e4-4f9a-ab69-e0ebe2e3331c",
-                    "path": "<Mouse>/scroll/up",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Zoom",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "47e7498f-83f6-49e8-90a7-246ae7c093e1",
-                    "path": "<Mouse>/scroll/down",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Zoom",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
