@@ -8,9 +8,9 @@ public class PlayerLivesManager : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI LifeText;
    [SerializeField]  IntVeriable LifeCount;
-    public UnityEvent PlayerDeath;
-    public UnityEvent PlayerSpawn;
-    [SerializeField] IntVeriable MaxLives;
+    // public UnityEvent PlayerDeath;
+    // public UnityEvent PlayerSpawn;
+    [SerializeField] int MaxLives;
     bool canSpawnMore;
 
     void Update()
@@ -22,7 +22,7 @@ public class PlayerLivesManager : MonoBehaviour
         if (canSpawnMore)
         {
             LifeCount._Value++;
-         if (LifeCount._Value == MaxLives._Value)
+         if (LifeCount._Value == MaxLives)
          {
              canSpawnMore =false;
          }

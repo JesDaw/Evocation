@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [SerializeField] Stats _player_Stats;
     public Rigidbody2D rb;
     public Transform groundCheck;
     public LayerMask groundLayer;
