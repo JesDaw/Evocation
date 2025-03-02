@@ -9,6 +9,8 @@ public class PauseMenu : MonoBehaviour
     public static bool GameIsOver = false;
     public GameObject pauseMenuUI;
     [SerializeField] UnityEvent ToggleMenu;
+    [SerializeField] UnityEvent _ResetValues;
+
 
   /*  InputAction pauseAction;
 
@@ -38,6 +40,7 @@ public class PauseMenu : MonoBehaviour
     {
         Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        ResetValues();
 
     }
     public void Resume()
@@ -60,10 +63,13 @@ public class PauseMenu : MonoBehaviour
     {
         Time.timeScale = 1;
         SceneManager.LoadScene(1);
+        ResetValues();
     }
 
     public void QuitGame()
     {
         Application.Quit();
     }
+
+    void ResetValues(){ Debug.Log("here0");_ResetValues.Invoke(); }
 }

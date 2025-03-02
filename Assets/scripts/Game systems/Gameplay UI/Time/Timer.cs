@@ -13,7 +13,6 @@ public class Timer : MonoBehaviour
     [SerializeField] UnityEvent _TimeHitZero;
     public FloatVariable remainingTimeSeconds;
 
-    bool _time_hit_zero_has_been_called = false;
     bool _game_is_active = true;
 
     void Update()
@@ -42,6 +41,8 @@ public class Timer : MonoBehaviour
     }
 
     public void DeactivateTimer(){ _game_is_active = false; }
+
+    public void ResetTimer(){ Debug.Log("here1"); remainingTimeSeconds.Reset();}
 
     // conversion from seconds to minuts and seconds and desplays it in UI
     void DesplayTime()
