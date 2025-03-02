@@ -6,17 +6,17 @@ public class PauseMenu : MonoBehaviour
     public static bool GameIsPaused = false;
     public static bool GameIsOver = false;
     public GameObject pauseMenuUI;
-    public GameObject victoryMenuUI;
-    public GameObject defeatMenuUI;
+    // public GameObject victoryMenuUI;
+    // public GameObject defeatMenuUI;
 
     void Update()
     {
-        if (GameIsOver == false)
+   /*     if (GameIsOver == false)
         {
             victoryMenuUI.SetActive(false);
             defeatMenuUI.SetActive(false);
-        }
-        if (Input.GetKeyDown(KeyCode.Escape) & GameIsOver == false)
+        } 
+  */    if (Input.GetKeyDown(KeyCode.Escape))// & GameIsOver == false)
         {
             if (GameIsPaused)
             {
@@ -27,7 +27,7 @@ public class PauseMenu : MonoBehaviour
                 Pause();
             }
         }
-        if (Input.GetKeyDown(KeyCode.K))
+  /*      if (Input.GetKeyDown(KeyCode.K))
         {
             victoryMenuUI.SetActive(true);
             GameIsOver = true;
@@ -37,6 +37,7 @@ public class PauseMenu : MonoBehaviour
             defeatMenuUI.SetActive(true);
             GameIsOver = true;
         }
+  */
     }
 
     public void Resume()

@@ -2,12 +2,22 @@ using UnityEngine;
 
 public class LossMenu : MonoBehaviour
 {
-    void Update()
+  [SerializeField] GameObject victoryMenuUI;
+  [SerializeField] GameObject defeatMenuUI;
+  [SerializeField] GameObject pauseMenuUI;
+
+    void Start()
     {
-      //  if (Input.GetKeyDown(KeyCode.L))
-      //  {
-       //     defeatMenuUI.SetActive(true);
-       //     GameIsOver = true;
-       // }
+        victoryMenuUI.SetActive(false);
+    }
+    public void OnEventRaised()
+    {
+      Debug.Log("here 3");
+        pauseMenuUI.SetActive(false);
+        defeatMenuUI.SetActive(true);
+        victoryMenuUI.SetActive(false);
+
+        // GameIsOver = true;
+
     }
 }

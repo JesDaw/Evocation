@@ -1,14 +1,24 @@
 using UnityEngine;
 
+
 public class WinMenu : MonoBehaviour
 {
-    
-    void Update()
+  [SerializeField] GameObject victoryMenuUI;
+  [SerializeField] GameObject defeatMenuUI;
+  [SerializeField] GameObject pauseMenuUI;
+
+    void Start()
     {
-      // if (Input.GetKeyDown(KeyCode.K))
-       // {
-       //     victoryMenuUI.SetActive(true);
-       //     GameIsOver = true;
-       // } 
+        victoryMenuUI.SetActive(false);
+    }
+    public void OnEventRaised()
+    {
+      Debug.Log("here 3");
+        pauseMenuUI.SetActive(false);
+        defeatMenuUI.SetActive(false);
+        victoryMenuUI.SetActive(true);
+
+        // GameIsOver = true;
+
     }
 }

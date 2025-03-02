@@ -1,12 +1,20 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BuildingHealth : MonoBehaviour
 {
     [SerializeField] FloatVariable Health;
+   [SerializeField] UnityEvent _end_game;
    
-    void TakeDamage(float damage)
+    public void TakeDamage(float damage)
     {
         Health._Value -= damage;
-        // animation / effect 
+
+        if (Health._Value <= 0)
+        {
+            Health._Value = 0;
+            Debug.Log("here 1");
+            _end_game.Invoke();    
+        }
     }
 }
