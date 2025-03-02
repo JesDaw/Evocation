@@ -9,6 +9,8 @@ public class Money : MonoBehaviour
     [SerializeField] FloatVariable genPerSec;
     [SerializeField] FloatVariable moneyAmount;
 
+    bool _game_is_active = true;
+
     void Start ()
     {
         StartCoroutine(moneyCount());
@@ -16,7 +18,7 @@ public class Money : MonoBehaviour
 
     IEnumerator moneyCount()
     {
-        while(moneyAmount._Value < 9999)
+        while(moneyAmount._Value < 9999 && _game_is_active)
         {
             moneyAmount._Value++;
             moneyText.text = moneyAmount._Value.ToString("0");
@@ -28,5 +30,5 @@ public class Money : MonoBehaviour
     {
         moneyAmount._Value -= amount;
     }
+    public void DeactivateMoney(){ _game_is_active = false; }
 }
-

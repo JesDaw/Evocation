@@ -9,6 +9,11 @@ public class Event : ScriptableObject
     {
         for (int i = listiners.Count -1; i >= 0; i--)
         {
+            if (listiners[i] == null)
+            {
+                listiners.RemoveAt(i);
+                continue;
+            }
             listiners[i].OnEventRaised();
             Debug.Log("Event signal sent to" + listiners[i].gameObject + "object");
         }
@@ -22,6 +27,4 @@ public class Event : ScriptableObject
     {
         listiners.Remove(listiner);
     }
-
-
 }
