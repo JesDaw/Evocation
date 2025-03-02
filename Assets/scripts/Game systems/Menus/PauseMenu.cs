@@ -1,23 +1,42 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 public class PauseMenu : MonoBehaviour
 {
     public static bool GameIsPaused = false;
     public static bool GameIsOver = false;
     public GameObject pauseMenuUI;
-    // public GameObject victoryMenuUI;
-    // public GameObject defeatMenuUI;
+    [SerializeField] UnityEvent ToggleMenu;
 
-    void Update()
+    InputAction pauseAction;
+
+    void Start()
     {
-   /*     if (GameIsOver == false)
+        pauseAction = InputSystem.actions.FindAction("Pause");
+    }
+
+ /*    void TogglePause(InputAction.CallbackContext context)  
+    {
+        if(context.performed)
         {
-            victoryMenuUI.SetActive(false);
-            defeatMenuUI.SetActive(false);
-        } 
-  */    if (Input.GetKeyDown(KeyCode.Escape))// & GameIsOver == false)
+            if (GameIsPaused)
+                {
+                  Resume();
+                }
+            else
+                {
+                    Pause();
+                }
+        }    
+    }
+*/
+   void Update()
+    {
+    if (Input.GetKeyDown(KeyCode.Escape) & GameIsOver == false)
         {
+            
             if (GameIsPaused)
             {
                 Resume();
@@ -27,21 +46,11 @@ public class PauseMenu : MonoBehaviour
                 Pause();
             }
         }
-  /*      if (Input.GetKeyDown(KeyCode.K))
-        {
-            victoryMenuUI.SetActive(true);
-            GameIsOver = true;
-        }
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            defeatMenuUI.SetActive(true);
-            GameIsOver = true;
-        }
-  */
     }
 
     public void Resume()
     {
+        ToggleMenu.Invoke();
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1;
         GameIsPaused = false;
@@ -49,6 +58,7 @@ public class PauseMenu : MonoBehaviour
 
     void Pause()
     {
+        ToggleMenu.Invoke();
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0;
         GameIsPaused = true;

@@ -13,7 +13,6 @@ public class BuildingHealth : MonoBehaviour
         if (Health._Value <= 0)
         {
             Health._Value = 0;
-            Debug.Log("here 1");
             _end_game.Invoke();    
         }
     }
