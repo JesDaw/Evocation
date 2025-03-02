@@ -23,12 +23,10 @@ public class LossMenu : MonoBehaviour
         if(TryGetComponent<WinMenu>(out WinMenu win))
         {
             win.enabled = false;
-            Debug.Log("win menu disabled");
         }
         if(TryGetComponent<PauseMenu>(out PauseMenu pause))
         {
             pause.enabled = false;
-            Debug.Log("pause menu disabled");
         }
         // GameIsOver = true;
 

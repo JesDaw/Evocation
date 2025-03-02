@@ -2011,7 +2011,6 @@ Transform:
   - {fileID: 1036933421}
   - {fileID: 1129622842}
   - {fileID: 332168481}
-  - {fileID: 454538494}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &454538493
@@ -2045,7 +2044,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 442664046}
+  m_Father: {fileID: 1017092333}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &454538495
 MonoBehaviour:
@@ -3068,6 +3067,7 @@ Transform:
   - {fileID: 1165808165}
   - {fileID: 19990788}
   - {fileID: 333301521}
+  - {fileID: 454538494}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1036933420
@@ -5992,7 +5992,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 820148551}
         m_TargetAssemblyTypeName: PlayersControlerScriptsManager, Assembly-CSharp
-        m_MethodName: OnEventRaised
+        m_MethodName: DisableControls
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

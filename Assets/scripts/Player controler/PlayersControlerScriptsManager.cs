@@ -5,7 +5,7 @@ public class PlayersControlerScriptsManager : MonoBehaviour
 {
     [SerializeField] bool _actionable = true;
 
-     public void OnEventRaised()
+     public void DisableControls()
      {
         _actionable = !_actionable;
         

@@ -7,11 +7,10 @@ public class Event : ScriptableObject
 
     public void Raise()
     {
-        Debug.Log(listiners.Count);
-        Debug.Log(listiners.Count - 1);
         for (int i = listiners.Count -1; i >= 0; i--)
         {
             listiners[i].OnEventRaised();
+            Debug.Log("Event signal sent to" + listiners[i].gameObject + "object");
         }
     }
 
