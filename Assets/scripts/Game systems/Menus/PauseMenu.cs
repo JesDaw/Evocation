@@ -10,18 +10,18 @@ public class PauseMenu : MonoBehaviour
     public GameObject pauseMenuUI;
     [SerializeField] UnityEvent ToggleMenu;
 
-    InputAction pauseAction;
+  /*  InputAction pauseAction;
 
     void Start()
     {
         pauseAction = InputSystem.actions.FindAction("Pause");
     }
-
+*/
     public void GameOver(){ GameIsOver = !GameIsOver;}
 
     public void TogglePause(InputAction.CallbackContext context)  
     {
-        if(context.performed & GameIsOver == false)
+        if(context.performed && GameIsOver == false)
         {
             if (GameIsPaused)
                 {
@@ -34,22 +34,6 @@ public class PauseMenu : MonoBehaviour
         }    
     }
 
- /*  void Update()
-    {
-    if (Input.GetKeyDown(KeyCode.Escape) & GameIsOver == false)
-        {
-            
-            if (GameIsPaused)
-            {
-                Resume();
-            }
-            else
-            {
-                Pause();
-            }
-        }
-    }
-*/
     public void Resume()
     {
         ToggleMenu.Invoke();
