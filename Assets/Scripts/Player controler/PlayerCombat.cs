@@ -30,13 +30,24 @@ public class Player_Combat : MonoBehaviour
         // Damage them
         foreach(Collider2D enemy in hitEnemies)
         {
-            Debug.Log("We hit " + enemy.name);
-            Stats enemyStats = enemy.GetComponent<Stats>();
-            enemyStats.Attack(_player_Stats._Attack);
-             if (enemyStats == null)
+         //   Debug.Log("We hit " + enemy.name);
+
+            if (enemy.TryGetComponent<Stats>(out Stats _enimy_stats)){
+                _enimy_stats.Attack(_player_Stats._Attack);
+                }
+            else
                 {
-                  Debug.LogError(enemy.name + " is missing the Stats component!");
-                 continue; // Skip this enemy if it doesn't have Stats
+                //Debug.LogError(enemy.name + " is missing the Stats component!");
+                 //continue; // Skip this enemy if it doesn't have Stats
+                }
+
+            if (enemy.TryGetComponent<BuildingHealth>(out BuildingHealth _building_health)){
+                _building_health.TakeDamage(_player_Stats._Attack);
+                }
+            else
+                {
+                //Debug.LogError(enemy.name + " is missing the BuildingHealth component!");
+                 //continue; // Skip this enemy if it doesn't have Stats
                 }
         }
     }
