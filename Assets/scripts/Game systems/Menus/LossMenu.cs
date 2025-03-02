@@ -13,7 +13,7 @@ public class LossMenu : MonoBehaviour
     {
         victoryMenuUI.SetActive(false);
     }
-    public void OnEventRaised()
+    public void LooseGame()
     {
         ToggleMenu.Invoke();
         pauseMenuUI.SetActive(false);

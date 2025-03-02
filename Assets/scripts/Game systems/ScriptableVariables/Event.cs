@@ -7,13 +7,11 @@ public class Event : ScriptableObject
 
     public void Raise()
     {
-        Debug.Log("here 1.5");
         Debug.Log(listiners.Count);
         Debug.Log(listiners.Count - 1);
         for (int i = listiners.Count -1; i >= 0; i--)
         {
             listiners[i].OnEventRaised();
-            Debug.Log("here 2");
         }
     }
 
