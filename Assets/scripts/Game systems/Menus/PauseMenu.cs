@@ -17,9 +17,11 @@ public class PauseMenu : MonoBehaviour
         pauseAction = InputSystem.actions.FindAction("Pause");
     }
 
- /*    void TogglePause(InputAction.CallbackContext context)  
+    public void GameOver(){ GameIsOver = !GameIsOver;}
+
+    public void TogglePause(InputAction.CallbackContext context)  
     {
-        if(context.performed)
+        if(context.performed & GameIsOver == false)
         {
             if (GameIsPaused)
                 {
@@ -31,8 +33,8 @@ public class PauseMenu : MonoBehaviour
                 }
         }    
     }
-*/
-   void Update()
+
+ /*  void Update()
     {
     if (Input.GetKeyDown(KeyCode.Escape) & GameIsOver == false)
         {
@@ -47,7 +49,7 @@ public class PauseMenu : MonoBehaviour
             }
         }
     }
-
+*/
     public void Resume()
     {
         ToggleMenu.Invoke();
