@@ -21,6 +21,16 @@ public class WinMenu : MonoBehaviour
         defeatMenuUI.SetActive(false);
         victoryMenuUI.SetActive(true);
 
+        if(TryGetComponent<LossMenu>(out LossMenu loss))
+        {
+            loss.enabled = false;
+            Debug.Log("win menu disabled");
+        }
+        if(TryGetComponent<PauseMenu>(out PauseMenu pause))
+        {
+            pause.enabled = false;
+            Debug.Log("pause menu disabled");
+        }
         // GameIsOver = true;
 
     }

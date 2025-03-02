@@ -11,6 +11,7 @@ public class PlayerLivesManager : MonoBehaviour
     // public UnityEvent PlayerDeath;
     // public UnityEvent PlayerSpawn;
     [SerializeField] int MaxLives;
+    [SerializeField] UnityEvent _loose_game;
     bool canSpawnMore;
 
     void Update()
@@ -34,7 +35,7 @@ public class PlayerLivesManager : MonoBehaviour
         canSpawnMore = true;
         if (LifeCount._Value == 0)
         {
-            //invoke game over event
+            _loose_game.Invoke();
         }
     }
 }
