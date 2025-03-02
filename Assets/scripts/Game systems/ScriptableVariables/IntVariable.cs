@@ -3,6 +3,7 @@ using UnityEngine;
 public class IntVeriable : ScriptableObject
 {
     [SerializeField] int _BaseValue = 1;
-    void OnEnable () { _Value =  _BaseValue;}
+    void OnEnable () { Reset(); }
+    void Reset() { _Value =  _BaseValue; }
     public int _Value; 
 }

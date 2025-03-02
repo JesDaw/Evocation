@@ -31,4 +31,5 @@ public class Money : MonoBehaviour
         moneyAmount._Value -= amount;
     }
     public void DeactivateMoney(){ _game_is_active = false; }
+    public void ResetMoney(){ Debug.Log("here2"); moneyAmount.Reset();}
 }
