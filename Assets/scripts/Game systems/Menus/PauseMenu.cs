@@ -34,6 +34,12 @@ public class PauseMenu : MonoBehaviour
         }    
     }
 
+    public void Restart()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
+    }
     public void Resume()
     {
         ToggleMenu.Invoke();
@@ -52,8 +58,8 @@ public class PauseMenu : MonoBehaviour
 
     public void LoadMenu()
     {
-        SceneManager.LoadScene(1);
         Time.timeScale = 1;
+        SceneManager.LoadScene(1);
     }
 
     public void QuitGame()

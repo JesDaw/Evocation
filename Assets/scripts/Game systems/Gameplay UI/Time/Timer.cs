@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using TMPro;
 
 
@@ -9,10 +10,19 @@ using TMPro;
 public class Timer : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI timerText;
+    [SerializeField] UnityEvent _TimeHitZero;
     public FloatVariable remainingTimeSeconds;
+
+    bool _time_hit_zero_has_been_called = false;
+    bool _game_is_active = true;
+
     void Update()
     {
-        Countdown();
+        if (_game_is_active)
+        {
+            Countdown();
+        }
+        
         DesplayTime();
     }
 
@@ -26,8 +36,12 @@ public class Timer : MonoBehaviour
         else 
         {
             remainingTimeSeconds._Value = 0;
+            _TimeHitZero.Invoke();
+            DeactivateTimer();    
         }
     }
+
+    public void DeactivateTimer(){ _game_is_active = false; }
 
     // conversion from seconds to minuts and seconds and desplays it in UI
     void DesplayTime()
