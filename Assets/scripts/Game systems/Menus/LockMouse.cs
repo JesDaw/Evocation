@@ -2,24 +2,26 @@ using UnityEngine;
 
 public class LockMouse : MonoBehaviour
 {
-    public BoolVariable IsMenuOpen;
+    [SerializeField] bool MenuIsOpen;
 
-    void Update()
+    void Start() 
     {
-        CursorControl();
+        MenuIsOpen = false;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
-
-    void CursorControl() 
+    public void OnEventRaised() 
     {
-        if (IsMenuOpen._Value)
-        {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-        }
-        else
+        MenuIsOpen = !MenuIsOpen;
+        if (MenuIsOpen)
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class LossMenu : MonoBehaviour
 {
@@ -6,13 +7,15 @@ public class LossMenu : MonoBehaviour
   [SerializeField] GameObject defeatMenuUI;
   [SerializeField] GameObject pauseMenuUI;
 
+  [SerializeField] UnityEvent ToggleMenu;
+
     void Start()
     {
         victoryMenuUI.SetActive(false);
     }
     public void OnEventRaised()
     {
-      Debug.Log("here 3");
+        ToggleMenu.Invoke();
         pauseMenuUI.SetActive(false);
         defeatMenuUI.SetActive(true);
         victoryMenuUI.SetActive(false);

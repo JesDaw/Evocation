@@ -124,6 +124,7 @@ GameObject:
   - component: {fileID: 1465774164666950800}
   - component: {fileID: 4843048538488971322}
   - component: {fileID: 3427854758063381521}
+  - component: {fileID: 1442724257326407446}
   m_Layer: 0
   m_Name: Player v2
   m_TagString: Untagged
@@ -438,6 +439,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e9055020654f764b9aad1cff3528e3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _player_Stats: {fileID: 0}
   rb: {fileID: 4312519828354290364}
   groundCheck: {fileID: 4916488986412298473}
   groundLayer:
@@ -509,6 +511,18 @@ MonoBehaviour:
   OnKnocked:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1442724257326407446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3033954488815394473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dab7b0d13f6f6455a96d7ab3f433925a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3883150596198097704
 GameObject:
   m_ObjectHideFlags: 0

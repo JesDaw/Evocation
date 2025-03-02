@@ -243,6 +243,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenuUI: {fileID: 454930796}
+  ToggleMenu:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 52f136a7c3a974fe885f12290f02e212, type: 2}
+        m_TargetAssemblyTypeName: Event, Assembly-CSharp
+        m_MethodName: Raise
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &4132337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -286,6 +301,21 @@ MonoBehaviour:
   victoryMenuUI: {fileID: 763861541}
   defeatMenuUI: {fileID: 55838045}
   pauseMenuUI: {fileID: 454930796}
+  ToggleMenu:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 52f136a7c3a974fe885f12290f02e212, type: 2}
+        m_TargetAssemblyTypeName: Event, Assembly-CSharp
+        m_MethodName: Raise
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &4132339
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301,6 +331,21 @@ MonoBehaviour:
   victoryMenuUI: {fileID: 763861541}
   defeatMenuUI: {fileID: 55838045}
   pauseMenuUI: {fileID: 454930796}
+  ToggleMenu:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 52f136a7c3a974fe885f12290f02e212, type: 2}
+        m_TargetAssemblyTypeName: Event, Assembly-CSharp
+        m_MethodName: Raise
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &4132340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1810,8 +1855,83 @@ Transform:
   - {fileID: 1036933421}
   - {fileID: 1129622842}
   - {fileID: 332168481}
+  - {fileID: 454538494}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &454538493
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 454538494}
+  - component: {fileID: 454538496}
+  - component: {fileID: 454538495}
+  m_Layer: 0
+  m_Name: MouseManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &454538494
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 454538493}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.044036865, y: 0.38502502, z: -0.0111983325}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 442664046}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &454538495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 454538493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df9c6c7d8744e45238a0877734f9942a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 52f136a7c3a974fe885f12290f02e212, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 454538496}
+        m_TargetAssemblyTypeName: LockMouse, Assembly-CSharp
+        m_MethodName: OnEventRaised
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &454538496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 454538493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 366ff0d16342f47e9b23233ad7393138, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MenuIsOpen: 0
 --- !u!1 &454930796
 GameObject:
   m_ObjectHideFlags: 0
@@ -1934,7 +2054,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 366ff0d16342f47e9b23233ad7393138, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsMenuOpen: {fileID: 11400000, guid: 98726d64b279149159ad086f4dc2513e, type: 2}
+  MenuIsOpen: 0
 --- !u!1 &521007207
 GameObject:
   m_ObjectHideFlags: 0
@@ -2378,6 +2498,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1090226791}
     m_Modifications:
+    - target: {fileID: 714627194410149917, guid: 746de50b4184d4569b8098da7ab02e4e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 714627194410149917, guid: 746de50b4184d4569b8098da7ab02e4e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2425314781152571327, guid: 746de50b4184d4569b8098da7ab02e4e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.1300242
@@ -2425,13 +2553,27 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3033954488815394473, guid: 746de50b4184d4569b8098da7ab02e4e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2077282498}
   m_SourcePrefab: {fileID: 100100000, guid: 746de50b4184d4569b8098da7ab02e4e, type: 3}
 --- !u!4 &820148550 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2425314781152571327, guid: 746de50b4184d4569b8098da7ab02e4e, type: 3}
   m_PrefabInstance: {fileID: 820148549}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &820148551 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1442724257326407446, guid: 746de50b4184d4569b8098da7ab02e4e, type: 3}
+  m_PrefabInstance: {fileID: 820148549}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077282489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dab7b0d13f6f6455a96d7ab3f433925a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &831314882
 GameObject:
   m_ObjectHideFlags: 0
@@ -5512,6 +5654,39 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2024427877}
   m_CullTransparentMesh: 1
+--- !u!1 &2077282489 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3033954488815394473, guid: 746de50b4184d4569b8098da7ab02e4e, type: 3}
+  m_PrefabInstance: {fileID: 820148549}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2077282498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077282489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df9c6c7d8744e45238a0877734f9942a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 52f136a7c3a974fe885f12290f02e212, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 820148551}
+        m_TargetAssemblyTypeName: PlayersControlerScriptsManager, Assembly-CSharp
+        m_MethodName: OnEventRaised
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -18,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask whatIsLadder;
     private bool isFacingRight = true;
     private bool isClimbing;
+    bool _game_is_active;
 
     //Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
