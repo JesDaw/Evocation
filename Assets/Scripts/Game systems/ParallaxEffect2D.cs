@@ -1,33 +1,32 @@
 using TMPro;
 using UnityEngine;
 
-[System.Serializable]
-
-public class BackgroundElement
-{
-    public SpriteRenderer backgroundSprite;
-    [Range(0, 1)] public float scrollSpeed;
-    [HideInInspector] public Material spriteMaterial;
-}
-
 public class ParallaxEffect2D : MonoBehaviour
 {
-    private const float ScrollMultiplier = 0.01f;
+    private float startPos, length;
+    public GameObject cam;
+    public float parallaxSpeed;
 
-    [SerializeField] private BackgroundElement[] backgroundElement;
-    private void Start()
+    void Start()
     {
-        foreach (BackgroundElement element in backgroundElement)
-        {
-            element.spriteMaterial = element.backgroundSprite.material;
-        }
+        startPos = transform.position.x;
+        length = GetComponent<SpriteRenderer>().bounds.size.x;
     }
 
-    private void Update()
+    void FixedUpdate()
     {
-        foreach(BackgroundElement element in backgroundElement)
+        float distance = cam.transform.position.x * parallaxSpeed;
+        float movement = cam.transform.position.x * (1 - parallaxSpeed);
+
+        transform.position = new Vector3(startPos + distance, transform.position.y, transform.position.z);
+
+        if (movement > startPos + length)
         {
-            element.spriteMaterial.mainTextureOffset = new Vector2(transform.position.x * element.scrollSpeed * ScrollMultiplier, 0);
+            startPos += length;
+        }
+        else if (movement < startPos - length)
+        {
+            startPos -= length;
         }
     }
 }
