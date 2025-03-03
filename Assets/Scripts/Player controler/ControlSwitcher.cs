@@ -13,19 +13,19 @@ public class ControlSwitcher : MonoBehaviour
 
     private void ToggleControl()
     {
-        if (playerInput.currentActionMap.name == "Player") //when controlling player
-        {
-            SwitchToCameraControl();
-        }
-        else
-        {
-            SwitchToPlayerControl();
-        }
+        //if (playerInput.currentActionMap.name == "Player") //when controlling player
+        //{
+        //    SwitchToCameraControl();
+        //}
+        //else
+        //{
+        //    SwitchToPlayerControl();
+        //}
     }
 
     public void SwitchToPlayerControl()
     {
-        StartCoroutine(SwitchActionMap("Player"));
+        //StartCoroutine(SwitchActionMap("Player"));
         //playerInput.SwitchCurrentActionMap("Player");
         //playerMovementScript.enabled = true;
         //cameraControllerScript.enabled = false;
@@ -35,19 +35,19 @@ public class ControlSwitcher : MonoBehaviour
 
     public void SwitchToCameraControl()
     {
-        StartCoroutine(SwitchActionMap("Camera"));
+        //StartCoroutine(SwitchActionMap("Camera"));
         //playerInput.SwitchCurrentActionMap("Camera");
         //playerMovementScript.enabled = false;
         //cameraControllerScript.enabled = true;
 
         //currentMode = "Camera";
     }
-    
-    private IEnumerator SwitchActionMap(string actionMapName)
-    {
-        yield return null; // Wait one frame to ensure input system updates
 
-        playerInput.SwitchCurrentActionMap(actionMapName);
-        Debug.Log("Switched to: " + actionMapName);
-    }
+    //private IEnumerator SwitchActionMap(string actionMapName)
+    //{
+    //    yield return null; // Wait one frame to ensure input system updates
+
+    //    playerInput.SwitchCurrentActionMap(actionMapName);
+    //    Debug.Log("Switched to: " + actionMapName);
+    //}
 }
