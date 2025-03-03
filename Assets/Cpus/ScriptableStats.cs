@@ -15,6 +15,8 @@ public class ScriptableStats : ScriptableObject
     public float _StopDistance;
     public float _KnockBackVelocity;
     public float _KnockBackHealth;
+    public List<StatusEffect> _EffectsToApply;
+    public int _StatusHealth = 1;
     public enum AttackType {Projectile, Direct}
     public AttackType _AttackType = AttackType.Direct;
 }

@@ -30,9 +30,15 @@ public class CpuLogic : MonoBehaviour
         float randomNumber = Random.Range(-0.3f, 0.3f);
         _Stats._StopDistance = ScrStats._StopDistance + randomNumber;
         _Stats._CpuPriority = ScrStats._CpuPriority;
+
+        //knockback
         _Stats._KnockBackHealth = ScrStats._KnockBackHealth;
         _Stats._KnockBackVelocity = ScrStats._KnockBackVelocity;
         _Stats._KnockBackMax = ScrStats._KnockBackHealth;
+
+        //status effects
+        _Stats._StatusHealth = ScrStats._StatusHealth;
+        _Stats._StatusMax = ScrStats._StatusHealth;
         
         _Renderer.sprite = ScrStats._Sprite;
 
@@ -77,6 +83,23 @@ public class CpuLogic : MonoBehaviour
 
             Debug.Log("Attacked Enemy" + hits[SavedIndex].collider.gameObject.name);
             EnemyStats.Attack(_Stats._Attack);
+            
+            //Status Effects
+            if(EnemyStats._StatusHealth <= 0)
+            {
+                if(ScrStats._EffectsToApply.Count == 0) return;
+
+                foreach(StatusEffect effect in ScrStats._EffectsToApply)
+                {
+                    if(effect is null) return;
+                    Debug.Log("Effect Applied");
+                    EnemyStats.AddStatusEffect(effect);
+                }
+            }
+            else
+            {
+                EnemyStats._StatusHealth--;
+            }
         }
         else
         {
