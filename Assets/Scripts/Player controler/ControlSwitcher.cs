@@ -13,6 +13,10 @@ public class ControlSwitcher : MonoBehaviour
     public Camera player_cam;
     public Camera free_cam;
 
+    //script references
+    public CameraController camera_movement;
+    public PlayerMovement player_movement;
+
     private bool on_player = true; //starts w/ controlling the player
 
     private void Update()
@@ -46,19 +50,35 @@ public class ControlSwitcher : MonoBehaviour
         free_cam.enabled = false;
         free_cam.gameObject.SetActive(false);
 
+        if (player_movement != null)
+            player_movement.enabled = true;
+
+        //disable the camera controls
+        if (camera_movement != null)
+            camera_movement.enabled = false;
+
         Debug.Log("switched to player");
     }
 
     public void SwitchToCameraControl()
     {
         on_player = false;
-        player_control.Invoke();
+        camera_control.Invoke();
 
         free_cam.gameObject.SetActive(true);
         free_cam.enabled = true;
 
         player_cam.enabled = false;
         player_cam.gameObject.SetActive(false);
+
+        camera_movement.enabled = true;
+
+         if (camera_movement != null)
+            camera_movement.enabled = true;
+            
+        //disable the player movmenet script when switched to camera controls
+        if (player_movement != null)
+            player_movement.enabled = false;
 
         Debug.Log("switched to camera");
     }
