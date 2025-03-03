@@ -3108,6 +3108,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 714627194410149917, guid: 746de50b4184d4569b8098da7ab02e4e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -10.698355
+      objectReference: {fileID: 0}
+    - target: {fileID: 714627194410149917, guid: 746de50b4184d4569b8098da7ab02e4e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.07370782
+      objectReference: {fileID: 0}
+    - target: {fileID: 984600387210186987, guid: 746de50b4184d4569b8098da7ab02e4e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1465774164666950800, guid: 746de50b4184d4569b8098da7ab02e4e, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -3155,6 +3167,10 @@ PrefabInstance:
     - target: {fileID: 3033954488815394473, guid: 746de50b4184d4569b8098da7ab02e4e, type: 3}
       propertyPath: m_Name
       value: Player 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3883150596198097704, guid: 746de50b4184d4569b8098da7ab02e4e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7934,6 +7950,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerController: {fileID: 1465774164854801795}
   player2Controller: {fileID: 932778218}
+  player1_cam: {fileID: 984600385804481016}
+  player2_cam: {fileID: 0}
   player1Active: 1
 --- !u!4 &1873089378
 Transform:
@@ -8489,7 +8507,7 @@ Transform:
   m_GameObject: {fileID: 3883150596392174139}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -23.001646, y: 0.9262922, z: -10}
+  m_LocalPosition: {x: -33.7, y: 1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8752,6 +8770,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 4dd2934a-58ef-4c52-b197-2c852b47f6c5
     m_ActionName: 'UI/TogglePause[/Keyboard/escape]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0d57ce1b-fe5a-40f0-aaa2-0bb221ba0dd6
+    m_ActionName: 'Player/ToggleControl[/Keyboard/tab]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
