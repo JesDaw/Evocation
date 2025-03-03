@@ -10,8 +10,8 @@ public class CameraController : MonoBehaviour
     private InputSystem_Actions inputActions; //reference to input sys
 
     [SerializeField]
-    private float moveSpeed = 10f;
-    private float zoomStep = 1f, minCamSize = 2f, maxCamSize = 6.4f;
+    public float moveSpeed = 10f;
+    public float zoomStep = 1f;
 
     [SerializeField]
     private SpriteRenderer mapRenderer;
@@ -20,6 +20,8 @@ public class CameraController : MonoBehaviour
     private PlayerInput playerInput; //using unity input sys
     private Vector2 moveInput; //WASD
     private float zoomInput; //mouse scroll wheel
+    private float minCamSize, maxCamSize;
+
 
     private void Awake()
     {
@@ -27,17 +29,31 @@ public class CameraController : MonoBehaviour
         inputActions = new InputSystem_Actions(); //initialize InputSystem_Actions(input actions editor)
         inputActions.Enable();  //enable the input actions
 
-        mapMinX = mapRenderer.transform.position.x - mapRenderer.bounds.size.x / 2f;
-        mapMaxX = mapRenderer.transform.position.x + mapRenderer.bounds.size.x / 2f;
+        //removed map bounds calculations; it is now done dynamically
+        mapMinX = mapRenderer.bounds.min.x;
+        mapMaxX = mapRenderer.bounds.max.x;
+        mapMinY = mapRenderer.bounds.min.y;
+        mapMaxY = mapRenderer.bounds.max.y;
 
-        mapMinY = mapRenderer.transform.position.y - mapRenderer.bounds.size.y / 2f;
-        mapMaxY = mapRenderer.transform.position.y + mapRenderer.bounds.size.y / 2f;
+        //fixed the zoom in/out limits
+        maxCamSize = mapRenderer.bounds.size.y / 2f;
+        minCamSize = maxCamSize / 4f;
+
+        cam.orthographicSize = maxCamSize;
+
     }
 
     private void OnEnable()
     {
         inputActions.Camera.Move.performed += MoveCamera;  //move binding
         //inputActions.Camera.Zoom.performed += Zoom;  //zoom binding
+        if (inputActions == null)
+        {
+            inputActions = new InputSystem_Actions();
+        }
+
+    inputActions.Enable();
+    inputActions.Camera.Enable();
     }
 
     private void OnDisable()
@@ -58,8 +74,11 @@ public class CameraController : MonoBehaviour
 
         if (inputActions.Camera.Zoom != null)
         {
-            zoomInput = Mouse.current.scroll.ReadValue().y; // read zoom input
-            Zoom(); // call Zoom without parameters
+            zoomInput = Mouse.current.scroll.ReadValue().y * 0.25f; // read zoom input
+            if (zoomInput != 0)  
+            {
+                Zoom();  
+            }
         }
     }
 
@@ -88,6 +107,10 @@ public class CameraController : MonoBehaviour
     {
         float camHeight = cam.orthographicSize;
         float camWidth = cam.orthographicSize * cam.aspect;
+
+        //adjust to the actual size of the map
+        float map_width = mapRenderer.bounds.size.x;
+        float map_height = mapRenderer.bounds.size.y;
 
         float minX = mapMinX + camWidth;
         float maxX = mapMaxX - camWidth;
