@@ -4,7 +4,7 @@ using UnityEngine;
 public class StatusEffect : ScriptableObject
 {
     //tick cannot go lower than 0.1 (see Stats script)
-    public float _Damage;
+    public int _Damage;
     public float _Tick;
     public float _Length;
 }

@@ -19,11 +19,12 @@ public class Stats : MonoBehaviour
     public List<StatusEffect> _StatusEffects;
     //x = Tick
     //y = Length
-    private List<Vector2> _StatusTicksMax;
+    public List<Vector2> _StatusTicksMax;
     public List<Vector2> _StatusTicks;
     public int _StatusMax;
     public int _StatusHealth;
-    [SerializeField] UnityEvent OnDeath, OnDamage, OnTick;
+    [SerializeField] UnityEvent OnDeath, OnDamage;
+    [SerializeField] UnityEvent<StatusEffect> OnTick;
     [SerializeField] UnityEvent<Vector2> OnKnocked;
 
     public void Start()
@@ -46,7 +47,7 @@ public class Stats : MonoBehaviour
         {
             Vector2 CurrentStatus = _StatusTicks[I];
 
-            if(CurrentStatus.x > 0)
+            if (CurrentStatus.x > 0)
             {
                 CurrentStatus.x -= _TickSpeed;
                 Debug.Log(CurrentStatus);
@@ -54,8 +55,11 @@ public class Stats : MonoBehaviour
             else
             {
                 CurrentStatus.x = _StatusTicksMax[I].x;
-                Debug.Log(CurrentStatus);
-                if(OnTick != null) OnTick.Invoke();
+
+                CurrentStatus.y -= CurrentStatus.x;
+                Attack(_StatusEffects[I]._Damage);
+
+                OnTick?.Invoke(_StatusEffects[I]);
             }
 
             _StatusTicks[I] = CurrentStatus;
