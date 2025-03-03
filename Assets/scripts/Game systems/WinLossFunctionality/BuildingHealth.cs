@@ -4,7 +4,7 @@ using UnityEngine.Events;
 public class BuildingHealth : MonoBehaviour
 {
     [SerializeField] FloatVariable Health;
-   [SerializeField] UnityEvent _end_game;
+    [SerializeField] UnityEvent _end_game;
     [SerializeField] UnityEvent _damage_taken;
    
     public void TakeDamage(float damage)
@@ -18,4 +18,6 @@ public class BuildingHealth : MonoBehaviour
             _end_game.Invoke();    
         }
     }
+
+    public void ResetHealth(){ Health.Reset(); }
 }
