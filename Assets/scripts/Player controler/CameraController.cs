@@ -10,8 +10,8 @@ public class CameraController : MonoBehaviour
     private InputSystem_Actions inputActions; //reference to input sys
 
     [SerializeField]
-    private float moveSpeed = 10f;
-    private float zoomStep = 1f, minCamSize = 2f, maxCamSize = 6.4f;
+    public float moveSpeed = 10f;
+    public float zoomStep = 1f, minCamSize = 2f, maxCamSize = 6.4f;
 
     [SerializeField]
     private SpriteRenderer mapRenderer;
@@ -20,6 +20,10 @@ public class CameraController : MonoBehaviour
     private PlayerInput playerInput; //using unity input sys
     private Vector2 moveInput; //WASD
     private float zoomInput; //mouse scroll wheel
+
+    //camera borders are same with player
+    public Transform player;
+    public float borderRadius = 5f; 
 
     private void Awake()
     {
@@ -50,24 +54,39 @@ public class CameraController : MonoBehaviour
     {
         //MoveCamera();
         //continuous movement input; holding down on WASD
-
-        Vector2 move = inputActions.Camera.Move.ReadValue<Vector2>();
-
-        Vector3 newPosition = cam.transform.position + new Vector3(move.x, move.y, 0) * moveSpeed * Time.deltaTime;
-        cam.transform.position = ClampCamera(newPosition);
-
-        if (inputActions.Camera.Zoom != null)
+        if (playerInput.currentActionMap.name == "Camera")
         {
-            zoomInput = Mouse.current.scroll.ReadValue().y; // read zoom input
-            Zoom(); // call Zoom without parameters
+            Vector2 move = inputActions.Camera.Move.ReadValue<Vector2>();
+
+            Vector3 newPosition = cam.transform.position + new Vector3(move.x, move.y, 0) * moveSpeed * Time.deltaTime;
+            cam.transform.position = ClampCamera(newPosition);
+
+            if (inputActions.Camera.Zoom != null)
+            {
+                zoomInput = Mouse.current.scroll.ReadValue().y; //read zoom input
+                Zoom();
+            }
         }
     }
-
     private void MoveCamera(InputAction.CallbackContext ctx)
     {
         Vector2 move = ctx.ReadValue<Vector2>(); //read move input; WASD
         Vector3 newPosition = cam.transform.position + new Vector3(move.x, move.y, 0) * moveSpeed * Time.deltaTime;
         cam.transform.position = ClampCamera(newPosition);
+    }
+
+    private void UpdateCameraBorders()
+    {
+        if (player != null)
+        {
+            float playerX = player.position.x;
+            float playerY = player.position.y;
+
+            mapMinX = playerX - borderRadius;
+            mapMaxX = playerX + borderRadius;
+            mapMinY = playerY - borderRadius;
+            mapMaxY = playerY + borderRadius;
+        }
     }
 
     private void Zoom()
