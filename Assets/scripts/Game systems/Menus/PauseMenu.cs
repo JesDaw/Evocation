@@ -84,5 +84,5 @@ public class PauseMenu : MonoBehaviour
         Application.Quit();
     }
 
-    void ResetValues(){ Debug.Log("here0");_ResetValues.Invoke(); }
+    void ResetValues(){ _ResetValues.Invoke(); }
 }
