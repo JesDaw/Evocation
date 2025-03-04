@@ -52,7 +52,8 @@ public class CpuLogic : MonoBehaviour
         Debug.DrawRay(_Raycast.position, transform.right * _Stats._StopDistance, Color.red);
         
         //what to do when detect something
-        if (hits.Length > 0)
+        if (hits.Length <= 0) _Stats._Speed = ScrStats._Speed;
+        else
         {
             int SavedIndex = -1;
             for (int I = 0; I < _Stats._CpuPriority.Count; I++)
@@ -100,10 +101,6 @@ public class CpuLogic : MonoBehaviour
             {
                 EnemyStats._StatusHealth--;
             }
-        }
-        else
-        {
-            _Stats._Speed = ScrStats._Speed;
         }
     }
     public void ApplyTempSpeed(Vector2 _SpeedInfo)
