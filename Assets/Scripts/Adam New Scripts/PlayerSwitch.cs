@@ -29,16 +29,16 @@ public class PlayerSwitch : MonoBehaviour
         {
             playerController.enabled = false;
             player2Controller.enabled = true;
-           // player1_cam.enabled = false;
-            //player2_cam.enabled = true;
+            player1_cam.enabled = false;
+            player2_cam.enabled = true;
             player1Active = false;
         }
         else
         {
             playerController.enabled = true;
             player2Controller.enabled = false;
-           // player1_cam.enabled = true;
-           // player2_cam.enabled = false;
+            player1_cam.enabled = true;
+            player2_cam.enabled = false;
             player1Active = true;
         }
     }
