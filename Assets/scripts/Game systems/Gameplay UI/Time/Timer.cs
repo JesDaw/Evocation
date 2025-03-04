@@ -42,7 +42,7 @@ public class Timer : MonoBehaviour
 
     public void DeactivateTimer(){ _game_is_active = false; }
 
-    public void ResetTimer(){ Debug.Log("here1"); remainingTimeSeconds.Reset();}
+    public void ResetTimer(){ remainingTimeSeconds.Reset();}
 
     // conversion from seconds to minuts and seconds and desplays it in UI
     void DesplayTime()

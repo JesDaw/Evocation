@@ -5,29 +5,42 @@ using UnityEngine.InputSystem;
 
 public class PauseMenu : MonoBehaviour
 {
-    public static bool GameIsPaused = false;
-    public static bool GameIsOver = false;
+    [SerializeField]  bool GameIsPaused = false;
+    [SerializeField]  bool GameIsOver = false;
     public GameObject pauseMenuUI;
     [SerializeField] UnityEvent ToggleMenu;
     [SerializeField] UnityEvent _ResetValues;
 
 
-  /*  InputAction pauseAction;
+    InputAction pauseAction;
 
     void Start()
     {
         pauseAction = InputSystem.actions.FindAction("Pause");
     }
-*/
+
     public void GameOver(){ GameIsOver = !GameIsOver;}
+
+    private void OnEnable()
+    {
+        if (pauseAction != null)
+            pauseAction.Enable();
+    }
+
+    private void OnDisable()
+    {
+        if (pauseAction != null)
+            pauseAction.Disable();
+    }
 
     public void TogglePause(InputAction.CallbackContext context)  
     {
         if(context.performed && GameIsOver == false)
         {
+            Debug.Log(GameIsOver);
             if (GameIsPaused)
                 {
-                  Resume();
+                    Resume();
                 }
             else
                 {
@@ -71,5 +84,5 @@ public class PauseMenu : MonoBehaviour
         Application.Quit();
     }
 
-    void ResetValues(){ Debug.Log("here0");_ResetValues.Invoke(); }
+    void ResetValues(){ _ResetValues.Invoke(); }
 }
