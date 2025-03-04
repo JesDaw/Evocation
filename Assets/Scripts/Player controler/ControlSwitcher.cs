@@ -38,24 +38,20 @@ public class ControlSwitcher : MonoBehaviour
 
     private void ToggleControl()
     {
-        //if (playerInput.currentActionMap.name == "Player") //when controlling player
-        //{
-        //    SwitchToCameraControl();
-        //}
-        //else
-        //{
-        //    SwitchToPlayerControl();
-        //}
-
+        if (on_player)
+        {
+            SwitchToCameraControl();
+        }
+        else
+        {
+            SwitchToPlayerControl();
+        }
     }
 
     public void SwitchToPlayerControl()
     {
-        //StartCoroutine(SwitchActionMap("Player"));
-        //playerInput.SwitchCurrentActionMap("Player");
-        //playerMovementScript.enabled = true;
-        //cameraControllerScript.enabled = false;
-
+        on_player = true;
+        player_control.Invoke(); //triggerr the unity event
 
         player_cam.gameObject.SetActive(true);
         player_cam.enabled = true;
@@ -66,6 +62,7 @@ public class ControlSwitcher : MonoBehaviour
         if (player_movement != null)
             player_movement.enabled = true;
 
+        //disable the camera controls
         //disable the camera controller script
         if (camera_movement != null)
             camera_movement.enabled = false;
@@ -79,18 +76,20 @@ public class ControlSwitcher : MonoBehaviour
 
     public void SwitchToCameraControl()
     {
-        //StartCoroutine(SwitchActionMap("Camera"));
-        //playerInput.SwitchCurrentActionMap("Camera");
-        //playerMovementScript.enabled = false;
-        //cameraControllerScript.enabled = true;
+        on_player = false;
+        camera_control.Invoke();
 
+        free_cam.gameObject.SetActive(true);
+        free_cam.enabled = true;
 
         player_cam.enabled = false;
         player_cam.gameObject.SetActive(false);
 
+        camera_movement.enabled = true;
+
          if (camera_movement != null)
             camera_movement.enabled = true;
-            
+
         //disable the player movmenet script when switched to camera controls
         if (player_movement != null)
             player_movement.enabled = false;
@@ -101,12 +100,4 @@ public class ControlSwitcher : MonoBehaviour
 
         Debug.Log("switched to camera");
     }
-    //private IEnumerator SwitchActionMap(string actionMapName)
-    //{
-    //    yield return null; // Wait one frame to ensure input system updates
-
-    //    playerInput.SwitchCurrentActionMap(actionMapName);
-    //    Debug.Log("Switched to: " + actionMapName);
-    //}
-
 }
