@@ -7,6 +7,7 @@ public class PlayersControlerScriptsManager : MonoBehaviour
 
      public void EnagbleControls()
      {
+        
         _actionable = true;
         
         if (TryGetComponent<PlayerMovement>(out PlayerMovement movement))
@@ -17,6 +18,7 @@ public class PlayersControlerScriptsManager : MonoBehaviour
         {
             combat.enabled = _actionable;
         }
+        Debug.Log(gameObject + "Controls enabled");
      }
 
      public void DisableControls()
@@ -31,5 +33,6 @@ public class PlayersControlerScriptsManager : MonoBehaviour
         {
             combat.enabled = _actionable;
         }
+        Debug.Log(gameObject + "Controls Disabled");
      }
 }

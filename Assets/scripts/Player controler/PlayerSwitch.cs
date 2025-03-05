@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class PlayerSwitch : MonoBehaviour
 {
-    [SerializeField] private List<PlayerMovement> players = new List<PlayerMovement>();
+    [SerializeField] private List<PlayersControlerScriptsManager> players = new List<PlayersControlerScriptsManager>();
     [SerializeField] private List<Camera> playerCameras = new List<Camera>();
 
     private int activePlayerIndex = 0;
@@ -36,7 +36,7 @@ public class PlayerSwitch : MonoBehaviour
         if (players.Count == 0 || playerCameras.Count == 0) return;
 
         // Disable current player
-        players[activePlayerIndex].enabled = false;
+        players[activePlayerIndex].DisableControls();
         playerCameras[activePlayerIndex].enabled = false;
 
         // Move to the next player
@@ -54,7 +54,10 @@ public class PlayerSwitch : MonoBehaviour
         for (int i = 0; i < players.Count; i++)
         {
             bool isActive = (i == index);
-            players[i].enabled = isActive;
+            if (isActive)
+                players[i].EnagbleControls();
+            else
+                players[i].DisableControls();
             playerCameras[i].enabled = isActive;
         }
 
