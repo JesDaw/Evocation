@@ -9,7 +9,7 @@ public class ControlSwitcher : MonoBehaviour
 
     // 🎮 Script References
     [SerializeField] private CameraController cameraMovement;
-    [SerializeField] private PlayerMovement playerMovement;
+    [SerializeField] private PlayersControlerScriptsManager playerMovementController;
 
     private InputSystem_Actions inputActions;
     private bool isControllingPlayer = true; // Starts by controlling the player
@@ -53,7 +53,7 @@ public class ControlSwitcher : MonoBehaviour
 
         if (playerCam != null) playerCam.enabled = true;
         if (freeCam != null) freeCam.enabled = false;
-        if (playerMovement != null) playerMovement.enabled = true;
+        if (playerMovementController != null) playerMovementController.EnagbleControls();
         if (cameraMovement != null) cameraMovement.enabled = false;
 
         inputActions.Camera.Disable();
@@ -72,7 +72,7 @@ public class ControlSwitcher : MonoBehaviour
         if (freeCam != null) freeCam.enabled = true;
         if (playerCam != null) playerCam.enabled = false;
         if (cameraMovement != null) cameraMovement.enabled = true;
-        if (playerMovement != null) playerMovement.enabled = false;
+        if (playerMovementController != null) playerMovementController.DisableControls();
 
         inputActions.Player.Disable();
         inputActions.Camera.Enable();
