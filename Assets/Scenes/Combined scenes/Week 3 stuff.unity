@@ -3476,7 +3476,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &488935342
 Transform:
   m_ObjectHideFlags: 0
@@ -3505,7 +3505,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 488935346}
-  moveSpeed: 10
+  moveSpeed: 75
   zoomStep: 1
   mapRenderer: {fileID: 680287520}
 --- !u!114 &488935344
@@ -3999,8 +3999,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 339570406}
   - {fileID: 2425314782978297516}
+  - {fileID: 339570406}
   - {fileID: 714627195142670606}
   m_Father: {fileID: 2009654821}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7301,7 +7301,7 @@ GameObject:
   - component: {fileID: 1245444542}
   - component: {fileID: 1245444543}
   m_Layer: 0
-  m_Name: ControlSwitcher
+  m_Name: CameraSwitcher
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7334,64 +7334,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 170e4fa6fbc959d449367a46aff4a164, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player_control:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3033954487002578874}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 488935341}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  camera_control:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 488935341}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 3033954487002578874}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  player_cam: {fileID: 984600385804481016}
-  free_cam: {fileID: 488935346}
-  camera_movement: {fileID: 488935343}
-  player_movement: {fileID: 1465774164854801795}
+  playerCam: {fileID: 984600385804481016}
+  freeCam: {fileID: 488935346}
+  cameraMovement: {fileID: 488935343}
+  playerMovement: {fileID: 1465774164854801795}
 --- !u!1 &1249886296
 GameObject:
   m_ObjectHideFlags: 0
