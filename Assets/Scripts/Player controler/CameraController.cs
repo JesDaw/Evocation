@@ -1,59 +1,53 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.InputSystem;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField]
-    private Camera cam;
-    private InputSystem_Actions inputActions; //reference to input sys
+    // 🎥 Camera Reference
+    [SerializeField] private Camera cam;
 
-    [SerializeField]
-    public float moveSpeed = 10f;
-    public float zoomStep = 1f;
+    // 🎮 Input System Actions
+    private InputSystem_Actions inputActions;
 
-    [SerializeField]
-    private SpriteRenderer mapRenderer;
+    // ⚡ Movement and Zoom Variables
+    [SerializeField] private float moveSpeed = 10f;
+    [SerializeField] private float zoomStep = 1f;
+
+    // 📍 Map Boundaries
+    [SerializeField] private SpriteRenderer mapRenderer;
     private float mapMinX, mapMaxX, mapMinY, mapMaxY;
-
-    private PlayerInput playerInput; //using unity input sys
-    private Vector2 moveInput; //WASD
-    private float zoomInput; //mouse scroll wheel
+    
+    // 📌 Camera Zoom Limits
     private float minCamSize, maxCamSize;
-
 
     private void Awake()
     {
-        //playerInput = GetComponent<PlayerInput>(); //GetComponent gets the PlayerInput attached to game object (the backgroudn)
-        inputActions = new InputSystem_Actions(); //initialize InputSystem_Actions(input actions editor)
-        inputActions.Enable();  //enable the input actions
+        inputActions = new InputSystem_Actions();
+        inputActions.Enable();
 
-        //removed map bounds calculations; it is now done dynamically
-        mapMinX = mapRenderer.bounds.min.x;
-        mapMaxX = mapRenderer.bounds.max.x;
-        mapMinY = mapRenderer.bounds.min.y;
-        mapMaxY = mapRenderer.bounds.max.y;
+        if (mapRenderer != null)
+        {
+            mapMinX = mapRenderer.bounds.min.x;
+            mapMaxX = mapRenderer.bounds.max.x;
+            mapMinY = mapRenderer.bounds.min.y;
+            mapMaxY = mapRenderer.bounds.max.y;
 
-        //fixed the zoom in/out limits
-        maxCamSize = mapRenderer.bounds.size.y / 2f;
-        minCamSize = maxCamSize / 4f;
+            maxCamSize = mapRenderer.bounds.size.y / 2f;
+            minCamSize = maxCamSize / 4f;
 
-        cam.orthographicSize = maxCamSize;
-
+            cam.orthographicSize = maxCamSize;
+        }
+        else
+        {
+            Debug.LogError("Map Renderer is not assigned!");
+        }
     }
 
     private void OnEnable()
     {
-        inputActions.Camera.Move.performed += MoveCamera;  //move binding
-        //inputActions.Camera.Zoom.performed += Zoom;  //zoom binding
-        if (inputActions == null)
-        {
-            inputActions = new InputSystem_Actions();
-        }
-
-    inputActions.Enable();
-    inputActions.Camera.Enable();
+        inputActions.Camera.Move.performed += OnMoveCamera;
+        inputActions.Enable();
+        inputActions.Camera.Enable();
     }
 
     private void OnDisable()
@@ -61,56 +55,55 @@ public class CameraController : MonoBehaviour
         inputActions.Disable();
     }
 
-    // Update is called once per frame
     private void Update()
     {
-        //MoveCamera();
-        //continuous movement input; holding down on WASD
+        HandleMovement();
+        HandleZoom();
+    }
 
-        Vector2 move = inputActions.Camera.Move.ReadValue<Vector2>();
-
-        Vector3 newPosition = cam.transform.position + new Vector3(move.x, move.y, 0) * moveSpeed * Time.deltaTime;
+    /// <summary>
+    /// Handles continuous movement based on input.
+    /// </summary>
+    private void HandleMovement()
+    {
+        Vector2 moveInput = inputActions.Camera.Move.ReadValue<Vector2>();
+        Vector3 newPosition = cam.transform.position + new Vector3(moveInput.x, moveInput.y, 0) * moveSpeed * Time.deltaTime;
         cam.transform.position = ClampCamera(newPosition);
+    }
 
-        if (inputActions.Camera.Zoom != null)
+    /// <summary>
+    /// Handles zooming in and out based on mouse scroll input.
+    /// </summary>
+    private void HandleZoom()
+    {
+        float zoomInput = Mouse.current.scroll.ReadValue().y * 0.25f; 
+        if (Mathf.Abs(zoomInput) > 0)
         {
-            zoomInput = Mouse.current.scroll.ReadValue().y * 0.25f; // read zoom input
-            if (zoomInput != 0)  
-            {
-                Zoom();  
-            }
+            float newSize = cam.orthographicSize - (zoomInput * zoomStep);
+            cam.orthographicSize = Mathf.Clamp(newSize, minCamSize, maxCamSize);
+            cam.transform.position = ClampCamera(cam.transform.position);
         }
     }
 
-    private void MoveCamera(InputAction.CallbackContext ctx)
+    /// <summary>
+    /// Moves the camera based on input.
+    /// </summary>
+    private void OnMoveCamera(InputAction.CallbackContext ctx)
     {
-        Vector2 move = ctx.ReadValue<Vector2>(); //read move input; WASD
+        Vector2 move = ctx.ReadValue<Vector2>();
         Vector3 newPosition = cam.transform.position + new Vector3(move.x, move.y, 0) * moveSpeed * Time.deltaTime;
         cam.transform.position = ClampCamera(newPosition);
     }
 
-    private void Zoom()
-    {
-        //float zoomInput = ctx.ReadValue<float>(); //read zoom input; scroll wheel
-        //float newSize = cam.orthographicSize - zoomInput * zoomStep;
-        
-        //scroll up = zoom in; decrease orthographic size
-        //scroll down = zoom out; increase orthographic size
-        float zoomChange = zoomInput * zoomStep;
-        float newSize = cam.orthographicSize - zoomChange;
-        
-        cam.orthographicSize = Mathf.Clamp(newSize, minCamSize, maxCamSize);
-        cam.transform.position = ClampCamera(cam.transform.position);
-    }
-
+    /// <summary>
+    /// Ensures the camera stays within the map bounds.
+    /// </summary>
     private Vector3 ClampCamera(Vector3 targetPosition)
     {
+        if (mapRenderer == null) return targetPosition;
+
         float camHeight = cam.orthographicSize;
         float camWidth = cam.orthographicSize * cam.aspect;
-
-        //adjust to the actual size of the map
-        float map_width = mapRenderer.bounds.size.x;
-        float map_height = mapRenderer.bounds.size.y;
 
         float minX = mapMinX + camWidth;
         float maxX = mapMaxX - camWidth;
