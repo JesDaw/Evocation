@@ -1745,18 +1745,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 339570398}
-        m_TargetAssemblyTypeName: Stats, Assembly-CSharp
-        m_MethodName: ToggleInvinciblity
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &339570396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1785,18 +1773,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 339570398}
-        m_TargetAssemblyTypeName: Stats, Assembly-CSharp
-        m_MethodName: ToggleInvinciblity
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &339570397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1809,7 +1785,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dab7b0d13f6f6455a96d7ab3f433925a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _actionable: 0
+  _actionable: 1
 --- !u!114 &339570398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3492,6 +3468,7 @@ GameObject:
   m_Component:
   - component: {fileID: 488935342}
   - component: {fileID: 488935346}
+  - component: {fileID: 488935345}
   - component: {fileID: 488935344}
   - component: {fileID: 488935343}
   m_Layer: 0
@@ -3576,6 +3553,14 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!81 &488935345
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 488935341}
+  m_Enabled: 1
 --- !u!20 &488935346
 Camera:
   m_ObjectHideFlags: 0
@@ -4015,8 +4000,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2425314782978297516}
   - {fileID: 339570406}
+  - {fileID: 2425314782978297516}
   - {fileID: 714627195142670606}
   m_Father: {fileID: 2009654821}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6241,18 +6226,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 3427854758817742082}
-        m_TargetAssemblyTypeName: Stats, Assembly-CSharp
-        m_MethodName: ToggleInvinciblity
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &1122168463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6272,18 +6245,6 @@ MonoBehaviour:
       - m_Target: {fileID: 1442724255504612869}
         m_TargetAssemblyTypeName: PlayersControlerScriptsManager, Assembly-CSharp
         m_MethodName: DisableControls
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 3427854758817742082}
-        m_TargetAssemblyTypeName: Stats, Assembly-CSharp
-        m_MethodName: ToggleInvinciblity
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7342,7 +7303,7 @@ GameObject:
   - component: {fileID: 1245444542}
   - component: {fileID: 1245444543}
   m_Layer: 0
-  m_Name: CameraSwitcher
+  m_Name: ControlSwitcher
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7375,10 +7336,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 170e4fa6fbc959d449367a46aff4a164, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCam: {fileID: 984600385804481016}
   freeCam: {fileID: 488935346}
   cameraMovement: {fileID: 488935343}
-  playerMovementController: {fileID: 1442724255504612869}
+  playerSwitcher: {fileID: 749055780}
 --- !u!1 &1249886296
 GameObject:
   m_ObjectHideFlags: 0
