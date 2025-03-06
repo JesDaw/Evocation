@@ -63,4 +63,20 @@ public class PlayerSwitch : MonoBehaviour
 
         Debug.Log($"Switched to Player {index + 1}");
     }
+
+        /// <summary>
+    /// Returns the currently active player controller.
+    /// </summary>
+    public PlayersControlerScriptsManager GetCurrentPlayerController()
+    {
+        return (players.Count > 0) ? players[activePlayerIndex] : null;
+    }
+
+    /// <summary>
+    /// Returns the currently active player camera.
+    /// </summary>
+    public Camera GetCurrentPlayerCamera()
+    {
+        return (playerCameras.Count > 0) ? playerCameras[activePlayerIndex] : null;
+    }
 }
