@@ -1745,6 +1745,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 339570398}
+        m_TargetAssemblyTypeName: Stats, Assembly-CSharp
+        m_MethodName: ToggleInvinciblity
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &339570396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1773,6 +1785,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 339570398}
+        m_TargetAssemblyTypeName: Stats, Assembly-CSharp
+        m_MethodName: ToggleInvinciblity
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &339570397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1785,7 +1809,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dab7b0d13f6f6455a96d7ab3f433925a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _actionable: 1
+  _actionable: 0
 --- !u!114 &339570398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1830,6 +1854,7 @@ MonoBehaviour:
   OnKnocked:
     m_PersistentCalls:
       m_Calls: []
+  _Invincible: 0
 --- !u!114 &339570399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3467,7 +3492,6 @@ GameObject:
   m_Component:
   - component: {fileID: 488935342}
   - component: {fileID: 488935346}
-  - component: {fileID: 488935345}
   - component: {fileID: 488935344}
   - component: {fileID: 488935343}
   m_Layer: 0
@@ -3552,14 +3576,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!81 &488935345
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 488935341}
-  m_Enabled: 1
 --- !u!20 &488935346
 Camera:
   m_ObjectHideFlags: 0
@@ -4604,11 +4620,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ad885267948ce442bff24a57ab96800, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerController: {fileID: 1465774164854801795}
-  player2Controller: {fileID: 339570400}
-  player1_cam: {fileID: 984600385804481016}
-  player2_cam: {fileID: 848708005}
-  player1Active: 1
+  players:
+  - {fileID: 1442724255504612869}
+  - {fileID: 339570397}
+  playerCameras:
+  - {fileID: 984600385804481016}
+  - {fileID: 848708005}
 --- !u!4 &749055781
 Transform:
   m_ObjectHideFlags: 0
@@ -6224,6 +6241,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 3427854758817742082}
+        m_TargetAssemblyTypeName: Stats, Assembly-CSharp
+        m_MethodName: ToggleInvinciblity
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1122168463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6243,6 +6272,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1442724255504612869}
         m_TargetAssemblyTypeName: PlayersControlerScriptsManager, Assembly-CSharp
         m_MethodName: DisableControls
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 3427854758817742082}
+        m_TargetAssemblyTypeName: Stats, Assembly-CSharp
+        m_MethodName: ToggleInvinciblity
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7337,7 +7378,7 @@ MonoBehaviour:
   playerCam: {fileID: 984600385804481016}
   freeCam: {fileID: 488935346}
   cameraMovement: {fileID: 488935343}
-  playerMovement: {fileID: 1465774164854801795}
+  playerMovementController: {fileID: 1442724255504612869}
 --- !u!1 &1249886296
 GameObject:
   m_ObjectHideFlags: 0
@@ -11229,6 +11270,7 @@ MonoBehaviour:
   OnKnocked:
     m_PersistentCalls:
       m_Calls: []
+  _Invincible: 0
 --- !u!114 &3705446678323871948
 MonoBehaviour:
   m_ObjectHideFlags: 0
