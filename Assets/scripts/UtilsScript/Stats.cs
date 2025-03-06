@@ -17,9 +17,14 @@ public class Stats : MonoBehaviour
     public List<StatusEffect> _StatusEffects;
     [SerializeField] UnityEvent OnDeath, OnDamage;
     [SerializeField] UnityEvent<Vector2> OnKnocked;
+    [SerializeField] bool _Invincible = false;
+
+    public void ToggleInvinciblity(){ _Invincible = !_Invincible; }
 
     public void Attack(int _Damage)
     {
+        if (_Invincible) return;
+
         _Health -= _Damage;
         _KnockBackHealth -= _Damage;
 
