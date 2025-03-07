@@ -84,7 +84,11 @@ public class ControlSwitcher : MonoBehaviour
             if (currentPlayer != null) currentPlayer.DisableControls();
         }
 
-        if (freeCam != null) freeCam.enabled = true;
+        if (freeCam != null) {
+            freeCam.enabled = true;
+            freeCam.transform.position = playerSwitcher.GetCurrentPlayerCamera().transform.position;
+            freeCam.orthographicSize = playerSwitcher.GetCurrentPlayerCamera().orthographicSize;
+        }
         if (cameraMovement != null) cameraMovement.enabled = true;
 
         inputActions.Player.Disable();
