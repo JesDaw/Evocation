@@ -1,44 +1,39 @@
-//using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Events;
 
 public class ControlSwitcher : MonoBehaviour
 {
-    //events
-    public UnityEvent player_control;
-    public UnityEvent camera_control;
+    // 🎥 Camera References
+    [SerializeField] private Camera freeCam;
 
-    //cameras
-    public Camera player_cam;
-    public Camera free_cam;
+    // 🎮 Script References
+    [SerializeField] private CameraController cameraMovement;
+    [SerializeField] private PlayerSwitch playerSwitcher; // Reference to PlayerSwitch script
 
-    //script references
-    public CameraController camera_movement;
-    public PlayerMovement player_movement;
-
-    private InputSystem_Actions input_actions;
-
-    private bool on_player = true; //starts w/ controlling the player
-
+    private InputSystem_Actions inputActions;
+    private bool isControllingPlayer = true; // Starts by controlling the player
 
     private void Awake()
     {
-        input_actions = new InputSystem_Actions();
-        input_actions.Enable();
+        inputActions = new InputSystem_Actions();
+        inputActions.Enable();
     }
 
     private void Update()
     {
-        if (Keyboard.current.tabKey.wasPressedThisFrame)//change the control w/ tab key
+        // Switch control using Tab key
+        if (Keyboard.current.tabKey.wasPressedThisFrame)
         {
             ToggleControl();
         }
     }
 
+    /// <summary>
+    /// Toggles between player and camera control.
+    /// </summary>
     private void ToggleControl()
     {
-        if (on_player)
+        if (isControllingPlayer)
         {
             SwitchToCameraControl();
         }
@@ -48,56 +43,53 @@ public class ControlSwitcher : MonoBehaviour
         }
     }
 
-    public void SwitchToPlayerControl()
+    /// <summary>
+    /// Switches control back to the current player.
+    /// </summary>
+    private void SwitchToPlayerControl()
     {
-        on_player = true;
-        player_control.Invoke(); //triggerr the unity event
+        isControllingPlayer = true;
 
-        player_cam.gameObject.SetActive(true);
-        player_cam.enabled = true;
+        if (playerSwitcher != null)
+        {
+            Camera currentPlayerCam = playerSwitcher.GetCurrentPlayerCamera();
+            PlayersControlerScriptsManager currentPlayer = playerSwitcher.GetCurrentPlayerController();
 
-        free_cam.enabled = false;
-        free_cam.gameObject.SetActive(false);
+            if (currentPlayerCam != null) currentPlayerCam.enabled = true;
+            if (freeCam != null) freeCam.enabled = false;
+            if (currentPlayer != null) currentPlayer.EnagbleControls();
+        }
 
-        if (player_movement != null)
-            player_movement.enabled = true;
+        if (cameraMovement != null) cameraMovement.enabled = false;
 
-        //disable the camera controls
-        //disable the camera controller script
-        if (camera_movement != null)
-            camera_movement.enabled = false;
+        inputActions.Camera.Disable();
+        inputActions.Player.Enable();
 
-        //switching the input system action map
-        input_actions.Camera.Disable();
-        input_actions.Player.Enable();
-
-        Debug.Log("switched to player");
+        Debug.Log("Switched to player control.");
     }
 
-    public void SwitchToCameraControl()
+    /// <summary>
+    /// Switches control to free camera mode.
+    /// </summary>
+    private void SwitchToCameraControl()
     {
-        on_player = false;
-        camera_control.Invoke();
+        isControllingPlayer = false;
 
-        free_cam.gameObject.SetActive(true);
-        free_cam.enabled = true;
+        if (playerSwitcher != null)
+        {
+            Camera currentPlayerCam = playerSwitcher.GetCurrentPlayerCamera();
+            PlayersControlerScriptsManager currentPlayer = playerSwitcher.GetCurrentPlayerController();
 
-        player_cam.enabled = false;
-        player_cam.gameObject.SetActive(false);
+            if (currentPlayerCam != null) currentPlayerCam.enabled = false;
+            if (currentPlayer != null) currentPlayer.DisableControls();
+        }
 
-        camera_movement.enabled = true;
+        if (freeCam != null) freeCam.enabled = true;
+        if (cameraMovement != null) cameraMovement.enabled = true;
 
-         if (camera_movement != null)
-            camera_movement.enabled = true;
+        inputActions.Player.Disable();
+        inputActions.Camera.Enable();
 
-        //disable the player movmenet script when switched to camera controls
-        if (player_movement != null)
-            player_movement.enabled = false;
-
-        //switching the input system action map
-        input_actions.Player.Disable();
-        input_actions.Camera.Enable();
-
-        Debug.Log("switched to camera");
+        Debug.Log("Switched to camera control.");
     }
 }

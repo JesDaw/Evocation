@@ -1,21 +1,26 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class PlayerSwitch : MonoBehaviour
 {
-    public PlayerMovement playerController;
-    public PlayerMovement player2Controller;
-    public Camera player1_cam;
-    public Camera player2_cam;
-    public bool player1Active = true;
+    [SerializeField] private List<PlayersControlerScriptsManager> players = new List<PlayersControlerScriptsManager>();
+    [SerializeField] private List<Camera> playerCameras = new List<Camera>();
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private int activePlayerIndex = 0;
+
+    private void Start()
     {
-        
+        if (players.Count == 0 || playerCameras.Count == 0)
+        {
+            Debug.LogError("PlayerSwitch: No players or cameras assigned!");
+            return;
+        }
+
+        // Ensure only the first player is active at the start
+        ActivatePlayer(activePlayerIndex);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.RightShift))
         {
@@ -23,23 +28,55 @@ public class PlayerSwitch : MonoBehaviour
         }
     }
 
-    public void SwitchPlayer()
+    /// <summary>
+    /// Switches control to the next player in the list.
+    /// </summary>
+    private void SwitchPlayer()
     {
-        if (player1Active)
+        if (players.Count == 0 || playerCameras.Count == 0) return;
+
+        // Disable current player
+        players[activePlayerIndex].DisableControls();
+        playerCameras[activePlayerIndex].enabled = false;
+
+        // Move to the next player
+        activePlayerIndex = (activePlayerIndex + 1) % players.Count;
+
+        // Activate the new player
+        ActivatePlayer(activePlayerIndex);
+    }
+
+    /// <summary>
+    /// Activates the player at the given index and disables all others.
+    /// </summary>
+    private void ActivatePlayer(int index)
+    {
+        for (int i = 0; i < players.Count; i++)
         {
-            playerController.enabled = false;
-            player2Controller.enabled = true;
-            player1_cam.enabled = false;
-            player2_cam.enabled = true;
-            player1Active = false;
+            bool isActive = (i == index);
+            if (isActive)
+                players[i].EnagbleControls();
+            else
+                players[i].DisableControls();
+            playerCameras[i].enabled = isActive;
         }
-        else
-        {
-            playerController.enabled = true;
-            player2Controller.enabled = false;
-            player1_cam.enabled = true;
-            player2_cam.enabled = false;
-            player1Active = true;
-        }
+
+        Debug.Log($"Switched to Player {index + 1}");
+    }
+
+        /// <summary>
+    /// Returns the currently active player controller.
+    /// </summary>
+    public PlayersControlerScriptsManager GetCurrentPlayerController()
+    {
+        return (players.Count > 0) ? players[activePlayerIndex] : null;
+    }
+
+    /// <summary>
+    /// Returns the currently active player camera.
+    /// </summary>
+    public Camera GetCurrentPlayerCamera()
+    {
+        return (playerCameras.Count > 0) ? playerCameras[activePlayerIndex] : null;
     }
 }
