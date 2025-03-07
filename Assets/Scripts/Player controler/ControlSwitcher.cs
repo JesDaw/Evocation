@@ -56,8 +56,8 @@ public class ControlSwitcher : MonoBehaviour
             CinemachineCamera currentPlayerCam = playerSwitcher.GetCurrentPlayerCamera();
             PlayersControlerScriptsManager currentPlayer = playerSwitcher.GetCurrentPlayerController();
 
-            if (currentPlayerCam != null) currentPlayerCam.Priority = 1;
-            if (freeCam != null) freeCam.Priority = 0;
+            if (currentPlayerCam != null) currentPlayerCam.Priority = 2;
+            if (freeCam != null) freeCam.Priority = 1;
             if (currentPlayer != null) currentPlayer.EnagbleControls();
         }
 
@@ -72,7 +72,7 @@ public class ControlSwitcher : MonoBehaviour
     /// <summary>
     /// Switches control to free camera mode.
     /// </summary>
-    private void SwitchToCameraControl()
+    public void SwitchToCameraControl()
     {
         isControllingPlayer = false;
 
@@ -82,7 +82,7 @@ public class ControlSwitcher : MonoBehaviour
             PlayersControlerScriptsManager currentPlayer = playerSwitcher.GetCurrentPlayerController();
         
             if (freeCam != null) {
-                freeCam.Priority = 1;
+                freeCam.Priority = 2;
                 freeCam.transform.position = playerSwitcher.GetCurrentPlayerCamera().transform.position;
                 freeCam.gameObject.GetComponent<CinemachineCamera>().Lens.OrthographicSize = playerSwitcher.GetCurrentPlayerCamera().GetComponent<CinemachineCamera>().Lens.OrthographicSize;
             }
