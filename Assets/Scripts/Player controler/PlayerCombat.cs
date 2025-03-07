@@ -1,21 +1,19 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Player_Combat : MonoBehaviour
 {
-    Stats _player_Stats;
+    [SerializeField] Stats _player_Stats;
     public Animator animator;
 
     public Transform attackPoint;
-    public float attackRange = 0.5f;
     public LayerMask enemyLayers;
 
     // Update is called once per frame
-    void Update()
+    public void AttackAction(InputAction.CallbackContext context)
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Attack();
-        }
+        Debug.Log("Attacked");
+        Attack();
     }
 
     void Attack()
@@ -24,7 +22,7 @@ public class Player_Combat : MonoBehaviour
         // animator.SetTrigger("Attack");
 
         // Detect enemies in range of attack
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, _player_Stats._StopDistance, enemyLayers);
         _player_Stats = GetComponent<Stats>();
 
         // Damage them
@@ -57,6 +55,6 @@ public class Player_Combat : MonoBehaviour
         if (attackPoint == null)
             return;
 
-        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+        Gizmos.DrawWireSphere(attackPoint.position, _player_Stats._StopDistance);
     }
 }

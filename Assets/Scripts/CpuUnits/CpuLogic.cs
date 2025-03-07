@@ -30,9 +30,15 @@ public class CpuLogic : MonoBehaviour
         float randomNumber = Random.Range(-0.3f, 0.3f);
         _Stats._StopDistance = ScrStats._StopDistance + randomNumber;
         _Stats._CpuPriority = ScrStats._CpuPriority;
+
+        //knockback
         _Stats._KnockBackHealth = ScrStats._KnockBackHealth;
         _Stats._KnockBackVelocity = ScrStats._KnockBackVelocity;
         _Stats._KnockBackMax = ScrStats._KnockBackHealth;
+
+        //status effects
+        _Stats._StatusHealth = ScrStats._StatusHealth;
+        _Stats._StatusMax = ScrStats._StatusHealth;
         
         _Renderer.sprite = ScrStats._Sprite;
 
@@ -46,41 +52,54 @@ public class CpuLogic : MonoBehaviour
         Debug.DrawRay(_Raycast.position, transform.right * _Stats._StopDistance, Color.red);
         
         //what to do when detect something
-        if (hits.Length > 0)
+        _Stats._Speed = ScrStats._Speed;
+        if (hits.Length <= 0) return;
+
+        int SavedIndex = -1;
+        for (int I = 0; I < _Stats._CpuPriority.Count; I++)
         {
-            int SavedIndex = -1;
-            for (int I = 0; I < _Stats._CpuPriority.Count; I++)
+            for (int II = 0; II < hits.Length; II++)
             {
-                for (int II = 0; II < hits.Length; II++)
+                if (hits[II].collider.CompareTag(_Stats._CpuPriority[I]))
                 {
-                    if (hits[II].collider.CompareTag(_Stats._CpuPriority[I]))
-                    {
-                        SavedIndex = II;
-                        break;
-                    }
-                }
-                if (SavedIndex != -1)
-                {
+                    SavedIndex = II;
                     break;
                 }
             }
+            if (SavedIndex != -1)
+            {
+                break;
+            }
+        }
 
-            if (SavedIndex == -1) return;
+        if (SavedIndex == -1) return;
 
-            _Stats._Speed = 0;
+        _Stats._Speed = 0;
 
-            Stats EnemyStats = hits[SavedIndex].collider.gameObject.GetComponent<Stats>();
-            if (EnemyStats == null) return;
-            
-            if (_AlreadyAttacked) return;
-            StartCoroutine(AttackCooldown());
+        Stats EnemyStats = hits[SavedIndex].collider.gameObject.GetComponent<Stats>();
+        if (EnemyStats == null) return;
+        
+        if (_AlreadyAttacked) return;
+        StartCoroutine(AttackCooldown());
 
-            Debug.Log("Attacked Enemy" + hits[SavedIndex].collider.gameObject.name);
-            EnemyStats.Attack(_Stats._Attack);
+        Debug.Log("Attacked Enemy" + hits[SavedIndex].collider.gameObject.name);
+        EnemyStats.Attack(_Stats._Attack);
+        
+        //Status Effects
+        if(EnemyStats._StatusHealth <= 0)
+        {
+            if(ScrStats._EffectsToApply.Count == 0) return;
+
+            foreach(StatusEffect effect in ScrStats._EffectsToApply)
+            {
+                if(effect is null) return;
+                Debug.Log("Effect Applied");
+                EnemyStats.AddStatusEffect(effect);
+            }
         }
         else
         {
-            _Stats._Speed = ScrStats._Speed;
+            EnemyStats._StatusHealth--;
         }
     }
     public void ApplyTempSpeed(Vector2 _SpeedInfo)
@@ -91,8 +110,8 @@ public class CpuLogic : MonoBehaviour
     {
         Debug.Log(_TempSpeed);
 
-        _Stats._Speed = _TempSpeed;
         _Freeze = true;
+        _Stats._Speed = _TempSpeed;
 
         //x knockback scales exponentially, which is a problem...
         //but it works fine

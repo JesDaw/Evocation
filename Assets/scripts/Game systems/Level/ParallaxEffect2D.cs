@@ -3,30 +3,35 @@ using UnityEngine;
 
 public class ParallaxEffect2D : MonoBehaviour
 {
-    private float startPos, length;
+    private float startPosX, startPosY, lengthX, lengthY;
     public GameObject cam;
-    public float parallaxSpeed;
+    public float parallaxSpeedX, parallaxSpeedY;
 
     void Start()
     {
-        startPos = transform.position.x;
-        length = GetComponent<SpriteRenderer>().bounds.size.x;
+        startPosX = transform.position.x;
+        startPosY = transform.position.y;
+
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        lengthX = spriteRenderer.bounds.size.x;
+        lengthY = spriteRenderer.bounds.size.y;
     }
 
     void FixedUpdate()
     {
-        float distance = cam.transform.position.x * parallaxSpeed;
-        float movement = cam.transform.position.x * (1 - parallaxSpeed);
+        float distanceX = cam.transform.position.x * parallaxSpeedX;
+        float distanceY = cam.transform.position.y * parallaxSpeedY;
 
-        transform.position = new Vector3(startPos + distance, transform.position.y, transform.position.z);
+        transform.position = new Vector3(startPosX + distanceX, startPosY + distanceY, transform.position.z);
 
-        if (movement > startPos + length)
+        if (Mathf.Abs(cam.transform.position.x - transform.position.x) >= lengthX)
         {
-            startPos += length;
+            startPosX += Mathf.Sign(cam.transform.position.x - transform.position.x) * lengthX;
         }
-        else if (movement < startPos - length)
+
+        if (Mathf.Abs(cam.transform.position.y - transform.position.y) >= lengthY)
         {
-            startPos -= length;
+            startPosY += Mathf.Sign(cam.transform.position.y - transform.position.y) * lengthY;
         }
     }
 }

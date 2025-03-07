@@ -287,6 +287,10 @@ MonoBehaviour:
   _KnockBackHealth: 0
   _KnockBackVelocity: 0
   _StatusEffects: []
+  _StatusTicksMax: []
+  _StatusTicks: []
+  _StatusMax: 0
+  _StatusHealth: 0
   OnDeath:
     m_PersistentCalls:
       m_Calls: []
@@ -305,6 +309,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnTick:
+    m_PersistentCalls:
+      m_Calls: []
   OnKnocked:
     m_PersistentCalls:
       m_Calls:
@@ -361,7 +368,7 @@ CircleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 1024
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -403,7 +410,7 @@ Rigidbody2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1536
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -761,7 +768,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 38f07a4b6d08c7243b482a84dc73ea52, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
