@@ -11,11 +11,10 @@ public class PlayerMovement : MonoBehaviour
     private float horizontal;
     private float vertical;
     private InputAction moveActions;
-    private float speed = 8f;
     public float distance;
     public LayerMask whatIsLadder;
     private bool isFacingRight = true;
-    private bool isClimbing;
+    private bool isClimbing = false;
     bool _game_is_active;
 
     //Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -23,52 +22,6 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         moveActions = InputSystem.actions.FindAction("Move");
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //horizontal = Input.GetAxisRaw("Horizontal");
-        if (isClimbing != true)
-        {
-            horizontal = moveActions.ReadValue<Vector2>().x;
-            rb.linearVelocity = new Vector2(horizontal * speed, rb.linearVelocity.y);
-        }
-
-        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.up, distance, whatIsLadder);
-
-        if (hitInfo.collider != null)
-        {
-            if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
-            {
-                isClimbing = true;
-            }
-        }
-        else
-        {
-            isClimbing = false;
-        }
-
-        if (isClimbing == true)
-        {
-            //vertical = Input.GetAxisRaw("Vertical");
-            vertical = moveActions.ReadValue<Vector2>().y;
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, vertical * speed);
-            rb.gravityScale = 0;
-        }
-        else
-        {
-            rb.gravityScale = 5;
-        }
-
-        if (!isFacingRight && horizontal > 0f)
-        {
-            Flip();
-        }
-        else if (isFacingRight && horizontal < 0f)
-        {
-            Flip();
-        }
     }
 
     private bool IsGrounded()
@@ -86,6 +39,33 @@ public class PlayerMovement : MonoBehaviour
 
     public void Move(InputAction.CallbackContext context)
     {
-        horizontal = context.ReadValue<Vector2>().x;
+        Vector2 input = context.ReadValue<Vector2>();
+        horizontal = input.x;
+        vertical = input.y;
+    }
+
+    void FixedUpdate()
+    {
+        if (!isClimbing)
+        {
+            rb.linearVelocity = new Vector2(horizontal * _player_Stats._Speed, rb.linearVelocity.y);
+        }
+
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.up, distance, whatIsLadder);
+
+        isClimbing = hitInfo.collider != null && (isClimbing || vertical > 0);
+
+        if (isClimbing)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, vertical * _player_Stats._Speed);
+            rb.gravityScale = 0;
+        }
+        else
+        {
+            rb.gravityScale = 4;
+        }
+
+        if (!isFacingRight && horizontal > 0f) Flip();
+        else if (isFacingRight && horizontal < 0f) Flip();
     }
 }
