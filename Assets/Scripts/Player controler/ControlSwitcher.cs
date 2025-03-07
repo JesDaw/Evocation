@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Unity.Cinemachine;
 
 public class ControlSwitcher : MonoBehaviour
 {
     // 🎥 Camera References
-    [SerializeField] private Camera freeCam;
+    [SerializeField] private CinemachineCamera freeCam;
 
     // 🎮 Script References
     [SerializeField] private CameraController cameraMovement;
@@ -52,11 +53,11 @@ public class ControlSwitcher : MonoBehaviour
 
         if (playerSwitcher != null)
         {
-            Camera currentPlayerCam = playerSwitcher.GetCurrentPlayerCamera();
+            CinemachineCamera currentPlayerCam = playerSwitcher.GetCurrentPlayerCamera();
             PlayersControlerScriptsManager currentPlayer = playerSwitcher.GetCurrentPlayerController();
 
-            if (currentPlayerCam != null) currentPlayerCam.enabled = true;
-            if (freeCam != null) freeCam.enabled = false;
+            if (currentPlayerCam != null) currentPlayerCam.Priority = 2;
+            if (freeCam != null) freeCam.Priority = 1;
             if (currentPlayer != null) currentPlayer.EnagbleControls();
         }
 
@@ -71,24 +72,26 @@ public class ControlSwitcher : MonoBehaviour
     /// <summary>
     /// Switches control to free camera mode.
     /// </summary>
-    private void SwitchToCameraControl()
+    public void SwitchToCameraControl()
     {
         isControllingPlayer = false;
 
         if (playerSwitcher != null)
         {
-            Camera currentPlayerCam = playerSwitcher.GetCurrentPlayerCamera();
+            CinemachineCamera currentPlayerCam = playerSwitcher.GetCurrentPlayerCamera();
             PlayersControlerScriptsManager currentPlayer = playerSwitcher.GetCurrentPlayerController();
+        
+            if (freeCam != null) {
+                freeCam.Priority = 2;
+                freeCam.transform.position = playerSwitcher.GetCurrentPlayerCamera().transform.position;
+                freeCam.gameObject.GetComponent<CinemachineCamera>().Lens.OrthographicSize = playerSwitcher.GetCurrentPlayerCamera().GetComponent<CinemachineCamera>().Lens.OrthographicSize;
+            }
 
-            if (currentPlayerCam != null) currentPlayerCam.enabled = false;
+            if (currentPlayerCam != null) currentPlayerCam.Priority = 0;
             if (currentPlayer != null) currentPlayer.DisableControls();
         }
 
-        if (freeCam != null) {
-            freeCam.enabled = true;
-            freeCam.transform.position = playerSwitcher.GetCurrentPlayerCamera().transform.position;
-            freeCam.orthographicSize = playerSwitcher.GetCurrentPlayerCamera().orthographicSize;
-        }
+
         if (cameraMovement != null) cameraMovement.enabled = true;
 
         inputActions.Player.Disable();
