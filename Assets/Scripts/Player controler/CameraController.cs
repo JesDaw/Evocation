@@ -1,13 +1,15 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Unity.Cinemachine;
 
 public class CameraController : MonoBehaviour
 {
     // 🎥 Camera Reference
-    [SerializeField] private Camera cam;
+    //[SerializeField] private Camera cam;
 
     // 🎮 Input System Actions
     private InputSystem_Actions inputActions;
+    CinemachineCamera _camera;
 
     // ⚡ Movement and Zoom Variables
     [SerializeField] private float moveSpeed = 10f;
@@ -24,7 +26,7 @@ public class CameraController : MonoBehaviour
     {
         inputActions = new InputSystem_Actions();
         inputActions.Enable();
-
+        _camera = gameObject.GetComponent<CinemachineCamera>();
         if (mapRenderer != null)
         {
             mapMinX = mapRenderer.bounds.min.x;
@@ -35,7 +37,7 @@ public class CameraController : MonoBehaviour
             maxCamSize = mapRenderer.bounds.size.y / 2f;
             minCamSize = maxCamSize / 4f;
 
-            cam.orthographicSize = maxCamSize;
+            _camera.Lens.OrthographicSize = maxCamSize;
         }
         else
         {
@@ -67,8 +69,8 @@ public class CameraController : MonoBehaviour
     private void HandleMovement()
     {
         Vector2 moveInput = inputActions.Camera.Move.ReadValue<Vector2>();
-        Vector3 newPosition = cam.transform.position + new Vector3(moveInput.x, moveInput.y, 0) * moveSpeed * Time.deltaTime;
-        cam.transform.position = ClampCamera(newPosition);
+        Vector3 newPosition = gameObject.transform.position + new Vector3(moveInput.x, moveInput.y, 0) * moveSpeed * Time.deltaTime;
+        gameObject.transform.position = ClampCamera(newPosition);
     }
 
     /// <summary>
@@ -79,9 +81,10 @@ public class CameraController : MonoBehaviour
         float zoomInput = Mouse.current.scroll.ReadValue().y * 0.25f; 
         if (Mathf.Abs(zoomInput) > 0)
         {
-            float newSize = cam.orthographicSize - (zoomInput * zoomStep);
-            cam.orthographicSize = Mathf.Clamp(newSize, minCamSize, maxCamSize);
-            cam.transform.position = ClampCamera(cam.transform.position);
+            float newSize = _camera.Lens.OrthographicSize - (zoomInput * zoomStep);
+            _camera.Lens.OrthographicSize = Mathf.Clamp(newSize, minCamSize, maxCamSize);
+            _camera.transform.position = ClampCamera(_camera.transform.position);
+            Debug.Log("zooming "  + _camera.Lens.OrthographicSize);
         }
     }
 
@@ -91,8 +94,8 @@ public class CameraController : MonoBehaviour
     private void OnMoveCamera(InputAction.CallbackContext ctx)
     {
         Vector2 move = ctx.ReadValue<Vector2>();
-        Vector3 newPosition = cam.transform.position + new Vector3(move.x, move.y, 0) * moveSpeed * Time.deltaTime;
-        cam.transform.position = ClampCamera(newPosition);
+        Vector3 newPosition = gameObject.transform.position + new Vector3(move.x, move.y, 0) * moveSpeed * Time.deltaTime;
+        gameObject.transform.position = ClampCamera(newPosition);
     }
 
     /// <summary>
@@ -102,8 +105,8 @@ public class CameraController : MonoBehaviour
     {
         if (mapRenderer == null) return targetPosition;
 
-        float camHeight = cam.orthographicSize;
-        float camWidth = cam.orthographicSize * cam.aspect;
+        float camHeight = _camera.Lens.OrthographicSize;
+        float camWidth = _camera.Lens.OrthographicSize * _camera.Lens.Aspect;
 
         float minX = mapMinX + camWidth;
         float maxX = mapMaxX - camWidth;

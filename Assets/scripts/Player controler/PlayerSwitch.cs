@@ -1,10 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.Cinemachine;
 
 public class PlayerSwitch : MonoBehaviour
 {
+    [SerializeField] Camera FreeCam;
     [SerializeField] private List<PlayersControlerScriptsManager> players = new List<PlayersControlerScriptsManager>();
-    [SerializeField] private List<Camera> playerCameras = new List<Camera>();
+    [SerializeField] private List<CinemachineCamera> playerCameras = new List<CinemachineCamera>();
 
     private int activePlayerIndex = 0;
 
@@ -37,7 +39,7 @@ public class PlayerSwitch : MonoBehaviour
 
         // Disable current player
         players[activePlayerIndex].DisableControls();
-        playerCameras[activePlayerIndex].enabled = false;
+        playerCameras[activePlayerIndex].Priority = 0;
 
         // Move to the next player
         activePlayerIndex = (activePlayerIndex + 1) % players.Count;
@@ -54,11 +56,15 @@ public class PlayerSwitch : MonoBehaviour
         for (int i = 0; i < players.Count; i++)
         {
             bool isActive = (i == index);
-            if (isActive)
+            if (isActive){
                 players[i].EnagbleControls();
-            else
+                playerCameras[i].Priority = 1;
+            }
+            else{
                 players[i].DisableControls();
-            playerCameras[i].enabled = isActive;
+                playerCameras[i].Priority = 0;
+            }
+
         }
 
         Debug.Log($"Switched to Player {index + 1}");
@@ -75,7 +81,7 @@ public class PlayerSwitch : MonoBehaviour
     /// <summary>
     /// Returns the currently active player camera.
     /// </summary>
-    public Camera GetCurrentPlayerCamera()
+    public CinemachineCamera GetCurrentPlayerCamera()
     {
         return (playerCameras.Count > 0) ? playerCameras[activePlayerIndex] : null;
     }
