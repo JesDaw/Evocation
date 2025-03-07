@@ -4,7 +4,7 @@ using Unity.Cinemachine;
 
 public class PlayerSwitch : MonoBehaviour
 {
-    [SerializeField] Camera FreeCam;
+    [SerializeField] private Camera FreeCam;
     [SerializeField] private List<PlayersControlerScriptsManager> players = new List<PlayersControlerScriptsManager>();
     [SerializeField] private List<CinemachineCamera> playerCameras = new List<CinemachineCamera>();
 
@@ -56,21 +56,67 @@ public class PlayerSwitch : MonoBehaviour
         for (int i = 0; i < players.Count; i++)
         {
             bool isActive = (i == index);
-            if (isActive){
+            if (isActive)
+            {
                 players[i].EnagbleControls();
-                playerCameras[i].Priority = 1;
+                playerCameras[i].Priority = 2;
             }
-            else{
+            else
+            {
                 players[i].DisableControls();
                 playerCameras[i].Priority = 0;
             }
-
         }
 
         Debug.Log($"Switched to Player {index + 1}");
     }
 
-        /// <summary>
+    /// <summary>
+    /// Adds a new player and its camera to the system.
+    /// </summary>
+    public void AddPlayer(PlayersControlerScriptsManager newPlayer, CinemachineCamera newCamera)
+    {
+        if (newPlayer == null || newCamera == null)
+        {
+            Debug.LogError("PlayerSwitch: Cannot add a null player or camera!");
+            return;
+        }
+
+        players.Add(newPlayer);
+        playerCameras.Add(newCamera);
+        Debug.Log($"Added new player. Total players: {players.Count}");
+    }
+
+    /// <summary>
+    /// Removes a player and its camera by index.
+    /// </summary>
+    public void RemovePlayer(int index)
+    {
+        if (index < 0 || index >= players.Count)
+        {
+            Debug.LogError("PlayerSwitch: Invalid index for removal!");
+            return;
+        }
+
+        bool wasActive = index == activePlayerIndex;
+
+        players.RemoveAt(index);
+        playerCameras.RemoveAt(index);
+        Debug.Log($"Removed player at index {index}. Total players: {players.Count}");
+
+        // Adjust the active player index if needed
+        if (players.Count == 0)
+        {
+            activePlayerIndex = -1; // No players left
+        }
+        else if (wasActive)
+        {
+            activePlayerIndex = Mathf.Clamp(index, 0, players.Count - 1);
+            ActivatePlayer(activePlayerIndex);
+        }
+    }
+
+    /// <summary>
     /// Returns the currently active player controller.
     /// </summary>
     public PlayersControlerScriptsManager GetCurrentPlayerController()
