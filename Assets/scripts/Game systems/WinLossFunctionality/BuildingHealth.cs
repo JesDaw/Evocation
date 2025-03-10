@@ -6,6 +6,9 @@ public class BuildingHealth : MonoBehaviour
     [SerializeField] FloatVariable Health;
     [SerializeField] UnityEvent _end_game;
     [SerializeField] UnityEvent _damage_taken;
+
+   [SerializeField] bool MainBase;
+   [SerializeField] bool MoneyBuilding;
    
     public void TakeDamage(float damage)
     {
@@ -14,8 +17,20 @@ public class BuildingHealth : MonoBehaviour
 
         if (Health._Value <= 0)
         {
-            Health._Value = 0;
-            _end_game.Invoke();    
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        Health._Value = 0;
+        if(MainBase)
+        {
+            _end_game.Invoke();
+        }
+        else if(MoneyBuilding)
+        {
+            _end_game.Invoke();
         }
     }
 
