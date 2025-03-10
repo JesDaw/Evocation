@@ -48,6 +48,12 @@ public class PlayerMovement : MonoBehaviour
     {
         isClimbing = !isClimbing;
 
+        if (isClimbing)
+        {
+            // snap position to center of ladder
+            // Somehow get ladder position
+        }
+
 
     }
 
@@ -66,6 +72,8 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, vertical * _player_Stats._Speed);
             rb.gravityScale = 0;
+
+            isClimbing = hitInfo.collider != null;
         }
         else
         {
