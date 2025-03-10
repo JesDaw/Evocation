@@ -18,7 +18,7 @@ public class CpuUtilis: MonoBehaviour
     public void SpawnMob(ScriptableStats ScrStats)
     {
         //this is stolen from SpawnObjects
-        GameObject CreatedObject = Instantiate(_Object, this.transform.position, this.transform.rotation, _Container);
+        GameObject CreatedObject = Instantiate(this.gameObject, this.transform.position, this.transform.rotation, this.transform);
         CpuLogic ObjectLogic = CreatedObject.GetComponent<CpuLogic>();
         if (ObjectLogic != null) ObjectLogic.ScrStats = ScrStats;
 
