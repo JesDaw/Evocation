@@ -69,6 +69,19 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void EngageClimbing()
+    {
+        isClimbing = !isClimbing;
+
+        if (isClimbing)
+        {
+            // snap position to center of ladder
+            // Somehow get ladder position
+        }
+
+
+    }
+
     void FixedUpdate()
     {
         if (!isClimbing)
@@ -78,12 +91,14 @@ public class PlayerMovement : MonoBehaviour
 
         RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.up, distance, whatIsLadder);
 
-        isClimbing = hitInfo.collider != null && (isClimbing || vertical > 0);
+        //isClimbing = hitInfo.collider != null && (isClimbing || vertical > 0);
 
         if (isClimbing)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, vertical * _player_Stats._Speed);
             rb.gravityScale = 0;
+
+            isClimbing = hitInfo.collider != null;
         }
         else
         {
