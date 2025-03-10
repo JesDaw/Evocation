@@ -9,7 +9,7 @@ public class MainMenu : MonoBehaviour
        //SceneManager.LoadScene("Level 1");
       //SceneManager.LoadScene("Week 3 stuff");
 
-      //for texting if audio changes off a different scene
+      //for testing if audio changes on a different scene
       SceneManager.LoadScene("Emi - W4 Sound");
    }
    public void QuitGame()

@@ -42,6 +42,13 @@ public class PlayerMovement : MonoBehaviour
         transform.localScale = localScale;
     }
 
+    //for walking sound effect
+    public void stop_walking()
+    {
+        audio_manager.Stop("Walking");
+        walking = false;
+    }
+
     public void Move(InputAction.CallbackContext context)
     {
         Vector2 input = context.ReadValue<Vector2>();
@@ -58,8 +65,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            audio_manager.Stop("Walking");
-            walking = false;
+            stop_walking();
         }
     }
 
