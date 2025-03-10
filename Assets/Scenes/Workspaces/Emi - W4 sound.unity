@@ -10634,7 +10634,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: 72b8f7d90b93c6b45bd883487eae84f8, type: 3}
   m_Resource: {fileID: 8300000, guid: 72b8f7d90b93c6b45bd883487eae84f8, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.249
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -10727,9 +10727,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 2041896553}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35bd6cf5412e10347a3a87ccd638f4de, type: 3}
+  m_Script: {fileID: 11500000, guid: c3283b3fae396d44e9c5fb70a0c7b988, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sounds:
+  - name: Walking
+    clip: {fileID: 8300000, guid: 4106d5a21970dad4aaaebd88518f5390, type: 3}
+    volume: 1
+    pitch: 0
+    loop: 0
+    source: {fileID: 0}
 --- !u!1 &2068233200
 GameObject:
   m_ObjectHideFlags: 0

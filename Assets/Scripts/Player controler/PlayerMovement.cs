@@ -17,11 +17,16 @@ public class PlayerMovement : MonoBehaviour
     private bool isClimbing = false;
     bool _game_is_active;
 
+    //for walking sound effect
+    private AudioManager audio_manager;
+    private bool walking = false;
+
     //Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         moveActions = InputSystem.actions.FindAction("Move");
+        audio_manager = FindAnyObjectByType<AudioManager>();
     }
 
     private bool IsGrounded()
@@ -42,6 +47,20 @@ public class PlayerMovement : MonoBehaviour
         Vector2 input = context.ReadValue<Vector2>();
         horizontal = input.x;
         vertical = input.y;
+
+        if (input.magnitude > 0) //player is moving
+        {
+            if (!walking)
+            {
+                audio_manager.Play("Walking");
+                walking = true;
+            }
+        }
+        else
+        {
+            audio_manager.Stop("Walking");
+            walking = false;
+        }
     }
 
     void FixedUpdate()
