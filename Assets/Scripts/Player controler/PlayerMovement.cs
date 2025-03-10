@@ -44,6 +44,13 @@ public class PlayerMovement : MonoBehaviour
         vertical = input.y;
     }
 
+    public void EngageClimbing()
+    {
+        isClimbing = !isClimbing;
+
+
+    }
+
     void FixedUpdate()
     {
         if (!isClimbing)
@@ -53,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
 
         RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.up, distance, whatIsLadder);
 
-        isClimbing = hitInfo.collider != null && (isClimbing || vertical > 0);
+        //isClimbing = hitInfo.collider != null && (isClimbing || vertical > 0);
 
         if (isClimbing)
         {
