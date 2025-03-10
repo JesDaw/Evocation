@@ -1,9 +1,8 @@
-using TMPro;
 using UnityEngine;
 
 public class ParallaxEffect2D : MonoBehaviour
 {
-    private float startPosX, startPosY, lengthX, lengthY;
+    private float startPosX, startPosY, lengthX;
     public GameObject cam;
     public float parallaxSpeedX, parallaxSpeedY;
 
@@ -13,8 +12,7 @@ public class ParallaxEffect2D : MonoBehaviour
         startPosY = transform.position.y;
 
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
-        lengthX = spriteRenderer.bounds.size.x;
-        lengthY = spriteRenderer.bounds.size.y;
+        lengthX = spriteRenderer.bounds.size.x; 
     }
 
     void FixedUpdate()
@@ -27,11 +25,6 @@ public class ParallaxEffect2D : MonoBehaviour
         if (Mathf.Abs(cam.transform.position.x - transform.position.x) >= lengthX)
         {
             startPosX += Mathf.Sign(cam.transform.position.x - transform.position.x) * lengthX;
-        }
-
-        if (Mathf.Abs(cam.transform.position.y - transform.position.y) >= lengthY)
-        {
-            startPosY += Mathf.Sign(cam.transform.position.y - transform.position.y) * lengthY;
         }
     }
 }
