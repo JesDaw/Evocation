@@ -24,6 +24,10 @@ public class SpawnObjects : MonoBehaviour
         yield return new WaitForSeconds(CoolDown);
         StartCoroutine(SpawnLoop());
     }
+    public void UpdateAttached(ScriptableStats ScrStats)
+    {
+        AttachedStats = ScrStats;
+    }
     public void Spawn()
     {
         GameObject CreatedObject = Instantiate(_Object, this.transform.position, this.transform.rotation, _Container);
