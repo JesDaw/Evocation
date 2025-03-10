@@ -10,6 +10,10 @@ public class ControlSwitcher : MonoBehaviour
     // 🎮 Script References
     [SerializeField] private CameraController cameraMovement;
     [SerializeField] private PlayerSwitch playerSwitcher; // Reference to PlayerSwitch script
+    [SerializeField] private PlayerMovement playerMovement;
+
+    //for walking sound effect
+    private AudioManager audio_manager;
 
     private InputSystem_Actions inputActions;
     private bool isControllingPlayer = true; // Starts by controlling the player
@@ -20,12 +24,18 @@ public class ControlSwitcher : MonoBehaviour
         inputActions.Enable();
     }
 
+    private void Start()
+    {
+        audio_manager = FindAnyObjectByType<AudioManager>();
+    }
+
     private void Update()
     {
         // Switch control using Tab key
         if (Keyboard.current.tabKey.wasPressedThisFrame)
         {
             ToggleControl();
+            audio_manager.Play("Switching Cameras");
         }
     }
 
@@ -88,7 +98,16 @@ public class ControlSwitcher : MonoBehaviour
             }
 
             if (currentPlayerCam != null) currentPlayerCam.Priority = 0;
-            if (currentPlayer != null) currentPlayer.DisableControls();
+            if (currentPlayer != null) 
+            {
+                currentPlayer.DisableControls();
+
+                //stop the walking sound effect when switching to free cam
+                if (playerMovement != null)
+                {
+                    playerMovement.stop_walking();
+                }
+            }
         }
 
 

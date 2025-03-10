@@ -618,6 +618,7 @@ MonoBehaviour:
   freeCam: {fileID: 541427750}
   cameraMovement: {fileID: 0}
   playerSwitcher: {fileID: 1807517026}
+  playerMovement: {fileID: 0}
 --- !u!1 &107305573
 GameObject:
   m_ObjectHideFlags: 0
@@ -10733,6 +10734,12 @@ MonoBehaviour:
   sounds:
   - name: Walking
     clip: {fileID: 8300000, guid: 4106d5a21970dad4aaaebd88518f5390, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: Switching Cameras
+    clip: {fileID: 8300000, guid: 1ef2df6cd27cedd448f7dd1d35f3eb17, type: 3}
     volume: 1
     pitch: 1
     loop: 0
