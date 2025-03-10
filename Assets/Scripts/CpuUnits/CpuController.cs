@@ -9,6 +9,7 @@ public class CpuController : MonoBehaviour
     [SerializeField] Money _Money;
     public void Spawn1(InputAction.CallbackContext context)
     {
+        Debug.Log("here");
         if (!context.started) return;
 
         _Money.spendMoney(10);

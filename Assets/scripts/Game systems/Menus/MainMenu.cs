@@ -10,7 +10,7 @@ public class MainMenu : MonoBehaviour
       //SceneManager.LoadScene("Week 3 stuff");
 
       //for testing if audio changes on a different scene
-      SceneManager.LoadScene("Emi - W4 Sound");
+      SceneManager.LoadScene("Week 4 stuff");
    }
    public void QuitGame()
    {
