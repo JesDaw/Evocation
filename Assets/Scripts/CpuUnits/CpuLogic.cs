@@ -84,7 +84,7 @@ public class CpuLogic : MonoBehaviour
         StartCoroutine(AttackCooldown());
 
         //Utilis.SpawnMobs
-        for(int I = 0; I < ScrStats.OnAttack.Length; I++)
+        for(int I = 0; I < ScrStats.OnAttack.Count; I++)
         {
             Utilis.SelectOnAttack(I, ScrStats.ExtraStats);
         }

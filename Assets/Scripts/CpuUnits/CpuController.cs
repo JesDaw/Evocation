@@ -6,7 +6,6 @@ using System.Collections.Generic;
 public class CpuController : MonoBehaviour
 {
     public UnityEvent<ScriptableStats> OnSpawn1, OnSpawn2;
-    public UnityEvent SpawnEvent;
     [SerializeField] Money _Money;
     public void Spawn1(InputAction.CallbackContext context)
     {
@@ -15,7 +14,6 @@ public class CpuController : MonoBehaviour
         _Money.spendMoney(10);
 
         OnSpawn1?.Invoke(null);
-        SpawnEvent?.Invoke();
     }
     public void Spawn2(InputAction.CallbackContext context)
     {
@@ -24,6 +22,5 @@ public class CpuController : MonoBehaviour
         _Money.spendMoney(20);
 
         OnSpawn2?.Invoke(null);
-        SpawnEvent?.Invoke();
     }
 }
