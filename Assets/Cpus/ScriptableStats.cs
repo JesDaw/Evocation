@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [CreateAssetMenu(fileName = "Cpu", menuName = "Cpu", order = 0)]
 public class ScriptableStats : ScriptableObject
@@ -17,7 +18,16 @@ public class ScriptableStats : ScriptableObject
     public float _KnockBackHealth;
     public List<StatusEffect> _EffectsToApply;
     public int _StatusHealth = 1;
-    public enum AttackType {Projectile, Direct}
-    public AttackType _AttackType = AttackType.Direct;
+    // anyways all of the events script that happen on the cpu
+    // uses the cpu utilits script
+    //so just update that if you're wondering aobu the different projectiles
+
+    //also this is the Scriptable obejct change the actual stats script lmao.
+    public List<int> OnAttack;
+    //dude I wish i was a better programmer
+    //but ahahhahahah I don't know how else to do it
+    //but the current logic is that it's spilt between the Cpu Utilis
+    //so this is just for like extra crap just incase
+    public ScriptableStats ExtraStats;
 }
     

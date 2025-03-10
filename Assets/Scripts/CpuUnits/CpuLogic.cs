@@ -14,6 +14,7 @@ public class CpuLogic : MonoBehaviour
     [SerializeField] Rigidbody2D _Body;
     [Header("Events")]
     [SerializeField] UnityEvent OnSpawn;
+    [SerializeField] CpuUtilis Utilis;
     private bool _AlreadyAttacked = false;
     private bool _Freeze = false;
     void Start()
@@ -82,6 +83,12 @@ public class CpuLogic : MonoBehaviour
         if (_AlreadyAttacked) return;
         StartCoroutine(AttackCooldown());
 
+        //Utilis.SpawnMobs
+        for(int I = 0; I < ScrStats.OnAttack.Count; I++)
+        {
+            Utilis.SelectOnAttack(I, ScrStats.ExtraStats);
+        }
+        //Enemy Attack
         Debug.Log("Attacked Enemy" + hits[SavedIndex].collider.gameObject.name);
         EnemyStats.Attack(_Stats._Attack);
         
