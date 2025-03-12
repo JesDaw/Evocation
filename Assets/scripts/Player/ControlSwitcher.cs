@@ -103,10 +103,7 @@ public class ControlSwitcher : MonoBehaviour
                 currentPlayer.DisableControls();
 
                 //stop the walking sound effect when switching to free cam
-                if (playerMovement != null)
-                {
-                    playerMovement.stop_walking();
-                }
+                playerMovement.stop_walking();
             }
         }
 
@@ -115,6 +112,7 @@ public class ControlSwitcher : MonoBehaviour
 
         inputActions.Player.Disable();
         inputActions.Camera.Enable();
+        playerMovement.stop_walking(); //stop walk sfx
 
         Debug.Log("Switched to camera control.");
     }
