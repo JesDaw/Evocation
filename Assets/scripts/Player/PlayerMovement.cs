@@ -17,9 +17,11 @@ public class PlayerMovement : MonoBehaviour
     private bool isClimbing = false;
     bool _game_is_active;
 
-    //for walking sound effect
+    //for walking & climbing sound effect
     private AudioManager audio_manager;
     private bool walking = false;
+    //v--use exisiting bool for climbing--v
+    ////private bool isClimbing = false;
 
     //Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -42,35 +44,53 @@ public class PlayerMovement : MonoBehaviour
         transform.localScale = localScale;
     }
 
-    //for walking sound effect to stop playing
-    public void stop_walking()
-    {
-    //debugged error when this sound still plays when switched cam; has to check if sound exists first
-        if (audio_manager != null)
-        {
-            audio_manager.Stop("Walking");
-        }
-    }
-
     public void Move(InputAction.CallbackContext context)
     {
         Vector2 input = context.ReadValue<Vector2>();
         horizontal = input.x;
         vertical = input.y;
 
-        //used to be 'input.magnitude > 0'
-        if (Mathf.Abs(horizontal) > 0 && Mathf.Abs(vertical) == 0) //now walk sound only plays when player moves left/right
+        //for walking**
+        //used to be 'input.magnitude > 0' but this included movement from every dir
+        if (horizontal != 0 && vertical == 0) //now walk sound only plays when player moves left/right
         {
             if (!walking)
             {
                 audio_manager.Play("Walking");
                 walking = true;
+                isClimbing = false; //walking & climbing cant interfere
+            }
+        }
+        //for climbing**
+        else if (vertical != 0 && horizontal == 0) //up/down movmenet only
+        {
+            if (!isClimbing)
+            {
+                audio_manager.Play("Climbing");
+                isClimbing = true;
+                walking = false;
             }
         }
         else
         {
             stop_walking();
+            stop_climbing();
         }
+
+    }
+
+    //for walking sound effect to stop playing
+    public void stop_walking()
+    {
+        audio_manager.Stop("Walking");
+        walking = false;
+    }
+
+    //for climbing sound effect to stop playing
+    public void stop_climbing()
+    {
+        audio_manager.Stop("Climbing");
+        isClimbing = false;
     }
 
     public void EngageClimbing()
