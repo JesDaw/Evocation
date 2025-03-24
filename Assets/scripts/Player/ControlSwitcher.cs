@@ -11,6 +11,7 @@ public class ControlSwitcher : MonoBehaviour
     [SerializeField] private CameraController cameraMovement;
     [SerializeField] private PlayerSwitch playerSwitcher; // Reference to PlayerSwitch script
     [SerializeField] private PlayerMovement playerMovement;
+    [SerializeField] private PlayerLivesManager player_lives;
 
     //for walking sound effect
     private AudioManager audio_manager;
@@ -36,6 +37,12 @@ public class ControlSwitcher : MonoBehaviour
         {
             audio_manager.Play("Switching Cameras"); //plays pop noise when cam switched
             ToggleControl();
+        }
+
+        //auto switches to free cam when player lives hit 0 (also cant use controls anymroe)
+        if (player_lives != null && player_lives.get_life_count() <= 0 && isControllingPlayer)
+        {
+            SwitchToCameraControl();
         }
     }
 
@@ -131,5 +138,43 @@ public class ControlSwitcher : MonoBehaviour
         
 
         Debug.Log("Switched to camera control.");
+    }
+
+    //auto switch to free cam w/o movement/controls when there are no more player lives
+    public void dead_free_cam()
+    {
+        isControllingPlayer = false;
+
+        if (playerSwitcher != null)
+        {
+            CinemachineCamera currentPlayerCam = playerSwitcher.GetCurrentPlayerCamera();
+            PlayersControlerScriptsManager currentPlayer = playerSwitcher.GetCurrentPlayerController();
+        
+            if (freeCam != null) {
+                freeCam.Priority = 2;
+                freeCam.transform.position = playerSwitcher.GetCurrentPlayerCamera().transform.position;
+                freeCam.gameObject.GetComponent<CinemachineCamera>().Lens.OrthographicSize = playerSwitcher.GetCurrentPlayerCamera().GetComponent<CinemachineCamera>().Lens.OrthographicSize;
+            }
+
+            if (currentPlayerCam != null) currentPlayerCam.Priority = 0;
+            if (currentPlayer != null) 
+            {
+                currentPlayer.DisableControls();
+            }
+        }
+
+
+        if (cameraMovement != null) cameraMovement.enabled = true;
+
+        inputActions.Player.Disable();
+        //inputActions.Camera.Enable();
+
+        //stop the walking & climbing sound effect when switching to free cam
+        if (audio_manager != null)
+        {
+            audio_manager.gameObject.SetActive(false); //deactivate the audio manager game obj
+        }
+
+        Debug.Log("All players dead - Switched to camera control.");
     }
 }
