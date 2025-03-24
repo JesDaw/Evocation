@@ -9,11 +9,15 @@ public class Player_Combat : MonoBehaviour
     public Transform attackPoint;
     public LayerMask enemyLayers;
 
+    //for sword slash sound effect
+    private AudioManager audio_manager;
+
     // Update is called once per frame
     public void AttackAction(InputAction.CallbackContext context)
     {
         Debug.Log("Attacked");
         Attack();
+        audio_manager.Play("Attack");
     }
 
     void Attack()
