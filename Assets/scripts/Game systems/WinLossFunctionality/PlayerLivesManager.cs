@@ -38,4 +38,8 @@ public class PlayerLivesManager : MonoBehaviour
             _loose_game.Invoke();
         }
     }
+    public int get_life_count()
+    {
+        return LifeCount._Value; //._Value -> get the int value
+    }
 }
