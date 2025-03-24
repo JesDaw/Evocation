@@ -18,7 +18,7 @@ public class MainMenu : MonoBehaviour
       //SceneManager.LoadScene("Week 3 stuff");
 
       //for testing if audio changes on a different scene
-      SceneManager.LoadScene("Week 4 stuff");
+      SceneManager.LoadScene("Week 6 stuff");
    }
 
    public void click_sound()
