@@ -33,4 +33,5 @@ public class Money : MonoBehaviour
     }
     public void DeactivateMoney(){ _game_is_active = false; }
     public void ResetMoney(){ moneyAmount.Reset();}
+    public void IncreaseMoneyGen(){ genPerSec *= 2; }
 }
