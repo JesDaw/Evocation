@@ -24,6 +24,11 @@ public class ScriptableStats : ScriptableObject
 
     //also this is the Scriptable obejct change the actual stats script lmao.
     public List<int> OnAttack;
+    //!-- CHECK CPU ULTILS FOR ON ATTACK FUNC --!//
+    // 0 - spawn mobs from extra stats
+    // 1 - shoot projectiles from extra proj
+    public List<ScrProjectiles> _Projectiles;
+
     //dude I wish i was a better programmer
     //but ahahhahahah I don't know how else to do it
     //but the current logic is that it's spilt between the Cpu Utilis

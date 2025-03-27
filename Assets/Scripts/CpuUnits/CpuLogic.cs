@@ -86,7 +86,7 @@ public class CpuLogic : MonoBehaviour
         //Utilis.SpawnMobs
         for(int I = 0; I < ScrStats.OnAttack.Count; I++)
         {
-            Utilis.SelectOnAttack(I, ScrStats.ExtraStats);
+            Utilis.SelectOnAttack(ScrStats.OnAttack[I], ScrStats);
         }
         //Enemy Attack
         Debug.Log("Attacked Enemy" + hits[SavedIndex].collider.gameObject.name);

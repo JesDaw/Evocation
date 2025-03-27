@@ -7,7 +7,10 @@ public class CpuUtilis: MonoBehaviour
         switch(n)
         {
             case 0:
-                SpawnMob(CreatedStats);
+                SpawnMob(CreatedStats.ExtraStats);
+                break;
+            case 1:
+                ShootProjectiles(CreatedStats._Projectiles[0]);
                 break;
 
             default:
@@ -40,5 +43,10 @@ public class CpuUtilis: MonoBehaviour
                 CreatedObject.transform.GetChild(0).position.z + RandomValue
             );
         }
+    }
+
+    public void ShootProjectiles(ScrProjectiles Projectiles)
+    {
+        Debug.Log("" + Projectiles.ToString());
     }
 }
