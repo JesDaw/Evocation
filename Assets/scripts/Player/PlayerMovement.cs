@@ -46,10 +46,9 @@ public class PlayerMovement : MonoBehaviour
         Vector2 input = context.ReadValue<Vector2>();
         horizontal = input.x;
         vertical = input.y;
-        if (!walking_audio.isPlaying)
+        if (!walking_audio.isPlaying && input.x > 0 && !isClimbing)
         {
             walking_audio.Play();
-            Debug.Log("walking sound");
         }
         if (context.canceled)
         {
