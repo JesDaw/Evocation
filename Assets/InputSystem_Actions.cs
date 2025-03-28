@@ -101,45 +101,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Zoom"",
-                    ""type"": ""Value"",
-                    ""id"": ""f337db5c-7b44-40f2-983c-44fad5e2c899"",
-                    ""expectedControlType"": ""Axis"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
                     ""name"": ""Attack"",
                     ""type"": ""Button"",
                     ""id"": ""6c2ab1b8-8984-453a-af3d-a3c78ae1679a"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""NextPlayer"",
-                    ""type"": ""Button"",
-                    ""id"": ""b7230bb6-fc9b-4f52-8b25-f5e19cb2c2ba"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""PreviousPlayer"",
-                    ""type"": ""Button"",
-                    ""id"": ""2776c80d-3c14-4091-8c56-d04ced07a2b0"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""ToggleCameraControl"",
-                    ""type"": ""Button"",
-                    ""id"": ""0d57ce1b-fe5a-40f0-aaa2-0bb221ba0dd6"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -308,28 +272,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""9649df19-a23e-4275-8fe2-9aa37dc3db5d"",
-                    ""path"": ""<Mouse>/scroll/up"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Zoom"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""0d9f83ec-f4c5-4f1b-9b7a-0c46b9c8561f"",
-                    ""path"": ""<Mouse>/scroll/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Zoom"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""143bb1cd-cc10-4eca-a2f0-a3664166fe91"",
                     ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
@@ -385,56 +327,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""b3c1c7f0-bd20-4ee7-a0f1-899b24bca6d7"",
-                    ""path"": ""<Keyboard>/enter"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Attack"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e15ca19d-e649-4852-97d5-7fe8ccc44e94"",
-                    ""path"": ""<Gamepad>/dpad/right"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""NextPlayer"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""333c9934-8f89-45ca-b0b9-e1bd04c692e6"",
-                    ""path"": ""<Keyboard>/shift"",
+                    ""id"": ""6eae8079-70d3-4c51-833b-3d2d887a0546"",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""NextPlayer"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""1534dc16-a6aa-499d-9c3a-22b47347b52a"",
-                    ""path"": ""<Keyboard>/1"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""PreviousPlayer"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""25060bbd-a3a6-476e-8fba-45ae484aad05"",
-                    ""path"": ""<Gamepad>/dpad/left"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""PreviousPlayer"",
+                    ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -457,17 +355,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Interact"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a13daace-9cf8-4718-b633-1426555ac2ab"",
-                    ""path"": ""<Keyboard>/tab"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ToggleCameraControl"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1144,6 +1031,74 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""ControlManager"",
+            ""id"": ""1e7f5d5e-c61a-44ee-a183-8ea258aa8a17"",
+            ""actions"": [
+                {
+                    ""name"": ""NextPlayer"",
+                    ""type"": ""Button"",
+                    ""id"": ""ae589a08-cdf4-4866-8226-941df6ee6a8c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PreviousPlayer"",
+                    ""type"": ""Button"",
+                    ""id"": ""acf61e7d-5f9d-4fa8-8462-c716a70f7507"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleCameraControl"",
+                    ""type"": ""Button"",
+                    ""id"": ""ce2d966f-1a41-4c1b-affe-40f5ffdc3879"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""56e4bec5-0a38-49e3-8abf-bd519a501952"",
+                    ""path"": ""<Keyboard>/rightShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextPlayer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""73b02fb0-555d-42f4-8655-a634192bb901"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PreviousPlayer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a3890f55-7b60-4505-a02e-a02e19b3b541"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleCameraControl"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1212,11 +1167,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
-        m_Player_Zoom = m_Player.FindAction("Zoom", throwIfNotFound: true);
         m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
-        m_Player_NextPlayer = m_Player.FindAction("NextPlayer", throwIfNotFound: true);
-        m_Player_PreviousPlayer = m_Player.FindAction("PreviousPlayer", throwIfNotFound: true);
-        m_Player_ToggleCameraControl = m_Player.FindAction("ToggleCameraControl", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Spawn = m_Player.FindAction("Spawn", throwIfNotFound: true);
         m_Player_Spawn1 = m_Player.FindAction("Spawn1", throwIfNotFound: true);
@@ -1237,6 +1188,11 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
         m_UI_TogglePause = m_UI.FindAction("TogglePause", throwIfNotFound: true);
+        // ControlManager
+        m_ControlManager = asset.FindActionMap("ControlManager", throwIfNotFound: true);
+        m_ControlManager_NextPlayer = m_ControlManager.FindAction("NextPlayer", throwIfNotFound: true);
+        m_ControlManager_PreviousPlayer = m_ControlManager.FindAction("PreviousPlayer", throwIfNotFound: true);
+        m_ControlManager_ToggleCameraControl = m_ControlManager.FindAction("ToggleCameraControl", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
@@ -1244,6 +1200,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Player.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_Camera.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Camera.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, InputSystem_Actions.UI.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_ControlManager.enabled, "This will cause a leak and performance issues, InputSystem_Actions.ControlManager.Disable() has not been called.");
     }
 
     /// <summary>
@@ -1320,11 +1277,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
-    private readonly InputAction m_Player_Zoom;
     private readonly InputAction m_Player_Attack;
-    private readonly InputAction m_Player_NextPlayer;
-    private readonly InputAction m_Player_PreviousPlayer;
-    private readonly InputAction m_Player_ToggleCameraControl;
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Spawn;
     private readonly InputAction m_Player_Spawn1;
@@ -1344,25 +1297,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Move => m_Wrapper.m_Player_Move;
         /// <summary>
-        /// Provides access to the underlying input action "Player/Zoom".
-        /// </summary>
-        public InputAction @Zoom => m_Wrapper.m_Player_Zoom;
-        /// <summary>
         /// Provides access to the underlying input action "Player/Attack".
         /// </summary>
         public InputAction @Attack => m_Wrapper.m_Player_Attack;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/NextPlayer".
-        /// </summary>
-        public InputAction @NextPlayer => m_Wrapper.m_Player_NextPlayer;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/PreviousPlayer".
-        /// </summary>
-        public InputAction @PreviousPlayer => m_Wrapper.m_Player_PreviousPlayer;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/ToggleCameraControl".
-        /// </summary>
-        public InputAction @ToggleCameraControl => m_Wrapper.m_Player_ToggleCameraControl;
         /// <summary>
         /// Provides access to the underlying input action "Player/Interact".
         /// </summary>
@@ -1404,21 +1341,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
-            @Zoom.started += instance.OnZoom;
-            @Zoom.performed += instance.OnZoom;
-            @Zoom.canceled += instance.OnZoom;
             @Attack.started += instance.OnAttack;
             @Attack.performed += instance.OnAttack;
             @Attack.canceled += instance.OnAttack;
-            @NextPlayer.started += instance.OnNextPlayer;
-            @NextPlayer.performed += instance.OnNextPlayer;
-            @NextPlayer.canceled += instance.OnNextPlayer;
-            @PreviousPlayer.started += instance.OnPreviousPlayer;
-            @PreviousPlayer.performed += instance.OnPreviousPlayer;
-            @PreviousPlayer.canceled += instance.OnPreviousPlayer;
-            @ToggleCameraControl.started += instance.OnToggleCameraControl;
-            @ToggleCameraControl.performed += instance.OnToggleCameraControl;
-            @ToggleCameraControl.canceled += instance.OnToggleCameraControl;
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
@@ -1442,21 +1367,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
-            @Zoom.started -= instance.OnZoom;
-            @Zoom.performed -= instance.OnZoom;
-            @Zoom.canceled -= instance.OnZoom;
             @Attack.started -= instance.OnAttack;
             @Attack.performed -= instance.OnAttack;
             @Attack.canceled -= instance.OnAttack;
-            @NextPlayer.started -= instance.OnNextPlayer;
-            @NextPlayer.performed -= instance.OnNextPlayer;
-            @NextPlayer.canceled -= instance.OnNextPlayer;
-            @PreviousPlayer.started -= instance.OnPreviousPlayer;
-            @PreviousPlayer.performed -= instance.OnPreviousPlayer;
-            @PreviousPlayer.canceled -= instance.OnPreviousPlayer;
-            @ToggleCameraControl.started -= instance.OnToggleCameraControl;
-            @ToggleCameraControl.performed -= instance.OnToggleCameraControl;
-            @ToggleCameraControl.canceled -= instance.OnToggleCameraControl;
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
@@ -1812,6 +1725,124 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="UIActions" /> instance referencing this action map.
     /// </summary>
     public UIActions @UI => new UIActions(this);
+
+    // ControlManager
+    private readonly InputActionMap m_ControlManager;
+    private List<IControlManagerActions> m_ControlManagerActionsCallbackInterfaces = new List<IControlManagerActions>();
+    private readonly InputAction m_ControlManager_NextPlayer;
+    private readonly InputAction m_ControlManager_PreviousPlayer;
+    private readonly InputAction m_ControlManager_ToggleCameraControl;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "ControlManager".
+    /// </summary>
+    public struct ControlManagerActions
+    {
+        private @InputSystem_Actions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public ControlManagerActions(@InputSystem_Actions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "ControlManager/NextPlayer".
+        /// </summary>
+        public InputAction @NextPlayer => m_Wrapper.m_ControlManager_NextPlayer;
+        /// <summary>
+        /// Provides access to the underlying input action "ControlManager/PreviousPlayer".
+        /// </summary>
+        public InputAction @PreviousPlayer => m_Wrapper.m_ControlManager_PreviousPlayer;
+        /// <summary>
+        /// Provides access to the underlying input action "ControlManager/ToggleCameraControl".
+        /// </summary>
+        public InputAction @ToggleCameraControl => m_Wrapper.m_ControlManager_ToggleCameraControl;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_ControlManager; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="ControlManagerActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(ControlManagerActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="ControlManagerActions" />
+        public void AddCallbacks(IControlManagerActions instance)
+        {
+            if (instance == null || m_Wrapper.m_ControlManagerActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_ControlManagerActionsCallbackInterfaces.Add(instance);
+            @NextPlayer.started += instance.OnNextPlayer;
+            @NextPlayer.performed += instance.OnNextPlayer;
+            @NextPlayer.canceled += instance.OnNextPlayer;
+            @PreviousPlayer.started += instance.OnPreviousPlayer;
+            @PreviousPlayer.performed += instance.OnPreviousPlayer;
+            @PreviousPlayer.canceled += instance.OnPreviousPlayer;
+            @ToggleCameraControl.started += instance.OnToggleCameraControl;
+            @ToggleCameraControl.performed += instance.OnToggleCameraControl;
+            @ToggleCameraControl.canceled += instance.OnToggleCameraControl;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="ControlManagerActions" />
+        private void UnregisterCallbacks(IControlManagerActions instance)
+        {
+            @NextPlayer.started -= instance.OnNextPlayer;
+            @NextPlayer.performed -= instance.OnNextPlayer;
+            @NextPlayer.canceled -= instance.OnNextPlayer;
+            @PreviousPlayer.started -= instance.OnPreviousPlayer;
+            @PreviousPlayer.performed -= instance.OnPreviousPlayer;
+            @PreviousPlayer.canceled -= instance.OnPreviousPlayer;
+            @ToggleCameraControl.started -= instance.OnToggleCameraControl;
+            @ToggleCameraControl.performed -= instance.OnToggleCameraControl;
+            @ToggleCameraControl.canceled -= instance.OnToggleCameraControl;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="ControlManagerActions.UnregisterCallbacks(IControlManagerActions)" />.
+        /// </summary>
+        /// <seealso cref="ControlManagerActions.UnregisterCallbacks(IControlManagerActions)" />
+        public void RemoveCallbacks(IControlManagerActions instance)
+        {
+            if (m_Wrapper.m_ControlManagerActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="ControlManagerActions.AddCallbacks(IControlManagerActions)" />
+        /// <seealso cref="ControlManagerActions.RemoveCallbacks(IControlManagerActions)" />
+        /// <seealso cref="ControlManagerActions.UnregisterCallbacks(IControlManagerActions)" />
+        public void SetCallbacks(IControlManagerActions instance)
+        {
+            foreach (var item in m_Wrapper.m_ControlManagerActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_ControlManagerActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="ControlManagerActions" /> instance referencing this action map.
+    /// </summary>
+    public ControlManagerActions @ControlManager => new ControlManagerActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     /// <summary>
     /// Provides access to the input control scheme.
@@ -1892,40 +1923,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMove(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Zoom" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnZoom(InputAction.CallbackContext context);
-        /// <summary>
         /// Method invoked when associated input action "Attack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnAttack(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "NextPlayer" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnNextPlayer(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "PreviousPlayer" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnPreviousPlayer(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "ToggleCameraControl" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnToggleCameraControl(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Interact" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
@@ -2054,5 +2057,34 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnTogglePause(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "ControlManager" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="ControlManagerActions.AddCallbacks(IControlManagerActions)" />
+    /// <seealso cref="ControlManagerActions.RemoveCallbacks(IControlManagerActions)" />
+    public interface IControlManagerActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "NextPlayer" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNextPlayer(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PreviousPlayer" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPreviousPlayer(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ToggleCameraControl" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnToggleCameraControl(InputAction.CallbackContext context);
     }
 }

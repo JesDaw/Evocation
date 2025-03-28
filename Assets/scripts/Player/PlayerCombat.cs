@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class Player_Combat : MonoBehaviour
 {
-    bool _controlable = true;
+    public bool _controllable = true;
     [SerializeField] Stats _player_Stats;
     public Animator animator;
 
@@ -16,15 +16,13 @@ public class Player_Combat : MonoBehaviour
     // Update is called once per frame
     public void AttackAction(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && _controllable)
         {
-            Debug.Log("Attacked");
             Attack();
             attackingAudio.Play();
             if (!attackingAudio.isPlaying)
             {
                 attackingAudio.Play();
-                Debug.Log("walking sound");
             } 
         }
     }
