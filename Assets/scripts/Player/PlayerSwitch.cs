@@ -1,16 +1,19 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Unity.Cinemachine;
+using UnityEngine.InputSystem;
 
 public class PlayerSwitch : MonoBehaviour
 {
     [SerializeField] private Camera FreeCam;
     [SerializeField] private List<PlayersControlerScriptsManager> players = new List<PlayersControlerScriptsManager>();
     [SerializeField] private List<CinemachineCamera> playerCameras = new List<CinemachineCamera>();
+     InputAction moveActions;
+
 
     private int activePlayerIndex = 0;
 
-    private void Start()
+    void Start()
     {
         if (players.Count == 0 || playerCameras.Count == 0)
         {
@@ -18,34 +21,38 @@ public class PlayerSwitch : MonoBehaviour
             return;
         }
 
-        // Ensure only the first player is active at the start
-        ActivatePlayer(activePlayerIndex);
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.RightShift))
+        InputAction nextPlayerAction = InputSystem.actions.FindAction("NextPlayer");
+        if (nextPlayerAction != null)
         {
-            SwitchPlayer();
+            nextPlayerAction.performed += SwitchPlayer;
+            nextPlayerAction.Enable();
         }
+        else
+        {
+            Debug.LogError("NextPlayer action not found in InputSystem!");
+        }
+        ActivatePlayer(activePlayerIndex);
     }
 
     /// <summary>
     /// Switches control to the next player in the list.
     /// </summary>
-    private void SwitchPlayer()
+    public void SwitchPlayer(InputAction.CallbackContext context)
     {
-        if (players.Count == 0 || playerCameras.Count == 0) return;
+        if (context.performed)
+        {
+            if (players.Count == 0 || playerCameras.Count == 0) return;
 
-        // Disable current player
-        players[activePlayerIndex].DisableControls();
-        playerCameras[activePlayerIndex].Priority = 0;
+            // Disable current player
+            players[activePlayerIndex].DisableControls();
+            playerCameras[activePlayerIndex].Priority = 0;
 
-        // Move to the next player
-        activePlayerIndex = (activePlayerIndex + 1) % players.Count;
+            // Move to the next player
+            activePlayerIndex = (activePlayerIndex + 1) % players.Count;
 
-        // Activate the new player
-        ActivatePlayer(activePlayerIndex);
+            // Activate the new player
+            ActivatePlayer(activePlayerIndex);
+        }
     }
 
     /// <summary>
