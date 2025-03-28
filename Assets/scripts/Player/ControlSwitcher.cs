@@ -92,8 +92,8 @@ public class ControlSwitcher : MonoBehaviour
         //reset bool for walking & climbing (idk y this part isnt resetting)
         if (playerMovement != null)
         {
-            playerMovement.stop_walking();
-            playerMovement.stop_climbing();
+            //playerMovement.stop_walking();
+            //playerMovement.stop_climbing();
         }
 
         Debug.Log("Switched to player control.");
