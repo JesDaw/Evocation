@@ -28,12 +28,6 @@ public class CameraController : MonoBehaviour
         inputActions = new InputSystem_Actions();
         inputActions.Enable();
         _camera = GetComponent<CinemachineCamera>();
-        rb = GetComponent<Rigidbody2D>();
-
-        if (rb == null)
-        {
-            Debug.LogError("Rigidbody2D is missing on Camera!");
-        }
 
         if (mapRenderer != null)
         {

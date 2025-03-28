@@ -20,10 +20,6 @@ public class Player_Combat : MonoBehaviour
         {
             Attack();
             attackingAudio.Play();
-            if (!attackingAudio.isPlaying)
-            {
-                attackingAudio.Play();
-            } 
         }
     }
 

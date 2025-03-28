@@ -12,6 +12,7 @@ public class CpuLogic : MonoBehaviour
     [SerializeField] Transform _Raycast;
     [SerializeField] SpriteRenderer _Renderer;
     [SerializeField] Rigidbody2D _Body;
+    [SerializeField] AudioSource attackingAudio;
     [Header("Events")]
     [SerializeField] UnityEvent OnSpawn;
     [SerializeField] CpuUtilis Utilis;
@@ -91,6 +92,7 @@ public class CpuLogic : MonoBehaviour
         //Enemy Attack
         Debug.Log("Attacked Enemy" + hits[SavedIndex].collider.gameObject.name);
         EnemyStats.Attack(_Stats._Attack);
+        attackingAudio.Play();
         
         //Status Effects
         if(EnemyStats._StatusHealth <= 0)

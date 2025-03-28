@@ -19,7 +19,7 @@ public class PlayerMovement : MonoBehaviour
     bool _game_is_active;
 
     [SerializeField] AudioSource walking_audio;
-    private bool walking = false;
+    //private bool walking = false;
 
     void Start()
     {
