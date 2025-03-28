@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    bool _controlable = true;
+    public bool _controllable = true;
     [SerializeField] Stats _player_Stats;
     public Rigidbody2D rb;
     public Transform groundCheck;
@@ -42,11 +42,12 @@ public class PlayerMovement : MonoBehaviour
 
     public void Move(InputAction.CallbackContext context)
     {
+        if(!_controllable) return;
  
         Vector2 input = context.ReadValue<Vector2>();
         horizontal = input.x;
         vertical = input.y;
-        if (!walking_audio.isPlaying && input.x > 0 && !isClimbing)
+        if (!walking_audio.isPlaying && input.x != 0 && !isClimbing)
         {
             walking_audio.Play();
         }

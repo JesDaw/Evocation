@@ -2,14 +2,14 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.Cinemachine;
 
-public class ControlSwitcher : MonoBehaviour
+public class CameraControlSwitcher : MonoBehaviour
 {
     // 🎥 Camera References
     [SerializeField] private CinemachineCamera freeCam;
 
     // 🎮 Script References
     [SerializeField] private CameraController cameraMovement;
-    [SerializeField] private PlayerSwitch playerSwitcher; // Reference to PlayerSwitch script
+    [SerializeField] private PlayerSwitch playerSwitcher;
     [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private PlayerLivesManager player_lives;
 
@@ -17,6 +17,7 @@ public class ControlSwitcher : MonoBehaviour
     private AudioManager audio_manager;
 
     private InputSystem_Actions inputActions;
+    //InputAction inputActions;
     private bool isControllingPlayer = true; // Starts by controlling the player
 
     private void Awake()
@@ -30,14 +31,12 @@ public class ControlSwitcher : MonoBehaviour
         audio_manager = FindAnyObjectByType<AudioManager>();
     }
 
-    private void Update()
+    public void SwitchControl(InputAction.CallbackContext context)
     {
-        // Switch control using Tab key
-        if (Keyboard.current.tabKey.wasPressedThisFrame)
-        {
-            audio_manager.Play("Switching Cameras"); //plays pop noise when cam switched
-            ToggleControl();
-        }
+        if (!context.performed) return;
+
+        audio_manager.Play("Switching Cameras"); //plays pop noise when cam switched
+        ToggleControl();
 
         //auto switches to free cam when player lives hit 0 (also cant use controls anymroe)
         if (player_lives != null && player_lives.get_life_count() <= 0 && isControllingPlayer)
@@ -83,18 +82,7 @@ public class ControlSwitcher : MonoBehaviour
         inputActions.Camera.Disable();
         inputActions.Player.Enable();
 
-        //walking & climbing sound effects only play when on player control
-        if (audio_manager != null)
-        {
-            audio_manager.gameObject.SetActive(true); //activate the audio manager game obj
-        }
 
-        //reset bool for walking & climbing (idk y this part isnt resetting)
-        if (playerMovement != null)
-        {
-            //playerMovement.stop_walking();
-            //playerMovement.stop_climbing();
-        }
 
         Debug.Log("Switched to player control.");
     }
@@ -111,12 +99,15 @@ public class ControlSwitcher : MonoBehaviour
             CinemachineCamera currentPlayerCam = playerSwitcher.GetCurrentPlayerCamera();
             PlayersControlerScriptsManager currentPlayer = playerSwitcher.GetCurrentPlayerController();
         
-            if (freeCam != null) {
+            //set freecam to active and make it start in the same position as the player cam
+            if (freeCam != null) 
+            {
                 freeCam.Priority = 2;
                 freeCam.transform.position = playerSwitcher.GetCurrentPlayerCamera().transform.position;
                 freeCam.gameObject.GetComponent<CinemachineCamera>().Lens.OrthographicSize = playerSwitcher.GetCurrentPlayerCamera().GetComponent<CinemachineCamera>().Lens.OrthographicSize;
             }
 
+            //dissable player
             if (currentPlayerCam != null) currentPlayerCam.Priority = 0;
             if (currentPlayer != null) 
             {
@@ -124,18 +115,10 @@ public class ControlSwitcher : MonoBehaviour
             }
         }
 
-
+        //enable camera controls
         if (cameraMovement != null) cameraMovement.enabled = true;
-
         inputActions.Player.Disable();
         inputActions.Camera.Enable();
-
-        //stop the walking & climbing sound effect when switching to free cam
-        if (audio_manager != null)
-        {
-            audio_manager.gameObject.SetActive(false); //deactivate the audio manager game obj
-        }
-        
 
         Debug.Log("Switched to camera control.");
     }

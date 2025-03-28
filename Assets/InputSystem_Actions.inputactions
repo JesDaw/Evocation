@@ -15,45 +15,9 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Zoom",
-                    "type": "Value",
-                    "id": "f337db5c-7b44-40f2-983c-44fad5e2c899",
-                    "expectedControlType": "Axis",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
                     "name": "Attack",
                     "type": "Button",
                     "id": "6c2ab1b8-8984-453a-af3d-a3c78ae1679a",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "NextPlayer",
-                    "type": "Button",
-                    "id": "b7230bb6-fc9b-4f52-8b25-f5e19cb2c2ba",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "PreviousPlayer",
-                    "type": "Button",
-                    "id": "2776c80d-3c14-4091-8c56-d04ced07a2b0",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "ToggleCameraControl",
-                    "type": "Button",
-                    "id": "0d57ce1b-fe5a-40f0-aaa2-0bb221ba0dd6",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -222,28 +186,6 @@
                 },
                 {
                     "name": "",
-                    "id": "9649df19-a23e-4275-8fe2-9aa37dc3db5d",
-                    "path": "<Mouse>/scroll/up",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Zoom",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "0d9f83ec-f4c5-4f1b-9b7a-0c46b9c8561f",
-                    "path": "<Mouse>/scroll/down",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Zoom",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "143bb1cd-cc10-4eca-a2f0-a3664166fe91",
                     "path": "<Gamepad>/buttonWest",
                     "interactions": "",
@@ -299,56 +241,12 @@
                 },
                 {
                     "name": "",
-                    "id": "b3c1c7f0-bd20-4ee7-a0f1-899b24bca6d7",
-                    "path": "<Keyboard>/enter",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e15ca19d-e649-4852-97d5-7fe8ccc44e94",
-                    "path": "<Gamepad>/dpad/right",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "NextPlayer",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "333c9934-8f89-45ca-b0b9-e1bd04c692e6",
-                    "path": "<Keyboard>/shift",
+                    "id": "6eae8079-70d3-4c51-833b-3d2d887a0546",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "NextPlayer",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "1534dc16-a6aa-499d-9c3a-22b47347b52a",
-                    "path": "<Keyboard>/1",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "PreviousPlayer",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "25060bbd-a3a6-476e-8fba-45ae484aad05",
-                    "path": "<Gamepad>/dpad/left",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "PreviousPlayer",
+                    "action": "Attack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -371,17 +269,6 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "a13daace-9cf8-4718-b633-1426555ac2ab",
-                    "path": "<Keyboard>/tab",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ToggleCameraControl",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -1054,6 +941,74 @@
                     "processors": "",
                     "groups": "",
                     "action": "TogglePause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "ControlManager",
+            "id": "1e7f5d5e-c61a-44ee-a183-8ea258aa8a17",
+            "actions": [
+                {
+                    "name": "NextPlayer",
+                    "type": "Button",
+                    "id": "ae589a08-cdf4-4866-8226-941df6ee6a8c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PreviousPlayer",
+                    "type": "Button",
+                    "id": "acf61e7d-5f9d-4fa8-8462-c716a70f7507",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ToggleCameraControl",
+                    "type": "Button",
+                    "id": "ce2d966f-1a41-4c1b-affe-40f5ffdc3879",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "56e4bec5-0a38-49e3-8abf-bd519a501952",
+                    "path": "<Keyboard>/rightShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "NextPlayer",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "73b02fb0-555d-42f4-8655-a634192bb901",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PreviousPlayer",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a3890f55-7b60-4505-a02e-a02e19b3b541",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleCameraControl",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
