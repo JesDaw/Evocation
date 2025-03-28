@@ -35,7 +35,7 @@ public class Player_Combat : MonoBehaviour
         // Damage them
         foreach(Collider2D enemy in hitEnemies)
         {
-         //   Debug.Log("We hit " + enemy.name);
+            if (!enemy.CompareTag("foe")) continue;
 
             if (enemy.TryGetComponent<Stats>(out Stats _enimy_stats)){
                 _enimy_stats.Attack(_player_Stats._Attack);
