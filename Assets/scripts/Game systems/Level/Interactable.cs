@@ -14,7 +14,7 @@ public class Interactable : MonoBehaviour
         {
             if (Input.GetKeyDown(interactKey))
             {
-                Debug.Log("Player did an action!");
+               // Debug.Log("Player did an action!");
                 interactAction.Invoke();
             }
         }
@@ -25,7 +25,7 @@ public class Interactable : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             isInRange = true;
-            Debug.Log("Player now in range");
+           // Debug.Log("Player now in range");
         }
     }
 
@@ -34,7 +34,7 @@ public class Interactable : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             isInRange = false;
-            Debug.Log("Player now not in range");
+           // Debug.Log("Player now not in range");
         }
     }
 }

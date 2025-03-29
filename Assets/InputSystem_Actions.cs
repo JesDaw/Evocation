@@ -117,24 +117,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Spawn"",
-                    ""type"": ""Button"",
-                    ""id"": ""514913c2-68ed-4391-8ad9-a633bb04e49c"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Spawn1"",
-                    ""type"": ""Button"",
-                    ""id"": ""46d8fbc7-019c-4e18-b9f1-670bd3a91687"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -355,28 +337,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Interact"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""4f9d3fda-c89c-444d-9831-6e7888382b1d"",
-                    ""path"": ""<Keyboard>/1"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Spawn"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""d8d14714-9e82-4a44-9901-0785f44e504c"",
-                    ""path"": ""<Keyboard>/2"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Spawn1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1099,6 +1059,214 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""CPU controller"",
+            ""id"": ""7ff255b1-5c38-436e-a709-892db920dd51"",
+            ""actions"": [
+                {
+                    ""name"": ""Spawn1"",
+                    ""type"": ""Button"",
+                    ""id"": ""3b6a0b23-96b1-4ae5-b7cd-bc3d66788c18"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Spawn2"",
+                    ""type"": ""Button"",
+                    ""id"": ""fd637db4-35ac-4574-90b5-41ec6e885151"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Spawn3"",
+                    ""type"": ""Button"",
+                    ""id"": ""1d9717d6-b336-4c96-88f2-0cc471e96757"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Spawn4"",
+                    ""type"": ""Button"",
+                    ""id"": ""2ea67227-3e80-469f-b2e2-52bd1904331d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Spawn5"",
+                    ""type"": ""Button"",
+                    ""id"": ""070500a9-e325-433e-93fe-6910df7a70bd"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Spawn6"",
+                    ""type"": ""Button"",
+                    ""id"": ""70e6752f-666f-44d6-b29f-ac4629dd506f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Spawn7"",
+                    ""type"": ""Button"",
+                    ""id"": ""f7bf8978-54ba-4059-b4f6-89bfc53e20e5"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Spawn8"",
+                    ""type"": ""Button"",
+                    ""id"": ""3251cf39-76d3-4b30-b20d-25f0e461827c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Spawn9"",
+                    ""type"": ""Button"",
+                    ""id"": ""bf164ef0-eba5-43b5-a484-529e411e78f8"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Spawn0"",
+                    ""type"": ""Button"",
+                    ""id"": ""94f9f83c-9ff8-4130-82e6-314b50a53696"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""e8ad1297-fcb7-4684-b1c6-ec5bec4de185"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Spawn1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5a00d13d-2780-46c0-a99c-eca6143ca189"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Spawn2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""512f8c93-6fef-4130-b79f-8391b9debd94"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Spawn3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5a8e53e5-a10c-4a02-bf0d-2a878bf0cf9f"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Spawn4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c18188cd-a37f-4e32-aa65-82c1757d2ee2"",
+                    ""path"": ""<Keyboard>/5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Spawn5"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d1f32552-9e20-4d33-a9d4-7a1e3bd74fd1"",
+                    ""path"": ""<Keyboard>/6"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Spawn6"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""567977ef-2058-40bb-9b62-81f3f6e6d7b8"",
+                    ""path"": ""<Keyboard>/7"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Spawn7"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""50ce01a9-3c38-4d30-8a9b-a572df4b468f"",
+                    ""path"": ""<Keyboard>/8"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Spawn8"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f95cdce5-d9d5-4c74-a6d9-85fcb2ddd01c"",
+                    ""path"": ""<Keyboard>/9"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Spawn9"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0d2c03be-28b6-4cf9-8e88-1f258281cca9"",
+                    ""path"": ""<Keyboard>/0"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Spawn0"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1169,8 +1337,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
-        m_Player_Spawn = m_Player.FindAction("Spawn", throwIfNotFound: true);
-        m_Player_Spawn1 = m_Player.FindAction("Spawn1", throwIfNotFound: true);
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_Move = m_Camera.FindAction("Move", throwIfNotFound: true);
@@ -1193,6 +1359,18 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_ControlManager_NextPlayer = m_ControlManager.FindAction("NextPlayer", throwIfNotFound: true);
         m_ControlManager_PreviousPlayer = m_ControlManager.FindAction("PreviousPlayer", throwIfNotFound: true);
         m_ControlManager_ToggleCameraControl = m_ControlManager.FindAction("ToggleCameraControl", throwIfNotFound: true);
+        // CPU controller
+        m_CPUcontroller = asset.FindActionMap("CPU controller", throwIfNotFound: true);
+        m_CPUcontroller_Spawn1 = m_CPUcontroller.FindAction("Spawn1", throwIfNotFound: true);
+        m_CPUcontroller_Spawn2 = m_CPUcontroller.FindAction("Spawn2", throwIfNotFound: true);
+        m_CPUcontroller_Spawn3 = m_CPUcontroller.FindAction("Spawn3", throwIfNotFound: true);
+        m_CPUcontroller_Spawn4 = m_CPUcontroller.FindAction("Spawn4", throwIfNotFound: true);
+        m_CPUcontroller_Spawn5 = m_CPUcontroller.FindAction("Spawn5", throwIfNotFound: true);
+        m_CPUcontroller_Spawn6 = m_CPUcontroller.FindAction("Spawn6", throwIfNotFound: true);
+        m_CPUcontroller_Spawn7 = m_CPUcontroller.FindAction("Spawn7", throwIfNotFound: true);
+        m_CPUcontroller_Spawn8 = m_CPUcontroller.FindAction("Spawn8", throwIfNotFound: true);
+        m_CPUcontroller_Spawn9 = m_CPUcontroller.FindAction("Spawn9", throwIfNotFound: true);
+        m_CPUcontroller_Spawn0 = m_CPUcontroller.FindAction("Spawn0", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
@@ -1201,6 +1379,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         UnityEngine.Debug.Assert(!m_Camera.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Camera.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, InputSystem_Actions.UI.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_ControlManager.enabled, "This will cause a leak and performance issues, InputSystem_Actions.ControlManager.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_CPUcontroller.enabled, "This will cause a leak and performance issues, InputSystem_Actions.CPUcontroller.Disable() has not been called.");
     }
 
     /// <summary>
@@ -1279,8 +1458,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Attack;
     private readonly InputAction m_Player_Interact;
-    private readonly InputAction m_Player_Spawn;
-    private readonly InputAction m_Player_Spawn1;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1304,14 +1481,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Interact".
         /// </summary>
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/Spawn".
-        /// </summary>
-        public InputAction @Spawn => m_Wrapper.m_Player_Spawn;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/Spawn1".
-        /// </summary>
-        public InputAction @Spawn1 => m_Wrapper.m_Player_Spawn1;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1347,12 +1516,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
-            @Spawn.started += instance.OnSpawn;
-            @Spawn.performed += instance.OnSpawn;
-            @Spawn.canceled += instance.OnSpawn;
-            @Spawn1.started += instance.OnSpawn1;
-            @Spawn1.performed += instance.OnSpawn1;
-            @Spawn1.canceled += instance.OnSpawn1;
         }
 
         /// <summary>
@@ -1373,12 +1536,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
-            @Spawn.started -= instance.OnSpawn;
-            @Spawn.performed -= instance.OnSpawn;
-            @Spawn.canceled -= instance.OnSpawn;
-            @Spawn1.started -= instance.OnSpawn1;
-            @Spawn1.performed -= instance.OnSpawn1;
-            @Spawn1.canceled -= instance.OnSpawn1;
         }
 
         /// <summary>
@@ -1843,6 +2000,201 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="ControlManagerActions" /> instance referencing this action map.
     /// </summary>
     public ControlManagerActions @ControlManager => new ControlManagerActions(this);
+
+    // CPU controller
+    private readonly InputActionMap m_CPUcontroller;
+    private List<ICPUcontrollerActions> m_CPUcontrollerActionsCallbackInterfaces = new List<ICPUcontrollerActions>();
+    private readonly InputAction m_CPUcontroller_Spawn1;
+    private readonly InputAction m_CPUcontroller_Spawn2;
+    private readonly InputAction m_CPUcontroller_Spawn3;
+    private readonly InputAction m_CPUcontroller_Spawn4;
+    private readonly InputAction m_CPUcontroller_Spawn5;
+    private readonly InputAction m_CPUcontroller_Spawn6;
+    private readonly InputAction m_CPUcontroller_Spawn7;
+    private readonly InputAction m_CPUcontroller_Spawn8;
+    private readonly InputAction m_CPUcontroller_Spawn9;
+    private readonly InputAction m_CPUcontroller_Spawn0;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "CPU controller".
+    /// </summary>
+    public struct CPUcontrollerActions
+    {
+        private @InputSystem_Actions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public CPUcontrollerActions(@InputSystem_Actions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "CPUcontroller/Spawn1".
+        /// </summary>
+        public InputAction @Spawn1 => m_Wrapper.m_CPUcontroller_Spawn1;
+        /// <summary>
+        /// Provides access to the underlying input action "CPUcontroller/Spawn2".
+        /// </summary>
+        public InputAction @Spawn2 => m_Wrapper.m_CPUcontroller_Spawn2;
+        /// <summary>
+        /// Provides access to the underlying input action "CPUcontroller/Spawn3".
+        /// </summary>
+        public InputAction @Spawn3 => m_Wrapper.m_CPUcontroller_Spawn3;
+        /// <summary>
+        /// Provides access to the underlying input action "CPUcontroller/Spawn4".
+        /// </summary>
+        public InputAction @Spawn4 => m_Wrapper.m_CPUcontroller_Spawn4;
+        /// <summary>
+        /// Provides access to the underlying input action "CPUcontroller/Spawn5".
+        /// </summary>
+        public InputAction @Spawn5 => m_Wrapper.m_CPUcontroller_Spawn5;
+        /// <summary>
+        /// Provides access to the underlying input action "CPUcontroller/Spawn6".
+        /// </summary>
+        public InputAction @Spawn6 => m_Wrapper.m_CPUcontroller_Spawn6;
+        /// <summary>
+        /// Provides access to the underlying input action "CPUcontroller/Spawn7".
+        /// </summary>
+        public InputAction @Spawn7 => m_Wrapper.m_CPUcontroller_Spawn7;
+        /// <summary>
+        /// Provides access to the underlying input action "CPUcontroller/Spawn8".
+        /// </summary>
+        public InputAction @Spawn8 => m_Wrapper.m_CPUcontroller_Spawn8;
+        /// <summary>
+        /// Provides access to the underlying input action "CPUcontroller/Spawn9".
+        /// </summary>
+        public InputAction @Spawn9 => m_Wrapper.m_CPUcontroller_Spawn9;
+        /// <summary>
+        /// Provides access to the underlying input action "CPUcontroller/Spawn0".
+        /// </summary>
+        public InputAction @Spawn0 => m_Wrapper.m_CPUcontroller_Spawn0;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_CPUcontroller; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="CPUcontrollerActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(CPUcontrollerActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="CPUcontrollerActions" />
+        public void AddCallbacks(ICPUcontrollerActions instance)
+        {
+            if (instance == null || m_Wrapper.m_CPUcontrollerActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_CPUcontrollerActionsCallbackInterfaces.Add(instance);
+            @Spawn1.started += instance.OnSpawn1;
+            @Spawn1.performed += instance.OnSpawn1;
+            @Spawn1.canceled += instance.OnSpawn1;
+            @Spawn2.started += instance.OnSpawn2;
+            @Spawn2.performed += instance.OnSpawn2;
+            @Spawn2.canceled += instance.OnSpawn2;
+            @Spawn3.started += instance.OnSpawn3;
+            @Spawn3.performed += instance.OnSpawn3;
+            @Spawn3.canceled += instance.OnSpawn3;
+            @Spawn4.started += instance.OnSpawn4;
+            @Spawn4.performed += instance.OnSpawn4;
+            @Spawn4.canceled += instance.OnSpawn4;
+            @Spawn5.started += instance.OnSpawn5;
+            @Spawn5.performed += instance.OnSpawn5;
+            @Spawn5.canceled += instance.OnSpawn5;
+            @Spawn6.started += instance.OnSpawn6;
+            @Spawn6.performed += instance.OnSpawn6;
+            @Spawn6.canceled += instance.OnSpawn6;
+            @Spawn7.started += instance.OnSpawn7;
+            @Spawn7.performed += instance.OnSpawn7;
+            @Spawn7.canceled += instance.OnSpawn7;
+            @Spawn8.started += instance.OnSpawn8;
+            @Spawn8.performed += instance.OnSpawn8;
+            @Spawn8.canceled += instance.OnSpawn8;
+            @Spawn9.started += instance.OnSpawn9;
+            @Spawn9.performed += instance.OnSpawn9;
+            @Spawn9.canceled += instance.OnSpawn9;
+            @Spawn0.started += instance.OnSpawn0;
+            @Spawn0.performed += instance.OnSpawn0;
+            @Spawn0.canceled += instance.OnSpawn0;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="CPUcontrollerActions" />
+        private void UnregisterCallbacks(ICPUcontrollerActions instance)
+        {
+            @Spawn1.started -= instance.OnSpawn1;
+            @Spawn1.performed -= instance.OnSpawn1;
+            @Spawn1.canceled -= instance.OnSpawn1;
+            @Spawn2.started -= instance.OnSpawn2;
+            @Spawn2.performed -= instance.OnSpawn2;
+            @Spawn2.canceled -= instance.OnSpawn2;
+            @Spawn3.started -= instance.OnSpawn3;
+            @Spawn3.performed -= instance.OnSpawn3;
+            @Spawn3.canceled -= instance.OnSpawn3;
+            @Spawn4.started -= instance.OnSpawn4;
+            @Spawn4.performed -= instance.OnSpawn4;
+            @Spawn4.canceled -= instance.OnSpawn4;
+            @Spawn5.started -= instance.OnSpawn5;
+            @Spawn5.performed -= instance.OnSpawn5;
+            @Spawn5.canceled -= instance.OnSpawn5;
+            @Spawn6.started -= instance.OnSpawn6;
+            @Spawn6.performed -= instance.OnSpawn6;
+            @Spawn6.canceled -= instance.OnSpawn6;
+            @Spawn7.started -= instance.OnSpawn7;
+            @Spawn7.performed -= instance.OnSpawn7;
+            @Spawn7.canceled -= instance.OnSpawn7;
+            @Spawn8.started -= instance.OnSpawn8;
+            @Spawn8.performed -= instance.OnSpawn8;
+            @Spawn8.canceled -= instance.OnSpawn8;
+            @Spawn9.started -= instance.OnSpawn9;
+            @Spawn9.performed -= instance.OnSpawn9;
+            @Spawn9.canceled -= instance.OnSpawn9;
+            @Spawn0.started -= instance.OnSpawn0;
+            @Spawn0.performed -= instance.OnSpawn0;
+            @Spawn0.canceled -= instance.OnSpawn0;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="CPUcontrollerActions.UnregisterCallbacks(ICPUcontrollerActions)" />.
+        /// </summary>
+        /// <seealso cref="CPUcontrollerActions.UnregisterCallbacks(ICPUcontrollerActions)" />
+        public void RemoveCallbacks(ICPUcontrollerActions instance)
+        {
+            if (m_Wrapper.m_CPUcontrollerActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="CPUcontrollerActions.AddCallbacks(ICPUcontrollerActions)" />
+        /// <seealso cref="CPUcontrollerActions.RemoveCallbacks(ICPUcontrollerActions)" />
+        /// <seealso cref="CPUcontrollerActions.UnregisterCallbacks(ICPUcontrollerActions)" />
+        public void SetCallbacks(ICPUcontrollerActions instance)
+        {
+            foreach (var item in m_Wrapper.m_CPUcontrollerActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_CPUcontrollerActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="CPUcontrollerActions" /> instance referencing this action map.
+    /// </summary>
+    public CPUcontrollerActions @CPUcontroller => new CPUcontrollerActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     /// <summary>
     /// Provides access to the input control scheme.
@@ -1936,20 +2288,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnInteract(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Spawn" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnSpawn(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Spawn1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnSpawn1(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Camera" which allows adding and removing callbacks.
@@ -2086,5 +2424,83 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnToggleCameraControl(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "CPU controller" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="CPUcontrollerActions.AddCallbacks(ICPUcontrollerActions)" />
+    /// <seealso cref="CPUcontrollerActions.RemoveCallbacks(ICPUcontrollerActions)" />
+    public interface ICPUcontrollerActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Spawn1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSpawn1(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Spawn2" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSpawn2(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Spawn3" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSpawn3(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Spawn4" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSpawn4(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Spawn5" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSpawn5(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Spawn6" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSpawn6(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Spawn7" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSpawn7(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Spawn8" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSpawn8(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Spawn9" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSpawn9(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Spawn0" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSpawn0(InputAction.CallbackContext context);
     }
 }
