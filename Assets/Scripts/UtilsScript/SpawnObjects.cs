@@ -8,12 +8,14 @@ public class SpawnObjects : MonoBehaviour
     public float CoolDown = 1f;
     [SerializeField] GameObject _Object;
     [SerializeField] Transform _Container;
+    [SerializeField] Transform _PlayerContainer;
     [SerializeField] UnityEvent OnSpawn;
     [Header("Entites")]
     [SerializeField] ScriptableStats AttachedStats;
     [SerializeField] bool enemySpawner;
     [SerializeField] bool autoSpawner;
     [SerializeField] FloatVariable _Money;
+    [SerializeField] PlayerSwitch playerSwitch;
 
     void Start()
     {
@@ -75,7 +77,6 @@ public class SpawnObjects : MonoBehaviour
         GameObject CreatedObject = Instantiate(_Object, this.transform.position, this.transform.rotation, _Container);
         CpuLogic ObjectLogic = CreatedObject.GetComponent<CpuLogic>();
         if (ObjectLogic != null) ObjectLogic.ScrStats = ScrStats;
-        Debug.Log(CreatedObject.name);
 
         // Assign layer
         if (enemySpawner) CreatedObject.layer = 9;
@@ -99,5 +100,11 @@ public class SpawnObjects : MonoBehaviour
                 CreatedObject.transform.GetChild(0).position.z + RandomValue
             );
         }
+    }
+    public void SpawnPlayer(GameObject player)
+    {
+        GameObject CreatedObject = Instantiate(player, this.transform.position, this.transform.rotation, _PlayerContainer);
+        playerSwitch.AddPlayer(CreatedObject);
+
     }
 }
