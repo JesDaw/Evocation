@@ -8,8 +8,6 @@ public class PlayerSwitch : MonoBehaviour
     [SerializeField] private Camera FreeCam;
     [SerializeField] private List<PlayersControlerScriptsManager> players = new List<PlayersControlerScriptsManager>();
     [SerializeField] private List<CinemachineCamera> playerCameras = new List<CinemachineCamera>();
-     InputAction moveActions;
-
 
     private int activePlayerIndex = 0;
 

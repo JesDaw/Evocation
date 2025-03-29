@@ -12,6 +12,8 @@ public class SpawnObjects : MonoBehaviour
     [Header("Entites")]
     [SerializeField] ScriptableStats AttachedStats;
     [SerializeField] bool enemySpawner;
+    [SerializeField] bool autoSpawner;
+    [SerializeField] FloatVariable _Money;
 
     void Start()
     {
@@ -29,6 +31,8 @@ public class SpawnObjects : MonoBehaviour
     //auto spawn
     public void Spawn()
     {
+        if (!autoSpawner) return;
+
         GameObject CreatedObject = Instantiate(_Object, this.transform.position, this.transform.rotation, _Container);
         CpuLogic ObjectLogic = CreatedObject.GetComponent<CpuLogic>();
         if (ObjectLogic != null) ObjectLogic.ScrStats = AttachedStats;
@@ -61,6 +65,9 @@ public class SpawnObjects : MonoBehaviour
     // when player manually spawns
     public void Spawn(ScriptableStats ScrStats)
     {
+        if (_Money._Value > ScrStats._spawnCost) _Money._Value -= ScrStats._spawnCost;
+        else Debug.Log("Not enough money!");
+
         GameObject CreatedObject = Instantiate(_Object, this.transform.position, this.transform.rotation, _Container);
         CpuLogic ObjectLogic = CreatedObject.GetComponent<CpuLogic>();
         if (ObjectLogic != null) ObjectLogic.ScrStats = ScrStats;

@@ -32,7 +32,6 @@ public class BuildingHealth : MonoBehaviour
         else if(MoneyBuilding)
         {
             ChangeMoneyGen.Invoke();
-            //_end_game.Invoke();
         }
     }
 

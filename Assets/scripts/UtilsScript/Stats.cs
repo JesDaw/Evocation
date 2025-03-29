@@ -16,6 +16,7 @@ public class Stats : MonoBehaviour
     public float _KnockBackMax;
     public float _KnockBackHealth;
     public float _KnockBackVelocity;
+    public int _spawnCost;
     public List<StatusEffect> _StatusEffects;
     //x = Tick
     //y = Length
