@@ -10,8 +10,7 @@ public class CameraControlSwitcher : MonoBehaviour
     // 🎮 Script References
     [SerializeField] private CameraController cameraMovement;
     [SerializeField] private PlayerSwitch playerSwitcher;
-    [SerializeField] private PlayerMovement playerMovement;
-    [SerializeField] private PlayerLivesManager player_lives;
+    [SerializeField] private IntVeriable player_lives;
 
     //for walking sound effect
     private AudioManager audio_manager;
@@ -24,22 +23,27 @@ public class CameraControlSwitcher : MonoBehaviour
     {
         inputActions = new InputSystem_Actions();
         inputActions.Enable();
+
+        inputActions.ControlManager.ToggleCameraControl.performed += SwitchControl;
     }
 
     private void Start()
     {
         audio_manager = FindAnyObjectByType<AudioManager>();
+        inputActions.Player.Enable();
     }
 
     public void SwitchControl(InputAction.CallbackContext context)
     {
+        Debug.Log("here");
+
         if (!context.performed) return;
 
         audio_manager.Play("Switching Cameras"); //plays pop noise when cam switched
         ToggleControl();
 
         //auto switches to free cam when player lives hit 0 (also cant use controls anymroe)
-        if (player_lives != null && player_lives.get_life_count() <= 0 && isControllingPlayer)
+        if (player_lives != null && player_lives._Value <= 0 && isControllingPlayer)
         {
             SwitchToCameraControl();
         }
@@ -50,6 +54,7 @@ public class CameraControlSwitcher : MonoBehaviour
     /// </summary>
     private void ToggleControl()
     {
+
         if (isControllingPlayer)
         {
             SwitchToCameraControl();
@@ -74,7 +79,7 @@ public class CameraControlSwitcher : MonoBehaviour
 
             if (currentPlayerCam != null) currentPlayerCam.Priority = 2;
             if (freeCam != null) freeCam.Priority = 1;
-            if (currentPlayer != null) currentPlayer.EnagbleControls();
+            if (currentPlayer != null) currentPlayer.EnableControls();
         }
 
         if (cameraMovement != null) cameraMovement.enabled = false;

@@ -1061,7 +1061,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             ]
         },
         {
-            ""name"": ""CPU controller"",
+            ""name"": ""SpawnerController"",
             ""id"": ""7ff255b1-5c38-436e-a709-892db920dd51"",
             ""actions"": [
                 {
@@ -1146,7 +1146,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Spawn0"",
+                    ""name"": ""SpawnPlayer"",
                     ""type"": ""Button"",
                     ""id"": ""94f9f83c-9ff8-4130-82e6-314b50a53696"",
                     ""expectedControlType"": """",
@@ -1262,7 +1262,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Spawn0"",
+                    ""action"": ""SpawnPlayer"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1359,18 +1359,18 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_ControlManager_NextPlayer = m_ControlManager.FindAction("NextPlayer", throwIfNotFound: true);
         m_ControlManager_PreviousPlayer = m_ControlManager.FindAction("PreviousPlayer", throwIfNotFound: true);
         m_ControlManager_ToggleCameraControl = m_ControlManager.FindAction("ToggleCameraControl", throwIfNotFound: true);
-        // CPU controller
-        m_CPUcontroller = asset.FindActionMap("CPU controller", throwIfNotFound: true);
-        m_CPUcontroller_Spawn1 = m_CPUcontroller.FindAction("Spawn1", throwIfNotFound: true);
-        m_CPUcontroller_Spawn2 = m_CPUcontroller.FindAction("Spawn2", throwIfNotFound: true);
-        m_CPUcontroller_Spawn3 = m_CPUcontroller.FindAction("Spawn3", throwIfNotFound: true);
-        m_CPUcontroller_Spawn4 = m_CPUcontroller.FindAction("Spawn4", throwIfNotFound: true);
-        m_CPUcontroller_Spawn5 = m_CPUcontroller.FindAction("Spawn5", throwIfNotFound: true);
-        m_CPUcontroller_Spawn6 = m_CPUcontroller.FindAction("Spawn6", throwIfNotFound: true);
-        m_CPUcontroller_Spawn7 = m_CPUcontroller.FindAction("Spawn7", throwIfNotFound: true);
-        m_CPUcontroller_Spawn8 = m_CPUcontroller.FindAction("Spawn8", throwIfNotFound: true);
-        m_CPUcontroller_Spawn9 = m_CPUcontroller.FindAction("Spawn9", throwIfNotFound: true);
-        m_CPUcontroller_Spawn0 = m_CPUcontroller.FindAction("Spawn0", throwIfNotFound: true);
+        // SpawnerController
+        m_SpawnerController = asset.FindActionMap("SpawnerController", throwIfNotFound: true);
+        m_SpawnerController_Spawn1 = m_SpawnerController.FindAction("Spawn1", throwIfNotFound: true);
+        m_SpawnerController_Spawn2 = m_SpawnerController.FindAction("Spawn2", throwIfNotFound: true);
+        m_SpawnerController_Spawn3 = m_SpawnerController.FindAction("Spawn3", throwIfNotFound: true);
+        m_SpawnerController_Spawn4 = m_SpawnerController.FindAction("Spawn4", throwIfNotFound: true);
+        m_SpawnerController_Spawn5 = m_SpawnerController.FindAction("Spawn5", throwIfNotFound: true);
+        m_SpawnerController_Spawn6 = m_SpawnerController.FindAction("Spawn6", throwIfNotFound: true);
+        m_SpawnerController_Spawn7 = m_SpawnerController.FindAction("Spawn7", throwIfNotFound: true);
+        m_SpawnerController_Spawn8 = m_SpawnerController.FindAction("Spawn8", throwIfNotFound: true);
+        m_SpawnerController_Spawn9 = m_SpawnerController.FindAction("Spawn9", throwIfNotFound: true);
+        m_SpawnerController_SpawnPlayer = m_SpawnerController.FindAction("SpawnPlayer", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
@@ -1379,7 +1379,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         UnityEngine.Debug.Assert(!m_Camera.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Camera.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, InputSystem_Actions.UI.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_ControlManager.enabled, "This will cause a leak and performance issues, InputSystem_Actions.ControlManager.Disable() has not been called.");
-        UnityEngine.Debug.Assert(!m_CPUcontroller.enabled, "This will cause a leak and performance issues, InputSystem_Actions.CPUcontroller.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_SpawnerController.enabled, "This will cause a leak and performance issues, InputSystem_Actions.SpawnerController.Disable() has not been called.");
     }
 
     /// <summary>
@@ -2001,74 +2001,74 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     /// </summary>
     public ControlManagerActions @ControlManager => new ControlManagerActions(this);
 
-    // CPU controller
-    private readonly InputActionMap m_CPUcontroller;
-    private List<ICPUcontrollerActions> m_CPUcontrollerActionsCallbackInterfaces = new List<ICPUcontrollerActions>();
-    private readonly InputAction m_CPUcontroller_Spawn1;
-    private readonly InputAction m_CPUcontroller_Spawn2;
-    private readonly InputAction m_CPUcontroller_Spawn3;
-    private readonly InputAction m_CPUcontroller_Spawn4;
-    private readonly InputAction m_CPUcontroller_Spawn5;
-    private readonly InputAction m_CPUcontroller_Spawn6;
-    private readonly InputAction m_CPUcontroller_Spawn7;
-    private readonly InputAction m_CPUcontroller_Spawn8;
-    private readonly InputAction m_CPUcontroller_Spawn9;
-    private readonly InputAction m_CPUcontroller_Spawn0;
+    // SpawnerController
+    private readonly InputActionMap m_SpawnerController;
+    private List<ISpawnerControllerActions> m_SpawnerControllerActionsCallbackInterfaces = new List<ISpawnerControllerActions>();
+    private readonly InputAction m_SpawnerController_Spawn1;
+    private readonly InputAction m_SpawnerController_Spawn2;
+    private readonly InputAction m_SpawnerController_Spawn3;
+    private readonly InputAction m_SpawnerController_Spawn4;
+    private readonly InputAction m_SpawnerController_Spawn5;
+    private readonly InputAction m_SpawnerController_Spawn6;
+    private readonly InputAction m_SpawnerController_Spawn7;
+    private readonly InputAction m_SpawnerController_Spawn8;
+    private readonly InputAction m_SpawnerController_Spawn9;
+    private readonly InputAction m_SpawnerController_SpawnPlayer;
     /// <summary>
-    /// Provides access to input actions defined in input action map "CPU controller".
+    /// Provides access to input actions defined in input action map "SpawnerController".
     /// </summary>
-    public struct CPUcontrollerActions
+    public struct SpawnerControllerActions
     {
         private @InputSystem_Actions m_Wrapper;
 
         /// <summary>
         /// Construct a new instance of the input action map wrapper class.
         /// </summary>
-        public CPUcontrollerActions(@InputSystem_Actions wrapper) { m_Wrapper = wrapper; }
+        public SpawnerControllerActions(@InputSystem_Actions wrapper) { m_Wrapper = wrapper; }
         /// <summary>
-        /// Provides access to the underlying input action "CPUcontroller/Spawn1".
+        /// Provides access to the underlying input action "SpawnerController/Spawn1".
         /// </summary>
-        public InputAction @Spawn1 => m_Wrapper.m_CPUcontroller_Spawn1;
+        public InputAction @Spawn1 => m_Wrapper.m_SpawnerController_Spawn1;
         /// <summary>
-        /// Provides access to the underlying input action "CPUcontroller/Spawn2".
+        /// Provides access to the underlying input action "SpawnerController/Spawn2".
         /// </summary>
-        public InputAction @Spawn2 => m_Wrapper.m_CPUcontroller_Spawn2;
+        public InputAction @Spawn2 => m_Wrapper.m_SpawnerController_Spawn2;
         /// <summary>
-        /// Provides access to the underlying input action "CPUcontroller/Spawn3".
+        /// Provides access to the underlying input action "SpawnerController/Spawn3".
         /// </summary>
-        public InputAction @Spawn3 => m_Wrapper.m_CPUcontroller_Spawn3;
+        public InputAction @Spawn3 => m_Wrapper.m_SpawnerController_Spawn3;
         /// <summary>
-        /// Provides access to the underlying input action "CPUcontroller/Spawn4".
+        /// Provides access to the underlying input action "SpawnerController/Spawn4".
         /// </summary>
-        public InputAction @Spawn4 => m_Wrapper.m_CPUcontroller_Spawn4;
+        public InputAction @Spawn4 => m_Wrapper.m_SpawnerController_Spawn4;
         /// <summary>
-        /// Provides access to the underlying input action "CPUcontroller/Spawn5".
+        /// Provides access to the underlying input action "SpawnerController/Spawn5".
         /// </summary>
-        public InputAction @Spawn5 => m_Wrapper.m_CPUcontroller_Spawn5;
+        public InputAction @Spawn5 => m_Wrapper.m_SpawnerController_Spawn5;
         /// <summary>
-        /// Provides access to the underlying input action "CPUcontroller/Spawn6".
+        /// Provides access to the underlying input action "SpawnerController/Spawn6".
         /// </summary>
-        public InputAction @Spawn6 => m_Wrapper.m_CPUcontroller_Spawn6;
+        public InputAction @Spawn6 => m_Wrapper.m_SpawnerController_Spawn6;
         /// <summary>
-        /// Provides access to the underlying input action "CPUcontroller/Spawn7".
+        /// Provides access to the underlying input action "SpawnerController/Spawn7".
         /// </summary>
-        public InputAction @Spawn7 => m_Wrapper.m_CPUcontroller_Spawn7;
+        public InputAction @Spawn7 => m_Wrapper.m_SpawnerController_Spawn7;
         /// <summary>
-        /// Provides access to the underlying input action "CPUcontroller/Spawn8".
+        /// Provides access to the underlying input action "SpawnerController/Spawn8".
         /// </summary>
-        public InputAction @Spawn8 => m_Wrapper.m_CPUcontroller_Spawn8;
+        public InputAction @Spawn8 => m_Wrapper.m_SpawnerController_Spawn8;
         /// <summary>
-        /// Provides access to the underlying input action "CPUcontroller/Spawn9".
+        /// Provides access to the underlying input action "SpawnerController/Spawn9".
         /// </summary>
-        public InputAction @Spawn9 => m_Wrapper.m_CPUcontroller_Spawn9;
+        public InputAction @Spawn9 => m_Wrapper.m_SpawnerController_Spawn9;
         /// <summary>
-        /// Provides access to the underlying input action "CPUcontroller/Spawn0".
+        /// Provides access to the underlying input action "SpawnerController/SpawnPlayer".
         /// </summary>
-        public InputAction @Spawn0 => m_Wrapper.m_CPUcontroller_Spawn0;
+        public InputAction @SpawnPlayer => m_Wrapper.m_SpawnerController_SpawnPlayer;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
-        public InputActionMap Get() { return m_Wrapper.m_CPUcontroller; }
+        public InputActionMap Get() { return m_Wrapper.m_SpawnerController; }
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
         public void Enable() { Get().Enable(); }
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
@@ -2076,9 +2076,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
         public bool enabled => Get().enabled;
         /// <summary>
-        /// Implicitly converts an <see ref="CPUcontrollerActions" /> to an <see ref="InputActionMap" /> instance.
+        /// Implicitly converts an <see ref="SpawnerControllerActions" /> to an <see ref="InputActionMap" /> instance.
         /// </summary>
-        public static implicit operator InputActionMap(CPUcontrollerActions set) { return set.Get(); }
+        public static implicit operator InputActionMap(SpawnerControllerActions set) { return set.Get(); }
         /// <summary>
         /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
         /// </summary>
@@ -2086,11 +2086,11 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <remarks>
         /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
         /// </remarks>
-        /// <seealso cref="CPUcontrollerActions" />
-        public void AddCallbacks(ICPUcontrollerActions instance)
+        /// <seealso cref="SpawnerControllerActions" />
+        public void AddCallbacks(ISpawnerControllerActions instance)
         {
-            if (instance == null || m_Wrapper.m_CPUcontrollerActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_CPUcontrollerActionsCallbackInterfaces.Add(instance);
+            if (instance == null || m_Wrapper.m_SpawnerControllerActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_SpawnerControllerActionsCallbackInterfaces.Add(instance);
             @Spawn1.started += instance.OnSpawn1;
             @Spawn1.performed += instance.OnSpawn1;
             @Spawn1.canceled += instance.OnSpawn1;
@@ -2118,9 +2118,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Spawn9.started += instance.OnSpawn9;
             @Spawn9.performed += instance.OnSpawn9;
             @Spawn9.canceled += instance.OnSpawn9;
-            @Spawn0.started += instance.OnSpawn0;
-            @Spawn0.performed += instance.OnSpawn0;
-            @Spawn0.canceled += instance.OnSpawn0;
+            @SpawnPlayer.started += instance.OnSpawnPlayer;
+            @SpawnPlayer.performed += instance.OnSpawnPlayer;
+            @SpawnPlayer.canceled += instance.OnSpawnPlayer;
         }
 
         /// <summary>
@@ -2129,8 +2129,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <remarks>
         /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
         /// </remarks>
-        /// <seealso cref="CPUcontrollerActions" />
-        private void UnregisterCallbacks(ICPUcontrollerActions instance)
+        /// <seealso cref="SpawnerControllerActions" />
+        private void UnregisterCallbacks(ISpawnerControllerActions instance)
         {
             @Spawn1.started -= instance.OnSpawn1;
             @Spawn1.performed -= instance.OnSpawn1;
@@ -2159,18 +2159,18 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Spawn9.started -= instance.OnSpawn9;
             @Spawn9.performed -= instance.OnSpawn9;
             @Spawn9.canceled -= instance.OnSpawn9;
-            @Spawn0.started -= instance.OnSpawn0;
-            @Spawn0.performed -= instance.OnSpawn0;
-            @Spawn0.canceled -= instance.OnSpawn0;
+            @SpawnPlayer.started -= instance.OnSpawnPlayer;
+            @SpawnPlayer.performed -= instance.OnSpawnPlayer;
+            @SpawnPlayer.canceled -= instance.OnSpawnPlayer;
         }
 
         /// <summary>
-        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="CPUcontrollerActions.UnregisterCallbacks(ICPUcontrollerActions)" />.
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="SpawnerControllerActions.UnregisterCallbacks(ISpawnerControllerActions)" />.
         /// </summary>
-        /// <seealso cref="CPUcontrollerActions.UnregisterCallbacks(ICPUcontrollerActions)" />
-        public void RemoveCallbacks(ICPUcontrollerActions instance)
+        /// <seealso cref="SpawnerControllerActions.UnregisterCallbacks(ISpawnerControllerActions)" />
+        public void RemoveCallbacks(ISpawnerControllerActions instance)
         {
-            if (m_Wrapper.m_CPUcontrollerActionsCallbackInterfaces.Remove(instance))
+            if (m_Wrapper.m_SpawnerControllerActionsCallbackInterfaces.Remove(instance))
                 UnregisterCallbacks(instance);
         }
 
@@ -2180,21 +2180,21 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <remarks>
         /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
         /// </remarks>
-        /// <seealso cref="CPUcontrollerActions.AddCallbacks(ICPUcontrollerActions)" />
-        /// <seealso cref="CPUcontrollerActions.RemoveCallbacks(ICPUcontrollerActions)" />
-        /// <seealso cref="CPUcontrollerActions.UnregisterCallbacks(ICPUcontrollerActions)" />
-        public void SetCallbacks(ICPUcontrollerActions instance)
+        /// <seealso cref="SpawnerControllerActions.AddCallbacks(ISpawnerControllerActions)" />
+        /// <seealso cref="SpawnerControllerActions.RemoveCallbacks(ISpawnerControllerActions)" />
+        /// <seealso cref="SpawnerControllerActions.UnregisterCallbacks(ISpawnerControllerActions)" />
+        public void SetCallbacks(ISpawnerControllerActions instance)
         {
-            foreach (var item in m_Wrapper.m_CPUcontrollerActionsCallbackInterfaces)
+            foreach (var item in m_Wrapper.m_SpawnerControllerActionsCallbackInterfaces)
                 UnregisterCallbacks(item);
-            m_Wrapper.m_CPUcontrollerActionsCallbackInterfaces.Clear();
+            m_Wrapper.m_SpawnerControllerActionsCallbackInterfaces.Clear();
             AddCallbacks(instance);
         }
     }
     /// <summary>
-    /// Provides a new <see cref="CPUcontrollerActions" /> instance referencing this action map.
+    /// Provides a new <see cref="SpawnerControllerActions" /> instance referencing this action map.
     /// </summary>
-    public CPUcontrollerActions @CPUcontroller => new CPUcontrollerActions(this);
+    public SpawnerControllerActions @SpawnerController => new SpawnerControllerActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     /// <summary>
     /// Provides access to the input control scheme.
@@ -2426,11 +2426,11 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnToggleCameraControl(InputAction.CallbackContext context);
     }
     /// <summary>
-    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "CPU controller" which allows adding and removing callbacks.
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "SpawnerController" which allows adding and removing callbacks.
     /// </summary>
-    /// <seealso cref="CPUcontrollerActions.AddCallbacks(ICPUcontrollerActions)" />
-    /// <seealso cref="CPUcontrollerActions.RemoveCallbacks(ICPUcontrollerActions)" />
-    public interface ICPUcontrollerActions
+    /// <seealso cref="SpawnerControllerActions.AddCallbacks(ISpawnerControllerActions)" />
+    /// <seealso cref="SpawnerControllerActions.RemoveCallbacks(ISpawnerControllerActions)" />
+    public interface ISpawnerControllerActions
     {
         /// <summary>
         /// Method invoked when associated input action "Spawn1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
@@ -2496,11 +2496,11 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSpawn9(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Spawn0" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "SpawnPlayer" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnSpawn0(InputAction.CallbackContext context);
+        void OnSpawnPlayer(InputAction.CallbackContext context);
     }
 }

@@ -87,18 +87,29 @@ public class Stats : MonoBehaviour
         _KnockBackHealth -= _Damage;
 
         OnDamage.Invoke();
-        if(_Health <= 0)
+    
+        if (_Health <= 0)
         {
             OnDeath.Invoke();
-            Destroy(gameObject);
+
+            // Defer player destruction to the next frame to ensure OnDeath triggers first
+            StartCoroutine(DelayedDeath());
         }
 
-        if(_KnockBackHealth <= 0)
+        if (_KnockBackHealth <= 0)
         {
             _KnockBackHealth = _KnockBackMax;
             OnKnocked.Invoke(new Vector2(-1 * _KnockBackVelocity, _KnockBackVelocity));
         }
     }
+
+    // Delayed destruction to ensure OnDeath is handled first
+    private IEnumerator DelayedDeath()
+    {
+    yield return null;  // Wait one frame before destroying the object
+        Destroy(gameObject);
+    }
+
 
     public void AddStatusEffect(StatusEffect _effect)
     {

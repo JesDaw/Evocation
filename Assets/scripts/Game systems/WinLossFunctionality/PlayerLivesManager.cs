@@ -2,44 +2,58 @@ using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
 
-
-//script need a corsponding player deth tracker
 public class PlayerLivesManager : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI LifeText;
-   [SerializeField]  IntVeriable LifeCount;
-    // public UnityEvent PlayerDeath;
-    // public UnityEvent PlayerSpawn;
+    [SerializeField] IntVeriable LifeCount;
     [SerializeField] int MaxLives;
     [SerializeField] UnityEvent _loose_game;
-    bool canSpawnMore;
+    [SerializeField] PlayerSwitch playerSwitch;
+    bool canSpawnMore = true;
 
     void Update()
     {
         LifeText.text = LifeCount._Value.ToString("0");
     }
-    public void GainLife()
+
+    public bool GainLife()
     {
         if (canSpawnMore)
         {
             LifeCount._Value++;
-         if (LifeCount._Value == MaxLives)
-         {
-             canSpawnMore =false;
-         }
+            if (LifeCount._Value == MaxLives) canSpawnMore = false;
+            return true;
+        }
+        else
+        {
+            Debug.LogWarning("Max Players reached");
+            return false;
         }
     }
+
     public void LooseLife()
     {
         LifeCount._Value--;
         canSpawnMore = true;
+
         if (LifeCount._Value == 0)
         {
             _loose_game.Invoke();
         }
-    }
-    public int get_life_count()
-    {
-        return LifeCount._Value; //._Value -> get the int value
+        else
+        {
+            // Get the current player who died
+            var currentPlayer = playerSwitch.GetCurrentPlayerController();
+
+            if (currentPlayer != null)
+            {
+                // Disable the controls of the current player and remove them from the list
+                currentPlayer.DisableControls();
+                playerSwitch.RemovePlayer(currentPlayer._PlayerID);
+            }
+
+            // Switch to the next player after the current one dies
+            playerSwitch.SwitchPlayer(default);
+        }
     }
 }
