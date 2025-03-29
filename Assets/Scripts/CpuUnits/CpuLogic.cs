@@ -62,6 +62,8 @@ public class CpuLogic : MonoBehaviour
         {
             for (int II = 0; II < hits.Length; II++)
             {
+                if (gameObject.layer == 10 && hits[II].collider.gameObject.layer == 11) continue;
+                if (hits[II].collider.gameObject.layer == gameObject.layer) continue;
                 if (hits[II].collider.CompareTag(_Stats._CpuPriority[I]))
                 {
                     SavedIndex = II;

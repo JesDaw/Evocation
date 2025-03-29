@@ -66,7 +66,11 @@ public class SpawnObjects : MonoBehaviour
     public void Spawn(ScriptableStats ScrStats)
     {
         if (_Money._Value > ScrStats._spawnCost) _Money._Value -= ScrStats._spawnCost;
-        else Debug.Log("Not enough money!");
+        else 
+        {
+            Debug.Log("Not enough money!");
+            return;
+        }
 
         GameObject CreatedObject = Instantiate(_Object, this.transform.position, this.transform.rotation, _Container);
         CpuLogic ObjectLogic = CreatedObject.GetComponent<CpuLogic>();
