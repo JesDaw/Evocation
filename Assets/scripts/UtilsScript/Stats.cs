@@ -95,7 +95,7 @@ public class Stats : MonoBehaviour
         if(_KnockBackHealth <= 0)
         {
             _KnockBackHealth = _KnockBackMax;
-            OnKnocked.Invoke(new Vector2(-1 * _KnockBackVelocity, _KnockBackVelocity));
+            OnKnocked.Invoke(new Vector2(-1 * _KnockBackVelocity, 0.5f * _KnockBackVelocity));
         }
     }
 
