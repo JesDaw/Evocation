@@ -77,7 +77,8 @@ public class CpuLogic : MonoBehaviour
 
         _Stats._Speed = 0;
 
-        Stats EnemyStats = hits[SavedIndex].collider.gameObject.GetComponent<Stats>();
+        GameObject EnemyGameobject = hits[SavedIndex].collider.gameObject;
+        Stats EnemyStats = EnemyGameobject.GetComponent<Stats>();
         if (EnemyStats == null) return;
         
         if (_AlreadyAttacked) return;
@@ -86,7 +87,7 @@ public class CpuLogic : MonoBehaviour
         //Utilis.SpawnMobs
         for(int I = 0; I < ScrStats.OnAttack.Count; I++)
         {
-            Utilis.SelectOnAttack(ScrStats.OnAttack[I], ScrStats);
+            Utilis.SelectOnAttack(ScrStats.OnAttack[I], ScrStats, EnemyGameobject);
         }
         //Enemy Attack
         Debug.Log("Attacked Enemy" + hits[SavedIndex].collider.gameObject.name);

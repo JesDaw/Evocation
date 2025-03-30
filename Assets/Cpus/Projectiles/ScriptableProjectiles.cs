@@ -9,4 +9,6 @@ public class ScrProjectiles : ScriptableObject
     public AnimationCurve _TrajectoryCurve;
     public int _Damage;
     public float _Speed;
+    public List<StatusEffect> _EffectsToApply;
+
 }
