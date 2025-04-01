@@ -4,12 +4,13 @@ using Unity.Cinemachine;
 
 public class CameraController : MonoBehaviour
 {
-    // 🎥 Camera Reference
-    //[SerializeField] private Camera cam;
-
     // 🎮 Input System Actions
     private InputSystem_Actions inputActions;
-    CinemachineCamera _camera;
+    private Rigidbody2D rb;
+    private Vector2 moveInput; // Stores movement input
+
+    // 🎥 Camera Reference
+    private CinemachineCamera _camera;
 
     // ⚡ Movement and Zoom Variables
     [SerializeField] private float moveSpeed = 10f;
@@ -18,7 +19,7 @@ public class CameraController : MonoBehaviour
     // 📍 Map Boundaries
     [SerializeField] private SpriteRenderer mapRenderer;
     private float mapMinX, mapMaxX, mapMinY, mapMaxY;
-    
+
     // 📌 Camera Zoom Limits
     private float minCamSize, maxCamSize;
 
@@ -26,7 +27,8 @@ public class CameraController : MonoBehaviour
     {
         inputActions = new InputSystem_Actions();
         inputActions.Enable();
-        _camera = gameObject.GetComponent<CinemachineCamera>();
+        _camera = GetComponent<CinemachineCamera>();
+
         if (mapRenderer != null)
         {
             mapMinX = mapRenderer.bounds.min.x;
@@ -47,20 +49,28 @@ public class CameraController : MonoBehaviour
 
     private void OnEnable()
     {
-        inputActions.Camera.Move.performed += OnMoveCamera;
+        inputActions.Camera.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
+        inputActions.Camera.Move.canceled += ctx => moveInput = Vector2.zero; // Stop movement when key is released
+
+        // Bind HandleZoom to zoom action
+        inputActions.Camera.Zoom.performed += HandleZoom;
+
         inputActions.Enable();
         inputActions.Camera.Enable();
     }
 
     private void OnDisable()
     {
+        inputActions.Camera.Zoom.performed -= HandleZoom; // Unbind the zoom action when disabled
         inputActions.Disable();
     }
 
     private void Update()
     {
-        HandleMovement();
-        HandleZoom();
+        if (moveInput != Vector2.zero)
+        {
+            HandleMovement();
+        }
     }
 
     /// <summary>
@@ -68,34 +78,26 @@ public class CameraController : MonoBehaviour
     /// </summary>
     private void HandleMovement()
     {
-        Vector2 moveInput = inputActions.Camera.Move.ReadValue<Vector2>();
-        Vector3 newPosition = gameObject.transform.position + new Vector3(moveInput.x, moveInput.y, 0) * moveSpeed * Time.deltaTime;
-        gameObject.transform.position = ClampCamera(newPosition);
+        Vector3 newPosition = transform.position + new Vector3(moveInput.x, moveInput.y, 0) * moveSpeed * Time.deltaTime;
+        transform.position = ClampCamera(newPosition);
     }
 
     /// <summary>
     /// Handles zooming in and out based on mouse scroll input.
     /// </summary>
-    private void HandleZoom()
+    public void HandleZoom(InputAction.CallbackContext context)
     {
-        float zoomInput = Mouse.current.scroll.ReadValue().y * 0.25f; 
+        // Zoom input from mouse scroll (y-axis)
+        float zoomInput = Mouse.current.scroll.ReadValue().y * 0.25f;
         if (Mathf.Abs(zoomInput) > 0)
         {
+            // Calculate new zoom size
             float newSize = _camera.Lens.OrthographicSize - (zoomInput * zoomStep);
+            // Clamp the zoom size within min and max range
             _camera.Lens.OrthographicSize = Mathf.Clamp(newSize, minCamSize, maxCamSize);
+            // Clamp camera position to prevent it from going outside map boundaries
             _camera.transform.position = ClampCamera(_camera.transform.position);
-            Debug.Log("zooming "  + _camera.Lens.OrthographicSize);
         }
-    }
-
-    /// <summary>
-    /// Moves the camera based on input.
-    /// </summary>
-    private void OnMoveCamera(InputAction.CallbackContext ctx)
-    {
-        Vector2 move = ctx.ReadValue<Vector2>();
-        Vector3 newPosition = gameObject.transform.position + new Vector3(move.x, move.y, 0) * moveSpeed * Time.deltaTime;
-        gameObject.transform.position = ClampCamera(newPosition);
     }
 
     /// <summary>

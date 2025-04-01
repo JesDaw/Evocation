@@ -15,7 +15,7 @@ public class Event : ScriptableObject
                 continue;
             }
             listiners[i].OnEventRaised();
-            Debug.Log("Event signal sent to" + listiners[i].gameObject + "object");
+            //Debug.Log("Event signal sent to" + listiners[i].gameObject + "object");
         }
     }
 

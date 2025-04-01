@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public bool _controllable = true;
     [SerializeField] Stats _player_Stats;
     public Rigidbody2D rb;
     public Transform groundCheck;
@@ -17,18 +18,13 @@ public class PlayerMovement : MonoBehaviour
     private bool isClimbing = false;
     bool _game_is_active;
 
-    //for walking & climbing sound effect
-    private AudioManager audio_manager;
-    private bool walking = false;
-    //v--use exisiting bool for climbing--v
-    ////private bool isClimbing = false;
+    [SerializeField] AudioSource walking_audio;
+    //private bool walking = false;
 
-    //Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         moveActions = InputSystem.actions.FindAction("Move");
-        audio_manager = FindAnyObjectByType<AudioManager>();
     }
 
     private bool IsGrounded()
@@ -46,64 +42,19 @@ public class PlayerMovement : MonoBehaviour
 
     public void Move(InputAction.CallbackContext context)
     {
+        if(!_controllable) return;
+ 
         Vector2 input = context.ReadValue<Vector2>();
         horizontal = input.x;
         vertical = input.y;
-
-        //for walking**
-        //used to be 'input.magnitude > 0' but this included movement from every dir
-        if (horizontal != 0 && vertical == 0) //now walk sound only plays when player moves left/right
+        if (!walking_audio.isPlaying && input.x != 0 && !isClimbing)
         {
-            if (!walking)
-            {
-                audio_manager.Play("Walking");
-                walking = true;
-                isClimbing = false; //walking & climbing cant interfere
-            }
+            walking_audio.Play();
         }
-        //for climbing**
-        else if (vertical != 0 && horizontal == 0) //up/down movmenet only
+        if (context.canceled)
         {
-            if (!isClimbing)
-            {
-                audio_manager.Play("Climbing");
-                isClimbing = true;
-                walking = false;
-            }
+            walking_audio.Stop();
         }
-        else
-        {
-            stop_walking();
-            stop_climbing();
-        }
-
-    }
-
-    //for walking sound effect to stop playing
-    public void stop_walking()
-    {
-        audio_manager.Stop("Walking");
-        walking = false;
-    }
-
-    //for climbing sound effect to stop playing
-    public void stop_climbing()
-    {
-        audio_manager.Stop("Climbing");
-        isClimbing = false;
-    }
-
-    public void EngageClimbing()
-    {
-        isClimbing = !isClimbing;
-
-        if (isClimbing)
-        {
-            // snap position to center of ladder
-            // Somehow get ladder position
-        }
-
-
     }
 
     void FixedUpdate()

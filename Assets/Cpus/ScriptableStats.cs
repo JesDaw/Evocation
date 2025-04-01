@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 [CreateAssetMenu(fileName = "Cpu", menuName = "Cpu", order = 0)]
 public class ScriptableStats : ScriptableObject
@@ -16,6 +15,7 @@ public class ScriptableStats : ScriptableObject
     public float _StopDistance;
     public float _KnockBackVelocity;
     public float _KnockBackHealth;
+    public int _spawnCost;
     public List<StatusEffect> _EffectsToApply;
     public int _StatusHealth = 1;
     // anyways all of the events script that happen on the cpu

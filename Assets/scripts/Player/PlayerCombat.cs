@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 public class Player_Combat : MonoBehaviour
 {
+    public bool _controllable = true;
     [SerializeField] Stats _player_Stats;
     public Animator animator;
 
@@ -10,14 +11,16 @@ public class Player_Combat : MonoBehaviour
     public LayerMask enemyLayers;
 
     //for sword slash sound effect
-    private AudioManager audio_manager;
+    [SerializeField] AudioSource attackingAudio;
 
     // Update is called once per frame
     public void AttackAction(InputAction.CallbackContext context)
     {
-        Debug.Log("Attacked");
-        Attack();
-        audio_manager.Play("Attack");
+        if (context.performed && _controllable)
+        {
+            Attack();
+            attackingAudio.Play();
+        }
     }
 
     void Attack()
@@ -32,7 +35,6 @@ public class Player_Combat : MonoBehaviour
         // Damage them
         foreach(Collider2D enemy in hitEnemies)
         {
-         //   Debug.Log("We hit " + enemy.name);
 
             if (enemy.TryGetComponent<Stats>(out Stats _enimy_stats)){
                 _enimy_stats.Attack(_player_Stats._Attack);
