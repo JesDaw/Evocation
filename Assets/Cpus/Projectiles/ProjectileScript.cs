@@ -2,19 +2,50 @@ using UnityEngine;
 
 public class ProjectileScript : MonoBehaviour
 {
-    public void UpdateProjectile(Vector3 Start, Vector3 End, ScrProjectiles _Projectile)
+    [SerializeField] SpriteRenderer Renderer;
+    public void UpdateProjectile(Vector3 _Start, GameObject _EndEnemy, ScrProjectiles _Projectile)
     {
+        Debug.Log("Updated Projectles");
+        Projectiles = _Projectile;
+        Start = _Start;
+        EnemyObject = _EndEnemy;
+        ProCurve = _Projectile._TrajectoryCurve;
+        Speed = _Projectile._Speed;
 
+        Renderer.sprite = _Projectile._Appearance; 
     }
+
+    Vector3 Start; 
+    GameObject EnemyObject;
+    ScrProjectiles Projectiles;
+    AnimationCurve ProCurve;
+    float Speed;
+    Stats DetectedStats;
 
     void FixedUpdate()
     {
-
+        float t = Time.time % 1;
+        float yPos = ProCurve.Evaluate(t);
+        transform.position = new Vector3(
+                                            Start.x + (t * Vector3.Distance(Start, EnemyObject.transform.position)),
+                                            Start.y + (yPos * Vector3.Distance(Start, EnemyObject.transform.position)),
+                                        0);
+        
+        if (Mathf.Approximately(t, 1.0f) || t > 0.99f)
+        {
+            OnEndReached();
+        }
     }
 
-    Stats DetectedStats;
-    private void OnTriggerEnter2D(Collider2D other)
+    void OnEndReached()
     {
-        //todo
+        Debug.Log("End reached! Do something here.");
+        DetectedStats = EnemyObject?.GetComponent<Stats>();
+        if (DetectedStats == null) return;
+
+        DetectedStats.Attack(Projectiles._Damage);
+
+        Destroy(this.gameObject);
     }
+
 }

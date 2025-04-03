@@ -50,7 +50,7 @@ public class CpuUtilis: MonoBehaviour
     public void ShootProjectiles(ScrProjectiles _Projectile, Transform _Enemy)
     {
         Debug.Log("" + _Projectile.ToString());
-        GameObject CreatedProjectile = Instantiate(ProjectilesOverlay, this.transform);
-        CreatedProjectile.GetComponent<ProjectileScript>().UpdateProjectile(this.transform.position, _Enemy.position, _Projectile);
+        GameObject CreatedProjectile = Instantiate(ProjectilesOverlay, transform.position, transform.rotation, null);
+        CreatedProjectile.GetComponent<ProjectileScript>().UpdateProjectile(transform.position, _Enemy.gameObject, _Projectile);
     }
 }
