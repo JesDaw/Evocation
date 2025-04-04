@@ -30,11 +30,16 @@ public class ProjectileScript : MonoBehaviour
                                             Start.x + (t * Vector3.Distance(Start, EnemyObject.transform.position)),
                                             Start.y + (yPos * Vector3.Distance(Start, EnemyObject.transform.position)),
                                         0);
+
+        Vector3 rotation = transform.rotation.eulerAngles;
+        rotation.z = Mathf.Atan2(yPos, ProCurve.Evaluate(t + 0.01f)) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(rotation);
         
         if (Mathf.Approximately(t, 1.0f) || t > 0.99f)
         {
             OnEndReached();
         }
+
     }
 
     void OnEndReached()
