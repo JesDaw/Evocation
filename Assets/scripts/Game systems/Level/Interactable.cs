@@ -8,7 +8,7 @@ public class Interactable : MonoBehaviour
     public UnityEvent interactAction;
 
     // Update is called once per frame
-    void Update()
+    void Update() //change this
     {
         if (isInRange)
         {
