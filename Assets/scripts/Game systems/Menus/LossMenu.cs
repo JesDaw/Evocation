@@ -15,6 +15,7 @@ public class LossMenu : MonoBehaviour
     }
     public void LooseGame()
     {
+        Debug.Log("game loss");
         ToggleMenu.Invoke();
         pauseMenuUI.SetActive(false);
         defeatMenuUI.SetActive(true);

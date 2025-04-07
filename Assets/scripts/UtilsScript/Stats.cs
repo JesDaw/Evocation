@@ -16,6 +16,7 @@ public class Stats : MonoBehaviour
     public float _KnockBackMax;
     public float _KnockBackHealth;
     public float _KnockBackVelocity;
+    public int _spawnCost;
     public List<StatusEffect> _StatusEffects;
     //x = Tick
     //y = Length
@@ -24,6 +25,12 @@ public class Stats : MonoBehaviour
     public int _StatusMax;
     public int _StatusHealth;
     [SerializeField] UnityEvent OnDeath, OnDamage;
+    //the reason this is public is because it will be applied from the
+    //scriptable objects
+
+    // anyways all of the "OnAttack" that happen on the cpu uses the cpu utilits script
+    // so just update that if you're wondering aobu the different projectiles
+    // UnityEvent OnAttack;
     [SerializeField] UnityEvent<StatusEffect> OnTick;
     [SerializeField] UnityEvent<Vector2> OnKnocked;
     [SerializeField] bool _Invincible = false;
@@ -80,18 +87,29 @@ public class Stats : MonoBehaviour
         _KnockBackHealth -= _Damage;
 
         OnDamage.Invoke();
-        if(_Health <= 0)
+    
+        if (_Health <= 0)
         {
             OnDeath.Invoke();
-            Destroy(gameObject);
+
+            // Defer player destruction to the next frame to ensure OnDeath triggers first
+            StartCoroutine(DelayedDeath());
         }
 
-        if(_KnockBackHealth <= 0)
+        if (_KnockBackHealth <= 0)
         {
             _KnockBackHealth = _KnockBackMax;
             OnKnocked.Invoke(new Vector2(-1 * _KnockBackVelocity, _KnockBackVelocity));
         }
     }
+
+    // Delayed destruction to ensure OnDeath is handled first
+    private IEnumerator DelayedDeath()
+    {
+    yield return null;  // Wait one frame before destroying the object
+        Destroy(gameObject);
+    }
+
 
     public void AddStatusEffect(StatusEffect _effect)
     {

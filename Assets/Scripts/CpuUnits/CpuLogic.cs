@@ -12,8 +12,10 @@ public class CpuLogic : MonoBehaviour
     [SerializeField] Transform _Raycast;
     [SerializeField] SpriteRenderer _Renderer;
     [SerializeField] Rigidbody2D _Body;
+    [SerializeField] AudioSource attackingAudio;
     [Header("Events")]
     [SerializeField] UnityEvent OnSpawn;
+    [SerializeField] CpuUtilis Utilis;
     private bool _AlreadyAttacked = false;
     private bool _Freeze = false;
     void Start()
@@ -60,6 +62,8 @@ public class CpuLogic : MonoBehaviour
         {
             for (int II = 0; II < hits.Length; II++)
             {
+                if (gameObject.layer == 10 && hits[II].collider.gameObject.layer == 11) continue;
+                if (hits[II].collider.gameObject.layer == gameObject.layer) continue;
                 if (hits[II].collider.CompareTag(_Stats._CpuPriority[I]))
                 {
                     SavedIndex = II;
@@ -82,8 +86,15 @@ public class CpuLogic : MonoBehaviour
         if (_AlreadyAttacked) return;
         StartCoroutine(AttackCooldown());
 
+        //Utilis.SpawnMobs
+        for(int I = 0; I < ScrStats.OnAttack.Count; I++)
+        {
+            Utilis.SelectOnAttack(I, ScrStats.ExtraStats);
+        }
+        //Enemy Attack
         Debug.Log("Attacked Enemy" + hits[SavedIndex].collider.gameObject.name);
         EnemyStats.Attack(_Stats._Attack);
+        attackingAudio.Play();
         
         //Status Effects
         if(EnemyStats._StatusHealth <= 0)

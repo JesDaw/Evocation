@@ -8,6 +8,7 @@ public class Money : MonoBehaviour
     [SerializeField] TextMeshProUGUI moneyText;
     [SerializeField] FloatVariable genPerSec;
     [SerializeField] FloatVariable moneyAmount;
+    public float CurrentMoney => moneyAmount._Value;
 
     bool _game_is_active = true;
 
@@ -32,4 +33,5 @@ public class Money : MonoBehaviour
     }
     public void DeactivateMoney(){ _game_is_active = false; }
     public void ResetMoney(){ moneyAmount.Reset();}
+    public void IncreaseMoneyGen(){ genPerSec._Value *= 2; }
 }
