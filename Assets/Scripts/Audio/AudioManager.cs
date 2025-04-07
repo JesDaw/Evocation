@@ -18,6 +18,8 @@ public class AudioManager : MonoBehaviour
             sound.source.pitch = sound.pitch;
 
             sound.source.loop = sound.loop;
+
+            sound.source.outputAudioMixerGroup = sound.mixer_group;
         }
     }
 
