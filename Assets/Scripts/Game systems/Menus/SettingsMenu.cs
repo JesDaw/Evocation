@@ -24,4 +24,9 @@ public class SettingsMenu : MonoBehaviour
         float dB = Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20;
         audio_mixer.SetFloat("MasterVolume", dB);
     }
+
+    public void set_quality (int qualityIndex)
+    {
+        QualitySettings.SetQualityLevel(qualityIndex);
+    }
 }
