@@ -32,7 +32,7 @@ public class ProjectileScript : MonoBehaviour
                                         0);
 
         Vector3 rotation = transform.rotation.eulerAngles;
-        rotation.z = Mathf.Atan2(yPos, ProCurve.Evaluate(t + 0.01f)) * Mathf.Rad2Deg;
+        rotation.z = (Mathf.Atan2(yPos, ProCurve.Evaluate(t + 0.01f)) * Mathf.Rad2Deg) + Projectiles._Offset;
         transform.rotation = Quaternion.Euler(rotation);
         
         if (Mathf.Approximately(t, 1.0f) || t > 0.99f)
