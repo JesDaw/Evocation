@@ -42,18 +42,24 @@ public class PlayerLivesManager : MonoBehaviour
         }
         else
         {
-            // Get the current player who died
+        
             var currentPlayer = playerSwitch.GetCurrentPlayerController();
 
             if (currentPlayer != null)
             {
-                // Disable the controls of the current player and remove them from the list
-                currentPlayer.DisableControls();
-                playerSwitch.RemovePlayer(currentPlayer._PlayerID);
+                GameObject playerObject = currentPlayer.gameObject;
+
+                if (playerObject != playerSwitch.GetCurrentPlayerController()?.gameObject)
+                {
+                    playerSwitch.RemovePlayer(playerObject);
+                    Destroy(playerObject);
+                }
             }
 
-            // Switch to the next player after the current one dies
-            playerSwitch.SwitchPlayer(default);
+            if (LifeCount._Value > 0 && playerSwitch.GetCurrentPlayerController() != null)
+            {
+                playerSwitch.SwitchPlayer(default);
+            }
         }
     }
 }

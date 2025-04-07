@@ -68,8 +68,8 @@ public class PlayersControlerScriptsManager : MonoBehaviour
     {
         if (playerSwitch != null)
         {
-            // Ensure player is removed when destroyed
-            playerSwitch.RemovePlayer(_PlayerID);
+         playerSwitch.RemovePlayer(this.gameObject);
         }
     }
+
 }
