@@ -106,7 +106,7 @@ public class Stats : MonoBehaviour
     // Delayed destruction to ensure OnDeath is handled first
     private IEnumerator DelayedDeath()
     {
-    yield return null;  // Wait one frame before destroying the object
+        yield return null;  // Wait one frame before destroying the object
         Destroy(gameObject);
     }
 
