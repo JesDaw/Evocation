@@ -34,7 +34,4 @@ public class MoneyGenBuilding : MonoBehaviour
             //apply effect on other team
         }
     }
-
-
-
 }
