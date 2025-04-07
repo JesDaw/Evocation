@@ -1,13 +1,18 @@
 using UnityEngine;
 
+//this script handels all external/ unique actions an enemy could do
 public class CpuUtilis: MonoBehaviour
 {
-    public void SelectOnAttack(int n, ScriptableStats CreatedStats)
+    [SerializeField] GameObject ProjectilesOverlay;
+    public void SelectOnAttack(int n, ScriptableStats ScrStats, GameObject EnemyObject)
     {
         switch(n)
         {
             case 0:
-                SpawnMob(CreatedStats);
+                SpawnMob(ScrStats.ExtraStats);
+                break;
+            case 1:
+                ShootProjectiles(ScrStats._Projectiles[0], EnemyObject.transform);
                 break;
 
             default:
@@ -40,5 +45,12 @@ public class CpuUtilis: MonoBehaviour
                 CreatedObject.transform.GetChild(0).position.z + RandomValue
             );
         }
+    }
+
+    public void ShootProjectiles(ScrProjectiles _Projectile, Transform _Enemy)
+    {
+        Debug.Log("" + _Projectile.ToString());
+        GameObject CreatedProjectile = Instantiate(ProjectilesOverlay, transform.position, transform.rotation, null);
+        CreatedProjectile.GetComponent<ProjectileScript>().UpdateProjectile(transform.position, _Enemy.gameObject, _Projectile);
     }
 }

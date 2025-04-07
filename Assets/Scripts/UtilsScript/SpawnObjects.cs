@@ -41,7 +41,7 @@ public class SpawnObjects : MonoBehaviour
 
         // Assign layer
         if (enemySpawner) CreatedObject.layer = 9;
-        else CreatedObject.layer = 10;        
+        else CreatedObject.layer = 10;
         foreach (Transform child in CreatedObject.transform) child.gameObject.layer = CreatedObject.layer;
 
         //rotate apperance if on other side
@@ -50,7 +50,6 @@ public class SpawnObjects : MonoBehaviour
             if(CreatedObject.transform.rotation.z > 0)
             {
                 CreatedObject.transform.GetChild(0).rotation = new Quaternion(0, 1, 0, 0);
-                
             }
             
             //randomize y pos

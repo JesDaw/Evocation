@@ -99,14 +99,14 @@ public class Stats : MonoBehaviour
         if (_KnockBackHealth <= 0)
         {
             _KnockBackHealth = _KnockBackMax;
-            OnKnocked.Invoke(new Vector2(-1 * _KnockBackVelocity, _KnockBackVelocity));
+            OnKnocked.Invoke(new Vector2(-1 * _KnockBackVelocity, 0.5f * _KnockBackVelocity));
         }
     }
 
     // Delayed destruction to ensure OnDeath is handled first
     private IEnumerator DelayedDeath()
     {
-    yield return null;  // Wait one frame before destroying the object
+        yield return null;  // Wait one frame before destroying the object
         Destroy(gameObject);
     }
 

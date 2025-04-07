@@ -13,6 +13,7 @@ public class CpuLogic : MonoBehaviour
     [SerializeField] SpriteRenderer _Renderer;
     [SerializeField] Rigidbody2D _Body;
     [SerializeField] AudioSource attackingAudio;
+    [SerializeField] float _RadiusDetection;
     [Header("Events")]
     [SerializeField] UnityEvent OnSpawn;
     [SerializeField] CpuUtilis Utilis;
@@ -46,6 +47,26 @@ public class CpuLogic : MonoBehaviour
 
         OnSpawn.Invoke();
     }
+
+    void SwitchSides(bool Direction)
+    {
+        GameObject CurrentGameObject = this.gameObject;
+
+        Vector3 CurrentObjectRotation = transform.eulerAngles;
+        if (Direction)
+        {
+            CurrentObjectRotation = new Vector3(0, 0, 180);
+            CurrentGameObject.transform.eulerAngles = CurrentObjectRotation;
+            CurrentGameObject.transform.GetChild(0).rotation = new Quaternion(0, 1, 0, 0);
+        }
+        else
+        {
+            CurrentObjectRotation = new Vector3(0, 0, 0);
+            CurrentGameObject.transform.eulerAngles = CurrentObjectRotation;
+            CurrentGameObject.transform.GetChild(0).rotation = new Quaternion(0, 0, 0, 0);
+        }
+
+    }
     void Update()
     {
         if(_Freeze) return;
@@ -53,6 +74,11 @@ public class CpuLogic : MonoBehaviour
         RaycastHit2D[] hits = Physics2D.RaycastAll(_Raycast.position, transform.right, _Stats._StopDistance);
         Debug.DrawRay(_Raycast.position, transform.right * _Stats._StopDistance, Color.red);
         
+        Collider2D[] SurroundingHits = Physics2D.OverlapCircleAll(this.transform.position, _RadiusDetection, LayerMask.GetMask("Player"));
+
+        if(SurroundingHits.Length <= 0) SwitchSides(false);
+        else if(SurroundingHits[0].transform.position.x - transform.position.x < 0) SwitchSides(true);
+
         //what to do when detect something
         _Stats._Speed = ScrStats._Speed;
         if (hits.Length <= 0) return;
@@ -80,7 +106,8 @@ public class CpuLogic : MonoBehaviour
 
         _Stats._Speed = 0;
 
-        Stats EnemyStats = hits[SavedIndex].collider.gameObject.GetComponent<Stats>();
+        GameObject EnemyGameobject = hits[SavedIndex].collider.gameObject;
+        Stats EnemyStats = EnemyGameobject.GetComponent<Stats>();
         if (EnemyStats == null) return;
         
         if (_AlreadyAttacked) return;
@@ -89,7 +116,7 @@ public class CpuLogic : MonoBehaviour
         //Utilis.SpawnMobs
         for(int I = 0; I < ScrStats.OnAttack.Count; I++)
         {
-            Utilis.SelectOnAttack(I, ScrStats.ExtraStats);
+            Utilis.SelectOnAttack(ScrStats.OnAttack[I], ScrStats, EnemyGameobject);
         }
         //Enemy Attack
         Debug.Log("Attacked Enemy" + hits[SavedIndex].collider.gameObject.name);
