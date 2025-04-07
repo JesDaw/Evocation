@@ -9,16 +9,11 @@ public class PlayerSwitch : MonoBehaviour
     private List<CinemachineCamera> playerCameras = new List<CinemachineCamera>();
 
     private int activePlayerIndex = 0;
-    int PlayerIDNumber;
+    private int PlayerIDNumber;
 
     void Start()
     {
         PlayerIDNumber = 1;
-        if (players.Count == 0)
-        {
-            Debug.LogError("PlayerSwitch: No players assigned!");
-            return;
-        }
 
         InputAction nextPlayerAction = InputSystem.actions.FindAction("NextPlayer");
         if (nextPlayerAction != null)
@@ -31,7 +26,6 @@ public class PlayerSwitch : MonoBehaviour
             Debug.LogError("NextPlayer action not found in InputSystem!");
         }
 
-        // Auto-populate player cameras
         foreach (GameObject player in players)
         {
             CinemachineCamera cam = player.GetComponentInChildren<CinemachineCamera>();
@@ -45,33 +39,68 @@ public class PlayerSwitch : MonoBehaviour
             }
         }
 
-        ActivatePlayer(activePlayerIndex);
+        if (players.Count > 0)
+            ActivatePlayer(activePlayerIndex);
     }
 
     public void SwitchPlayer(InputAction.CallbackContext context)
     {
-        if (!context.performed) return;
-        if (players.Count == 0 || playerCameras.Count == 0) return;
+        if (!context.performed || players.Count == 0)
+            return;
 
-        // Disable current player
-        players[activePlayerIndex].GetComponent<PlayersControlerScriptsManager>().DisableControls();
-        playerCameras[activePlayerIndex].Priority = 0;
+        RemoveNullPlayers();
 
-        // Move to the next player
-        activePlayerIndex = (activePlayerIndex + 1) % players.Count;
+        if (players.Count == 0 || playerCameras.Count == 0)
+        {
+            Debug.Log("No players available to switch to.");
+            return;
+        }
 
-        // Activate the new player
+        if (activePlayerIndex >= 0 && activePlayerIndex < players.Count && players[activePlayerIndex] != null)
+        {
+            var currentPlayer = players[activePlayerIndex].GetComponent<PlayersControlerScriptsManager>();
+            currentPlayer?.DisableControls();
+            playerCameras[activePlayerIndex].Priority = 0;
+        }
+
+        int startIndex = activePlayerIndex;
+        do
+        {
+            activePlayerIndex = (activePlayerIndex + 1) % players.Count;
+        }
+        while (players[activePlayerIndex] == null && activePlayerIndex != startIndex); // Loop to find an active player
+
         ActivatePlayer(activePlayerIndex);
     }
+
+
+    private void RemoveNullPlayers()
+    {
+        for (int i = players.Count - 1; i >= 0; i--)
+        {
+            if (players[i] == null)
+            {
+                players.RemoveAt(i);
+                playerCameras.RemoveAt(i);
+                if (i < activePlayerIndex)
+                {
+                    activePlayerIndex--;
+                }
+            }
+        }
+        activePlayerIndex = Mathf.Clamp(activePlayerIndex, 0, players.Count - 1);
+    }
+
+
 
     private void ActivatePlayer(int index)
     {
         for (int i = 0; i < players.Count; i++)
         {
-            bool isActive = (i == index);
             var playerScript = players[i].GetComponent<PlayersControlerScriptsManager>();
+            if (playerScript == null) continue;
 
-            if (isActive)
+            if (i == index)
             {
                 playerScript.EnableControls();
                 playerCameras[i].Priority = 2;
@@ -88,15 +117,17 @@ public class PlayerSwitch : MonoBehaviour
 
     public void AddPlayer(GameObject newPlayer)
     {
-        Debug.Log("adding" + newPlayer.name);
-        PlayersControlerScriptsManager managePlayer = newPlayer.GetComponent<PlayersControlerScriptsManager>();
+        Debug.Log("Adding " + newPlayer.name);
+
+        var managePlayer = newPlayer.GetComponent<PlayersControlerScriptsManager>();
         managePlayer.DisableControls();
-        managePlayer._PlayerID = PlayerIDNumber;
+        managePlayer._PlayerID = PlayerIDNumber++;
         players.Add(newPlayer);
-        CinemachineCamera newCam = newPlayer.GetComponentInChildren<CinemachineCamera>();
-        newCam.Priority = 0;
+
+        var newCam = newPlayer.GetComponentInChildren<CinemachineCamera>();
         if (newCam != null)
         {
+            newCam.Priority = 0;
             playerCameras.Add(newCam);
         }
         else
@@ -107,58 +138,59 @@ public class PlayerSwitch : MonoBehaviour
         Debug.Log($"Added new player. Total players: {players.Count}");
     }
 
-    public void RemovePlayer(int ID)
+    public void RemovePlayer(GameObject playerToRemove)
     {
-        if (ID < 0 || ID >= players.Count)
+        int index = players.IndexOf(playerToRemove);
+        if (index == -1)
         {
-            Debug.LogError("PlayerSwitch: Invalid index for removal!");
+            Debug.LogWarning("Tried to remove player, but it wasn't in the list.");
             return;
         }
 
-        bool wasActive = ID == activePlayerIndex;
+        bool wasActive = index == activePlayerIndex;
 
-        // Remove player and camera at the specified index
-        players.RemoveAt(ID);
-        playerCameras.RemoveAt(ID);
-        Debug.Log($"Removed player at index {ID}. Total players: {players.Count}");
+        players.RemoveAt(index);
+        playerCameras.RemoveAt(index);
+        Debug.Log($"Removed player at index {index}. Total players: {players.Count}");
 
-        // If the removed player was the active one, we need to switch to the next player
         if (wasActive)
         {
             if (players.Count > 0)
             {
-                // If there are still players left, select the next player
-                activePlayerIndex = Mathf.Min(ID, players.Count - 1);  // Adjust the active index to avoid out-of-bounds
+                activePlayerIndex = Mathf.Clamp(index, 0, players.Count - 1);
                 ActivatePlayer(activePlayerIndex);
             }
             else
             {
-                // If no players are left, reset the active player index
                 activePlayerIndex = -1;
                 Debug.Log("No players left to control.");
             }
         }
-        else
+        else if (activePlayerIndex > index)
         {
-            // If the removed player wasn't the active one, simply update the player IDs
-            for (int i = 0; i < players.Count; i++)
-            {
-                players[i].GetComponent<PlayersControlerScriptsManager>()._PlayerID = i;
-            }
+            activePlayerIndex--; // Adjust index after removal
+        }
+
+        // Optional: reassign PlayerIDs
+        for (int i = 0; i < players.Count; i++)
+        {
+            players[i].GetComponent<PlayersControlerScriptsManager>()._PlayerID = i;
         }
     }
 
-
-
-
-
     public PlayersControlerScriptsManager GetCurrentPlayerController()
     {
-        return (players.Count > 0) ? players[activePlayerIndex].GetComponent<PlayersControlerScriptsManager>() : null;
+        if (players.Count == 0 || activePlayerIndex < 0 || activePlayerIndex >= players.Count)
+            return null;
+
+        return players[activePlayerIndex]?.GetComponent<PlayersControlerScriptsManager>();
     }
 
     public CinemachineCamera GetCurrentPlayerCamera()
     {
-        return (playerCameras.Count > 0) ? playerCameras[activePlayerIndex] : null;
+        if (playerCameras.Count == 0 || activePlayerIndex < 0 || activePlayerIndex >= playerCameras.Count)
+            return null;
+
+        return playerCameras[activePlayerIndex];
     }
 }
