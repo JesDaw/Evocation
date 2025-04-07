@@ -24,17 +24,22 @@ public class ProjectileScript : MonoBehaviour
 
     void FixedUpdate()
     {
-        float t = Time.time % 1;
+        float t = Time.time * Speed % 1;
         float yPos = ProCurve.Evaluate(t);
         transform.position = new Vector3(
-                                            Start.x + (t * Vector3.Distance(Start, EnemyObject.transform.position)),
-                                            Start.y + (yPos * Vector3.Distance(Start, EnemyObject.transform.position)),
-                                        0);
+            Start.x + (t * Vector3.Distance(Start, EnemyObject.transform.position)),
+            Start.y + (yPos * Vector3.Distance(Start, EnemyObject.transform.position)),
+            0);
 
         Vector3 rotation = transform.rotation.eulerAngles;
-        rotation.z = (Mathf.Atan2(yPos, ProCurve.Evaluate(t + 0.01f)) * Mathf.Rad2Deg) + Projectiles._Offset;
+
+        float currentAngle = Mathf.Atan2(yPos, ProCurve.Evaluate(t + 0.01f)) * Mathf.Rad2Deg;
+        float targetAngle = currentAngle + Projectiles._Offset;
+
+        rotation.z = Mathf.LerpAngle(rotation.z, targetAngle, Time.deltaTime * 10);
+
         transform.rotation = Quaternion.Euler(rotation);
-        
+
         if (Mathf.Approximately(t, 1.0f) || t > 0.99f)
         {
             OnEndReached();

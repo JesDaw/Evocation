@@ -8,7 +8,7 @@ public class ScrProjectiles : ScriptableObject
     public Sprite _Appearance;
     public AnimationCurve _TrajectoryCurve;
     public int _Damage;
-    public float _Speed;
+    public float _Speed = 1;
     public float _Offset;
     public List<StatusEffect> _EffectsToApply;
 
