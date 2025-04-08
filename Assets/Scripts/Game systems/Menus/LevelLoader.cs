@@ -10,9 +10,13 @@ public class LevelLoader : MonoBehaviour
 
     // FInd way to avoid using update
     // Update is called once per frame
-    public void StartAnimation()
+    public void StartAnimationLevel1()
     {
         StartCoroutine(LoadLevel("Week 7&8 Stuff"));
+    }
+        public void StartAnimationLevel2()
+    {
+        StartCoroutine(LoadLevel("AI Movement"));
     }
 
     IEnumerator LoadLevel(string levelName)

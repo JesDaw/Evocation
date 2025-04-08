@@ -58,6 +58,7 @@ public class PauseMenu : MonoBehaviour
     }
     public void Resume()
     {
+        Debug.Log("resumed");
         ToggleMenu.Invoke();
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1;
