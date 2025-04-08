@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,10 +12,7 @@ public class LevelLoader : MonoBehaviour
     // Update is called once per frame
     public void StartAnimation()
     {
-        if(Input.GetMouseButtonDown(0))
-        {
-            StartCoroutine(LoadLevel("Week 6 Stuff"));
-        }
+        StartCoroutine(LoadLevel("Week 7&8 Stuff"));
     }
 
     IEnumerator LoadLevel(string levelName)
