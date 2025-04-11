@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayersControlerScriptsManager : MonoBehaviour
 {
-    [SerializeField] bool _actionable = true;
+    public bool _actionable;
     public int _PlayerID;
     [SerializeField] PlayerSwitch playerSwitch;
 

@@ -15,21 +15,15 @@ public class PlayerMovement : MonoBehaviour
     public float distance;
     public LayerMask whatIsLadder;
     private bool isFacingRight = true;
-    private bool isClimbing = false;
+    public bool isClimbing = false;
     bool _game_is_active;
 
     [SerializeField] AudioSource walking_audio;
-    //private bool walking = false;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         moveActions = InputSystem.actions.FindAction("Move");
-    }
-
-    private bool IsGrounded()
-    {
-        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
     }
 
     private void Flip()
@@ -38,6 +32,11 @@ public class PlayerMovement : MonoBehaviour
         Vector3 localScale = transform.localScale;
         localScale.x *= -1f;
         transform.localScale = localScale;
+    }
+
+    public void ToggleClimbing()
+    {
+        isClimbing = !isClimbing;
     }
 
     public void Move(InputAction.CallbackContext context)

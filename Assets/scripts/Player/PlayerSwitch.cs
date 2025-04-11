@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerSwitch : MonoBehaviour
 {
+    [SerializeField] ActivePlayer activePlayer;
     [SerializeField] private List<GameObject> players = new List<GameObject>();
     private List<CinemachineCamera> playerCameras = new List<CinemachineCamera>();
 
@@ -104,6 +105,7 @@ public class PlayerSwitch : MonoBehaviour
             {
                 playerScript.EnableControls();
                 playerCameras[i].Priority = 2;
+                activePlayer.CurrentPlayer = players[i];
             }
             else
             {

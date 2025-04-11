@@ -1,31 +1,44 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using System.Collections.Generic;
 using UnityEngine.Events;
 
 public class Interactable : MonoBehaviour
 {
-    public bool isInRange;
-    public KeyCode interactKey;
     public UnityEvent interactAction;
+    List<GameObject> _playersInRange = new List<GameObject>();
+    [SerializeField] ActivePlayer activePlayer;
+    bool ActivePlayerIsInRange;
 
-    // Update is called once per frame
-    void Update() //change this
+
+    public void ActionPressed(InputAction.CallbackContext context)
     {
-        if (isInRange)
-        {
-            if (Input.GetKeyDown(interactKey))
-            {
-               // Debug.Log("Player did an action!");
-                interactAction.Invoke();
-            }
-        }
+        if (!context.started) return;
+        if (_playersInRange.Count == 0) return;
+        if (CheckActivePlayerIsInRange()) interactAction.Invoke(); 
+    }
+
+    void TogglePlayerNotification()
+    {
+        // gameObject.notification.enabled = !gameObject.notification.enabled;
+    }
+
+    bool CheckActivePlayerIsInRange()
+    {
+        if (_playersInRange.Contains(activePlayer.CurrentPlayer)) return true;
+        else return false;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            isInRange = true;
-           // Debug.Log("Player now in range");
+            _playersInRange.Add(collision.gameObject);
+           
+            if(CheckActivePlayerIsInRange())
+            {
+                TogglePlayerNotification();
+            }
         }
     }
 
@@ -33,8 +46,12 @@ public class Interactable : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            isInRange = false;
-           // Debug.Log("Player now not in range");
+            _playersInRange.Remove(collision.gameObject);
+
+            if (CheckActivePlayerIsInRange())
+            {
+                TogglePlayerNotification();
+            }
         }
     }
 }
