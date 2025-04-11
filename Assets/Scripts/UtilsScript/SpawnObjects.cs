@@ -16,6 +16,7 @@ public class SpawnObjects : MonoBehaviour
     [SerializeField] bool autoSpawner;
     [SerializeField] FloatVariable _Money;
     [SerializeField] PlayerSwitch playerSwitch;
+    [SerializeField] PlayerLivesManager PlayerCountManager;
 
     void Start()
     {
@@ -102,8 +103,17 @@ public class SpawnObjects : MonoBehaviour
     }
     public void SpawnPlayer(GameObject player)
     {
+        if (!PlayerCountManager.canSpawnMore) return;
+        int cost = player.GetComponent<Stats>()._spawnCost;
+        if (_Money._Value > cost) _Money._Value -= cost;
+        else 
+        {
+            Debug.Log("Not enough money!");
+            return;
+        }
         GameObject CreatedObject = Instantiate(player, this.transform.position, this.transform.rotation, _PlayerContainer);
         playerSwitch.AddPlayer(CreatedObject);
+        PlayerCountManager.GainLife();
 
     }
 }

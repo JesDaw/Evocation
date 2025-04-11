@@ -9,25 +9,23 @@ public class PlayerLivesManager : MonoBehaviour
     [SerializeField] int MaxLives;
     [SerializeField] UnityEvent _loose_game;
     [SerializeField] PlayerSwitch playerSwitch;
-    bool canSpawnMore = true;
+    public bool canSpawnMore = true;
 
     void Update()
     {
         LifeText.text = LifeCount._Value.ToString("0");
     }
 
-    public bool GainLife()
+    public void GainLife()
     {
         if (canSpawnMore)
         {
             LifeCount._Value++;
             if (LifeCount._Value == MaxLives) canSpawnMore = false;
-            return true;
         }
         else
         {
             Debug.LogWarning("Max Players reached");
-            return false;
         }
     }
 

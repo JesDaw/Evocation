@@ -7,7 +7,7 @@ public class SpawnerController : MonoBehaviour
     [SerializeField] private List<ScriptableStats> spawnables = new List<ScriptableStats>();
     [SerializeField] private SpawnObjects spawnObjects; 
     [SerializeField] GameObject _Player;
-    [SerializeField] PlayerLivesManager PlayerCountManager;
+
 
 
     // Reference to the InputAction asset
@@ -62,21 +62,15 @@ public class SpawnerController : MonoBehaviour
     public void Spawn7(InputAction.CallbackContext context){ Spawn(context, 6);}
     public void Spawn8(InputAction.CallbackContext context){ Spawn(context, 7);}
     public void Spawn9(InputAction.CallbackContext context){ Spawn(context, 8);}
-    public void SpawnPlayer(InputAction.CallbackContext context)
-    { 
-        if (PlayerCountManager.GainLife()) spawnObjects.SpawnPlayer(_Player);
-        else Debug.Log("here");
-    }
+    public void SpawnPlayer(InputAction.CallbackContext context) { spawnObjects.SpawnPlayer(_Player); }
 
     private void OnEnable()
     {
-        // Enable the action map to start listening for inputs
         actionMap.Enable();
     }
 
     private void OnDisable()
     {
-        // Disable the action map when not needed
         actionMap.Disable();
     }
 
@@ -85,15 +79,12 @@ public class SpawnerController : MonoBehaviour
         // Check if the index is within bounds of the spawnables list
         if (index >= 0 && index < spawnables.Count) 
         {
-            // Valid index: Proceed to spawn object
             spawnObjects.Spawn(spawnables[index]);
         }
         else
         {
-            // If index is invalid, log a warning
             Debug.LogWarning("Invalid index: No spawnable object at index " + index);
         }
-        // Debug message to check if the spawn action was called
         Debug.Log("Spawn called with index: " + index);
     }
 }
