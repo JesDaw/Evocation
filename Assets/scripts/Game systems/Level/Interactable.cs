@@ -6,9 +6,13 @@ using UnityEngine.Events;
 public class Interactable : MonoBehaviour
 {
     public UnityEvent interactAction;
+    public UnityEvent playerInRange;
     List<GameObject> _playersInRange = new List<GameObject>();
     [SerializeField] ActivePlayer activePlayer;
+    [SerializeField] GameObject freeCam;
+    [SerializeField] bool FreeCamActsAsActivePlayer;
     bool ActivePlayerIsInRange;
+
 
 
     public void ActionPressed(InputAction.CallbackContext context)
@@ -20,7 +24,7 @@ public class Interactable : MonoBehaviour
 
     void TogglePlayerNotification()
     {
-        // gameObject.notification.enabled = !gameObject.notification.enabled;
+        playerInRange.Invoke();
     }
 
     bool CheckActivePlayerIsInRange()
@@ -31,12 +35,17 @@ public class Interactable : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        bool playerEntered = false;
+        if (collision.gameObject.CompareTag("Player")) playerEntered = true;
+        if (collision.gameObject.CompareTag("FreeCam") && FreeCamActsAsActivePlayer) playerEntered = true;
+        
+        if (playerEntered)
         {
             _playersInRange.Add(collision.gameObject);
            
             if(CheckActivePlayerIsInRange())
             {
+                //Debug.Log("in range");
                 TogglePlayerNotification();
             }
         }
@@ -44,12 +53,16 @@ public class Interactable : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+                bool playerEntered = false;
+        if (collision.gameObject.CompareTag("Player")) playerEntered = true;
+        if (collision.gameObject.CompareTag("FreeCam") && FreeCamActsAsActivePlayer) playerEntered = true;
+        if (playerEntered)
         {
             _playersInRange.Remove(collision.gameObject);
 
-            if (CheckActivePlayerIsInRange())
+            if (!CheckActivePlayerIsInRange())
             {
+                //Debug.Log("out of range");
                 TogglePlayerNotification();
             }
         }
