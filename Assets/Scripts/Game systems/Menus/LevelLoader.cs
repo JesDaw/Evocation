@@ -1,30 +1,35 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LevelLoader : MonoBehaviour
 {
-    public Animator transition;
+    public GameObject loadingScreen;
+    public Slider slider;
+    public Text progressText;
 
-    public float transitionTime = 1f;
-
-    // FInd way to avoid using update
-    // Update is called once per frame
-    public void StartAnimationLevel1()
+    public void LoadLevel(int sceneIndex)
     {
-        StartCoroutine(LoadLevel("Week 7&8 Stuff"));
-    }
-        public void StartAnimationLevel2()
-    {
-        StartCoroutine(LoadLevel("AI Movement"));
+        StartCoroutine(LoadAsynchronously(sceneIndex));
     }
 
-    IEnumerator LoadLevel(string levelName)
+    IEnumerator LoadAsynchronously(int sceneIndex)
     {
-        transition.SetTrigger("Start");
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex);
 
-        yield return new WaitForSeconds(transitionTime);
+        loadingScreen.SetActive(true);
+        
+        while (!operation.isDone)
+        {
+            float progress = Mathf.Clamp01(operation.progress / .9f);
+            //Debug.Log(progress);
 
-        SceneManager.LoadScene(levelName);
+            slider.value = progress;
+            progressText.text = progress * 100f + "%";
+
+            yield return null;
+        }
     }
+    
 }
