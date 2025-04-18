@@ -24,7 +24,7 @@ public class Stats : MonoBehaviour
     public List<Vector2> _StatusTicks;
     public int _StatusMax;
     public int _StatusHealth;
-    [SerializeField] UnityEvent OnDeath, OnDamage;
+    [SerializeField] UltEvents.UltEvent OnDeath, OnDamage;
     //the reason this is public is because it will be applied from the
     //scriptable objects
 
