@@ -1,10 +1,10 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class LevelTransition : MonoBehaviour
 {
     public Animator transition;
+    [SerializeField] LevelLoader levelLoader;
 
     public float transitionTime = 1f;
 
@@ -12,7 +12,7 @@ public class LevelTransition : MonoBehaviour
     // Update is called once per frame
     public void StartAnimationLevel1()
     {
-        StartCoroutine(LoadLevel("Week 7&8 Stuff"));
+        StartCoroutine(LoadLevel("Level 1"));
     }
 
     public void StartAnimationLevel2()
@@ -26,7 +26,7 @@ public class LevelTransition : MonoBehaviour
 
         yield return new WaitForSeconds(transitionTime);
 
-        SceneManager.LoadScene(levelName);
+        levelLoader.LoadLevel(levelName);
     }
 
     //public void StartAnimation(int sceneID)
