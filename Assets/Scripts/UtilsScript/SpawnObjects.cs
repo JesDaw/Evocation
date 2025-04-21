@@ -9,7 +9,7 @@ public class SpawnObjects : MonoBehaviour
     [SerializeField] GameObject _Object;
     [SerializeField] Transform _Container;
     [SerializeField] Transform _PlayerContainer;
-    [SerializeField] UnityEvent OnSpawn;
+    [SerializeField] UnityEvent<GameObject> OnSpawn;
     [Header("Entites")]
     [SerializeField] ScriptableStats AttachedStats;
     [SerializeField] bool enemySpawner;
@@ -62,6 +62,8 @@ public class SpawnObjects : MonoBehaviour
                 CreatedObject.transform.GetChild(0).position.z + RandomValue
             );
         }
+
+        OnSpawn.Invoke(CreatedObject);
     }
 
     // when player manually spawns
@@ -99,6 +101,7 @@ public class SpawnObjects : MonoBehaviour
                 CreatedObject.transform.GetChild(0).position.y + RandomValue,
                 CreatedObject.transform.GetChild(0).position.z + RandomValue
             );
+
         }
     }
     public void SpawnPlayer(GameObject player)
@@ -111,9 +114,9 @@ public class SpawnObjects : MonoBehaviour
             Debug.Log("Not enough money!");
             return;
         }
+
         GameObject CreatedObject = Instantiate(player, this.transform.position, this.transform.rotation, _PlayerContainer);
         playerSwitch.AddPlayer(CreatedObject);
         PlayerCountManager.GainLife();
-
     }
 }
