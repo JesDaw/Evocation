@@ -9,9 +9,11 @@ public class Stats : MonoBehaviour
     public List<string> _CpuPriority;
     public string _Clan;
     public int _Health = 1;
-    public int _Attack;
-    public float _AttackSpeed;
-    public float _Speed;
+    public int _AttackDamage;
+    public int _AttackStartup;
+    public int _AttackActiveDuration;
+    public int _AttackEndlag;
+    public float _MoveSpeed;
     public float _StopDistance;
     public float _KnockBackMax;
     public float _KnockBackHealth;
