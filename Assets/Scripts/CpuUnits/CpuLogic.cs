@@ -25,9 +25,9 @@ public class CpuLogic : MonoBehaviour
         _Stats._Clan = ScrStats._Clan;
         gameObject.tag = _Stats._Clan;
         _Stats._Health = ScrStats._Health;
-        _Stats._Attack = ScrStats._Attack;
-        _Stats._AttackSpeed = ScrStats._AttackSpeed;
-        _Stats._Speed = ScrStats._Speed;
+        _Stats._AttackDamage = ScrStats._AttackDamage;
+        _Stats._AttackEndlag = ScrStats._AttackEndlag;
+        _Stats._MoveSpeed = ScrStats._MoveSpeed;
 
         //just looks better if they slightyoffset
         float randomNumber = Random.Range(-0.3f, 0.3f);
@@ -50,8 +50,11 @@ public class CpuLogic : MonoBehaviour
 
     void SwitchSides(bool Direction)
     {
-        GameObject CurrentGameObject = this.gameObject;
 
+        //there are two seperate thing managing rotation but this one constantly overloads it
+        //shoud've made a rotation manager
+        //a bit of a hack ;=; i hope nobody needs to read this
+        GameObject CurrentGameObject = this.gameObject;
         Vector3 CurrentObjectRotation = transform.eulerAngles;
         if (Direction)
         {
@@ -80,7 +83,7 @@ public class CpuLogic : MonoBehaviour
         else if(SurroundingHits[0].transform.position.x - transform.position.x < 0) SwitchSides(true);
 
         //what to do when detect something
-        _Stats._Speed = ScrStats._Speed;
+        _Stats._MoveSpeed = ScrStats._MoveSpeed;
         if (hits.Length <= 0) return;
 
         int SavedIndex = -1;
@@ -104,7 +107,7 @@ public class CpuLogic : MonoBehaviour
 
         if (SavedIndex == -1) return;
 
-        _Stats._Speed = 0;
+        _Stats._MoveSpeed = 0;
 
         GameObject EnemyGameobject = hits[SavedIndex].collider.gameObject;
         Stats EnemyStats = EnemyGameobject.GetComponent<Stats>();
@@ -120,7 +123,7 @@ public class CpuLogic : MonoBehaviour
         }
         //Enemy Attack
         Debug.Log("Attacked Enemy" + hits[SavedIndex].collider.gameObject.name);
-        EnemyStats.Attack(_Stats._Attack);
+        EnemyStats.Attack(_Stats._AttackDamage);
         attackingAudio.Play();
         
         //Status Effects
@@ -149,24 +152,24 @@ public class CpuLogic : MonoBehaviour
         Debug.Log(_TempSpeed);
 
         _Freeze = true;
-        _Stats._Speed = _TempSpeed;
+        _Stats._MoveSpeed = _TempSpeed;
 
         //x knockback scales exponentially, which is a problem...
         //but it works fine
         //and I'm too lazy to test values
-        yield return new WaitForSeconds(ScrStats._Speed/6f);
+        yield return new WaitForSeconds(ScrStats._MoveSpeed/6f);
         _Freeze = false;
     }
 
     IEnumerator AttackCooldown()
     {
         _AlreadyAttacked = true;
-        yield return new WaitForSeconds(_Stats._AttackSpeed);
+        yield return new WaitForSeconds(_Stats._AttackEndlag);
         _AlreadyAttacked = false;
     }
 
     void FixedUpdate()
     {
-        _Body.linearVelocity = new Vector2(_Stats._Speed * transform.right.x, _Body.linearVelocity.y);
+        _Body.linearVelocity = new Vector2(_Stats._MoveSpeed * transform.right.x, _Body.linearVelocity.y);
     }
 }
