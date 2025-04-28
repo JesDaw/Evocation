@@ -662,8 +662,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 546498ff8cd30004098d5123d00744ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _controllable: 1
-  _player_Stats: {fileID: 5282752521041242536}
+  controllable: 1
+  playerStats: {fileID: 5282752521041242536}
+  framesPerSecond: 60
   animator: {fileID: 1014587609252558497}
   attackPoint: {fileID: 3177171496775643294}
   enemyLayers:
@@ -685,9 +686,11 @@ MonoBehaviour:
   _CpuPriority: []
   _Clan: 
   _Health: 50
-  _Attack: 100
-  _AttackSpeed: 0
-  _Speed: 5
+  _AttackDamage: 0
+  _AttackStartup: 0
+  _AttackActiveDuration: 0
+  _AttackEndlag: 0
+  _MoveSpeed: 0
   _StopDistance: 0
   _KnockBackMax: 100
   _KnockBackHealth: 50
