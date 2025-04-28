@@ -22,10 +22,10 @@ public class PlayersControlerScriptsManager : MonoBehaviour
         }
 
         // Enable Player_Combat if it exists
-        if (TryGetComponent<Player_Combat>(out Player_Combat combat))
+        if (TryGetComponent<PlayerCombat>(out PlayerCombat combat))
         {
             combat.enabled = _actionable;
-            combat._controllable = _actionable;
+            combat.controllable = _actionable;
         }
         else
         {
@@ -51,10 +51,10 @@ public class PlayersControlerScriptsManager : MonoBehaviour
         }
 
         // Disable Player_Combat if it exists
-        if (TryGetComponent<Player_Combat>(out Player_Combat combat))
+        if (TryGetComponent<PlayerCombat>(out PlayerCombat combat))
         {
             combat.enabled = _actionable;
-            combat._controllable = _actionable;
+            combat.controllable = _actionable;
         }
         else
         {
