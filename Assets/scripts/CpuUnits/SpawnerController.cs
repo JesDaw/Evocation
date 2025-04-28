@@ -1,6 +1,7 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Collections.Generic;
 
 public class SpawnerController : MonoBehaviour
 {
@@ -53,16 +54,18 @@ public class SpawnerController : MonoBehaviour
     spawnPlayer.performed += SpawnPlayer;
 }
 
-    public void Spawn1(InputAction.CallbackContext context){ Spawn(context, 0);}
-    public void Spawn2(InputAction.CallbackContext context){ Spawn(context, 1);}
-    public void Spawn3(InputAction.CallbackContext context){ Spawn(context, 2);}
-    public void Spawn4(InputAction.CallbackContext context){ Spawn(context, 3);}
-    public void Spawn5(InputAction.CallbackContext context){ Spawn(context, 4);}
-    public void Spawn6(InputAction.CallbackContext context){ Spawn(context, 5);}
-    public void Spawn7(InputAction.CallbackContext context){ Spawn(context, 6);}
-    public void Spawn8(InputAction.CallbackContext context){ Spawn(context, 7);}
-    public void Spawn9(InputAction.CallbackContext context){ Spawn(context, 8);}
+    public void Spawn1(InputAction.CallbackContext context){ StartCoroutine(Spawn(context, 0));}
+    public void Spawn2(InputAction.CallbackContext context){ StartCoroutine(Spawn(context, 1));}
+    public void Spawn3(InputAction.CallbackContext context){ StartCoroutine(Spawn(context, 2));}
+    public void Spawn4(InputAction.CallbackContext context){ StartCoroutine(Spawn(context, 3));}
+    public void Spawn5(InputAction.CallbackContext context){ StartCoroutine(Spawn(context, 4));}
+    public void Spawn6(InputAction.CallbackContext context){ StartCoroutine(Spawn(context, 5));}
+    public void Spawn7(InputAction.CallbackContext context){ StartCoroutine(Spawn(context, 6));}
+    public void Spawn8(InputAction.CallbackContext context){ StartCoroutine(Spawn(context, 7));}
+    public void Spawn9(InputAction.CallbackContext context){ StartCoroutine(Spawn(context, 8));}
     public void SpawnPlayer(InputAction.CallbackContext context) { spawnObjects.SpawnPlayer(_Player); }
+    public float CoolDown;
+    private bool AlreadySpawned = false;
 
     private void OnEnable()
     {
@@ -74,17 +77,29 @@ public class SpawnerController : MonoBehaviour
         actionMap.Disable();
     }
 
-    void Spawn(InputAction.CallbackContext context, int index)
+    IEnumerator Spawn(InputAction.CallbackContext context, int index)
     {
-        // Check if the index is within bounds of the spawnables list
-        if (index >= 0 && index < spawnables.Count) 
+        if (AlreadySpawned)
+        {
+            Debug.Log("Cooldown active. Waiting...");
+            yield break; // Immediately exit if still on cooldown
+        }
+
+        if (index >= 0 && index < spawnables.Count)
         {
             spawnObjects.Spawn(spawnables[index]);
+            Debug.Log("Spawned object at index: " + index);
+
+            AlreadySpawned = true;
+
+            // Internal cooldown wait
+            yield return new WaitForSeconds(CoolDown);
+
+            AlreadySpawned = false;
         }
         else
         {
             Debug.LogWarning("Invalid index: No spawnable object at index " + index);
         }
-        Debug.Log("Spawn called with index: " + index);
     }
 }
