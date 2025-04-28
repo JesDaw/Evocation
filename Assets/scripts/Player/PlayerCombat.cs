@@ -1,66 +1,71 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
-public class Player_Combat : MonoBehaviour
+public class PlayerCombat : MonoBehaviour
 {
-    public bool _controllable = true;
-    [SerializeField] Stats _player_Stats;
+    public bool controllable = true;
+    [SerializeField] Stats playerStats;
+    [SerializeField] float framesPerSecond = 60f;
     public Animator animator;
-
     public Transform attackPoint;
     public LayerMask enemyLayers;
 
-    //for sword slash sound effect
     [SerializeField] AudioSource attackingAudio;
+    bool isAttacking = false;
 
-    // Update is called once per frame
     public void AttackAction(InputAction.CallbackContext context)
     {
-        if (context.performed && _controllable)
+        if (context.performed && controllable)
         {
-            Attack();
-            attackingAudio.Play();
+            StartCoroutine(AttackRoutine());
         }
     }
 
-    void Attack()
+    IEnumerator AttackRoutine()
     {
-        // No Attack animation yet. Uncomment below code when animation has been implemented
+        isAttacking = true;
+
+        // Startup
+        yield return new WaitForSeconds(playerStats._AttackStartup/framesPerSecond);
+
+        // Active hit
+        AttackActive();
+        attackingAudio.Play();
+
+        // Endlag
+        yield return new WaitForSeconds(playerStats._AttackEndlag/framesPerSecond);
+
+        isAttacking = false;
+    }
+
+    void AttackActive()
+    {
         // animator.SetTrigger("Attack");
 
-        // Detect enemies in range of attack
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, _player_Stats._StopDistance, enemyLayers);
-        _player_Stats = GetComponent<Stats>();
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, playerStats._StopDistance, enemyLayers);
 
-        // Damage them
-        foreach(Collider2D enemy in hitEnemies)
+        foreach (Collider2D enemy in hitEnemies)
         {
-
-            if (enemy.TryGetComponent<Stats>(out Stats _enimy_stats)){
-                _enimy_stats.Attack(_player_Stats._Attack);
-                }
+            if (enemy.TryGetComponent<Stats>(out Stats enemyStats))
+            {
+                enemyStats.Attack(playerStats._AttackDamage);
+            }
+            else if (enemy.TryGetComponent<BuildingHealth>(out BuildingHealth buildingHealth))
+            {
+                buildingHealth.TakeDamage(playerStats._AttackDamage);
+            }
             else
-                {
-                //Debug.LogError(enemy.name + " is missing the Stats component!");
-                 //continue; // Skip this enemy if it doesn't have Stats
-                }
-
-            if (enemy.TryGetComponent<BuildingHealth>(out BuildingHealth _building_health)){
-                _building_health.TakeDamage(_player_Stats._Attack);
-                }
-            else
-                {
-                //Debug.LogError(enemy.name + " is missing the BuildingHealth component!");
-                 //continue; // Skip this enemy if it doesn't have Stats
-                }
+            {
+                Debug.LogError(enemy.name + " is missing Stats or BuildingHealth component!");
+            }
         }
     }
 
     void OnDrawGizmosSelected()
     {
-        if (attackPoint == null)
-            return;
+        if (attackPoint == null) return;
 
-        Gizmos.DrawWireSphere(attackPoint.position, _player_Stats._StopDistance);
+        Gizmos.DrawWireSphere(attackPoint.position, playerStats._StopDistance);
     }
 }

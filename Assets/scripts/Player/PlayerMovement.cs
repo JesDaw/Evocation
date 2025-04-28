@@ -60,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!isClimbing)
         {
-            rb.linearVelocity = new Vector2(horizontal * _player_Stats._Speed, rb.linearVelocity.y);
+            rb.linearVelocity = new Vector2(horizontal * _player_Stats._MoveSpeed, rb.linearVelocity.y);
         }
 
         RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.up, distance, whatIsLadder);
@@ -69,7 +69,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (isClimbing)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, vertical * _player_Stats._Speed);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, vertical * _player_Stats._MoveSpeed);
             rb.gravityScale = 0;
 
             isClimbing = hitInfo.collider != null;
