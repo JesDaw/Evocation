@@ -28,7 +28,6 @@ public class PlayerCombat : MonoBehaviour
         isAttacking = true;
 
         // Startup
-        Debug.Log("attack startup!");
         controlsManager.DisableControls();
         yield return new WaitForSeconds(playerStats._AttackStartup/framesPerSecond);
 
@@ -37,7 +36,6 @@ public class PlayerCombat : MonoBehaviour
         attackingAudio.Play();
 
         // Endlag
-        Debug.Log("attack endlag!");
         yield return new WaitForSeconds(playerStats._AttackEndlag/framesPerSecond);
         controlsManager.EnableControls();
 
@@ -47,8 +45,6 @@ public class PlayerCombat : MonoBehaviour
     void AttackActive()
     {
         // animator.SetTrigger("Attack");
-        Debug.Log("attacking!");
-
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, playerStats._StopDistance, enemyLayers);
 
         foreach (Collider2D enemy in hitEnemies)
