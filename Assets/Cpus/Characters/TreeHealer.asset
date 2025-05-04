@@ -14,16 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _CpuPriority:
   - TreeGang
-  _Sprite: {fileID: 21300000, guid: 38f07a4b6d08c7243b482a84dc73ea52, type: 3}
   _Clan: TreeGang
   _Health: 40
-  _Attack: -100
-  _AttackSpeed: 0.1
-  _Speed: 5
+  _AttackDamage: 0
+  _AttackStartup: 3
+  _AttackActiveDuration: 1
+  _AttackEndlag: 20
+  _MoveSpeed: 10
   _StopDistance: 2
-  _KnockBackVelocity: 5
+  _KnockBackMax: 0
   _KnockBackHealth: 1
+  _KnockBackVelocity: 5
+  _spawnCost: 0
+  _Sprite: {fileID: 21300000, guid: 38f07a4b6d08c7243b482a84dc73ea52, type: 3}
   _EffectsToApply:
   - {fileID: 11400000, guid: b09447a80e6bebf43805189595c14d8a, type: 2}
   _StatusHealth: 2
-  _AttackType: 1
+  OnAttack: 
+  _Projectiles: []
+  ExtraStats: {fileID: 0}
