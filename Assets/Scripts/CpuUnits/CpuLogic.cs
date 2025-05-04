@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -7,57 +7,150 @@ public class CpuLogic : MonoBehaviour
 {
     public ScriptableStats ScrStats;
     [SerializeField] Stats _Stats;
-    //this is for testing
-    [Header("Req Components")]
+
+    [Header("Required Components")]
     [SerializeField] Transform _Raycast;
     [SerializeField] SpriteRenderer _Renderer;
     [SerializeField] Rigidbody2D _Body;
     [SerializeField] AudioSource attackingAudio;
+    [SerializeField] Animator animator;
+
     [SerializeField] float _RadiusDetection;
+
     [Header("Events")]
     [SerializeField] UnityEvent OnSpawn;
     [SerializeField] CpuUtilis Utilis;
+
     private bool _AlreadyAttacked = false;
     private bool _Freeze = false;
+
     void Start()
     {
-        //Set Stats class to ScriptableObject
+        // Copy stats from ScriptableObject
         _Stats._Clan = ScrStats._Clan;
         gameObject.tag = _Stats._Clan;
         _Stats._Health = ScrStats._Health;
-        _Stats._Attack = ScrStats._Attack;
-        _Stats._AttackSpeed = ScrStats._AttackSpeed;
-        _Stats._Speed = ScrStats._Speed;
-
-        //just looks better if they slightyoffset
-        float randomNumber = Random.Range(-0.3f, 0.3f);
-        _Stats._StopDistance = ScrStats._StopDistance + randomNumber;
+        _Stats._AttackDamage = ScrStats._AttackDamage;
+        _Stats._AttackStartup = ScrStats._AttackStartup;
+        _Stats._AttackActiveDuration = ScrStats._AttackActiveDuration;
+        _Stats._AttackEndlag = ScrStats._AttackEndlag;
+        _Stats._MoveSpeed = ScrStats._MoveSpeed;
+        _Stats._StopDistance = ScrStats._StopDistance + Random.Range(-0.3f, 0.3f);
         _Stats._CpuPriority = ScrStats._CpuPriority;
-
-        //knockback
         _Stats._KnockBackHealth = ScrStats._KnockBackHealth;
         _Stats._KnockBackVelocity = ScrStats._KnockBackVelocity;
         _Stats._KnockBackMax = ScrStats._KnockBackHealth;
-
-        //status effects
         _Stats._StatusHealth = ScrStats._StatusHealth;
         _Stats._StatusMax = ScrStats._StatusHealth;
-        
-        _Renderer.sprite = ScrStats._Sprite;
 
+        _Renderer.sprite = ScrStats._Sprite;
         OnSpawn.Invoke();
+    }
+
+    void Update()
+    {
+        if (_Freeze) return;
+
+        RaycastHit2D[] hits = Physics2D.RaycastAll(_Raycast.position, transform.right, _Stats._StopDistance);
+        Debug.DrawRay(_Raycast.position, transform.right * _Stats._StopDistance, Color.red);
+
+        Collider2D[] surroundingHits = Physics2D.OverlapCircleAll(transform.position, _RadiusDetection, LayerMask.GetMask("Player"));
+        if (surroundingHits.Length == 0)
+        {
+            SwitchSides(false);
+        }
+        else if (surroundingHits[0].transform.position.x - transform.position.x < 0)
+        {
+            SwitchSides(true);
+        }
+
+        _Stats._MoveSpeed = ScrStats._MoveSpeed;
+        if (hits.Length == 0) return;
+
+        GameObject target = FindTargetFromRaycast(hits);
+        if (target == null) return;
+
+        _Stats._MoveSpeed = 0;
+
+        if (!_AlreadyAttacked)
+        {
+            StartCoroutine(AttackRoutine(target));
+        }
+    }
+
+    GameObject FindTargetFromRaycast(RaycastHit2D[] hits)
+    {
+        for (int i = 0; i < _Stats._CpuPriority.Count; i++)
+        {
+            foreach (RaycastHit2D hit in hits)
+            {
+                if (gameObject.layer == 10 && hit.collider.gameObject.layer == 11) continue;
+                if (hit.collider.gameObject.layer == gameObject.layer) continue;
+                if (hit.collider.CompareTag(_Stats._CpuPriority[i]))
+                {
+                    return hit.collider.gameObject;
+                }
+            }
+        }
+        return null;
+    }
+
+    IEnumerator AttackRoutine(GameObject target)
+    {
+        _AlreadyAttacked = true;
+        _Stats._MoveSpeed = 0;
+        _Freeze = true;
+
+        yield return new WaitForSeconds(_Stats._AttackStartup / 60f);
+
+        if (animator != null)
+            animator.SetTrigger("Attack");
+
+        if (target != null)
+        {
+            if (target.TryGetComponent(out Stats enemyStats))
+            {
+                enemyStats.Attack(_Stats._AttackDamage);
+
+                foreach (var effect in ScrStats.OnAttack)
+                    Utilis.SelectOnAttack(effect, ScrStats, target);
+
+                if (enemyStats._StatusHealth <= 0)
+                {
+                    foreach (StatusEffect effect in ScrStats._EffectsToApply)
+                    {
+                        if (effect != null)
+                            enemyStats.AddStatusEffect(effect);
+                    }
+                }
+                else
+                {
+                    enemyStats._StatusHealth--;
+                }
+            }
+            else if (target.TryGetComponent(out BuildingHealth buildingHealth))
+            {
+                buildingHealth.TakeDamage(_Stats._AttackDamage);
+            }
+        }
+
+        attackingAudio.Play();
+        yield return new WaitForSeconds(_Stats._AttackActiveDuration / 60f);
+        yield return new WaitForSeconds(_Stats._AttackEndlag / 60f);
+
+        _Freeze = false;
+        _AlreadyAttacked = false;
     }
 
     void SwitchSides(bool Direction)
     {
         GameObject CurrentGameObject = this.gameObject;
-
         Vector3 CurrentObjectRotation = transform.eulerAngles;
         if (Direction)
         {
-            CurrentObjectRotation = new Vector3(0, 0, 180);
-            CurrentGameObject.transform.eulerAngles = CurrentObjectRotation;
-            CurrentGameObject.transform.GetChild(0).rotation = new Quaternion(0, 1, 0, 0);
+        CurrentObjectRotation = new Vector3(0, 0, 180);
+        CurrentGameObject.transform.eulerAngles = CurrentObjectRotation;
+        CurrentGameObject.transform.GetChild(0).rotation = new Quaternion(0, 1, 0, 0);
         }
         else
         {
@@ -65,108 +158,25 @@ public class CpuLogic : MonoBehaviour
             CurrentGameObject.transform.eulerAngles = CurrentObjectRotation;
             CurrentGameObject.transform.GetChild(0).rotation = new Quaternion(0, 0, 0, 0);
         }
-
     }
-    void Update()
+
+
+
+    public void ApplyTempSpeed(Vector2 speedInfo)
     {
-        if(_Freeze) return;
-
-        RaycastHit2D[] hits = Physics2D.RaycastAll(_Raycast.position, transform.right, _Stats._StopDistance);
-        Debug.DrawRay(_Raycast.position, transform.right * _Stats._StopDistance, Color.red);
-        
-        Collider2D[] SurroundingHits = Physics2D.OverlapCircleAll(this.transform.position, _RadiusDetection, LayerMask.GetMask("Player"));
-
-        if(SurroundingHits.Length <= 0) SwitchSides(false);
-        else if(SurroundingHits[0].transform.position.x - transform.position.x < 0) SwitchSides(true);
-
-        //what to do when detect something
-        _Stats._Speed = ScrStats._Speed;
-        if (hits.Length <= 0) return;
-
-        int SavedIndex = -1;
-        for (int I = 0; I < _Stats._CpuPriority.Count; I++)
-        {
-            for (int II = 0; II < hits.Length; II++)
-            {
-                if (gameObject.layer == 10 && hits[II].collider.gameObject.layer == 11) continue;
-                if (hits[II].collider.gameObject.layer == gameObject.layer) continue;
-                if (hits[II].collider.CompareTag(_Stats._CpuPriority[I]))
-                {
-                    SavedIndex = II;
-                    break;
-                }
-            }
-            if (SavedIndex != -1)
-            {
-                break;
-            }
-        }
-
-        if (SavedIndex == -1) return;
-
-        _Stats._Speed = 0;
-
-        GameObject EnemyGameobject = hits[SavedIndex].collider.gameObject;
-        Stats EnemyStats = EnemyGameobject.GetComponent<Stats>();
-        if (EnemyStats == null) return;
-        
-        if (_AlreadyAttacked) return;
-        StartCoroutine(AttackCooldown());
-
-        //Utilis.SpawnMobs
-        for(int I = 0; I < ScrStats.OnAttack.Count; I++)
-        {
-            Utilis.SelectOnAttack(ScrStats.OnAttack[I], ScrStats, EnemyGameobject);
-        }
-        //Enemy Attack
-        Debug.Log("Attacked Enemy" + hits[SavedIndex].collider.gameObject.name);
-        EnemyStats.Attack(_Stats._Attack);
-        attackingAudio.Play();
-        
-        //Status Effects
-        if(EnemyStats._StatusHealth <= 0)
-        {
-            if(ScrStats._EffectsToApply.Count == 0) return;
-
-            foreach(StatusEffect effect in ScrStats._EffectsToApply)
-            {
-                if(effect is null) return;
-                Debug.Log("Effect Applied");
-                EnemyStats.AddStatusEffect(effect);
-            }
-        }
-        else
-        {
-            EnemyStats._StatusHealth--;
-        }
+        StartCoroutine(TempSpeed(speedInfo.x));
     }
-    public void ApplyTempSpeed(Vector2 _SpeedInfo)
-    {
-        StartCoroutine(TempSpeed(_SpeedInfo.x));
-    }
-    IEnumerator TempSpeed(float _TempSpeed)
-    {
-        Debug.Log(_TempSpeed);
 
+    IEnumerator TempSpeed(float tempSpeed)
+    {
         _Freeze = true;
-        _Stats._Speed = _TempSpeed;
-
-        //x knockback scales exponentially, which is a problem...
-        //but it works fine
-        //and I'm too lazy to test values
-        yield return new WaitForSeconds(ScrStats._Speed/6f);
+        _Stats._MoveSpeed = tempSpeed;
+        yield return new WaitForSeconds(ScrStats._MoveSpeed / 6f);
         _Freeze = false;
-    }
-
-    IEnumerator AttackCooldown()
-    {
-        _AlreadyAttacked = true;
-        yield return new WaitForSeconds(_Stats._AttackSpeed);
-        _AlreadyAttacked = false;
     }
 
     void FixedUpdate()
     {
-        _Body.linearVelocity = new Vector2(_Stats._Speed * transform.right.x, _Body.linearVelocity.y);
+        _Body.linearVelocity = new Vector2(_Stats._MoveSpeed * transform.right.x, _Body.linearVelocity.y);
     }
 }
