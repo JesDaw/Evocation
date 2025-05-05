@@ -13,8 +13,19 @@ public class SettingsMenu : MonoBehaviour
 
     Resolution[] resolutions;
 
+    void Awake()
+    {
+        load_settings();
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
+    {
+        load_settings();
+    }
+
+    //load the settings from player prefs
+    void load_settings()
     {
         //using player pref to save the all setting changes acorss diff scenes
         //volume//////
