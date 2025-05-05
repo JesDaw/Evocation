@@ -6,6 +6,9 @@ using UnityEngine.Events;
 public class CpuLogic : MonoBehaviour
 {
     public ScriptableStats ScrStats;
+    //god I hate this, this is for rotation for the enemies since they will face the other side
+    //I SHOULD HAVE WRITTEN A SCRIPT TO CONTROL FOR ALL ROTATION DAWMN ITHTJOIFI
+    public bool _Enemy;
     [SerializeField] Stats _Stats;
     //this is for testing
     [Header("Req Components")]
@@ -54,6 +57,8 @@ public class CpuLogic : MonoBehaviour
         //there are two seperate thing managing rotation but this one constantly overloads it
         //shoud've made a rotation manager
         //a bit of a hack ;=; i hope nobody needs to read this
+        if (_Enemy) Direction = !Direction;
+
         GameObject CurrentGameObject = this.gameObject;
         Vector3 CurrentObjectRotation = transform.eulerAngles;
         if (Direction)
@@ -79,8 +84,8 @@ public class CpuLogic : MonoBehaviour
         
         Collider2D[] SurroundingHits = Physics2D.OverlapCircleAll(this.transform.position, _RadiusDetection, LayerMask.GetMask("Player"));
 
-        if(SurroundingHits.Length <= 0) SwitchSides(false);
-        else if(SurroundingHits[0].transform.position.x - transform.position.x < 0) SwitchSides(true);
+        //if(SurroundingHits.Length <= 0) SwitchSides(false);
+        //else if(SurroundingHits[0].transform.position.x - transform.position.x < 0) SwitchSides(true);
 
         //what to do when detect something
         _Stats._MoveSpeed = ScrStats._MoveSpeed;
@@ -157,7 +162,7 @@ public class CpuLogic : MonoBehaviour
         //x knockback scales exponentially, which is a problem...
         //but it works fine
         //and I'm too lazy to test values
-        yield return new WaitForSeconds(ScrStats._MoveSpeed/6f);
+        yield return new WaitForSeconds(ScrStats._MoveSpeed/20f);
         _Freeze = false;
     }
 

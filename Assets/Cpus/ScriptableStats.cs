@@ -14,7 +14,7 @@ public class ScriptableStats : ScriptableObject
     public int _AttackEndlag;
     public float _MoveSpeed;
     public float _StopDistance;
-    public float _KnockBackMax;
+    public float _KnockBackMax = 1;
     public float _KnockBackHealth;
     public float _KnockBackVelocity;
     public int _spawnCost;

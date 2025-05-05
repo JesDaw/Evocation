@@ -78,6 +78,7 @@ public class SpawnObjects : MonoBehaviour
 
         GameObject CreatedObject = Instantiate(_Object, this.transform.position, this.transform.rotation, _Container);
         CpuLogic ObjectLogic = CreatedObject.GetComponent<CpuLogic>();
+        if (enemySpawner) ObjectLogic._Enemy = true;
         if (ObjectLogic != null) ObjectLogic.ScrStats = ScrStats;
 
         // Assign layer
