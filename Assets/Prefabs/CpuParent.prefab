@@ -232,6 +232,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ScrStats: {fileID: 11400000, guid: b6992adb71df9b441bc53d51187ea154, type: 2}
+  _Enemy: 0
   _Stats: {fileID: 8642845343927698181}
   _Raycast: {fileID: 3871249974143792539}
   _Renderer: {fileID: 1835736808589767493}
@@ -298,9 +299,11 @@ MonoBehaviour:
   - 
   _Clan: 
   _Health: 0
-  _Attack: 0
-  _AttackSpeed: 0
-  _Speed: 0
+  _AttackDamage: 0
+  _AttackStartup: 0
+  _AttackActiveDuration: 0
+  _AttackEndlag: 0
+  _MoveSpeed: 0
   _StopDistance: 0
   _KnockBackMax: 0
   _KnockBackHealth: 0
@@ -312,23 +315,9 @@ MonoBehaviour:
   _StatusMax: 0
   _StatusHealth: 0
   OnDeath:
-    m_PersistentCalls:
-      m_Calls: []
+    _PersistentCalls: []
   OnDamage:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2391128896491098164}
-        m_TargetAssemblyTypeName: CpuHealthBar, Assembly-CSharp
-        m_MethodName: UpdateHealth
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+    _PersistentCalls: []
   OnTick:
     m_PersistentCalls:
       m_Calls: []

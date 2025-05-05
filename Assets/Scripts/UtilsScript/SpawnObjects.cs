@@ -63,6 +63,7 @@ public class SpawnObjects : MonoBehaviour
             );
         }
 
+        if (enemySpawner) ObjectLogic._Enemy = true;
         OnSpawn.Invoke(CreatedObject);
     }
 
@@ -78,9 +79,8 @@ public class SpawnObjects : MonoBehaviour
 
         GameObject CreatedObject = Instantiate(_Object, this.transform.position, this.transform.rotation, _Container);
         CpuLogic ObjectLogic = CreatedObject.GetComponent<CpuLogic>();
-        if (enemySpawner) ObjectLogic._Enemy = true;
         if (ObjectLogic != null) ObjectLogic.ScrStats = ScrStats;
-
+        
         // Assign layer
         if (enemySpawner) CreatedObject.layer = 9;
         else CreatedObject.layer = 10;        

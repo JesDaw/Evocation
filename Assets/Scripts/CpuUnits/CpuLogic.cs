@@ -61,18 +61,20 @@ public class CpuLogic : MonoBehaviour
 
         GameObject CurrentGameObject = this.gameObject;
         Vector3 CurrentObjectRotation = transform.eulerAngles;
+
         if (Direction)
         {
-            CurrentObjectRotation = new Vector3(0, 0, 180);
-            CurrentGameObject.transform.eulerAngles = CurrentObjectRotation;
-            CurrentGameObject.transform.GetChild(0).rotation = new Quaternion(0, 1, 0, 0);
+            CurrentObjectRotation = new Vector3(0, 180, 0);
         }
         else
         {
             CurrentObjectRotation = new Vector3(0, 0, 0);
-            CurrentGameObject.transform.eulerAngles = CurrentObjectRotation;
-            CurrentGameObject.transform.GetChild(0).rotation = new Quaternion(0, 0, 0, 0);
         }
+
+        CurrentGameObject.transform.eulerAngles = CurrentObjectRotation;
+
+        Transform child = CurrentGameObject.transform.GetChild(0);
+        child.localRotation = Quaternion.identity; 
 
     }
     void Update()
@@ -82,10 +84,10 @@ public class CpuLogic : MonoBehaviour
         RaycastHit2D[] hits = Physics2D.RaycastAll(_Raycast.position, transform.right, _Stats._StopDistance);
         Debug.DrawRay(_Raycast.position, transform.right * _Stats._StopDistance, Color.red);
         
-        Collider2D[] SurroundingHits = Physics2D.OverlapCircleAll(this.transform.position, _RadiusDetection, LayerMask.GetMask("Player"));
+        Collider2D[] SurroundingHits = Physics2D.OverlapCircleAll(this.transform.position, _RadiusDetection, LayerMask.GetMask("Player/NeutralLane"));
 
-        //if(SurroundingHits.Length <= 0) SwitchSides(false);
-        //else if(SurroundingHits[0].transform.position.x - transform.position.x < 0) SwitchSides(true);
+        if(SurroundingHits.Length <= 0) SwitchSides(false);
+        else if(SurroundingHits[0].transform.position.x - transform.position.x > 0 && _Enemy) SwitchSides(true);
 
         //what to do when detect something
         _Stats._MoveSpeed = ScrStats._MoveSpeed;
@@ -162,7 +164,7 @@ public class CpuLogic : MonoBehaviour
         //x knockback scales exponentially, which is a problem...
         //but it works fine
         //and I'm too lazy to test values
-        yield return new WaitForSeconds(ScrStats._MoveSpeed/20f);
+        yield return new WaitForSeconds(ScrStats._MoveSpeed/15f);
         _Freeze = false;
     }
 
@@ -177,4 +179,6 @@ public class CpuLogic : MonoBehaviour
     {
         _Body.linearVelocity = new Vector2(_Stats._MoveSpeed * transform.right.x, _Body.linearVelocity.y);
     }
+    //util
+
 }
