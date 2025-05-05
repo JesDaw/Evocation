@@ -39,7 +39,6 @@ public class PauseMenu : MonoBehaviour
     {
         if(context.performed && GameIsOver == false)
         {
-            Debug.Log(GameIsOver);
             if (GameIsPaused)
                 {
                     Resume();
