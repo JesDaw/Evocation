@@ -56,7 +56,7 @@ public class PlayerLivesManager : MonoBehaviour
 
             if (LifeCount._Value > 0 && playerSwitch.GetCurrentPlayerController() != null)
             {
-                playerSwitch.SwitchPlayer(default);
+                playerSwitch.SwitchPlayerRight(default);
             }
         }
     }
