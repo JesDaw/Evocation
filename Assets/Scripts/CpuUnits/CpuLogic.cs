@@ -6,6 +6,8 @@ using UnityEngine.Events;
 public class CpuLogic : MonoBehaviour
 {
     public ScriptableStats ScrStats;
+    public bool _Enemy; 
+
     [SerializeField] Stats _Stats;
 
     [Header("Required Components")]
@@ -59,9 +61,11 @@ public class CpuLogic : MonoBehaviour
         {
             SwitchSides(false);
         }
-        else if (surroundingHits[0].transform.position.x - transform.position.x < 0)
+        else
         {
-            SwitchSides(true);
+            bool faceRight = surroundingHits[0].transform.position.x - transform.position.x > 0;
+            if (_Enemy) faceRight = !faceRight;
+            SwitchSides(faceRight);
         }
 
         _Stats._MoveSpeed = ScrStats._MoveSpeed;
@@ -142,25 +146,17 @@ public class CpuLogic : MonoBehaviour
         _AlreadyAttacked = false;
     }
 
-    void SwitchSides(bool Direction)
+    void SwitchSides(bool faceRight)
     {
-        GameObject CurrentGameObject = this.gameObject;
-        Vector3 CurrentObjectRotation = transform.eulerAngles;
-        if (Direction)
+        if (_Enemy) faceRight = !faceRight;
+
+        transform.eulerAngles = faceRight ? new Vector3(0, 180, 0) : Vector3.zero;
+
+        if (transform.childCount > 0)
         {
-        CurrentObjectRotation = new Vector3(0, 0, 180);
-        CurrentGameObject.transform.eulerAngles = CurrentObjectRotation;
-        CurrentGameObject.transform.GetChild(0).rotation = new Quaternion(0, 1, 0, 0);
-        }
-        else
-        {
-            CurrentObjectRotation = new Vector3(0, 0, 0);
-            CurrentGameObject.transform.eulerAngles = CurrentObjectRotation;
-            CurrentGameObject.transform.GetChild(0).rotation = new Quaternion(0, 0, 0, 0);
+            transform.GetChild(0).localRotation = Quaternion.identity;
         }
     }
-
-
 
     public void ApplyTempSpeed(Vector2 speedInfo)
     {
