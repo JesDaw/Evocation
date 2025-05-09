@@ -17,7 +17,7 @@ public class LevelTransition : MonoBehaviour
 
     public void StartAnimationLevel2()
     {
-        StartCoroutine(LoadLevel("AI Movement"));
+        StartCoroutine(LoadLevel("pathSelector"));
     }
 
     IEnumerator LoadLevel(string levelName)

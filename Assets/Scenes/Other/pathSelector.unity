@@ -163,7 +163,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95c558b45f35b47df8f36cabffb99028, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  active: 0
   BuildingHealth: {fileID: 11400000, guid: d7b4b90a065f04ae2a1770df0e152c92, type: 2}
   OnClaim:
     m_PersistentCalls:
@@ -448,6 +447,7 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
+  CoolDown: 0
 --- !u!1 &764697382
 GameObject:
   m_ObjectHideFlags: 0
@@ -1136,7 +1136,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StopFlag: 0
-  CoolDown: 10
+  CoolDown: 3
   _Object: {fileID: 2248256087404518340, guid: 773700babc222c242a218ecb417ff2a4, type: 3}
   _Container: {fileID: 1016618374}
   _PlayerContainer: {fileID: 0}
@@ -1144,7 +1144,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   AttachedStats: {fileID: 11400000, guid: d4daadf164451854c8c5982cee62e5f9, type: 2}
-  enemySpawner: 1
+  enemySpawner: 0
   autoSpawner: 1
   _Money: {fileID: 0}
   playerSwitch: {fileID: 0}
@@ -1364,6 +1364,7 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
+  CoolDown: 0
 --- !u!1 &1469721601
 GameObject:
   m_ObjectHideFlags: 0
@@ -1816,8 +1817,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: ff9b57653d8514f688cd477dcc4f9e1d, type: 3}
-  m_Resource: {fileID: 8300000, guid: ff9b57653d8514f688cd477dcc4f9e1d, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 808975b9637d841628b84392f3ffcc22, type: 3}
+  m_Resource: {fileID: 8300000, guid: 808975b9637d841628b84392f3ffcc22, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
