@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 
 public class Dialogue : MonoBehaviour
@@ -10,14 +9,12 @@ public class Dialogue : MonoBehaviour
     public float text_speed;
     private int index;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         text_component.text = string.Empty;
         start_dialogue();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(Input.GetMouseButtonDown(0))

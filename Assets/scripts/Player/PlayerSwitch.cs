@@ -19,13 +19,24 @@ public class PlayerSwitch : MonoBehaviour
         InputAction nextPlayerAction = InputSystem.actions.FindAction("NextPlayer");
         if (nextPlayerAction != null)
         {
-            nextPlayerAction.performed += SwitchPlayer;
+            nextPlayerAction.performed += SwitchPlayerRight;
             nextPlayerAction.Enable();
         }
         else
         {
             Debug.LogError("NextPlayer action not found in InputSystem!");
         }
+        InputAction prevPlayerAction = InputSystem.actions.FindAction("PreviousPlayer");
+        if (prevPlayerAction != null)
+        {
+            prevPlayerAction.performed += SwitchPlayerLeft;
+            prevPlayerAction.Enable();
+        }
+        else
+        {
+            Debug.LogError("PreviousPlayer action not found in InputSystem!");
+        }
+
 
         foreach (GameObject player in players)
         {
@@ -44,7 +55,7 @@ public class PlayerSwitch : MonoBehaviour
             ActivatePlayer(activePlayerIndex);
     }
 
-    public void SwitchPlayer(InputAction.CallbackContext context)
+    public void SwitchPlayerRight(InputAction.CallbackContext context)
     {
         if (!context.performed || players.Count == 0)
             return;
@@ -73,6 +84,37 @@ public class PlayerSwitch : MonoBehaviour
 
         ActivatePlayer(activePlayerIndex);
     }
+
+    public void SwitchPlayerLeft(InputAction.CallbackContext context)
+{
+    if (!context.performed || players.Count == 0)
+        return;
+
+    RemoveNullPlayers();
+
+    if (players.Count == 0 || playerCameras.Count == 0)
+    {
+        Debug.Log("No players available to switch to.");
+        return;
+    }
+
+    if (activePlayerIndex >= 0 && activePlayerIndex < players.Count && players[activePlayerIndex] != null)
+    {
+        var currentPlayer = players[activePlayerIndex].GetComponent<PlayersControlerScriptsManager>();
+        currentPlayer?.DisableControls();
+        playerCameras[activePlayerIndex].Priority = 0;
+    }
+
+    int startIndex = activePlayerIndex;
+    do
+    {
+        activePlayerIndex = (activePlayerIndex - 1 + players.Count) % players.Count;
+    }
+    while (players[activePlayerIndex] == null && activePlayerIndex != startIndex);
+
+    ActivatePlayer(activePlayerIndex);
+}
+
 
 
     private void RemoveNullPlayers()
@@ -113,8 +155,6 @@ public class PlayerSwitch : MonoBehaviour
                 playerCameras[i].Priority = 0;
             }
         }
-
-        Debug.Log($"Switched to Player {index + 1}");
     }
 
     public void AddPlayer(GameObject newPlayer)

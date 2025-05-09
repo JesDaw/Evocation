@@ -10,6 +10,8 @@ public class PauseMenu : MonoBehaviour
     public GameObject pauseMenuUI;
     [SerializeField] UnityEvent ToggleMenu;
     [SerializeField] UnityEvent _ResetValues;
+    [SerializeField] GameObject _settingsMenu;
+
 
 
     InputAction pauseAction;
@@ -37,7 +39,6 @@ public class PauseMenu : MonoBehaviour
     {
         if(context.performed && GameIsOver == false)
         {
-            Debug.Log(GameIsOver);
             if (GameIsPaused)
                 {
                     Resume();
@@ -58,6 +59,7 @@ public class PauseMenu : MonoBehaviour
     }
     public void Resume()
     {
+        if (_settingsMenu.activeSelf) _settingsMenu.SetActive(false);
         Debug.Log("resumed");
         ToggleMenu.Invoke();
         pauseMenuUI.SetActive(false);

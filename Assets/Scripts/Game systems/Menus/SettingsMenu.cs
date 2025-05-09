@@ -5,20 +5,42 @@ using System.Collections.Generic;
 
 public class SettingsMenu : MonoBehaviour
 {
-    public Slider volume_slider;
+    public Slider master_slider;
+    public Slider music_slider;
+    public Slider sfx_slider;
     public TMPro.TMP_Dropdown resolution_dropdown;
     public AudioMixer audio_mixer;
 
     Resolution[] resolutions;
 
+    void Awake()
+    {
+        load_settings();
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        load_settings();
+    }
+
+    //load the settings from player prefs
+    void load_settings()
+    {
         //using player pref to save the all setting changes acorss diff scenes
         //volume//////
-        float saved_volume = PlayerPrefs.GetFloat("Volume", 1f);
-        set_volume(saved_volume);
-        volume_slider.value = saved_volume;
+        float master_volume = PlayerPrefs.GetFloat("MasterVolume", 0.75f);
+        float music_volume = PlayerPrefs.GetFloat("MusicVolume", 0.75f);
+        float sfx_volume = PlayerPrefs.GetFloat("SFXVolume", 0.75f);
+
+        set_master(master_volume);
+        set_music(music_volume);
+        set_sfx(sfx_volume);
+
+        master_slider.value = master_volume;
+        music_slider.value = music_volume;
+        sfx_slider.value = sfx_volume;
+
 
         //quality/////
         int saved_quality = PlayerPrefs.GetInt("GraphicsQuality", QualitySettings.GetQualityLevel());
@@ -55,14 +77,26 @@ public class SettingsMenu : MonoBehaviour
         resolution_dropdown.RefreshShownValue();
     }
 
-    public void set_volume(float volume)
+    //convert volume values (0-1) to decibels
+    //0 dB = full volume
+    //-80 dB = silent
+    //fucntions for each volume slider
+    public void set_master(float volume)
     {
-        //convert volume values (0-1) to decibels
-        //0 dB = full volume
-        //-80 dB = silent
-        float dB = Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20;
-        audio_mixer.SetFloat("MasterVolume", dB);
-        PlayerPrefs.SetFloat("Volume", volume);
+        audio_mixer.SetFloat("MasterVolume", Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20);
+        PlayerPrefs.SetFloat("MasterVolume", volume);
+    }
+
+    public void set_music(float volume)
+    {
+        audio_mixer.SetFloat("MusicVolume", Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20);
+        PlayerPrefs.SetFloat("MusicVolume", volume);
+    }
+
+    public void set_sfx(float volume)
+    {
+        audio_mixer.SetFloat("SFXVolume", Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20);
+        PlayerPrefs.SetFloat("SFXVolume", volume);
     }
 
     public void set_quality (int qualityIndex)

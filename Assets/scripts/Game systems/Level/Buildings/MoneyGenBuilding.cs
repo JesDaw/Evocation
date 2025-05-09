@@ -5,20 +5,20 @@ public class MoneyGenBuilding : MonoBehaviour
 {
     [SerializeField] FloatVariable genPerSec;
     [SerializeField] FloatVariable moneyAmount;
-    [SerializeField] bool active;
+    //[SerializeField] bool active;
     [SerializeField] float ActivationMultiplier;
     [SerializeField] FloatVariable BuildingHealth;
 
     void OnEnable()
     {
-        active = false;
+       // active = false;
         ActivationMultiplier = 1f; 
         BuildingHealth.Reset();
     }
 
     void ClaimBuilding(bool PlayerTeam)
     {
-        active = true;
+        //active = true;
         BuildingBonus(PlayerTeam);
         BuildingHealth.Reset();
     }

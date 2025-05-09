@@ -10,9 +10,10 @@ public class PlayerCombat : MonoBehaviour
     public Animator animator;
     public Transform attackPoint;
     public LayerMask enemyLayers;
+    [SerializeField] PlayersControlerScriptsManager controlsManager;
 
     [SerializeField] AudioSource attackingAudio;
-    bool isAttacking = false;
+    //bool isAttacking = false;
 
     public void AttackAction(InputAction.CallbackContext context)
     {
@@ -24,9 +25,10 @@ public class PlayerCombat : MonoBehaviour
 
     IEnumerator AttackRoutine()
     {
-        isAttacking = true;
+       // isAttacking = true;
 
         // Startup
+        controlsManager.DisableControls();
         yield return new WaitForSeconds(playerStats._AttackStartup/framesPerSecond);
 
         // Active hit
@@ -35,14 +37,14 @@ public class PlayerCombat : MonoBehaviour
 
         // Endlag
         yield return new WaitForSeconds(playerStats._AttackEndlag/framesPerSecond);
+        controlsManager.EnableControls();
 
-        isAttacking = false;
+       // isAttacking = false;
     }
 
     void AttackActive()
     {
         // animator.SetTrigger("Attack");
-
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, playerStats._StopDistance, enemyLayers);
 
         foreach (Collider2D enemy in hitEnemies)
