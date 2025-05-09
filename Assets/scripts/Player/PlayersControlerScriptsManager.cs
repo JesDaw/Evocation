@@ -32,7 +32,6 @@ public class PlayersControlerScriptsManager : MonoBehaviour
             Debug.LogWarning($"{gameObject.name} does not have Player_Combat component.");
         }
 
-        Debug.Log($"{gameObject.name} controls enabled");
     }
 
     public void DisableControls()
@@ -60,8 +59,6 @@ public class PlayersControlerScriptsManager : MonoBehaviour
         {
             Debug.LogWarning($"{gameObject.name} does not have Player_Combat component.");
         }
-
-        Debug.Log($"{gameObject.name} controls disabled");
     }
 
     void OnDestroy()

@@ -11,6 +11,8 @@ public class SpawnerController : MonoBehaviour
 
 
     // Reference to the InputAction asset
+    InputSystem_Actions inputActions;
+
     private InputActionMap actionMap;
     public InputAction spawn1Action;
     private InputAction spawn2Action;
@@ -23,35 +25,34 @@ public class SpawnerController : MonoBehaviour
     private InputAction spawn9Action;
     private InputAction spawnPlayer;
 
-    private void Awake()
-{
-    var inputActions = new InputSystem_Actions();
-    actionMap = inputActions.SpawnerController;
+    void Awake()
+    {
+        inputActions = new InputSystem_Actions(); // store the reference
+        actionMap = inputActions.SpawnerController;
 
-    // Assign input actions
-    spawn1Action = actionMap["Spawn1"];
-    spawn2Action = actionMap["Spawn2"];
-    spawn3Action = actionMap["Spawn3"];
-    spawn4Action = actionMap["Spawn4"];
-    spawn5Action = actionMap["Spawn5"];
-    spawn6Action = actionMap["Spawn6"];
-    spawn7Action = actionMap["Spawn7"];
-    spawn8Action = actionMap["Spawn8"];
-    spawn9Action = actionMap["Spawn9"];
-    spawnPlayer = actionMap["SpawnPlayer"];
+        spawn1Action = actionMap["Spawn1"];
+        spawn2Action = actionMap["Spawn2"];
+        spawn3Action = actionMap["Spawn3"];
+        spawn4Action = actionMap["Spawn4"];
+        spawn5Action = actionMap["Spawn5"];
+        spawn6Action = actionMap["Spawn6"];
+        spawn7Action = actionMap["Spawn7"];
+        spawn8Action = actionMap["Spawn8"];
+        spawn9Action = actionMap["Spawn9"];
+        spawnPlayer = actionMap["SpawnPlayer"];
 
-    // Bind input actions to functions
-    spawn1Action.performed += Spawn1;
-    spawn2Action.performed += Spawn2;
-    spawn3Action.performed += Spawn3;
-    spawn4Action.performed += Spawn4;
-    spawn5Action.performed += Spawn5;
-    spawn6Action.performed += Spawn6;
-    spawn7Action.performed += Spawn7;
-    spawn8Action.performed += Spawn8;
-    spawn9Action.performed += Spawn9;
-    spawnPlayer.performed += SpawnPlayer;
-}
+        spawn1Action.performed += Spawn1;
+        spawn2Action.performed += Spawn2;
+        spawn3Action.performed += Spawn3;
+        spawn4Action.performed += Spawn4;
+        spawn5Action.performed += Spawn5;
+        spawn6Action.performed += Spawn6;
+        spawn7Action.performed += Spawn7;
+        spawn8Action.performed += Spawn8;
+        spawn9Action.performed += Spawn9;
+        spawnPlayer.performed += SpawnPlayer;
+    }
+
 
     public void Spawn1(InputAction.CallbackContext context){ Spawn(context, 0);}
     public void Spawn2(InputAction.CallbackContext context){ Spawn(context, 1);}
@@ -74,17 +75,25 @@ public class SpawnerController : MonoBehaviour
         actionMap.Disable();
     }
 
+    void OnDestroy()
+    {
+        inputActions.Dispose();
+    }
+
+
     void Spawn(InputAction.CallbackContext context, int index)
     {
-        // Check if the index is within bounds of the spawnables list
+        if (!context.performed) return;
         if (index >= 0 && index < spawnables.Count) 
         {
             spawnObjects.Spawn(spawnables[index]);
+            Debug.Log("here");
+            Debug.Log(index);
+
         }
         else
         {
             Debug.LogWarning("Invalid index: No spawnable object at index " + index);
         }
-        Debug.Log("Spawn called with index: " + index);
     }
 }

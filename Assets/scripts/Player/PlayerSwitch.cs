@@ -155,8 +155,6 @@ public class PlayerSwitch : MonoBehaviour
                 playerCameras[i].Priority = 0;
             }
         }
-
-        Debug.Log($"Switched to Player {index + 1}");
     }
 
     public void AddPlayer(GameObject newPlayer)

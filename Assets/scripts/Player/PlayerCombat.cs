@@ -13,7 +13,7 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] PlayersControlerScriptsManager controlsManager;
 
     [SerializeField] AudioSource attackingAudio;
-    bool isAttacking = false;
+    //bool isAttacking = false;
 
     public void AttackAction(InputAction.CallbackContext context)
     {
@@ -25,7 +25,7 @@ public class PlayerCombat : MonoBehaviour
 
     IEnumerator AttackRoutine()
     {
-        isAttacking = true;
+       // isAttacking = true;
 
         // Startup
         controlsManager.DisableControls();
@@ -39,7 +39,7 @@ public class PlayerCombat : MonoBehaviour
         yield return new WaitForSeconds(playerStats._AttackEndlag/framesPerSecond);
         controlsManager.EnableControls();
 
-        isAttacking = false;
+       // isAttacking = false;
     }
 
     void AttackActive()
