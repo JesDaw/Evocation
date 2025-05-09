@@ -1,178 +1,184 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class CpuLogic : MonoBehaviour
 {
     public ScriptableStats ScrStats;
-    public bool _Enemy; 
-
+    //god I hate this, this is for rotation for the enemies since they will face the other side
+    //I SHOULD HAVE WRITTEN A SCRIPT TO CONTROL FOR ALL ROTATION DAWMN ITHTJOIFI
+    public bool _Enemy;
     [SerializeField] Stats _Stats;
-
-    [Header("Required Components")]
+    //this is for testing
+    [Header("Req Components")]
     [SerializeField] Transform _Raycast;
     [SerializeField] SpriteRenderer _Renderer;
     [SerializeField] Rigidbody2D _Body;
     [SerializeField] AudioSource attackingAudio;
-    [SerializeField] Animator animator;
-
     [SerializeField] float _RadiusDetection;
-
     [Header("Events")]
     [SerializeField] UnityEvent OnSpawn;
     [SerializeField] CpuUtilis Utilis;
-
     private bool _AlreadyAttacked = false;
     private bool _Freeze = false;
-
     void Start()
     {
-        // Copy stats from ScriptableObject
+        //Set Stats class to ScriptableObject
         _Stats._Clan = ScrStats._Clan;
         gameObject.tag = _Stats._Clan;
         _Stats._Health = ScrStats._Health;
         _Stats._AttackDamage = ScrStats._AttackDamage;
-        _Stats._AttackStartup = ScrStats._AttackStartup;
-        _Stats._AttackActiveDuration = ScrStats._AttackActiveDuration;
         _Stats._AttackEndlag = ScrStats._AttackEndlag;
         _Stats._MoveSpeed = ScrStats._MoveSpeed;
-        _Stats._StopDistance = ScrStats._StopDistance + Random.Range(-0.3f, 0.3f);
+
+        //just looks better if they slightyoffset
+        float randomNumber = Random.Range(-0.3f, 0.3f);
+        _Stats._StopDistance = ScrStats._StopDistance + randomNumber;
         _Stats._CpuPriority = ScrStats._CpuPriority;
+
+        //knockback
         _Stats._KnockBackHealth = ScrStats._KnockBackHealth;
         _Stats._KnockBackVelocity = ScrStats._KnockBackVelocity;
         _Stats._KnockBackMax = ScrStats._KnockBackHealth;
+
+        //status effects
         _Stats._StatusHealth = ScrStats._StatusHealth;
         _Stats._StatusMax = ScrStats._StatusHealth;
-
+        
         _Renderer.sprite = ScrStats._Sprite;
+
         OnSpawn.Invoke();
     }
 
-    void Update()
+    void SwitchSides(bool Direction)
     {
-        if (_Freeze) return;
 
-        RaycastHit2D[] hits = Physics2D.RaycastAll(_Raycast.position, transform.right, _Stats._StopDistance);
-        Debug.DrawRay(_Raycast.position, transform.right * _Stats._StopDistance, Color.red);
+        //there are two seperate thing managing rotation but this one constantly overloads it
+        //shoud've made a rotation manager
+        //a bit of a hack ;=; i hope nobody needs to read this
+        if (_Enemy) Direction = !Direction;
 
-        Collider2D[] surroundingHits = Physics2D.OverlapCircleAll(transform.position, _RadiusDetection, LayerMask.GetMask("Player"));
-        if (surroundingHits.Length == 0)
+        GameObject CurrentGameObject = this.gameObject;
+        Vector3 CurrentObjectRotation = transform.eulerAngles;
+
+        if (Direction)
         {
-            SwitchSides(false);
+            CurrentObjectRotation = new Vector3(0, 180, 0);
         }
         else
         {
-            bool faceRight = surroundingHits[0].transform.position.x - transform.position.x > 0;
-            if (_Enemy) faceRight = !faceRight;
-            SwitchSides(faceRight);
+            CurrentObjectRotation = new Vector3(0, 0, 0);
         }
 
-        _Stats._MoveSpeed = ScrStats._MoveSpeed;
-        if (hits.Length == 0) return;
+        CurrentGameObject.transform.eulerAngles = CurrentObjectRotation;
 
-        GameObject target = FindTargetFromRaycast(hits);
-        if (target == null) return;
+        Transform child = CurrentGameObject.transform.GetChild(0);
+        child.localRotation = Quaternion.identity; 
+
+    }
+    void Update()
+    {
+        if(_Freeze) return;
+
+        RaycastHit2D[] hits = Physics2D.RaycastAll(_Raycast.position, transform.right, _Stats._StopDistance);
+        Debug.DrawRay(_Raycast.position, transform.right * _Stats._StopDistance, Color.red);
+        
+        Collider2D[] SurroundingHits = Physics2D.OverlapCircleAll(this.transform.position, _RadiusDetection, LayerMask.GetMask("Player/NeutralLane"));
+
+        if(SurroundingHits.Length <= 0) SwitchSides(false);
+        else if(SurroundingHits[0].transform.position.x - transform.position.x > 0 && _Enemy) SwitchSides(true);
+
+        //what to do when detect something
+        _Stats._MoveSpeed = ScrStats._MoveSpeed;
+        if (hits.Length <= 0) return;
+
+        int SavedIndex = -1;
+        for (int I = 0; I < _Stats._CpuPriority.Count; I++)
+        {
+            for (int II = 0; II < hits.Length; II++)
+            {
+                if (gameObject.layer == 10 && hits[II].collider.gameObject.layer == 11) continue;
+                if (hits[II].collider.gameObject.layer == gameObject.layer) continue;
+                if (hits[II].collider.CompareTag(_Stats._CpuPriority[I]))
+                {
+                    SavedIndex = II;
+                    break;
+                }
+            }
+            if (SavedIndex != -1)
+            {
+                break;
+            }
+        }
+
+        if (SavedIndex == -1) return;
 
         _Stats._MoveSpeed = 0;
 
-        if (!_AlreadyAttacked)
-        {
-            StartCoroutine(AttackRoutine(target));
-        }
-    }
+        GameObject EnemyGameobject = hits[SavedIndex].collider.gameObject;
+        Stats EnemyStats = EnemyGameobject.GetComponent<Stats>();
+        if (EnemyStats == null) return;
+        
+        if (_AlreadyAttacked) return;
+        StartCoroutine(AttackCooldown());
 
-    GameObject FindTargetFromRaycast(RaycastHit2D[] hits)
-    {
-        for (int i = 0; i < _Stats._CpuPriority.Count; i++)
+        //Utilis.SpawnMobs
+        for(int I = 0; I < ScrStats.OnAttack.Count; I++)
         {
-            foreach (RaycastHit2D hit in hits)
+            Utilis.SelectOnAttack(ScrStats.OnAttack[I], ScrStats, EnemyGameobject);
+        }
+        //Enemy Attack
+        Debug.Log("Attacked Enemy" + hits[SavedIndex].collider.gameObject.name);
+        EnemyStats.Attack(_Stats._AttackDamage);
+        attackingAudio.Play();
+        
+        //Status Effects
+        if(EnemyStats._StatusHealth <= 0)
+        {
+            if(ScrStats._EffectsToApply.Count == 0) return;
+
+            foreach(StatusEffect effect in ScrStats._EffectsToApply)
             {
-                if (gameObject.layer == 10 && hit.collider.gameObject.layer == 11) continue;
-                if (hit.collider.gameObject.layer == gameObject.layer) continue;
-                if (hit.collider.CompareTag(_Stats._CpuPriority[i]))
-                {
-                    return hit.collider.gameObject;
-                }
+                if(effect is null) return;
+                Debug.Log("Effect Applied");
+                EnemyStats.AddStatusEffect(effect);
             }
         }
-        return null;
+        else
+        {
+            EnemyStats._StatusHealth--;
+        }
+    }
+    public void ApplyTempSpeed(Vector2 _SpeedInfo)
+    {
+        StartCoroutine(TempSpeed(_SpeedInfo.x));
+    }
+    IEnumerator TempSpeed(float _TempSpeed)
+    {
+        Debug.Log(_TempSpeed);
+
+        _Freeze = true;
+        _Stats._MoveSpeed = _TempSpeed;
+
+        //x knockback scales exponentially, which is a problem...
+        //but it works fine
+        //and I'm too lazy to test values
+        yield return new WaitForSeconds(ScrStats._MoveSpeed/15f);
+        _Freeze = false;
     }
 
-    IEnumerator AttackRoutine(GameObject target)
+    IEnumerator AttackCooldown()
     {
         _AlreadyAttacked = true;
-        _Stats._MoveSpeed = 0;
-        _Freeze = true;
-
-        yield return new WaitForSeconds(_Stats._AttackStartup / 60f);
-
-        if (animator != null)
-            animator.SetTrigger("Attack");
-
-        if (target != null)
-        {
-            if (target.TryGetComponent(out Stats enemyStats))
-            {
-                enemyStats.Attack(_Stats._AttackDamage);
-
-                foreach (var effect in ScrStats.OnAttack)
-                    Utilis.SelectOnAttack(effect, ScrStats, target);
-
-                if (enemyStats._StatusHealth <= 0)
-                {
-                    foreach (StatusEffect effect in ScrStats._EffectsToApply)
-                    {
-                        if (effect != null)
-                            enemyStats.AddStatusEffect(effect);
-                    }
-                }
-                else
-                {
-                    enemyStats._StatusHealth--;
-                }
-            }
-            else if (target.TryGetComponent(out BuildingHealth buildingHealth))
-            {
-                buildingHealth.TakeDamage(_Stats._AttackDamage);
-            }
-        }
-
-        attackingAudio.Play();
-        yield return new WaitForSeconds(_Stats._AttackActiveDuration / 60f);
-        yield return new WaitForSeconds(_Stats._AttackEndlag / 60f);
-
-        _Freeze = false;
+        yield return new WaitForSeconds(_Stats._AttackEndlag);
         _AlreadyAttacked = false;
-    }
-
-    void SwitchSides(bool faceRight)
-    {
-        if (_Enemy) faceRight = !faceRight;
-
-        transform.eulerAngles = faceRight ? new Vector3(0, 180, 0) : Vector3.zero;
-
-        if (transform.childCount > 0)
-        {
-            transform.GetChild(0).localRotation = Quaternion.identity;
-        }
-    }
-
-    public void ApplyTempSpeed(Vector2 speedInfo)
-    {
-        StartCoroutine(TempSpeed(speedInfo.x));
-    }
-
-    IEnumerator TempSpeed(float tempSpeed)
-    {
-        _Freeze = true;
-        _Stats._MoveSpeed = tempSpeed;
-        yield return new WaitForSeconds(ScrStats._MoveSpeed / 6f);
-        _Freeze = false;
     }
 
     void FixedUpdate()
     {
         _Body.linearVelocity = new Vector2(_Stats._MoveSpeed * transform.right.x, _Body.linearVelocity.y);
     }
+    //util
+
 }
