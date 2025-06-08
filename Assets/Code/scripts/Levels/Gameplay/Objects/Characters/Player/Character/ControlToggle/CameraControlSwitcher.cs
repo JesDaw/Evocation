@@ -4,10 +4,10 @@ using Unity.Cinemachine;
 
 public class CameraControlSwitcher : MonoBehaviour
 {
-    // 🎥 Camera References
+    // Camera References
     [SerializeField] private CinemachineCamera freeCam;
 
-    // 🎮 Script References
+    // Script References
     [SerializeField] private CameraController cameraMovement;
     [SerializeField] private PlayerSwitch playerSwitcher;
     [SerializeField] private IntVeriable player_lives;
