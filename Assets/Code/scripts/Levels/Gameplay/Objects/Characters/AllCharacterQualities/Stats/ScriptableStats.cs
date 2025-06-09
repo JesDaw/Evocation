@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Cpu", menuName = "Cpu", order = 0)]
+[CreateAssetMenu(fileName = "Stats", menuName = "Stats", order = 0)]
 public class ScriptableStats : ScriptableObject
 {
     public List<string> _CpuPriority;

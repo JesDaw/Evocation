@@ -8,6 +8,8 @@ public class Stats : MonoBehaviour
 {
     public List<string> _CpuPriority;
     public string _Clan;
+
+    //the above can be made into an enum, but i'll hold off on it until we get all the different clans
     public int _Health = 1;
     public int _AttackDamage;
     public int _AttackStartup;
@@ -36,6 +38,7 @@ public class Stats : MonoBehaviour
     [SerializeField] UnityEvent<StatusEffect> OnTick;
     [SerializeField] UnityEvent<Vector2> OnKnocked;
     [SerializeField] bool _Invincible = false;
+    [SerializeField] bool _DontDestroy = false;
 
     public void ToggleInvinciblity(){ _Invincible = !_Invincible; }
 
@@ -93,6 +96,7 @@ public class Stats : MonoBehaviour
         if (_Health <= 0)
         {
             OnDeath.Invoke();
+            if (_DontDestroy) return;
             Destroy(gameObject);
         }
 
@@ -101,6 +105,10 @@ public class Stats : MonoBehaviour
             _KnockBackHealth = _KnockBackMax;
             OnKnocked.Invoke(new Vector2(-1 * _KnockBackVelocity, 0.5f * _KnockBackVelocity));
         }
+    }
+    public void SetHealth(int _Amount)
+    {
+        _Health = _Amount;
     }
 
     public void AddStatusEffect(StatusEffect _effect)
