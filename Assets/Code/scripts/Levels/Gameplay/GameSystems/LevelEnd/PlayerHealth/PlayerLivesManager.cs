@@ -29,6 +29,7 @@ public class PlayerLivesManager : MonoBehaviour
         }
     }
 
+    //referanced my player character "onDeath" event
     public void LooseLife()
     {
         LifeCount._Value--;
@@ -40,7 +41,7 @@ public class PlayerLivesManager : MonoBehaviour
         }
         else
         {
-        
+
             var currentPlayer = playerSwitch.GetCurrentPlayerController();
 
             if (currentPlayer != null)
@@ -50,13 +51,7 @@ public class PlayerLivesManager : MonoBehaviour
                 if (playerObject != playerSwitch.GetCurrentPlayerController()?.gameObject)
                 {
                     playerSwitch.RemovePlayer(playerObject);
-                    Destroy(playerObject);
                 }
-            }
-
-            if (LifeCount._Value > 0 && playerSwitch.GetCurrentPlayerController() != null)
-            {
-                playerSwitch.SwitchPlayerRight(default);
             }
         }
     }
