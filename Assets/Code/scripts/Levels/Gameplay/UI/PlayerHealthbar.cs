@@ -129,7 +129,7 @@ public class PlayerHealthbar : MonoBehaviour
         getPlayerStats(out Stats stats);
         if (stats != null)
         {
-            updateHealthIndicator(stats._Health);
+            updateHealthIndicator(stats._CurrentHealth);
         }
     }
 

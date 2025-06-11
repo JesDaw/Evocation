@@ -140,7 +140,7 @@ public class PlayerHealthbarTest : PlayerHealthbarTestBase
     public IEnumerator InitialSliderMatchesPlayer()
     {
         componentUnderTest.getPlayerStats(out Stats stats);
-        Assert.AreEqual(stats._Health, mySlider.value);
+        Assert.AreEqual(stats._CurrentHealth, mySlider.value);
         Assert.AreEqual(stats._MaxHealth, mySlider.maxValue);
         yield return null;
     }
@@ -149,12 +149,12 @@ public class PlayerHealthbarTest : PlayerHealthbarTestBase
     public IEnumerator SliderUpdatesWithPlayerDamage()
     {
         componentUnderTest.getPlayerStats(out Stats stats);
-        int initHealth = stats._Health;
+        int initHealth = stats._CurrentHealth;
         stats.Attack(1);
         yield return new WaitForSeconds(0.1f);
 
         Assert.AreNotEqual(initHealth, mySlider.value);
-        Assert.AreEqual(stats._Health, mySlider.value);
+        Assert.AreEqual(stats._CurrentHealth, mySlider.value);
         Assert.AreEqual(stats._MaxHealth, mySlider.maxValue);
         yield return null;
     }
@@ -163,7 +163,7 @@ public class PlayerHealthbarTest : PlayerHealthbarTestBase
     public IEnumerator SliderUpdatesWithPlayerDeath()
     {
         componentUnderTest.getPlayerStats(out Stats stats);
-        int initHealth = stats._Health;
+        int initHealth = stats._CurrentHealth;
         stats.Attack(initHealth);  // Kill the player
 
         yield return new WaitForSeconds(0.1f);
