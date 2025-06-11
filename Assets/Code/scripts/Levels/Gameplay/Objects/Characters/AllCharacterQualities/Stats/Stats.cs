@@ -8,7 +8,8 @@ public class Stats : MonoBehaviour
 {
     public List<string> _CpuPriority;
     public string _Clan;
-    public int _Health = 1;
+    public int _MaxHealth = 1;
+    public int _CurrentHealth = 1;
     public int _AttackDamage;
     public int _AttackStartup;
     public int _AttackActiveDuration;
@@ -42,6 +43,7 @@ public class Stats : MonoBehaviour
     public void Start()
     {
         StartCoroutine(StatusEffectLoop());
+        _CurrentHealth = _MaxHealth;
     }
 
     IEnumerator StatusEffectLoop()
@@ -85,12 +87,12 @@ public class Stats : MonoBehaviour
     {
         if (_Invincible) return;
 
-        _Health -= _Damage;
+        _CurrentHealth -= _Damage;
         _KnockBackHealth -= _Damage;
 
         OnDamage.Invoke();
 
-        if (_Health <= 0)
+        if (_CurrentHealth <= 0)
         {
             OnDeath.Invoke();
             Destroy(gameObject);

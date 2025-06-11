@@ -67,8 +67,8 @@ public class PlayerHealthbar : MonoBehaviour
             //    The Healthbar won't work properly without it when switching
             //    between players because the bar will appear full even when
             //    the newly active player is injured.
-            _Slider.maxValue = stats._Health;
-            _Slider.value = stats._Health;
+            _Slider.maxValue = stats._MaxHealth;
+            _Slider.value = stats._CurrentHealth;
         }
     }
 
@@ -113,7 +113,7 @@ public class PlayerHealthbar : MonoBehaviour
         getPlayerStats(out Stats stats);
         if (stats != null)
         {
-            _Slider.value = stats._Health;
+            _Slider.value = stats._CurrentHealth;
         }
     }
 
