@@ -15,7 +15,7 @@ public class ParallaxEffect2D : MonoBehaviour
         lengthX = spriteRenderer.bounds.size.x; 
     }
 
-    void FixedUpdate()
+    void LateUpdate()
     {
         float distanceX = cam.transform.position.x * parallaxSpeedX;
         float distanceY = cam.transform.position.y * parallaxSpeedY;
