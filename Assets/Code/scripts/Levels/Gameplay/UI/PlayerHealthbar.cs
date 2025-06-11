@@ -79,7 +79,7 @@ public class PlayerHealthbar : MonoBehaviour
         if (stats != null)
         {
             updateMaxHealthIndicator(stats._MaxHealth);
-            updateHealthIndicator(stats._Health);
+            updateHealthIndicator(stats._CurrentHealth);
         }
         else
         {
