@@ -8,6 +8,7 @@ public class Stats : MonoBehaviour
 {
     public List<string> _CpuPriority;
     public string _Clan;
+    public int _MaxHealth = 1;
     public int _Health = 1;
     public int _AttackDamage;
     public int _AttackStartup;
