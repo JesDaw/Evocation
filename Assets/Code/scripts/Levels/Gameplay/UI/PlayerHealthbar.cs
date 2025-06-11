@@ -3,10 +3,25 @@ using UnityEngine.UI;
 
 public class PlayerHealthbar : MonoBehaviour
 {
-    [SerializeField] ActivePlayer ActivePlayer;
-    [SerializeField] Slider _Slider;
+    [SerializeField] internal ActivePlayer ActivePlayer;
+    [SerializeField] internal Slider _Slider;
 
-    void Start()
+    internal delegate void UpdateHealth(int value);
+    internal delegate void UpdateMaxHealth(int value);
+
+    // Function called to update the Health indicator
+    internal UpdateHealth updateHealthIndicator;
+
+    // Function called to update the Max Health indicator
+    internal UpdateMaxHealth updateMaxHealthIndicator;
+
+    internal PlayerHealthbar()
+    {
+        updateHealthIndicator = (x) => _Slider.value = x;
+        updateMaxHealthIndicator = (x) => _Slider.maxValue = x;
+    }
+
+    internal void Start()
     {
         Debug.Assert(ActivePlayer != null, "This should've already been set via the Editor!");
 
@@ -23,7 +38,7 @@ public class PlayerHealthbar : MonoBehaviour
     /// </summary>
     /// <param name="player">A player GameObject, 'null' defaults to the Active Player</param>
     /// <param name="result">Current stats</param>
-    void getPlayerStats(GameObject player, out Stats result)
+    internal void getPlayerStats(GameObject player, out Stats result)
     {
         result = null;
 
@@ -32,13 +47,16 @@ public class PlayerHealthbar : MonoBehaviour
             player = ActivePlayer.CurrentPlayer;
         }
 
-        if ((player != null) && player.TryGetComponent<Stats>(out Stats stats))
+        if (player != null)
         {
-            result = stats;
-        }
-        else
-        {
-            Debug.LogWarning($"Stats component not found on player {player}!");
+            if (player.TryGetComponent<Stats>(out Stats stats))
+            {
+                result = stats;
+            }
+            else
+            {
+                Debug.LogWarning($"Stats component not found on player {player}!");
+            }
         }
     }
 
@@ -46,7 +64,7 @@ public class PlayerHealthbar : MonoBehaviour
     /// Get the active player stats
     /// </summary>
     /// <param name="result">Player Stats</param>
-    void getPlayerStats(out Stats result)
+    internal void getPlayerStats(out Stats result)
     {
         getPlayerStats(null, out Stats stats);
         result = stats;
@@ -55,20 +73,18 @@ public class PlayerHealthbar : MonoBehaviour
     /// <summary>
     /// Set the HealthBar according to the active player stats
     /// </summary>
-    public void UpdateHealth()
+    public void updateHealthStats()
     {
         getPlayerStats(out Stats stats);
         if (stats != null)
         {
-            // FIXME:  
-            //    We need a stats._MaxHealth (or something equivalent) to
-            //    set the slider with.
-            //
-            //    The Healthbar won't work properly without it when switching
-            //    between players because the bar will appear full even when
-            //    the newly active player is injured.
-            _Slider.maxValue = stats._MaxHealth;
-            _Slider.value = stats._CurrentHealth;
+            updateMaxHealthIndicator(stats._MaxHealth);
+            updateHealthIndicator(stats._CurrentHealth);
+        }
+        else
+        {
+            updateMaxHealthIndicator(0);
+            updateHealthIndicator(0);
         }
     }
 
@@ -76,7 +92,7 @@ public class PlayerHealthbar : MonoBehaviour
     /// Called when the active player is about to be switched
     /// </summary>
     /// <param name="player">The player about to be deactivated</param>
-    void OnPlayerDeactivating(GameObject player)
+    internal void OnPlayerDeactivating(GameObject player)
     {
         Debug.Assert(player == ActivePlayer.CurrentPlayer);
         getPlayerStats(player, out Stats stats);
@@ -91,7 +107,7 @@ public class PlayerHealthbar : MonoBehaviour
     /// Called when a player is 'activated'
     /// </summary>
     /// <param name="player">New, active player</param>
-    void OnPlayerActivating(GameObject player)
+    internal void OnPlayerActivating(GameObject player)
     {
         Debug.Assert(player == ActivePlayer.CurrentPlayer);
         getPlayerStats(player, out Stats stats);
@@ -101,19 +117,19 @@ public class PlayerHealthbar : MonoBehaviour
             stats.OnDeath += OnActivePlayerDeath;
         }
 
-        UpdateHealth();
+        updateHealthStats();
     }
 
     /// <summary>
     /// Called when the currently active player takes damage so
     /// that the health bar can be updated
     /// </summary>
-    void OnActivePlayerDamage()
+    internal void OnActivePlayerDamage()
     {
         getPlayerStats(out Stats stats);
         if (stats != null)
         {
-            _Slider.value = stats._CurrentHealth;
+            updateHealthIndicator(stats._CurrentHealth);
         }
     }
 
@@ -121,8 +137,8 @@ public class PlayerHealthbar : MonoBehaviour
     /// Called when the currently active player dies so the
     /// health bar can be updated.
     /// </summary>
-    void OnActivePlayerDeath()
+    internal void OnActivePlayerDeath()
     {
-        _Slider.value = 0;
+        updateHealthIndicator(0);
     }
 }
