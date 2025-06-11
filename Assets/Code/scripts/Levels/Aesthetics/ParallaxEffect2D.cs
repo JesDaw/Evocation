@@ -12,7 +12,7 @@ public class ParallaxEffect2D : MonoBehaviour
         startPosY = transform.position.y;
 
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
-        lengthX = spriteRenderer.bounds.size.x; 
+        lengthX = spriteRenderer.bounds.size.x;
     }
 
     void LateUpdate()
