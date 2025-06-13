@@ -16,13 +16,13 @@ using System;
 
 public class MainMenuTest
 {
-    const string MAIN_MENU_LABEL = "MainMenu";
-    const string CREDITS_LABEL = "Credits";
-    const string CONTROLS_LABEL = "Controls";
+    const string MAIN_MENU_LABEL = "SA_0_MainMenu";
+    const string CREDITS_LABEL = "SA_3_Credits";
+    const string CONTROLS_LABEL = "SA_2_Controls";
 
-    const string SETTINGS_LABEL = "Settings";
+    const string SETTINGS_LABEL = "SA_Settings";
 
-    const string LEVEL_SELECT_LABEL = "LevelSelectMenu";
+    const string LEVEL_SELECT_LABEL = "SA_1_LevelSelectMenu";
 
     /// <summary>
     /// Maps submenu names to all the Root GameObjects that should be active
@@ -125,9 +125,12 @@ public class MainMenuTest
         {
             GameObject obj = t.gameObject;
 
+            // Ignore the SceneActivityManager
+            if (obj.name == "SceneActivityManager") continue;
+
             if (enabledSet.Contains(obj.name) ^ obj.activeInHierarchy)
             {
-                Debug.Log($"{obj} has an unexpected active state!");
+                Debug.Log($"{obj.name}, {obj} has an unexpected active state!");
                 return false;
             }
         }
