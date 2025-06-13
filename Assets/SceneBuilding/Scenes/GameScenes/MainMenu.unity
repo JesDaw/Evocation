@@ -1131,14 +1131,15 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1165459792}
-  - {fileID: 868902414}
-  - {fileID: 1190284747}
-  - {fileID: 562140604}
-  - {fileID: 1133431306}
   - {fileID: 2052672329}
+  - {fileID: 868902414}
+  - {fileID: 562140604}
+  - {fileID: 1190284747}
+  - {fileID: 1133431306}
   - {fileID: 1181174567}
   - {fileID: 879929181}
   - {fileID: 2087149657}
+  - {fileID: 223952498}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1146,6 +1147,53 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &223952497
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 223952498}
+  - component: {fileID: 223952499}
+  m_Layer: 5
+  m_Name: SceneActivityManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &223952498
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 223952497}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 202818072}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &223952499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 223952497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d43fd9e3492a856409f11b15efaca0da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ActivityChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &240561748
 GameObject:
   m_ObjectHideFlags: 0
@@ -1514,22 +1562,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1190284746}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 1
-      - m_Target: {fileID: 2052672327}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 291740423}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: click_sound
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1538,9 +1574,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 291740423}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: click_sound
+      - m_Target: {fileID: 223952499}
+        m_TargetAssemblyTypeName: SceneActivityManager, CodeAssembly
+        m_MethodName: ActivateBack
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3370,8 +3406,9 @@ GameObject:
   m_Component:
   - component: {fileID: 562140604}
   - component: {fileID: 562140606}
+  - component: {fileID: 562140607}
   m_Layer: 5
-  m_Name: Controls
+  m_Name: SA_2_Controls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3410,6 +3447,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 365e8d733bcf54a7e8ba094d96743d1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &562140607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 562140603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00b7d357ae468ed48a16301d851e302e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  disableDefaultBehavior: 0
+  OnActivityStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnActivityStop:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &563515753
 GameObject:
   m_ObjectHideFlags: 0
@@ -4158,22 +4214,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2052672327}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 1
-      - m_Target: {fileID: 868902413}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 681587526}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: click_sound
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4182,9 +4226,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 681587526}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: click_sound
+      - m_Target: {fileID: 223952499}
+        m_TargetAssemblyTypeName: SceneActivityManager, CodeAssembly
+        m_MethodName: ActivateSA1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4874,8 +4918,9 @@ GameObject:
   - component: {fileID: 868902414}
   - component: {fileID: 868902415}
   - component: {fileID: 868902416}
+  - component: {fileID: 868902417}
   m_Layer: 5
-  m_Name: LevelSelectMenu
+  m_Name: SA_1_LevelSelectMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4938,6 +4983,25 @@ MonoBehaviour:
   transition: {fileID: 2087149658}
   levelLoader: {fileID: 284021066}
   transitionTime: 1
+--- !u!114 &868902417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 868902413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00b7d357ae468ed48a16301d851e302e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  disableDefaultBehavior: 0
+  OnActivityStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnActivityStop:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &876925366
 GameObject:
   m_ObjectHideFlags: 0
@@ -5109,7 +5173,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000030517578}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &879929182
@@ -6665,8 +6729,9 @@ GameObject:
   - component: {fileID: 1133431306}
   - component: {fileID: 1133431308}
   - component: {fileID: 1133431307}
+  - component: {fileID: 1133431309}
   m_Layer: 5
-  m_Name: SettingsMenu
+  m_Name: SA_Settings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6722,6 +6787,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 365e8d733bcf54a7e8ba094d96743d1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1133431309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1133431305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00b7d357ae468ed48a16301d851e302e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  disableDefaultBehavior: 0
+  OnActivityStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnActivityStop:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1135547308
 GameObject:
   m_ObjectHideFlags: 0
@@ -7154,8 +7238,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1190284747}
   - component: {fileID: 1190284749}
+  - component: {fileID: 1190284750}
   m_Layer: 5
-  m_Name: Credits
+  m_Name: SA_3_Credits
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7197,6 +7282,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 365e8d733bcf54a7e8ba094d96743d1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1190284750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1190284746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00b7d357ae468ed48a16301d851e302e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  disableDefaultBehavior: 0
+  OnActivityStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnActivityStop:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1219606708
 GameObject:
   m_ObjectHideFlags: 0
@@ -7294,10 +7398,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2052672327}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 1219606710}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: click_sound
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -7306,21 +7410,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 562140603}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 1219606710}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: click_sound
+      - m_Target: {fileID: 223952499}
+        m_TargetAssemblyTypeName: SceneActivityManager, CodeAssembly
+        m_MethodName: ActivateSA2
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9060,22 +9152,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 562140603}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 1
-      - m_Target: {fileID: 2052672327}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 1420638841}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: click_sound
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -9084,9 +9164,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 1420638841}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: click_sound
+      - m_Target: {fileID: 223952499}
+        m_TargetAssemblyTypeName: SceneActivityManager, CodeAssembly
+        m_MethodName: ActivateBack
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9483,22 +9563,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2052672327}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 1
-      - m_Target: {fileID: 1133431305}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 1498844548}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: click_sound
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -9507,9 +9575,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 1498844548}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: click_sound
+      - m_Target: {fileID: 223952499}
+        m_TargetAssemblyTypeName: SceneActivityManager, CodeAssembly
+        m_MethodName: ActivateSettings
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11274,10 +11342,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2052672327}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 1671554207}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: click_sound
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -11286,21 +11354,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1190284746}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 1671554207}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: click_sound
+      - m_Target: {fileID: 223952499}
+        m_TargetAssemblyTypeName: SceneActivityManager, CodeAssembly
+        m_MethodName: ActivateSA3
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12412,22 +12468,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 868902413}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 1
-      - m_Target: {fileID: 2052672327}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 1945816108}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: click_sound
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -12436,9 +12480,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 1945816108}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: click_sound
+      - m_Target: {fileID: 223952499}
+        m_TargetAssemblyTypeName: SceneActivityManager, CodeAssembly
+        m_MethodName: ActivateBack
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -13304,22 +13348,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1133431305}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 1
-      - m_Target: {fileID: 2052672327}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 2051630651}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: click_sound
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -13328,9 +13360,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 2051630651}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: click_sound
+      - m_Target: {fileID: 223952499}
+        m_TargetAssemblyTypeName: SceneActivityManager, CodeAssembly
+        m_MethodName: ActivateBack
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -13388,8 +13420,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2052672329}
   - component: {fileID: 2052672328}
+  - component: {fileID: 2052672330}
   m_Layer: 5
-  m_Name: MainMenu
+  m_Name: SA_0_MainMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13431,6 +13464,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 600}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2052672330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2052672327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00b7d357ae468ed48a16301d851e302e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  disableDefaultBehavior: 0
+  OnActivityStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnActivityStop:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &2059804350
 GameObject:
   m_ObjectHideFlags: 0
