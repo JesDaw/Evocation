@@ -24,7 +24,7 @@ public class SceneActivity : MonoBehaviour
         OnActivityStart.Invoke();
     }
 
-    public void StopActvity()
+    public void StopActivity()
     {
         if (!disableDefaultBehavior) { gameObject.SetActive(false); }
         OnActivityStop.Invoke();

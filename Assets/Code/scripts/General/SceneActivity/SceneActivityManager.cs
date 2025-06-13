@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.Events;
+
 
 /// <summary>
 /// This Script/Behavior handles all the SceneActivity transitions
@@ -13,15 +15,23 @@ using UnityEngine.Events;
 /// </summary>
 public class SceneActivityManager : MonoBehaviour
 {
+    public class BadNameException : Exception
+    {
+        public BadNameException(string msg)
+        : base(msg)
+        {
+        }
+    }
+
     /// <summary>
     /// Currently active SceneActivity GameObject
     /// </summary>
-    GameObject currentActivity;
+    internal GameObject currentActivity;
 
     /// <summary>
     /// Maps an ID to a SceneActivity GameObject
     /// </summary>
-    Dictionary<string, GameObject> objNamed = new Dictionary<string, GameObject>();
+    internal Dictionary<string, GameObject> objNamed = new Dictionary<string, GameObject>();
 
     /// <summary>
     /// Stack of scene transitions needed for shifting 'Back'
@@ -29,7 +39,7 @@ public class SceneActivityManager : MonoBehaviour
     /// I expect this stack to stay relatively small so that
     /// memory is not an issue...
     /// </summary>
-    Stack<string> changeHistory = new Stack<string>();
+    internal Stack<string> changeHistory = new Stack<string>();
 
     /// <summary>
     /// Event is raised at every SceneActivity transition
@@ -79,6 +89,8 @@ public class SceneActivityManager : MonoBehaviour
 
     static public bool IsSAObjectName(string aName)
     {
+        if (aName == null) { return false; }
+
         var nameParts = aName.Split("_");
         return (nameParts.Length > 1 && nameParts[0] == "SA");
     }
@@ -88,11 +100,20 @@ public class SceneActivityManager : MonoBehaviour
         return IsSAObjectName(obj.name);
     }
 
-    void Start()
+    internal void Start()
     {
-        Debug.Log("SceneActivityManager.Start");
+        Debug.Log("SceneActivityManager.Start", gameObject);
 
-        // Cache all SceneActivity Objects
+        CacheAllSAObjects();
+
+        // Activate the 'Initial' SceneActivity and disable all others
+        ChangeActivity(0, true);
+    }
+
+    void CacheAllSAObjects()
+    {
+        ClearCache();
+
         foreach (var obj in Resources.FindObjectsOfTypeAll<GameObject>())
         {
             if (HasSAObjectName(obj))
@@ -102,44 +123,64 @@ public class SceneActivityManager : MonoBehaviour
                 {
                     if (name.index.HasValue)
                     {
-                        cacheSceneActivity($"{name.index}", obj);
+                        CacheSceneActivity($"{name.index}", obj);
                     }
 
                     if (name.strName != null)
                     {
-                        cacheSceneActivity(name.strName, obj);
+                        CacheSceneActivity(name.strName, obj);
                     }
                 }
                 else
                 {
-                    Debug.LogError($"{obj.name} is NOT a valid SceneActivity (i.e. Doesn't have the MonoBehaviour)");
+                    throw new BadNameException($"{obj.name} has a SceneActivity Name but NOT the behaviour");
+                }
+            }
+            else
+            {
+                if (obj.GetComponent<SceneActivity>() != null)
+                {
+                    throw new BadNameException($"'{obj.name}' has the SceneActivity Behaviour but NOT a proper name");
                 }
             }
         }
-
-        // Activate the 'Initial' SceneActivity and disable all others
-        ChangeActivity(0, true);
     }
 
     void OnDestroy()
     {
-        Debug.Log("SceneActivityManager.OnDestroy");
+        Debug.Log("SceneActivityManager.OnDestroy", gameObject);
     }
 
-    void cacheSceneActivity(string id, GameObject obj)
+    void ClearCache()
     {
-        Debug.Assert(!objNamed.ContainsKey(id), "Ambiguous SA Names were used; id \"{id}\" has already been used!");
+        objNamed.Clear();
+    }
+
+    void CacheSceneActivity(string id, GameObject obj)
+    {
         if (!objNamed.ContainsKey(id))
         {
             objNamed.Add(id, obj);
         }
         else
         {
-            Debug.LogError($"Duplicate SceneActivity named {id}");
+            throw new BadNameException($"SA Naming conflict around the string '{id}'");
         }
     }
 
     public void ActivateInitialSA() { ActivateSA0(); }
+    public void ActivatePreviousSA()
+    {
+        if (changeHistory.Count > 0)
+        {
+            string targetName = changeHistory.Pop();
+            ChangeActivity(targetName);
+        }
+        else
+        {
+            Debug.LogWarning("No SceneActivity to go BACK to!, gameObject");
+        }
+    }
 
     public void ActivateSA0() { ChangeActivity(0); }
 
@@ -166,22 +207,18 @@ public class SceneActivityManager : MonoBehaviour
 
     public void ActivateSettings() { ChangeActivity("Settings"); }
 
+    /// <summary>
+    /// Activate a SceneActivity Object by either its
+    /// stringified int id OR its detailed name
+    /// 
+    /// The 2 SA name forms are:
+    ///    SA_[int]_[detailed name]
+    ///    SA_[detailed name]
+    /// </summary>
+    /// <param name="name">SA string id</param>
     public void ActivateByName(string name)
     {
         ChangeActivity(name);
-    }
-
-    public void ActivateBack()
-    {
-        if (changeHistory.Count > 0)
-        {
-            string targetName = changeHistory.Pop();
-            ChangeActivity(targetName);
-        }
-        else
-        {
-            Debug.LogError("No SceneActivity to go BACK to!");
-        }
     }
 
     void ChangeActivity<T>(T activityId, bool disableAllOthers = false)
@@ -192,18 +229,18 @@ public class SceneActivityManager : MonoBehaviour
         if (currObj == null)
         {
             nextObj.GetComponent<SceneActivity>().StartActivity();
-            Debug.Log($"SceneActivityManager: -> {activityId}");
+            Debug.Log($"SceneActivityManager: -> {activityId}", nextObj);
         }
         else if (!currObj.Equals(nextObj))
         {
             nextObj.GetComponent<SceneActivity>().StartActivity();
-            currObj.GetComponent<SceneActivity>().StopActvity();
+            currObj.GetComponent<SceneActivity>().StopActivity();
             var parsedName = ParseSAObjectName(currObj.name);
 
             // Push the SAObject index into our changeHistory or
             // the strName if there is no index
             changeHistory.Push($"{(parsedName.index.HasValue ? parsedName.index.Value : parsedName.strName)}");
-            Debug.Log($"SceneActivityManager: {currObj.name} -> {nextObj.name}");
+            Debug.Log($"SceneActivityManager: {currObj.name} -> {nextObj.name}", nextObj);
         }
         else
         {
@@ -212,15 +249,19 @@ public class SceneActivityManager : MonoBehaviour
 
         currentActivity = nextObj;
 
+        // Notify all interested parties that an SceneActivity
+        // change has occurred.
         ActivityChanged.Invoke();
 
         if (disableAllOthers)
         {
+            var alreadyHandled = new HashSet<GameObject>();
             foreach (var obj in objNamed.Values)
             {
-                if (!obj.Equals(currentActivity))
+                if (!obj.Equals(currentActivity) && !alreadyHandled.Contains(obj))
                 {
-                    obj.GetComponent<SceneActivity>().StopActvity();
+                    obj.GetComponent<SceneActivity>().StopActivity();
+                    alreadyHandled.Add(obj);
                 }
             }
         }
@@ -231,6 +272,10 @@ public class SceneActivityManager : MonoBehaviour
         return currentActivity;
     }
 
+    /// <summary>
+    /// Indicates if 'SA_0...' is currently active
+    /// </summary>
+    /// <returns>true if active, false if not</returns>
     public bool InInitialSA()
     {
         bool result = false;
