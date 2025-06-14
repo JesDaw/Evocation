@@ -15,9 +15,9 @@ using UnityEngine.Events;
 /// </summary>
 public class SceneActivityManager : MonoBehaviour
 {
-    public class BadNameException : Exception
+    public class SAException : Exception
     {
-        public BadNameException(string msg)
+        public SAException(string msg)
         : base(msg)
         {
         }
@@ -27,6 +27,8 @@ public class SceneActivityManager : MonoBehaviour
     /// Currently active SceneActivity GameObject
     /// </summary>
     internal GameObject currentActivity;
+
+    internal GameObject initialActivity;
 
     /// <summary>
     /// Maps an ID to a SceneActivity GameObject
@@ -47,58 +49,8 @@ public class SceneActivityManager : MonoBehaviour
     /// </summary>
     public UnityEvent ActivityChanged;
 
-    /// <summary>
-    /// Parse a SceneActivity Object Name
-    /// 
-    /// A properly formatted name has one of the following forms:
-    /// <list type="number">
-    /// <item><description>"SA_[int]_[any characters]</description></item>
-    /// <item><description>"SA_[any characters]</description></item>
-    /// </list>
-    /// 
-    /// The first form should be used for SceneActivity objects
-    /// with uncommon names - names not common to virtually every
-    /// Scene.  The second form is reserved for common, widespread
-    /// objects like "SA_Settings".
-    /// </summary>
-    /// <param name="aName">SA GameObject name to parse</param>
-    /// <returns>(int? index, string strName)</returns>
-    static public (int? index, string strName) ParseSAObjectName(string aName)
-    {
-        (int? index, string name) result = (null, null);
-
-        var singleIdRegExp = new Regex(@"^SA_(.+)$");
-        var dualIdRegExp = new Regex(@"^SA_(\d+)_(.+)$");
-
-        Match match = dualIdRegExp.Match(aName);
-        if (match.Success)
-        {
-            result = (int.Parse(match.Groups[1].Value), match.Groups[2].Value);
-        }
-        else
-        {
-            match = singleIdRegExp.Match(aName);
-            if (match.Success)
-            {
-                result = (null, match.Groups[1].Value);
-            }
-        }
-
-        return result;
-    }
-
-    static public bool IsSAObjectName(string aName)
-    {
-        if (aName == null) { return false; }
-
-        var nameParts = aName.Split("_");
-        return (nameParts.Length > 1 && nameParts[0] == "SA");
-    }
-
-    static public bool HasSAObjectName(GameObject obj)
-    {
-        return IsSAObjectName(obj.name);
-    }
+    public GameObject InitialSA { get => initialActivity; }
+    public GameObject CurrentSA { get => currentActivity; }
 
     internal void Start()
     {
@@ -107,7 +59,7 @@ public class SceneActivityManager : MonoBehaviour
         CacheAllSAObjects();
 
         // Activate the 'Initial' SceneActivity and disable all others
-        ChangeActivity(0, true);
+        Activate(initialActivity, true);
     }
 
     void CacheAllSAObjects()
@@ -116,32 +68,21 @@ public class SceneActivityManager : MonoBehaviour
 
         foreach (var obj in Resources.FindObjectsOfTypeAll<GameObject>())
         {
-            if (HasSAObjectName(obj))
+            SceneActivity sa = obj.GetComponent<SceneActivity>();
+            if (sa != null)
             {
-                var name = ParseSAObjectName(obj.name);
-                if (obj.GetComponent<SceneActivity>() != null)
+                if (sa.gameObject.activeInHierarchy)
                 {
-                    if (name.index.HasValue)
+                    if (initialActivity == null)
                     {
-                        CacheSceneActivity($"{name.index}", obj);
+                        initialActivity = obj;
                     }
-
-                    if (name.strName != null)
+                    else
                     {
-                        CacheSceneActivity(name.strName, obj);
+                        throw new SAException($"Multiple \"initial\" detected; {initialActivity.name} + {obj.name}");
                     }
                 }
-                else
-                {
-                    throw new BadNameException($"{obj.name} has a SceneActivity Name but NOT the behaviour");
-                }
-            }
-            else
-            {
-                if (obj.GetComponent<SceneActivity>() != null)
-                {
-                    throw new BadNameException($"'{obj.name}' has the SceneActivity Behaviour but NOT a proper name");
-                }
+                CacheSceneActivity(obj);
             }
         }
     }
@@ -154,92 +95,62 @@ public class SceneActivityManager : MonoBehaviour
     void ClearCache()
     {
         objNamed.Clear();
+        initialActivity = null;
+        //currentActivity = null;
     }
 
-    void CacheSceneActivity(string id, GameObject obj)
+    void CacheSceneActivity(GameObject obj)
     {
-        if (!objNamed.ContainsKey(id))
+        if (!objNamed.ContainsKey(obj.name))
         {
-            objNamed.Add(id, obj);
+            Debug.Log($"Found SceneActivity \"{obj.name}\"", gameObject);
+            objNamed.Add(obj.name, obj);
         }
         else
         {
-            throw new BadNameException($"SA Naming conflict around the string '{id}'");
+            throw new SAException($"Name collision on '{obj.name}'");
         }
     }
 
-    public void ActivateInitialSA() { ActivateSA0(); }
+    public void ActivateInitialSA() { Activate(initialActivity); }
     public void ActivatePreviousSA()
     {
         if (changeHistory.Count > 0)
         {
             string targetName = changeHistory.Pop();
-            ChangeActivity(targetName);
+            Activate(targetName);
         }
         else
         {
             Debug.LogWarning("No SceneActivity to go BACK to!, gameObject");
         }
     }
-
-    public void ActivateSA0() { ChangeActivity(0); }
-
-    public void ActivateSA1() { ChangeActivity(1); }
-
-    public void ActivateSA2() { ChangeActivity(2); }
-
-    public void ActivateSA3() { ChangeActivity(3); }
-
-    public void ActivateSA4() { ChangeActivity(4); }
-
-    public void ActivateSA5() { ChangeActivity(5); }
+    public void ActivateSettings() { Activate("Settings"); }
 
 
-    public void ActivateSA6() { ChangeActivity(6); }
-
-
-    public void ActivateSA7() { ChangeActivity(7); }
-
-
-    public void ActivateSA8() { ChangeActivity(8); }
-
-    public void ActivateSA9() { ChangeActivity(9); }
-
-    public void ActivateSettings() { ChangeActivity("Settings"); }
-
-    /// <summary>
-    /// Activate a SceneActivity Object by either its
-    /// stringified int id OR its detailed name
-    /// 
-    /// The 2 SA name forms are:
-    ///    SA_[int]_[detailed name]
-    ///    SA_[detailed name]
-    /// </summary>
-    /// <param name="name">SA string id</param>
-    public void ActivateByName(string name)
-    {
-        ChangeActivity(name);
-    }
-
-    void ChangeActivity<T>(T activityId, bool disableAllOthers = false)
+    public void Activate(GameObject nextObj, bool disableAllOthers = false)
     {
         GameObject currObj = GetCurrentActivity();
-        GameObject nextObj = FindActivity($"{activityId}");
+
+        if (nextObj == null)
+        {
+            throw new SAException($"SceneActivity \"{name}\" was not found");
+        }
 
         if (currObj == null)
         {
             nextObj.GetComponent<SceneActivity>().StartActivity();
-            Debug.Log($"SceneActivityManager: -> {activityId}", nextObj);
+            Debug.Log($"SceneActivityManager: -> {name}", nextObj);
         }
         else if (!currObj.Equals(nextObj))
         {
             nextObj.GetComponent<SceneActivity>().StartActivity();
             currObj.GetComponent<SceneActivity>().StopActivity();
-            var parsedName = ParseSAObjectName(currObj.name);
+
 
             // Push the SAObject index into our changeHistory or
             // the strName if there is no index
-            changeHistory.Push($"{(parsedName.index.HasValue ? parsedName.index.Value : parsedName.strName)}");
+            changeHistory.Push(currObj.name);
             Debug.Log($"SceneActivityManager: {currObj.name} -> {nextObj.name}", nextObj);
         }
         else
@@ -267,6 +178,11 @@ public class SceneActivityManager : MonoBehaviour
         }
     }
 
+    public void Activate(string name)
+    {
+        Activate(FindActivity(name));
+    }
+
     public GameObject GetCurrentActivity()
     {
         return currentActivity;
@@ -278,15 +194,7 @@ public class SceneActivityManager : MonoBehaviour
     /// <returns>true if active, false if not</returns>
     public bool InInitialSA()
     {
-        bool result = false;
-
-        if (currentActivity != null)
-        {
-            var saName = ParseSAObjectName(currentActivity.name);
-            result = ((saName.index.HasValue) && (saName.index.Value == 0));
-        }
-
-        return result;
+        return initialActivity.Equals(currentActivity);
     }
 
     /// <summary>
@@ -298,11 +206,13 @@ public class SceneActivityManager : MonoBehaviour
     {
         GameObject result = null;
 
-        Debug.Assert(objNamed.ContainsKey(activityName), $"Reference to an unknown SceneActivity \"{activityName}\"");
-
         if (objNamed.ContainsKey(activityName))
         {
             result = objNamed[activityName];
+        }
+        else
+        {
+            throw new SAException($"No SceneActivity named '{activityName}' was found");
         }
 
         return result;

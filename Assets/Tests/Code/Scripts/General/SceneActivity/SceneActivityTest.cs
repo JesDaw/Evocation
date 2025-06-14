@@ -18,7 +18,7 @@ public class SceneActivityTest
         yield return null;
 
         Scene scene = SceneManager.GetSceneByName("MainMenu");
-        GameObject origObj = GameObject.Find("SA_0_MainMenu");
+        GameObject origObj = GameObject.Find("MainMenu");
 
         myTestObj = GameObject.Instantiate(origObj);
 

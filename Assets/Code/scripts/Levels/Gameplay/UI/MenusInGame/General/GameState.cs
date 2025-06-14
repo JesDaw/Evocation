@@ -25,19 +25,17 @@ public class GameState : MonoBehaviour
         Debug.Assert(sceneMgr != null);
     }
 
-
-
     public void HandleGameWin()
     {
         GameIsOver = true;
-        sceneMgr.ActivateByName("Victory");
+        sceneMgr.Activate("Victory");
         Time.timeScale = 0;
     }
 
     public void HandleGameLoss()
     {
         GameIsOver = true;
-        sceneMgr.ActivateByName("Defeat");
+        sceneMgr.Activate("Defeat");
         Time.timeScale = 0;
     }
 
@@ -92,7 +90,7 @@ public class GameState : MonoBehaviour
         if (!GameIsPaused)
         {
             GameIsPaused = true;
-            sceneMgr.ActivateByName("Pause");
+            sceneMgr.Activate("Pause");
             Time.timeScale = 0;
         }
     }
