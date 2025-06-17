@@ -125,9 +125,12 @@ public class MainMenuTest
         {
             GameObject obj = t.gameObject;
 
+            // Ignore the SceneActivityManager
+            if (obj.name.Contains("SceneActiv")) continue;
+
             if (enabledSet.Contains(obj.name) ^ obj.activeInHierarchy)
             {
-                Debug.Log($"{obj} has an unexpected active state!");
+                Debug.Log($"{obj.name}, {obj} has an unexpected active state!");
                 return false;
             }
         }
@@ -165,8 +168,8 @@ public class MainMenuTest
     {
         GameObject[] rootObjects = s.GetRootGameObjects();
 
-        var canvas = rootObjects.Single(x => x.name == "Canvas");
-        foreach (Transform t in canvas.transform)
+        var sceneActivities = GameObject.Find("SceneActivities");
+        foreach (Transform t in sceneActivities.transform)
         {
             GameObject obj = t.gameObject;
 
