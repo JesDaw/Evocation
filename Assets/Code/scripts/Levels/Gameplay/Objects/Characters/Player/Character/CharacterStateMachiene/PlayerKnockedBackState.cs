@@ -2,29 +2,35 @@ using UnityEngine;
 
 public class PlayerKnockedBackState : PlayerBaseState
 {
-    public PlayerKnockedBackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory): base(currentContext, playerStateFactory) { }
+    public PlayerKnockedBackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory) { }
+
+    public override void UpdateState()
+    {
+        CheckSwitchStates();
+    }
     public override void CheckSwitchStates()
     {
-        throw new System.NotImplementedException();
+        // if player touches ground maybe
     }
 
     public override void EnterState()
     {
-        throw new System.NotImplementedException();
+        HandleKnockback();
+        SwitchState(Factory.Idle());
     }
 
     public override void ExitState()
     {
-        throw new System.NotImplementedException();
+        //if we want something to happen as the state is left
     }
 
     public override void InitializeSubState()
     {
-        throw new System.NotImplementedException();
+        // if this gets substates
     }
 
-    public override void UpdateState()
+    void HandleKnockback()
     {
-        throw new System.NotImplementedException();
+        
     }
 }

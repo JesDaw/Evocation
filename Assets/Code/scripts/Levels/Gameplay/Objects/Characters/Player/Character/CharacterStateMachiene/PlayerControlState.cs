@@ -2,32 +2,41 @@ using UnityEngine;
 
 public class PlayerControlState : PlayerBaseState
 {
-    public PlayerControlState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory): base(currentContext, playerStateFactory) { }
+    public PlayerControlState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
+    {
+        Debug.Log("Control state Constructor activated");
+        IsRootState = true;
+        InitializeSubState();
+        Debug.Log("Control state Constructor complete");
+    }
+    public override void UpdateState()
+    {
+        CheckSwitchStates();
+    }
     public override void CheckSwitchStates()
     {
-        if (_context.IsAttackPressed)
-        {
-            SwitchState(_factory.Attack());
-        }
+        // if the player isnt controling the charater switch states
     }
 
     public override void EnterState()
     {
-        throw new System.NotImplementedException();
+
     }
 
     public override void ExitState()
     {
-        throw new System.NotImplementedException();
+        //if we want something to happen as the state is left
     }
 
     public override void InitializeSubState()
     {
-        throw new System.NotImplementedException();
+        if (!Ctx.IsAttackPressed && !Ctx.IsMovementPressed && !Ctx.IsClimbing && !Ctx.IsKnockedBack)
+        { SetSubState(Factory.Idle()); }
+        else if (Ctx.IsClimbing) { SetSubState(Factory.Climb()); }
+        else if (Ctx.IsKnockedBack) { SetSubState(Factory.KnockedBack()); }
+        else if (Ctx.IsAttackPressed) { SetSubState(Factory.Attack()); }
+        else if (Ctx.IsMovementPressed) { SetSubState(Factory.Move()); }
     }
 
-    public override void UpdateState()
-    {
-        throw new System.NotImplementedException();
-    }
+
 }

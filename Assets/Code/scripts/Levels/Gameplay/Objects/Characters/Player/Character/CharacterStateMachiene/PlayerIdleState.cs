@@ -2,29 +2,36 @@ using UnityEngine;
 
 public class PlayerIdleState : PlayerBaseState
 {
-    public PlayerIdleState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory): base(currentContext, playerStateFactory) { }
+    public PlayerIdleState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory) { }
+    public override void UpdateState()
+    {
+        CheckSwitchStates();
+    }
     public override void CheckSwitchStates()
     {
-        throw new System.NotImplementedException();
+        if (Ctx.IsClimbing) { SwitchState(Factory.Climb()); }
+        else if (Ctx.IsKnockedBack) { SwitchState(Factory.KnockedBack()); }
+        else if (Ctx.IsAttackPressed) { SwitchState(Factory.Attack()); }
+        else if (Ctx.IsMovementPressed) { SwitchState(Factory.Move()); }
     }
 
     public override void EnterState()
     {
-        throw new System.NotImplementedException();
+        HandleIdle();
     }
 
     public override void ExitState()
     {
-        throw new System.NotImplementedException();
+        //if we want something to happen as the state is left
     }
 
     public override void InitializeSubState()
     {
-        throw new System.NotImplementedException();
+        // if this gets substates
     }
 
-    public override void UpdateState()
+    public void HandleIdle()
     {
-        throw new System.NotImplementedException();
+        // idle animation or something
     }
 }
