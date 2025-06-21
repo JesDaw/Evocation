@@ -1,10 +1,7 @@
 public class PlayerStateFactory
 {
     PlayerStateMachine _context;
-    public PlayerStateFactory(PlayerStateMachine CurrentContext)
-    {
-        _context = CurrentContext;
-    }
+    public PlayerStateFactory(PlayerStateMachine CurrentContext) { _context = CurrentContext; }
     public PlayerBaseState Idle() { return new PlayerIdleState(_context, this); }
     public PlayerBaseState Move() { return new PlayerMoveState(_context, this); }
     public PlayerBaseState Attack() { return new PlayerAttackState(_context, this); }

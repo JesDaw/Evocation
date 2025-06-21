@@ -3,10 +3,16 @@ using UnityEngine;
 public class PlayerClimbState : PlayerBaseState
 {
     public PlayerClimbState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory): base(currentContext, playerStateFactory) { }
+    public override void UpdateState()
+    {
+        CheckSwitchStates();
+    }
     public override void CheckSwitchStates()
     {
-        throw new System.NotImplementedException();
+        if (!Ctx.IsAttackPressed && !Ctx.IsMovementPressed && !Ctx.IsClimbing && !Ctx.IsKnockedBack)
+        { SwitchState(Factory.Idle()); }
     }
+
 
     public override void EnterState()
     {
@@ -15,16 +21,14 @@ public class PlayerClimbState : PlayerBaseState
 
     public override void ExitState()
     {
-        throw new System.NotImplementedException();
+        //if we want something to happen as the state is left
+        // reset gravity scale to 4
     }
 
     public override void InitializeSubState()
     {
-        throw new System.NotImplementedException();
+        // if this gets substates
     }
 
-    public override void UpdateState()
-    {
-        throw new System.NotImplementedException();
-    }
+
 }

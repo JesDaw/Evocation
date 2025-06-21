@@ -2,7 +2,15 @@ using UnityEngine;
 
 public class PlayerAutoState : PlayerBaseState
 {
-    public PlayerAutoState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory): base(currentContext, playerStateFactory) { }
+    public PlayerAutoState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
+    {
+        IsRootState = true;
+        InitializeSubState();
+    }
+    public override void UpdateState()
+    {
+        CheckSwitchStates();
+    }
     public override void CheckSwitchStates()
     {
         throw new System.NotImplementedException();
@@ -23,8 +31,5 @@ public class PlayerAutoState : PlayerBaseState
         throw new System.NotImplementedException();
     }
 
-    public override void UpdateState()
-    {
-        throw new System.NotImplementedException();
-    }
+
 }

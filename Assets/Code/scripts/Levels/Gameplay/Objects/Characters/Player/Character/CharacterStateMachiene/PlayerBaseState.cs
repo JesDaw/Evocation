@@ -1,10 +1,23 @@
+using Codice.Client.BaseCommands;
+using Mono.Cecil.Cil;
+
 public abstract class PlayerBaseState
 {
-    protected PlayerStateMachine _context;
-    protected PlayerStateFactory _factory;
+    private bool _isRootState = false;
+    private PlayerBaseState _currentSubState;
+    private PlayerBaseState _currentSuperState;
+    private PlayerStateMachine _ctx;
+    private PlayerStateFactory _factory;
+
+    // getters and setters
+    protected bool IsRootState { get { return _isRootState; } set { _isRootState = value; } }
+    protected PlayerStateMachine Ctx { get { return _ctx; } }
+    protected PlayerStateFactory Factory { get { return _factory; } }
+
+
     public PlayerBaseState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory)
     {
-        _context = currentContext;
+        _ctx = currentContext;
         _factory = playerStateFactory;
     }
     public abstract void EnterState();
@@ -12,14 +25,29 @@ public abstract class PlayerBaseState
     public abstract void ExitState();
     public abstract void CheckSwitchStates();
     public abstract void InitializeSubState();
-    void UpdateStates() { }
+    public void UpdateStates()
+    {
+        UpdateState();
+        if (_currentSubState != null)
+        {
+            _currentSubState.UpdateStates();
+        }
+    }
     protected void SwitchState(PlayerBaseState newState)
     {
         ExitState();
-        newState.EnterState();    
-        _context.CurrentState = newState;
+        newState.EnterState();
+        if (_isRootState) { _ctx.CurrentState = newState; }
+        else if (_currentSuperState != null){ _currentSuperState.SetSubState(newState); }
     }
-    protected void SetSuperState() { }
-    protected void SetSubState() { }
+    protected void SetSuperState(PlayerBaseState newSuperState)
+    {
+        _currentSuperState = newSuperState;
+    }
+    protected void SetSubState(PlayerBaseState newSubState)
+    {
+        _currentSubState = newSubState;
+        newSubState.SetSuperState(this);
+    }
     
 }
