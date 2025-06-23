@@ -27,7 +27,8 @@ public class CpuLogic : MonoBehaviour
         //Set Stats class to ScriptableObject
         _Stats._Clan = ScrStats._Clan;
         gameObject.tag = _Stats._Clan;
-        _Stats._Health = ScrStats._Health;
+        _Stats._MaxHealth = ScrStats._MaxHealth;
+        _Stats._CurrentHealth = ScrStats._CurrentHealth;
         _Stats._AttackDamage = ScrStats._AttackDamage;
         _Stats._AttackEndlag = ScrStats._AttackEndlag;
         _Stats._MoveSpeed = ScrStats._MoveSpeed;
