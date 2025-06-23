@@ -4,24 +4,47 @@ public class LockMouse : MonoBehaviour
 {
     [SerializeField] bool MenuIsOpen;
 
-    void Start() 
+    SceneActivityManager sceneMgr;
+
+    void Start()
     {
         MenuIsOpen = false;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-    }
-    public void OnEventRaised() 
-    {
-        MenuIsOpen = !MenuIsOpen;
-        if (MenuIsOpen)
+
+        // Find the SceneActivityManager!
+        foreach (var obj in Resources.FindObjectsOfTypeAll<SceneActivityManager>())
         {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
+            sceneMgr = obj;
         }
-        else
+        Debug.Assert(sceneMgr != null);
+    }
+    public void OnEventRaised()
+    {
+        // The Initial SceneActivity for this Scene is the
+        // GamePlayUI.  If we are in any other SA then we
+        // are in some kind of Menu!
+        bool isMenuCurrentlyOpen = !sceneMgr.InInitialSA();
+
+        if (MenuIsOpen != isMenuCurrentlyOpen)
         {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
+            // Update our state
+            MenuIsOpen = isMenuCurrentlyOpen;
+
+            if (MenuIsOpen)
+            {
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+
+                Debug.Log("LockMouse -> Release Cursor");
+            }
+            else
+            {
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+
+                Debug.Log("LockMouse -> Lock Cursor");
+            }
         }
     }
 }
