@@ -10,7 +10,8 @@ public class Stats : MonoBehaviour
     public string _Clan;
 
     //the above can be made into an enum, but i'll hold off on it until we get all the different clans
-    public int _Health = 1;
+    public int _MaxHealth = 1;
+    public int _CurrentHealth = 1;
     public int _AttackDamage;
     public int _AttackStartup;
     public int _AttackActiveDuration;
@@ -28,8 +29,8 @@ public class Stats : MonoBehaviour
     public List<Vector2> _StatusTicks;
     public int _StatusMax;
     public int _StatusHealth;
-    [SerializeField] UltEvents.UltEvent OnDeath, OnDamage;
-    [SerializeField] UltEvents.UltEvent<bool> OnWitFlagDeath, OnWitFlagDamage;
+    [SerializeField] internal UltEvents.UltEvent OnDeath, OnDamage;
+    [SerializeField] internal UltEvents.UltEvent<bool> OnWitFlagDeath, OnWitFlagDamage;
     //the reason this is public is because it will be applied from the
     //scriptable objects
 
@@ -47,6 +48,7 @@ public class Stats : MonoBehaviour
     public void Start()
     {
         StartCoroutine(StatusEffectLoop());
+        _CurrentHealth = _MaxHealth;
     }
 
     IEnumerator StatusEffectLoop()
@@ -97,13 +99,13 @@ public class Stats : MonoBehaviour
     {
         if (_Invincible) return;
 
-        _Health -= _Damage;
+        _CurrentHealth -= _Damage;
         _KnockBackHealth -= _Damage;
 
         if (_AttackedBy != null) OnWitFlagDamage.Invoke(_AttackedBy.IsEnemy);
         OnDamage.Invoke();
 
-        if (_Health <= 0)
+        if (_CurrentHealth <= 0)
         {
             Died();    
         }
@@ -125,7 +127,7 @@ public class Stats : MonoBehaviour
     }
     public void SetHealth(int _Amount)
     {
-        _Health = _Amount;
+        _CurrentHealth = _Amount;
     }
 
     public void AddStatusEffect(StatusEffect _effect)

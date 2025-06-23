@@ -17,14 +17,14 @@ public class BuildingStatsManager : MonoBehaviour
 
     public void SetMax()
     {
-        _Stats._Health = ScrStats._Health;
+        _Stats._MaxHealth = ScrStats._MaxHealth;
     }
 
     public void SwapBuilding(ScriptableStats _ScrStats)
     {
         _Stats._Clan = _ScrStats._Clan;
         gameObject.tag = _Stats._Clan;
-        _Stats._Health = _ScrStats._Health;
+        _Stats._CurrentHealth = _ScrStats._CurrentHealth;
         _Stats._AttackDamage = _ScrStats._AttackDamage;
         _Stats._AttackEndlag = _ScrStats._AttackEndlag;
         _Stats._MoveSpeed = _ScrStats._MoveSpeed;
