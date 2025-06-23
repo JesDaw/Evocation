@@ -1,14 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Cpu", menuName = "Cpu", order = 0)]
+[CreateAssetMenu(fileName = "Stats", menuName = "Stats", order = 0)]
 public class ScriptableStats : ScriptableObject
 {
     public List<string> _CpuPriority;
     public Sprite _Sprite;
     public string _Clan;
-    public int _MaxHealth = 1;
-    public int _CurrentHealth = 1;
+    public int _Health = 1;
     public int _AttackDamage;
     public int _AttackStartup;
     public int _AttackActiveDuration;

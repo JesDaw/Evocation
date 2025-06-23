@@ -8,8 +8,9 @@ public class Stats : MonoBehaviour
 {
     public List<string> _CpuPriority;
     public string _Clan;
-    public int _MaxHealth = 1;
-    public int _CurrentHealth = 1;
+
+    //the above can be made into an enum, but i'll hold off on it until we get all the different clans
+    public int _Health = 1;
     public int _AttackDamage;
     public int _AttackStartup;
     public int _AttackActiveDuration;
@@ -27,28 +28,30 @@ public class Stats : MonoBehaviour
     public List<Vector2> _StatusTicks;
     public int _StatusMax;
     public int _StatusHealth;
-    [SerializeField] public UltEvents.UltEvent OnDeath, OnDamage;
+    [SerializeField] UltEvents.UltEvent OnDeath, OnDamage;
+    [SerializeField] UltEvents.UltEvent<bool> OnWitFlagDeath, OnWitFlagDamage;
     //the reason this is public is because it will be applied from the
     //scriptable objects
 
     // anyways all of the "OnAttack" that happen on the cpu uses the cpu utilits script
     // so just update that if you're wondering aobu the different projectiles
     // UnityEvent OnAttack;
-    [SerializeField] public UnityEvent<StatusEffect> OnTick;
-    [SerializeField] public UnityEvent<Vector2> OnKnocked;
+    [SerializeField] UnityEvent<StatusEffect> OnTick;
+    [SerializeField] UnityEvent<Vector2> OnKnocked;
     [SerializeField] bool _Invincible = false;
+    [SerializeField] bool _DontDestroy = false;
+    DamageSource LastHitBy;
 
-    public void ToggleInvinciblity() { _Invincible = !_Invincible; }
+    public void ToggleInvinciblity(){ _Invincible = !_Invincible; }
 
     public void Start()
     {
         StartCoroutine(StatusEffectLoop());
-        _CurrentHealth = _MaxHealth;
     }
 
     IEnumerator StatusEffectLoop()
     {
-        if (_StatusEffects.Count == 0) StatusEffectLoop();
+        if(_StatusEffects.Count == 0) StatusEffectLoop();
 
         //x = Tick
         //y = Length
@@ -77,25 +80,32 @@ public class Stats : MonoBehaviour
             }
 
             _StatusTicks[I] = CurrentStatus;
+
+            if (CurrentStatus.y < 0)
+            {
+                _StatusEffects.RemoveAt(I);
+                _StatusTicks.RemoveAt(I);
+                _StatusTicksMax.RemoveAt(I);
+            }
         }
         //(circular logic), there's prob a better way to do this
         //but i like this
         StartCoroutine(StatusEffectLoop());
     }
 
-    public void Attack(int _Damage)
+    public void Attack(int _Damage, DamageSource _AttackedBy = null)
     {
         if (_Invincible) return;
 
-        _CurrentHealth -= _Damage;
+        _Health -= _Damage;
         _KnockBackHealth -= _Damage;
 
+        if (_AttackedBy != null) OnWitFlagDamage.Invoke(_AttackedBy.IsEnemy);
         OnDamage.Invoke();
 
-        if (_CurrentHealth <= 0)
+        if (_Health <= 0)
         {
-            OnDeath.Invoke();
-            Destroy(gameObject);
+            Died();    
         }
 
         if (_KnockBackHealth <= 0)
@@ -103,6 +113,19 @@ public class Stats : MonoBehaviour
             _KnockBackHealth = _KnockBackMax;
             OnKnocked.Invoke(new Vector2(-1 * _KnockBackVelocity, 0.5f * _KnockBackVelocity));
         }
+
+        LastHitBy = _AttackedBy;
+    }
+    public void Died()
+    {
+        if (LastHitBy != null) OnWitFlagDeath.Invoke(LastHitBy.IsEnemy);
+        OnDeath.Invoke();
+        if (_DontDestroy) return;
+        Destroy(gameObject);
+    }
+    public void SetHealth(int _Amount)
+    {
+        _Health = _Amount;
     }
 
     public void AddStatusEffect(StatusEffect _effect)
@@ -114,3 +137,9 @@ public class Stats : MonoBehaviour
     }
 }
 
+public class DamageSource
+{
+    //more context will be provided when I have time
+    public bool IsEnemy;
+}
+    
