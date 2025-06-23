@@ -7,36 +7,39 @@ public class BuildingStatsManager : MonoBehaviour
     public ScriptableStats ScrStats;
     public Stats _Stats;
     [SerializeField] GameObject Building;
+    [Tooltip("This should be left blank if you want both teams to be able to attack this building")]
     [SerializeField] string AllyBuilding;
     void Start()
     {
-        _Stats._Clan = ScrStats._Clan;
-        gameObject.tag = _Stats._Clan;
-        _Stats._Health = ScrStats._Health;
-        _Stats._AttackDamage = ScrStats._AttackDamage;
-        _Stats._AttackEndlag = ScrStats._AttackEndlag;
-        _Stats._MoveSpeed = ScrStats._MoveSpeed;
-
-        //just looks better if they slightyoffset
-        float randomNumber = Random.Range(-0.3f, 0.3f);
-        _Stats._StopDistance = ScrStats._StopDistance + randomNumber;
-        _Stats._CpuPriority = ScrStats._CpuPriority;
-
-        //knockback
-        _Stats._KnockBackHealth = ScrStats._KnockBackHealth;
-        _Stats._KnockBackVelocity = ScrStats._KnockBackVelocity;
-        _Stats._KnockBackMax = ScrStats._KnockBackHealth;
-
-        //status effects
-        _Stats._StatusHealth = ScrStats._StatusHealth;
-        _Stats._StatusMax = ScrStats._StatusHealth;
-
-        _Renderer.sprite = ScrStats._Sprite;
+        SwapBuilding(ScrStats);
     }
 
     public void SetMax()
     {
         _Stats._Health = ScrStats._Health;
+    }
+
+    public void SwapBuilding(ScriptableStats _ScrStats)
+    {
+        _Stats._Clan = _ScrStats._Clan;
+        gameObject.tag = _Stats._Clan;
+        _Stats._Health = _ScrStats._Health;
+        _Stats._AttackDamage = _ScrStats._AttackDamage;
+        _Stats._AttackEndlag = _ScrStats._AttackEndlag;
+        _Stats._MoveSpeed = _ScrStats._MoveSpeed;
+
+        float randomNumber = Random.Range(-0.3f, 0.3f);
+        _Stats._StopDistance = _ScrStats._StopDistance + randomNumber;
+        _Stats._CpuPriority = _ScrStats._CpuPriority;
+
+        _Stats._KnockBackHealth = _ScrStats._KnockBackHealth;
+        _Stats._KnockBackVelocity = _ScrStats._KnockBackVelocity;
+        _Stats._KnockBackMax = _ScrStats._KnockBackHealth;
+
+        _Stats._StatusHealth = _ScrStats._StatusHealth;
+        _Stats._StatusMax = _ScrStats._StatusHealth;
+
+        _Renderer.sprite = _ScrStats._Sprite;
     }
 
     public void ChangeTeam(string _Team)

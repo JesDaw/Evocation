@@ -58,7 +58,7 @@ public class Stats : MonoBehaviour
         float _TickSpeed = 0.1f;
 
         yield return new WaitForSeconds(_TickSpeed);
-        for(int I = 0; I < _StatusTicks.Count; I++)
+        for (int I = 0; I < _StatusTicks.Count; I++)
         {
             Vector2 CurrentStatus = _StatusTicks[I];
 
@@ -78,6 +78,13 @@ public class Stats : MonoBehaviour
             }
 
             _StatusTicks[I] = CurrentStatus;
+
+            if (CurrentStatus.y < 0)
+            {
+                _StatusEffects.RemoveAt(I);
+                _StatusTicks.RemoveAt(I);
+                _StatusTicksMax.RemoveAt(I);
+            }
         }
         //(circular logic), there's prob a better way to do this
         //but i like this
