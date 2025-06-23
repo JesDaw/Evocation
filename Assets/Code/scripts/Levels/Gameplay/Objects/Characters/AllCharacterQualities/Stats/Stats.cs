@@ -29,6 +29,7 @@ public class Stats : MonoBehaviour
     public int _StatusMax;
     public int _StatusHealth;
     [SerializeField] UltEvents.UltEvent OnDeath, OnDamage;
+    [SerializeField] UltEvents.UltEvent<bool> OnWitFlagDeath, OnWitFlagDamage;
     //the reason this is public is because it will be applied from the
     //scriptable objects
 
@@ -39,6 +40,7 @@ public class Stats : MonoBehaviour
     [SerializeField] UnityEvent<Vector2> OnKnocked;
     [SerializeField] bool _Invincible = false;
     [SerializeField] bool _DontDestroy = false;
+    DamageSource LastHitBy;
 
     public void ToggleInvinciblity(){ _Invincible = !_Invincible; }
 
@@ -91,20 +93,19 @@ public class Stats : MonoBehaviour
         StartCoroutine(StatusEffectLoop());
     }
 
-    public void Attack(int _Damage)
+    public void Attack(int _Damage, DamageSource _AttackedBy = null)
     {
         if (_Invincible) return;
 
         _Health -= _Damage;
         _KnockBackHealth -= _Damage;
 
+        if (_AttackedBy != null) OnWitFlagDamage.Invoke(_AttackedBy.IsEnemy);
         OnDamage.Invoke();
 
         if (_Health <= 0)
         {
-            OnDeath.Invoke();
-            if (_DontDestroy) return;
-            Destroy(gameObject);
+            Died();    
         }
 
         if (_KnockBackHealth <= 0)
@@ -112,6 +113,15 @@ public class Stats : MonoBehaviour
             _KnockBackHealth = _KnockBackMax;
             OnKnocked.Invoke(new Vector2(-1 * _KnockBackVelocity, 0.5f * _KnockBackVelocity));
         }
+
+        LastHitBy = _AttackedBy;
+    }
+    public void Died()
+    {
+        if (LastHitBy != null) OnWitFlagDeath.Invoke(LastHitBy.IsEnemy);
+        OnDeath.Invoke();
+        if (_DontDestroy) return;
+        Destroy(gameObject);
     }
     public void SetHealth(int _Amount)
     {
@@ -125,5 +135,11 @@ public class Stats : MonoBehaviour
         _StatusTicksMax.Add(new Vector2(_effect._Tick, _effect._Length));
         _StatusHealth = _StatusMax;
     }
+}
+
+public class DamageSource
+{
+    //more context will be provided when I have time
+    public bool IsEnemy;
 }
     

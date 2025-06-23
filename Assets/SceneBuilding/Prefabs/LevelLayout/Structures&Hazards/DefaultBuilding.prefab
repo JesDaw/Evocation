@@ -167,20 +167,12 @@ MonoBehaviour:
   _StatusMax: 0
   _StatusHealth: 0
   OnDeath:
-    _PersistentCalls:
-    - _Target: {fileID: 7612600847862275697}
-      _MemberName: SwapBuilding
-      _PersistentArguments:
-      - _Type: 13
-        _Int: 0
-        _String: ScriptableStats, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
-        _X: 0
-        _Y: 0
-        _Z: 0
-        _W: 0
-        _Object: {fileID: 11400000, guid: 7e6e8cc8682e1aa4dae224a642ea078f, type: 2}
+    _PersistentCalls: []
   OnDamage:
+    _PersistentCalls: []
+  OnWitFlagDeath:
+    _PersistentCalls: []
+  OnWitFlagDamage:
     _PersistentCalls: []
   OnTick:
     m_PersistentCalls:
@@ -206,4 +198,5 @@ MonoBehaviour:
   ScrStats: {fileID: 11400000, guid: 167e95e39d0530b4b9eeac3b999d4935, type: 2}
   _Stats: {fileID: 215369451068188314}
   Building: {fileID: 5411589103336727643}
-  AllyBuilding: 
+  AllyBuilding: {fileID: 11400000, guid: 306dfb092686ce54ca348aab1c38a8d3, type: 2}
+  EnemyBuilding: {fileID: 11400000, guid: c21cbf4d40adfb240be6fb5ffdae3ec5, type: 2}

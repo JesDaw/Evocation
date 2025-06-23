@@ -7,8 +7,9 @@ public class BuildingStatsManager : MonoBehaviour
     public ScriptableStats ScrStats;
     public Stats _Stats;
     [SerializeField] GameObject Building;
-    [Tooltip("This should be left blank if you want both teams to be able to attack this building")]
-    [SerializeField] string AllyBuilding;
+    [Header("Buildings")]
+    [SerializeField] ScriptableStats AllyBuilding;
+    [SerializeField] ScriptableStats EnemyBuilding;
     void Start()
     {
         SwapBuilding(ScrStats);
@@ -41,25 +42,15 @@ public class BuildingStatsManager : MonoBehaviour
 
         _Renderer.sprite = _ScrStats._Sprite;
     }
-
-    public void ChangeTeam(string _Team)
+    public void SwapAccordingToWho(bool IsEnemy)
     {
-        AllyBuilding = _Team;
-
-        if (AllyBuilding == "LavaBros")
+        if (IsEnemy == true)
         {
-            _Stats._Clan = "LavaBros";
-            Building.tag = "LavaBros";
+            SwapBuilding(EnemyBuilding);
         }
         else
         {
-            _Stats._Clan = "TreeGang";
-            Building.tag = "TreeGang";
+            SwapBuilding(AllyBuilding);
         }
-    }
-    public void ChangeColor()
-    {
-        if (AllyBuilding == "LavaBros") _Renderer.color = Color.red;
-        if (AllyBuilding == "TreeGang") _Renderer.color = Color.green;
     }
 }
