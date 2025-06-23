@@ -12,7 +12,7 @@ public class LevelTransition : MonoBehaviour
     // Update is called once per frame
     public void StartAnimationLevel1()
     {
-        StartCoroutine(LoadLevel("Level 1"));
+        StartCoroutine(LoadLevel("Level 1 Jesse"));
     }
 
     public void StartAnimationLevel2()
