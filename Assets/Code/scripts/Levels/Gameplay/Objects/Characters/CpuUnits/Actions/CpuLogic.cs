@@ -131,7 +131,7 @@ public class CpuLogic : MonoBehaviour
         }
         //Enemy Attack
         Debug.Log("Attacked Enemy" + hits[SavedIndex].collider.gameObject.name);
-        EnemyStats.Attack(_Stats._AttackDamage);
+        EnemyStats.Attack(_Stats._AttackDamage, new DamageSource { IsEnemy = _Enemy });
         attackingAudio.Play();
         
         //Status Effects
