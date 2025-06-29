@@ -42,7 +42,7 @@ public class PlayerStateMachine : MonoBehaviour
     {
         //setup state
         _states = new PlayerStateFactory(this);
-        _currentState = _states.Control();
+        _currentState = _states.Idle();
         _currentState.EnterState();
     }
 
