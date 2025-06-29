@@ -21,6 +21,7 @@ public class PlayerMoveState : PlayerBaseState
     public override void UpdateState()
     {
         CheckSwitchStates();
+        HandleMove();
     }
     public override void CheckSwitchStates()
     {
@@ -29,9 +30,7 @@ public class PlayerMoveState : PlayerBaseState
         else if (Ctx.IsClimbing) { SwitchState(Factory.Climb()); }
         else if (Ctx.IsKnockedBack) { SwitchState(Factory.KnockedBack()); }
         else if (Ctx.IsAttackPressed) { SwitchState(Factory.Attack()); }
-
-        Ctx.Rb.linearVelocity = new Vector2(horizontal * Ctx.PlayerStats._MoveSpeed, Ctx.Rb.linearVelocity.y);
-    }
+     }
 
     public override void EnterState()
     {
