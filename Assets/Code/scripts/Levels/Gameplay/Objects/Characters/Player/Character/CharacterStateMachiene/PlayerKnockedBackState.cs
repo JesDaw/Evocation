@@ -2,7 +2,11 @@ using UnityEngine;
 
 public class PlayerKnockedBackState : PlayerBaseState
 {
-    public PlayerKnockedBackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory) { }
+    public PlayerKnockedBackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
+    {
+        IsRootState = true;
+
+    }
 
     public override void UpdateState()
     {

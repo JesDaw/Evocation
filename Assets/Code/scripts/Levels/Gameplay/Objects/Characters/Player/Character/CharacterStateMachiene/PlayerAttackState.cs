@@ -12,7 +12,11 @@ public class PlayerAttackState : PlayerBaseState
     public Animator animator;
     [SerializeField] AudioSource attackingAudio;
 
-    public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory) { }
+    public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
+    {
+        IsRootState = true;
+
+    }
     public override void UpdateState()
     {
         CheckSwitchStates();

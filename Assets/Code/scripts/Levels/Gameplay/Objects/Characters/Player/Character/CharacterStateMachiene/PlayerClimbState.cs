@@ -2,7 +2,11 @@ using UnityEngine;
 
 public class PlayerClimbState : PlayerBaseState
 {
-    public PlayerClimbState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory): base(currentContext, playerStateFactory) { }
+    public PlayerClimbState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
+    {
+        IsRootState = true;
+
+    }
     public override void UpdateState()
     {
         CheckSwitchStates();

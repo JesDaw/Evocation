@@ -12,8 +12,12 @@ public class PlayerMoveState : PlayerBaseState
     //  public float distance;
     private bool isFacingRight = true;
 
+
     [SerializeField] AudioSource walking_audio;
-    public PlayerMoveState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory) { }
+    public PlayerMoveState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
+    {
+        IsRootState = true;
+    }
     public override void UpdateState()
     {
         CheckSwitchStates();
@@ -25,6 +29,8 @@ public class PlayerMoveState : PlayerBaseState
         else if (Ctx.IsClimbing) { SwitchState(Factory.Climb()); }
         else if (Ctx.IsKnockedBack) { SwitchState(Factory.KnockedBack()); }
         else if (Ctx.IsAttackPressed) { SwitchState(Factory.Attack()); }
+
+        Ctx.Rb.linearVelocity = new Vector2(horizontal * Ctx.PlayerStats._MoveSpeed, Ctx.Rb.linearVelocity.y);
     }
 
     public override void EnterState()
@@ -50,10 +56,11 @@ public class PlayerMoveState : PlayerBaseState
         horizontal = input;
         //if (!walking_audio.isPlaying)
         //{
-            //walking_audio.Play();
+        //walking_audio.Play();
         //}
-
+      
         Ctx.Rb.linearVelocity = new Vector2(horizontal * Ctx.PlayerStats._MoveSpeed, Ctx.Rb.linearVelocity.y);
+        //Ctx.Rb.linearVelocity = new Vector2(horizontal * Ctx.PlayerStats._MoveSpeed, Ctx.Rb.linearVelocity.y);
         if (!isFacingRight && horizontal > 0f) Flip();
         else if (isFacingRight && horizontal < 0f) Flip();
     }
