@@ -51,7 +51,7 @@ public class PlayerCombat : MonoBehaviour
         {
             if (enemy.TryGetComponent<Stats>(out Stats enemyStats))
             {
-                enemyStats.Attack(playerStats._AttackDamage);
+                enemyStats.TakeDamage(playerStats._AttackDamage);
             }
             else if (enemy.TryGetComponent<BuildingHealth>(out BuildingHealth buildingHealth))
             {

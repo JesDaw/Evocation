@@ -76,7 +76,7 @@ public class Stats : MonoBehaviour
                 CurrentStatus.x = _StatusTicksMax[I].x;
 
                 CurrentStatus.y -= CurrentStatus.x;
-                Attack(_StatusEffects[I]._Damage);
+                TakeDamage(_StatusEffects[I]._Damage);
 
                 OnTick?.Invoke(_StatusEffects[I]);
             }
@@ -95,7 +95,7 @@ public class Stats : MonoBehaviour
         StartCoroutine(StatusEffectLoop());
     }
 
-    public void Attack(int _Damage, DamageSource _AttackedBy = null)
+    public void TakeDamage(int _Damage, DamageSource _AttackedBy = null)
     {
         if (_Invincible) return;
 
