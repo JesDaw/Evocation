@@ -53,7 +53,7 @@ public class ProjectileScript : MonoBehaviour
         DetectedStats = EnemyObject?.GetComponent<Stats>();
         if (DetectedStats == null) return;
 
-        DetectedStats.Attack(Projectiles._Damage);
+        DetectedStats.TakeDamage(Projectiles._Damage);
 
         Destroy(this.gameObject);
     }

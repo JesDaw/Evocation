@@ -3,16 +3,8 @@ using System.Collections;
 
 public class PlayerAttackState : PlayerBaseState
 {
-    //Settings
-    float framesPerSecond = 60f;
-    public Transform attackPoint;
-    public LayerMask enemyLayers;
-
-    // Effects
-    public Animator animator;
-    [SerializeField] AudioSource attackingAudio;
-
-    public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
+    bool _attackOver = false;
+   public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
     {
         IsRootState = true;
 
@@ -23,14 +15,20 @@ public class PlayerAttackState : PlayerBaseState
     }
     public override void CheckSwitchStates()
     {
-        // this if for conditions that have to be met to switch the state, doesnt apply to attacking
+        if (Ctx.IsKnockedBack) { SwitchState(Factory.KnockedBack()); }
+        if (_attackOver)
+        {
+            if (Ctx.IsClimbing) { SwitchState(Factory.Climb()); }
+            else if (!Ctx.IsAttackPressed && !Ctx.IsMovementPressed && !Ctx.IsClimbing && !Ctx.IsKnockedBack) { SwitchState(Factory.Idle()); }
+            //else if (Ctx.IsAttackPressed) { SwitchState(Factory.Attack()); }
+            else if (Ctx.IsMovementPressed) { SwitchState(Factory.Move()); }
+        }
     }
 
 
     public override void EnterState()
     {
         HandleAttack();
-        SwitchState(Factory.Idle());
     }
 
     public override void ExitState()
@@ -50,25 +48,26 @@ public class PlayerAttackState : PlayerBaseState
     IEnumerator AttackRoutine()
     {
 
-        yield return new WaitForSeconds(Ctx.PlayerStats._AttackStartup / framesPerSecond);
+        yield return new WaitForSeconds(Ctx.PlayerStats._AttackStartup / Ctx.FPS);
 
         // Active hit
         AttackActive();
-        attackingAudio.Play();
+        Ctx.AttackingAudio.Play();
 
         // Endlag
-        yield return new WaitForSeconds(Ctx.PlayerStats._AttackEndlag / framesPerSecond);
+        yield return new WaitForSeconds(Ctx.PlayerStats._AttackEndlag / Ctx.FPS);
+        _attackOver = true;
     }
     void AttackActive()
     {
         // animator.SetTrigger("Attack");
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, Ctx.PlayerStats._StopDistance, enemyLayers);
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(Ctx.AttackPoint.position, Ctx.PlayerStats._StopDistance, Ctx.EnemyLayers);
 
         foreach (Collider2D enemy in hitEnemies)
         {
             if (enemy.TryGetComponent<Stats>(out Stats enemyStats))
             {
-                enemyStats.Attack(Ctx.PlayerStats._AttackDamage);
+                enemyStats.TakeDamage(Ctx.PlayerStats._AttackDamage);
             }
             else if (enemy.TryGetComponent<BuildingHealth>(out BuildingHealth buildingHealth))
             {

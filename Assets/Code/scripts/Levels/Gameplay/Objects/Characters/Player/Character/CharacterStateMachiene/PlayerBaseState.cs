@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Codice.Client.BaseCommands;
 using Mono.Cecil.Cil;
 
