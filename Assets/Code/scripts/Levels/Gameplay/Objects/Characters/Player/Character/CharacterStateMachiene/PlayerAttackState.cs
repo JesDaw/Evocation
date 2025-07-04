@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerAttackState : PlayerBaseState
 {
     bool _attackOver = false;
-   public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
+    public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
     {
         IsRootState = true;
 
@@ -18,16 +18,24 @@ public class PlayerAttackState : PlayerBaseState
         if (Ctx.IsKnockedBack) { SwitchState(Factory.KnockedBack()); }
         if (_attackOver)
         {
-            if (Ctx.IsClimbing) { SwitchState(Factory.Climb()); }
-            else if (!Ctx.IsAttackPressed && !Ctx.IsMovementPressed && !Ctx.IsClimbing && !Ctx.IsKnockedBack) { SwitchState(Factory.Idle()); }
-            //else if (Ctx.IsAttackPressed) { SwitchState(Factory.Attack()); }
-            else if (Ctx.IsMovementPressed) { SwitchState(Factory.Move()); }
+            var nextState = Factory.GetNextState(Ctx.PlayerCommander);
+            if (this.Equals(nextState))
+            {
+                // If we're here then there must be another attack command
+                // in the queue.  We'll service it by restarting this state.
+                EnterState();
+            }
+            else
+            {
+                SwitchState(nextState);
+            }
         }
     }
 
 
     public override void EnterState()
     {
+        _attackOver = false;
         HandleAttack();
     }
 
@@ -47,7 +55,9 @@ public class PlayerAttackState : PlayerBaseState
     }
     IEnumerator AttackRoutine()
     {
+        _attackOver = false;
 
+        Ctx.PlayerCommander.TakePendingCmd(DiscretePlayerCommand.Attack);
         yield return new WaitForSeconds(Ctx.PlayerStats._AttackStartup / Ctx.FPS);
 
         // Active hit
@@ -57,6 +67,16 @@ public class PlayerAttackState : PlayerBaseState
         // Endlag
         yield return new WaitForSeconds(Ctx.PlayerStats._AttackEndlag / Ctx.FPS);
         _attackOver = true;
+
+        // If any attack commands are still in the buffer, only keep 1 of them so 
+        // attacks don't pile up
+        /*
+        if (Ctx.PlayerCommander.IsCmdPending(DiscretePlayerCommand.Attack))
+        {
+            Ctx.PlayerCommander.ClearPendingCmds(DiscretePlayerCommand.Attack);
+            Ctx.PlayerCommander.SendCmd(DiscretePlayerCommand.Attack, null);
+        */
+        Ctx.PlayerCommander.ClearPendingCmds(DiscretePlayerCommand.Attack);
     }
     void AttackActive()
     {
