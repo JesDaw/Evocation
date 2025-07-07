@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class PlayerMoveState : PlayerBaseState
 {
-    float horizontal;
     bool isFacingRight = true;
 
     public PlayerMoveState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
@@ -14,19 +13,10 @@ public class PlayerMoveState : PlayerBaseState
         HandleMove();
         CheckSwitchStates();
     }
-    
-    public override void CheckSwitchStates()
-    {
-        if (!Ctx.IsAttackPressed && !Ctx.IsMovementPressed && !Ctx.IsClimbing && !Ctx.IsKnockedBack)
-        { SwitchState(Factory.Idle()); }
-        else if (Ctx.IsClimbing) { SwitchState(Factory.Climb()); }
-        else if (Ctx.IsKnockedBack) { SwitchState(Factory.KnockedBack()); }
-        else if (Ctx.IsAttackPressed) { SwitchState(Factory.Attack()); }
-    }
 
     public override void EnterState()
     {
-        
+
     }
 
     public override void ExitState()
@@ -43,16 +33,20 @@ public class PlayerMoveState : PlayerBaseState
 
     void HandleMove()
     {
-        if (Ctx.ButtonContext.canceled) Ctx.Rb.linearVelocity = new Vector2(0, Ctx.Rb.linearVelocity.y);
-        float input = Ctx.MovementContext;
-        horizontal = input;
 
-        
-        if (!Ctx.WalkingAudio.isPlaying && !Ctx.ButtonContext.canceled) Ctx.WalkingAudio.Play();
-        
-        Ctx.Rb.linearVelocity = new Vector2(horizontal * Ctx.PlayerStats._MoveSpeed, Ctx.Rb.linearVelocity.y);
-        if (!isFacingRight && horizontal > 0f) Flip();
-        else if (isFacingRight && horizontal < 0f) Flip();
+        if (Ctx.IsMovementPressed)
+        {
+            if (!Ctx.WalkingAudio.isPlaying) Ctx.WalkingAudio.Play();
+
+            float horizontal = Ctx.MovementContext;
+            Ctx.Rb.linearVelocityX = horizontal * Ctx.PlayerStats._MoveSpeed;
+            if (!isFacingRight && horizontal > 0f) Flip();
+            else if (isFacingRight && horizontal < 0f) Flip();
+        }
+        else
+        {
+            Ctx.Rb.linearVelocity = new Vector2(0, Ctx.Rb.linearVelocity.y);
+        }
     }
 
     private void Flip()

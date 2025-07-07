@@ -11,11 +11,6 @@ public class PlayerClimbState : PlayerBaseState
     {
         CheckSwitchStates();
     }
-    public override void CheckSwitchStates()
-    {
-        if (!Ctx.IsAttackPressed && !Ctx.IsMovementPressed && !Ctx.IsClimbing && !Ctx.IsKnockedBack)
-        { SwitchState(Factory.Idle()); }
-    }
 
 
     public override void EnterState()

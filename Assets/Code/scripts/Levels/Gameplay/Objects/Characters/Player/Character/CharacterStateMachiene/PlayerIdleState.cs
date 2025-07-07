@@ -11,13 +11,6 @@ public class PlayerIdleState : PlayerBaseState
     {
         CheckSwitchStates();
     }
-    public override void CheckSwitchStates()
-    {
-        if (Ctx.IsClimbing) { SwitchState(Factory.Climb()); }
-        else if (Ctx.IsKnockedBack) { SwitchState(Factory.KnockedBack()); }
-        else if (Ctx.IsAttackPressed) { SwitchState(Factory.Attack()); }
-        else if (Ctx.IsMovementPressed) { SwitchState(Factory.Move()); }
-    }
 
     public override void EnterState()
     {

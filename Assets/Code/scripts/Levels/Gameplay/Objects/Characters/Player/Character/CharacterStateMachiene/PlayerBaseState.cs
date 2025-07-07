@@ -24,7 +24,16 @@ public abstract class PlayerBaseState
     public abstract void EnterState();
     public abstract void UpdateState();
     public abstract void ExitState();
-    public abstract void CheckSwitchStates();
+
+    public virtual void CheckSwitchStates()
+    {
+        var nextState = _factory.GetNextState(_ctx.PlayerCommander);
+        if (!this.Equals(nextState))
+        {
+            SwitchState(nextState);
+        }
+    }
+
     public abstract void InitializeSubState();
     public void UpdateStates()
     {
@@ -39,7 +48,7 @@ public abstract class PlayerBaseState
         ExitState();
         newState.EnterState();
         if (_isRootState) { _ctx.CurrentState = newState; }
-        else if (_currentSuperState != null){ _currentSuperState.SetSubState(newState); }
+        else if (_currentSuperState != null) { _currentSuperState.SetSubState(newState); }
     }
     protected void SetSuperState(PlayerBaseState newSuperState)
     {
@@ -50,5 +59,5 @@ public abstract class PlayerBaseState
         _currentSubState = newSubState;
         newSubState.SetSuperState(this);
     }
-    
+
 }
