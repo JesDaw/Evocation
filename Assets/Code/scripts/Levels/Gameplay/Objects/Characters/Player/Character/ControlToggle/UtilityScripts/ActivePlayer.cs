@@ -15,7 +15,7 @@ public class ActivePlayer : MonoBehaviour
     /// </summary>
     public event OnPlayerActivating PlayerActivating;
 
-    private GameObject _currentPlayer;
+    [SerializeField] GameObject _currentPlayer;
 
     public GameObject CurrentPlayer
     {
