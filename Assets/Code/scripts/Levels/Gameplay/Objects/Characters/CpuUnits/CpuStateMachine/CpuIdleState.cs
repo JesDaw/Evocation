@@ -1,27 +1,18 @@
-
-public class CpuAttackState : CpuBaseState
+public class CpuIdleState : CpuBaseState
 {
-    public CpuAttackState(CpuStateManager context) : base(context)
+    public CpuIdleState(CpuStateManager context) : base(context)
     {
         _context = context;
     }
-
     public override void EnterState()
     {
 
     }
-
     public override void UpdateState()
     {
 
     }
-
     public override void ExitState()
-    {
-
-    }
-
-    void DealDamage()
     {
 
     }
