@@ -1,7 +1,3 @@
-using System.Diagnostics;
-using Codice.Client.BaseCommands;
-using Mono.Cecil.Cil;
-
 public abstract class PlayerBaseState
 {
     private bool _isRootState = false;
@@ -59,5 +55,4 @@ public abstract class PlayerBaseState
         _currentSubState = newSubState;
         newSubState.SetSuperState(this);
     }
-
 }
