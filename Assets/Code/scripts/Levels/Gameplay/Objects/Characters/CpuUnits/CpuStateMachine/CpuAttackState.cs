@@ -8,7 +8,7 @@ public class CpuAttackState : CpuBaseState
 
     public override void EnterState()
     {
-
+        DealDamage();
     }
 
     public override void UpdateState()
@@ -23,6 +23,7 @@ public class CpuAttackState : CpuBaseState
 
     void DealDamage()
     {
-
+        _context._AttackingStats.TakeDamage(_context._AttackingStats._AttackDamage);
+        _context.UpdateCurrentState(CpuStateManager.State.Move);
     }
 }
