@@ -253,7 +253,6 @@ public enum ContinuousPlayerCommand
 public enum DiscretePlayerCommand
 {
     Attack,
-    //    Spawn,
     KnockBack,
 }
 
@@ -288,12 +287,21 @@ public class PlayerCommander :
         PlayerCommandData
         >
 {
+    bool _isFreeCamActive;
+
+    public PlayerCommander(bool isFreeCamActive)
+    {
+        _isFreeCamActive = isFreeCamActive;
+    }
+
     /// <summary>
     /// Handle 'Move' Input Action
     /// </summary>
     /// <param name="context">context associated with the event</param>
     public void OnMove(InputAction.CallbackContext context)
     {
+        if (_isFreeCamActive) { return;  }
+
         if ((context.ReadValue<Vector2>() == Vector2.zero) || context.canceled)
         {
             SetActiveCmd(ContinuousPlayerCommand.Move, false, null);
@@ -313,10 +321,25 @@ public class PlayerCommander :
     /// <param name="context">context associated with the event</param>
     public void OnAttack(InputAction.CallbackContext context)
     {
+        if (_isFreeCamActive) { return; }
+        
         if (context.performed && context.ReadValueAsButton())
         {
             SendCmd(DiscretePlayerCommand.Attack, null);
         }
+    }
+
+    public void OnToggleFreeCam(InputAction.CallbackContext context)
+    {
+        if (!_isFreeCamActive)
+        {
+            // Deactivate all potentially active continuous commands
+            foreach (ContinuousPlayerCommand c in Enum.GetValues(typeof(ContinuousPlayerCommand)))
+            {
+                SetActiveCmd(c, false, null);
+            }
+        }
+        _isFreeCamActive = !_isFreeCamActive;
     }
 
     /// <summary>

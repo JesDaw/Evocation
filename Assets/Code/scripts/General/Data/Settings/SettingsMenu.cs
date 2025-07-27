@@ -51,30 +51,33 @@ public class SettingsMenu : MonoBehaviour
         set_fullscreen(saved_fullscreen);
 
         //resolutions////////
-        resolutions = Screen.resolutions;
-        resolution_dropdown.ClearOptions();
-        //turn array of resolutions into formatetd strings
-        List<string> options = new List<string>();
-        //save
-        int saved_resolutionIndex = PlayerPrefs.GetInt("Resolution", 0);
-        set_resolution(saved_resolutionIndex);
-
-
-        int current_res = 0;
-        for (int i = 0; i < resolutions.Length; i++)
+        if (resolution_dropdown != null)
         {
-            string option = resolutions[i].width + "x" + resolutions[i].height;
-            options.Add(option);
+            resolutions = Screen.resolutions;
+            resolution_dropdown.ClearOptions();
+            //turn array of resolutions into formatetd strings
+            List<string> options = new List<string>();
+            //save
+            int saved_resolutionIndex = PlayerPrefs.GetInt("Resolution", 0);
+            set_resolution(saved_resolutionIndex);
 
-            if (resolutions[i].width == Screen.currentResolution.width &&
-                resolutions[i].height == Screen.currentResolution.height)
+
+            int current_res = 0;
+            for (int i = 0; i < resolutions.Length; i++)
             {
-                current_res = i;
+                string option = resolutions[i].width + "x" + resolutions[i].height;
+                options.Add(option);
+
+                if (resolutions[i].width == Screen.currentResolution.width &&
+                    resolutions[i].height == Screen.currentResolution.height)
+                {
+                    current_res = i;
+                }
             }
+            resolution_dropdown.AddOptions(options);
+            resolution_dropdown.value = saved_resolutionIndex;
+            resolution_dropdown.RefreshShownValue();
         }
-        resolution_dropdown.AddOptions(options);
-        resolution_dropdown.value = saved_resolutionIndex;
-        resolution_dropdown.RefreshShownValue();
     }
 
     //convert volume values (0-1) to decibels
