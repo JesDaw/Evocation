@@ -18,7 +18,23 @@ public class PlayerStateMachine : MonoBehaviour
     PlayerBaseState _currentState;
     PlayerStateFactory _states;
 
-    PlayerCommander _commander = new PlayerCommander();
+    PlayerCommander _commander;
+
+
+    public void FindFreeCam()
+    {
+        // Find the CameraControllerSwitcher script
+        foreach (var obj in Resources.FindObjectsOfTypeAll<GameObject>())
+        {
+            CameraControlSwitcher ccs = obj.GetComponent<CameraControlSwitcher>();
+            if (ccs != null)
+            {
+                _commander = new PlayerCommander(ccs.FreeCamIsActive);
+                break;
+            }
+        }     
+    }
+
 
     // getters andf setters
     //universal stuff 
@@ -72,10 +88,16 @@ public class PlayerStateMachine : MonoBehaviour
         _commander.OnAttack(context);
     }
 
+ public void OnToggleFreeCam(InputAction.CallbackContext context)
+    {
+        _commander.OnToggleFreeCam(context);
+    }
+
     //all referance veraibles, player input callbacks
     void Awake()
     {
         //setup state
+        FindFreeCam();
         _states = new PlayerStateFactory(this);
         _currentState = _states.Idle();
         _currentState.EnterState();

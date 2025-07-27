@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.Cinemachine;
 
-public class CameraController : MonoBehaviour
+public class FreeCamController : MonoBehaviour
 {
     private InputSystem_Actions inputActions;
     private Vector2 moveInput;
@@ -10,11 +10,11 @@ public class CameraController : MonoBehaviour
 
     // Movement and Zoom Variables
     [SerializeField] private float moveSpeed = 10f;
-    [SerializeField] private float zoomStep = 1f;
+    [SerializeField] private float zoomStep = 5f;  // Bigger step size for FOV feels better
 
-    // Camera Zoom Limits
-    [SerializeField] private float minCamSize = 5f;
-    [SerializeField] private float maxCamSize = 20f;
+    // Camera Zoom Limits (FOV for perspective camera)
+    [SerializeField] private float minFOV = 40f;
+    [SerializeField] private float maxFOV = 80f;
 
     private void Awake()
     {
@@ -60,11 +60,12 @@ public class CameraController : MonoBehaviour
 
     public void HandleZoom(InputAction.CallbackContext context)
     {
-        float zoomInput = Mouse.current.scroll.ReadValue().y * 0.25f;
-        if (Mathf.Abs(zoomInput) > 0)
+        float scrollDelta = Mouse.current.scroll.ReadValue().y;
+
+        if (Mathf.Abs(scrollDelta) > 0)
         {
-            float newSize = _camera.Lens.OrthographicSize - (zoomInput * zoomStep);
-            _camera.Lens.OrthographicSize = Mathf.Clamp(newSize, minCamSize, maxCamSize);
+            float newFOV = _camera.Lens.FieldOfView - (scrollDelta * zoomStep * 0.1f);  // scroll up = zoom in
+            _camera.Lens.FieldOfView = Mathf.Clamp(newFOV, minFOV, maxFOV);
         }
     }
 }
