@@ -8,7 +8,7 @@ public class CameraControlSwitcher : MonoBehaviour
     [SerializeField] private CinemachineCamera freeCam;
 
     // Script References
-    [SerializeField] private CameraController cameraMovement;
+    [SerializeField] private FreeCamController cameraMovement;
     [SerializeField] private PlayerSwitch playerSwitcher;
     [SerializeField] private IntVeriable player_lives;
 
@@ -17,7 +17,7 @@ public class CameraControlSwitcher : MonoBehaviour
 
     private InputSystem_Actions inputActions;
     //InputAction inputActions;
-    private bool isControllingPlayer = true; // Starts by controlling the player
+    public bool FreeCamIsActive = false; // Starts by controlling the player
 
     private void Awake()
     {
@@ -35,15 +35,13 @@ public class CameraControlSwitcher : MonoBehaviour
 
     public void SwitchControl(InputAction.CallbackContext context)
     {
-        Debug.Log("here");
-
         if (!context.performed) return;
 
         audio_manager.Play("Switching Cameras"); //plays pop noise when cam switched
         ToggleControl();
 
         //auto switches to free cam when player lives hit 0 (also cant use controls anymroe)
-        if (player_lives != null && player_lives._Value <= 0 && isControllingPlayer)
+        if (player_lives != null && player_lives._Value <= 0 && !FreeCamIsActive)
         {
             SwitchToCameraControl();
         }
@@ -55,7 +53,7 @@ public class CameraControlSwitcher : MonoBehaviour
     private void ToggleControl()
     {
 
-        if (isControllingPlayer)
+        if (!FreeCamIsActive)
         {
             SwitchToCameraControl();
         }
@@ -70,7 +68,7 @@ public class CameraControlSwitcher : MonoBehaviour
     /// </summary>
     private void SwitchToPlayerControl()
     {
-        isControllingPlayer = true;
+        FreeCamIsActive = false;
 
         if (playerSwitcher != null)
         {
@@ -97,7 +95,7 @@ public class CameraControlSwitcher : MonoBehaviour
     /// </summary>
     public void SwitchToCameraControl()
     {
-        isControllingPlayer = false;
+        FreeCamIsActive = true;
 
         if (playerSwitcher != null)
         {
@@ -131,7 +129,7 @@ public class CameraControlSwitcher : MonoBehaviour
     //auto switch to free cam w/o movement/controls when there are no more player lives
     public void dead_free_cam()
     {
-        isControllingPlayer = false;
+        FreeCamIsActive = true;
 
         if (playerSwitcher != null)
         {
