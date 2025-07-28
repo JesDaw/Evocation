@@ -29,7 +29,7 @@ public class Stats : MonoBehaviour
     public List<Vector2> _StatusTicks;
     public int _StatusMax;
     public int _StatusHealth;
-    [SerializeField] internal UltEvents.UltEvent OnDeath, OnDamage;
+    [SerializeField] internal UltEvents.UltEvent OnDeath, OnDamage, OnKnocked;
     [SerializeField] internal UltEvents.UltEvent<bool> OnWitFlagDeath, OnWitFlagDamage;
     //the reason this is public is because it will be applied from the
     //scriptable objects
@@ -38,9 +38,9 @@ public class Stats : MonoBehaviour
     // so just update that if you're wondering aobu the different projectiles
     // UnityEvent OnAttack;
     [SerializeField] UnityEvent<StatusEffect> OnTick;
-    [SerializeField] UnityEvent<Vector2> OnKnocked;
     [SerializeField] bool _Invincible = false;
     [SerializeField] bool _DontDestroy = false;
+    public bool _Enemy;
     DamageSource LastHitBy;
 
     public void ToggleInvinciblity(){ _Invincible = !_Invincible; }
@@ -113,7 +113,7 @@ public class Stats : MonoBehaviour
         if (_KnockBackHealth <= 0)
         {
             _KnockBackHealth = _KnockBackMax;
-            OnKnocked.Invoke(new Vector2(-1 * _KnockBackVelocity, 0.5f * _KnockBackVelocity));
+            OnKnocked.Invoke();
         }
 
         LastHitBy = _AttackedBy;
