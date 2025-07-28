@@ -11,9 +11,6 @@ public class SettingsMenu : MonoBehaviour
     public TMPro.TMP_Dropdown resolution_dropdown;
     public AudioMixer audio_mixer;
 
-    public GameObject settings_menu;
-    public GameObject pause_menu;
-
     Resolution[] resolutions;
 
     void Awake()
@@ -122,11 +119,5 @@ public class SettingsMenu : MonoBehaviour
         Resolution resolution = resolutions[resolutionIndex];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
         PlayerPrefs.SetInt("Resolution", resolutionIndex);
-    }
-
-    public void back_button()
-    {
-        settings_menu.SetActive(false);
-        pause_menu.SetActive(true);
     }
 }
