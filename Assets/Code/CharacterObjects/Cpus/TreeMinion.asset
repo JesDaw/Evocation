@@ -18,19 +18,21 @@ MonoBehaviour:
   - Blank
   _Sprite: {fileID: 21300000, guid: 38f07a4b6d08c7243b482a84dc73ea52, type: 3}
   _Clan: TreeGang
-  _Health: 40
-  _AttackDamage: 10
-  _AttackStartup: 0
+  _MaxHealth: 50
+  _CurrentHealth: 1
+  _AttackDamage: 1
+  _AttackStartup: 500
   _AttackActiveDuration: 0
-  _AttackEndlag: 5
+  _AttackEndlag: 100000
   _MoveSpeed: 10
   _StopDistance: 2
   _KnockBackMax: 1
   _KnockBackHealth: 1
-  _KnockBackVelocity: 5
+  _KnockBackVelocity: 80
   _spawnCost: 0
   _StatusEffects: []
-  _EffectsToApply: []
+  _EffectsToApply:
+  - {fileID: 11400000, guid: ee68ec388959d91469672acd03fe2555, type: 2}
   _StatusTicksMax: []
   _StatusTicks: []
   _StatusMax: 0
