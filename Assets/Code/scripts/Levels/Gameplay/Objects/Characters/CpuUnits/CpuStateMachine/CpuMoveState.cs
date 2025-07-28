@@ -23,6 +23,7 @@ public class CpuMoveState : CpuBaseState
     }
     public override void ExitState()
     {
+        _context.UpdateCurrentState(CpuStateManager.State.Attack);
     }
 
     void Moving()
@@ -34,7 +35,20 @@ public class CpuMoveState : CpuBaseState
 
         if (hits.Length <= 0) return;
 
-        _Body.linearVelocity = Vector2.zero;
-        _context.UpdateCurrentState(CpuStateManager.State.Attack);
+        for (int I = 0; I < _Stats._CpuPriority.Count; I++)
+        {
+            for (int II = 0; II < hits.Length; II++)
+            {
+                if (hits[II].collider.CompareTag(_Stats._CpuPriority[I]))
+                {
+                    _Body.linearVelocity = Vector2.zero;
+
+                    GameObject EnemyGameobject = hits[II].collider.gameObject;
+                    _context._AttackingStats = EnemyGameobject.GetComponent<Stats>();
+
+                    ExitState();             
+                }
+            }
+        }
     }
 }
