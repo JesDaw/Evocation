@@ -13,7 +13,7 @@ public class MainMenu : MonoBehaviour
 
    public void click_sound()
    {
-      audio_manager.Play("Button click"); //play this sfx when a menu UI button is clicked
+      audio_manager.Play("Button Click"); //play this sfx when a menu UI button is clicked
    }
 
 
