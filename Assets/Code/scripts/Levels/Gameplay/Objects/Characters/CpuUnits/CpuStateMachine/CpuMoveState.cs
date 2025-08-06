@@ -16,6 +16,7 @@ public class CpuMoveState : CpuBaseState
     }
     public override void EnterState()
     {
+        _context._Animator.SetBool("IsRunning", true);
     }
     public override void UpdateState()
     {
@@ -45,6 +46,12 @@ public class CpuMoveState : CpuBaseState
 
                     GameObject EnemyGameobject = hits[II].collider.gameObject;
                     _context._AttackingStats = EnemyGameobject.GetComponent<Stats>();
+
+                    if (_context._AttackingStats == null)
+                    {
+                        Debug.Log("No stats object attached");
+                        continue;
+                    }
 
                     ExitState();             
                 }

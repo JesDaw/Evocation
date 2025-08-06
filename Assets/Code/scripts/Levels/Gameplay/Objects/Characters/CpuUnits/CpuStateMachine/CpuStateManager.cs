@@ -11,15 +11,15 @@ public class CpuStateManager : MonoBehaviour
     }
     public ScriptableStats _ScrStats;
     public Stats _Stats;
-    public SpriteRenderer _Renderer;
     public Rigidbody2D _Body;
     public Transform _Raycast;
+    public Animator _Animator;
     CpuBaseState _currentState;
 
     public Dictionary<State, CpuBaseState> _State = new Dictionary<State, CpuBaseState>();
     [SerializeField] internal UltEvents.UltEvent<Stats> OnInitStats;
 
-    [HideInInspector]
+    //[HideInInspector]
     public Stats _AttackingStats;
 
     void Start()
@@ -45,8 +45,6 @@ public class CpuStateManager : MonoBehaviour
         //status effects
         _Stats._StatusHealth = _ScrStats._StatusHealth;
         _Stats._StatusMax = _ScrStats._StatusHealth;
-        
-        _Renderer.sprite = _ScrStats._Sprite;
 
         OnInitStats.Invoke(_Stats);
 
