@@ -15,6 +15,7 @@ public class CpuAttackState : CpuBaseState
 
     public override void EnterState()
     {
+        _context._Animator.SetBool("IsRunning", false);
         Debug.Log("Attacking " + _context._AttackingStats.gameObject.name);
         _phase = AttackPhase.Startup;
         _timer = 0;
