@@ -13,11 +13,11 @@ public class Timer : MonoBehaviour
     [SerializeField] UnityEvent _TimeHitZero;
     public FloatVariable remainingTimeSeconds;
 
-    bool _game_is_active = true;
+    bool _timer_is_active = true;
 
     void Update()
     {
-        if (_game_is_active)
+        if (_timer_is_active)
         {
             Countdown();
         }
@@ -35,14 +35,15 @@ public class Timer : MonoBehaviour
         else 
         {
             remainingTimeSeconds._Value = 0;
-            _TimeHitZero.Invoke();
+            _TimeHitZero?.Invoke();
             DeactivateTimer();    
         }
     }
 
-    public void DeactivateTimer(){ _game_is_active = false; }
+    public void DeactivateTimer(){ _timer_is_active = false; }
+    public void ActivateTimer(){ _timer_is_active = true;}
 
-    public void ResetTimer(){ remainingTimeSeconds.Reset();}
+    public void ResetTimer() { remainingTimeSeconds.Reset(); }
 
     // conversion from seconds to minuts and seconds and desplays it in UI
     void DesplayTime()
