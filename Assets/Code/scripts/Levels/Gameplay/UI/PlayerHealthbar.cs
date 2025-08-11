@@ -55,8 +55,12 @@ public class PlayerHealthbar : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning($"Stats component not found on player {player}!");
+                Debug.LogWarning($"Stats component not found on player {player.name}!");
             }
+        }
+        else
+        {
+            Debug.LogError("PlayerHealthBar can't find active player");
         }
     }
 

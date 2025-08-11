@@ -10,11 +10,11 @@ public class FreeCamController : MonoBehaviour
 
     // Movement and Zoom Variables
     [SerializeField] private float moveSpeed = 10f;
-    [SerializeField] private float zoomStep = 5f;  // Bigger step size for FOV feels better
+    [SerializeField] private float zoomSpeed = 5f;  // Speed of Z-axis movement for zoom
 
-    // Camera Zoom Limits (FOV for perspective camera)
-    [SerializeField] private float minFOV = 40f;
-    [SerializeField] private float maxFOV = 80f;
+    // Camera Zoom Limits (Z position limits)
+    [SerializeField] private float minZDistance = -50f;  // How far back the camera can go
+    [SerializeField] private float maxZDistance = 50f;   // How far forward the camera can go
 
     private void Awake()
     {
@@ -55,7 +55,9 @@ public class FreeCamController : MonoBehaviour
 
     private void HandleMovement()
     {
-        transform.position += (Vector3)(moveInput * moveSpeed * Time.deltaTime);
+        // Move only on X and Y axes, preserving Z position for zoom control
+        Vector3 movement = new Vector3(moveInput.x, moveInput.y, 0) * moveSpeed * Time.deltaTime;
+        transform.position += movement;
     }
 
     public void HandleZoom(InputAction.CallbackContext context)
@@ -64,8 +66,13 @@ public class FreeCamController : MonoBehaviour
 
         if (Mathf.Abs(scrollDelta) > 0)
         {
-            float newFOV = _camera.Lens.FieldOfView - (scrollDelta * zoomStep * 0.1f);  // scroll up = zoom in
-            _camera.Lens.FieldOfView = Mathf.Clamp(newFOV, minFOV, maxFOV);
+            // Move camera forward/backward on Z-axis
+            float zoomAmount = scrollDelta * zoomSpeed * 0.1f;
+            Vector3 newPosition = transform.position + new Vector3(0, 0, zoomAmount);
+            
+            // Clamp the Z position within limits
+            newPosition.z = Mathf.Clamp(newPosition.z, minZDistance, maxZDistance);
+            transform.position = newPosition;
         }
     }
 }
