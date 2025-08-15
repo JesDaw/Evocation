@@ -1,10 +1,15 @@
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
-public class LockMouse : MonoBehaviour
+public class MenuLogicManager : MonoBehaviour
 {
     [SerializeField] bool MenuIsOpen;
+    [SerializeField] UnityEvent _ResetValues;
+    [SerializeField] int SceneToLoad;
 
     SceneActivityManager sceneMgr;
+    AudioManager audio_manager;
 
     void Start()
     {
@@ -18,9 +23,41 @@ public class LockMouse : MonoBehaviour
             sceneMgr = obj;
         }
         Debug.Assert(sceneMgr != null);
+        audio_manager = FindAnyObjectByType<AudioManager>();
     }
+
+    public void click_sound()
+    {
+        audio_manager.Play("Button Click"); 
+    }
+
+    public void LoadScene()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene(SceneToLoad);
+        ResetValues();
+    }
+
+    public void ReloadCurrentScene()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        ResetValues();
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
+    void ResetValues()
+    {
+        _ResetValues.Invoke();
+    }
+
     public void OnEventRaised()
     {
+        //this is auto called when menus get activated or deactivated
         // The Initial SceneActivity for this Scene is the
         // GamePlayUI.  If we are in any other SA then we
         // are in some kind of Menu!

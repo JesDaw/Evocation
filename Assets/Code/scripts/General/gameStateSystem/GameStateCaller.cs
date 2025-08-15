@@ -1,11 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 using UnityEngine.Playables;
 
 public class GameStateCaller : MonoBehaviour
 {
     [Header("State Atrobutes")]
+    [SerializeField] public bool ManageUI;
+    [SerializeField] public string UIToActivate;
+    [SerializeField] public bool ActivateInitialSA;
+    [SerializeField] public bool ActivateCursor;
+    [SerializeField] public bool PauseGame;
+    [SerializeField] public bool GameIsOver;
     [SerializeField] public bool EditTimeScale;
     [SerializeField] [Range(0, 3)] public float TimeScale = 1;
     [SerializeField] public bool EditTimer;
@@ -22,7 +29,11 @@ public class GameStateCaller : MonoBehaviour
     [SerializeField] public List<GameObject> ObjectsToDisable = new List<GameObject>();
     [SerializeField] public PlayableDirector CutscenToActivate;
 
+    [Header("State Activation Types")]
+    [SerializeField] string InputAction;
+
     public UnityEvent StateCalled;
+    InputAction Action;
 
     [Header("State Debugging Stuff")]
     [SerializeField] GameStateManager GameStateManager;
@@ -42,8 +53,30 @@ public class GameStateCaller : MonoBehaviour
             Debug.LogWarning($" time scale for state - {_stateName} is < 0");
             TimeScale = 0;
         }
+        if (InputAction == null)
+        {
+            Action = InputSystem.actions.FindAction(InputAction);
+            if (Action == null) Debug.LogError($"{gameObject}: input action not found - {InputAction} ");
+            else Action.Enable();
+        }
     }
 
+    void OnEnable()
+    {
+        if (Action != null)
+            Action.Enable();
+    }
+
+    void OnDisable()
+    {
+        if (Action != null)
+            Action.Disable();
+    }
+
+    public void ButtonAction(InputAction.CallbackContext context)
+    {
+        ActivateState();
+    }
 
     public void ActivateState()
     {
