@@ -22,9 +22,14 @@ public class Money : MonoBehaviour
         while(moneyAmount._Value < 9999 && _money_is_active)
         {
             moneyAmount._Value++;
-            moneyText.text = moneyAmount._Value.ToString("0");
+            UpdateMoneyDesplay();
             yield return new WaitForSeconds(1/genPerSec._Value);
         }
+    }
+
+    public void UpdateMoneyDesplay()
+    {
+        moneyText.text = moneyAmount._Value.ToString("0");
     }
 
     public void spendMoney(int amount)
