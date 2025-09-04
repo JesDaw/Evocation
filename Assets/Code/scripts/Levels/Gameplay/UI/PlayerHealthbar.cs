@@ -23,7 +23,7 @@ public class PlayerHealthbar : MonoBehaviour
 
     internal void Start()
     {
-        Debug.Assert(ActivePlayer != null, "This should've already been set via the Editor!");
+        Debug.Assert(ActivePlayer != null, "First active player needs to be set in the editor for player healthbar");
 
         ActivePlayer.PlayerActivating += OnPlayerActivating;
         ActivePlayer.PlayerDeactivating += OnPlayerDeactivating;
