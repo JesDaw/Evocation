@@ -60,7 +60,10 @@ public class CpuAttackState : CpuBaseState
 
     void DealDamage()
     {
-        _context._AttackingStats.TakeDamage(_context._Stats._AttackDamage);
+        DamageSource _damageSource = new DamageSource();
+        _damageSource.IsEnemy = _context._Stats._Enemy;
+
+        _context._AttackingStats.TakeDamage(_context._Stats._AttackDamage, _damageSource);
 
         //status effects
         List<StatusEffect> _EffectsToApply = _context._ScrStats._EffectsToApply;

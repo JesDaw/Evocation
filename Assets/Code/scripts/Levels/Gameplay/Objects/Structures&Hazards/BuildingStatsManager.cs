@@ -12,6 +12,7 @@ public class BuildingStatsManager : MonoBehaviour
     [SerializeField] ScriptableStats EnemyBuilding;
     void Start()
     {
+        gameObject.tag = "Blank";
         SwapBuilding(ScrStats);
     }
 
@@ -47,10 +48,12 @@ public class BuildingStatsManager : MonoBehaviour
         if (IsEnemy == true)
         {
             SwapBuilding(EnemyBuilding);
+            gameObject.tag = "LavaBros";
         }
         else
         {
             SwapBuilding(AllyBuilding);
+            gameObject.tag = "TreeGang";
         }
     }
 }

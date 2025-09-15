@@ -120,7 +120,11 @@ public class Stats : MonoBehaviour
     }
     public void Died()
     {
-        if (LastHitBy != null) OnWitFlagDeath.Invoke(LastHitBy.IsEnemy);
+        if (LastHitBy != null)
+        {
+            Debug.Log(LastHitBy.IsEnemy);
+            OnWitFlagDeath.Invoke(LastHitBy.IsEnemy);
+        }
         OnDeath.Invoke();
         if (_DontDestroy) return;
         Destroy(gameObject);
