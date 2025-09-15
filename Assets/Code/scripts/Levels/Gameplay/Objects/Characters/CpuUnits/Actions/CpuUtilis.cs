@@ -24,8 +24,8 @@ public class CpuUtilis: MonoBehaviour
     {
         //this is stolen from SpawnObjects
         GameObject CreatedObject = Instantiate(this.gameObject, this.transform.position, this.transform.rotation, this.transform);
-        CpuLogic ObjectLogic = CreatedObject.GetComponent<CpuLogic>();
-        if (ObjectLogic != null) ObjectLogic.ScrStats = ScrStats;
+        CpuStateManager ObjectLogic = CreatedObject.GetComponent<CpuStateManager>();
+        if (ObjectLogic != null) ObjectLogic._ScrStats = ScrStats;
 
         //rotate apperance if on other side
         if (CreatedObject.transform.childCount > 0 && CreatedObject.transform.GetChild(0).name == "CpuApperance")

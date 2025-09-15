@@ -36,6 +36,7 @@ public class CpuStateManager : MonoBehaviour
         float randomNumber = Random.Range(-0.3f, 0.3f);
         _Stats._StopDistance = _ScrStats._StopDistance + randomNumber;
         _Stats._CpuPriority = _ScrStats._CpuPriority;
+        if(_Stats._Enemy) _Stats._CpuPriority.Insert(0, "Player");
 
         //knockback
         _Stats._KnockBackHealth = _ScrStats._KnockBackHealth;
