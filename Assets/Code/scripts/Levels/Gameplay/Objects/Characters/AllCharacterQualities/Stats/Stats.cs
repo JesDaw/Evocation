@@ -50,6 +50,10 @@ public class Stats : MonoBehaviour
         StartCoroutine(StatusEffectLoop());
         _CurrentHealth = _MaxHealth;
     }
+    public void SetDestroyed(bool _ShouldDestroy)
+    {
+        _DontDestroy = _ShouldDestroy;
+    }
 
     IEnumerator StatusEffectLoop()
     {
@@ -64,6 +68,15 @@ public class Stats : MonoBehaviour
         yield return new WaitForSeconds(_TickSpeed);
         for (int I = 0; I < _StatusTicks.Count; I++)
         {
+            if (I <= 0)
+            {
+                Debug.Log("Status Effect list was changed (most likely from an external operation)");
+                _StatusEffects = new List<StatusEffect>();
+                _StatusTicksMax = new List<Vector2>();
+                _StatusTicks = new List<Vector2>();
+                break;
+            }
+
             Vector2 CurrentStatus = _StatusTicks[I];
 
             if (CurrentStatus.x > 0)
@@ -74,7 +87,6 @@ public class Stats : MonoBehaviour
             else
             {
                 CurrentStatus.x = _StatusTicksMax[I].x;
-
                 CurrentStatus.y -= CurrentStatus.x;
                 TakeDamage(_StatusEffects[I]._Damage);
 

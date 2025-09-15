@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class BuildingStatsManager : MonoBehaviour
 {
@@ -40,12 +42,15 @@ public class BuildingStatsManager : MonoBehaviour
 
         _Stats._StatusHealth = _ScrStats._StatusHealth;
         _Stats._StatusMax = _ScrStats._StatusHealth;
+        _Stats._StatusEffects = new List<StatusEffect>();
+        _Stats._StatusTicksMax = new List<Vector2>();
+        _Stats._StatusTicks = new List<Vector2>();
 
         _Renderer.sprite = _ScrStats._Sprite;
     }
     public void SwapAccordingToWho(bool IsEnemy)
     {
-        if (IsEnemy == true)
+        if (IsEnemy)
         {
             SwapBuilding(EnemyBuilding);
             gameObject.tag = "LavaBros";
@@ -55,5 +60,14 @@ public class BuildingStatsManager : MonoBehaviour
             SwapBuilding(AllyBuilding);
             gameObject.tag = "TreeGang";
         }
+
+        //delay is needed because status effect runs on update()
+        StartCoroutine(ResetDestroyedAfterDelay());
+    }
+
+    private IEnumerator ResetDestroyedAfterDelay()
+    {
+        yield return new WaitForSeconds(0.5f); // wait for status effects and any prelimary attacks
+        _Stats.SetDestroyed(false);
     }
 }
