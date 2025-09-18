@@ -5,12 +5,21 @@ using System.Collections;
 
 public class Money : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI moneyText;
+    
     [SerializeField] FloatVariable genPerSec;
     [SerializeField] FloatVariable moneyAmount;
     public float CurrentMoney => moneyAmount._Value;
+    GameObject moneyTextObj;
+    TextMeshProUGUI moneyText;
 
     bool _money_is_active = true;
+
+    void Awake()
+    {
+        moneyTextObj = GameObject.Find("MoneyText");
+        if (moneyTextObj == null) Debug.LogError("MoneyManager could not find the MoneyText game object");
+        moneyText = moneyTextObj.GetComponent<TextMeshProUGUI>();
+    }
 
     void Start ()
     {

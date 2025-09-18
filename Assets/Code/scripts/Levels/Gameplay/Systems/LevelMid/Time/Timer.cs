@@ -9,11 +9,20 @@ using TMPro;
 // desplays time in provided UI object
 public class Timer : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI timerText;
+    
     [SerializeField] UnityEvent _TimeHitZero;
     public FloatVariable remainingTimeSeconds;
+    GameObject timerTextObj;
+    TextMeshProUGUI timerText;
 
     bool _timer_is_active = true;
+
+    void Awake()
+    {
+        timerTextObj = GameObject.Find("TimerText");
+        if (timerTextObj == null) Debug.LogError("TimerManager could not find the TimerText game object");
+        timerText = timerTextObj.GetComponent<TextMeshProUGUI>();
+    }
 
     void Update()
     {
