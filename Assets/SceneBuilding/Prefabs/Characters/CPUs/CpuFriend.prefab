@@ -1325,6 +1325,38 @@ Transform:
   - {fileID: 8700980137986012641}
   m_Father: {fileID: 3526205736376455097}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3855038793988823244
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7600863437697538067}
+  m_Layer: 0
+  m_Name: CpuAppearance
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7600863437697538067
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3855038793988823244}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4245541083745454055}
+  m_Father: {fileID: 899014493961415775}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3935600218738898496
 GameObject:
   m_ObjectHideFlags: 0
@@ -1336,7 +1368,7 @@ GameObject:
   - component: {fileID: 4245541083745454055}
   - component: {fileID: 7592242119458481958}
   m_Layer: 0
-  m_Name: CpuAppearance
+  m_Name: CpuRig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1350,14 +1382,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3935600218738898496}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8255893625014789921}
   - {fileID: 1967929423762079717}
-  m_Father: {fileID: 899014493961415775}
+  m_Father: {fileID: 7600863437697538067}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &7592242119458481958
 Animator:
@@ -1767,7 +1799,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4245541083745454055}
+  - {fileID: 7600863437697538067}
   - {fileID: 8733454645625125250}
   - {fileID: 7570772938560011846}
   - {fileID: 1228775622615169691}
@@ -1859,7 +1891,10 @@ MonoBehaviour:
   OnDeath:
     _PersistentCalls: []
   OnDamage:
-    _PersistentCalls: []
+    _PersistentCalls:
+    - _Target: {fileID: 520336542923096696}
+      _MemberName: UpdateHealth
+      _PersistentArguments: []
   OnKnocked:
     _PersistentCalls: []
   OnWitFlagDeath:
@@ -3920,7 +3955,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.7}
+  m_AnchoredPosition: {x: 0, y: 2}
   m_SizeDelta: {x: 5, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &315572636013906048
