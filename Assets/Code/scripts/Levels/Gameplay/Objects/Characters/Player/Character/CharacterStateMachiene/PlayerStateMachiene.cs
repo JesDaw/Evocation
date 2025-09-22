@@ -19,6 +19,7 @@ public class PlayerStateMachine : MonoBehaviour
     PlayerStateFactory _states;
 
     PlayerCommander _commander;
+    int playerId;
 
 
     public void FindFreeCam()
@@ -32,7 +33,7 @@ public class PlayerStateMachine : MonoBehaviour
                 _commander = new PlayerCommander(ccs.FreeCamIsActive);
                 break;
             }
-        }     
+        }
     }
 
 
