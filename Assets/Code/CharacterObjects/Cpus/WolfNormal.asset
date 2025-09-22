@@ -10,29 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 238e13654c5efff43b776bb1e518c913, type: 3}
-  m_Name: LavaGuys
+  m_Name: WolfNormal
   m_EditorClassIdentifier: 
   _CpuPriority:
   - Player
-  - TreeGang
+  - LavaBros
   - Blank
   _Sprite: {fileID: 21300000, guid: 38f07a4b6d08c7243b482a84dc73ea52, type: 3}
   _Clan: LavaBros
   _MaxHealth: 10
   _CurrentHealth: 0
-  _AttackDamage: 5
-  _AttackStartup: 200
+  _AttackDamage: 4
+  _AttackStartup: 100
   _AttackActiveDuration: 0
-  _AttackEndlag: 400
-  _MoveSpeed: 10
-  _StopDistance: 2
+  _AttackEndlag: 200
+  _MoveSpeed: 20
+  _StopDistance: 1
   _KnockBackMax: 10
   _KnockBackHealth: 1
   _KnockBackVelocity: 1
   _spawnCost: 5
-  _StatusEffects: []
-  _EffectsToApply:
-  - {fileID: 11400000, guid: ee68ec388959d91469672acd03fe2555, type: 2}
+  _StatusEffects:
+  - {fileID: 11400000, guid: b09447a80e6bebf43805189595c14d8a, type: 2}
+  _EffectsToApply: []
   _StatusTicksMax: []
   _StatusTicks: []
   _StatusMax: 0
