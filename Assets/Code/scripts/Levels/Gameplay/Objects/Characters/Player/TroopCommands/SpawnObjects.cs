@@ -49,13 +49,8 @@ public class SpawnObjects : MonoBehaviour
         foreach (Transform child in CreatedObject.transform) child.gameObject.layer = CreatedObject.layer;
 
         //rotate apperance if on other side
-        if (CreatedObject.transform.childCount > 0 && CreatedObject.transform.GetChild(0).name == "CpuApperance")
+        if (CreatedObject.transform.childCount > 0 && CreatedObject.transform.GetChild(0).name == "CpuAppearance")
         {
-            if(CreatedObject.transform.rotation.z > 0)
-            {
-                CreatedObject.transform.GetChild(0).rotation = new Quaternion(0, 1, 0, 0);
-            }
-            
             //randomize y pos
             float RandomValue = Random.Range(-0.5f, 0.5f);
             CreatedObject.transform.GetChild(0).position = new Vector3
