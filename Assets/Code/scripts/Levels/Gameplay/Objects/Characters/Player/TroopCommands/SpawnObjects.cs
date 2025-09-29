@@ -17,13 +17,13 @@ public class SpawnObjects : MonoBehaviour
     [SerializeField] FloatVariable _Money;
     [SerializeField] PlayerSwitch playerSwitch;
     [SerializeField] PlayerLivesManager PlayerCountManager;
-    Money _moneyDesplay;
+    [SerializeField] Money _moneyDesplay;
 
     void Start()
     {
         StartCoroutine(SpawnLoop());
         _moneyDesplay = FindAnyObjectByType<Money>();
-        if (_moneyDesplay != null) Debug.LogWarning("Spawn objects script cant find Money script to edit the money desplay");
+        if (_moneyDesplay == null) Debug.LogError("Spawn objects script can't find Money script to edit the money desplay");
     }
 
     IEnumerator SpawnLoop()
@@ -76,6 +76,7 @@ public class SpawnObjects : MonoBehaviour
 
         _Money._Value -= ScrStats._spawnCost;
         _moneyDesplay.UpdateMoneyDesplay();
+        Debug.Log("money updated:" + _Money._Value);
 
 
         GameObject CreatedObject = Instantiate(_Object, this.transform.position, this.transform.rotation, _Container);

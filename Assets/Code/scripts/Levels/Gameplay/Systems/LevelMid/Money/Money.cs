@@ -39,6 +39,7 @@ public class Money : MonoBehaviour
     public void UpdateMoneyDesplay()
     {
         moneyText.text = moneyAmount._Value.ToString("0");
+        Debug.Log("UpdateMoneyDesplay updated");
     }
 
     public void spendMoney(int amount)
