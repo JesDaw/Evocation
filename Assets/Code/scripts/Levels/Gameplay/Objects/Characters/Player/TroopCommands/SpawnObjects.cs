@@ -106,6 +106,7 @@ public class SpawnObjects : MonoBehaviour
             );
 
         }
+        OnSpawn.Invoke(CreatedObject);
     }
     public void SpawnPlayer(GameObject player)
     {
