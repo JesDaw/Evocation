@@ -38,14 +38,29 @@ public class Healthbar : MonoBehaviour
     private void DrainHealthBar()
     {
         _currentHealth -= 10f;
-        float ratio = _currentHealth / _maxHealth;
+        float ratio = Mathf.Clamp01(_currentHealth / _maxHealth);
 
         Sequence sequence = DOTween.Sequence();
-        sequence.Append(_healthBarFillImage.DOFillAmount(ratio, 0.25f))
-                .SetEase(Ease.InOutSine);
+
+        sequence.Append(
+            DOTween.To(
+                () => _healthBarFillImage.fillAmount,
+                x => _healthBarFillImage.fillAmount = x,
+                ratio,
+                0.25f
+            ).SetEase(Ease.InOutSine)
+        );
+
         sequence.AppendInterval(_trailDelay);
-        sequence.Append(_healthBarTrailingFillImage.DOFillAmount(ratio, 0.3f))
-                .SetEase(Ease.InOutSine);
+
+        sequence.Append(
+            DOTween.To(
+                () => _healthBarTrailingFillImage.fillAmount,
+                x => _healthBarTrailingFillImage.fillAmount = x,
+                ratio,
+                0.3f
+            ).SetEase(Ease.InOutSine)
+        );
 
         sequence.Play();
     }
