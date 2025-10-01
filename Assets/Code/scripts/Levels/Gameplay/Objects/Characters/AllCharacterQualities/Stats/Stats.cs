@@ -68,15 +68,6 @@ public class Stats : MonoBehaviour
         yield return new WaitForSeconds(_TickSpeed);
         for (int I = 0; I < _StatusTicks.Count; I++)
         {
-            if (I <= 0)
-            {
-                Debug.Log("Status Effect list was changed (most likely from an external operation)");
-                _StatusEffects = new List<StatusEffect>();
-                _StatusTicksMax = new List<Vector2>();
-                _StatusTicks = new List<Vector2>();
-                break;
-            }
-
             Vector2 CurrentStatus = _StatusTicks[I];
 
             if (CurrentStatus.x > 0)
