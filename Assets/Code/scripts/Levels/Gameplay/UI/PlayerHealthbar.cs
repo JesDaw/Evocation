@@ -1,10 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class PlayerHealthbar : MonoBehaviour
 {
     [SerializeField] internal ActivePlayer ActivePlayer;
-    [SerializeField] internal Slider _Slider;
+    [SerializeField] internal Image _HealthFillImage;
+    [SerializeField] internal Image _HealthTrailImage;
+
+    [SerializeField] private float _tweenDuration = 0.25f;
+    [SerializeField] private float _trailDelay = 0.4f;
 
     internal delegate void UpdateHealth(int value);
     internal delegate void UpdateMaxHealth(int value);
@@ -15,10 +20,31 @@ public class PlayerHealthbar : MonoBehaviour
     // Function called to update the Max Health indicator
     internal UpdateMaxHealth updateMaxHealthIndicator;
 
-    internal PlayerHealthbar()
+    private int _maxHealth = 100;
+
+    private void Awake()
     {
-        updateHealthIndicator = (x) => _Slider.value = x;
-        updateMaxHealthIndicator = (x) => _Slider.maxValue = x;
+        updateHealthIndicator = (x) =>
+        {
+            float ratio = _maxHealth > 0 ? (float)x / _maxHealth : 0f;
+            DOTween.To(() => _HealthFillImage.fillAmount,
+                       value => _HealthFillImage.fillAmount = value,
+                       ratio, _tweenDuration)
+                   .SetEase(Ease.InOutSine);
+
+            // animate trailing bar after delay
+            DOTween.Sequence()
+                   .AppendInterval(_trailDelay)
+                   .Append(DOTween.To(() => _HealthTrailImage.fillAmount,
+                                      v => _HealthTrailImage.fillAmount = v,
+                                      ratio, _tweenDuration)
+                                 .SetEase(Ease.InOutSine));
+        };
+
+        updateMaxHealthIndicator = (x) =>
+        {
+            _maxHealth = x;
+        };
     }
 
     internal void Start()
@@ -27,6 +53,7 @@ public class PlayerHealthbar : MonoBehaviour
 
         ActivePlayer.PlayerActivating += OnPlayerActivating;
         ActivePlayer.PlayerDeactivating += OnPlayerDeactivating;
+
         if (ActivePlayer.CurrentPlayer != null)
         {
             OnPlayerActivating(ActivePlayer.CurrentPlayer);
@@ -87,7 +114,7 @@ public class PlayerHealthbar : MonoBehaviour
         }
         else
         {
-            updateMaxHealthIndicator(0);
+            updateMaxHealthIndicator(1);
             updateHealthIndicator(0);
         }
     }
