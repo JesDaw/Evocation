@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.Playables;
 
-private bool isPaused = false;
+
 
 public class TimelineController : MonoBehaviour
 {
+    private bool isPaused = false;
     PlayableDirector timeline;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
