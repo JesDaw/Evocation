@@ -73,7 +73,7 @@ public class Stats : MonoBehaviour
             if (CurrentStatus.x > 0)
             {
                 CurrentStatus.x -= _TickSpeed;
-                Debug.Log(CurrentStatus);
+                //Debug.Log(CurrentStatus);
             }
             else
             {

@@ -15,6 +15,11 @@ public class BuildingStatsManager : MonoBehaviour
     void Start()
     {
         gameObject.tag = "Blank";
+        if (_Renderer == null)
+        {
+            _Renderer = gameObject.GetComponent<SpriteRenderer>();
+            Debug.Log($"auto linked sprite renderor onto {gameObject.name} because it wasnt set in inspecter");
+        }
         SwapBuilding(ScrStats);
     }
 

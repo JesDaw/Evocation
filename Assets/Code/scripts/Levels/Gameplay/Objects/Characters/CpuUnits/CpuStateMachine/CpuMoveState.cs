@@ -46,6 +46,7 @@ public class CpuMoveState : CpuBaseState
                     GameObject EnemyGameobject = hits[II].collider.gameObject;
                     _context._AttackingStats = EnemyGameobject.GetComponent<Stats>();
                     //this section is for healing
+
                     if (_context._AttackingStats._CurrentHealth >= _context._AttackingStats._MaxHealth &&
                         _Stats._AttackDamage <= 0
                         )
