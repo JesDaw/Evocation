@@ -21,6 +21,30 @@ public class PlayerStateMachine : MonoBehaviour
     PlayerCommander _commander;
     int playerId;
 
+    void Awake()
+    {
+        //setup state
+        FindFreeCam();
+        _states = new PlayerStateFactory(this);
+        _currentState = _states.Idle();
+        _currentState.EnterState();
+    }
+
+    void OnEnable()
+    {
+        // Enable character controls action map
+    }
+
+    void OnDisable()
+    {
+        // Disable character controls action map
+    }
+
+    void Update()
+    {
+        //Debug.Log($"current state = {_currentState}");
+        _currentState.UpdateStates();
+    }
 
     public void FindFreeCam()
     {
@@ -95,28 +119,5 @@ public class PlayerStateMachine : MonoBehaviour
     }
 
     //all referance veraibles, player input callbacks
-    void Awake()
-    {
-        //setup state
-        FindFreeCam();
-        _states = new PlayerStateFactory(this);
-        _currentState = _states.Idle();
-        _currentState.EnterState();
-    }
 
-    void OnEnable()
-    {
-        // Enable character controls action map
-    }
-
-    void OnDisable()
-    {
-        // Disable character controls action map
-    }
-
-    void Update()
-    {
-        //Debug.Log($"current state = {_currentState}");
-        _currentState.UpdateStates();
-    }
 }
