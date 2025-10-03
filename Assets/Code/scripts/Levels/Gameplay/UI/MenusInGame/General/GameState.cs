@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using Codice.CM.WorkspaceServer.Tree;
 
 public class GameState : MonoBehaviour
 {
@@ -23,6 +24,22 @@ public class GameState : MonoBehaviour
             sceneMgr = obj;
         }
         Debug.Assert(sceneMgr != null);
+    }
+
+    public void HandleGameStart()
+    {
+        GameIsOver = false;
+        // make player is in free cam
+        // cant to to player
+        // turn off spawns
+        // turn off timer
+        // turn off money
+        // during this time player should be able to toggle a menu on and off 
+        // music is into only initially
+
+        // when player presses go:
+        // there is a 3, 2, 1 countdown
+        // music transitions to main gampley clip 
     }
 
     public void HandleGameWin()
