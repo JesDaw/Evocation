@@ -1010,6 +1010,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""5ee5288a-e2d5-4074-b7b0-63e7fa014d0a"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""StartEngaugment"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""9e714125-7b9d-43e8-9638-18cc29ad72fb"",
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",

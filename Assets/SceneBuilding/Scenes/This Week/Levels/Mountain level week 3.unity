@@ -590,8 +590,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameState, CodeAssembly
+      - m_Target: {fileID: 1303307800}
+        m_TargetAssemblyTypeName: UILogic, CodeAssembly
         m_MethodName: QuitGame
         m_Mode: 1
         m_Arguments:
@@ -872,8 +872,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameState, CodeAssembly
+      - m_Target: {fileID: 215629011}
+        m_TargetAssemblyTypeName: UILogic, CodeAssembly
         m_MethodName: Resume
         m_Mode: 1
         m_Arguments:
@@ -1493,8 +1493,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameState, CodeAssembly
+      - m_Target: {fileID: 556792487}
+        m_TargetAssemblyTypeName: UILogic, CodeAssembly
         m_MethodName: LoadMenu
         m_Mode: 1
         m_Arguments:
@@ -1638,8 +1638,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameState, CodeAssembly
+      - m_Target: {fileID: 215629011}
+        m_TargetAssemblyTypeName: UILogic, CodeAssembly
         m_MethodName: LoadMenu
         m_Mode: 1
         m_Arguments:
@@ -2246,6 +2246,14 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 94f9f83c-9ff8-4130-82e6-314b50a53696
     m_ActionName: 'CPU controller/Spawn0[/Keyboard/0]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: bddbf0f0-9641-4c97-bd19-8537845227fe
+    m_ActionName: 'UI/StartEngaugment[/Keyboard/enter]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 3dff94d3-7b3a-43c9-8c15-9bcaea684c9c
+    m_ActionName: 'UI/ToggleCharacterSelect[/Keyboard/escape]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: UI
@@ -2382,7 +2390,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 665598a9eb8e04bcb88ba2e53a683727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameState: {fileID: 0}
+  gameState: {fileID: 1757698617}
   _ResetValues:
     m_PersistentCalls:
       m_Calls: []
@@ -8699,9 +8707,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 556792478}
         m_TargetAssemblyTypeName: GameState, CodeAssembly
-        m_MethodName: Restart
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -13778,8 +13786,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameState, CodeAssembly
+      - m_Target: {fileID: 1303307800}
+        m_TargetAssemblyTypeName: UILogic, CodeAssembly
         m_MethodName: LoadMenu
         m_Mode: 1
         m_Arguments:
@@ -16173,10 +16181,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 556792478}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aad484f707abd4459aca5a773ddd3957, type: 3}
+  m_Script: {fileID: 11500000, guid: 665598a9eb8e04bcb88ba2e53a683727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameState: {fileID: 0}
+  gameState: {fileID: 1757698617}
+  _ResetValues:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &607666651
 GameObject:
   m_ObjectHideFlags: 0
@@ -16345,75 +16356,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1001 &612095205
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 899014493961415775, guid: 52135a68ff4a24ac4b84ed8d10b9c691, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -48.358368
-      objectReference: {fileID: 0}
-    - target: {fileID: 899014493961415775, guid: 52135a68ff4a24ac4b84ed8d10b9c691, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -4.656135
-      objectReference: {fileID: 0}
-    - target: {fileID: 899014493961415775, guid: 52135a68ff4a24ac4b84ed8d10b9c691, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.020564094
-      objectReference: {fileID: 0}
-    - target: {fileID: 899014493961415775, guid: 52135a68ff4a24ac4b84ed8d10b9c691, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 899014493961415775, guid: 52135a68ff4a24ac4b84ed8d10b9c691, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 899014493961415775, guid: 52135a68ff4a24ac4b84ed8d10b9c691, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 899014493961415775, guid: 52135a68ff4a24ac4b84ed8d10b9c691, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 899014493961415775, guid: 52135a68ff4a24ac4b84ed8d10b9c691, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 899014493961415775, guid: 52135a68ff4a24ac4b84ed8d10b9c691, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 899014493961415775, guid: 52135a68ff4a24ac4b84ed8d10b9c691, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4570205984447939618, guid: 52135a68ff4a24ac4b84ed8d10b9c691, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5332745155659718807, guid: 52135a68ff4a24ac4b84ed8d10b9c691, type: 3}
-      propertyPath: m_Name
-      value: CpuFriend
-      objectReference: {fileID: 0}
-    - target: {fileID: 5332745155659718807, guid: 52135a68ff4a24ac4b84ed8d10b9c691, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5441694804795365909, guid: 52135a68ff4a24ac4b84ed8d10b9c691, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 52135a68ff4a24ac4b84ed8d10b9c691, type: 3}
 --- !u!1 &638670842
 GameObject:
   m_ObjectHideFlags: 0
@@ -17207,6 +17149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdde509aad8264911bb5e8043d6af146, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trackTotriggerevent: 
   Tracks:
   - {fileID: 1033762403}
   - {fileID: 1799577621}
@@ -17706,7 +17649,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 00:00
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -17880,8 +17823,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MenuLogicManager, CodeAssembly
+      - m_Target: {fileID: 556792487}
+        m_TargetAssemblyTypeName: UILogic, CodeAssembly
         m_MethodName: QuitGame
         m_Mode: 1
         m_Arguments:
@@ -18157,9 +18100,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 215629002}
         m_TargetAssemblyTypeName: SceneActivityManager, CodeAssembly
-        m_MethodName: ActivateSettings
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -20368,7 +20311,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -26715,10 +26658,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1303307791}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 914cdc019ddda4fe3ab4ff6148a04717, type: 3}
+  m_Script: {fileID: 11500000, guid: 665598a9eb8e04bcb88ba2e53a683727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameState: {fileID: 0}
+  gameState: {fileID: 1757698617}
+  _ResetValues:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1321677415
 GameObject:
   m_ObjectHideFlags: 0
@@ -27130,8 +27076,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameState, CodeAssembly
+      - m_Target: {fileID: 1303307800}
+        m_TargetAssemblyTypeName: UILogic, CodeAssembly
         m_MethodName: Restart
         m_Mode: 1
         m_Arguments:
@@ -33181,6 +33127,171 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1544070352}
   m_CullTransparentMesh: 1
+--- !u!43 &1547892628
+Mesh:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  serializedVersion: 11
+  m_SubMeshes:
+  - serializedVersion: 2
+    firstByte: 0
+    indexCount: 0
+    topology: 0
+    baseVertex: 0
+    firstVertex: 0
+    vertexCount: 0
+    localAABB:
+      m_Center: {x: 0, y: 0, z: 0}
+      m_Extent: {x: 0, y: 0, z: 0}
+  m_Shapes:
+    vertices: []
+    shapes: []
+    channels: []
+    fullWeights: []
+  m_BindPose: []
+  m_BoneNameHashes: 
+  m_RootBoneNameHash: 0
+  m_BonesAABB: []
+  m_VariableBoneCountWeights:
+    m_Data: 
+  m_MeshCompression: 0
+  m_IsReadable: 1
+  m_KeepVertices: 1
+  m_KeepIndices: 1
+  m_IndexFormat: 0
+  m_IndexBuffer: 
+  m_VertexData:
+    serializedVersion: 3
+    m_VertexCount: 0
+    m_Channels:
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    m_DataSize: 0
+    _typelessdata: 
+  m_CompressedMesh:
+    m_Vertices:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UV:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Normals:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Tangents:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Weights:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_NormalSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_TangentSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_FloatColors:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_BoneIndices:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Triangles:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UVInfo: 0
+  m_LocalAABB:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
+  m_MeshUsageFlags: 0
+  m_CookingOptions: 30
+  m_BakedConvexCollisionMesh: 
+  m_BakedTriangleCollisionMesh: 
+  'm_MeshMetrics[0]': 1
+  'm_MeshMetrics[1]': 1
+  m_MeshOptimizationFlags: 1
+  m_StreamData:
+    serializedVersion: 2
+    offset: 0
+    size: 0
+    path: 
 --- !u!1 &1573923686
 GameObject:
   m_ObjectHideFlags: 0
@@ -33519,10 +33630,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1573923686}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85875f566d1934bdda87af932de1ccb8, type: 3}
+  m_Script: {fileID: 11500000, guid: 665598a9eb8e04bcb88ba2e53a683727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameState: {fileID: 0}
+  gameState: {fileID: 1757698617}
+  _ResetValues:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1576073606
 GameObject:
   m_ObjectHideFlags: 0
@@ -38812,7 +38926,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1647256512}
   m_Layer: 0
-  m_Name: ManuManagers
+  m_Name: MenuManagers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -39448,7 +39562,6 @@ MonoBehaviour:
     _PersistentCalls: []
   TrackfadeOutThree:
     _PersistentCalls: []
-  MusicManager: {fileID: 0}
   currentlevelState: 0
 --- !u!114 &1757698618
 MonoBehaviour:
@@ -39625,7 +39738,7 @@ MonoBehaviour:
     m_ActionName: 'UI & Gamestates/ToggleCharacterSelect[/Keyboard/escape]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
+  m_DefaultActionMap: UI
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!1 &1765862225
@@ -40448,7 +40561,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1838350703
 Transform:
   m_ObjectHideFlags: 0
@@ -41200,10 +41313,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1937163049}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8b00f8a1714d40458ee9d0a881540b7, type: 3}
+  m_Script: {fileID: 11500000, guid: 665598a9eb8e04bcb88ba2e53a683727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameState: {fileID: 0}
+  gameState: {fileID: 1757698617}
+  _ResetValues:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1948440977
 GameObject:
   m_ObjectHideFlags: 0
@@ -43195,171 +43311,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!43 &2144458390
-Mesh:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  serializedVersion: 11
-  m_SubMeshes:
-  - serializedVersion: 2
-    firstByte: 0
-    indexCount: 0
-    topology: 0
-    baseVertex: 0
-    firstVertex: 0
-    vertexCount: 0
-    localAABB:
-      m_Center: {x: 0, y: 0, z: 0}
-      m_Extent: {x: 0, y: 0, z: 0}
-  m_Shapes:
-    vertices: []
-    shapes: []
-    channels: []
-    fullWeights: []
-  m_BindPose: []
-  m_BoneNameHashes: 
-  m_RootBoneNameHash: 0
-  m_BonesAABB: []
-  m_VariableBoneCountWeights:
-    m_Data: 
-  m_MeshCompression: 0
-  m_IsReadable: 1
-  m_KeepVertices: 1
-  m_KeepIndices: 1
-  m_IndexFormat: 0
-  m_IndexBuffer: 
-  m_VertexData:
-    serializedVersion: 3
-    m_VertexCount: 0
-    m_Channels:
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 3
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    m_DataSize: 0
-    _typelessdata: 
-  m_CompressedMesh:
-    m_Vertices:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UV:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Normals:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Tangents:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Weights:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_NormalSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_TangentSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_FloatColors:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_BoneIndices:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Triangles:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UVInfo: 0
-  m_LocalAABB:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
-  m_MeshUsageFlags: 0
-  m_CookingOptions: 30
-  m_BakedConvexCollisionMesh: 
-  m_BakedTriangleCollisionMesh: 
-  'm_MeshMetrics[0]': 1
-  'm_MeshMetrics[1]': 1
-  m_MeshOptimizationFlags: 1
-  m_StreamData:
-    serializedVersion: 2
-    offset: 0
-    size: 0
-    path: 
 --- !u!1001 &5121823051759623096
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -43566,4 +43517,3 @@ SceneRoots:
   - {fileID: 607666652}
   - {fileID: 1591676357}
   - {fileID: 711744346}
-  - {fileID: 612095205}

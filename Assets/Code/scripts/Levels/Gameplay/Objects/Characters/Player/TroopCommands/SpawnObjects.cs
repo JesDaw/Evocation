@@ -19,7 +19,7 @@ public class SpawnObjects : MonoBehaviour
     [SerializeField] PlayerLivesManager PlayerCountManager;
     [SerializeField] Money _moneyDesplay;
 
-    bool _spawning_is_active;
+    bool _spawning_is_active = false;
 
     internal bool SpawningIsActive
     {
@@ -36,11 +36,13 @@ public class SpawnObjects : MonoBehaviour
 
     IEnumerator SpawnLoop()
     {
-        if(StopFlag) yield break;
-        Spawn();
-        yield return new WaitForSeconds(CoolDown);
-        StartCoroutine(SpawnLoop());
+        while (!StopFlag)
+        {
+            Spawn();
+            yield return new WaitForSeconds(CoolDown);
+        }
     }
+
     //same overloaded bullshit spawn script
     //auto spawn
     public void Spawn()

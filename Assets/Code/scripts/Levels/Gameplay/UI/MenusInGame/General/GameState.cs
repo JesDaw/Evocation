@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -16,8 +17,6 @@ public class GameState : MonoBehaviour
     //mjusic
     [SerializeField] internal UltEvents.UltEvent TrackfadeInOne, TrackfadeInTwo, TrackfadeInThree;
     [SerializeField] internal UltEvents.UltEvent TrackfadeOutOne, TrackfadeOutTwo, TrackfadeOutThree;
-    [SerializeField] MusicManager MusicManager;
-
     public LevelState currentlevelState;
     InputAction engaugeAction, toggleCharacterSeceltAction;
 
@@ -60,22 +59,22 @@ public class GameState : MonoBehaviour
         }
         Debug.Assert(sceneMgr != null);
 
-        if (_moneyMachanic == null) { }
-        if (_timeMachanic == null) { }
-        if (_playerStateMachine == null) { }
-        if (_playerSpawnObjects == null) { }
-        if (_enemySpawnObjects == null) { }
+       // if (_moneyMachanic == null) { }
+        //if (_timeMachanic == null) { }
+        //if (_playerStateMachine == null) { }
+        //if (_playerSpawnObjects == null) { }
+        //if (_enemySpawnObjects == null) { }
         HandleLevelIntro();
     }
 
     //=======================Game States=======================================
-    internal void HandleLevelIntro()
-    {
-        currentlevelState = LevelState.Intro;
-        // optional animation sequence and diologue 
-        HandleLevelScoutingFaze();
-    }
-
+  internal void HandleLevelIntro()
+{
+    currentlevelState = LevelState.Intro;
+    // optional animation sequence and dialogue
+    // Delay the transition to Scouting so Start() finishes first
+    HandleLevelScoutingFaze();
+}
     public void HandleLevelScoutingFaze()
     {
         currentlevelState = LevelState.Scouting;
@@ -100,6 +99,7 @@ public class GameState : MonoBehaviour
 
     public void OnEngaugeButtonPressed(InputAction.CallbackContext context)
     {
+        Debug.Log("OnEngaugeButtonPressed");
         if (currentlevelState != LevelState.Scouting || !context.performed) return;
         //check if they are sure
         // 3, 2, 1 go thing
@@ -111,7 +111,7 @@ public class GameState : MonoBehaviour
         currentlevelState = LevelState.EngaugmentPartOne;
         //activate music
         _playerSpawnObjects.SpawningIsActive = true;
-        _enemySpawnObjects.SpawningIsActive = false;
+        _enemySpawnObjects.SpawningIsActive = true;
         _timeMachanic.TimeIsActive = true;
         _moneyMachanic.MoneyIsActive = true;
         StartTrackTwo();
@@ -142,26 +142,14 @@ public class GameState : MonoBehaviour
         Time.timeScale = 0;
     }
 
-    //=======================Game State Functionality=======================================
-
-
-
-
-
-
-
-
-
-
-
     //=======================Music tracks=======================================
     public void StartTrackOne()
     {
-        TrackfadeInOne?.Invoke();
+       TrackfadeInOne?.Invoke();
     }
     public void StartTrackTwo()
     {
-        TrackfadeInTwo?.Invoke();
+       TrackfadeInTwo?.Invoke();
     }
     public void StartTrackThree()
     {

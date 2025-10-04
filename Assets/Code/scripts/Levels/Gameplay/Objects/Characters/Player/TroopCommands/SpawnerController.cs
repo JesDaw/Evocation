@@ -130,11 +130,13 @@ public class SpawnerController : MonoBehaviour
                 spawnObjects.Spawn(spawnables[index]);
                 Debug.Log("Spawned object at index: " + index);
 
-                AlreadySpawned = true;
+                //AlreadySpawned = true;
+                //yield return new WaitForSeconds(CoolDown);
+                //AlreadySpawned = false;
+                
+                yield return null;
 
-                yield return new WaitForSeconds(CoolDown);
-
-                AlreadySpawned = false;
+                
             }
             else
             {
