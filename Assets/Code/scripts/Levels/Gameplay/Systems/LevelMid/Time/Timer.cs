@@ -17,6 +17,12 @@ public class Timer : MonoBehaviour
 
     bool _timer_is_active = true;
 
+    internal bool TimeIsActive
+    {
+        get { return _timer_is_active; }
+        set { _timer_is_active = value;}
+    }
+
     void Awake()
     {
         timerTextObj = GameObject.Find("TimerText");
