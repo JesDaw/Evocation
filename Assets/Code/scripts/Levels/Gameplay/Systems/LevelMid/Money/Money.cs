@@ -12,7 +12,13 @@ public class Money : MonoBehaviour
     GameObject moneyTextObj;
     TextMeshProUGUI moneyText;
 
-    bool _money_is_active = true;
+    bool _money_is_active = false;
+
+    public bool MoneyIsActive
+    {
+        get { return _money_is_active; }
+        set { _money_is_active = value;}
+    }
 
     void Awake()
     {
@@ -28,8 +34,13 @@ public class Money : MonoBehaviour
 
     IEnumerator moneyCount()
     {
-        while(moneyAmount._Value < 9999 && _money_is_active)
+        while(moneyAmount._Value < 9999 )
         {
+            if (!_money_is_active)
+            {
+                yield return null;
+                continue;
+            }
             moneyAmount._Value++;
             UpdateMoneyDesplay();
             yield return new WaitForSeconds(1/genPerSec._Value);

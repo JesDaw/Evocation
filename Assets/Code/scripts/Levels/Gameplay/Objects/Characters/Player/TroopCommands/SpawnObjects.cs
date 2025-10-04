@@ -19,6 +19,14 @@ public class SpawnObjects : MonoBehaviour
     [SerializeField] PlayerLivesManager PlayerCountManager;
     [SerializeField] Money _moneyDesplay;
 
+    bool _spawning_is_active = false;
+
+    internal bool SpawningIsActive
+    {
+        get { return _spawning_is_active; }
+        set { _spawning_is_active = value;}
+    }
+
     void Start()
     {
         StartCoroutine(SpawnLoop());
@@ -28,16 +36,18 @@ public class SpawnObjects : MonoBehaviour
 
     IEnumerator SpawnLoop()
     {
-        if(StopFlag) yield break;
-        Spawn();
-        yield return new WaitForSeconds(CoolDown);
-        StartCoroutine(SpawnLoop());
+        while (!StopFlag)
+        {
+            Spawn();
+            yield return new WaitForSeconds(CoolDown);
+        }
     }
+
     //same overloaded bullshit spawn script
     //auto spawn
     public void Spawn()
     {
-        if (!autoSpawner) return;
+        if (!autoSpawner || !_spawning_is_active) return;
 
         GameObject CreatedObject = Instantiate(_Object, this.transform.position, this.transform.rotation, _Container);
         CpuStateManager ObjectLogic = CreatedObject.GetComponent<CpuStateManager>();
@@ -68,10 +78,15 @@ public class SpawnObjects : MonoBehaviour
     // when player manually spawns
     public void Spawn(ScriptableStats ScrStats)
     {
+        if (!_spawning_is_active)
+        {
+            Debug.Log("Character spawns are dissabled");
+            return;
+        }
         if (_Money._Value < ScrStats._spawnCost)
         {
             Debug.Log("Not enough money!");
-            return;    
+            return;
         }
 
         _Money._Value -= ScrStats._spawnCost;
@@ -110,6 +125,11 @@ public class SpawnObjects : MonoBehaviour
     }
     public void SpawnPlayer(GameObject player)
     {
+        if (!_spawning_is_active)
+        {
+            Debug.Log("Character spawns are dissabled");
+            return;
+        }
         if (!PlayerCountManager.canSpawnMore) return;
         int cost = player.GetComponent<Stats>()._spawnCost;
         if (_Money._Value > cost) _Money._Value -= cost;

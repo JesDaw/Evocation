@@ -536,6 +536,24 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""StartEngaugment"",
+                    ""type"": ""Button"",
+                    ""id"": ""bddbf0f0-9641-4c97-bd19-8537845227fe"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleCharacterSelect"",
+                    ""type"": ""Button"",
+                    ""id"": ""3dff94d3-7b3a-43c9-8c15-9bcaea684c9c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -978,6 +996,39 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""TogglePause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d25f086c-12b8-416f-b92a-2dfaf42d1a8a"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""StartEngaugment"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5ee5288a-e2d5-4074-b7b0-63e7fa014d0a"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""StartEngaugment"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9e714125-7b9d-43e8-9638-18cc29ad72fb"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""ToggleCharacterSelect"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1343,6 +1394,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
         m_UI_TogglePause = m_UI.FindAction("TogglePause", throwIfNotFound: true);
+        m_UI_StartEngaugment = m_UI.FindAction("StartEngaugment", throwIfNotFound: true);
+        m_UI_ToggleCharacterSelect = m_UI.FindAction("ToggleCharacterSelect", throwIfNotFound: true);
         // ControlManager
         m_ControlManager = asset.FindActionMap("ControlManager", throwIfNotFound: true);
         m_ControlManager_NextPlayer = m_ControlManager.FindAction("NextPlayer", throwIfNotFound: true);
@@ -1680,6 +1733,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_TrackedDevicePosition;
     private readonly InputAction m_UI_TrackedDeviceOrientation;
     private readonly InputAction m_UI_TogglePause;
+    private readonly InputAction m_UI_StartEngaugment;
+    private readonly InputAction m_UI_ToggleCharacterSelect;
     /// <summary>
     /// Provides access to input actions defined in input action map "UI".
     /// </summary>
@@ -1735,6 +1790,14 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "UI/TogglePause".
         /// </summary>
         public InputAction @TogglePause => m_Wrapper.m_UI_TogglePause;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/StartEngaugment".
+        /// </summary>
+        public InputAction @StartEngaugment => m_Wrapper.m_UI_StartEngaugment;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/ToggleCharacterSelect".
+        /// </summary>
+        public InputAction @ToggleCharacterSelect => m_Wrapper.m_UI_ToggleCharacterSelect;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1794,6 +1857,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @TogglePause.started += instance.OnTogglePause;
             @TogglePause.performed += instance.OnTogglePause;
             @TogglePause.canceled += instance.OnTogglePause;
+            @StartEngaugment.started += instance.OnStartEngaugment;
+            @StartEngaugment.performed += instance.OnStartEngaugment;
+            @StartEngaugment.canceled += instance.OnStartEngaugment;
+            @ToggleCharacterSelect.started += instance.OnToggleCharacterSelect;
+            @ToggleCharacterSelect.performed += instance.OnToggleCharacterSelect;
+            @ToggleCharacterSelect.canceled += instance.OnToggleCharacterSelect;
         }
 
         /// <summary>
@@ -1838,6 +1907,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @TogglePause.started -= instance.OnTogglePause;
             @TogglePause.performed -= instance.OnTogglePause;
             @TogglePause.canceled -= instance.OnTogglePause;
+            @StartEngaugment.started -= instance.OnStartEngaugment;
+            @StartEngaugment.performed -= instance.OnStartEngaugment;
+            @StartEngaugment.canceled -= instance.OnStartEngaugment;
+            @ToggleCharacterSelect.started -= instance.OnToggleCharacterSelect;
+            @ToggleCharacterSelect.performed -= instance.OnToggleCharacterSelect;
+            @ToggleCharacterSelect.canceled -= instance.OnToggleCharacterSelect;
         }
 
         /// <summary>
@@ -2384,6 +2459,20 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnTogglePause(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "StartEngaugment" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnStartEngaugment(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ToggleCharacterSelect" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnToggleCharacterSelect(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "ControlManager" which allows adding and removing callbacks.

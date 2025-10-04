@@ -15,7 +15,13 @@ public class Timer : MonoBehaviour
     GameObject timerTextObj;
     TextMeshProUGUI timerText;
 
-    bool _timer_is_active = true;
+    bool _timer_is_active = false;
+
+    internal bool TimeIsActive
+    {
+        get { return _timer_is_active; }
+        set { _timer_is_active = value;}
+    }
 
     void Awake()
     {

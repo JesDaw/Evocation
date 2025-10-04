@@ -8,8 +8,10 @@ public class MusicManager : MonoBehaviour
     List<AudioSource> _currentTracks = new List<AudioSource>();
     [SerializeField] public List<AudioSource> Tracks = new List<AudioSource>();
     
-    private Dictionary<AudioSource, bool> _trackFadingStates = new Dictionary<AudioSource, bool>();
+    Dictionary<AudioSource, bool> _trackFadingStates = new Dictionary<AudioSource, bool>();
     List<AudioEffectEditor> _currentEffects = new List<AudioEffectEditor>();
+    [SerializeField] event System.Action<AudioSource> OnTrackFinished;
+
 
     void Start()
     {
@@ -40,7 +42,7 @@ public class MusicManager : MonoBehaviour
             }
         }
         _currentTracks.RemoveAll(track => !track.isPlaying);
-        
+
         Debug.Log($"Current tracks: {_currentTracks.Count}, Anchoring track: {(_AnchoringTrack ? _AnchoringTrack.name : "None")}");
         foreach (AudioSource audioSourcetrack in Tracks)
         {
