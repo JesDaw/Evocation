@@ -1,5 +1,8 @@
 using UnityEngine;
 
+
+// SCRIPT IS NO LONGER USED
+
 public class PlayersControlerScriptsManager : MonoBehaviour
 {
     public bool _actionable;
@@ -65,7 +68,7 @@ public class PlayersControlerScriptsManager : MonoBehaviour
     {
         if (playerSwitch != null)
         {
-         playerSwitch.RemovePlayer(this.gameObject);
+            playerSwitch.RemovePlayer(this.gameObject);
         }
     }
 

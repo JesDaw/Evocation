@@ -6,12 +6,13 @@ using UnityEngine.InputSystem;
 public class GameState : MonoBehaviour
 {
     bool GameIsPaused = false;
-    
+
 
     // For controlling game machanics
     [SerializeField] Money _moneyMachanic;
     [SerializeField] Timer _timeMachanic;
     [SerializeField] PlayerStateMachine _playerStateMachine;
+    [SerializeField] CameraControlSwitcher controlSwitcher;
     [SerializeField] SpawnObjects _playerSpawnObjects, _enemySpawnObjects;
     [SerializeField] internal UltEvents.UltEvent LevelPartOne, LevelPartTwo, LevelPartThree;
     //mjusic
@@ -21,6 +22,7 @@ public class GameState : MonoBehaviour
     InputAction engaugeAction, toggleCharacterSeceltAction;
 
     SceneActivityManager sceneMgr;
+    InputSystem_Actions inputActions;
     public enum LevelState
     {
         Intro,
@@ -37,17 +39,21 @@ public class GameState : MonoBehaviour
     {
         engaugeAction = InputSystem.actions.FindAction("StartEngaugment");
         toggleCharacterSeceltAction = InputSystem.actions.FindAction("ToggleCharacterSelect");
+        
+        
     }
 
     void OnEnable()
     {
         if (engaugeAction != null) engaugeAction.Enable();
         if (toggleCharacterSeceltAction != null) toggleCharacterSeceltAction.Enable();
+        
     }
     private void OnDisable()
     {
         if (engaugeAction != null) engaugeAction.Disable();
         if (toggleCharacterSeceltAction != null) toggleCharacterSeceltAction.Disable();
+        inputActions.Disable();
     }
 
     void Start()
@@ -58,8 +64,9 @@ public class GameState : MonoBehaviour
             sceneMgr = obj;
         }
         Debug.Assert(sceneMgr != null);
+        inputActions = controlSwitcher.inputActions;
 
-       // if (_moneyMachanic == null) { }
+        // if (_moneyMachanic == null) { }
         //if (_timeMachanic == null) { }
         //if (_playerStateMachine == null) { }
         //if (_playerSpawnObjects == null) { }
@@ -68,18 +75,24 @@ public class GameState : MonoBehaviour
     }
 
     //=======================Game States=======================================
-  internal void HandleLevelIntro()
-{
-    currentlevelState = LevelState.Intro;
-    // optional animation sequence and dialogue
-    // Delay the transition to Scouting so Start() finishes first
-    HandleLevelScoutingFaze();
-}
+    internal void HandleLevelIntro()
+    {
+        currentlevelState = LevelState.Intro;
+        // optional animation sequence and dialogue
+        // Delay the transition to Scouting so Start() finishes first
+        StartCoroutine(WaitFrame());
+    }
     public void HandleLevelScoutingFaze()
     {
-        StartTrackOne();
+
         currentlevelState = LevelState.Scouting;
-        // make player is in free cam and cant switch to player
+        StartTrackOne();
+
+        controlSwitcher.ToggleControl();
+        _playerStateMachine.controlable = false;
+        controlSwitcher._camModeIsTogglable = false;
+        _playerStateMachine._camModeIsTogglable = false;
+
         if (_playerSpawnObjects != null) _playerSpawnObjects.SpawningIsActive = false;
         else Debug.LogError("_playerSpawnObjects is null");
         if (_enemySpawnObjects != null) _enemySpawnObjects.SpawningIsActive = false;
@@ -89,7 +102,7 @@ public class GameState : MonoBehaviour
         if (_moneyMachanic != null) _moneyMachanic.MoneyIsActive = false;
         else Debug.LogError("_moneyMachanic is null");
 
-        
+
     }
     public void ToggleScaracterSelectMenu(InputAction.CallbackContext context)
     {
@@ -109,13 +122,21 @@ public class GameState : MonoBehaviour
 
     public void EngaugmentPartOne()
     {
+        StartTrackTwo();
         currentlevelState = LevelState.EngaugmentPartOne;
-        //activate music
+        controlSwitcher.SwitchToPlayerControl();
+        controlSwitcher.FreeCamIsActive = false;
+
+        _playerStateMachine.controlable = true;
+        controlSwitcher._camModeIsTogglable = true;
+        _playerStateMachine._camModeIsTogglable = true;
+
+        
+
         _playerSpawnObjects.SpawningIsActive = true;
         _enemySpawnObjects.SpawningIsActive = true;
         _timeMachanic.TimeIsActive = true;
         _moneyMachanic.MoneyIsActive = true;
-        StartTrackTwo();
         LevelPartOne?.Invoke();
     }
     public void EngaugmentPartTwo()
@@ -146,14 +167,21 @@ public class GameState : MonoBehaviour
     //=======================Music tracks=======================================
     public void StartTrackOne()
     {
-       TrackfadeInOne?.Invoke();
+        TrackfadeInOne?.Invoke();
     }
     public void StartTrackTwo()
     {
-       TrackfadeInTwo?.Invoke();
+        TrackfadeInTwo?.Invoke();
     }
     public void StartTrackThree()
     {
         TrackfadeInThree?.Invoke();
+    }
+
+    //extra
+    IEnumerator WaitFrame()
+    {
+        yield return null;
+        HandleLevelScoutingFaze();
     }
 }

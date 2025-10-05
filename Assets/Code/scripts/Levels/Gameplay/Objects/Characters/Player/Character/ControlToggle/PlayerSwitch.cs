@@ -230,6 +230,7 @@ public class PlayerSwitch : MonoBehaviour
 
     public CinemachineCamera GetCurrentPlayerCamera()
     {
+
         if (playerCameras.Count == 0 || activePlayerIndex < 0 || activePlayerIndex >= playerCameras.Count)
             return null;
 
