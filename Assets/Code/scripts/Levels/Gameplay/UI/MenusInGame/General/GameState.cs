@@ -77,6 +77,7 @@ public class GameState : MonoBehaviour
 }
     public void HandleLevelScoutingFaze()
     {
+        StartTrackOne();
         currentlevelState = LevelState.Scouting;
         // make player is in free cam and cant switch to player
         if (_playerSpawnObjects != null) _playerSpawnObjects.SpawningIsActive = false;
@@ -88,7 +89,7 @@ public class GameState : MonoBehaviour
         if (_moneyMachanic != null) _moneyMachanic.MoneyIsActive = false;
         else Debug.LogError("_moneyMachanic is null");
 
-        StartTrackOne();
+        
     }
     public void ToggleScaracterSelectMenu(InputAction.CallbackContext context)
     {
