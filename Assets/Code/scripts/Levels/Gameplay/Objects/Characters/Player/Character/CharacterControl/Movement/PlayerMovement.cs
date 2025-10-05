@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    // SCRIPT IS NO LONGER USED
     public bool _controllable = true;
     [SerializeField] Stats _player_Stats;
     public Rigidbody2D rb;

@@ -13,6 +13,8 @@ public class PlayerStateMachine : MonoBehaviour
     [SerializeField] Transform attackPoint;
     [SerializeField] LayerMask enemyLayers;
     [SerializeField] AudioSource attackingAudio;
+    internal bool controlable;
+    internal bool _camModeIsTogglable;
 
     // states
     PlayerBaseState _currentState;
@@ -42,6 +44,7 @@ public class PlayerStateMachine : MonoBehaviour
 
     void Update()
     {
+        if (!controlable) return;
         //Debug.Log($"current state = {_currentState}");
         _currentState.UpdateStates();
     }
@@ -61,7 +64,7 @@ public class PlayerStateMachine : MonoBehaviour
     }
 
 
-    // getters andf setters
+//==========================================getters andf setters=================================================
     //universal stuff 
     public Stats PlayerStats { get { return _playerStats; } }
     public Animator Animator { get { return _animator; } }
@@ -103,7 +106,7 @@ public class PlayerStateMachine : MonoBehaviour
     public PlayerBaseState CurrentState { get { return _currentState; } set { _currentState = value; } }
 
 
-    //all player input callbacks
+//==========================================all player input callbacks===================================================
     public void OnMove(InputAction.CallbackContext context)
     {
         _commander.OnMove(context);
@@ -115,6 +118,11 @@ public class PlayerStateMachine : MonoBehaviour
 
  public void OnToggleFreeCam(InputAction.CallbackContext context)
     {
+        if (!_camModeIsTogglable)
+        {
+            Debug.Log($" freecam taggle function is disabled");
+            return;
+        }
         _commander.OnToggleFreeCam(context);
     }
 
