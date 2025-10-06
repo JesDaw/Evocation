@@ -1,11 +1,10 @@
 using UnityEngine;
 using UnityEngine.Playables;
 
-private bool isPaused = false;
-
 public class TimelineController : MonoBehaviour
 {
     PlayableDirector timeline;
+    private bool isPaused = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -13,27 +12,22 @@ public class TimelineController : MonoBehaviour
         timeline = GetComponent<PlayableDirector>();
     }
 
-    //void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.Z))
-    //        timeline.Play();
-    //    if (Input.GetKeyDown(KeyCode.X))
-    //        timeline.Pause();
-    //}
-
-    public void TogglePause()
+    void Update()
     {
-        timeline.Resume();
-        isPaused = !isPaused;
+        if (isPaused == true && Input.GetKeyDown(KeyCode.E))
+        {
+            timeline.Resume();
+            isPaused = false;
+        }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            timeline.Stop();
+        }
     }
 
     public void PauseAnimation()
     {
         timeline.Pause();
-        isPaused = !isPaused;
+        isPaused = true;
     }
-    //private bool IsInputAllowed()
-    //{
-    //    return timeline.state != PlayState.Playing;
-    //}
 }
