@@ -14,7 +14,7 @@ public class TrackFadeCallAssister : MonoBehaviour
        // Debug.Log($"{!fadeCalled} && {RefTrack.time} >= {timeToCall}: {!fadeCalled && RefTrack.time == timeToCall}");
         if (!fadeCalled && RefTrack.time >= timeToCall)
         {
-            Debug.Log("TrackFadeCallAssister now invoking event!");
+            //Debug.Log("TrackFadeCallAssister now invoking event!");
             CallFadeTracks.Invoke();
             fadeCalled = true;
         }

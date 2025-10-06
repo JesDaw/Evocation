@@ -91,7 +91,7 @@ public class MusicManager : MonoBehaviour
                 if (_AnchoringTrack == null)
                 {
                     _AnchoringTrack = track;
-                    Debug.Log($"Set anchoring track to: {track.name}");
+                    //Debug.Log($"Set anchoring track to: {track.name}");
                 }
             }
 

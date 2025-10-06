@@ -91,7 +91,7 @@ public class SpawnObjects : MonoBehaviour
 
         _Money._Value -= ScrStats._spawnCost;
         _moneyDesplay.UpdateMoneyDesplay();
-        Debug.Log("money updated:" + _Money._Value);
+        //Debug.Log("money updated:" + _Money._Value);
 
 
         GameObject CreatedObject = Instantiate(_Object, this.transform.position, this.transform.rotation, _Container);

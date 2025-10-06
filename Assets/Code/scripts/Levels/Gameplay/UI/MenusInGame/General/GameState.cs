@@ -113,7 +113,7 @@ public class GameState : MonoBehaviour
 
     public void OnEngaugeButtonPressed(InputAction.CallbackContext context)
     {
-        Debug.Log("OnEngaugeButtonPressed");
+        //Debug.Log("OnEngaugeButtonPressed");
         if (currentlevelState != LevelState.Scouting || !context.performed) return;
         //check if they are sure
         // 3, 2, 1 go thing
@@ -122,6 +122,7 @@ public class GameState : MonoBehaviour
 
     public void EngaugmentPartOne()
     {
+        StopTrackOne();
         StartTrackTwo();
         currentlevelState = LevelState.EngaugmentPartOne;
         controlSwitcher.SwitchToPlayerControl();
@@ -176,6 +177,11 @@ public class GameState : MonoBehaviour
     public void StartTrackThree()
     {
         TrackfadeInThree?.Invoke();
+    }
+
+    internal void StopTrackOne()
+    {
+        TrackfadeOutOne?.Invoke();
     }
 
     //extra

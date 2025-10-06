@@ -90,7 +90,7 @@ public class TrackFader : IMusicTransition
             else if (curveValue > 1f) curveValue = 1f;
             thisTrack.volume = curveValue;
             
-            Debug.Log($"Fade In {thisTrack} - Time: {time:F2}, Curve: {curveValue:F2}, Volume: {thisTrack.volume:F2}");
+            //Debug.Log($"Fade In {thisTrack} - Time: {time:F2}, Curve: {curveValue:F2}, Volume: {thisTrack.volume:F2}");
             yield return null;
         }        
     }
@@ -112,7 +112,7 @@ public class TrackFader : IMusicTransition
             else if (curveValue > 1f) curveValue = 1f;
             thisTrack.volume = _startVol * curveValue;
             
-            Debug.Log($"Fade Out {thisTrack}  - Time: {time:F2}, Curve: {curveValue:F2}, Volume: {thisTrack.volume:F2}");
+            //Debug.Log($"Fade Out {thisTrack}  - Time: {time:F2}, Curve: {curveValue:F2}, Volume: {thisTrack.volume:F2}");
             yield return null;
         }
     }
