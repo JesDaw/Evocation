@@ -15,9 +15,13 @@ public class FreeCamController : MonoBehaviour
     // Camera Zoom Limits (Z position limits)
     [SerializeField] private float minZDistance = -50f;  // How far back the camera can go
     [SerializeField] private float maxZDistance = 50f;   // How far forward the camera can go
+    [SerializeField] float minZoomSpeedMultiplier = 1;
+    [SerializeField] float maxZoomSpeedMultiplier = 2;
+    float _ZoomToSpeedMultiplier;
 
     private void Awake()
     {
+        _ZoomToSpeedMultiplier = minZoomSpeedMultiplier;
         inputActions = new InputSystem_Actions();
         inputActions.Enable();
 
@@ -56,7 +60,7 @@ public class FreeCamController : MonoBehaviour
     private void HandleMovement()
     {
         // Move only on X and Y axes, preserving Z position for zoom control
-        Vector3 movement = new Vector3(moveInput.x, moveInput.y, 0) * moveSpeed * Time.deltaTime;
+        Vector3 movement = new Vector3(moveInput.x, moveInput.y, 0) * moveSpeed * _ZoomToSpeedMultiplier * Time.deltaTime;
         transform.position += movement;
     }
 
@@ -69,10 +73,16 @@ public class FreeCamController : MonoBehaviour
             // Move camera forward/backward on Z-axis
             float zoomAmount = scrollDelta * zoomSpeed * 0.1f;
             Vector3 newPosition = transform.position + new Vector3(0, 0, zoomAmount);
-            
-            // Clamp the Z position within limits
-            newPosition.z = Mathf.Clamp(newPosition.z, minZDistance, maxZDistance);
+
+            // Clamp Z position within zoom range (-50 = far out, -15 = close in)
+            newPosition.z = Mathf.Clamp(newPosition.z, -50f, -15f);
             transform.position = newPosition;
+
+            // Calculate normalized zoom ratio (0 = zoomed in, 1 = zoomed out)
+            float t = Mathf.InverseLerp(-15f, -50f, newPosition.z);
+
+            // Scale movement speed based on zoom level
+            _ZoomToSpeedMultiplier = Mathf.Lerp(minZoomSpeedMultiplier, maxZoomSpeedMultiplier, t);
         }
     }
 }
