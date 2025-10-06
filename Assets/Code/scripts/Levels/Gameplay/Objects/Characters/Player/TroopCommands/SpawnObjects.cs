@@ -47,7 +47,8 @@ public class SpawnObjects : MonoBehaviour
     //auto spawn
     public void Spawn()
     {
-        if (!autoSpawner || !_spawning_is_active) return;
+        if (!_spawning_is_active) return;
+        if (!autoSpawner) return;
 
         GameObject CreatedObject = Instantiate(_Object, this.transform.position, this.transform.rotation, _Container);
         CpuStateManager ObjectLogic = CreatedObject.GetComponent<CpuStateManager>();
@@ -71,7 +72,33 @@ public class SpawnObjects : MonoBehaviour
             );
         }
 
-        if (enemySpawner) ObjectLogic._Stats._Enemy = true;
+        OnSpawn.Invoke(CreatedObject);
+    }
+    public void SpawnFromSpawner(ScriptableStats attachedStat)
+    {
+        if (!_spawning_is_active) return;
+        GameObject CreatedObject = Instantiate(_Object, this.transform.position, this.transform.rotation, _Container);
+        CpuStateManager ObjectLogic = CreatedObject.GetComponent<CpuStateManager>();
+        if (ObjectLogic != null) ObjectLogic._ScrStats = attachedStat;
+
+        // Assign layer
+        if (enemySpawner) CreatedObject.layer = 9;
+        else CreatedObject.layer = 10;
+        foreach (Transform child in CreatedObject.transform) child.gameObject.layer = CreatedObject.layer;
+
+        //rotate apperance if on other side
+        if (CreatedObject.transform.childCount > 0 && CreatedObject.transform.GetChild(0).name == "CpuAppearance")
+        {
+            //randomize y pos
+            float RandomValue = Random.Range(-0.5f, 0.5f);
+            CreatedObject.transform.GetChild(0).position = new Vector3
+            (
+                CreatedObject.transform.GetChild(0).position.x,
+                CreatedObject.transform.GetChild(0).position.y + RandomValue,
+                CreatedObject.transform.GetChild(0).position.z + RandomValue
+            );
+        }
+
         OnSpawn.Invoke(CreatedObject);
     }
 
