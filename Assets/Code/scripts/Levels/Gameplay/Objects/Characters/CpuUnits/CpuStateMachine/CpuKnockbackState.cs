@@ -15,6 +15,8 @@ public class CpuKnockBackState : CpuBaseState
 
     public override void EnterState()
     {
+        Debug.Log("enter Knockback");
+        _context._Animator.SetBool("IsKnockback", true);
         ApplyKnockback();
     }
 
@@ -26,13 +28,17 @@ public class CpuKnockBackState : CpuBaseState
     public override void ExitState()
     {
         _context.UpdateCurrentState(CpuStateManager.State.Move);
+        _context._Animator.SetBool("IsKnockback", false);
     }
 
     void ApplyKnockback()
     {
         if (rb != null)
         {
-            Vector2 knockbackForce = new Vector2(-_Stats._KnockBackVelocity, _Stats._KnockBackVelocity);
+            short knockbackDir = -1;
+            if (_context._Stats._Enemy) knockbackDir = 1; 
+            Vector2 knockbackForce = new Vector2(knockbackDir * _Stats._KnockBackVelocity, _Stats._KnockBackVelocity);
+            rb.linearVelocity = Vector2.zero;
             rb.AddForce(knockbackForce, ForceMode2D.Impulse);
             _Knocked = true;
         }
@@ -41,7 +47,7 @@ public class CpuKnockBackState : CpuBaseState
     void BackOnGround()
     {
         if (!_Knocked) return;
-        if (Mathf.Abs(rb.linearVelocity.y) < 0.01f)
+        if ((Mathf.Abs(rb.linearVelocity.y) < 0.1f) && (Mathf.Abs(rb.linearVelocity.x) < 0.1f))
         {
             ExitState();
         }
