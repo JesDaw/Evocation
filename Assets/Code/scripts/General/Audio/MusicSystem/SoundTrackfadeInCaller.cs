@@ -22,7 +22,7 @@ public class SoundTrackfadeInCaller : MonoBehaviour
 
         musicManager.Fade(musicManager.Tracks[TrackToFadeIn], fadeInCurve, sectionOfAnchoringTrackToStartFadeIn, MatchAnchoringTrackTime, true, FadeInStartOffsetSeconds, () =>
         {
-            Debug.Log($"Fade in completed for {musicManager.Tracks[TrackToFadeIn].clip.name}");
+            //Debug.Log($"Fade in completed for {musicManager.Tracks[TrackToFadeIn].clip.name}");
             ResetManualTest();
         });
 

@@ -120,7 +120,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -150,7 +150,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _CpuPriority: []
   _Clan: 
-  _Health: 1000
+  _MaxHealth: 1
+  _CurrentHealth: 1
   _AttackDamage: 0
   _AttackStartup: 0
   _AttackActiveDuration: 0
@@ -170,18 +171,29 @@ MonoBehaviour:
     _PersistentCalls: []
   OnDamage:
     _PersistentCalls: []
-  OnWitFlagDeath:
+  OnKnocked:
     _PersistentCalls: []
+  OnWitFlagDeath:
+    _PersistentCalls:
+    - _Target: {fileID: 7612600847862275697}
+      _MemberName: SwapAccordingToWho
+      _PersistentArguments:
+      - _Type: 14
+        _Int: 0
+        _String: 
+        _X: 1
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
   OnWitFlagDamage:
     _PersistentCalls: []
   OnTick:
     m_PersistentCalls:
       m_Calls: []
-  OnKnocked:
-    m_PersistentCalls:
-      m_Calls: []
   _Invincible: 0
   _DontDestroy: 1
+  _Enemy: 0
 --- !u!114 &7612600847862275697
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -11,7 +11,7 @@ public class MenuLogicManager : MonoBehaviour
     SceneActivityManager sceneMgr;
     AudioManager audio_manager;
 
-    void Start()
+    void Awake()
     {
         MenuIsOpen = false;
         Cursor.visible = false;

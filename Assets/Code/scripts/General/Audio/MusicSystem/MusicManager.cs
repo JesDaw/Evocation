@@ -8,8 +8,10 @@ public class MusicManager : MonoBehaviour
     List<AudioSource> _currentTracks = new List<AudioSource>();
     [SerializeField] public List<AudioSource> Tracks = new List<AudioSource>();
     
-    private Dictionary<AudioSource, bool> _trackFadingStates = new Dictionary<AudioSource, bool>();
+    Dictionary<AudioSource, bool> _trackFadingStates = new Dictionary<AudioSource, bool>();
     List<AudioEffectEditor> _currentEffects = new List<AudioEffectEditor>();
+    [SerializeField] event System.Action<AudioSource> OnTrackFinished;
+
 
     void Start()
     {
@@ -18,17 +20,33 @@ public class MusicManager : MonoBehaviour
             _trackFadingStates[track] = false;
         }
 
-        Debug.Log("Track list:");
+/*        Debug.Log("Track list:");
         foreach (AudioSource track in Tracks)
         {
             Debug.Log(track.clip.name);
-        }
+        } */
     }
 
     void Update()
+{
+    AudioSource longestTrack = null;
+    float longestRemainingTime = -1f;
+
+    foreach (var track in _currentTracks)
     {
-        _AnchoringTrack = _currentTracks.Find(track => track.isPlaying);
+        if (track.isPlaying && track.clip != null)
+        {
+            float remainingTime = track.clip.length - track.time;
+            if (remainingTime > longestRemainingTime)
+            {
+                longestRemainingTime = remainingTime;
+                longestTrack = track;
+            }
+        }
     }
+
+    _AnchoringTrack = longestTrack;
+}
 
     void CurrentTrackCleanUp()
     {
@@ -40,7 +58,7 @@ public class MusicManager : MonoBehaviour
             }
         }
         _currentTracks.RemoveAll(track => !track.isPlaying);
-        
+
         Debug.Log($"Current tracks: {_currentTracks.Count}, Anchoring track: {(_AnchoringTrack ? _AnchoringTrack.name : "None")}");
         foreach (AudioSource audioSourcetrack in Tracks)
         {
@@ -65,22 +83,22 @@ public class MusicManager : MonoBehaviour
         
         StartCoroutine(newFader.Execute(_AnchoringTrack, track, fadeCurve, sectionOfAnchoringTrack, matchAnchoringTrackTime, fadingIn, startOffsetSeconds, () =>
         {
-            _trackFadingStates[track] = false; 
-            
+            _trackFadingStates[track] = false;
+
             if (fadingIn && !_currentTracks.Contains(track))
             {
                 _currentTracks.Add(track);
                 if (_AnchoringTrack == null)
                 {
                     _AnchoringTrack = track;
-                    Debug.Log($"Set anchoring track to: {track.name}");
+                    //Debug.Log($"Set anchoring track to: {track.name}");
                 }
             }
 
             else if (!fadingIn && _currentTracks.Contains(track))
             {
                 _currentTracks.Remove(track);
-                track.Stop(); 
+                track.Stop();
             }
             
             onComplete?.Invoke();

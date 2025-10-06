@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
@@ -50,6 +49,10 @@ public class Stats : MonoBehaviour
         StartCoroutine(StatusEffectLoop());
         _CurrentHealth = _MaxHealth;
     }
+    public void SetDestroyed(bool _ShouldDestroy)
+    {
+        _DontDestroy = _ShouldDestroy;
+    }
 
     IEnumerator StatusEffectLoop()
     {
@@ -69,12 +72,11 @@ public class Stats : MonoBehaviour
             if (CurrentStatus.x > 0)
             {
                 CurrentStatus.x -= _TickSpeed;
-                Debug.Log(CurrentStatus);
+                //Debug.Log(CurrentStatus);
             }
             else
             {
                 CurrentStatus.x = _StatusTicksMax[I].x;
-
                 CurrentStatus.y -= CurrentStatus.x;
                 TakeDamage(_StatusEffects[I]._Damage);
 
@@ -120,7 +122,11 @@ public class Stats : MonoBehaviour
     }
     public void Died()
     {
-        if (LastHitBy != null) OnWitFlagDeath.Invoke(LastHitBy.IsEnemy);
+        if (LastHitBy != null)
+        {
+            Debug.Log(LastHitBy.IsEnemy);
+            OnWitFlagDeath.Invoke(LastHitBy.IsEnemy);
+        }
         OnDeath.Invoke();
         if (_DontDestroy) return;
         Destroy(gameObject);

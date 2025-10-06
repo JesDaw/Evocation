@@ -13,13 +13,41 @@ public class PlayerStateMachine : MonoBehaviour
     [SerializeField] Transform attackPoint;
     [SerializeField] LayerMask enemyLayers;
     [SerializeField] AudioSource attackingAudio;
+    internal bool controlable;
+    internal bool _camModeIsTogglable;
 
     // states
     PlayerBaseState _currentState;
     PlayerStateFactory _states;
 
     PlayerCommander _commander;
+    int playerId;
 
+    void Awake()
+    {
+        //setup state
+        FindFreeCam();
+        _states = new PlayerStateFactory(this);
+        _currentState = _states.Idle();
+        _currentState.EnterState();
+    }
+
+    void OnEnable()
+    {
+        // Enable character controls action map
+    }
+
+    void OnDisable()
+    {
+        // Disable character controls action map
+    }
+
+    void Update()
+    {
+        if (!controlable) return;
+        //Debug.Log($"current state = {_currentState}");
+        _currentState.UpdateStates();
+    }
 
     public void FindFreeCam()
     {
@@ -32,11 +60,11 @@ public class PlayerStateMachine : MonoBehaviour
                 _commander = new PlayerCommander(ccs.FreeCamIsActive);
                 break;
             }
-        }     
+        }
     }
 
 
-    // getters andf setters
+//==========================================getters andf setters=================================================
     //universal stuff 
     public Stats PlayerStats { get { return _playerStats; } }
     public Animator Animator { get { return _animator; } }
@@ -78,7 +106,7 @@ public class PlayerStateMachine : MonoBehaviour
     public PlayerBaseState CurrentState { get { return _currentState; } set { _currentState = value; } }
 
 
-    //all player input callbacks
+//==========================================all player input callbacks===================================================
     public void OnMove(InputAction.CallbackContext context)
     {
         _commander.OnMove(context);
@@ -90,32 +118,14 @@ public class PlayerStateMachine : MonoBehaviour
 
  public void OnToggleFreeCam(InputAction.CallbackContext context)
     {
+        if (!_camModeIsTogglable)
+        {
+            Debug.Log($" freecam taggle function is disabled");
+            return;
+        }
         _commander.OnToggleFreeCam(context);
     }
 
     //all referance veraibles, player input callbacks
-    void Awake()
-    {
-        //setup state
-        FindFreeCam();
-        _states = new PlayerStateFactory(this);
-        _currentState = _states.Idle();
-        _currentState.EnterState();
-    }
 
-    void OnEnable()
-    {
-        // Enable character controls action map
-    }
-
-    void OnDisable()
-    {
-        // Disable character controls action map
-    }
-
-    void Update()
-    {
-        //Debug.Log($"current state = {_currentState}");
-        _currentState.UpdateStates();
-    }
 }

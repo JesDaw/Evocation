@@ -13,6 +13,7 @@ public class SoundTrackfadeOutCaller : MonoBehaviour
 
     public void FadeTracksOut()
     {
+        //Debug.Log("fade out called");
         if (musicManager.Tracks[trackToFadeOut] == null)
         {
             Debug.LogError("attemted to fade in a track outside of the music manager list");
@@ -29,9 +30,10 @@ public class SoundTrackfadeOutCaller : MonoBehaviour
         }
         else
         {
+            //Debug.Log("fading out");
             musicManager.Fade(musicManager.Tracks[trackToFadeOut], fadeOutCurve, sectionOfAnchoringTrackToStartFadeOut, false, false, FadeOutStartOffsetSeconds, () =>
             {
-                Debug.Log($"Fade out completed for {musicManager.Tracks[trackToFadeOut].clip.name}");
+                //Debug.Log($"Fade out completed for {musicManager.Tracks[trackToFadeOut].clip.name}");
                 ResetManualTest();
             });
         }

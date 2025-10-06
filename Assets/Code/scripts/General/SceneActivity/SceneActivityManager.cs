@@ -52,7 +52,7 @@ public class SceneActivityManager : MonoBehaviour
 
     internal void Start()
     {
-        Debug.Log("SceneActivityManager.Start", gameObject);
+        //Debug.Log("SceneActivityManager.Start", gameObject);
 
         CacheAllSAObjects();
 
@@ -87,7 +87,7 @@ public class SceneActivityManager : MonoBehaviour
 
     void OnDestroy()
     {
-        Debug.Log("SceneActivityManager.OnDestroy", gameObject);
+        //Debug.Log("SceneActivityManager.OnDestroy", gameObject);
     }
 
     void ClearCache()
@@ -101,7 +101,7 @@ public class SceneActivityManager : MonoBehaviour
     {
         if (!objNamed.ContainsKey(obj.name))
         {
-            Debug.Log($"Found SceneActivity \"{obj.name}\"", gameObject);
+            //Debug.Log($"Found SceneActivity \"{obj.name}\"", gameObject);
             objNamed.Add(obj.name, obj);
         }
         else
@@ -138,7 +138,7 @@ public class SceneActivityManager : MonoBehaviour
         if (currObj == null)
         {
             nextObj.GetComponent<SceneActivity>().StartActivity();
-            Debug.Log($"SceneActivityManager: -> {name}", nextObj);
+        //    Debug.Log($"SceneActivityManager: -> {name}", nextObj);
         }
         else if (!currObj.Equals(nextObj))
         {

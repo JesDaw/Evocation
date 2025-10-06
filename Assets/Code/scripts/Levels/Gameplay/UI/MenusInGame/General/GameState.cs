@@ -1,114 +1,193 @@
+using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class GameState : MonoBehaviour
 {
-    [SerializeField] bool GameIsPaused = false;
-    [SerializeField] bool GameIsOver = false;
-    [SerializeField] UnityEvent _ResetValues;
+    bool GameIsPaused = false;
 
-    InputAction pauseAction;
+
+    // For controlling game machanics
+    [SerializeField] Money _moneyMachanic;
+    [SerializeField] Timer _timeMachanic;
+    [SerializeField] PlayerStateMachine _playerStateMachine;
+    [SerializeField] CameraControlSwitcher controlSwitcher;
+    [SerializeField] SpawnObjects _playerSpawnObjects, _enemySpawnObjects;
+    [SerializeField] internal UltEvents.UltEvent LevelPartOne, LevelPartTwo, LevelPartThree;
+    //mjusic
+    [SerializeField] internal UltEvents.UltEvent TrackfadeInOne, TrackfadeInTwo, TrackfadeInThree;
+    [SerializeField] internal UltEvents.UltEvent TrackfadeOutOne, TrackfadeOutTwo, TrackfadeOutThree;
+    public LevelState currentlevelState;
+    InputAction engaugeAction, toggleCharacterSeceltAction;
 
     SceneActivityManager sceneMgr;
+    InputSystem_Actions inputActions;
+    public enum LevelState
+    {
+        Intro,
+        Scouting,
+        EngaugmentPartOne,
+        EngaugmentPartTwo,
+        EngaugmentPartThree,
+        Win,
+        Loose,
+        OutTro
+    }
+
+    void Awake()
+    {
+        engaugeAction = InputSystem.actions.FindAction("StartEngaugment");
+        toggleCharacterSeceltAction = InputSystem.actions.FindAction("ToggleCharacterSelect");
+        
+        
+    }
+
+    void OnEnable()
+    {
+        if (engaugeAction != null) engaugeAction.Enable();
+        if (toggleCharacterSeceltAction != null) toggleCharacterSeceltAction.Enable();
+        
+    }
+    private void OnDisable()
+    {
+        if (engaugeAction != null) engaugeAction.Disable();
+        if (toggleCharacterSeceltAction != null) toggleCharacterSeceltAction.Disable();
+        inputActions.Disable();
+    }
 
     void Start()
     {
-        pauseAction = InputSystem.actions.FindAction("Pause");
-
         // Find the SceneActivityManager!
         foreach (var obj in Resources.FindObjectsOfTypeAll<SceneActivityManager>())
         {
             sceneMgr = obj;
         }
         Debug.Assert(sceneMgr != null);
+        inputActions = controlSwitcher.inputActions;
+
+        // if (_moneyMachanic == null) { }
+        //if (_timeMachanic == null) { }
+        //if (_playerStateMachine == null) { }
+        //if (_playerSpawnObjects == null) { }
+        //if (_enemySpawnObjects == null) { }
+        HandleLevelIntro();
     }
 
-    public void HandleGameWin()
+    //=======================Game States=======================================
+    internal void HandleLevelIntro()
     {
-        GameIsOver = true;
+        currentlevelState = LevelState.Intro;
+        // optional animation sequence and dialogue
+        // Delay the transition to Scouting so Start() finishes first
+        StartCoroutine(WaitFrame());
+    }
+    public void HandleLevelScoutingFaze()
+    {
+
+        currentlevelState = LevelState.Scouting;
+        StartTrackOne();
+
+        controlSwitcher.ToggleControl();
+        _playerStateMachine.controlable = false;
+        controlSwitcher._camModeIsTogglable = false;
+        _playerStateMachine._camModeIsTogglable = false;
+
+        if (_playerSpawnObjects != null) _playerSpawnObjects.SpawningIsActive = false;
+        else Debug.LogError("_playerSpawnObjects is null");
+        if (_enemySpawnObjects != null) _enemySpawnObjects.SpawningIsActive = false;
+        else Debug.LogError("_enemySpawnObjects is null");
+        if (_timeMachanic != null) _timeMachanic.TimeIsActive = false;
+        else Debug.LogError("_timeMachanic is null");
+        if (_moneyMachanic != null) _moneyMachanic.MoneyIsActive = false;
+        else Debug.LogError("_moneyMachanic is null");
+
+
+    }
+    public void ToggleScaracterSelectMenu(InputAction.CallbackContext context)
+    {
+        if (currentlevelState != LevelState.Scouting || !context.performed) return;
+        Debug.Log("Character secect button pressed");
+        // open character select screen
+    }
+
+    public void OnEngaugeButtonPressed(InputAction.CallbackContext context)
+    {
+        //Debug.Log("OnEngaugeButtonPressed");
+        if (currentlevelState != LevelState.Scouting || !context.performed) return;
+        //check if they are sure
+        // 3, 2, 1 go thing
+        EngaugmentPartOne();
+    }
+
+    public void EngaugmentPartOne()
+    {
+        StopTrackOne();
+        StartTrackTwo();
+        currentlevelState = LevelState.EngaugmentPartOne;
+        controlSwitcher.SwitchToPlayerControl();
+        controlSwitcher.FreeCamIsActive = false;
+
+        _playerStateMachine.controlable = true;
+        controlSwitcher._camModeIsTogglable = true;
+        _playerStateMachine._camModeIsTogglable = true;
+
+        
+
+        _playerSpawnObjects.SpawningIsActive = true;
+        _enemySpawnObjects.SpawningIsActive = true;
+        _timeMachanic.TimeIsActive = true;
+        _moneyMachanic.MoneyIsActive = true;
+        LevelPartOne?.Invoke();
+    }
+    public void EngaugmentPartTwo()
+    {
+        currentlevelState = LevelState.EngaugmentPartTwo;
+        LevelPartTwo?.Invoke();
+    }
+    public void EngaugmentPartThree()
+    {
+        currentlevelState = LevelState.EngaugmentPartThree;
+        LevelPartThree?.Invoke();
+    }
+
+    public void HandleLevelWin()
+    {
+        currentlevelState = LevelState.Win;
         sceneMgr.Activate("Victory");
         Time.timeScale = 0;
     }
 
-    public void HandleGameLoss()
+    public void HandleLevelLoss()
     {
-        GameIsOver = true;
+        currentlevelState = LevelState.Loose;
         sceneMgr.Activate("Defeat");
         Time.timeScale = 0;
     }
 
-    private void OnEnable()
+    //=======================Music tracks=======================================
+    public void StartTrackOne()
     {
-        if (pauseAction != null)
-            pauseAction.Enable();
+        TrackfadeInOne?.Invoke();
+    }
+    public void StartTrackTwo()
+    {
+        TrackfadeInTwo?.Invoke();
+    }
+    public void StartTrackThree()
+    {
+        TrackfadeInThree?.Invoke();
     }
 
-    private void OnDisable()
+    internal void StopTrackOne()
     {
-        if (pauseAction != null)
-            pauseAction.Disable();
+        TrackfadeOutOne?.Invoke();
     }
 
-    public void TogglePause(InputAction.CallbackContext context)
+    //extra
+    IEnumerator WaitFrame()
     {
-        if (context.performed && GameIsOver == false)
-        {
-            if (GameIsPaused)
-            {
-                Resume();
-            }
-            else
-            {
-                Pause();
-            }
-        }
-    }
-
-    public void Restart()
-    {
-        Time.timeScale = 1;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        ResetValues();
-
-    }
-    public void Resume()
-    {
-        if (GameIsPaused)
-        {
-            Debug.Log("resumed");
-            sceneMgr.ActivateInitialSA();
-
-            Time.timeScale = 1;
-            GameIsPaused = false;
-        }
-    }
-
-    void Pause()
-    {
-        if (!GameIsPaused)
-        {
-            GameIsPaused = true;
-            sceneMgr.Activate("Pause");
-            Time.timeScale = 0;
-        }
-    }
-
-    public void LoadMenu()
-    {
-        Time.timeScale = 1;
-        SceneManager.LoadScene(0);
-        ResetValues();
-    }
-
-    public void QuitGame()
-    {
-        Application.Quit();
-    }
-
-    void ResetValues()
-    {
-        _ResetValues.Invoke();
+        yield return null;
+        HandleLevelScoutingFaze();
     }
 }

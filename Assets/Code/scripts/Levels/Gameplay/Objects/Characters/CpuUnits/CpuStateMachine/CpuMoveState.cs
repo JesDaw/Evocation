@@ -42,10 +42,22 @@ public class CpuMoveState : CpuBaseState
             {
                 if (hits[II].collider.CompareTag(_Stats._CpuPriority[I]))
                 {
-                    _Body.linearVelocity = Vector2.zero;
-
+                    //actual attackers
                     GameObject EnemyGameobject = hits[II].collider.gameObject;
+                    Debug.LogWarning(EnemyGameobject.name);
                     _context._AttackingStats = EnemyGameobject.GetComponent<Stats>();
+                    if (_context._AttackingStats == null) Debug.LogWarning("Make sure the enemy has their collider and stats script on the same object");
+                    //this section is for healing
+
+                    if (_context._AttackingStats._CurrentHealth >= _context._AttackingStats._MaxHealth &&
+                        _Stats._AttackDamage <= 0
+                        )
+                    {
+                        return;
+                    }
+
+                    _Body.linearVelocity = Vector2.zero;
+                    //heal
 
                     if (_context._AttackingStats == null)
                     {
