@@ -9,10 +9,12 @@ public class Dialogue : MonoBehaviour
     public float text_speed;
     private int index;
 
+    public GameObject dialogue_box;
+
     void Start()
     {
         text_component.text = string.Empty;
-        start_dialogue();
+        dialogue_box.SetActive(false);
     }
 
     void Update()
@@ -29,6 +31,12 @@ public class Dialogue : MonoBehaviour
                 text_component.text = lines[index];
             }
         }
+    }
+
+    public void activate_dialogue_box()
+    {
+        dialogue_box.SetActive(true);
+        start_dialogue();
     }
 
     void start_dialogue()

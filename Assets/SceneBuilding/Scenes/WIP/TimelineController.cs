@@ -5,7 +5,6 @@ using UnityEngine.Playables;
 
 public class TimelineController : MonoBehaviour
 {
-    private bool isPaused = false;
     PlayableDirector timeline;
     private bool isPaused = false;
 
