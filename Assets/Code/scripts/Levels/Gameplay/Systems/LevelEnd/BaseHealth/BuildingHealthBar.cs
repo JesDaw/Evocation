@@ -1,28 +1,22 @@
 using UnityEngine;
-using UnityEngine.UI;
 
-public class BuildingHealthBar : MonoBehaviour
+public class BuildingHealthBar : HealthBarBase
 {
     [SerializeField] FloatVariable _health;
-    [SerializeField] Slider _Slider;
-    [SerializeField] float _MaxHealth;
-    void Start()
+    [SerializeField] float _MaxHealth = 100f;
+
+    protected override void Start()
     {
-        _Slider.gameObject.SetActive(false);
+        base.Start();
         _MaxHealth = _health._Value;
-        _Slider.maxValue = _MaxHealth;
     }
 
-    public void UpdateHealth()
+    public override void UpdateHealth()
     {
-        _Slider.value = _health._Value;
-        if (_Slider.value != _MaxHealth)
-        {
-            _Slider.gameObject.SetActive(true);
-        }
-        else
-        {
-            _Slider.gameObject.SetActive(false);
-        }
+        float ratio = _MaxHealth > 0 ? _health._Value / _MaxHealth : 0f;
+        AnimateHealthChange(ratio);
+
+        if (HealthBarObject)
+            HealthBarObject.SetActive(_health._Value != _MaxHealth);
     }
 }
