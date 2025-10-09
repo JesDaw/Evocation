@@ -12,9 +12,6 @@ public class FreeCamController : MonoBehaviour
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float zoomSpeed = 5f;  // Speed of Z-axis movement for zoom
 
-    // Camera Zoom Limits (Z position limits)
-    [SerializeField] private float minZDistance = -50f;  // How far back the camera can go
-    [SerializeField] private float maxZDistance = 50f;   // How far forward the camera can go
     [SerializeField] float minZoomSpeedMultiplier = 1;
     [SerializeField] float maxZoomSpeedMultiplier = 2;
     float _ZoomToSpeedMultiplier;
