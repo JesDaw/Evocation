@@ -52,8 +52,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Restart()
     {
-        Time.timeScale = 1;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        MenuUtilities.RestartCurrentScene();
         ResetValues();
 
     }
@@ -75,17 +74,17 @@ public class PauseMenu : MonoBehaviour
         GameIsPaused = true;
     }
 
-    public void LoadMenu()
-    {
-        Time.timeScale = 1;
-        SceneManager.LoadScene(0);
-        ResetValues();
-    }
+public void LoadMenu()
+{
+    MenuUtilities.LoadMenu(0);
+    ResetValues();
+}
 
-    public void QuitGame()
-    {
-        Application.Quit();
-    }
+public void QuitGame()
+{
+    MenuUtilities.QuitGame();
+}
+
 
     void ResetValues(){ _ResetValues.Invoke(); }
 }

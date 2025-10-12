@@ -10,7 +10,6 @@ public class MusicManager : MonoBehaviour
     
     Dictionary<AudioSource, bool> _trackFadingStates = new Dictionary<AudioSource, bool>();
     List<AudioEffectEditor> _currentEffects = new List<AudioEffectEditor>();
-    [SerializeField] event System.Action<AudioSource> OnTrackFinished;
 
 
     void Start()

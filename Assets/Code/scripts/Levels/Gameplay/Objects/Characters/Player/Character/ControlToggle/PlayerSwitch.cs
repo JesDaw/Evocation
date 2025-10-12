@@ -9,8 +9,8 @@ public class PlayerSwitch : MonoBehaviour
     [SerializeField] private List<GameObject> players = new List<GameObject>();
     private List<CinemachineCamera> playerCameras = new List<CinemachineCamera>();
 
-    private int activePlayerIndex = 0;
-    private int PlayerIDNumber;
+    int activePlayerIndex = 0;
+    int PlayerIDNumber;
 
     void Start()
     {
@@ -70,8 +70,9 @@ public class PlayerSwitch : MonoBehaviour
 
         if (activePlayerIndex >= 0 && activePlayerIndex < players.Count && players[activePlayerIndex] != null)
         {
-            var currentPlayer = players[activePlayerIndex].GetComponent<PlayersControlerScriptsManager>();
-            currentPlayer?.DisableControls();
+            
+            activePlayer.CurrentPlayer.GetComponent<PlayerStateMachine>().PlayerCommander.ClearAllCommands();
+            GlobalInputManager.Instance.UnregisterPlayerCharacterInputCallbacks();
             playerCameras[activePlayerIndex].Priority = 0;
         }
 
@@ -86,34 +87,34 @@ public class PlayerSwitch : MonoBehaviour
     }
 
     public void SwitchPlayerLeft(InputAction.CallbackContext context)
-{
-    if (!context.performed || players.Count == 0)
-        return;
-
-    RemoveNullPlayers();
-
-    if (players.Count == 0 || playerCameras.Count == 0)
     {
-        Debug.Log("No players available to switch to.");
-        return;
-    }
+        if (!context.performed || players.Count == 0)
+            return;
 
-    if (activePlayerIndex >= 0 && activePlayerIndex < players.Count && players[activePlayerIndex] != null)
-    {
-        var currentPlayer = players[activePlayerIndex].GetComponent<PlayersControlerScriptsManager>();
-        currentPlayer?.DisableControls();
-        playerCameras[activePlayerIndex].Priority = 0;
-    }
+        RemoveNullPlayers();
 
-    int startIndex = activePlayerIndex;
-    do
-    {
-        activePlayerIndex = (activePlayerIndex - 1 + players.Count) % players.Count;
-    }
-    while (players[activePlayerIndex] == null && activePlayerIndex != startIndex);
+        if (players.Count == 0 || playerCameras.Count == 0)
+        {
+            Debug.Log("No players available to switch to.");
+            return;
+        }
 
-    ActivatePlayer(activePlayerIndex);
-}
+        if (activePlayerIndex >= 0 && activePlayerIndex < players.Count && players[activePlayerIndex] != null)
+        {
+            activePlayer.CurrentPlayer.GetComponent<PlayerStateMachine>().PlayerCommander.ClearAllCommands();
+            GlobalInputManager.Instance.UnregisterPlayerCharacterInputCallbacks();
+            playerCameras[activePlayerIndex].Priority = 0;
+        }
+
+        int startIndex = activePlayerIndex;
+        do
+        {
+            activePlayerIndex = (activePlayerIndex - 1 + players.Count) % players.Count;
+        }
+        while (players[activePlayerIndex] == null && activePlayerIndex != startIndex);
+
+        ActivatePlayer(activePlayerIndex);
+    }
 
 
 
@@ -136,34 +137,35 @@ public class PlayerSwitch : MonoBehaviour
 
 
 
-    private void ActivatePlayer(int index)
+    void ActivatePlayer(int index)
     {
         for (int i = 0; i < players.Count; i++)
         {
-            var playerScript = players[i].GetComponent<PlayersControlerScriptsManager>();
+            var playerScript = players[i].GetComponent<PlayerStateMachine>();
             if (playerScript == null) continue;
 
             if (i == index)
             {
-                playerScript.EnableControls();
                 playerCameras[i].Priority = 2;
                 activePlayer.CurrentPlayer = players[i];
+
+                var playerSM = players[i].GetComponent<PlayerStateMachine>();
+                GlobalInputManager.Instance.SetActivePlayer(playerSM);
             }
             else
             {
-                playerScript.DisableControls();
                 playerCameras[i].Priority = 0;
             }
         }
     }
 
+
     public void AddPlayer(GameObject newPlayer)
     {
         Debug.Log("Adding " + newPlayer.name);
 
-        var managePlayer = newPlayer.GetComponent<PlayersControlerScriptsManager>();
-        managePlayer.DisableControls();
-        managePlayer._PlayerID = PlayerIDNumber++;
+        var managePlayer = newPlayer.GetComponent<PlayerStateMachine>();
+        managePlayer.PlayerID = PlayerIDNumber++;
         players.Add(newPlayer);
 
         var newCam = newPlayer.GetComponentInChildren<CinemachineCamera>();
@@ -179,6 +181,7 @@ public class PlayerSwitch : MonoBehaviour
 
         Debug.Log($"Added new player. Total players: {players.Count}");
     }
+
 
     public void RemovePlayer(GameObject playerToRemove)
     {
@@ -210,30 +213,16 @@ public class PlayerSwitch : MonoBehaviour
         }
         else if (activePlayerIndex > index)
         {
-            activePlayerIndex--; // Adjust index after removal
+            activePlayerIndex--;
         }
 
         // Optional: reassign PlayerIDs
         for (int i = 0; i < players.Count; i++)
         {
-            players[i].GetComponent<PlayersControlerScriptsManager>()._PlayerID = i;
+            players[i].GetComponent<PlayerStateMachine>().PlayerID = i;
         }
     }
 
-    public PlayersControlerScriptsManager GetCurrentPlayerController()
-    {
-        if (players.Count == 0 || activePlayerIndex < 0 || activePlayerIndex >= players.Count)
-            return null;
 
-        return players[activePlayerIndex]?.GetComponent<PlayersControlerScriptsManager>();
-    }
 
-    public CinemachineCamera GetCurrentPlayerCamera()
-    {
-
-        if (playerCameras.Count == 0 || activePlayerIndex < 0 || activePlayerIndex >= playerCameras.Count)
-            return null;
-
-        return playerCameras[activePlayerIndex];
-    }
 }

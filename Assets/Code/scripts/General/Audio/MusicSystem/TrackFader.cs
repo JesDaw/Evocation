@@ -33,7 +33,7 @@ public class TrackFader : IMusicTransition
             else if (sectionOfAnchoringTrack == SectionOfAnchoringTrack.TrackEnd)
             {
                 AnchoringTrack.loop = false;
-                Debug.Log($" {AnchoringTrack} - no longer looping");
+//                Debug.Log($" {AnchoringTrack} - no longer looping");
                 if (StartOffsetSeconds <= 0)
                 {
                     yield return new WaitUntil(() => AnchoringTrack.time >= AnchoringTrack.clip.length + StartOffsetSeconds);

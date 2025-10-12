@@ -22,7 +22,6 @@ public class GameState : MonoBehaviour
     InputAction engaugeAction, toggleCharacterSeceltAction;
 
     SceneActivityManager sceneMgr;
-    InputSystem_Actions inputActions;
     public enum LevelState
     {
         Intro,
@@ -35,27 +34,6 @@ public class GameState : MonoBehaviour
         OutTro
     }
 
-    void Awake()
-    {
-        engaugeAction = InputSystem.actions.FindAction("StartEngaugment");
-        toggleCharacterSeceltAction = InputSystem.actions.FindAction("ToggleCharacterSelect");
-        
-        
-    }
-
-    void OnEnable()
-    {
-        if (engaugeAction != null) engaugeAction.Enable();
-        if (toggleCharacterSeceltAction != null) toggleCharacterSeceltAction.Enable();
-        
-    }
-    private void OnDisable()
-    {
-        if (engaugeAction != null) engaugeAction.Disable();
-        if (toggleCharacterSeceltAction != null) toggleCharacterSeceltAction.Disable();
-        inputActions.Disable();
-    }
-
     void Start()
     {
         // Find the SceneActivityManager!
@@ -64,7 +42,6 @@ public class GameState : MonoBehaviour
             sceneMgr = obj;
         }
         Debug.Assert(sceneMgr != null);
-        inputActions = controlSwitcher.inputActions;
 
         // if (_moneyMachanic == null) { }
         //if (_timeMachanic == null) { }
@@ -88,10 +65,8 @@ public class GameState : MonoBehaviour
         currentlevelState = LevelState.Scouting;
         StartTrackOne();
 
-        controlSwitcher.ToggleControl();
-        _playerStateMachine.controlable = false;
-        controlSwitcher._camModeIsTogglable = false;
-        _playerStateMachine._camModeIsTogglable = false;
+        controlSwitcher.SwitchToCameraControl();
+        GlobalInputManager.Instance.DisableControlSwapping();
 
         if (_playerSpawnObjects != null) _playerSpawnObjects.SpawningIsActive = false;
         else Debug.LogError("_playerSpawnObjects is null");
@@ -101,7 +76,6 @@ public class GameState : MonoBehaviour
         else Debug.LogError("_timeMachanic is null");
         if (_moneyMachanic != null) _moneyMachanic.MoneyIsActive = false;
         else Debug.LogError("_moneyMachanic is null");
-
 
     }
     public void ToggleScaracterSelectMenu(InputAction.CallbackContext context)
@@ -124,20 +98,18 @@ public class GameState : MonoBehaviour
     {
         StopTrackOne();
         StartTrackTwo();
+
         currentlevelState = LevelState.EngaugmentPartOne;
         controlSwitcher.SwitchToPlayerControl();
-        controlSwitcher.FreeCamIsActive = false;
 
-        _playerStateMachine.controlable = true;
-        controlSwitcher._camModeIsTogglable = true;
-        _playerStateMachine._camModeIsTogglable = true;
-
-        
+        GlobalInputManager.Instance.EnableControlSwapping();
 
         _playerSpawnObjects.SpawningIsActive = true;
         _enemySpawnObjects.SpawningIsActive = true;
+        
         _timeMachanic.TimeIsActive = true;
         _moneyMachanic.MoneyIsActive = true;
+
         LevelPartOne?.Invoke();
     }
     public void EngaugmentPartTwo()

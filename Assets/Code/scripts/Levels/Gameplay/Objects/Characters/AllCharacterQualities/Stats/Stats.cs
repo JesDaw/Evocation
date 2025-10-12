@@ -10,11 +10,10 @@ public class Stats : MonoBehaviour
 
     //the above can be made into an enum, but i'll hold off on it until we get all the different clans
     public int _MaxHealth = 1;
-    public int _CurrentHealth = 1;
-    public int _AttackDamage;
-    public int _AttackStartup;
-    public int _AttackActiveDuration;
-    public int _AttackEndlag;
+    public float _CurrentHealth = 1;
+    public float _AttackDamage;
+    public float _AttackStartup;
+    public float _AttackEndlag;
     public float _MoveSpeed;
     public float _StopDistance;
     public float _KnockBackMax;
@@ -97,7 +96,7 @@ public class Stats : MonoBehaviour
         StartCoroutine(StatusEffectLoop());
     }
 
-    public void TakeDamage(int _Damage, DamageSource _AttackedBy = null)
+    public void TakeDamage(float _Damage, DamageSource _AttackedBy = null)
     {
         if (_Invincible) return;
 

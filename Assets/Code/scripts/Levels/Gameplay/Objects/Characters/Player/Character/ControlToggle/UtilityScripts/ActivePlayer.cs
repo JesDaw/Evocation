@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class ActivePlayer : MonoBehaviour
@@ -16,6 +17,12 @@ public class ActivePlayer : MonoBehaviour
     public event OnPlayerActivating PlayerActivating;
 
     [SerializeField] GameObject _currentPlayer;
+    GameObject _currentCamera;
+
+    void Start()
+    {
+        GlobalInputManager.Instance.SetActivePlayer(GetCurrentPlayerController());
+    }
 
     public GameObject CurrentPlayer
     {
@@ -29,6 +36,29 @@ public class ActivePlayer : MonoBehaviour
                 PlayerActivating?.Invoke(_currentPlayer);
             }
         }
+    }
+
+    public CinemachineCamera GetCurrentPlayerCamera()
+    {
+
+        if (_currentPlayer == null)
+        {
+            Debug.LogError("Current player isnt set");
+            return null;
+        }
+
+        Debug.Log($"Returning camera {_currentPlayer == null}, and {_currentPlayer.GetComponent<CinemachineCamera>() == null}");
+        return _currentPlayer.GetComponentInChildren<CinemachineCamera>();
+    }
+    public PlayerStateMachine GetCurrentPlayerController()
+    {
+        if (_currentPlayer == null)
+        {
+            Debug.LogError("Current player isnt set");
+            return null; 
+        }
+
+        return _currentPlayer?.GetComponent<PlayerStateMachine>();
     }
 }
 

@@ -236,7 +236,15 @@ where CTX : struct
     {
         pendingCmds.Clear();
     }
+
+    public void ClearAllCommands()
+    {
+        activeCmds.Clear();
+        pendingCmds.Clear();
+    }
+
 }
+
 
 /// <summary>
 /// Enum of the valid Continuous commands for a Player Character
