@@ -9,6 +9,12 @@ public class PlayerAttackState : PlayerBaseState
         IsRootState = true;
 
     }
+    public override void EnterState()
+    {
+        _attackOver = false;
+        HandleAttack();
+    }
+
     public override void UpdateState()
     {
         CheckSwitchStates();
@@ -32,13 +38,6 @@ public class PlayerAttackState : PlayerBaseState
         }
     }
 
-
-    public override void EnterState()
-    {
-        _attackOver = false;
-        HandleAttack();
-    }
-
     public override void ExitState()
     {
         //if we want something to happen as the state is left
@@ -58,24 +57,24 @@ public class PlayerAttackState : PlayerBaseState
         _attackOver = false;
 
         Ctx.PlayerCommander.TakePendingCmd(DiscretePlayerCommand.Attack);
-        yield return new WaitForSeconds(Ctx.PlayerStats._AttackStartup / Ctx.FPS);
+        yield return new WaitForSeconds(Ctx.PlayerStats._AttackStartup);
 
         // Active hit
         AttackActive();
         Ctx.AttackingAudio.Play();
 
         // Endlag
-        yield return new WaitForSeconds(Ctx.PlayerStats._AttackEndlag / Ctx.FPS);
+        yield return new WaitForSeconds(Ctx.PlayerStats._AttackEndlag);
         _attackOver = true;
 
         // If any attack commands are still in the buffer, only keep 1 of them so 
         // attacks don't pile up
-        /*
-        if (Ctx.PlayerCommander.IsCmdPending(DiscretePlayerCommand.Attack))
+
+      /*  if (Ctx.PlayerCommander.IsCmdPending(DiscretePlayerCommand.Attack))
         {
             Ctx.PlayerCommander.ClearPendingCmds(DiscretePlayerCommand.Attack);
             Ctx.PlayerCommander.SendCmd(DiscretePlayerCommand.Attack, null);
-        */
+        } */
         Ctx.PlayerCommander.ClearPendingCmds(DiscretePlayerCommand.Attack);
     }
     void AttackActive()

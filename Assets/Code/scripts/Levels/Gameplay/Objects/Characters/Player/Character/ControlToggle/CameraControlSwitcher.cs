@@ -4,168 +4,116 @@ using Unity.Cinemachine;
 
 public class CameraControlSwitcher : MonoBehaviour
 {
-    // Camera References
-    [SerializeField]  CinemachineCamera freeCam;
+    [SerializeField] CinemachineCamera freeCam;
+    [SerializeField] FreeCamController cameraMovement;
+    [SerializeField] ActivePlayer activePlayer;
+    [SerializeField] IntVeriable player_lives;
+    [SerializeField] AudioManager audio_manager;
 
-    // Script References
-    [SerializeField]  FreeCamController cameraMovement;
-    [SerializeField]  PlayerSwitch playerSwitcher;
-    [SerializeField]  IntVeriable player_lives;
-
-    //for walking sound effect
-     AudioManager audio_manager;
-
-     internal InputSystem_Actions inputActions;
-    //InputAction inputActions;
+    internal InputSystem_Actions inputActions;
     public bool FreeCamIsActive = false;
-    internal bool _camModeIsTogglable;
+    internal bool _camModeIsTogglable = true; 
 
-    private void Awake()
+
+    public void DisableSwitching() { GlobalInputManager.Instance.DisableControlSwapping(); }
+    public void EnableSwitching() { GlobalInputManager.Instance.EnableControlSwapping(); }
+
+
+    void Start()
     {
-        inputActions = new InputSystem_Actions();
-        inputActions.Enable();
+        if (audio_manager == null)
+            audio_manager = FindAnyObjectByType<AudioManager>();
 
-        inputActions.ControlManager.ToggleCameraControl.performed += SwitchControl;
+        GlobalInputManager.Instance.SetActiveCamera(this);
     }
 
-    private void Start()
+    public void OnToggleCameraControl(InputAction.CallbackContext context)
     {
-        audio_manager = FindAnyObjectByType<AudioManager>();
-        inputActions.Player.Enable();
-    }
+        if (!_camModeIsTogglable) return;
+        if (!context.performed) return;
 
-    public void SwitchControl(InputAction.CallbackContext context)
-    {
-        if (!_camModeIsTogglable)
-        {
-            Debug.Log($" freecam taggle function is disabled");
-            return;
-        }
-
-        //auto switches to free cam when player lives hit 0 (also can't use controls anymroe)
         if (player_lives != null && player_lives._Value <= 0 && !FreeCamIsActive)
         {
             SwitchToCameraControl();
+            return;
         }
-        if (!context.performed) return;
 
-        audio_manager.Play("Switching Cameras"); //plays pop noise when cam switched
+        audio_manager?.Play("Switching Cameras");
         ToggleControl();
     }
 
-    /// <summary>
-    /// Toggles between player and camera control.
-    /// </summary>
-    internal void ToggleControl()
+    public void ToggleControl()
     {
-        if (!FreeCamIsActive)
-        {
-            SwitchToCameraControl();
-        }
-        else
-        {
+        if (FreeCamIsActive)
             SwitchToPlayerControl();
-        }
+        else
+            SwitchToCameraControl();
     }
 
-    /// <summary>
-    /// Switches control back to the current player.
-    /// </summary>
     public void SwitchToPlayerControl()
     {
         FreeCamIsActive = false;
-        inputActions.Camera.Disable();
-        inputActions.Player.Enable();
+        GlobalInputManager.Instance.EnableCharacterControls();
+        GlobalInputManager.Instance.DisableCameraControls();
+        //cameraMovement.enabled = false;
 
-        if (playerSwitcher != null)
+        var playerCam = activePlayer.GetCurrentPlayerCamera();
+        if (playerCam != null)
         {
-            CinemachineCamera currentPlayerCam = playerSwitcher.GetCurrentPlayerCamera();
-            PlayersControlerScriptsManager currentPlayer = playerSwitcher.GetCurrentPlayerController();
-
-            if (currentPlayerCam != null) currentPlayerCam.Priority = 2;
-            if (freeCam != null) freeCam.Priority = 1;
-            if (currentPlayer != null) currentPlayer.EnableControls();
+            playerCam.Priority = 2;
         }
 
-        if (cameraMovement != null) cameraMovement.enabled = false;
+        if (freeCam != null)
+        {
+            freeCam.Priority = 1;
+        }
 
-        //Debug.Log("Switched to player control.");
+        var playerController = activePlayer.CurrentPlayer?.GetComponent<PlayerStateMachine>();
+        GlobalInputManager.Instance?.EnableCharacterControls();
     }
 
-    /// <summary>
-    /// Switches control to free camera mode.
-    /// </summary>
     public void SwitchToCameraControl()
     {
         FreeCamIsActive = true;
-        inputActions.Player.Disable();
-        inputActions.Camera.Enable();
 
-        if (playerSwitcher != null)
-        {
-            CinemachineCamera currentPlayerCam = playerSwitcher.GetCurrentPlayerCamera();
-            PlayersControlerScriptsManager currentPlayer = playerSwitcher.GetCurrentPlayerController();
+        GlobalInputManager.Instance.DisableCharacterControls();
+        GlobalInputManager.Instance.EnableCameraControls();
 
-            //set freecam to active and make it start in the same position as the player cam
-            if (freeCam != null)
-            {
-                freeCam.Priority = 2;
-                freeCam.transform.position = currentPlayerCam.transform.position;
-                freeCam.gameObject.GetComponent<CinemachineCamera>().Lens.FieldOfView = playerSwitcher.GetCurrentPlayerCamera().GetComponent<CinemachineCamera>().Lens.FieldOfView;
-            }
+        var playerCam = activePlayer.GetCurrentPlayerCamera();
 
-            //dissable player
-            if (currentPlayerCam != null) currentPlayerCam.Priority = 0;
-            /* if (currentPlayer != null) 
-             {
-                 currentPlayer.DisableControls();
-             } */
-        }
+        Debug.Log($"{playerCam == null}");
+        freeCam.transform.position = playerCam.transform.position;
+        freeCam.Lens.FieldOfView = playerCam.Lens.FieldOfView;
 
-        //enable camera controls
-        if (cameraMovement != null) cameraMovement.enabled = true;
+        freeCam.Priority = 2;
 
-        //so when the player switches to freecam all player controls are disabled 
-        
+        playerCam.Priority = 0;
 
-       // Debug.Log("Switched to camera control.");
+        //  disable control of the player while freecam is active
+        //var playerController = activePlayer.CurrentPlayer?.GetComponent<PlayerStateMachine>();
+        GlobalInputManager.Instance?.DisableCharacterControls();
     }
 
-    //auto switch to free cam w/o movement/controls when there are no more player lives
-    public void dead_free_cam()
+    public void DeadFreeCam()
     {
         FreeCamIsActive = true;
 
-        if (playerSwitcher != null)
+        var playerCam = activePlayer.GetCurrentPlayerCamera();
+        if (freeCam != null && playerCam != null)
         {
-            CinemachineCamera currentPlayerCam = playerSwitcher.GetCurrentPlayerCamera();
-            PlayersControlerScriptsManager currentPlayer = playerSwitcher.GetCurrentPlayerController();
-        
-            if (freeCam != null) {
-                freeCam.Priority = 2;
-                freeCam.transform.position = playerSwitcher.GetCurrentPlayerCamera().transform.position;
-                freeCam.gameObject.GetComponent<CinemachineCamera>().Lens.OrthographicSize = playerSwitcher.GetCurrentPlayerCamera().GetComponent<CinemachineCamera>().Lens.OrthographicSize;
-            }
-
-            if (currentPlayerCam != null) currentPlayerCam.Priority = 0;
-            if (currentPlayer != null) 
-            {
-                currentPlayer.DisableControls();
-            }
+            freeCam.Priority = 2;
+            freeCam.transform.position = playerCam.transform.position;
+            freeCam.Lens.FieldOfView = playerCam.Lens.FieldOfView;
         }
 
+        playerCam.Priority = 0;
 
-        if (cameraMovement != null) cameraMovement.enabled = true;
+        //var playerController = activePlayer.CurrentPlayer?.GetComponent<PlayerStateMachine>();
+        GlobalInputManager.Instance?.DisableCharacterControls();
 
-        inputActions.Player.Disable();
-        //inputActions.Camera.Enable();
-
-        //stop the walking & climbing sound effect when switching to free cam
         if (audio_manager != null)
-        {
-            audio_manager.gameObject.SetActive(false); //deactivate the audio manager game obj
-        }
+            audio_manager.gameObject.SetActive(false);
 
-        Debug.Log("All players dead - Switched to camera control.");
+        Debug.Log("All players dead - switched to freecam.");
     }
 }

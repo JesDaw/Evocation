@@ -8,6 +8,7 @@ public class PlayerLivesManager : MonoBehaviour
     [SerializeField] IntVeriable LifeCount;
     [SerializeField] int MaxLives;
     [SerializeField] UnityEvent _loose_game;
+    [SerializeField] ActivePlayer activePlayer;
     [SerializeField] PlayerSwitch playerSwitch;
     public bool canSpawnMore = true;
 
@@ -42,13 +43,13 @@ public class PlayerLivesManager : MonoBehaviour
         else
         {
 
-            var currentPlayer = playerSwitch.GetCurrentPlayerController();
+            var currentPlayer = activePlayer.GetCurrentPlayerController();
 
             if (currentPlayer != null)
             {
                 GameObject playerObject = currentPlayer.gameObject;
 
-                if (playerObject != playerSwitch.GetCurrentPlayerController()?.gameObject)
+                if (playerObject != activePlayer.GetCurrentPlayerController()?.gameObject)
                 {
                     playerSwitch.RemovePlayer(playerObject);
                 }

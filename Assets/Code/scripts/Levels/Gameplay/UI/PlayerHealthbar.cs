@@ -7,7 +7,7 @@ public class PlayerHealthbar : HealthBarBase
 
     int _maxHealth = 100;
 
-    internal delegate void UpdateHealthDelegate(int value);
+    internal delegate void UpdateHealthDelegate(float value);
     internal delegate void UpdateMaxHealthDelegate(int value);
 
     internal UpdateHealthDelegate updateHealthIndicator;
@@ -28,7 +28,7 @@ public class PlayerHealthbar : HealthBarBase
             OnPlayerActivating(ActivePlayer.CurrentPlayer);
     }
 
-    void UpdateHealthVisual(int currentHealth)
+    void UpdateHealthVisual(float currentHealth)
     {
         float ratio = _maxHealth > 0 ? (float)currentHealth / _maxHealth : 0f;
         AnimateHealthChange(ratio);

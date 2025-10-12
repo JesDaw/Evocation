@@ -25,7 +25,7 @@ public abstract class PlayerHealthbarTestBase
     protected class MockSlider
     {
         public int maxValue = 0;
-        public int value = 0;
+        public float value = 0;
     }
 
     [OneTimeSetUp]
@@ -149,7 +149,7 @@ public class PlayerHealthbarTest : PlayerHealthbarTestBase
     public IEnumerator SliderUpdatesWithPlayerDamage()
     {
         componentUnderTest.getPlayerStats(out Stats stats);
-        int initHealth = stats._CurrentHealth;
+        float initHealth = stats._CurrentHealth;
         stats.TakeDamage(1);
         yield return new WaitForSeconds(0.1f);
 
@@ -163,7 +163,7 @@ public class PlayerHealthbarTest : PlayerHealthbarTestBase
     public IEnumerator SliderUpdatesWithPlayerDeath()
     {
         componentUnderTest.getPlayerStats(out Stats stats);
-        int initHealth = stats._CurrentHealth;
+        float initHealth = stats._CurrentHealth;
         stats.TakeDamage(initHealth);  // Kill the player
 
         yield return new WaitForSeconds(0.1f);
