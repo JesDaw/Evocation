@@ -11,9 +11,6 @@ public class CpuUtilis: MonoBehaviour
             case 0:
                 SpawnMob(ScrStats.ExtraStats);
                 break;
-            case 1:
-                ShootProjectiles(ScrStats._Projectiles[0], EnemyObject.transform);
-                break;
 
             default:
                 Debug.LogWarning("Invalid On Attack");
