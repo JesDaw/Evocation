@@ -15,7 +15,8 @@ public class DialogueManager : MonoBehaviour
 
     Coroutine _typeLineCorutine;
     string _currentLine;
-    public bool DialogueActive = false;
+    bool _dialogueActive = false;
+    public bool DialogueActive { get { return _dialogueActive; } set { _dialogueActive = value; } }
     DailogueTrigger _dailogueTrigger;
     bool _firstLine = true; //this is so cringe im sorry
 
