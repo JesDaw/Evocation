@@ -142,6 +142,9 @@ public class Stats : MonoBehaviour
         _StatusTicksMax.Add(new Vector2(_effect._Tick, _effect._Length));
         _StatusHealth = _StatusMax;
     }
+
+    public AttackType attackType;
+
 }
 
 public class DamageSource

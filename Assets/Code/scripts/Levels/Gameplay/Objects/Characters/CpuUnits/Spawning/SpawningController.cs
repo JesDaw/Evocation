@@ -6,8 +6,8 @@ public class SpawningController : MonoBehaviour
 {
     public SpawnObjects spawnObjects;
     public float SpawnCondition;
-    private SpawningStatsInfo _info;
-    public List<SpawningStatsInfo> SpawningInfo;
+    private BaseActionInfo _info;
+    public List<BaseActionInfo> SpawningInfo;
     void OnValidate()
     {
         SpawnCondition = Mathf.Clamp(SpawnCondition, 0f, 1f);
@@ -18,21 +18,39 @@ public class SpawningController : MonoBehaviour
     }
     public void Spawn(SpawningStatsInfo _stat)
     {
-        if (_stat.ConditionLower > SpawnCondition) return;
-        if (_stat.ConditionUpper < SpawnCondition) return;
-        _info = _stat;
+
         spawnObjects.SpawnFromSpawner(_stat.stat);
     }
 
     IEnumerator SpawnLoop()
     {
-        foreach (SpawningStatsInfo _stat in SpawningInfo)
+        foreach (BaseActionInfo _stat in SpawningInfo)
         {
-            Spawn(_stat);
+            if (_stat.ConditionLower > SpawnCondition) continue;
+            if (_stat.ConditionUpper < SpawnCondition) continue;
+            _info = _stat;
+            switch (_stat)
+            {
+                case SpawningStatsInfo _spawn:
+                    Spawn(_spawn);
+                    break;
+                case DebugStatsInfo _Debug:
+                    Debug.Log(_Debug.debugText);
+                    break;
+                default:
+                    break;
+            }
             continue;
         }
 
-        yield return new WaitForSeconds(_info.spawnRate);
+        if(_info != null)
+        {
+            yield return new WaitForSeconds(_info.conditionRate);
+        }
+        else
+        {
+            yield return new WaitForSeconds(3);
+        }
     }
 
     private IEnumerator SpawnLoopRepeater()
@@ -45,11 +63,3 @@ public class SpawningController : MonoBehaviour
 }
 
 
-[System.Serializable]
-public class SpawningStatsInfo
-{
-    public ScriptableStats stat;
-    public float ConditionLower;
-    public float ConditionUpper;
-    public float spawnRate;
-}
