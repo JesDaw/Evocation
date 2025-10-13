@@ -1307,6 +1307,54 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Test"",
+            ""id"": ""141a12e8-214d-428d-8934-cc184fbab0c8"",
+            ""actions"": [
+                {
+                    ""name"": ""test1 (H)"",
+                    ""type"": ""Button"",
+                    ""id"": ""a913f0fc-fed9-4df2-a485-dd81ec86684c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""test2 (J)"",
+                    ""type"": ""Button"",
+                    ""id"": ""d5b93875-192c-4998-a237-7872dd664313"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""5cd6dd4b-8591-4fe4-9490-024a587fd92c"",
+                    ""path"": ""<Keyboard>/h"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""test1 (H)"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""860d01e0-b470-414c-9ca4-60e3e77fc487"",
+                    ""path"": ""<Keyboard>/j"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""test2 (J)"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1413,6 +1461,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_SpawnerController_Spawn8 = m_SpawnerController.FindAction("Spawn8", throwIfNotFound: true);
         m_SpawnerController_Spawn9 = m_SpawnerController.FindAction("Spawn9", throwIfNotFound: true);
         m_SpawnerController_SpawnPlayer = m_SpawnerController.FindAction("SpawnPlayer", throwIfNotFound: true);
+        // Test
+        m_Test = asset.FindActionMap("Test", throwIfNotFound: true);
+        m_Test_test1H = m_Test.FindAction("test1 (H)", throwIfNotFound: true);
+        m_Test_test2J = m_Test.FindAction("test2 (J)", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
@@ -1422,6 +1474,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, InputSystem_Actions.UI.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_ControlManager.enabled, "This will cause a leak and performance issues, InputSystem_Actions.ControlManager.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_SpawnerController.enabled, "This will cause a leak and performance issues, InputSystem_Actions.SpawnerController.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Test.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Test.Disable() has not been called.");
     }
 
     /// <summary>
@@ -2259,6 +2312,113 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="SpawnerControllerActions" /> instance referencing this action map.
     /// </summary>
     public SpawnerControllerActions @SpawnerController => new SpawnerControllerActions(this);
+
+    // Test
+    private readonly InputActionMap m_Test;
+    private List<ITestActions> m_TestActionsCallbackInterfaces = new List<ITestActions>();
+    private readonly InputAction m_Test_test1H;
+    private readonly InputAction m_Test_test2J;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "Test".
+    /// </summary>
+    public struct TestActions
+    {
+        private @InputSystem_Actions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public TestActions(@InputSystem_Actions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "Test/test1H".
+        /// </summary>
+        public InputAction @test1H => m_Wrapper.m_Test_test1H;
+        /// <summary>
+        /// Provides access to the underlying input action "Test/test2J".
+        /// </summary>
+        public InputAction @test2J => m_Wrapper.m_Test_test2J;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_Test; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="TestActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(TestActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="TestActions" />
+        public void AddCallbacks(ITestActions instance)
+        {
+            if (instance == null || m_Wrapper.m_TestActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_TestActionsCallbackInterfaces.Add(instance);
+            @test1H.started += instance.OnTest1H;
+            @test1H.performed += instance.OnTest1H;
+            @test1H.canceled += instance.OnTest1H;
+            @test2J.started += instance.OnTest2J;
+            @test2J.performed += instance.OnTest2J;
+            @test2J.canceled += instance.OnTest2J;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="TestActions" />
+        private void UnregisterCallbacks(ITestActions instance)
+        {
+            @test1H.started -= instance.OnTest1H;
+            @test1H.performed -= instance.OnTest1H;
+            @test1H.canceled -= instance.OnTest1H;
+            @test2J.started -= instance.OnTest2J;
+            @test2J.performed -= instance.OnTest2J;
+            @test2J.canceled -= instance.OnTest2J;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="TestActions.UnregisterCallbacks(ITestActions)" />.
+        /// </summary>
+        /// <seealso cref="TestActions.UnregisterCallbacks(ITestActions)" />
+        public void RemoveCallbacks(ITestActions instance)
+        {
+            if (m_Wrapper.m_TestActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="TestActions.AddCallbacks(ITestActions)" />
+        /// <seealso cref="TestActions.RemoveCallbacks(ITestActions)" />
+        /// <seealso cref="TestActions.UnregisterCallbacks(ITestActions)" />
+        public void SetCallbacks(ITestActions instance)
+        {
+            foreach (var item in m_Wrapper.m_TestActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_TestActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="TestActions" /> instance referencing this action map.
+    /// </summary>
+    public TestActions @Test => new TestActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     /// <summary>
     /// Provides access to the input control scheme.
@@ -2580,5 +2740,27 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSpawnPlayer(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Test" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="TestActions.AddCallbacks(ITestActions)" />
+    /// <seealso cref="TestActions.RemoveCallbacks(ITestActions)" />
+    public interface ITestActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "test1 (H)" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTest1H(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "test2 (J)" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTest2J(InputAction.CallbackContext context);
     }
 }
