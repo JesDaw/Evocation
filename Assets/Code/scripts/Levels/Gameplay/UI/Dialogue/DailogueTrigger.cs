@@ -14,7 +14,6 @@ public class DailogueTrigger : MonoBehaviour
     public void TriggerDailogue(InputAction.CallbackContext context)
     {
         if (!context.started || dialogueManager.DialogueActive) return;
-        Debug.Log("Trigger");
         TriggerDailogue();
     }
     
