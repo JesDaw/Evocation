@@ -22,14 +22,14 @@ public class DialogueManager : MonoBehaviour
 
 
     Queue<string> Lines;
-    Queue<string> Names;
-    Queue<float> TextSpeeds;
+    //Queue<string> Names;
+    //Queue<float> TextSpeeds;
 
     void Start()
     {
         Lines = new Queue<string>();
-        Names = new Queue<string>();
-        TextSpeeds = new Queue<float>();
+        //Names = new Queue<string>();
+        //TextSpeeds = new Queue<float>();
         
     }
 
