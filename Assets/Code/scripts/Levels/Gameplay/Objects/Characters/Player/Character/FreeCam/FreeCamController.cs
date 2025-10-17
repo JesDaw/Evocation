@@ -54,7 +54,7 @@ public class FreeCamController : MonoBehaviour
         }
     }
 
-    private void HandleMovement()
+    public void HandleMovement()
     {
         // Move only on X and Y axes, preserving Z position for zoom control
         Vector3 movement = new Vector3(moveInput.x, moveInput.y, 0) * moveSpeed * _ZoomToSpeedMultiplier * Time.deltaTime;

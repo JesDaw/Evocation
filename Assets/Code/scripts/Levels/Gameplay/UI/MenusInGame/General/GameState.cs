@@ -103,6 +103,8 @@ public class GameState : MonoBehaviour
         controlSwitcher.SwitchToPlayerControl();
 
         GlobalInputManager.Instance.EnableControlSwapping();
+        GlobalInputManager.Instance.EnableCharacterSpawnControls();
+
 
         _playerSpawnObjects.SpawningIsActive = true;
         _enemySpawnObjects.SpawningIsActive = true;
