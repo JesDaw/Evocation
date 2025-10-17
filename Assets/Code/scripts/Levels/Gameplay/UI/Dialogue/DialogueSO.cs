@@ -2,10 +2,8 @@ using UnityEngine;
 
 [CreateAssetMenu]
 [System.Serializable]
-public class DialogueSO : ScriptableObject
+public class DialogueSO : CharacterDialogue
 {
-    public string CharacterName;
-
     [TextArea(3, 10)]
     public string[] Lines;
     public string[] DialogueSpeedOveride;
