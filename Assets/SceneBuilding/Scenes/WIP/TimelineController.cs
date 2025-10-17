@@ -14,22 +14,20 @@ public class TimelineController : MonoBehaviour
         timeline = GetComponent<PlayableDirector>();
     }
 
-    void Update()
+    public void PlayTimeline()
     {
-        if (isPaused == true && Input.GetKeyDown(KeyCode.E))
-        {
-            timeline.Resume();
-            isPaused = false;
-        }
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            timeline.Stop();
-        }
+        timeline.Resume();
+        isPaused = false;
     }
 
     public void PauseAnimation()
     {
         timeline.Pause();
         isPaused = true;
+    }
+
+    public void ResetTimeline()
+    {
+        timeline.Stop();
     }
 }
