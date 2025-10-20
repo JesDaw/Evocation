@@ -16,7 +16,6 @@ public class CpuAttackState : CpuBaseState
     public override void EnterState()
     {
         _context._Animator.SetBool("IsRunning", false);
-        //Debug.Log("Attacking " + _context._AttackingStats.gameObject.name);
         _phase = AttackPhase.Startup;
         _timer = 0;
     }
@@ -60,6 +59,17 @@ public class CpuAttackState : CpuBaseState
 
     void DealDamage()
     {
+        // if special attack types
+        AttackType currentAttack = _context._ScrStats._attackType;
+        switch (currentAttack)
+        {
+            case AOEAttackType aoeAttack:
+                AOEAttack(aoeAttack.sizeX, aoeAttack.sizeY);
+                return;
+            default:
+                break;
+        }
+        //
         DamageSource _damageSource = new DamageSource();
         _damageSource.IsEnemy = _context._Stats._Enemy;
 
@@ -72,5 +82,18 @@ public class CpuAttackState : CpuBaseState
         {
             _context._AttackingStats.AddStatusEffect(_EffectsToApply[I]);
         }
+    }
+
+    void AOEAttack(float sizeX, float sizeY)
+    {
+        Debug.Log("AOE Attack");
+        //debug
+        sizeX += _context._Stats._StopDistance;
+        sizeX = _context._Stats._Enemy ?  -sizeX : sizeX;
+        var rect = new Rect(_context.transform.position.x, _context.transform.position.y, sizeX, sizeY);
+        Debug.DrawLine(new Vector3(rect.x, rect.y), new Vector3(rect.x + rect.width, rect.y), Color.red, 1f);
+        Debug.DrawLine(new Vector3(rect.x, rect.y), new Vector3(rect.x, rect.y + rect.height), Color.red, 1f);
+        Debug.DrawLine(new Vector3(rect.x + rect.width, rect.y + rect.height), new Vector3(rect.x + rect.width, rect.y), Color.red, 1f);
+        Debug.DrawLine(new Vector3(rect.x + rect.width, rect.y + rect.height), new Vector3(rect.x, rect.y + rect.height), Color.red, 1f);
     }
 }
