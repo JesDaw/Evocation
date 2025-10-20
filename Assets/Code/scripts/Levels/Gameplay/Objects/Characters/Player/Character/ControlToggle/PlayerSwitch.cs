@@ -6,12 +6,11 @@ using UnityEngine.InputSystem;
 public class PlayerSwitch : MonoBehaviour
 {
     [SerializeField] ActivePlayer activePlayer;
-    [SerializeField] private List<GameObject> players = new List<GameObject>();
+    [SerializeField] List<GameObject> players = new List<GameObject>();
     private List<CinemachineCamera> playerCameras = new List<CinemachineCamera>();
 
     int activePlayerIndex = 0;
     int PlayerIDNumber;
-
     void Start()
     {
         PlayerIDNumber = 1;
@@ -90,7 +89,7 @@ public class PlayerSwitch : MonoBehaviour
     {
         if (!context.performed || players.Count == 0)
             return;
-
+        
         RemoveNullPlayers();
 
         if (players.Count == 0 || playerCameras.Count == 0)

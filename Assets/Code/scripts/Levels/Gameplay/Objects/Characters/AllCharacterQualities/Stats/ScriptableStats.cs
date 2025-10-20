@@ -36,7 +36,6 @@ public class ScriptableStats : ScriptableObject
     //!-- CHECK CPU ULTILS FOR ON ATTACK FUNC --!//
     // 0 - spawn mobs from extra stats
     // 1 - shoot projectiles from extra proj
-    public List<ScrProjectiles> _Projectiles;
 
     //dude I wish i was a better programmer
     //but ahahhahahah I don't know how else to do it
