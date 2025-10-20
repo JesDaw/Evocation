@@ -1,9 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class DailogueTrigger : MonoBehaviour
 {
-    public DialogueSO dialogueSO;
+    public List<Dialogue> Slides = new List<Dialogue>(); 
     DialogueManager dialogueManager;
     [SerializeField] internal UltEvents.UltEvent EndOfLines;
 
@@ -19,13 +20,11 @@ public class DailogueTrigger : MonoBehaviour
     
     public void TriggerDailogue()
     {
-        dialogueManager.StartDialogue(dialogueSO, this);
-        dialogueManager.DialogueActive = true;
+        dialogueManager.StartDialogue(Slides, this);
     }
     
     public void EndDialogue()
     {
-        dialogueManager.DialogueActive = false;
         EndOfLines?.Invoke();
     }
 }

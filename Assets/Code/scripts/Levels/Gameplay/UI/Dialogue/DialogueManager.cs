@@ -3,115 +3,108 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 public class DialogueManager : MonoBehaviour
 {
     public TMP_Text nameText;
     public TMP_Text dialogueText;
-    public float textSpeed;
-    //public Animator animator;
     [SerializeField] GameObject DialogueBox;
 
-    Coroutine _typeLineCorutine;
+    List<Dialogue> dialogueSlides = new List<Dialogue>();
+    Coroutine _typeLineCoroutine;
     string _currentLine;
-    bool _dialogueActive = false;
-    public bool DialogueActive { get { return _dialogueActive; } set { _dialogueActive = value; } }
+    int slideCount = 0;
+    bool _firstLine = true;
+
     DailogueTrigger _dailogueTrigger;
-    bool _firstLine = true; //this is so cringe im sorry
 
+    public bool DialogueActive { get; private set; }
 
-    Queue<string> Lines;
-    //Queue<string> Names;
-    //Queue<float> TextSpeeds;
-
-    void Start()
+    public void StartDialogue(List<Dialogue> slides, DailogueTrigger trigger)
     {
-        Lines = new Queue<string>();
-        //Names = new Queue<string>();
-        //TextSpeeds = new Queue<float>();
-        
-    }
+        dialogueSlides = slides;
+        _dailogueTrigger = trigger;
 
-    public void StartDialogue(DialogueSO dialogue, DailogueTrigger dailogueTrigger)
-    {
-        _dailogueTrigger = dailogueTrigger;
-        ActivateDialogueBox();
-        nameText.text = dialogue.CharacterName;
-        Lines.Clear();
-        foreach (string line in dialogue.Lines)
-        {
-            Lines.Enqueue(line);
-        }
-        DesplayNextSentance();
-        
-    }
-    public void ActivateDialogueBox()
-    {
+        slideCount = 0;
+        _firstLine = true;
+        DialogueActive = true;
+
         DialogueBox.SetActive(true);
+        DisplayNextSlide(); 
     }
 
     public void OnConfirmDialoguePressed(InputAction.CallbackContext context)
     {
         if (!context.started || !DialogueActive) return;
+
         if (_firstLine)
         {
             _firstLine = false;
             return;
         }
+
         OnConfirmDialoguePressedLogic();
-        
     }
-    
-    public void OnConfirmDialoguePressedLogic()
+
+    void OnConfirmDialoguePressedLogic()
     {
-        if (_typeLineCorutine == null && Lines.Count == 0)
-        {
-            _dailogueTrigger.EndDialogue();
-            return;
-        }
-        if (_typeLineCorutine != null)
+        if (_typeLineCoroutine != null) // still typing → skip
         {
             SkipToEndOfLine();
+            return;
         }
-        else
+
+        // Finished all lines?
+        if (slideCount >= dialogueSlides.Count - 1)
         {
-            DesplayNextSentance();
+            EndDialogue();
+            return;
         }
+
+        // Go to next slide properly
+        slideCount++;
+        DisplayNextSlide();
     }
 
-    public void DesplayNextSentance()
+    void DisplayNextSlide()
     {
-        _currentLine = Lines.Dequeue();
-        _typeLineCorutine = StartCoroutine(TypeLine(_currentLine));        
+        nameText.text = dialogueSlides[slideCount].CharacterName;
+        _currentLine = dialogueSlides[slideCount].Line;
+
+        if (_typeLineCoroutine != null)
+            StopCoroutine(_typeLineCoroutine);
+
+        _typeLineCoroutine = StartCoroutine(TypeLine(_currentLine, dialogueSlides[slideCount].DialogueSpeed));
     }
 
-    IEnumerator TypeLine(string line)
+    IEnumerator TypeLine(string line, float speed)
     {
         dialogueText.text = "";
-        foreach (char c in line.ToCharArray())
+        foreach (char c in line)
         {
             dialogueText.text += c;
-            yield return new WaitForSeconds(textSpeed);
+            yield return new WaitForSeconds(speed);
         }
-         _typeLineCorutine = null;
+        _typeLineCoroutine = null;
     }
 
     void SkipToEndOfLine()
     {
-        StopCoroutine(_typeLineCorutine);
-        _typeLineCorutine = null;
+        StopCoroutine(_typeLineCoroutine);
+        _typeLineCoroutine = null;
         dialogueText.text = _currentLine;
     }
 
-    public void EndOfConvo()
+    void EndDialogue()
     {
-        _firstLine = true;
-        DeactivateDialogueBox();
+        DialogueActive = false;
+        slideCount = 0;
+        _typeLineCoroutine = null;
+        _dailogueTrigger.EndDialogue();
     }
+
     public void DeactivateDialogueBox()
     {
         DialogueBox.SetActive(false);
     }
- 
 }
