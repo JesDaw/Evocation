@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.XR.Haptics;
 
 public class CpuAttackState : CpuBaseState
 {
@@ -38,7 +39,7 @@ public class CpuAttackState : CpuBaseState
             case AttackPhase.Startup:
                 if (_timer >= _context._Stats._AttackStartup)
                 {
-                    DealDamage();
+                    TriesToHit();
                     _timer = 0f;
                     _phase = AttackPhase.Cooldown;
                 }
@@ -57,7 +58,7 @@ public class CpuAttackState : CpuBaseState
         }
     }
 
-    void DealDamage()
+    void TriesToHit()
     {
         // if special attack types
         AttackType currentAttack = _context._ScrStats._attackType;
@@ -67,15 +68,19 @@ public class CpuAttackState : CpuBaseState
                 AOEAttack(aoeAttack.sizeX, aoeAttack.sizeY);
                 return;
             default:
+                DealDamage();
                 break;
         }
-        //
+
+    }
+
+    void DealDamage()
+    {
         DamageSource _damageSource = new DamageSource();
         _damageSource.IsEnemy = _context._Stats._Enemy;
 
         _context._AttackingStats.TakeDamage(_context._Stats._AttackDamage, _damageSource);
 
-        //status effects
         List<StatusEffect> _EffectsToApply = _context._ScrStats._EffectsToApply;
         if (_EffectsToApply.Count == 0) return;
         for (int I = 0; I < _EffectsToApply.Count; I++)
@@ -95,5 +100,46 @@ public class CpuAttackState : CpuBaseState
         Debug.DrawLine(new Vector3(rect.x, rect.y), new Vector3(rect.x, rect.y + rect.height), Color.red, 1f);
         Debug.DrawLine(new Vector3(rect.x + rect.width, rect.y + rect.height), new Vector3(rect.x + rect.width, rect.y), Color.red, 1f);
         Debug.DrawLine(new Vector3(rect.x + rect.width, rect.y + rect.height), new Vector3(rect.x, rect.y + rect.height), Color.red, 1f);
+
+            Vector2 center = new Vector2(
+            _context.transform.position.x + sizeX / 2f,
+            _context.transform.position.y + sizeY / 2f
+        );
+        //stolen from cpuMoveState kina dubpulicated but should be fine
+        Vector2 size = new Vector2(Mathf.Abs(sizeX), Mathf.Abs(sizeY));
+
+        Collider2D[] hits = Physics2D.OverlapBoxAll(center, size, 0f);
+
+        for (int I = 0; I < _context._Stats._CpuPriority.Count; I++)
+        {
+            for (int II = 0; II < hits.Length; II++)
+            {
+                if (hits[II].CompareTag(_context._Stats._CpuPriority[I]))
+                {
+                    //actual attackers
+                    GameObject EnemyGameobject = hits[II].gameObject;
+                    Debug.LogWarning(EnemyGameobject.name);
+                    _context._AttackingStats = EnemyGameobject.GetComponent<Stats>();
+                    if (_context._AttackingStats == null) Debug.LogWarning("Make sure the enemy has their collider and stats script on the same object");
+                    //this section is for healing
+
+                    if (_context._AttackingStats._CurrentHealth >= _context._AttackingStats._MaxHealth &&
+                        _context._Stats._AttackDamage <= 0
+                        )
+                    {
+                        return;
+                    }
+
+
+                    if (_context._AttackingStats == null)
+                    {
+                        Debug.Log("No stats object attached");
+                        continue;
+                    }
+
+                    DealDamage();
+                }
+            }
+        }
     }
 }
