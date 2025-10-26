@@ -6,7 +6,7 @@ public class GameData
 {
     public bool[] levelsComplete;
 
-    public initializeSaveData()
+    public void initializeSaveData()
     {
         for (int i = 0; i < 5; i++)
             levelsComplete[i] = false;
@@ -15,6 +15,7 @@ public class GameData
 
 public static class SaveSystem
 {
+    /*
     public static void SaveGame()
     {
         BinaryFormatter formatter = new BinaryFormatter();
@@ -44,5 +45,5 @@ public static class SaveSystem
             Debug.LogError("Save file not found in " + path);
             return null;
         }
-    }
+    } */
 }
