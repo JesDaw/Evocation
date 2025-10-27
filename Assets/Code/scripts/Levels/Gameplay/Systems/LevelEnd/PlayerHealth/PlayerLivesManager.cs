@@ -6,7 +6,7 @@ public class PlayerLivesManager : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI LifeText;
     [SerializeField] IntVeriable LifeCount;
-    [SerializeField] int MaxLives;
+    [SerializeField] public int MaxLives;
     [SerializeField] UnityEvent _loose_game;
     [SerializeField] ActivePlayer activePlayer;
     [SerializeField] PlayerSwitch playerSwitch;
