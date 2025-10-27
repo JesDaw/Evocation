@@ -3,8 +3,10 @@ using System.Collections.Generic;
 
 public class PlayerLivesDisplay : MonoBehaviour
 {
-    [SerializeField] PlayerLivesManager livesManager;
-    [SerializeField] List<GameObject> torchIcons = new List<GameObject>();
+    [SerializeField]
+    PlayerLivesManager livesManager;
+    [SerializeField]
+    List<GameObject> torchIcons = new List<GameObject>();
     private int lastMaxLives = -1;
 
     void Start()
