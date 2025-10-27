@@ -4,21 +4,29 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Stats", menuName = "Stats", order = 0)]
 public class ScriptableStats : ScriptableObject
 {
-    public List<string> _CpuPriority;
-    public Sprite _Sprite;
+    [Header("Clan")]
     public string _Clan;
+    public List<string> _CpuPriority;
+    [Space]
+    [Header("Animation")]
+    public animationRigs[] _Sprites;
+    [Space]
+    [Header("General Info")]
     public int _MaxHealth = 1;
     public int _CurrentHealth = 1;
     public int _AttackDamage;
     public int _AttackStartup;
     public int _AttackActiveDuration;
     public int _AttackEndlag;
+    public AttackType _attackType;
     public float _MoveSpeed;
     public float _StopDistance;
     public float _KnockBackMax = 1;
     public float _KnockBackHealth;
     public float _KnockBackVelocity;
     public int _spawnCost;
+    [Space]
+    [Header("Status Effects")]
     public List<StatusEffect> _StatusEffects;
     //x = Tick
     //y = Length
@@ -27,6 +35,15 @@ public class ScriptableStats : ScriptableObject
     public List<Vector2> _StatusTicks;
     public int _StatusMax;
     public int _StatusHealth;
-    public AttackType _attackType;
+}
+
+[System.Serializable]
+public class animationRigs
+{
+    public enum animationKey {Idle, Running, Attack, Knockback};
+    public animationKey Key;
+    public GameObject Rig;
+    public AnimationClip Animation;
+    public Vector2 Offset;
 }
     

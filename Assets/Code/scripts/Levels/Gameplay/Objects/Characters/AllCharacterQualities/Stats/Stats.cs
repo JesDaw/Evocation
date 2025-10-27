@@ -29,12 +29,6 @@ public class Stats : MonoBehaviour
     public int _StatusHealth;
     [SerializeField] internal UltEvents.UltEvent OnDeath, OnDamage, OnKnocked;
     [SerializeField] internal UltEvents.UltEvent<bool> OnWitFlagDeath, OnWitFlagDamage;
-    //the reason this is public is because it will be applied from the
-    //scriptable objects
-
-    // anyways all of the "OnAttack" that happen on the cpu uses the cpu utilits script
-    // so just update that if you're wondering aobu the different projectiles
-    // UnityEvent OnAttack;
     [SerializeField] UnityEvent<StatusEffect> OnTick;
     [SerializeField] bool _Invincible = false;
     [SerializeField] bool _DontDestroy = false;

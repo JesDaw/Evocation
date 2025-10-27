@@ -1684,7 +1684,7 @@ Animator:
   m_GameObject: {fileID: 3935600218738898496}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4356cc12222f1490f8638c76a1a2dbb7, type: 2}
+  m_Controller: {fileID: 22100000, guid: 77b63d5cf92d04241904be854aa0fcda, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2055,7 +2055,6 @@ GameObject:
   - component: {fileID: 899014493961415775}
   - component: {fileID: 1117684528899802519}
   - component: {fileID: 520336542923096696}
-  - component: {fileID: 3282164608094160393}
   - component: {fileID: 319218597411901608}
   - component: {fileID: 5264833244042762581}
   - component: {fileID: 319819617920929801}
@@ -2106,10 +2105,7 @@ MonoBehaviour:
   _Raycast: {fileID: 1228775622615169691}
   _Animator: {fileID: 7592242119458481958}
   OnInitStats:
-    _PersistentCalls:
-    - _Target: {fileID: 520336542923096696}
-      _MemberName: SetHealth
-      _PersistentArguments: []
+    _PersistentCalls: []
   _AttackingStats: {fileID: 0}
 --- !u!114 &520336542923096696
 MonoBehaviour:
@@ -2123,25 +2119,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3da0f5b7c70ecb4194af07b8bde4060, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Stats: {fileID: 319218597411901608}
   HealthBarObject: {fileID: 3308870223969388923}
   _HealthFillImage: {fileID: 5243333258914038328}
   _HealthTrailImage: {fileID: 6032444138073473807}
   _tweenDuration: 0.25
   _trailDelay: 0.4
---- !u!114 &3282164608094160393
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5332745155659718807}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad1562db880f9b2489ab593d329d7a9c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ProjectilesOverlay: {fileID: 6072924362752908747, guid: e36c33467359d0a44aa4493b4d80e7d9, type: 3}
+  _Stats: {fileID: 319218597411901608}
 --- !u!114 &319218597411901608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2162,7 +2145,6 @@ MonoBehaviour:
   _CurrentHealth: 1
   _AttackDamage: 0
   _AttackStartup: 0
-  _AttackActiveDuration: 0
   _AttackEndlag: 0
   _MoveSpeed: 0
   _StopDistance: 0
@@ -2206,6 +2188,7 @@ MonoBehaviour:
   _Invincible: 0
   _DontDestroy: 0
   _Enemy: 0
+  attackType: {fileID: 0}
 --- !u!114 &5264833244042762581
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -50,8 +50,6 @@ public class BuildingStatsManager : MonoBehaviour
         _Stats._StatusEffects = new List<StatusEffect>();
         _Stats._StatusTicksMax = new List<Vector2>();
         _Stats._StatusTicks = new List<Vector2>();
-
-        _Renderer.sprite = _ScrStats._Sprite;
     }
     public void SwapAccordingToWho(bool IsEnemy)
     {

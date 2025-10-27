@@ -12,18 +12,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 238e13654c5efff43b776bb1e518c913, type: 3}
   m_Name: WolfTank
   m_EditorClassIdentifier: 
+  _Clan: LavaBros
   _CpuPriority:
   - Player
   - TreeGang
   - Blank
-  _Sprite: {fileID: 21300000, guid: 38f07a4b6d08c7243b482a84dc73ea52, type: 3}
-  _Clan: LavaBros
-  _MaxHealth: 25
+  _Sprites:
+  - Key: 0
+    Rig: {fileID: 5931000895928908881, guid: 1f889f7ae4e8a4e4a9ce5241e3c67e6d, type: 3}
+    Animation: {fileID: 7400000, guid: 06de7b873f33f49568089ee0755b7e31, type: 2}
+    Offset: {x: 0, y: 0}
+  - Key: 1
+    Rig: {fileID: 7538981178263470042, guid: 2f1dd45802dd6f649b82e7bf44400c8b, type: 3}
+    Animation: {fileID: 7400000, guid: 543552328d50d44efa1da3c38f877a31, type: 2}
+    Offset: {x: 0, y: 0}
+  - Key: 2
+    Rig: {fileID: 3697514392992730701, guid: ac3941ae4b0d76a429873905578c3133, type: 3}
+    Animation: {fileID: 7400000, guid: aa11b3614f1114cd99fed85e5b4b7955, type: 2}
+    Offset: {x: 0, y: 0}
+  _MaxHealth: 20
   _CurrentHealth: 1
   _AttackDamage: 10
   _AttackStartup: 500
   _AttackActiveDuration: 0
-  _AttackEndlag: 100
+  _AttackEndlag: 1000
+  _attackType: {fileID: 11400000, guid: 1d87f3a35573c6843913bc8e4c26340e, type: 2}
   _MoveSpeed: 4
   _StopDistance: 2
   _KnockBackMax: 1
@@ -36,4 +49,3 @@ MonoBehaviour:
   _StatusTicks: []
   _StatusMax: 0
   _StatusHealth: 1
-  _attackType: {fileID: 11400000, guid: 1d87f3a35573c6843913bc8e4c26340e, type: 2}
