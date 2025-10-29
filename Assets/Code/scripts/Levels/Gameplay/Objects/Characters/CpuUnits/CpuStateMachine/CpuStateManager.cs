@@ -15,7 +15,6 @@ public class CpuStateManager : MonoBehaviour
     public Rigidbody2D _Body;
     public Transform _Raycast;
     public Animator _Animator;
-    public AnimatorOverrideController _OverrideController;
     CpuBaseState _currentState;
 
     public Dictionary<State, CpuBaseState> _State = new Dictionary<State, CpuBaseState>();
@@ -23,6 +22,10 @@ public class CpuStateManager : MonoBehaviour
 
     //[HideInInspector]
     public Stats _AttackingStats;
+    void Awake()
+    {
+        if (_ScrStats._Sprites.Length > 0) replaceAnimation(); 
+    }
 
     void Start()
     {
@@ -57,8 +60,6 @@ public class CpuStateManager : MonoBehaviour
 
         _State[State.KnockBack] = new CpuKnockBackState(this);
 
-        if (_ScrStats._Sprites.Length > 0) replaceAnimation(); 
-
         UpdateCurrentState(State.Move);
     }
     public void UpdateCurrentState(State state)
@@ -69,100 +70,50 @@ public class CpuStateManager : MonoBehaviour
 
     void replaceAnimation()
     {
-        AnimatorOverrideController runtimeOverride = new AnimatorOverrideController(_OverrideController);
-        Transform _cpuRig = transform.Find("CpuAppearance")?.transform.Find("CpuRig");
-        if (_cpuRig == null) { Debug.LogWarning("No Cpu Rig!! (for animation)"); return; }
-        for (int I = 0; I < _ScrStats._Sprites.Length; ++I)
+        Transform _cpuRig = transform.Find("CpuAppearance")?.Find("CpuRig");
+        if (_cpuRig == null)
         {
-
-            switch (_ScrStats._Sprites[I].Key)
-            {
-                //looks really intemidating but it's pretty simpele
-                case (animationRigs.animationKey.Idle):
-                    {
-                        GameObject currentRig = _cpuRig?.Find("IdleRig").gameObject;
-                        if (currentRig != null) Destroy(currentRig);
-
-                        Transform TempTransform = _cpuRig;
-                        TempTransform.position = new Vector3
-                                                    (
-                                                        transform.position.x + _ScrStats._Sprites[I].Offset.x,
-                                                        transform.position.y + _ScrStats._Sprites[I].Offset.y,
-                                                        transform.position.z
-                                                    );
-
-                        GameObject newRig = Instantiate(_ScrStats._Sprites[I].Rig, TempTransform);
-                        Debug.Log(newRig.name);
-                        if (_Stats._Enemy) newRig.transform.Rotate(0, 180, 0);
-                        runtimeOverride["HoodesIdle"] = _ScrStats._Sprites[I].Animation;
-                    }
-                    break;
-                case (animationRigs.animationKey.Running):
-                    {
-                        GameObject currentRig = _cpuRig?.Find("RunningRig").gameObject;
-                        if (currentRig != null) Destroy(currentRig);
-
-                        Transform TempTransform = _cpuRig;
-                        TempTransform.position = new Vector3
-                                                    (
-                                                        transform.position.x + _ScrStats._Sprites[I].Offset.x,
-                                                        transform.position.y + _ScrStats._Sprites[I].Offset.y,
-                                                        transform.position.z
-                                                    );
-
-                        GameObject newRig = Instantiate(_ScrStats._Sprites[I].Rig, TempTransform);
-                        Debug.Log(newRig.name);
-                        if (_Stats._Enemy) newRig.transform.Rotate(0, 180, 0);
-                        runtimeOverride["HoodesRunning"] = _ScrStats._Sprites[I].Animation;
-                    }
-                    break;
-                case (animationRigs.animationKey.Knockback):
-                    {
-                        GameObject currentRig = _cpuRig?.Find("KnockbackRig").gameObject;
-                        if (currentRig != null) Destroy(currentRig);
-
-                        Transform TempTransform = _cpuRig;
-                        TempTransform.position = new Vector3
-                                                    (
-                                                        transform.position.x + _ScrStats._Sprites[I].Offset.x,
-                                                        transform.position.y + _ScrStats._Sprites[I].Offset.y,
-                                                        transform.position.z
-                                                    );
-
-                        GameObject newRig = Instantiate(_ScrStats._Sprites[I].Rig, TempTransform);
-                        Debug.Log(newRig.name);
-                        if (_Stats._Enemy) newRig.transform.Rotate(0, 180, 0);
-                        runtimeOverride["HoodeesKnockback"] = _ScrStats._Sprites[I].Animation;
-                    }
-                    break;
-                case (animationRigs.animationKey.Attack):
-                    {
-                        GameObject currentRig = _cpuRig?.Find("AttackingRig").gameObject;
-                        if (currentRig != null) Destroy(currentRig);
-                        Transform TempTransform = _cpuRig;
-                        TempTransform.position = new Vector3
-                                                    (
-                                                        transform.position.x + _ScrStats._Sprites[I].Offset.x,
-                                                        transform.position.y + _ScrStats._Sprites[I].Offset.y,
-                                                        transform.position.z
-                                                    );
-
-                        GameObject newRig = Instantiate(_ScrStats._Sprites[I].Rig, TempTransform);
-                        Debug.Log(newRig.name);
-                        if (_Stats._Enemy) newRig.transform.Rotate(0, 180, 0);
-                        runtimeOverride["HoodesAttacking"] = _ScrStats._Sprites[I].Animation;
-
-                    }
-                    break;
-                default:
-                    break;
-            }
-
+            Debug.LogWarning("No Cpu Rig!! (for animation)");
+            return;
         }
 
-        _Animator.runtimeAnimatorController = runtimeOverride;
-        return;
+        for (int i = 0; i < _ScrStats._Sprites.Length; ++i)
+        {
+            var spriteData = _ScrStats._Sprites[i];
+            string rigName = null;
+
+            switch (spriteData.Key)
+            {
+                case animationRigs.animationKey.Idle: rigName = "IdleRig"; break;
+                case animationRigs.animationKey.Running: rigName = "RunningRig"; break;
+                case animationRigs.animationKey.Knockback: rigName = "KnockbackRig"; break;
+                case animationRigs.animationKey.Attack: rigName = "AttackingRig"; break;
+                default: continue;
+            }
+
+            var existing = _cpuRig.Find(rigName);
+            if (existing != null)
+                Destroy(existing.gameObject);
+
+            _cpuRig.position = new Vector3(
+                transform.position.x + spriteData.Offset.x,
+                transform.position.y + spriteData.Offset.y,
+                transform.position.z
+            );
+
+            GameObject newRig = Instantiate(spriteData.Rig, _cpuRig);
+            newRig.name = rigName;
+            if (_Stats._Enemy)
+                newRig.transform.Rotate(0, 180, 0);
+
+            if(rigName != "RunningRig") newRig.SetActive(false);
+        }
+
+        _Animator.runtimeAnimatorController = _ScrStats._animator;
+        _Animator.Rebind();
+        _Animator.Update(0f);
     }
+
 
     void Update()
     {

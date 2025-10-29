@@ -9,6 +9,7 @@ public class ScriptableStats : ScriptableObject
     public List<string> _CpuPriority;
     [Space]
     [Header("Animation")]
+    public AnimatorOverrideController _animator;
     public animationRigs[] _Sprites;
     [Space]
     [Header("General Info")]
@@ -43,7 +44,6 @@ public class animationRigs
     public enum animationKey {Idle, Running, Attack, Knockback};
     public animationKey Key;
     public GameObject Rig;
-    public AnimationClip Animation;
     public Vector2 Offset;
 }
     
