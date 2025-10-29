@@ -4,24 +4,20 @@ using TMPro;
 
 public class PlayerLivesManager : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI LifeText;
     [SerializeField] IntVeriable LifeCount;
-    [SerializeField] int MaxLives;
+    [SerializeField] public int MaxLives;
     [SerializeField] UnityEvent _loose_game;
     [SerializeField] ActivePlayer activePlayer;
     [SerializeField] PlayerSwitch playerSwitch;
+    [SerializeField] PlayerLivesDisplay playerLivesDisplay;
     public bool canSpawnMore = true;
-
-    void Update()
-    {
-        LifeText.text = LifeCount._Value.ToString("0");
-    }
 
     public void GainLife()
     {
         if (canSpawnMore)
         {
             LifeCount._Value++;
+            playerLivesDisplay.UpdateTorchDisplay();
             if (LifeCount._Value == MaxLives) canSpawnMore = false;
         }
         else
@@ -35,6 +31,7 @@ public class PlayerLivesManager : MonoBehaviour
     {
         LifeCount._Value--;
         canSpawnMore = true;
+        playerLivesDisplay.UpdateTorchDisplay();
 
         if (LifeCount._Value == 0)
         {
