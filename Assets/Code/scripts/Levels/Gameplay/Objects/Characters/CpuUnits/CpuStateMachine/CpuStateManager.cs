@@ -33,6 +33,9 @@ public class CpuStateManager : MonoBehaviour
         gameObject.tag = _Stats._Clan;
         _Stats._MaxHealth = _ScrStats._MaxHealth;
         _Stats._CurrentHealth = _ScrStats._CurrentHealth;
+
+        // info
+        _Stats._AttackStartup = _ScrStats._AttackStartup;
         _Stats._AttackDamage = _ScrStats._AttackDamage;
         _Stats._AttackEndlag = _ScrStats._AttackEndlag;
         _Stats._MoveSpeed = _ScrStats._MoveSpeed;
@@ -51,7 +54,7 @@ public class CpuStateManager : MonoBehaviour
         //status effects
         _Stats._StatusHealth = _ScrStats._StatusHealth;
         _Stats._StatusMax = _ScrStats._StatusHealth;
-
+        
         OnInitStats.Invoke(_Stats);
 
 
@@ -64,6 +67,8 @@ public class CpuStateManager : MonoBehaviour
     }
     public void UpdateCurrentState(State state)
     {
+        _Animator.Rebind();
+        _Animator.Update(0f);
         _currentState = _State[state];
         _currentState.EnterState();
     }
@@ -95,10 +100,10 @@ public class CpuStateManager : MonoBehaviour
             if (existing != null)
                 Destroy(existing.gameObject);
 
-            _cpuRig.position = new Vector3(
-                transform.position.x + spriteData.Offset.x,
-                transform.position.y + spriteData.Offset.y,
-                transform.position.z
+            spriteData.Rig.transform.position = new Vector3(
+                spriteData.Offset.x,
+                spriteData.Offset.y,
+                spriteData.Rig.transform.position.z
             );
 
             GameObject newRig = Instantiate(spriteData.Rig, _cpuRig);
