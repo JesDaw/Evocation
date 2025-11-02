@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem.XR.Haptics;
 
 public class CpuAttackState : CpuBaseState
 {
@@ -16,7 +15,8 @@ public class CpuAttackState : CpuBaseState
 
     public override void EnterState()
     {
-        _context._Animator.SetBool("IsRunning", false);
+        _context._Animator.SetBool("IsAttacking", true);
+
         _phase = AttackPhase.Startup;
         _timer = 0;
     }
@@ -46,6 +46,7 @@ public class CpuAttackState : CpuBaseState
                 break;
 
             case AttackPhase.Cooldown:
+                _context._Animator.SetBool("IsAttacking", false);
                 if (_timer >= _context._Stats._AttackEndlag)
                 {
                     _phase = AttackPhase.Done;
