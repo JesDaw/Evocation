@@ -29,7 +29,7 @@ public class FreeCamController : MonoBehaviour
         }
     }
 
-    private void OnEnable()
+    void OnEnable()
     {
         inputActions.Camera.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
         inputActions.Camera.Move.canceled += ctx => moveInput = Vector2.zero;
@@ -40,7 +40,12 @@ public class FreeCamController : MonoBehaviour
         inputActions.Camera.Enable();
     }
 
-    private void OnDisable()
+    void Start()
+    {
+        GlobalInputManager.Instance.FreecamInputs = inputActions;
+    }
+
+    void OnDisable()
     {
         inputActions.Camera.Zoom.performed -= HandleZoom;
         inputActions.Disable();

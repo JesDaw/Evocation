@@ -18,11 +18,17 @@ public class CameraControlSwitcher : MonoBehaviour
     public void DisableSwitching() { GlobalInputManager.Instance.DisableControlSwapping(); }
     public void EnableSwitching() { GlobalInputManager.Instance.EnableControlSwapping(); }
 
+    void Onable()
+    {
+        inputActions = new InputSystem_Actions();
+    }
 
     void Start()
     {
         if (audio_manager == null)
             audio_manager = FindAnyObjectByType<AudioManager>();
+
+        GlobalInputManager.Instance.ControlSwitchingInputs = inputActions;
 
         GlobalInputManager.Instance.SetActiveCamera(this);
     }
