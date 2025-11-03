@@ -3,19 +3,26 @@ using UnityEngine.InputSystem;
 
 public class GlobalInputManager : MonoBehaviour
 {
+
+    [SerializeField] CameraControlSwitcher _cameraControlSwitcher;
+    [SerializeField] public InputSystem_Actions ControlSwitchingInputs;
+    [SerializeField] public InputSystem_Actions FreecamInputs;
+    [SerializeField] public InputSystem_Actions PauseMenuInputs;
+    [SerializeField] public InputSystem_Actions CharacterSelectInputs;
+
+    // Cached delegates
+    System.Action<InputAction.CallbackContext> _movePerformed;
+    System.Action<InputAction.CallbackContext> _moveCanceled;
+    System.Action<InputAction.CallbackContext> _attackPerformed;
+    System.Action<InputAction.CallbackContext> _toggleCameraControl;
+
+    //getters and setters
     public static GlobalInputManager Instance { get; private set; }
     public InputSystem_Actions InputActions { get; private set; }
 
     public PlayerStateMachine ActivePlayerStateMachiene { get; private set; }
-    [SerializeField] CameraControlSwitcher _cameraControlSwitcher;
 
-    // Cached delegates
-    private System.Action<InputAction.CallbackContext> _movePerformed;
-    private System.Action<InputAction.CallbackContext> _moveCanceled;
-    private System.Action<InputAction.CallbackContext> _attackPerformed;
-    private System.Action<InputAction.CallbackContext> _toggleCameraControl;
-
-    private void Awake()
+    void Awake()
     {
         if (Instance != null && Instance != this)
         {
@@ -28,9 +35,20 @@ public class GlobalInputManager : MonoBehaviour
 
         InputActions = new InputSystem_Actions();
     }
+    void OnEnable() => EnableAllControls();
+    void Start()
+    {
 
-    private void OnEnable() => EnableAllControls();
-    private void OnDisable() => DisableAllControls();
+    }
+    
+    void OnDisable() => DisableAllControls();
+
+    
+
+    
+
+    
+    
 
     // ========================= Input Linking =========================
     public void RegisterPlayerCharacterInputCallbacks()
