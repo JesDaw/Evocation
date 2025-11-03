@@ -12,8 +12,7 @@ public class Timer : MonoBehaviour
     
     [SerializeField] UnityEvent _TimeHitZero;
     public FloatVariable remainingTimeSeconds;
-    GameObject timerTextObj;
-    TextMeshProUGUI timerText;
+    [SerializeField] TextMeshProUGUI timerText;
 
     bool _timer_is_active = false;
 
@@ -25,9 +24,12 @@ public class Timer : MonoBehaviour
 
     void Awake()
     {
-        timerTextObj = GameObject.Find("TimerText");
-        if (timerTextObj == null) Debug.LogError("TimerManager could not find the TimerText game object");
-        timerText = timerTextObj.GetComponent<TextMeshProUGUI>();
+        if (timerText == null)
+        {
+            GameObject timerTextObj = GameObject.Find("TimerText");
+            if (timerTextObj == null) Debug.LogError("TimerManager could not find the TimerText game object");
+            timerText = timerTextObj.GetComponent<TextMeshProUGUI>();
+        }
     }
 
     void Update()

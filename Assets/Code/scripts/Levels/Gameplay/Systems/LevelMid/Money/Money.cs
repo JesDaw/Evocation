@@ -9,8 +9,7 @@ public class Money : MonoBehaviour
     [SerializeField] FloatVariable genPerSec;
     [SerializeField] FloatVariable moneyAmount;
     public float CurrentMoney => moneyAmount._Value;
-    GameObject moneyTextObj;
-    TextMeshProUGUI moneyText;
+    [SerializeField] TextMeshProUGUI moneyText;
 
     bool _money_is_active = false;
 
@@ -22,9 +21,12 @@ public class Money : MonoBehaviour
 
     void Awake()
     {
-        moneyTextObj = GameObject.Find("MoneyText");
-        if (moneyTextObj == null) Debug.LogError("MoneyManager could not find the MoneyText game object");
-        moneyText = moneyTextObj.GetComponent<TextMeshProUGUI>();
+        if (moneyText == null)
+        {
+            GameObject moneyTextObj = GameObject.Find("MoneyText");
+            if (moneyTextObj == null) Debug.LogError("MoneyManager could not find the MoneyText game object");
+            moneyText = moneyTextObj.GetComponent<TextMeshProUGUI>();
+        }
     }
 
     void Start ()

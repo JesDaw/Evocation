@@ -20,13 +20,22 @@ public class SceneActivity : MonoBehaviour
 
     public void StartActivity()
     {
-        if (!disableDefaultBehavior) { gameObject.SetActive(true); }
+        if (!disableDefaultBehavior)
+        {
+            Debug.Log($"Setting {gameObject.name} to true");
+            gameObject.SetActive(true); 
+
+        }
         OnActivityStart.Invoke();
     }
 
     public void StopActivity()
     {
-        if (!disableDefaultBehavior) { gameObject.SetActive(false); }
+        if (!disableDefaultBehavior)
+        {
+            Debug.Log($"Setting {gameObject.name} to false");
+            gameObject.SetActive(false); 
+        }
         OnActivityStop.Invoke();
     }
 }
