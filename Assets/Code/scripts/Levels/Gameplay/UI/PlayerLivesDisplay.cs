@@ -5,7 +5,7 @@ public class PlayerLivesDisplay : MonoBehaviour
 {
     [SerializeField] PlayerLivesManager livesManager;
     [SerializeField] List<GameObject> torchIcons = new List<GameObject>();
-    [SerializeField] List<GameObject> Fire = new List<GameObject>();
+    [SerializeField] IntVeriable LifeCount;
     void Start()
     {
         UpdateTorchDisplay();
@@ -19,7 +19,7 @@ public class PlayerLivesDisplay : MonoBehaviour
         {
             if (torchIcons[i] != null)
             {
-                Fire[i].SetActive(i < livesManager.MaxLives);
+                torchIcons[i].SetActive(i <= LifeCount._Value);
             }
         }
     }
