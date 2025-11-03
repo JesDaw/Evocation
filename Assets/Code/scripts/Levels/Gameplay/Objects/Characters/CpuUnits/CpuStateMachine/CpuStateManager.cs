@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine;
+using UnityEngine.Analytics;
 public class CpuStateManager : MonoBehaviour
 {
     public enum State
@@ -21,6 +22,10 @@ public class CpuStateManager : MonoBehaviour
 
     //[HideInInspector]
     public Stats _AttackingStats;
+    void Awake()
+    {
+        if (_ScrStats._Sprites.Length > 0) replaceAnimation(); 
+    }
 
     void Start()
     {
@@ -28,6 +33,9 @@ public class CpuStateManager : MonoBehaviour
         gameObject.tag = _Stats._Clan;
         _Stats._MaxHealth = _ScrStats._MaxHealth;
         _Stats._CurrentHealth = _ScrStats._CurrentHealth;
+
+        // info
+        _Stats._AttackStartup = _ScrStats._AttackStartup;
         _Stats._AttackDamage = _ScrStats._AttackDamage;
         _Stats._AttackEndlag = _ScrStats._AttackEndlag;
         _Stats._MoveSpeed = _ScrStats._MoveSpeed;
@@ -46,7 +54,7 @@ public class CpuStateManager : MonoBehaviour
         //status effects
         _Stats._StatusHealth = _ScrStats._StatusHealth;
         _Stats._StatusMax = _ScrStats._StatusHealth;
-
+        
         OnInitStats.Invoke(_Stats);
 
 
@@ -59,9 +67,58 @@ public class CpuStateManager : MonoBehaviour
     }
     public void UpdateCurrentState(State state)
     {
+        _Animator.Rebind();
+        _Animator.Update(0f);
         _currentState = _State[state];
         _currentState.EnterState();
     }
+
+    void replaceAnimation()
+    {
+        Transform _cpuRig = transform.Find("CpuAppearance")?.Find("CpuRig");
+        if (_cpuRig == null)
+        {
+            Debug.LogWarning("No Cpu Rig!! (for animation)");
+            return;
+        }
+
+        for (int i = 0; i < _ScrStats._Sprites.Length; ++i)
+        {
+            var spriteData = _ScrStats._Sprites[i];
+            string rigName = null;
+
+            switch (spriteData.Key)
+            {
+                case animationRigs.animationKey.Idle: rigName = "IdleRig"; break;
+                case animationRigs.animationKey.Running: rigName = "RunningRig"; break;
+                case animationRigs.animationKey.Knockback: rigName = "KnockbackRig"; break;
+                case animationRigs.animationKey.Attack: rigName = "AttackingRig"; break;
+                default: continue;
+            }
+
+            var existing = _cpuRig.Find(rigName);
+            if (existing != null)
+                Destroy(existing.gameObject);
+
+            spriteData.Rig.transform.position = new Vector3(
+                spriteData.Offset.x,
+                spriteData.Offset.y,
+                spriteData.Rig.transform.position.z
+            );
+
+            GameObject newRig = Instantiate(spriteData.Rig, _cpuRig);
+            newRig.name = rigName;
+            if (_Stats._Enemy)
+                newRig.transform.Rotate(0, 180, 0);
+
+            if(rigName != "RunningRig") newRig.SetActive(false);
+        }
+
+        _Animator.runtimeAnimatorController = _ScrStats._animator;
+        _Animator.Rebind();
+        _Animator.Update(0f);
+    }
+
 
     void Update()
     {

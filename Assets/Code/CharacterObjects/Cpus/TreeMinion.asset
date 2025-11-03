@@ -12,17 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 238e13654c5efff43b776bb1e518c913, type: 3}
   m_Name: TreeMinion
   m_EditorClassIdentifier: 
+  _Clan: TreeGang
   _CpuPriority:
   - LavaBros
   - Blank
-  _Sprite: {fileID: 21300000, guid: 38f07a4b6d08c7243b482a84dc73ea52, type: 3}
-  _Clan: TreeGang
+  _Sprites: []
   _MaxHealth: 50
   _CurrentHealth: 1
   _AttackDamage: 10
   _AttackStartup: 500
   _AttackActiveDuration: 0
   _AttackEndlag: 1000
+  _attackType: {fileID: 0}
   _MoveSpeed: 10
   _StopDistance: 2
   _KnockBackMax: 1
@@ -36,6 +37,3 @@ MonoBehaviour:
   _StatusTicks: []
   _StatusMax: 0
   _StatusHealth: 2
-  OnAttack: 
-  _Projectiles: []
-  ExtraStats: {fileID: 0}
