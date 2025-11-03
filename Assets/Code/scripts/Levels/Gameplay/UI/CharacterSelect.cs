@@ -1,38 +1,41 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
+using TMPro;
 
 public class CharacterSelect : MonoBehaviour
 {
     [SerializeField]
     private GameObject characterSelectMenu;
 
-    [SerializeField] 
-    InputActionAsset inputActions;
+    private InputSystemActions inputActions;
+    
+    [SerializeField] private TMP_Text characterNameText;
+    [SerializeField] private TMP_Text characterDescriptionText;
+    [SerializeField] private Image characterImage;
 
-    private InputAction characterSelectAction;
     private bool menuOpen = false;
 
-    private void Start()
+    private void Awake()
     {
-        characterSelectAction = inputActions.FindAction("ToggleCharacterSelect");
-
-        characterSelectAction.performed += OnToggleCharacterSelect;
-        characterSelectAction.Enable();
-
-        characterSelectMenu.SetActive(false);
+        inputActions = new InputSystemActions();
     }
 
-    private void OnToggleCharacterSelect(InputAction.CallbackContext context)
+    private void OnEnable()
+    {
+        inputActions.Enable();
+        inputActions.UI.ToggleCharacterSelect.performed += toggleCharacterSelect;
+    }
+
+    private void OnDisable()
+    {
+        inputActions.UI.ToggleCharacterSelect.performed -= toggleCharacterSelect;
+        inputActions.Disable();
+    }
+
+    private void toggleCharacterSelect(InputAction.CallbackContext context)
     {
         menuOpen = !menuOpen;
         characterSelectMenu.SetActive(menuOpen);
-    }
-
-    private void OnDestroy()
-    {
-        if (characterSelectAction != null)
-        {
-            characterSelectAction.performed -= OnToggleCharacterSelect;
-        }
     }
 }
