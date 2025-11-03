@@ -10,11 +10,14 @@ public class FreeCamController : MonoBehaviour
 
     // Movement and Zoom Variables
     [SerializeField] private float moveSpeed = 10f;
-    [SerializeField] private float zoomSpeed = 5f;  // Speed of Z-axis movement for zoom
+    [SerializeField] private float zoomSpeed = 5f;  
 
     [SerializeField] float minZoomSpeedMultiplier = 1;
     [SerializeField] float maxZoomSpeedMultiplier = 2;
     float _ZoomToSpeedMultiplier;
+
+    [SerializeField] private float minZPosition = -50f;
+    [SerializeField] private float maxZPosition = -15f;
 
     private void Awake()
     {
@@ -51,7 +54,7 @@ public class FreeCamController : MonoBehaviour
         inputActions.Disable();
     }
 
-    private void Update()
+    void Update()
     {
         if (moveInput != Vector2.zero)
         {
@@ -59,9 +62,18 @@ public class FreeCamController : MonoBehaviour
         }
     }
 
+    void LateUpdate()
+    {
+        if (_camera != null)
+        {
+            transform.position = _camera.transform.position;
+            
+            UpdateZoomSpeedMultiplier();
+        }
+    }
+
     public void HandleMovement()
     {
-        // Move only on X and Y axes, preserving Z position for zoom control
         Vector3 movement = new Vector3(moveInput.x, moveInput.y, 0) * moveSpeed * _ZoomToSpeedMultiplier * Time.deltaTime;
         transform.position += movement;
     }
@@ -72,19 +84,16 @@ public class FreeCamController : MonoBehaviour
 
         if (Mathf.Abs(scrollDelta) > 0)
         {
-            // Move camera forward/backward on Z-axis
             float zoomAmount = scrollDelta * zoomSpeed * 0.1f;
             Vector3 newPosition = transform.position + new Vector3(0, 0, zoomAmount);
-
-            // Clamp Z position within zoom range (-50 = far out, -15 = close in)
-            newPosition.z = Mathf.Clamp(newPosition.z, -50f, -15f);
+            
             transform.position = newPosition;
-
-            // Calculate normalized zoom ratio (0 = zoomed in, 1 = zoomed out)
-            float t = Mathf.InverseLerp(-15f, -50f, newPosition.z);
-
-            // Scale movement speed based on zoom level
-            _ZoomToSpeedMultiplier = Mathf.Lerp(minZoomSpeedMultiplier, maxZoomSpeedMultiplier, t);
         }
+    }
+
+    private void UpdateZoomSpeedMultiplier()
+    {
+        float t = Mathf.InverseLerp(maxZPosition, minZPosition, transform.position.z);
+        _ZoomToSpeedMultiplier = Mathf.Lerp(minZoomSpeedMultiplier, maxZoomSpeedMultiplier, t);
     }
 }
