@@ -31,7 +31,7 @@ public class GlobalInputManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
 
         InputActions = new InputSystem_Actions();
     }

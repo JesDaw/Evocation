@@ -3,108 +3,156 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-
 public class UILogic : MonoBehaviour
 {
-    InputAction pauseAction;
-    [SerializeField] private GameState gameState;
+    [Header("Input")]
+    [SerializeField] PlayerInput playerInput;
+
+    [SerializeField] GameState gameState;
     [SerializeField] UnityEvent _ResetValues;
+
+    [SerializeField] int SceneToLoad;
+    [SerializeField] bool MenuIsOpen = false;
+    AudioManager _audioManager;
+
     SceneActivityManager sceneMgr;
     bool GameIsPaused = false;
+    bool CharacterSelectIsOpen = false;
+
     void Awake()
     {
-        pauseAction = InputSystem.actions.FindAction("Pause");
-        if (gameState == null)
-        {
-            gameState = FindFirstObjectByType<GameState>();
+        if (playerInput == null)
+            playerInput = GetComponent<PlayerInput>();
 
-            if (gameState != null)
-            {
-                Debug.LogWarning($"[{name}] Auto-assigned GameState via FindFirstObjectByType.", this);
-            }
-            else
-            {
-                Debug.LogError($"[{name}] Missing GameState reference! Please assign manually.", this);
-            }
+        if (playerInput == null)
+        {
+            Debug.LogError($"[{name}] Missing PlayerInput component!");
+            return;
         }
+
+        if (gameState == null)
+            gameState = FindFirstObjectByType<GameState>();
     }
-    void OnEnable()
-    {
-        if (pauseAction != null) pauseAction.Enable();
-    }
-    private void OnDisable()
-    {
-        if (pauseAction != null) pauseAction.Disable();
-    }
+
     void Start()
     {
-        foreach (var obj in Resources.FindObjectsOfTypeAll<SceneActivityManager>())
-        {
-            sceneMgr = obj;
-        }
+        sceneMgr = FindFirstObjectByType<SceneActivityManager>();
         Debug.Assert(sceneMgr != null);
     }
-    public void TogglePause(InputAction.CallbackContext context)
+
+    // This gets called automatically when the PlayerInput triggers a "performed" event
+    public void ESCpressed(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (!context.performed) return;
+
+        Debug.Log("ESC pressed");
+
+        if (gameState.currentlevelState == GameState.LevelState.Scouting)
         {
-                if (gameState.currentlevelState != GameState.LevelState.EngaugmentPartOne &&
-                gameState.currentlevelState != GameState.LevelState.EngaugmentPartTwo &&
-                gameState.currentlevelState != GameState.LevelState.EngaugmentPartThree)
-                return;
-            if (GameIsPaused)
-            {
-                Resume();
-            }
-            else
-            {
-                Pause();
-            }
+            ToggleCharacterSelect();
+        }
+        else
+        {
+            TogglePause();
         }
     }
+
+    public void ClickSound()
+    {
+        _audioManager.Play("Button Click");
+    }
+
+    void ToggleCharacterSelect()
+    {
+        Debug.Log($"{CharacterSelectIsOpen}");
+
+        if (!CharacterSelectIsOpen)
+        {
+            Debug.Log("activating loadout");
+            sceneMgr.Activate("Loadout Select");
+        }
+        else
+        {
+            Debug.Log("activating ScoutingUI");
+            sceneMgr.Activate("ScoutingUI");
+        }
+
+        CharacterSelectIsOpen = !CharacterSelectIsOpen;
+        MenuIsOpen = !MenuIsOpen;
+    }
+
+    void TogglePause()
+    {
+        if (GameIsPaused)
+            Resume();
+        else
+            Pause();
+    }
+
     public void Resume()
     {
         if (GameIsPaused)
         {
-            Debug.Log("resumed");
             sceneMgr.ActivateInitialSA();
-
             Time.timeScale = 1;
             GameIsPaused = false;
+            MenuIsOpen = false;
         }
     }
+
     void Pause()
     {
         if (!GameIsPaused)
         {
-            GameIsPaused = true;
             sceneMgr.Activate("Pause");
             Time.timeScale = 0;
+            GameIsPaused = true;
+            MenuIsOpen = true;
         }
     }
-    public void Restart()
+
+    public void ReloadCurrentScene()
     {
         Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        ResetValues();
-
+        _ResetValues?.Invoke();
     }
-
 
     public void LoadMenu()
     {
         Time.timeScale = 1;
         SceneManager.LoadScene(0);
-        ResetValues();
+        _ResetValues?.Invoke();
     }
 
-    public void QuitGame()
+    public void LoadScene()
     {
-        Application.Quit();
+        Time.timeScale = 1;
+        SceneManager.LoadScene(SceneToLoad);
+        _ResetValues?.Invoke();
     }
-    
-        void ResetValues()
+
+    public void QuitGame() => Application.Quit();
+
+
+    public void OnEventRaised()
     {
-        _ResetValues.Invoke();
+        bool isMenuCurrentlyOpen = !sceneMgr.InInitialSA();
+
+        if (MenuIsOpen)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+
+            Debug.Log("LockMouse -> Release Cursor");
+        }
+        else
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+
+            Debug.Log("LockMouse -> Lock Cursor");
+        }
     }
 }
+

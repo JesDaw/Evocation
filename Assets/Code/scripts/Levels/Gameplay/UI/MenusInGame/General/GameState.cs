@@ -62,6 +62,7 @@ public class GameState : MonoBehaviour
     public void HandleLevelScoutingFaze()
     {
 
+        sceneMgr.Activate("ScoutingUI");
         currentlevelState = LevelState.Scouting;
         StartTrackOne();
 
@@ -77,12 +78,6 @@ public class GameState : MonoBehaviour
         if (_moneyMachanic != null) _moneyMachanic.MoneyIsActive = false;
         else Debug.LogError("_moneyMachanic is null");
 
-    }
-    public void ToggleScaracterSelectMenu(InputAction.CallbackContext context)
-    {
-        if (currentlevelState != LevelState.Scouting || !context.performed) return;
-        Debug.Log("Character secect button pressed");
-        // open character select screen
     }
 
     public void OnEngaugeButtonPressed(InputAction.CallbackContext context)

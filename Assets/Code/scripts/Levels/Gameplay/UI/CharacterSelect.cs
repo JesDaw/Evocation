@@ -4,18 +4,13 @@ using TMPro;
 
 public class CharacterSelect : MonoBehaviour
 {
-    [SerializeField] private GameObject characterSelectMenu;
+    [SerializeField] GameObject characterSelectMenu;
 
-    [SerializeField] private TMP_Text characterNameText;
-    [SerializeField] private TMP_Text characterDescriptionText;
-    [SerializeField] private Image characterImage;
+    [SerializeField] TMP_Text characterNameText;
+    [SerializeField] TMP_Text characterDescriptionText;
+    [SerializeField] Image characterImage;
 
     private bool menuOpen = false;
-
-    private void Start()
-    {
-        characterSelectMenu.SetActive(false);
-    }
 
     private void Update()
     {

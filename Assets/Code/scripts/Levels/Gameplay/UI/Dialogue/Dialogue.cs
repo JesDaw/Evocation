@@ -1,6 +1,5 @@
 using UnityEngine;
 
-[CreateAssetMenu]
 [System.Serializable]
 public class Dialogue
 {
@@ -8,5 +7,4 @@ public class Dialogue
     [TextArea(3, 10)]
     public string Line;
     public float DialogueSpeed;
-
 }
