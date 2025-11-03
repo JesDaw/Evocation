@@ -4,7 +4,7 @@ using TMPro;
 
 public class PlayerLivesManager : MonoBehaviour
 {
-    [SerializeField] IntVeriable LifeCount;
+    [SerializeField] public IntVeriable  LifeCount;
     [SerializeField] public int MaxLives;
     [SerializeField] UnityEvent _loose_game;
     [SerializeField] ActivePlayer activePlayer;
@@ -39,14 +39,13 @@ public class PlayerLivesManager : MonoBehaviour
         }
         else
         {
-
             var currentPlayer = activePlayer.GetCurrentPlayerController();
 
             if (currentPlayer != null)
             {
                 GameObject playerObject = currentPlayer.gameObject;
 
-                if (playerObject != activePlayer.GetCurrentPlayerController()?.gameObject)
+                if (playerObject != activePlayer.GetCurrentPlayerController()?.gameObject) // <-- I dont think this works the way I thought it would I need to relook at it
                 {
                     playerSwitch.RemovePlayer(playerObject);
                 }
