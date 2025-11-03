@@ -67,6 +67,12 @@ public class BuildingStatsManager : MonoBehaviour
         //delay is needed because status effect runs on update()
         StartCoroutine(ResetDestroyedAfterDelay());
     }
+    public void SwapToPlayer()
+    {
+        Debug.Log("player claimed building");
+        SwapBuilding(AllyBuilding);
+        gameObject.tag = "TreeGang";
+    }
 
     private IEnumerator ResetDestroyedAfterDelay()
     {

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 202700121419526575}
   - component: {fileID: 215369451068188314}
   - component: {fileID: 7612600847862275697}
+  - component: {fileID: 2765480481442245626}
   m_Layer: 21
   m_Name: DefaultBuilding
   m_TagString: Blank
@@ -154,7 +155,6 @@ MonoBehaviour:
   _CurrentHealth: 1
   _AttackDamage: 0
   _AttackStartup: 0
-  _AttackActiveDuration: 0
   _AttackEndlag: 0
   _MoveSpeed: 0
   _StopDistance: 0
@@ -194,6 +194,7 @@ MonoBehaviour:
   _Invincible: 0
   _DontDestroy: 1
   _Enemy: 0
+  attackType: {fileID: 0}
 --- !u!114 &7612600847862275697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,3 +213,36 @@ MonoBehaviour:
   Building: {fileID: 5411589103336727643}
   AllyBuilding: {fileID: 11400000, guid: 306dfb092686ce54ca348aab1c38a8d3, type: 2}
   EnemyBuilding: {fileID: 11400000, guid: c21cbf4d40adfb240be6fb5ffdae3ec5, type: 2}
+--- !u!114 &2765480481442245626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5411589103336727643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 480459b94e0e17d46a3bc51ce4af8ad6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactAction:
+    m_PersistentCalls:
+      m_Calls: []
+  playerInRange:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: BuildingClaim, CodeAssembly
+        m_MethodName: claimBuilding
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  activePlayer: {fileID: 0}
+  freeCam: {fileID: 0}
+  FreeCamActsAsActivePlayer: 0
