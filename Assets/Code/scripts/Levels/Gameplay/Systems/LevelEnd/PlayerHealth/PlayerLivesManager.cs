@@ -11,6 +11,17 @@ public class PlayerLivesManager : MonoBehaviour
     [SerializeField] PlayerSwitch playerSwitch;
     [SerializeField] PlayerLivesDisplay playerLivesDisplay;
     public bool canSpawnMore = true;
+    public static PlayerLivesManager Instance { get; private set; }
+
+    void Start()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
 
     public void GainLife()
     {

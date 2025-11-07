@@ -12,7 +12,7 @@ public class MapZoneMaster : MonoBehaviour
 
     int _player_score;
     int _total_zones;
-    public void CompareAll()
+    public void CompareAllZones()
     {
         if (UpperZone != null)
         {

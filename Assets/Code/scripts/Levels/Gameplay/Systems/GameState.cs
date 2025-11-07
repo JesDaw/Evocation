@@ -99,10 +99,10 @@ public class GameState : MonoBehaviour
 
     public void EngaugmentPartOne()
     {
+        sceneMgr.Activate("GamePlayUI");
         StopTrackOne();
         StartTrackTwo();
-        sceneMgr.Activate("GamePlayUI");
-
+        
         currentlevelState = LevelState.EngaugmentPartOne;
         controlSwitcher.SwitchToPlayerControl();
 
