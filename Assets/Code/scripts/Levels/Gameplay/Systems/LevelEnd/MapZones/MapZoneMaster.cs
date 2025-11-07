@@ -9,27 +9,38 @@ public class MapZoneMaster : MonoBehaviour
 
     [SerializeField] UnityEvent _loose_game;
     [SerializeField] UnityEvent _win_game;
+
     int _player_score;
     int _total_zones;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void CompareAll()
     {
-     /*   if(UpperZone.TryGetComponent<MapZonesManager>(out MapZonesManager _upper_manager))
+        if (UpperZone != null)
         {
-            _total_zones++;
-           if(_upper_manager.CompareSides()) {_player_score++;}
-        } */
-        if(MiddleZone.TryGetComponent<MapZonesManager>(out MapZonesManager _middle_manager))
-        {
-            _total_zones++;
-           if(_middle_manager.CompareSides()) {_player_score++;}
+            if (UpperZone.TryGetComponent<MapZonesManager>(out MapZonesManager _upper_manager))
+            {
+                _total_zones++;
+                if (_upper_manager.CompareSides()) { _player_score++; }
+            }
         }
-     /*   if(LowerZone.TryGetComponent<MapZonesManager>(out MapZonesManager _lower_manager))
+
+        if (MiddleZone != null)
         {
-            _total_zones++;
-           if(_lower_manager.CompareSides()) {_player_score++;}
+            if (MiddleZone.TryGetComponent<MapZonesManager>(out MapZonesManager _middle_manager))
+            {
+                _total_zones++;
+                if (_middle_manager.CompareSides()) { _player_score++; }
+            }
         }
-        */
+
+        if (LowerZone != null)
+        {
+            if (LowerZone.TryGetComponent<MapZonesManager>(out MapZonesManager _lower_manager))
+            {
+                _total_zones++;
+                if (_lower_manager.CompareSides()) { _player_score++; }
+            }
+        }
+        
         Debug.Log(_player_score + " " + _total_zones);
 
         if (_player_score >= 1){ _win_game.Invoke(); }

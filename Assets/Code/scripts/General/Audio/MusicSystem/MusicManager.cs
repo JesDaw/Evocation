@@ -58,7 +58,6 @@ public class MusicManager : MonoBehaviour
         }
         _currentTracks.RemoveAll(track => !track.isPlaying);
 
-        Debug.Log($"Current tracks: {_currentTracks.Count}, Anchoring track: {(_AnchoringTrack ? _AnchoringTrack.name : "None")}");
         foreach (AudioSource audioSourcetrack in Tracks)
         {
             if (!audioSourcetrack.isPlaying)

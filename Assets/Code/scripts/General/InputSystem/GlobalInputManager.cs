@@ -5,10 +5,10 @@ public class GlobalInputManager : MonoBehaviour
 {
 
     [SerializeField] CameraControlSwitcher _cameraControlSwitcher;
-    [SerializeField] public InputSystem_Actions ControlSwitchingInputs;
-    [SerializeField] public InputSystem_Actions FreecamInputs;
-    [SerializeField] public InputSystem_Actions PauseMenuInputs;
-    [SerializeField] public InputSystem_Actions CharacterSelectInputs;
+    public InputSystem_Actions ControlSwitchingInputs;
+    public InputSystem_Actions FreecamInputs;
+    public InputSystem_Actions PauseMenuInputs;
+    public InputSystem_Actions CharacterSelectInputs;
 
     // Cached delegates
     System.Action<InputAction.CallbackContext> _movePerformed;
@@ -36,10 +36,6 @@ public class GlobalInputManager : MonoBehaviour
         InputActions = new InputSystem_Actions();
     }
     void OnEnable() => EnableAllControls();
-    void Start()
-    {
-
-    }
     
     void OnDisable() => DisableAllControls();
 
@@ -71,7 +67,6 @@ public class GlobalInputManager : MonoBehaviour
         InputActions.Player.Attack.performed += _attackPerformed;
         InputActions.ControlManager.ToggleCameraControl.performed += _toggleCameraControl;
 
-        Debug.Log($"Registered input callbacks for player: {ActivePlayerStateMachiene.name}");
     }
 
     public void UnregisterPlayerCharacterInputCallbacks()
@@ -84,7 +79,6 @@ public class GlobalInputManager : MonoBehaviour
             InputActions.Player.Attack.performed -= _attackPerformed;
             InputActions.ControlManager.ToggleCameraControl.performed -= _toggleCameraControl;
 
-            Debug.Log("Unregistered previous input callbacks");
         }
 
         _movePerformed = null;
@@ -116,7 +110,6 @@ public class GlobalInputManager : MonoBehaviour
     public void SetActiveCamera(CameraControlSwitcher camera)
     {
         _cameraControlSwitcher = camera;
-        Debug.Log($"Active camera set to: {camera?.name ?? "None"}");
     }
 
     // ========================= Enable / Disable Controls =========================
@@ -128,9 +121,6 @@ public class GlobalInputManager : MonoBehaviour
 
     public void EnableCameraControls() => InputActions.Camera.Enable();
     public void DisableCameraControls() => InputActions.Camera.Disable();
-
-    public void EnableUIControls() => InputActions.UI.Enable();
-    public void DisableUIControls() => InputActions.UI.Disable();
 
     public void EnableControlSwapping() => InputActions.ControlManager.Enable();
     public void DisableControlSwapping() => InputActions.ControlManager.Disable();

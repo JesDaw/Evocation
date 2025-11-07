@@ -8,19 +8,20 @@ public class Money : MonoBehaviour
     
     [SerializeField] FloatVariable genPerSec;
     [SerializeField] FloatVariable moneyAmount;
-    public float CurrentMoney => moneyAmount._Value;
     [SerializeField] TextMeshProUGUI moneyText;
 
     bool _money_is_active = false;
+    float CurrentMoney = 0;
 
     public bool MoneyIsActive
     {
         get { return _money_is_active; }
-        set { _money_is_active = value;}
     }
 
     void Awake()
     {
+        CurrentMoney = moneyAmount._Value;
+
         if (moneyText == null)
         {
             GameObject moneyTextObj = GameObject.Find("MoneyText");
@@ -36,9 +37,9 @@ public class Money : MonoBehaviour
 
     IEnumerator moneyCount()
     {
-        while(moneyAmount._Value < 9999 )
+        while(true)
         {
-            if (!_money_is_active)
+            if (!_money_is_active && moneyAmount._Value < 9999)
             {
                 yield return null;
                 continue;
@@ -59,12 +60,8 @@ public class Money : MonoBehaviour
     {
         moneyAmount._Value -= amount;
     }
-    public void DeactivateMoney(){ _money_is_active = false; }
-    public void ActivateMoney()
-    {
-        _money_is_active = true;
-        StartCoroutine(moneyCount());
-    }
+    public void DeactivateMoney() { _money_is_active = false; }
+    public void ActivateMoney() { _money_is_active = true; }
     public void ResetMoney() { moneyAmount.Reset(); }
     public void IncreaseMoneyGen(){ genPerSec._Value *= 2; }
 }

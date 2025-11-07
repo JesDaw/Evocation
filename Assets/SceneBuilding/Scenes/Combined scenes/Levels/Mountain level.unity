@@ -149,22 +149,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df9c6c7d8744e45238a0877734f9942a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 5170a53b1a9da4f0695a57eb0af221f9, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4008177}
-        m_TargetAssemblyTypeName: MapZoneMaster, Assembly-CSharp
-        m_MethodName: CompareAll
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &4008177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1130,9 +1114,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   freeCam: {fileID: 541427750}
   cameraMovement: {fileID: 541427749}
-  activePlayer: {fileID: 1729426933}
   player_lives: {fileID: 11400000, guid: 134620333c1634a509ab78576b5ad9ac, type: 2}
-  audio_manager: {fileID: 0}
+  soundEffectsManager: {fileID: 0}
   FreeCamIsActive: 0
 --- !u!1 &107267156
 GameObject:
@@ -2215,22 +2198,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df9c6c7d8744e45238a0877734f9942a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 6f999b5caf7c54b5880ddf16c902f7f8, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameState, CodeAssembly
-        m_MethodName: HandleGameLoss
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &215629007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2243,22 +2210,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df9c6c7d8744e45238a0877734f9942a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 7833f6bff1fe744da9dc3f1a26c3673e, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameState, CodeAssembly
-        m_MethodName: HandleGameWin
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &215629008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2334,10 +2285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 665598a9eb8e04bcb88ba2e53a683727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameState: {fileID: 1757698617}
-  _ResetValues:
-    m_PersistentCalls:
-      m_Calls: []
+  SceneToLoad: 0
 --- !u!1 &229281815
 GameObject:
   m_ObjectHideFlags: 0
@@ -7428,171 +7376,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!43 &242237629
-Mesh:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  serializedVersion: 11
-  m_SubMeshes:
-  - serializedVersion: 2
-    firstByte: 0
-    indexCount: 0
-    topology: 0
-    baseVertex: 0
-    firstVertex: 0
-    vertexCount: 0
-    localAABB:
-      m_Center: {x: 0, y: 0, z: 0}
-      m_Extent: {x: 0, y: 0, z: 0}
-  m_Shapes:
-    vertices: []
-    shapes: []
-    channels: []
-    fullWeights: []
-  m_BindPose: []
-  m_BoneNameHashes: 
-  m_RootBoneNameHash: 0
-  m_BonesAABB: []
-  m_VariableBoneCountWeights:
-    m_Data: 
-  m_MeshCompression: 0
-  m_IsReadable: 1
-  m_KeepVertices: 1
-  m_KeepIndices: 1
-  m_IndexFormat: 0
-  m_IndexBuffer: 
-  m_VertexData:
-    serializedVersion: 3
-    m_VertexCount: 0
-    m_Channels:
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 3
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    m_DataSize: 0
-    _typelessdata: 
-  m_CompressedMesh:
-    m_Vertices:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UV:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Normals:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Tangents:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Weights:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_NormalSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_TangentSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_FloatColors:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_BoneIndices:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Triangles:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UVInfo: 0
-  m_LocalAABB:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
-  m_MeshUsageFlags: 0
-  m_CookingOptions: 30
-  m_BakedConvexCollisionMesh: 
-  m_BakedTriangleCollisionMesh: 
-  'm_MeshMetrics[0]': 1
-  'm_MeshMetrics[1]': 1
-  m_MeshOptimizationFlags: 1
-  m_StreamData:
-    serializedVersion: 2
-    offset: 0
-    size: 0
-    path: 
 --- !u!1 &262367078
 GameObject:
   m_ObjectHideFlags: 0
@@ -7948,7 +7731,6 @@ MonoBehaviour:
   _HealthTrailImage: {fileID: 1709937519}
   _tweenDuration: 0.25
   _trailDelay: 0.4
-  ActivePlayer: {fileID: 1729426933}
 --- !u!1 &284013756
 GameObject:
   m_ObjectHideFlags: 0
@@ -8084,22 +7866,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df9c6c7d8744e45238a0877734f9942a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 52f136a7c3a974fe885f12290f02e212, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 289895548}
-        m_TargetAssemblyTypeName: LockMouse, Assembly-CSharp
-        m_MethodName: OnEventRaised
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &289895548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8112,11 +7878,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 366ff0d16342f47e9b23233ad7393138, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MenuIsOpen: 0
-  _ResetValues:
-    m_PersistentCalls:
-      m_Calls: []
-  SceneToLoad: 0
 --- !u!1 &301340411
 GameObject:
   m_ObjectHideFlags: 0
@@ -15611,6 +15372,8 @@ MonoBehaviour:
   zoomSpeed: 1
   minZoomSpeedMultiplier: 1
   maxZoomSpeedMultiplier: 2
+  minZPosition: -50
+  maxZPosition: -15
 --- !u!114 &541427750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16391,22 +16154,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df9c6c7d8744e45238a0877734f9942a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 6f999b5caf7c54b5880ddf16c902f7f8, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameState, CodeAssembly
-        m_MethodName: HandleGameLoss
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &556792483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16419,22 +16166,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df9c6c7d8744e45238a0877734f9942a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 7833f6bff1fe744da9dc3f1a26c3673e, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameState, CodeAssembly
-        m_MethodName: HandleGameWin
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &556792484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16510,10 +16241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 665598a9eb8e04bcb88ba2e53a683727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameState: {fileID: 1757698617}
-  _ResetValues:
-    m_PersistentCalls:
-      m_Calls: []
+  SceneToLoad: 0
 --- !u!1 &607666651
 GameObject:
   m_ObjectHideFlags: 0
@@ -18877,6 +18605,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   genPerSec: {fileID: 11400000, guid: 9d0ae6bf0ab46402da3b14888a7daa84, type: 2}
   moneyAmount: {fileID: 11400000, guid: 91aec1bcab1f941ac8249cb8d32e8614, type: 2}
+  moneyText: {fileID: 0}
 --- !u!4 &895219148
 Transform:
   m_ObjectHideFlags: 0
@@ -19411,6 +19140,171 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!43 &985513505
+Mesh:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  serializedVersion: 11
+  m_SubMeshes:
+  - serializedVersion: 2
+    firstByte: 0
+    indexCount: 0
+    topology: 0
+    baseVertex: 0
+    firstVertex: 0
+    vertexCount: 0
+    localAABB:
+      m_Center: {x: 0, y: 0, z: 0}
+      m_Extent: {x: 0, y: 0, z: 0}
+  m_Shapes:
+    vertices: []
+    shapes: []
+    channels: []
+    fullWeights: []
+  m_BindPose: []
+  m_BoneNameHashes: 
+  m_RootBoneNameHash: 0
+  m_BonesAABB: []
+  m_VariableBoneCountWeights:
+    m_Data: 
+  m_MeshCompression: 0
+  m_IsReadable: 1
+  m_KeepVertices: 1
+  m_KeepIndices: 1
+  m_IndexFormat: 0
+  m_IndexBuffer: 
+  m_VertexData:
+    serializedVersion: 3
+    m_VertexCount: 0
+    m_Channels:
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    m_DataSize: 0
+    _typelessdata: 
+  m_CompressedMesh:
+    m_Vertices:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UV:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Normals:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Tangents:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Weights:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_NormalSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_TangentSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_FloatColors:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_BoneIndices:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Triangles:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UVInfo: 0
+  m_LocalAABB:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
+  m_MeshUsageFlags: 0
+  m_CookingOptions: 30
+  m_BakedConvexCollisionMesh: 
+  m_BakedTriangleCollisionMesh: 
+  'm_MeshMetrics[0]': 1
+  'm_MeshMetrics[1]': 1
+  m_MeshOptimizationFlags: 1
+  m_StreamData:
+    serializedVersion: 2
+    offset: 0
+    size: 0
+    path: 
 --- !u!1 &998354225
 GameObject:
   m_ObjectHideFlags: 0
@@ -20419,22 +20313,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df9c6c7d8744e45238a0877734f9942a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: f4b04e76ec063442eacf293123593c6c, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1045570844}
-        m_TargetAssemblyTypeName: BuildingHealthBar, Assembly-CSharp
-        m_MethodName: UpdateHealth
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &1045570844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27248,22 +27126,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df9c6c7d8744e45238a0877734f9942a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 6f999b5caf7c54b5880ddf16c902f7f8, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameState, CodeAssembly
-        m_MethodName: HandleGameLoss
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &1303307796
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27276,22 +27138,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df9c6c7d8744e45238a0877734f9942a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 7833f6bff1fe744da9dc3f1a26c3673e, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameState, CodeAssembly
-        m_MethodName: HandleGameWin
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &1303307797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27367,10 +27213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 665598a9eb8e04bcb88ba2e53a683727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameState: {fileID: 1757698617}
-  _ResetValues:
-    m_PersistentCalls:
-      m_Calls: []
+  SceneToLoad: 0
 --- !u!1 &1321677415
 GameObject:
   m_ObjectHideFlags: 0
@@ -28087,6 +27930,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d9c28236a0f65f41a7c31915363deaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxTimeRemaining: 1
+  remainingTimeSeconds: {fileID: 11400000, guid: bab981189e2514c6cb5b0f4b61443103, type: 2}
+  timerText: {fileID: 0}
   _TimeHitZero:
     m_PersistentCalls:
       m_Calls:
@@ -28102,7 +27948,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  remainingTimeSeconds: {fileID: 11400000, guid: bab981189e2514c6cb5b0f4b61443103, type: 2}
 --- !u!4 &1437470925
 Transform:
   m_ObjectHideFlags: 0
@@ -28496,83 +28341,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9986cc3201adc4a4ab1c67ad5ff85b7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moneyCondition:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  moneyCondition_val: 0
-  numCondition:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  numCondition_val: 0
-  distanceCondition:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  distanceCondition_val: 0
+  distanceToBase: 0
+  money: 0
   actionPool: []
-  totalActionPool: []
+  totalAction: []
 --- !u!1 &1455807319
 GameObject:
   m_ObjectHideFlags: 0
@@ -34167,22 +33939,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df9c6c7d8744e45238a0877734f9942a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 6f999b5caf7c54b5880ddf16c902f7f8, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameState, CodeAssembly
-        m_MethodName: HandleGameLoss
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &1573923691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34195,22 +33951,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df9c6c7d8744e45238a0877734f9942a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 7833f6bff1fe744da9dc3f1a26c3673e, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameState, CodeAssembly
-        m_MethodName: HandleGameWin
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &1573923692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34286,10 +34026,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 665598a9eb8e04bcb88ba2e53a683727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameState: {fileID: 1757698617}
-  _ResetValues:
-    m_PersistentCalls:
-      m_Calls: []
+  SceneToLoad: 0
 --- !u!1 &1576073606
 GameObject:
   m_ObjectHideFlags: 0
@@ -40354,6 +40091,10 @@ MonoBehaviour:
     _PersistentCalls: []
   TrackfadeOutThree:
     _PersistentCalls: []
+  GameWin:
+    _PersistentCalls: []
+  GameLoose:
+    _PersistentCalls: []
   currentlevelState: 0
 --- !u!114 &1757698618
 MonoBehaviour:
@@ -40727,34 +40468,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df9c6c7d8744e45238a0877734f9942a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 6f999b5caf7c54b5880ddf16c902f7f8, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1437470924}
-        m_TargetAssemblyTypeName: Timer, Assembly-CSharp
-        m_MethodName: DeactivateTimer
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 895219147}
-        m_TargetAssemblyTypeName: Money, Assembly-CSharp
-        m_MethodName: DeactivateMoney
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &1786745156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40767,34 +40480,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df9c6c7d8744e45238a0877734f9942a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 7833f6bff1fe744da9dc3f1a26c3673e, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1437470924}
-        m_TargetAssemblyTypeName: Timer, Assembly-CSharp
-        m_MethodName: DeactivateTimer
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 895219147}
-        m_TargetAssemblyTypeName: Money, Assembly-CSharp
-        m_MethodName: DeactivateMoney
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &1786745157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40807,34 +40492,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df9c6c7d8744e45238a0877734f9942a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 833adac451f5f4dc19e1c7025e624f87, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1437470924}
-        m_TargetAssemblyTypeName: Timer, Assembly-CSharp
-        m_MethodName: ResetTimer
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 895219147}
-        m_TargetAssemblyTypeName: Money, Assembly-CSharp
-        m_MethodName: ResetMoney
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!4 &1786745158
 Transform:
   m_ObjectHideFlags: 0
@@ -41232,7 +40889,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ad885267948ce442bff24a57ab96800, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activePlayer: {fileID: 1729426933}
   players:
   - {fileID: 203146954}
 --- !u!4 &1807517027
@@ -41577,22 +41233,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df9c6c7d8744e45238a0877734f9942a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 833adac451f5f4dc19e1c7025e624f87, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1876407711}
-        m_TargetAssemblyTypeName: ValueReseter, Assembly-CSharp
-        m_MethodName: ResetValues
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &1876407711
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41605,81 +41245,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ade6a9dd35a8b4d3ba35b3422e2e670a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ResetValues:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: d7b4b90a065f04ae2a1770df0e152c92, type: 2}
-        m_TargetAssemblyTypeName: FloatVariable, Assembly-CSharp
-        m_MethodName: Reset
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 11400000, guid: 75db399507af64f228c236bf0cc15982, type: 2}
-        m_TargetAssemblyTypeName: FloatVariable, Assembly-CSharp
-        m_MethodName: Reset
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 11400000, guid: 91aec1bcab1f941ac8249cb8d32e8614, type: 2}
-        m_TargetAssemblyTypeName: FloatVariable, Assembly-CSharp
-        m_MethodName: Reset
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 11400000, guid: 9d0ae6bf0ab46402da3b14888a7daa84, type: 2}
-        m_TargetAssemblyTypeName: FloatVariable, Assembly-CSharp
-        m_MethodName: Reset
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 11400000, guid: 134620333c1634a509ab78576b5ad9ac, type: 2}
-        m_TargetAssemblyTypeName: IntVeriable, Assembly-CSharp
-        m_MethodName: Reset
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 11400000, guid: bab981189e2514c6cb5b0f4b61443103, type: 2}
-        m_TargetAssemblyTypeName: FloatVariable, Assembly-CSharp
-        m_MethodName: Reset
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &1881270635
 GameObject:
   m_ObjectHideFlags: 0
@@ -42031,22 +41596,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df9c6c7d8744e45238a0877734f9942a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 6f999b5caf7c54b5880ddf16c902f7f8, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameState, CodeAssembly
-        m_MethodName: HandleGameLoss
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &1937163054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42059,22 +41608,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df9c6c7d8744e45238a0877734f9942a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 7833f6bff1fe744da9dc3f1a26c3673e, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameState, CodeAssembly
-        m_MethodName: HandleGameWin
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &1937163055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42150,10 +41683,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 665598a9eb8e04bcb88ba2e53a683727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameState: {fileID: 1757698617}
-  _ResetValues:
-    m_PersistentCalls:
-      m_Calls: []
+  SceneToLoad: 0
 --- !u!1 &1948440977
 GameObject:
   m_ObjectHideFlags: 0

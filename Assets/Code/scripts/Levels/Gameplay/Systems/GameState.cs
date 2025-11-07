@@ -1,12 +1,9 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class GameState : MonoBehaviour
 {
-    bool GameIsPaused = false;
-
 
     // For controlling game machanics
     [SerializeField] Money _moneyMachanic;
@@ -18,8 +15,10 @@ public class GameState : MonoBehaviour
     //mjusic
     [SerializeField] internal UltEvents.UltEvent TrackfadeInOne, TrackfadeInTwo, TrackfadeInThree;
     [SerializeField] internal UltEvents.UltEvent TrackfadeOutOne, TrackfadeOutTwo, TrackfadeOutThree;
+    [SerializeField] internal UltEvents.UltEvent GameWin, GameLoose;
     public LevelState currentlevelState;
     InputAction engaugeAction, toggleCharacterSeceltAction;
+    PlayerInput playerInput;
 
     SceneActivityManager sceneMgr;
     public enum LevelState
@@ -32,6 +31,10 @@ public class GameState : MonoBehaviour
         Win,
         Loose,
         OutTro
+    }
+    void Awake()
+    {
+        playerInput = GetComponent<PlayerInput>();
     }
 
     void Start()
@@ -51,7 +54,7 @@ public class GameState : MonoBehaviour
         HandleLevelIntro();
     }
 
-    //=======================Game States=======================================
+    //=======================LEVEL START=======================================
     internal void HandleLevelIntro()
     {
         currentlevelState = LevelState.Intro;
@@ -75,10 +78,13 @@ public class GameState : MonoBehaviour
         else Debug.LogError("_enemySpawnObjects is null");
         if (_timeMachanic != null) _timeMachanic.TimeIsActive = false;
         else Debug.LogError("_timeMachanic is null");
-        if (_moneyMachanic != null) _moneyMachanic.MoneyIsActive = false;
+        if (_moneyMachanic != null) _moneyMachanic.DeactivateMoney();
         else Debug.LogError("_moneyMachanic is null");
 
     }
+
+
+    // character seclecct login in UILogic.cs and 
 
     public void OnEngaugeButtonPressed(InputAction.CallbackContext context)
     {
@@ -89,10 +95,13 @@ public class GameState : MonoBehaviour
         EngaugmentPartOne();
     }
 
+    //================================================GAMEPLAY========================================
+
     public void EngaugmentPartOne()
     {
         StopTrackOne();
         StartTrackTwo();
+        sceneMgr.Activate("GamePlayUI");
 
         currentlevelState = LevelState.EngaugmentPartOne;
         controlSwitcher.SwitchToPlayerControl();
@@ -105,7 +114,7 @@ public class GameState : MonoBehaviour
         _enemySpawnObjects.SpawningIsActive = true;
         
         _timeMachanic.TimeIsActive = true;
-        _moneyMachanic.MoneyIsActive = true;
+        _moneyMachanic.ActivateMoney();
 
         LevelPartOne?.Invoke();
     }
@@ -120,9 +129,12 @@ public class GameState : MonoBehaviour
         LevelPartThree?.Invoke();
     }
 
+    // ===========================================LEVEL END============================================
     public void HandleLevelWin()
     {
         currentlevelState = LevelState.Win;
+        _moneyMachanic.DeactivateMoney();
+        _timeMachanic.DeactivateTimer();
         sceneMgr.Activate("Victory");
         Time.timeScale = 0;
     }
@@ -130,11 +142,13 @@ public class GameState : MonoBehaviour
     public void HandleLevelLoss()
     {
         currentlevelState = LevelState.Loose;
+        _moneyMachanic.DeactivateMoney();
+        _timeMachanic.DeactivateTimer();
         sceneMgr.Activate("Defeat");
         Time.timeScale = 0;
     }
 
-    //=======================Music tracks=======================================
+    //===================================Music tracks=======================================
     public void StartTrackOne()
     {
         TrackfadeInOne?.Invoke();

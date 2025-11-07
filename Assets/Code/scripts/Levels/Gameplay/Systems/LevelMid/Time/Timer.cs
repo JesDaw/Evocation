@@ -9,10 +9,13 @@ using TMPro;
 // desplays time in provided UI object
 public class Timer : MonoBehaviour
 {
+
     
-    [SerializeField] UnityEvent _TimeHitZero;
-    public FloatVariable remainingTimeSeconds;
+    [SerializeField] float maxTimeRemaining = 1f;
+    [SerializeField] FloatVariable remainingTimeSeconds;
     [SerializeField] TextMeshProUGUI timerText;
+    [SerializeField] UnityEvent _TimeHitZero;
+    
 
     bool _timer_is_active = false;
 
@@ -24,6 +27,7 @@ public class Timer : MonoBehaviour
 
     void Awake()
     {
+        remainingTimeSeconds._Value = maxTimeRemaining;
         if (timerText == null)
         {
             GameObject timerTextObj = GameObject.Find("TimerText");
@@ -38,7 +42,6 @@ public class Timer : MonoBehaviour
         {
             Countdown();
         }
-        
         DesplayTime();
     }
 
