@@ -6,9 +6,8 @@ public class CameraControlSwitcher : MonoBehaviour
 {
     [SerializeField] CinemachineCamera freeCam;
     [SerializeField] FreeCamController cameraMovement;
-    [SerializeField] ActivePlayer activePlayer;
     [SerializeField] IntVeriable player_lives;
-    [SerializeField] AudioManager audio_manager;
+    [SerializeField] AudioManager soundEffectsManager;
 
     internal InputSystem_Actions inputActions;
     public bool FreeCamIsActive = false;
@@ -25,8 +24,8 @@ public class CameraControlSwitcher : MonoBehaviour
 
     void Start()
     {
-        if (audio_manager == null)
-            audio_manager = FindAnyObjectByType<AudioManager>();
+        if (soundEffectsManager == null)
+            soundEffectsManager = FindAnyObjectByType<AudioManager>();
 
         GlobalInputManager.Instance.ControlSwitchingInputs = inputActions;
 
@@ -44,7 +43,7 @@ public class CameraControlSwitcher : MonoBehaviour
             return;
         }
 
-        audio_manager?.Play("Switching Cameras");
+        soundEffectsManager?.Play("Switching Cameras");
         ToggleControl();
     }
 
@@ -63,7 +62,7 @@ public class CameraControlSwitcher : MonoBehaviour
         GlobalInputManager.Instance.DisableCameraControls();
         //cameraMovement.enabled = false;
 
-        var playerCam = activePlayer.GetCurrentPlayerCamera();
+        var playerCam = ActivePlayer.Instance.GetCurrentPlayerCamera();
         if (playerCam != null)
         {
             playerCam.Priority = 2;
@@ -74,7 +73,7 @@ public class CameraControlSwitcher : MonoBehaviour
             freeCam.Priority = 1;
         }
 
-        var playerController = activePlayer.CurrentPlayer?.GetComponent<PlayerStateMachine>();
+        var playerController = ActivePlayer.Instance.CurrentPlayer?.GetComponent<PlayerStateMachine>();
         GlobalInputManager.Instance?.EnableCharacterControls();
     }
 
@@ -85,9 +84,8 @@ public class CameraControlSwitcher : MonoBehaviour
         GlobalInputManager.Instance.DisableCharacterControls();
         GlobalInputManager.Instance.EnableCameraControls();
 
-        var playerCam = activePlayer.GetCurrentPlayerCamera();
+        var playerCam = ActivePlayer.Instance.GetCurrentPlayerCamera();
 
-        Debug.Log($"{playerCam == null}");
         freeCam.transform.position = playerCam.transform.position;
         freeCam.Lens.FieldOfView = playerCam.Lens.FieldOfView;
 
@@ -104,7 +102,7 @@ public class CameraControlSwitcher : MonoBehaviour
     {
         FreeCamIsActive = true;
 
-        var playerCam = activePlayer.GetCurrentPlayerCamera();
+        var playerCam = ActivePlayer.Instance.GetCurrentPlayerCamera();
         if (freeCam != null && playerCam != null)
         {
             freeCam.Priority = 2;
@@ -117,8 +115,8 @@ public class CameraControlSwitcher : MonoBehaviour
         //var playerController = activePlayer.CurrentPlayer?.GetComponent<PlayerStateMachine>();
         GlobalInputManager.Instance?.DisableCharacterControls();
 
-        if (audio_manager != null)
-            audio_manager.gameObject.SetActive(false);
+        if (soundEffectsManager != null)
+            soundEffectsManager.gameObject.SetActive(false);
 
         Debug.Log("All players dead - switched to freecam.");
     }

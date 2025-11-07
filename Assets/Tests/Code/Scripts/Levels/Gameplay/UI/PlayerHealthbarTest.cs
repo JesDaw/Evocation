@@ -59,7 +59,7 @@ public abstract class PlayerHealthbarTestBase
         componentUnderTest.updateHealthIndicator = (x) => mySlider.value = x;
         componentUnderTest.updateMaxHealthIndicator = (x) => mySlider.maxValue = x;
 
-        componentUnderTest.ActivePlayer = myPlayer;
+        //componentUnderTest.ActivePlayer = myPlayer;
 
         yield return null;
     }

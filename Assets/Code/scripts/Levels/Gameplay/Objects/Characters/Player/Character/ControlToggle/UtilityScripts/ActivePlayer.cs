@@ -17,7 +17,19 @@ public class ActivePlayer : MonoBehaviour
     public event OnPlayerActivating PlayerActivating;
 
     [SerializeField] GameObject _currentPlayer;
+    public static ActivePlayer Instance { get; private set; }
     GameObject _currentCamera;
+
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+    }
 
     void Start()
     {
@@ -47,7 +59,6 @@ public class ActivePlayer : MonoBehaviour
             return null;
         }
 
-        Debug.Log($"Returning camera {_currentPlayer == null}, and {_currentPlayer.GetComponent<CinemachineCamera>() == null}");
         return _currentPlayer.GetComponentInChildren<CinemachineCamera>();
     }
     public PlayerStateMachine GetCurrentPlayerController()

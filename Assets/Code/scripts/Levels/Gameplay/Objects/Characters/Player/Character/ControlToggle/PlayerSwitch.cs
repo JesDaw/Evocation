@@ -5,7 +5,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerSwitch : MonoBehaviour
 {
-    [SerializeField] ActivePlayer activePlayer;
     [SerializeField] List<GameObject> players = new List<GameObject>();
     private List<CinemachineCamera> playerCameras = new List<CinemachineCamera>();
 
@@ -70,7 +69,7 @@ public class PlayerSwitch : MonoBehaviour
         if (activePlayerIndex >= 0 && activePlayerIndex < players.Count && players[activePlayerIndex] != null)
         {
             
-            activePlayer.CurrentPlayer.GetComponent<PlayerStateMachine>().PlayerCommander.ClearAllCommands();
+            ActivePlayer.Instance.CurrentPlayer.GetComponent<PlayerStateMachine>().PlayerCommander.ClearAllCommands();
             GlobalInputManager.Instance.UnregisterPlayerCharacterInputCallbacks();
             playerCameras[activePlayerIndex].Priority = 0;
         }
@@ -100,7 +99,7 @@ public class PlayerSwitch : MonoBehaviour
 
         if (activePlayerIndex >= 0 && activePlayerIndex < players.Count && players[activePlayerIndex] != null)
         {
-            activePlayer.CurrentPlayer.GetComponent<PlayerStateMachine>().PlayerCommander.ClearAllCommands();
+            ActivePlayer.Instance.CurrentPlayer.GetComponent<PlayerStateMachine>().PlayerCommander.ClearAllCommands();
             GlobalInputManager.Instance.UnregisterPlayerCharacterInputCallbacks();
             playerCameras[activePlayerIndex].Priority = 0;
         }
@@ -146,7 +145,7 @@ public class PlayerSwitch : MonoBehaviour
             if (i == index)
             {
                 playerCameras[i].Priority = 2;
-                activePlayer.CurrentPlayer = players[i];
+                ActivePlayer.Instance.CurrentPlayer = players[i];
 
                 var playerSM = players[i].GetComponent<PlayerStateMachine>();
                 GlobalInputManager.Instance.SetActivePlayer(playerSM);

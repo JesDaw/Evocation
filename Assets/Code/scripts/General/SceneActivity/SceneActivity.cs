@@ -8,21 +8,10 @@ public class SceneActivity : MonoBehaviour
     public UnityEvent OnActivityStart;
     public UnityEvent OnActivityStop;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-    }
-
-    void OnDestroy()
-    {
-
-    }
-
     public void StartActivity()
     {
         if (!disableDefaultBehavior)
         {
-            Debug.Log($"Setting {gameObject.name} to true");
             gameObject.SetActive(true); 
 
         }
@@ -33,7 +22,6 @@ public class SceneActivity : MonoBehaviour
     {
         if (!disableDefaultBehavior)
         {
-            Debug.Log($"Setting {gameObject.name} to false");
             gameObject.SetActive(false); 
         }
         OnActivityStop.Invoke();

@@ -55,7 +55,7 @@ public class SpawnController : MonoBehaviour
         input.SpawnPlayer.performed -= SpawnPlayerPerformed;
     }
 
-    public void Spawn1Performed(InputAction.CallbackContext context)  { Debug.Log("spawning");  TrySpawnCPU(0, context); }
+    public void Spawn1Performed(InputAction.CallbackContext context) => TrySpawnCPU(0, context); 
     public void Spawn2Performed(InputAction.CallbackContext context) => TrySpawnCPU(1, context);
     public void Spawn3Performed(InputAction.CallbackContext context) => TrySpawnCPU(2, context);
     public void Spawn4Performed(InputAction.CallbackContext context) => TrySpawnCPU(3, context);
@@ -79,7 +79,6 @@ public class SpawnController : MonoBehaviour
 
     void TrySpawnCPU(int index, InputAction.CallbackContext context)
     {
-        Debug.Log("here");
         if (context.performed && spawnableCPUs != null && index >= 0 && index < spawnableCPUs.Length)
         {
             if (spawnObjects != null && spawnableCPUs[index] != null)

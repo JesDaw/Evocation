@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-
 /// <summary>
 /// This Script/Behavior handles all the SceneActivity transitions
 /// for a given Scene.
@@ -49,6 +48,9 @@ public class SceneActivityManager : MonoBehaviour
 
     public GameObject InitialSA { get => initialActivity; }
     public GameObject CurrentSA { get => currentActivity; }
+
+    // Flag to prevent adding to history when navigating back
+    private bool isNavigatingBack = false;
 
     internal void Start()
     {
@@ -111,18 +113,22 @@ public class SceneActivityManager : MonoBehaviour
     }
 
     public void ActivateInitialSA() { Activate(initialActivity); }
+    
     public void ActivatePreviousSA()
     {
         if (changeHistory.Count > 0)
         {
             string targetName = changeHistory.Pop();
+            isNavigatingBack = true; // Set flag to prevent re-pushing to history
             Activate(targetName);
+            isNavigatingBack = false; // Reset flag
         }
         else
         {
-            Debug.LogWarning("No SceneActivity to go BACK to!, gameObject");
+            Debug.LogWarning("No SceneActivity to go BACK to!", gameObject);
         }
     }
+    
     public void ActivateSettings() { Activate("Settings"); }
 
 
@@ -145,11 +151,12 @@ public class SceneActivityManager : MonoBehaviour
             nextObj.GetComponent<SceneActivity>().StartActivity();
             currObj.GetComponent<SceneActivity>().StopActivity();
 
-
-            // Push the SAObject index into our changeHistory or
-            // the strName if there is no index
-            changeHistory.Push(currObj.name);
-            Debug.Log($"SceneActivityManager: {currObj.name} -> {nextObj.name}", nextObj);
+            // Only push to history if we're NOT navigating back
+            if (!isNavigatingBack)
+            {
+                changeHistory.Push(currObj.name);
+            }
+            //Debug.Log($"SceneActivityManager: {currObj.name} -> {nextObj.name}", nextObj);
         }
         else
         {

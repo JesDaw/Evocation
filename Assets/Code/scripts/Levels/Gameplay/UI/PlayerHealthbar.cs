@@ -3,7 +3,6 @@ using DG.Tweening;
 
 public class PlayerHealthbar : HealthBarBase
 {
-    public ActivePlayer ActivePlayer;
 
     int _maxHealth = 100;
 
@@ -16,16 +15,15 @@ public class PlayerHealthbar : HealthBarBase
     protected override void Start()
     {
         base.SetStartHealth();
-        Debug.Assert(ActivePlayer != null, "ActivePlayer reference missing on player healthbar object!");
 
-        ActivePlayer.PlayerActivating += OnPlayerActivating;
-        ActivePlayer.PlayerDeactivating += OnPlayerDeactivating;
+        ActivePlayer.Instance.PlayerActivating += OnPlayerActivating;
+        ActivePlayer.Instance.PlayerDeactivating += OnPlayerDeactivating;
 
         updateHealthIndicator = UpdateHealthVisual;
         updateMaxHealthIndicator = (x) => _maxHealth = x;
 
-        if (ActivePlayer.CurrentPlayer != null)
-            OnPlayerActivating(ActivePlayer.CurrentPlayer);
+        if (ActivePlayer.Instance.CurrentPlayer != null)
+            OnPlayerActivating(ActivePlayer.Instance.CurrentPlayer);
     }
 
     void UpdateHealthVisual(float currentHealth)
@@ -54,7 +52,7 @@ public class PlayerHealthbar : HealthBarBase
         result = null;
 
         if (player == null)
-            player = ActivePlayer.CurrentPlayer;
+            player = ActivePlayer.Instance.CurrentPlayer;
 
         if (player != null && player.TryGetComponent(out Stats stats))
             result = stats;

@@ -8,12 +8,8 @@ public class Interactable : MonoBehaviour
     public UnityEvent interactAction;
     public UnityEvent playerInRange;
     List<GameObject> _playersInRange = new List<GameObject>();
-    [SerializeField] ActivePlayer activePlayer;
-    [SerializeField] GameObject freeCam;
     [SerializeField] bool FreeCamActsAsActivePlayer;
     bool ActivePlayerIsInRange;
-
-
 
     public void ActionPressed(InputAction.CallbackContext context)
     {
@@ -29,7 +25,7 @@ public class Interactable : MonoBehaviour
 
     bool CheckActivePlayerIsInRange()
     {
-        if (_playersInRange.Contains(activePlayer.CurrentPlayer)) return true;
+        if (_playersInRange.Contains(ActivePlayer.Instance.CurrentPlayer)) return true;
         else return false;
     }
 
