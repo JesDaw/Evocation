@@ -13,6 +13,7 @@ public class CameraControlSwitcher : MonoBehaviour
     public bool FreeCamIsActive = false;
     internal bool _camModeIsTogglable = true; 
 
+    public static CameraControlSwitcher Instance { get; set; }
 
     public void DisableSwitching() { GlobalInputManager.Instance.DisableControlSwapping(); }
     public void EnableSwitching() { GlobalInputManager.Instance.EnableControlSwapping(); }
@@ -20,6 +21,12 @@ public class CameraControlSwitcher : MonoBehaviour
     void Onable()
     {
         inputActions = new InputSystem_Actions();
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
     }
 
     void Start()
@@ -28,8 +35,7 @@ public class CameraControlSwitcher : MonoBehaviour
             soundEffectsManager = FindAnyObjectByType<AudioManager>();
 
         GlobalInputManager.Instance.ControlSwitchingInputs = inputActions;
-
-        GlobalInputManager.Instance.SetActiveCamera(this);
+        
     }
 
     public void OnToggleCameraControl(InputAction.CallbackContext context)

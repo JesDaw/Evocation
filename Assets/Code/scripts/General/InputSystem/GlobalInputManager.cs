@@ -4,7 +4,6 @@ using UnityEngine.InputSystem;
 public class GlobalInputManager : MonoBehaviour
 {
 
-    [SerializeField] CameraControlSwitcher _cameraControlSwitcher;
     public InputSystem_Actions ControlSwitchingInputs;
     public InputSystem_Actions FreecamInputs;
     public InputSystem_Actions PauseMenuInputs;
@@ -59,7 +58,7 @@ public class GlobalInputManager : MonoBehaviour
         _movePerformed = ctx => ActivePlayerStateMachiene.OnMove(ctx);
         _moveCanceled = ctx => ActivePlayerStateMachiene.OnMove(ctx);
         _attackPerformed = ctx => ActivePlayerStateMachiene.OnAttack(ctx);
-        _toggleCameraControl = ctx => _cameraControlSwitcher?.OnToggleCameraControl(ctx);
+        _toggleCameraControl = ctx => CameraControlSwitcher.Instance?.OnToggleCameraControl(ctx);
 
         // Subscribe once
         InputActions.Player.Move.performed += _movePerformed;
@@ -104,12 +103,6 @@ public class GlobalInputManager : MonoBehaviour
     {
         UnregisterPlayerCharacterInputCallbacks();
         ActivePlayerStateMachiene = null;
-    }
-
-    // ========================= Camera =========================
-    public void SetActiveCamera(CameraControlSwitcher camera)
-    {
-        _cameraControlSwitcher = camera;
     }
 
     // ========================= Enable / Disable Controls =========================

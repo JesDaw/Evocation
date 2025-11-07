@@ -12,7 +12,7 @@ public class SpawnController : MonoBehaviour
     [Header("Player Spawning")]
     [SerializeField] GameObject playerPrefab;
 
-    void OnEnable()
+    void Start()
     {
         if (GlobalInputManager.Instance == null)
         {
