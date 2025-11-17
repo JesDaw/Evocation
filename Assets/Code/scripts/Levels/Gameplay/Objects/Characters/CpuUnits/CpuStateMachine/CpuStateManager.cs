@@ -63,9 +63,9 @@ public class CpuStateManager : MonoBehaviour
     }
     IEnumerator Startup()
     {
+        UpdateCurrentState(State.Move);
         yield return new WaitUntil(() => transform.childCount >= _ScrStats._Sprites.Length);
         replaceAnimation();
-
     }
     public void UpdateCurrentState(State state)
     {
