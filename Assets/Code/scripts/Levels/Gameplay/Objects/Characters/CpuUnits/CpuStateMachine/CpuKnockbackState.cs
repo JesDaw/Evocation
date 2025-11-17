@@ -47,7 +47,7 @@ public class CpuKnockBackState : CpuBaseState
     void BackOnGround()
     {
         if (!_Knocked) return;
-        if ((Mathf.Abs(rb.linearVelocity.y) < 0.1f) && (Mathf.Abs(rb.linearVelocity.x) < 0.1f))
+        if ((Mathf.Abs(rb.linearVelocity.y) < 0.1f))
         {
             ExitState();
         }

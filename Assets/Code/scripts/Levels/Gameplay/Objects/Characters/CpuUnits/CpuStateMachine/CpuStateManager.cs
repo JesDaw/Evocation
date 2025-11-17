@@ -29,7 +29,7 @@ public class CpuStateManager : MonoBehaviour
         _Stats._Clan = _ScrStats._Clan;
         gameObject.tag = _Stats._Clan.ToString();
         _Stats._MaxHealth = _ScrStats._MaxHealth;
-        _Stats._CurrentHealth = _ScrStats._CurrentHealth;
+        _Stats._CurrentHealth = _ScrStats._MaxHealth;
 
         // info
         _Stats._AttackStartup = _ScrStats._AttackStartup;

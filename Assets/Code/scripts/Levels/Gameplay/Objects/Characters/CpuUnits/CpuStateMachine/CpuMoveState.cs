@@ -44,7 +44,6 @@ public class CpuMoveState : CpuBaseState
                 {
                     //actual attackers
                     GameObject EnemyGameobject = hits[II].collider.gameObject;
-                    Debug.LogWarning(EnemyGameobject.name);
                     _context._AttackingStats = EnemyGameobject.GetComponent<Stats>();
                     if (_context._AttackingStats == null) Debug.LogWarning("Make sure the enemy has their collider and stats script on the same object");
                     //this section is for healing

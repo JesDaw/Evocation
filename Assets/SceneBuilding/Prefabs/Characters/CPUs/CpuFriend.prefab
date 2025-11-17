@@ -1814,7 +1814,7 @@ GameObject:
   - component: {fileID: 1510265157621000109}
   m_Layer: 0
   m_Name: Healthbar
-  m_TagString: Untagged
+  m_TagString: Knights
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2011,7 +2011,7 @@ GameObject:
   - component: {fileID: 7600863437697538067}
   m_Layer: 0
   m_Name: CpuAppearance
-  m_TagString: Untagged
+  m_TagString: Knights
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2042,9 +2042,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4245541083745454055}
   - component: {fileID: 7592242119458481958}
+  - component: {fileID: 5316221638223677608}
   m_Layer: 0
   m_Name: CpuRig
-  m_TagString: Untagged
+  m_TagString: Knights
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2078,7 +2079,7 @@ Animator:
   m_GameObject: {fileID: 3935600218738898496}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: 77b63d5cf92d04241904be854aa0fcda, type: 2}
+  m_Controller: {fileID: 9100000, guid: 4356cc12222f1490f8638c76a1a2dbb7, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2090,6 +2091,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5316221638223677608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3935600218738898496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ae0d9a0d53bb534398da044ca760a04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4159809229699050773
 GameObject:
   m_ObjectHideFlags: 0
@@ -2491,7 +2504,7 @@ GameObject:
   - component: {fileID: 1186603951000595987}
   m_Layer: 0
   m_Name: CpuFriend
-  m_TagString: TreeGang
+  m_TagString: Knights
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2532,6 +2545,7 @@ MonoBehaviour:
   _Body: {fileID: 3798137318090021558}
   _Raycast: {fileID: 1228775622615169691}
   _Animator: {fileID: 7592242119458481958}
+  _AnimatorController: {fileID: 5316221638223677608}
   OnInitStats:
     _PersistentCalls: []
   _AttackingStats: {fileID: 0}
@@ -2565,10 +2579,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e04091fb59721b64188e07ceb7d885e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _CpuPriority:
-  - 
-  - 
-  _Clan: 
+  _CpuPriority: 0000000000000000
+  _Clan: 0
   _MaxHealth: 1
   _CurrentHealth: 1
   _AttackDamage: 0
@@ -3599,7 +3611,7 @@ GameObject:
   - component: {fileID: 1228775622615169691}
   m_Layer: 0
   m_Name: CpuRaycast
-  m_TagString: TreeGang
+  m_TagString: Knights
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4376,7 +4388,7 @@ GameObject:
   - component: {fileID: 4657879184986053861}
   m_Layer: 3
   m_Name: MiniMapIcon
-  m_TagString: Untagged
+  m_TagString: Knights
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

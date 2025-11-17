@@ -98,7 +98,7 @@ public class Stats : MonoBehaviour
         if (_Invincible) return;
 
         _CurrentHealth -= _Damage;
-        _KnockBackHealth -= _Damage;
+        _KnockBackHealth--;
 
         if (_AttackedBy != null) OnWitFlagDamage.Invoke(_AttackedBy.IsEnemy);
         OnDamage.Invoke();

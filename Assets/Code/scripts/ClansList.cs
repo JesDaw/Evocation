@@ -2,7 +2,7 @@ namespace Evocation.Clans
 {
     public enum ClansList
     {
-        WolfClan,
+        Wolf_Clan,
         Knights,
         Player
     }
