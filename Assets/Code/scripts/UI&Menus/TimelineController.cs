@@ -6,6 +6,7 @@ using UnityEngine.Playables;
 public class TimelineController : MonoBehaviour
 {
     PlayableDirector timeline;
+    float rewindTime;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -26,5 +27,10 @@ public class TimelineController : MonoBehaviour
     public void ResetTimeline()
     {
         timeline.Stop();
+    }
+
+    public void RewindTimeline()
+    {
+        timeline.time = rewindTime;
     }
 }
