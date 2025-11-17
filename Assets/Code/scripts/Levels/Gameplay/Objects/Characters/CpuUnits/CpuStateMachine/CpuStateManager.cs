@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using System.Collections;
+using UnityEngine.Events;
 using UnityEngine;
-using DG.Tweening.Core.Enums;
+using UnityEngine.Analytics;
 public class CpuStateManager : MonoBehaviour
 {
     public enum State
@@ -22,6 +22,10 @@ public class CpuStateManager : MonoBehaviour
 
     //[HideInInspector]
     public Stats _AttackingStats;
+    void Awake()
+    {
+        if (_ScrStats._Sprites.Length > 0) replaceAnimation(); 
+    }
 
     void Start()
     {
@@ -53,19 +57,13 @@ public class CpuStateManager : MonoBehaviour
         
         OnInitStats.Invoke(_Stats);
 
+
         _State[State.Move] = new CpuMoveState(this);
         _State[State.Attack] = new CpuAttackState(this);
 
         _State[State.KnockBack] = new CpuKnockBackState(this);
 
         UpdateCurrentState(State.Move);
-        StartCoroutine(Startup());
-    }
-    IEnumerator Startup()
-    {
-        yield return new WaitUntil(() => transform.childCount >= _ScrStats._Sprites.Length);
-        replaceAnimation();
-
     }
     public void UpdateCurrentState(State state)
     {
@@ -108,18 +106,8 @@ public class CpuStateManager : MonoBehaviour
                 spriteData.Rig.transform.position.z
             );
 
-            if (_ScrStats._Rotate)
-            {
-                spriteData.Rig.transform.rotation = Quaternion.Euler(0, 180, 0);
-            }
-            else
-            {
-                spriteData.Rig.transform.rotation = Quaternion.identity;
-            }
-
             GameObject newRig = Instantiate(spriteData.Rig, _cpuRig);
             newRig.name = rigName;
-
             if (_Stats._Enemy)
                 newRig.transform.Rotate(0, 180, 0);
 

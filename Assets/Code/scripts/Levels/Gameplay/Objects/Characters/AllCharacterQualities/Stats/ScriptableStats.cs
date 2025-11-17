@@ -9,7 +9,6 @@ public class ScriptableStats : ScriptableObject
     public List<string> _CpuPriority;
     [Space]
     [Header("Animation")]
-    public bool _Rotate;
     public AnimatorOverrideController _animator;
     public animationRigs[] _Sprites;
     [Space]
