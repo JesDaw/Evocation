@@ -2,16 +2,19 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using Evocation.Clans;
 
 public class Stats : MonoBehaviour
 {
-    public List<string> _CpuPriority;
-    public string _Clan;
+    public List<ClansList> _CpuPriority;
+    public ClansList _Clan;
 
     //the above can be made into an enum, but i'll hold off on it until we get all the different clans
     public int _MaxHealth = 1;
     public float _CurrentHealth = 1;
     public float _AttackDamage;
+
+    [Tooltip ("Only works on npc right now, but hopefully I can fully remove this when we have animatinos for the player")]
     public float _AttackStartup;
     public float _AttackEndlag;
     public float _MoveSpeed;

@@ -1,17 +1,19 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Evocation.Clans;
 
 [CreateAssetMenu(fileName = "Stats", menuName = "Stats", order = 0)]
 public class ScriptableStats : ScriptableObject
 {
     [Header("Clan")]
-    public string _Clan;
-    public List<string> _CpuPriority;
+    public ClansList _Clan;
+    public List<ClansList> _CpuPriority;
     [Space]
     [Header("Animation")]
     public bool _Rotate;
     public AnimatorOverrideController _animator;
     public animationRigs[] _Sprites;
+    public float _AnimationMoveSpeed = 1f;
     [Space]
     [Header("General Info")]
     public int _MaxHealth = 1;

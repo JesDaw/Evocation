@@ -37,7 +37,7 @@ public class CpuAttackState : CpuBaseState
         switch (_phase)
         {
             case AttackPhase.Startup:
-                if (_timer >= _context._Stats._AttackStartup)
+                if (_context._AnimatorController.ShouldAttack())
                 {
                     TriesToHit();
                     _timer = 0f;
@@ -115,11 +115,10 @@ public class CpuAttackState : CpuBaseState
         {
             for (int II = 0; II < hits.Length; II++)
             {
-                if (hits[II].CompareTag(_context._Stats._CpuPriority[I]))
+                if (hits[II].CompareTag(_context._Stats._CpuPriority[I].ToString()))
                 {
                     //actual attackers
                     GameObject EnemyGameobject = hits[II].gameObject;
-                    Debug.LogWarning(EnemyGameobject.name);
                     _context._AttackingStats = EnemyGameobject.GetComponent<Stats>();
                     if (_context._AttackingStats == null) Debug.LogWarning("Make sure the enemy has their collider and stats script on the same object");
                     //this section is for healing

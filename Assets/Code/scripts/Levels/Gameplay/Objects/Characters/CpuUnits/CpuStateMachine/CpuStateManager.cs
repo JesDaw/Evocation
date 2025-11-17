@@ -15,6 +15,7 @@ public class CpuStateManager : MonoBehaviour
     public Rigidbody2D _Body;
     public Transform _Raycast;
     public Animator _Animator;
+    public AnimationEventsController _AnimatorController;
     CpuBaseState _currentState;
 
     public Dictionary<State, CpuBaseState> _State = new Dictionary<State, CpuBaseState>();
@@ -26,7 +27,7 @@ public class CpuStateManager : MonoBehaviour
     void Start()
     {
         _Stats._Clan = _ScrStats._Clan;
-        gameObject.tag = _Stats._Clan;
+        gameObject.tag = _Stats._Clan.ToString();
         _Stats._MaxHealth = _ScrStats._MaxHealth;
         _Stats._CurrentHealth = _ScrStats._CurrentHealth;
 
@@ -58,7 +59,6 @@ public class CpuStateManager : MonoBehaviour
 
         _State[State.KnockBack] = new CpuKnockBackState(this);
 
-        UpdateCurrentState(State.Move);
         StartCoroutine(Startup());
     }
     IEnumerator Startup()
@@ -78,7 +78,7 @@ public class CpuStateManager : MonoBehaviour
     void replaceAnimation()
     {
         Transform _cpuRig = transform.Find("CpuAppearance")?.Find("CpuRig");
-        if (_cpuRig == null)
+        if (_cpuRig == null || _ScrStats._animator == null)
         {
             Debug.LogWarning("No Cpu Rig!! (for animation)");
             return;
@@ -127,13 +127,17 @@ public class CpuStateManager : MonoBehaviour
         }
 
         _Animator.runtimeAnimatorController = _ScrStats._animator;
+
         _Animator.Rebind();
         _Animator.Update(0f);
-    }
 
+        UpdateCurrentState(State.Move);
+        _Animator.SetFloat("RunningSpeed", _ScrStats._AnimationMoveSpeed);
+    }
 
     void Update()
     {
         _currentState.UpdateState();
     }
+
 }

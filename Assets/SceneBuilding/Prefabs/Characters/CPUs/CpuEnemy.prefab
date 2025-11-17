@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 491020825800668630}
   m_Layer: 0
   m_Name: CpuAppearance
-  m_TagString: Untagged
+  m_TagString: WolfClan
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -74,6 +74,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6556064229918282668}
   - component: {fileID: 7548955430503638842}
+  - component: {fileID: 3859775499832756399}
   m_Layer: 0
   m_Name: CpuRig
   m_TagString: Untagged
@@ -122,6 +123,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3859775499832756399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 212470894599092082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ae0d9a0d53bb534398da044ca760a04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &359240073732573571
 GameObject:
   m_ObjectHideFlags: 0
@@ -1788,7 +1801,7 @@ GameObject:
   - component: {fileID: 5343377815608489414}
   m_Layer: 0
   m_Name: Healthbar
-  m_TagString: Untagged
+  m_TagString: WolfClan
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2558,7 +2571,7 @@ GameObject:
   - component: {fileID: 3396496971449982794}
   m_Layer: 0
   m_Name: CpuRaycast
-  m_TagString: TreeGang
+  m_TagString: WolfClan
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4581,7 +4594,7 @@ GameObject:
   - component: {fileID: 8539166552315940901}
   m_Layer: 0
   m_Name: CpuEnemy
-  m_TagString: LavaBros
+  m_TagString: WolfClan
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4617,11 +4630,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58e63e2c27f90dc4490cca512f4dfe2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ScrStats: {fileID: 11400000, guid: b6992adb71df9b441bc53d51187ea154, type: 2}
+  _ScrStats: {fileID: 11400000, guid: d4daadf164451854c8c5982cee62e5f9, type: 2}
   _Stats: {fileID: 5848340058514809631}
   _Body: {fileID: 5705592259659799490}
   _Raycast: {fileID: 3396496971449982794}
   _Animator: {fileID: 7548955430503638842}
+  _AnimatorController: {fileID: 3859775499832756399}
   OnInitStats:
     _PersistentCalls: []
   _AttackingStats: {fileID: 0}
@@ -4655,10 +4669,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e04091fb59721b64188e07ceb7d885e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _CpuPriority:
-  - 
-  - 
-  _Clan: 
+  _CpuPriority: 0000000001000000
+  _Clan: 0
   _MaxHealth: 1
   _CurrentHealth: 1
   _AttackDamage: 0
@@ -5338,7 +5350,7 @@ GameObject:
   - component: {fileID: 32801805885208401}
   m_Layer: 3
   m_Name: MiniMapIcon
-  m_TagString: Untagged
+  m_TagString: WolfClan
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

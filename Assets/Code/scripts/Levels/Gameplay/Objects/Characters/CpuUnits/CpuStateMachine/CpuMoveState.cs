@@ -40,7 +40,7 @@ public class CpuMoveState : CpuBaseState
         {
             for (int II = 0; II < hits.Length; II++)
             {
-                if (hits[II].collider.CompareTag(_Stats._CpuPriority[I]))
+                if (hits[II].collider.CompareTag(_Stats._CpuPriority[I].ToString()))
                 {
                     //actual attackers
                     GameObject EnemyGameobject = hits[II].collider.gameObject;
