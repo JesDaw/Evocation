@@ -29,12 +29,7 @@ public class ScriptableStats : ScriptableObject
     public int _spawnCost;
     [Space]
     [Header("Status Effects")]
-    public List<StatusEffect> _StatusEffects;
-    //x = Tick
-    //y = Length
     public List<StatusEffect> _EffectsToApply;
-    public List<Vector2> _StatusTicksMax;
-    public List<Vector2> _StatusTicks;
     public int _StatusMax;
     public int _StatusHealth;
 }
