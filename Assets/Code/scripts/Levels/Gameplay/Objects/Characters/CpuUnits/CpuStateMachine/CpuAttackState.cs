@@ -77,7 +77,7 @@ public class CpuAttackState : CpuBaseState
 
     void DealDamage()
     {
-        DamageSource _damageSource = new DamageSource();
+        DamageSource _damageSource = new DamageSource(DamageSource.DamageType.StatusEffect);
         _damageSource.IsEnemy = _context._Stats._Enemy;
 
         _context._AttackingStats.TakeDamage(_context._Stats._AttackDamage, _damageSource);

@@ -74,6 +74,8 @@ public class Stats : MonoBehaviour
             {
                 CurrentStatus.x = _StatusTicksMax[I].x;
                 CurrentStatus.y -= CurrentStatus.x;
+
+                DamageSource _statusEffect = new DamageSource(DamageSource.DamageType.StatusEffect);
                 TakeDamage(_StatusEffects[I]._Damage);
 
                 OnTick?.Invoke(_StatusEffects[I]);
@@ -98,7 +100,9 @@ public class Stats : MonoBehaviour
         if (_Invincible) return;
 
         _CurrentHealth -= _Damage;
-        _KnockBackHealth--;
+
+        if(_AttackedBy != null && _AttackedBy.damageType == DamageSource.DamageType.StatusEffect)
+            _KnockBackHealth--;
 
         if (_AttackedBy != null) OnWitFlagDamage.Invoke(_AttackedBy.IsEnemy);
         OnDamage.Invoke();
@@ -147,6 +151,10 @@ public class Stats : MonoBehaviour
 public class DamageSource
 {
     //more context will be provided when I have time
+    public DamageSource(){}
+    public DamageSource(DamageType _damageType) {damageType = _damageType;}
     public bool IsEnemy;
+    public DamageType damageType;
+    public enum DamageType {StatusEffect}
 }
     

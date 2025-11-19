@@ -4588,7 +4588,7 @@ GameObject:
   - component: {fileID: 6780557470148160586}
   - component: {fileID: 5848340058514809631}
   - component: {fileID: 1539593309633758572}
-  - component: {fileID: 2713458167711584994}
+  - component: {fileID: 6265351297120461175}
   - component: {fileID: 5705592259659799490}
   - component: {fileID: 6552615881447152400}
   - component: {fileID: 8539166552315940901}
@@ -4732,8 +4732,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _body: {fileID: 5705592259659799490}
---- !u!58 &2713458167711584994
-CircleCollider2D:
+--- !u!70 &6265351297120461175
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -4748,7 +4748,7 @@ CircleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 0
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -4766,8 +4766,9 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 0.5
+  m_Offset: {x: -0, y: 0}
+  m_Size: {x: 0.5, y: 1.5}
+  m_Direction: 0
 --- !u!50 &5705592259659799490
 Rigidbody2D:
   serializedVersion: 5
