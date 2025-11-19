@@ -32,7 +32,6 @@ public class CpuStateManager : MonoBehaviour
         _Stats._CurrentHealth = _ScrStats._MaxHealth;
 
         // info
-        _Stats._AttackStartup = _ScrStats._AttackStartup;
         _Stats._AttackDamage = _ScrStats._AttackDamage;
         _Stats._AttackEndlag = _ScrStats._AttackEndlag;
         _Stats._MoveSpeed = _ScrStats._MoveSpeed;

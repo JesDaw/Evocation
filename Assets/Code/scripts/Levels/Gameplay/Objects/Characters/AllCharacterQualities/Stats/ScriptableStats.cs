@@ -18,8 +18,6 @@ public class ScriptableStats : ScriptableObject
     [Header("General Info")]
     public int _MaxHealth = 1;
     public int _AttackDamage;
-    public int _AttackStartup;
-    public int _AttackActiveDuration;
     public int _AttackEndlag;
     public AttackType _attackType;
     public float _MoveSpeed;
