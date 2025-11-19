@@ -44,9 +44,9 @@ public class CpuStateManager : MonoBehaviour
         //if(_Stats._Enemy) _Stats._CpuPriority.Insert(0, "Player");
 
         //knockback
-        _Stats._KnockBackHealth = _ScrStats._KnockBackHealth;
+        _Stats._KnockBackHealth = _ScrStats._KnockBackMax;
         _Stats._KnockBackVelocity = _ScrStats._KnockBackVelocity;
-        _Stats._KnockBackMax = _ScrStats._KnockBackHealth;
+        _Stats._KnockBackMax = _ScrStats._KnockBackMax;
 
         //status effects
         _Stats._StatusHealth = _ScrStats._StatusHealth;

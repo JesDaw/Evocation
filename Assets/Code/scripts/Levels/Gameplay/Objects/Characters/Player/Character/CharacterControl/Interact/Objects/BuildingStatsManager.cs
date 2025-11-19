@@ -33,7 +33,7 @@ public class BuildingStatsManager : MonoBehaviour
     {
         _Stats._Clan = _ScrStats._Clan;
         gameObject.tag = _Stats._Clan.ToString();
-        _Stats._CurrentHealth = _ScrStats._CurrentHealth;
+        _Stats._CurrentHealth = _ScrStats._MaxHealth;
         _Stats._AttackDamage = _ScrStats._AttackDamage;
         _Stats._AttackEndlag = _ScrStats._AttackEndlag;
         _Stats._MoveSpeed = _ScrStats._MoveSpeed;
@@ -42,9 +42,9 @@ public class BuildingStatsManager : MonoBehaviour
         _Stats._StopDistance = _ScrStats._StopDistance + randomNumber;
         _Stats._CpuPriority = _ScrStats._CpuPriority;
 
-        _Stats._KnockBackHealth = _ScrStats._KnockBackHealth;
+        _Stats._KnockBackHealth = _ScrStats._KnockBackMax;
         _Stats._KnockBackVelocity = _ScrStats._KnockBackVelocity;
-        _Stats._KnockBackMax = _ScrStats._KnockBackHealth;
+        _Stats._KnockBackMax = _ScrStats._KnockBackMax;
 
         _Stats._StatusHealth = _ScrStats._StatusHealth;
         _Stats._StatusMax = _ScrStats._StatusHealth;

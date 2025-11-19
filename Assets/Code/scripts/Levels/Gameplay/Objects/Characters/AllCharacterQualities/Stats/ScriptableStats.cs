@@ -17,7 +17,6 @@ public class ScriptableStats : ScriptableObject
     [Space]
     [Header("General Info")]
     public int _MaxHealth = 1;
-    public int _CurrentHealth = 1;
     public int _AttackDamage;
     public int _AttackStartup;
     public int _AttackActiveDuration;
@@ -26,7 +25,6 @@ public class ScriptableStats : ScriptableObject
     public float _MoveSpeed;
     public float _StopDistance;
     public float _KnockBackMax = 1;
-    public float _KnockBackHealth;
     public float _KnockBackVelocity;
     public int _spawnCost;
     [Space]
