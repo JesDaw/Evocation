@@ -27,9 +27,9 @@ public class CpuStateManager : MonoBehaviour
     void Start()
     {
         if(_Stats._Enemy)
-            _Stats._Clan = Evocation.Clans.ClansList.Wolf_Clan;
+            _Stats._Clan = Evocation.Clans.ClansList.Enemy;
         else
-            _Stats._Clan = Evocation.Clans.ClansList.Knights;
+            _Stats._Clan = Evocation.Clans.ClansList.Allies;
 
         gameObject.tag = _Stats._Clan.ToString();
         _Stats._MaxHealth = _ScrStats._MaxHealth;
@@ -44,14 +44,14 @@ public class CpuStateManager : MonoBehaviour
         float randomNumber = Random.Range(-0.3f, 0.3f);
         _Stats._StopDistance = _ScrStats._StopDistance + randomNumber;
 
-        if(!_Stats._Enemy && !_Stats._CpuPriority.Contains(Evocation.Clans.ClansList.Wolf_Clan))
-            _Stats._CpuPriority.Insert(0, Evocation.Clans.ClansList.Wolf_Clan);
+        if(!_Stats._Enemy && !_Stats._CpuPriority.Contains(Evocation.Clans.ClansList.Enemy))
+            _Stats._CpuPriority.Insert(0, Evocation.Clans.ClansList.Enemy);
 
         if(_Stats._Enemy && !_Stats._CpuPriority.Contains(Evocation.Clans.ClansList.Player))
             _Stats._CpuPriority.Insert(0, Evocation.Clans.ClansList.Player);
 
-        if(_Stats._Enemy && !_Stats._CpuPriority.Contains(Evocation.Clans.ClansList.Knights))
-            _Stats._CpuPriority.Insert(0, Evocation.Clans.ClansList.Knights);
+        if(_Stats._Enemy && !_Stats._CpuPriority.Contains(Evocation.Clans.ClansList.Allies))
+            _Stats._CpuPriority.Insert(0, Evocation.Clans.ClansList.Allies);
 
         //knockback
         _Stats._KnockBackHealth = _ScrStats._KnockBackMax;
