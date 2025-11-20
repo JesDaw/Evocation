@@ -1,7 +1,13 @@
+using System;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 [CreateAssetMenu(fileName = "RangeAttack", menuName = "AttackType/RangeAttack")]
-public abstract class RangeAttackType : AttackType
+public class RangeAttackType : AttackType
 {
+    public enum ProjType {Arch, Direct}
+    public ProjType projType;
     public AnimationCurve projectileCurve;
+    public AnimationCurve projectileSpeedCurve;
+    public Vector2 detectionRange;
 }
