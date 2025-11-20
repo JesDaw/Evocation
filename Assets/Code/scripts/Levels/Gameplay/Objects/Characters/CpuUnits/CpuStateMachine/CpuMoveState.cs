@@ -17,6 +17,7 @@ public class CpuMoveState : CpuBaseState
     public override void EnterState()
     {
         _context._Animator.SetBool("IsRunning", true);
+        _context._Animator.SetFloat("RunningSpeed", _context._ScrStats._AnimationMoveSpeed);
     }
     public override void UpdateState()
     {

@@ -144,7 +144,6 @@ public class CpuStateManager : MonoBehaviour
         _Animator.Update(0f);
 
         UpdateCurrentState(State.Move);
-        _Animator.SetFloat("RunningSpeed", _ScrStats._AnimationMoveSpeed);
     }
 
     void Update()
