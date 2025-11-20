@@ -26,7 +26,11 @@ public class CpuStateManager : MonoBehaviour
 
     void Start()
     {
-        _Stats._Clan = _ScrStats._Clan;
+        if(_Stats._Enemy)
+            _Stats._Clan = Evocation.Clans.ClansList.Wolf_Clan;
+        else
+            _Stats._Clan = Evocation.Clans.ClansList.Knights;
+
         gameObject.tag = _Stats._Clan.ToString();
         _Stats._MaxHealth = _ScrStats._MaxHealth;
         _Stats._CurrentHealth = _ScrStats._MaxHealth;
@@ -39,8 +43,15 @@ public class CpuStateManager : MonoBehaviour
         //just looks better if they slightyoffset
         float randomNumber = Random.Range(-0.3f, 0.3f);
         _Stats._StopDistance = _ScrStats._StopDistance + randomNumber;
-        _Stats._CpuPriority = _ScrStats._CpuPriority;
-        //if(_Stats._Enemy) _Stats._CpuPriority.Insert(0, "Player");
+
+        if(!_Stats._Enemy && !_Stats._CpuPriority.Contains(Evocation.Clans.ClansList.Wolf_Clan))
+            _Stats._CpuPriority.Insert(0, Evocation.Clans.ClansList.Wolf_Clan);
+
+        if(_Stats._Enemy && !_Stats._CpuPriority.Contains(Evocation.Clans.ClansList.Player))
+            _Stats._CpuPriority.Insert(0, Evocation.Clans.ClansList.Player);
+
+        if(_Stats._Enemy && !_Stats._CpuPriority.Contains(Evocation.Clans.ClansList.Knights))
+            _Stats._CpuPriority.Insert(0, Evocation.Clans.ClansList.Knights);
 
         //knockback
         _Stats._KnockBackHealth = _ScrStats._KnockBackMax;
@@ -121,6 +132,8 @@ public class CpuStateManager : MonoBehaviour
 
             if (_Stats._Enemy)
                 newRig.transform.Rotate(0, 180, 0);
+            else
+                newRig.transform.Rotate(0, -180, 0);
 
             if(rigName != "RunningRig") newRig.SetActive(false);
         }

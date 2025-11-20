@@ -31,7 +31,10 @@ public class BuildingStatsManager : MonoBehaviour
 
     public void SwapBuilding(ScriptableStats _ScrStats)
     {
-        _Stats._Clan = _ScrStats._Clan;
+        if(_Stats._Enemy)
+            _Stats._Clan = ClansList.Knights;
+        else
+            _Stats._Clan = ClansList.Wolf_Clan;
         gameObject.tag = _Stats._Clan.ToString();
         _Stats._CurrentHealth = _ScrStats._MaxHealth;
         _Stats._AttackDamage = _ScrStats._AttackDamage;
@@ -40,7 +43,6 @@ public class BuildingStatsManager : MonoBehaviour
 
         float randomNumber = Random.Range(-0.3f, 0.3f);
         _Stats._StopDistance = _ScrStats._StopDistance + randomNumber;
-        _Stats._CpuPriority = _ScrStats._CpuPriority;
 
         _Stats._KnockBackHealth = _ScrStats._KnockBackMax;
         _Stats._KnockBackVelocity = _ScrStats._KnockBackVelocity;
@@ -57,12 +59,12 @@ public class BuildingStatsManager : MonoBehaviour
         if (IsEnemy)
         {
             SwapBuilding(EnemyBuilding);
-            gameObject.tag = "LavaBros";
+            gameObject.tag = ClansList.Wolf_Clan.ToString();
         }
         else
         {
             SwapBuilding(AllyBuilding);
-            gameObject.tag = "TreeGang";
+            gameObject.tag = ClansList.Knights.ToString();
         }
 
         //delay is needed because status effect runs on update()
@@ -72,7 +74,7 @@ public class BuildingStatsManager : MonoBehaviour
     {
         Debug.Log("player claimed building");
         SwapBuilding(AllyBuilding);
-        gameObject.tag = "TreeGang";
+        gameObject.tag = ClansList.Knights.ToString();
     }
 
     private IEnumerator ResetDestroyedAfterDelay()

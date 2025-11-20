@@ -5,10 +5,6 @@ using Evocation.Clans;
 [CreateAssetMenu(fileName = "Stats", menuName = "Stats", order = 0)]
 public class ScriptableStats : ScriptableObject
 {
-    [Header("Clan")]
-    public ClansList _Clan;
-    public List<ClansList> _CpuPriority;
-    [Space]
     [Header("Animation")]
     public bool _Rotate;
     public AnimatorOverrideController _animator;
