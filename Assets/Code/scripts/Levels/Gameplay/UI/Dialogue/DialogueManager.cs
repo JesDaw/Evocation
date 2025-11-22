@@ -35,6 +35,7 @@ public class DialogueManager : MonoBehaviour
 
     public void OnConfirmDialoguePressed(InputAction.CallbackContext context)
     {
+        Debug.Log($"Interact button pressed");
         if (!context.started || !DialogueActive) return;
 
         if (_firstLine)
