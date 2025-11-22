@@ -55,10 +55,6 @@ public class CpuStateManager : MonoBehaviour
         _Stats._KnockBackHealth = _ScrStats._KnockBackMax;
         _Stats._KnockBackMax = _ScrStats._KnockBackMax;
 
-        //status effects
-        _Stats._StatusHealth = _ScrStats._StatusHealth;
-        _Stats._StatusMax = _ScrStats._StatusHealth;
-        
         OnInitStats.Invoke(_Stats);
 
         _State[State.Move] = new CpuMoveState(this);

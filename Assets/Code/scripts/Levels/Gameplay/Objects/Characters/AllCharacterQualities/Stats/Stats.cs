@@ -22,8 +22,6 @@ public class Stats : MonoBehaviour
     //y = Length
     public List<Vector2> _StatusTicksMax;
     public List<Vector2> _StatusTicks;
-    public int _StatusMax;
-    public int _StatusHealth;
     [SerializeField] internal UltEvents.UltEvent OnDeath, OnDamage, OnKnocked;
     [SerializeField] internal UltEvents.UltEvent<bool> OnWitFlagDeath, OnWitFlagDamage;
     [SerializeField] UnityEvent<StatusEffect> OnTick;
@@ -135,7 +133,6 @@ public class Stats : MonoBehaviour
         _StatusEffects.Add(_effect);
         _StatusTicks.Add(new Vector2(_effect._Tick, _effect._Length));
         _StatusTicksMax.Add(new Vector2(_effect._Tick, _effect._Length));
-        _StatusHealth = _StatusMax;
     }
 
     public AttackType attackType;

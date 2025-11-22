@@ -46,8 +46,6 @@ public class BuildingStatsManager : MonoBehaviour
         _Stats._KnockBackHealth = _ScrStats._KnockBackMax;
         _Stats._KnockBackMax = _ScrStats._KnockBackMax;
 
-        _Stats._StatusHealth = _ScrStats._StatusHealth;
-        _Stats._StatusMax = _ScrStats._StatusHealth;
         _Stats._StatusEffects = new List<StatusEffect>();
         _Stats._StatusTicksMax = new List<Vector2>();
         _Stats._StatusTicks = new List<Vector2>();

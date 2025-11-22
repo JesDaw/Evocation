@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: TestRange
   m_EditorClassIdentifier: 
   attackApperance: {fileID: 0}
+  _AttackDamage: 0
+  _AttackEndlag: 0
+  _EffectsToApply: []
+  projType: 1
   projectileCurve:
     serializedVersion: 2
     m_Curve:
@@ -37,3 +41,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  projectileSpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  detectionRange: {x: 0, y: 0}

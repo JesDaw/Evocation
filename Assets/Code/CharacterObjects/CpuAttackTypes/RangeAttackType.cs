@@ -12,6 +12,8 @@ public class RangeAttackType : AttackType
     public Vector2 detectionRange;
     public override void Attack(CpuStateManager _context)
     {
-        throw new System.NotImplementedException();
+        if(projType == ProjType.Arch)
+            throw new System.NotImplementedException();
+
     }
 }
