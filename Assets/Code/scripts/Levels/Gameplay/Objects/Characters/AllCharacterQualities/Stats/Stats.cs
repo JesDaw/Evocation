@@ -12,16 +12,10 @@ public class Stats : MonoBehaviour
     //the above can be made into an enum, but i'll hold off on it until we get all the different clans
     public int _MaxHealth = 1;
     public float _CurrentHealth = 1;
-    public float _AttackDamage;
-
-    [Tooltip ("Only works on npc right now, but hopefully I can fully remove this when we have animatinos for the player")]
-    public float _AttackStartup;
-    public float _AttackEndlag;
     public float _MoveSpeed;
     public float _StopDistance;
     public float _KnockBackMax;
     public float _KnockBackHealth;
-    public float _KnockBackVelocity;
     public int _spawnCost;
     public List<StatusEffect> _StatusEffects;
     //x = Tick

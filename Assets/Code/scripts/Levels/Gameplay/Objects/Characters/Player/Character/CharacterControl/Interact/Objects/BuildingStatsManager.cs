@@ -38,15 +38,12 @@ public class BuildingStatsManager : MonoBehaviour
 
         gameObject.tag = _Stats._Clan.ToString();
         _Stats._CurrentHealth = _ScrStats._MaxHealth;
-        _Stats._AttackDamage = _ScrStats._AttackDamage;
-        _Stats._AttackEndlag = _ScrStats._AttackEndlag;
         _Stats._MoveSpeed = _ScrStats._MoveSpeed;
 
         float randomNumber = Random.Range(-0.3f, 0.3f);
         _Stats._StopDistance = _ScrStats._StopDistance + randomNumber;
 
         _Stats._KnockBackHealth = _ScrStats._KnockBackMax;
-        _Stats._KnockBackVelocity = _ScrStats._KnockBackVelocity;
         _Stats._KnockBackMax = _ScrStats._KnockBackMax;
 
         _Stats._StatusHealth = _ScrStats._StatusHealth;

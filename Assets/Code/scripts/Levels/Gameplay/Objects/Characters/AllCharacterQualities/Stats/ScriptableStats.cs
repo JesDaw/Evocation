@@ -13,9 +13,7 @@ public class ScriptableStats : ScriptableObject
     [Space]
     [Header("General Info")]
     public int _MaxHealth = 1;
-    public int _AttackDamage;
-    public int _AttackEndlag;
-    public AttackType _attackType;
+    public AttackType _AttackType;
     public float _MoveSpeed;
     public float _StopDistance;
     public float _KnockBackMax = 1;
@@ -23,7 +21,6 @@ public class ScriptableStats : ScriptableObject
     public int _spawnCost;
     [Space]
     [Header("Status Effects")]
-    public List<StatusEffect> _EffectsToApply;
     public int _StatusMax;
     public int _StatusHealth;
 }

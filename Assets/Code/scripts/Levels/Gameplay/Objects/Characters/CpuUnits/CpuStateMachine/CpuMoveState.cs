@@ -49,13 +49,6 @@ public class CpuMoveState : CpuBaseState
                     if (_context._AttackingStats == null) Debug.LogWarning("Make sure the enemy has their collider and stats script on the same object");
                     //this section is for healing
 
-                    if (_context._AttackingStats._CurrentHealth >= _context._AttackingStats._MaxHealth &&
-                        _Stats._AttackDamage <= 0
-                        )
-                    {
-                        return;
-                    }
-
                     _Body.linearVelocity = Vector2.zero;
                     //heal
 

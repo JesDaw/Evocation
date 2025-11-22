@@ -10,4 +10,8 @@ public class RangeAttackType : AttackType
     public AnimationCurve projectileCurve;
     public AnimationCurve projectileSpeedCurve;
     public Vector2 detectionRange;
+    public override void Attack(CpuStateManager _context)
+    {
+        throw new System.NotImplementedException();
+    }
 }

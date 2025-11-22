@@ -37,7 +37,8 @@ public class CpuKnockBackState : CpuBaseState
         {
             short knockbackDir = -1;
             if (_context._Stats._Enemy) knockbackDir = 1; 
-            Vector2 knockbackForce = new Vector2(knockbackDir * _Stats._KnockBackVelocity, _Stats._KnockBackVelocity);
+            Vector2 knockbackForce = new Vector2(knockbackDir * _context._ScrStats._KnockBackVelocity,
+                                                                _context._ScrStats._KnockBackVelocity);
             rb.linearVelocity = Vector2.zero;
             rb.AddForce(knockbackForce, ForceMode2D.Impulse);
             _Knocked = true;

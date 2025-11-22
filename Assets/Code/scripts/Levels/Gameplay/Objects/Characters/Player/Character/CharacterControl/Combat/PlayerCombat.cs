@@ -6,7 +6,7 @@ public class PlayerCombat : MonoBehaviour
 {
     public bool controllable = true;
     [SerializeField] Stats playerStats;
-    [SerializeField] float framesPerSecond = 60f;
+    //[SerializeField] float framesPerSecond = 60f;
     public Animator animator;
     public Transform attackPoint;
     public LayerMask enemyLayers;
@@ -29,14 +29,15 @@ public class PlayerCombat : MonoBehaviour
 
         // Startup
         controlsManager.DisableControls();
-        yield return new WaitForSeconds(playerStats._AttackStartup/framesPerSecond);
+        //yield return new WaitForSeconds(playerStats._AttackStartup/framesPerSecond);
 
         // Active hit
         AttackActive();
         attackingAudio.Play();
 
         // Endlag
-        yield return new WaitForSeconds(playerStats._AttackEndlag/framesPerSecond);
+        //yield return new WaitForSeconds(playerStats._AttackEndlag/framesPerSecond);
+        yield return new WaitForSeconds(10);
         controlsManager.EnableControls();
 
        // isAttacking = false;
@@ -51,11 +52,11 @@ public class PlayerCombat : MonoBehaviour
         {
             if (enemy.TryGetComponent<Stats>(out Stats enemyStats))
             {
-                enemyStats.TakeDamage(playerStats._AttackDamage);
+                //enemyStats.TakeDamage(playerStats._AttackDamage);
             }
             else if (enemy.TryGetComponent<BuildingHealth>(out BuildingHealth buildingHealth))
             {
-                buildingHealth.TakeDamage(playerStats._AttackDamage);
+                //buildingHealth.TakeDamage(playerStats._AttackDamage);
             }
             else
             {

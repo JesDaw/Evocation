@@ -36,8 +36,6 @@ public class CpuStateManager : MonoBehaviour
         _Stats._CurrentHealth = _ScrStats._MaxHealth;
 
         // info
-        _Stats._AttackDamage = _ScrStats._AttackDamage;
-        _Stats._AttackEndlag = _ScrStats._AttackEndlag;
         _Stats._MoveSpeed = _ScrStats._MoveSpeed;
 
         //just looks better if they slightyoffset
@@ -55,7 +53,6 @@ public class CpuStateManager : MonoBehaviour
 
         //knockback
         _Stats._KnockBackHealth = _ScrStats._KnockBackMax;
-        _Stats._KnockBackVelocity = _ScrStats._KnockBackVelocity;
         _Stats._KnockBackMax = _ScrStats._KnockBackMax;
 
         //status effects
