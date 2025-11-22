@@ -77,6 +77,7 @@ public class CpuStateManager : MonoBehaviour
         yield return new WaitUntil(() => transform.childCount >= _ScrStats._Sprites.Length);
         replaceAnimation();
     }
+
     public void UpdateCurrentState(State state)
     {
         _Animator.Rebind();
