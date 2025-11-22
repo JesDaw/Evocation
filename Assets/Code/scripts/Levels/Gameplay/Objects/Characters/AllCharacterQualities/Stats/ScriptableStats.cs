@@ -6,6 +6,7 @@ using Evocation.Clans;
 public class ScriptableStats : ScriptableObject
 {
     [Header("Animation")]
+    public bool _Rotate;
     public AnimatorOverrideController _animator;
     public animationRigs[] _Sprites;
     public float _AnimationMoveSpeed = 1f;
