@@ -2,31 +2,26 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using Evocation.Clans;
 
 public class Stats : MonoBehaviour
 {
-    public List<string> _CpuPriority;
-    public string _Clan;
+    public List<ClansList> _CpuPriority;
+    public ClansList _Clan;
 
     //the above can be made into an enum, but i'll hold off on it until we get all the different clans
     public int _MaxHealth = 1;
     public float _CurrentHealth = 1;
-    public float _AttackDamage;
-    public float _AttackStartup;
-    public float _AttackEndlag;
     public float _MoveSpeed;
     public float _StopDistance;
     public float _KnockBackMax;
     public float _KnockBackHealth;
-    public float _KnockBackVelocity;
     public int _spawnCost;
     public List<StatusEffect> _StatusEffects;
     //x = Tick
     //y = Length
     public List<Vector2> _StatusTicksMax;
     public List<Vector2> _StatusTicks;
-    public int _StatusMax;
-    public int _StatusHealth;
     [SerializeField] internal UltEvents.UltEvent OnDeath, OnDamage, OnKnocked;
     [SerializeField] internal UltEvents.UltEvent<bool> OnWitFlagDeath, OnWitFlagDamage;
     [SerializeField] UnityEvent<StatusEffect> OnTick;
@@ -71,6 +66,8 @@ public class Stats : MonoBehaviour
             {
                 CurrentStatus.x = _StatusTicksMax[I].x;
                 CurrentStatus.y -= CurrentStatus.x;
+
+                DamageSource _statusEffect = new DamageSource(DamageSource.DamageType.StatusEffect);
                 TakeDamage(_StatusEffects[I]._Damage);
 
                 OnTick?.Invoke(_StatusEffects[I]);
@@ -95,7 +92,9 @@ public class Stats : MonoBehaviour
         if (_Invincible) return;
 
         _CurrentHealth -= _Damage;
-        _KnockBackHealth -= _Damage;
+
+        if(_AttackedBy != null && _AttackedBy.damageType == DamageSource.DamageType.StatusEffect)
+            _KnockBackHealth--;
 
         if (_AttackedBy != null) OnWitFlagDamage.Invoke(_AttackedBy.IsEnemy);
         OnDamage.Invoke();
@@ -134,7 +133,6 @@ public class Stats : MonoBehaviour
         _StatusEffects.Add(_effect);
         _StatusTicks.Add(new Vector2(_effect._Tick, _effect._Length));
         _StatusTicksMax.Add(new Vector2(_effect._Tick, _effect._Length));
-        _StatusHealth = _StatusMax;
     }
 
     public AttackType attackType;
@@ -144,6 +142,10 @@ public class Stats : MonoBehaviour
 public class DamageSource
 {
     //more context will be provided when I have time
+    public DamageSource(){}
+    public DamageSource(DamageType _damageType) {damageType = _damageType;}
     public bool IsEnemy;
+    public DamageType damageType;
+    public enum DamageType {StatusEffect}
 }
     

@@ -17,6 +17,7 @@ public class CpuMoveState : CpuBaseState
     public override void EnterState()
     {
         _context._Animator.SetBool("IsRunning", true);
+        _context._Animator.SetFloat("RunningSpeed", _context._ScrStats._AnimationMoveSpeed);
     }
     public override void UpdateState()
     {
@@ -40,21 +41,13 @@ public class CpuMoveState : CpuBaseState
         {
             for (int II = 0; II < hits.Length; II++)
             {
-                if (hits[II].collider.CompareTag(_Stats._CpuPriority[I]))
+                if (hits[II].collider.CompareTag(_Stats._CpuPriority[I].ToString()))
                 {
                     //actual attackers
                     GameObject EnemyGameobject = hits[II].collider.gameObject;
-                    Debug.LogWarning(EnemyGameobject.name);
                     _context._AttackingStats = EnemyGameobject.GetComponent<Stats>();
                     if (_context._AttackingStats == null) Debug.LogWarning("Make sure the enemy has their collider and stats script on the same object");
                     //this section is for healing
-
-                    if (_context._AttackingStats._CurrentHealth >= _context._AttackingStats._MaxHealth &&
-                        _Stats._AttackDamage <= 0
-                        )
-                    {
-                        return;
-                    }
 
                     _Body.linearVelocity = Vector2.zero;
                     //heal
