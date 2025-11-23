@@ -19,7 +19,9 @@ public class FreeCamController : MonoBehaviour
     [SerializeField] private float minZPosition = -50f;
     [SerializeField] private float maxZPosition = -15f;
 
-    private void Awake()
+ 
+
+    void Awake()
     {
         _ZoomToSpeedMultiplier = minZoomSpeedMultiplier;
         inputActions = new InputSystem_Actions();

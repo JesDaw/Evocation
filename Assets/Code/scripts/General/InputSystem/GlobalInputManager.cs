@@ -112,8 +112,8 @@ public class GlobalInputManager : MonoBehaviour
     public void EnableCharacterControls() => InputActions.Player.Enable();
     public void DisableCharacterControls() => InputActions.Player.Disable();
 
-    public void EnableCameraControls() => InputActions.Camera.Enable();
-    public void DisableCameraControls() => InputActions.Camera.Disable();
+    public void EnableCameraControls() => FreecamInputs.Camera.Enable();
+    public void DisableCameraControls() => FreecamInputs.Camera.Disable();
 
     public void EnableControlSwapping() => InputActions.ControlManager.Enable();
     public void DisableControlSwapping() => InputActions.ControlManager.Disable();
