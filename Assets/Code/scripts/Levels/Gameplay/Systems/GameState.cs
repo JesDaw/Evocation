@@ -113,9 +113,25 @@ public class GameState : MonoBehaviour
     public void OnEngaugeButtonPressed(InputAction.CallbackContext context)
     {
         if (currentlevelState != LevelState.Scouting || !context.performed) return;
+        
         //check if they are sure
-        // 3, 2, 1 go thing
-        EngaugmentPartOne();
+        //sceneMgr.Activate("StartGameUI");
+        //if (yes) { I guess there should be events called by buttons
+            if(playableDirectors.Count > 1)
+            {
+                // 3, 2, 1 go cutscene
+                HandleInGameCutscene(1); // have this clip finishing activate EngaugmentPartOne
+            }
+            else
+            {
+                EngaugmentPartOne();
+            }
+        //}
+        // if (no){
+            // sceneMgr.Deactivate("StartGameUI");
+        //}
+        
+
     }
 
     //================================================GAMEPLAY========================================
@@ -158,8 +174,19 @@ public class GameState : MonoBehaviour
         currentlevelState = LevelState.Win;
         _moneyMachanic.DeactivateMoney();
         _timeMachanic.DeactivateTimer();
-        sceneMgr.Activate("Victory");
-        Time.timeScale = 0;
+        
+        if(playableDirectors.Count > 2)
+        {
+            //win cutscene
+            HandleInGameCutscene(2);
+        }
+        else
+        {
+            sceneMgr.Activate("Victory");
+            Time.timeScale = 0;
+            Debug.LogWarning($"No 'Win' PlayableDirector in playableDirectors list");
+        }
+        
     }
 
     public void HandleLevelLoss()
@@ -167,8 +194,18 @@ public class GameState : MonoBehaviour
         currentlevelState = LevelState.Loose;
         _moneyMachanic.DeactivateMoney();
         _timeMachanic.DeactivateTimer();
-        sceneMgr.Activate("Defeat");
-        Time.timeScale = 0;
+         if(playableDirectors.Count > 3)
+        {
+        // loose cutscene
+            HandleInGameCutscene(3);
+        }
+        else
+        {
+            sceneMgr.Activate("Defeat");
+            Time.timeScale = 0;
+            Debug.LogWarning($"No 'Loose' PlayableDirector in playableDirectors list");
+        }
+        
     }
 
     //===================================Music tracks=======================================
