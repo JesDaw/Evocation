@@ -55,7 +55,6 @@ public class PlayerAttackState : PlayerBaseState
     }
     IEnumerator AttackRoutine()
     {
-        //I STILL NEED TO REPROGRAM THIS TO FIT WITH THE NEW ATTACK SYSTEM AHHHHHHHHHHHH;
         yield return new WaitForSeconds(10);
         _attackOver = false;
 
@@ -90,7 +89,7 @@ public class PlayerAttackState : PlayerBaseState
         {
             if (enemy.TryGetComponent<Stats>(out Stats enemyStats))
             {
-                //Ctx.PlayerAttackType.Attack(enemyStats);
+                Ctx.PlayerAttackType.DealDamage(enemyStats);
             }
             else
             {

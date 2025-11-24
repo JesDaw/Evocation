@@ -16,7 +16,7 @@ public class RangeAttackType : AttackType
         GameObject createdProj = Instantiate(projObject);
 
         Projectile projectile = createdProj.GetComponent<Projectile>();
-        projectile.Launch(
+        projectile?.Launch(
             _context.transform.position,
             _context._AttackingStats.transform,
             projectileCurve,

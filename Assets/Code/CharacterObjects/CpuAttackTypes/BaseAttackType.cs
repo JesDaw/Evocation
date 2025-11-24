@@ -25,4 +25,18 @@ public abstract class AttackType : ScriptableObject
             _context._AttackingStats.AddStatusEffect(_EffectsToApply[I]);
         }
     }
+    public void DealDamage(Stats _context)
+    {
+        if(_context == null) return;
+
+        DamageSource _damageSource = new DamageSource(DamageSource.DamageType.StatusEffect);
+
+        _context.TakeDamage(_AttackDamage, _damageSource);
+
+        if (_EffectsToApply.Count == 0) return;
+        for (int I = 0; I < _EffectsToApply.Count; I++)
+        {
+            _context.AddStatusEffect(_EffectsToApply[I]);
+        }
+    }
 }
