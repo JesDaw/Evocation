@@ -4,9 +4,9 @@ using Unity.Cinemachine;
 
 public class FreeCamController : MonoBehaviour
 {
-    private InputSystem_Actions inputActions;
-    private Vector2 moveInput;
-    private CinemachineCamera _camera;
+    public InputSystem_Actions inputActions;
+    Vector2 moveInput;
+    CinemachineCamera _camera;
 
     // Movement and Zoom Variables
     [SerializeField] private float moveSpeed = 10f;
@@ -36,6 +36,7 @@ public class FreeCamController : MonoBehaviour
 
     void OnEnable()
     {
+        GlobalInputManager.Instance.FreecamInputs = inputActions;
         inputActions.Camera.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
         inputActions.Camera.Move.canceled += ctx => moveInput = Vector2.zero;
 
@@ -43,11 +44,6 @@ public class FreeCamController : MonoBehaviour
 
         inputActions.Enable();
         inputActions.Camera.Enable();
-    }
-
-    void Start()
-    {
-        GlobalInputManager.Instance.FreecamInputs = inputActions;
     }
 
     void OnDisable()

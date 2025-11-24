@@ -84,7 +84,7 @@ public class SpawnController : MonoBehaviour
             if (spawnObjects != null && spawnableCPUs[index] != null)
             {
                 spawnObjects.Spawn(spawnableCPUs[index]);
-                Debug.Log("Spawned object at index: " + index);
+                //Debug.Log("Spawned object at index: " + index);
             }
             else
             {

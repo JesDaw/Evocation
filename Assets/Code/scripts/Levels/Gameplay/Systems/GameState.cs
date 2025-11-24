@@ -6,8 +6,7 @@ using UnityEngine.Playables;
 
 public class GameState : MonoBehaviour
 {
-
-    // For controlling game machanics
+    // For controlling game mechanics
     [SerializeField] Money _moneyMachanic;
     [SerializeField] Timer _timeMachanic;
     [SerializeField] PlayerStateMachine _playerStateMachine;
@@ -15,15 +14,18 @@ public class GameState : MonoBehaviour
     [SerializeField] SpawnObjects _playerSpawnObjects, _enemySpawnObjects;
     [SerializeField] List<PlayableDirector> playableDirectors = new List<PlayableDirector>();
     [SerializeField] internal UltEvents.UltEvent LevelPartOne, LevelPartTwo, LevelPartThree;
-    //mjusic
+    
+    // Music
     [SerializeField] internal UltEvents.UltEvent TrackfadeInOne, TrackfadeInTwo, TrackfadeInThree;
     [SerializeField] internal UltEvents.UltEvent TrackfadeOutOne, TrackfadeOutTwo, TrackfadeOutThree;
     [SerializeField] internal UltEvents.UltEvent GameWin, GameLoose;
+    
     public LevelState currentlevelState;
     InputAction engaugeAction, toggleCharacterSeceltAction;
     PlayerInput playerInput;
 
     SceneActivityManager sceneMgr;
+    
     public enum LevelState
     {
         Intro,
@@ -35,12 +37,13 @@ public class GameState : MonoBehaviour
         Loose,
         OutTro
     }
+    
     void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
         foreach (PlayableDirector director in playableDirectors)
         {
-            if (director == null)
+            if (director != null)
             {
                 director.timeUpdateMode = DirectorUpdateMode.UnscaledGameTime;
             }
@@ -49,19 +52,19 @@ public class GameState : MonoBehaviour
 
     void Start()
     {
-        // Find the SceneActivityManager!
+        // Find the SceneActivityManager
         foreach (var obj in Resources.FindObjectsOfTypeAll<SceneActivityManager>())
         {
             sceneMgr = obj;
         }
         Debug.Assert(sceneMgr != null);
 
-        //forces free cam mode
+        // Forces free cam mode
         controlSwitcher.SwitchToCameraControl();
         GlobalInputManager.Instance.DisableControlSwapping();
         GlobalInputManager.Instance.DisableCameraControls();
 
-        //Disables other parts of game
+        // Disables other parts of game
         if (_playerSpawnObjects != null) _playerSpawnObjects.SpawningIsActive = false;
         else Debug.LogError("_playerSpawnObjects is null");
         if (_enemySpawnObjects != null) _enemySpawnObjects.SpawningIsActive = false;
@@ -78,7 +81,6 @@ public class GameState : MonoBehaviour
     internal void HandleLevelIntro()
     {
         currentlevelState = LevelState.Intro;
-        // optional animation sequence and dialogue
         if(playableDirectors.Count > 0)
         {
             HandleInGameCutscene(0);
@@ -91,7 +93,7 @@ public class GameState : MonoBehaviour
 
     public void OnIntroCutsceneFinishedTest(InputAction.CallbackContext context)
     {
-        Debug.Log("OnIntroCutsceneFinishedTest button pressed");
+        //Debug.Log("OnIntroCutsceneFinishedTest button pressed");
         if (!context.performed) return;
         OnIntroCutsceneFinished();
     }
@@ -111,27 +113,18 @@ public class GameState : MonoBehaviour
     }
 
     public void OnEngaugeButtonPressed(InputAction.CallbackContext context)
-    {
+    {        
         if (currentlevelState != LevelState.Scouting || !context.performed) return;
         
-        //check if they are sure
-        //sceneMgr.Activate("StartGameUI");
-        //if (yes) { I guess there should be events called by buttons
-            if(playableDirectors.Count > 1)
-            {
-                // 3, 2, 1 go cutscene
-                HandleInGameCutscene(1); // have this clip finishing activate EngaugmentPartOne
-            }
-            else
-            {
-                EngaugmentPartOne();
-            }
-        //}
-        // if (no){
-            // sceneMgr.Deactivate("StartGameUI");
-        //}
-        
-
+        if(playableDirectors.Count > 1)
+        {
+            // 3, 2, 1 go cutscene
+            HandleInGameCutscene(1);
+        }
+        else
+        {
+            EngaugmentPartOne();
+        }
     }
 
     //================================================GAMEPLAY========================================
@@ -143,12 +136,18 @@ public class GameState : MonoBehaviour
         StartTrackTwo();
         
         currentlevelState = LevelState.EngaugmentPartOne;
-        controlSwitcher.SwitchToPlayerControl();
 
+        // Enable global shared controls
+        GlobalInputManager.Instance.EnableCameraControls();
         GlobalInputManager.Instance.EnableControlSwapping();
         GlobalInputManager.Instance.EnableCharacterSpawnControls();
 
+        // Switch to player control (this will enable the active player's inputs)
+        controlSwitcher.SwitchToPlayerControl();
+        
+        //Debug.Log("EngaugmentPartOne: Player control should now be active");
 
+        // Enable spawning
         _playerSpawnObjects.SpawningIsActive = true;
         _enemySpawnObjects.SpawningIsActive = true;
         
@@ -157,11 +156,13 @@ public class GameState : MonoBehaviour
 
         LevelPartOne?.Invoke();
     }
+    
     public void EngaugmentPartTwo()
     {
         currentlevelState = LevelState.EngaugmentPartTwo;
         LevelPartTwo?.Invoke();
     }
+    
     public void EngaugmentPartThree()
     {
         currentlevelState = LevelState.EngaugmentPartThree;
@@ -177,7 +178,6 @@ public class GameState : MonoBehaviour
         
         if(playableDirectors.Count > 2)
         {
-            //win cutscene
             HandleInGameCutscene(2);
         }
         else
@@ -186,7 +186,6 @@ public class GameState : MonoBehaviour
             Time.timeScale = 0;
             Debug.LogWarning($"No 'Win' PlayableDirector in playableDirectors list");
         }
-        
     }
 
     public void HandleLevelLoss()
@@ -194,9 +193,9 @@ public class GameState : MonoBehaviour
         currentlevelState = LevelState.Loose;
         _moneyMachanic.DeactivateMoney();
         _timeMachanic.DeactivateTimer();
-         if(playableDirectors.Count > 3)
+        
+        if(playableDirectors.Count > 3)
         {
-        // loose cutscene
             HandleInGameCutscene(3);
         }
         else
@@ -205,7 +204,6 @@ public class GameState : MonoBehaviour
             Time.timeScale = 0;
             Debug.LogWarning($"No 'Loose' PlayableDirector in playableDirectors list");
         }
-        
     }
 
     //===================================Music tracks=======================================
@@ -214,14 +212,17 @@ public class GameState : MonoBehaviour
         Time.timeScale = 0;
         playableDirectors[director].Play();
     }
+    
     public void StartTrackOne()
     {
         TrackfadeInOne?.Invoke();
     }
+    
     public void StartTrackTwo()
     {
         TrackfadeInTwo?.Invoke();
     }
+    
     public void StartTrackThree()
     {
         TrackfadeInThree?.Invoke();

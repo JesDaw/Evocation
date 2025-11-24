@@ -8,6 +8,7 @@ public class PlayerMoveState : PlayerBaseState
     {
         IsRootState = true;
     }
+    
     public override void UpdateState()
     {
         HandleMove();
@@ -16,12 +17,12 @@ public class PlayerMoveState : PlayerBaseState
 
     public override void EnterState()
     {
-
+        //Debug.Log($"{Ctx.gameObject.name}: Entered MOVE state");
     }
 
     public override void ExitState()
     {
-        //Ctx.Rb.linearVelocity = new Vector2(0, Ctx.Rb.linearVelocity.y);
+        //Debug.Log($"{Ctx.gameObject.name}: Exited MOVE state");
         Ctx.Rb.linearVelocityX = 0;
         Ctx.WalkingAudio.Stop();
     }
@@ -33,13 +34,15 @@ public class PlayerMoveState : PlayerBaseState
 
     void HandleMove()
     {
-
         if (Ctx.IsMovementPressed)
         {
+            float horizontal = Ctx.MovementContext;
+            //Debug.Log($"{Ctx.gameObject.name}: Moving - Horizontal: {horizontal}, IsMovementPressed: {Ctx.IsMovementPressed}");
+            
             if (!Ctx.WalkingAudio.isPlaying) Ctx.WalkingAudio.Play();
 
-            float horizontal = Ctx.MovementContext;
             Ctx.Rb.linearVelocityX = horizontal * Ctx.PlayerStats._MoveSpeed;
+            
             if (!isFacingRight && horizontal > 0f) Flip();
             else if (isFacingRight && horizontal < 0f) Flip();
         }
@@ -57,4 +60,3 @@ public class PlayerMoveState : PlayerBaseState
         Ctx.transform.localScale = localScale;
     }
 }
-
