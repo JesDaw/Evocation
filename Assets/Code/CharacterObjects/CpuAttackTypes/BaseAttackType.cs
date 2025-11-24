@@ -12,6 +12,8 @@ public abstract class AttackType : ScriptableObject
     public abstract void Attack(CpuStateManager _context);
     public void DealDamage(CpuStateManager _context)
     {
+        if(_context._AttackingStats == null || _context._Stats == null) return;
+
         DamageSource _damageSource = new DamageSource(DamageSource.DamageType.StatusEffect);
         _damageSource.IsEnemy = _context._Stats._Enemy;
 

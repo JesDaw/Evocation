@@ -22,6 +22,7 @@ public class Stats : MonoBehaviour
     public List<Vector2> _StatusTicksMax;
     public List<Vector2> _StatusTicks;
     [SerializeField] internal UltEvents.UltEvent OnDeath, OnDamage, OnKnocked;
+    [Tooltip("This is for when we need who it got hit by (tldr: dont worry about it)")]
     [SerializeField] internal UltEvents.UltEvent<bool> OnWitFlagDeath, OnWitFlagDamage;
     [SerializeField] UnityEvent<StatusEffect> OnTick;
     [SerializeField] bool _Invincible = false;
@@ -133,9 +134,6 @@ public class Stats : MonoBehaviour
         _StatusTicks.Add(new Vector2(_effect._Tick, _effect._Length));
         _StatusTicksMax.Add(new Vector2(_effect._Tick, _effect._Length));
     }
-
-    public AttackType attackType;
-
 }
 
 public class DamageSource

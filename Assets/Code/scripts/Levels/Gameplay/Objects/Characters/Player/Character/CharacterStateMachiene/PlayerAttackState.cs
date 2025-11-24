@@ -12,6 +12,7 @@ public class PlayerAttackState : PlayerBaseState
     public override void EnterState()
     {
         _attackOver = false;
+        Debug.Log("Attacking!!!");
         HandleAttack();
     }
 

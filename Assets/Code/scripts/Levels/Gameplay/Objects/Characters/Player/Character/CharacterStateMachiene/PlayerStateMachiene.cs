@@ -12,6 +12,7 @@ public class PlayerStateMachine : MonoBehaviour
     [SerializeField] Transform attackPoint;
     [SerializeField] LayerMask enemyLayers;
     [SerializeField] AudioSource attackingAudio;
+    [SerializeField] AttackType attackType;
     //internal bool controlable;
     //internal bool _camModeIsTogglable;
 
