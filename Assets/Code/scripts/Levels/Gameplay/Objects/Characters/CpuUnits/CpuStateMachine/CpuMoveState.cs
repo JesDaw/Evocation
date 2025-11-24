@@ -28,12 +28,13 @@ public class CpuMoveState : CpuBaseState
         _context.UpdateCurrentState(CpuStateManager.State.Attack);
     }
 
+    float stopOffset = Random.Range(-0.3f, 0.3f);
     void Moving()
     {
         _Body.linearVelocity = new Vector2(_Stats._MoveSpeed * _Transform.right.x, _Body.linearVelocity.y);
 
-        RaycastHit2D[] hits = Physics2D.RaycastAll(_Raycast.position, _Transform.right, _Stats._StopDistance);
-        Debug.DrawRay(_Raycast.position, _Transform.right * _Stats._StopDistance, Color.red);
+        RaycastHit2D[] hits = Physics2D.RaycastAll(_Raycast.position, _Transform.right, _context._ScrStats._AttackType._StopDistance + stopOffset);
+        Debug.DrawRay(_Raycast.position, _Transform.right * _context._ScrStats._AttackType._StopDistance, Color.red);
 
         if (hits.Length <= 0) return;
 

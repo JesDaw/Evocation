@@ -12,7 +12,7 @@ public class AOEAttackType : AttackType
         float sizeY = _SizeY;
         Debug.Log("AOE Attack");
         //debug
-        sizeX += _context._Stats._StopDistance;
+        sizeX += _StopDistance;
         sizeX = _context._Stats._Enemy ?  -sizeX : sizeX;
         var rect = new Rect(_context.transform.position.x, _context.transform.position.y, sizeX, sizeY);
         Debug.DrawLine(new Vector3(rect.x, rect.y), new Vector3(rect.x + rect.width, rect.y), Color.red, 1f);

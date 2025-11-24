@@ -46,7 +46,7 @@ public class PlayerCombat : MonoBehaviour
     void AttackActive()
     {
         // animator.SetTrigger("Attack");
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, playerStats._StopDistance, enemyLayers);
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, 0, enemyLayers);
 
         foreach (Collider2D enemy in hitEnemies)
         {
@@ -69,6 +69,6 @@ public class PlayerCombat : MonoBehaviour
     {
         if (attackPoint == null) return;
 
-        Gizmos.DrawWireSphere(attackPoint.position, playerStats._StopDistance);
+        //Gizmos.DrawWireSphere(attackPoint.position, playerStats._StopDistance);
     }
 }

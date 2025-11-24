@@ -3,10 +3,12 @@ using UnityEngine;
 
 public abstract class AttackType : ScriptableObject
 {
-    public Sprite attackApperance;
+    public float _StopDistance;
     public int _AttackDamage;
     public float _AttackEndlag;
     public List<StatusEffect> _EffectsToApply;
+    //override init
+    public virtual void Start(){}
     public abstract void Attack(CpuStateManager _context);
     public void DealDamage(CpuStateManager _context)
     {
