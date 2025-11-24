@@ -23,6 +23,10 @@ public class BuildingStatsManager : MonoBehaviour
         }
         SwapBuilding(ScrStats);
     }
+    public void buildingDebug()
+    {
+        Debug.Log("<color=cyan> Home base DESTROYED</color>");
+    }
 
     public void SetMax()
     {

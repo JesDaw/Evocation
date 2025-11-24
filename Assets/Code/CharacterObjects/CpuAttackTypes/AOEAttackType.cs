@@ -38,12 +38,9 @@ public class AOEAttackType : AttackType
                     //actual attackers
                     GameObject EnemyGameobject = hits[II].gameObject;
                     _context._AttackingStats = EnemyGameobject.GetComponent<Stats>();
-                    if (_context._AttackingStats == null) Debug.LogWarning("Make sure the enemy has their collider and stats script on the same object");
-                    //this section is for healing
-
                     if (_context._AttackingStats == null)
                     {
-                        Debug.Log("No stats object attached");
+                        Debug.LogWarning("Make sure the enemy has their collider and stats script on the same object");
                         continue;
                     }
 

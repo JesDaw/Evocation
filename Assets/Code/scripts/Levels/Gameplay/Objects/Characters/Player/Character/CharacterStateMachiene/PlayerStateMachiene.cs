@@ -7,6 +7,7 @@ public class PlayerStateMachine : MonoBehaviour
     [SerializeField] Animator _animator;
     [SerializeField] Rigidbody2D _rb;
     [SerializeField] AudioSource _walkingAudio;
+    [SerializeField] AttackType _playerAttackType;
     [SerializeField] Transform attackPoint;
     [SerializeField] LayerMask enemyLayers;
     [SerializeField] AudioSource attackingAudio;
@@ -27,6 +28,7 @@ public class PlayerStateMachine : MonoBehaviour
     public PlayerCommander PlayerCommander { get { return _commander; } }
     public Rigidbody2D Rb { get { return _rb; } }
     public AudioSource WalkingAudio { get { return _walkingAudio; } }
+    public AttackType PlayerAttackType { get {return _playerAttackType;} }
     public AudioSource AttackingAudio { get { return attackingAudio; } }
     public LayerMask EnemyLayers { get { return enemyLayers; } }
     public Transform AttackPoint { get { return attackPoint; } }

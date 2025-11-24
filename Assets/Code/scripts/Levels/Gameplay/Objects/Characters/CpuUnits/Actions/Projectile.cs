@@ -29,7 +29,11 @@ public class Projectile : MonoBehaviour
     private void FixedUpdate()
     {
         if (target == null)
+        {
+            Destroy(gameObject);
             return;
+        }
+
 
         t += Time.deltaTime * speed;
         float yPos = curve.Evaluate(t);
