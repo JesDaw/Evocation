@@ -8,18 +8,18 @@ public class FreeCamController : MonoBehaviour
     Vector2 moveInput;
     CinemachineCamera _camera;
 
-    // Movement and Zoom Variables
-    [SerializeField] private float moveSpeed = 10f;
-    [SerializeField] private float zoomSpeed = 5f;  
+    [SerializeField] float moveSpeed = 10f;
+    [SerializeField] float zoomSpeed = 5f;  
 
-    [SerializeField] float minZoomSpeedMultiplier = 1;
     [SerializeField] float maxZoomSpeedMultiplier = 2;
+    float minZoomSpeedMultiplier = 1;
     float _ZoomToSpeedMultiplier;
 
-    [SerializeField] private float minZPosition = -50f;
-    [SerializeField] private float maxZPosition = -15f;
-
- 
+    [SerializeField] GameObject CameraConfiner;
+    
+    Bounds confineBounds;
+    float minZPosition;
+    float maxZPosition;
 
     void Awake()
     {
@@ -30,8 +30,45 @@ public class FreeCamController : MonoBehaviour
         _camera = GetComponent<CinemachineCamera>();
         if (_camera == null)
         {
-            Debug.LogError("CinemachineCamera component not found on this GameObject.");
+            Debug.LogError($"CinemachineCamera component not found on {gameObject.name}.");
         }
+
+        CalculateBounds();
+    }
+
+    void CalculateBounds()
+    {
+        if (CameraConfiner == null)
+        {
+            Debug.LogError("CameraConfiner is not assigned to the freecam controller script");
+            return;
+        }
+
+        BoxCollider boxCollider = CameraConfiner.GetComponent<BoxCollider>();
+        if (boxCollider == null)
+        {
+            Debug.LogError("CameraConfiner doesn't have a BoxCollider on it");
+            return;
+        }
+
+        confineBounds = boxCollider.bounds;
+        
+        float zMin = confineBounds.center.z - confineBounds.extents.z;
+        float zMax = confineBounds.center.z + confineBounds.extents.z;
+
+        if (Mathf.Abs(zMin) < Mathf.Abs(zMax))
+        {
+            maxZPosition = zMin;
+            minZPosition = zMax;
+        }
+        else
+        {
+            maxZPosition = zMax;
+            minZPosition = zMin;
+        }
+
+        Debug.Log($"Bounds calculated - Min: {confineBounds.min}, Max: {confineBounds.max}");
+        Debug.Log($"Zoom bounds - Min Z: {minZPosition}, Max Z: {maxZPosition}");
     }
 
     void OnEnable()
@@ -58,22 +95,21 @@ public class FreeCamController : MonoBehaviour
         {
             HandleMovement();
         }
-    }
-
-    void LateUpdate()
-    {
-        if (_camera != null)
-        {
-            transform.position = _camera.transform.position;
-            
-            UpdateZoomSpeedMultiplier();
-        }
+        
+        UpdateZoomSpeedMultiplier();
     }
 
     public void HandleMovement()
     {
         Vector3 movement = new Vector3(moveInput.x, moveInput.y, 0) * moveSpeed * _ZoomToSpeedMultiplier * Time.deltaTime;
-        transform.position += movement;
+        Vector3 newPosition = transform.position + movement;
+        
+        // Clamp to bounds
+        newPosition.x = Mathf.Clamp(newPosition.x, confineBounds.min.x, confineBounds.max.x);
+        newPosition.y = Mathf.Clamp(newPosition.y, confineBounds.min.y, confineBounds.max.y);
+        newPosition.z = Mathf.Clamp(newPosition.z, confineBounds.min.z, confineBounds.max.z);
+        
+        transform.position = newPosition;
     }
 
     public void HandleZoom(InputAction.CallbackContext context)
@@ -85,13 +121,18 @@ public class FreeCamController : MonoBehaviour
             float zoomAmount = scrollDelta * zoomSpeed * 0.1f;
             Vector3 newPosition = transform.position + new Vector3(0, 0, zoomAmount);
             
+            // Clamp to bounds
+            newPosition.x = Mathf.Clamp(newPosition.x, confineBounds.min.x, confineBounds.max.x);
+            newPosition.y = Mathf.Clamp(newPosition.y, confineBounds.min.y, confineBounds.max.y);
+            newPosition.z = Mathf.Clamp(newPosition.z, confineBounds.min.z, confineBounds.max.z);
+            
             transform.position = newPosition;
         }
     }
 
-    private void UpdateZoomSpeedMultiplier()
+    void UpdateZoomSpeedMultiplier()
     {
         float t = Mathf.InverseLerp(maxZPosition, minZPosition, transform.position.z);
         _ZoomToSpeedMultiplier = Mathf.Lerp(minZoomSpeedMultiplier, maxZoomSpeedMultiplier, t);
-    }
+    }   
 }
