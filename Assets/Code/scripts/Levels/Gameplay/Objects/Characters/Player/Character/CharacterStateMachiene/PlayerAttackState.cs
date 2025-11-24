@@ -60,24 +60,24 @@ public class PlayerAttackState : PlayerBaseState
         _attackOver = false;
 
         Ctx.PlayerCommander.TakePendingCmd(DiscretePlayerCommand.Attack);
-        //yield return new WaitForSeconds(Ctx.PlayerStats._AttackStartup);
+        yield return new WaitForSeconds(2);
 
         // Active hit
         AttackActive();
         Ctx.AttackingAudio.Play();
 
         // Endlag
-        //yield return new WaitForSeconds(Ctx.PlayerStats._AttackEndlag);
+        yield return new WaitForSeconds(Ctx.PlayerAttackType._AttackEndlag);
         _attackOver = true;
 
         // If any attack commands are still in the buffer, only keep 1 of them so 
         // attacks don't pile up
 
-      /*  if (Ctx.PlayerCommander.IsCmdPending(DiscretePlayerCommand.Attack))
+        if (Ctx.PlayerCommander.IsCmdPending(DiscretePlayerCommand.Attack))
         {
             Ctx.PlayerCommander.ClearPendingCmds(DiscretePlayerCommand.Attack);
             Ctx.PlayerCommander.SendCmd(DiscretePlayerCommand.Attack, null);
-        } */
+        }
         Ctx.PlayerCommander.ClearPendingCmds(DiscretePlayerCommand.Attack);
     }
     void AttackActive()
@@ -90,16 +90,11 @@ public class PlayerAttackState : PlayerBaseState
         {
             if (enemy.TryGetComponent<Stats>(out Stats enemyStats))
             {
-                //NEED TO REPROGRAM THIS TO FIT WITHT HE NEW ATTACK SYSTEM
-                //enemyStats.TakeDamage(Ctx.PlayerStats._AttackDamage);
-            }
-            else if (enemy.TryGetComponent<BuildingHealth>(out BuildingHealth buildingHealth))
-            {
-                //buildingHealth.TakeDamage(Ctx.PlayerStats._AttackDamage);
+                //Ctx.PlayerAttackType.Attack(enemyStats);
             }
             else
             {
-                Debug.LogError(enemy.name + " is missing Stats or BuildingHealth component!");
+                Debug.LogError(enemy.name + " is missing Stats!");
             }
         }
     }

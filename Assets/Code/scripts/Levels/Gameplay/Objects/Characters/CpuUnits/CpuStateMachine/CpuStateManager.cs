@@ -85,15 +85,19 @@ public class CpuStateManager : MonoBehaviour
         replaceAnimation();
         toggleEverything(true);
 
-        _Animator.Rebind();
-        _Animator.Update(0f);
+        if(_Animator != null)
+        {
+            _Animator.Rebind();
+            _Animator.Update(0f);
+        }
 
         UpdateCurrentState(State.Move);
     }
 
     public void UpdateCurrentState(State state)
     {
-        _Animator.Rebind();
+        if(_Animator != null)
+            _Animator.Rebind();
 
         _currentState = _State[state];
         _currentState.EnterState();
