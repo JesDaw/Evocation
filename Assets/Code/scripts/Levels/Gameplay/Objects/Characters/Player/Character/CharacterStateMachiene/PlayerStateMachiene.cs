@@ -10,6 +10,7 @@ public class PlayerStateMachine : MonoBehaviour
     [SerializeField] Transform attackPoint;
     [SerializeField] LayerMask enemyLayers;
     [SerializeField] AudioSource attackingAudio;
+    [SerializeField] AttackType playerAttackType;
 
     // Each player has their own input instance
     public InputSystem_Actions playerInputActions;
