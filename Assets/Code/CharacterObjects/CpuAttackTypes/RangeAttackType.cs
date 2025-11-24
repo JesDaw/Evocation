@@ -1,19 +1,28 @@
-using System;
+using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 [CreateAssetMenu(fileName = "RangeAttack", menuName = "AttackType/RangeAttack")]
 public class RangeAttackType : AttackType
 {
-    public enum ProjType {Arch, Direct}
-    public ProjType projType;
+    public Sprite attackApperance;
     public AnimationCurve projectileCurve;
-    public AnimationCurve projectileSpeedCurve;
-    public Vector2 detectionRange;
+    public float speed;
+    public float offset = 2;
+    public GameObject projObject;
+
     public override void Attack(CpuStateManager _context)
     {
-        if(projType == ProjType.Arch)
-            throw new System.NotImplementedException();
+        GameObject createdProj = Instantiate(projObject);
 
+        Projectile projectile = createdProj.GetComponent<Projectile>();
+        projectile.Launch(
+            _context.transform.position,
+            _context._AttackingStats.transform,
+            projectileCurve,
+            speed,
+            offset,
+            () => DealDamage(_context)
+        );
     }
 }

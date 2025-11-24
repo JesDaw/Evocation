@@ -13,7 +13,6 @@ public class Stats : MonoBehaviour
     public int _MaxHealth = 1;
     public float _CurrentHealth = 1;
     public float _MoveSpeed;
-    public float _StopDistance;
     public float _KnockBackMax;
     public float _KnockBackHealth;
     public int _spawnCost;

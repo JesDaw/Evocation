@@ -15,14 +15,9 @@ public class ScriptableStats : ScriptableObject
     public int _MaxHealth = 1;
     public AttackType _AttackType;
     public float _MoveSpeed;
-    public float _StopDistance;
     public float _KnockBackMax = 1;
     public float _KnockBackVelocity;
     public int _spawnCost;
-    [Space]
-    [Header("Status Effects")]
-    public int _StatusMax;
-    public int _StatusHealth;
 }
 
 [System.Serializable]
