@@ -82,7 +82,7 @@ public class PlayerAttackState : PlayerBaseState
     void AttackActive()
     {
         // animator.SetTrigger("Attack");
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(Ctx.AttackPoint.position, Ctx.PlayerStats._StopDistance, Ctx.EnemyLayers);
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(Ctx.AttackPoint.position, 0, Ctx.EnemyLayers);
         Debug.Log("AttemptedAttacked");
 
         foreach (Collider2D enemy in hitEnemies)

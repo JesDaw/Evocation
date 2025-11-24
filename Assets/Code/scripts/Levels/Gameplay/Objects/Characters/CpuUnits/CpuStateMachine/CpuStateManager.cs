@@ -24,8 +24,26 @@ public class CpuStateManager : MonoBehaviour
     //[HideInInspector]
     public Stats _AttackingStats;
 
+    void toggleEverything(bool enable)
+    {
+        var components = GetComponents<MonoBehaviour>();
+        foreach (var comp in components)
+        {
+            if (comp != this)
+            {
+                comp.enabled = enable;
+            }
+        }
+
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).gameObject.SetActive(enable);
+        }
+    }
+
     void Start()
     {
+        toggleEverything(false);
         if(_Stats._Enemy)
             _Stats._Clan = Evocation.Clans.ClansList.Enemy;
         else
@@ -37,10 +55,6 @@ public class CpuStateManager : MonoBehaviour
 
         // info
         _Stats._MoveSpeed = _ScrStats._MoveSpeed;
-
-        //just looks better if they slightyoffset
-        float randomNumber = Random.Range(-0.3f, 0.3f);
-        _Stats._StopDistance = _ScrStats._StopDistance + randomNumber;
 
         if(!_Stats._Enemy && !_Stats._CpuPriority.Contains(Evocation.Clans.ClansList.Enemy))
             _Stats._CpuPriority.Insert(0, Evocation.Clans.ClansList.Enemy);
@@ -69,12 +83,22 @@ public class CpuStateManager : MonoBehaviour
         UpdateCurrentState(State.Move);
         yield return new WaitUntil(() => transform.childCount >= _ScrStats._Sprites.Length);
         replaceAnimation();
+        toggleEverything(true);
+
+        _Animator.Rebind();
+        _Animator.Update(0f);
+
+        UpdateCurrentState(State.Move);
     }
 
     public void UpdateCurrentState(State state)
     {
-        _Animator.Rebind();
-        _Animator.Update(0f);
+        if(_Animator.enabled)
+        {
+            _Animator.Rebind();
+            _Animator.Update(0f);
+        }
+
         _currentState = _State[state];
         _currentState.EnterState();
     }
@@ -133,11 +157,6 @@ public class CpuStateManager : MonoBehaviour
         }
 
         _Animator.runtimeAnimatorController = _ScrStats._animator;
-
-        _Animator.Rebind();
-        _Animator.Update(0f);
-
-        UpdateCurrentState(State.Move);
     }
 
     void Update()

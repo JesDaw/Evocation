@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c215e31adab36794195fd8d406410f2d, type: 3}
   m_Name: TestRange
   m_EditorClassIdentifier: 
-  attackApperance: {fileID: 0}
-  _AttackDamage: 0
-  _AttackEndlag: 0
-  _EffectsToApply: []
-  projType: 1
+  _StopDistance: 30
+  _AttackDamage: 1
+  _AttackEndlag: 5000
+  _EffectsToApply:
+  - {fileID: 11400000, guid: ee68ec388959d91469672acd03fe2555, type: 2}
+  attackApperance: {fileID: -2398233751314505116, guid: 7adec3645dc725040a3ed0c3d0e8feb9, type: 3}
   projectileCurve:
     serializedVersion: 2
     m_Curve:
@@ -30,8 +31,17 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 1
-      value: 1
+      time: 0.25726682
+      value: 0.12758496
+      inSlope: 0.08262546
+      outSlope: 0.08262546
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.9897461
+      value: 0.018867493
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -41,10 +51,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  projectileSpeedCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  detectionRange: {x: 0, y: 0}
+  speed: 5
+  offset: 0
+  projObject: {fileID: 6072924362752908747, guid: e36c33467359d0a44aa4493b4d80e7d9, type: 3}
