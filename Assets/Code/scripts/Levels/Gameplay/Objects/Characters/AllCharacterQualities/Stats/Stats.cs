@@ -6,6 +6,8 @@ using Evocation.Clans;
 
 public class Stats : MonoBehaviour
 {
+    //the attacking stuff is in Scriptable Stats so
+    // if you wannted to implement that you'll have to store the AttackType Variable somehwere else
     public List<ClansList> _CpuPriority;
     public ClansList _Clan;
 

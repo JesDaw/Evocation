@@ -9,6 +9,7 @@ public abstract class AttackType : ScriptableObject
     public List<StatusEffect> _EffectsToApply;
     //override init
     public virtual void Start(){}
+    //public abstract void Attack(stats _enemy, stats _user);
     public abstract void Attack(CpuStateManager _context);
     public void DealDamage(CpuStateManager _context)
     {
