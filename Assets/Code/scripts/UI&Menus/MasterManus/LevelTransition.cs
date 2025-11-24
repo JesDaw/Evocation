@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class LevelTransition : MonoBehaviour
 {
-    public Animator transition;
+    public Animator TransitionAnimation;
     [SerializeField] LevelLoader levelLoader;
 
     public float transitionTime = 1f;
@@ -12,7 +12,7 @@ public class LevelTransition : MonoBehaviour
     // Update is called once per frame
     public void StartAnimationLevel1()
     {
-        StartCoroutine(LoadLevel("Level 1 Jesse"));
+        StartCoroutine(LoadLevel("this week"));
     }
 
     public void StartAnimationLevel2()
@@ -22,9 +22,9 @@ public class LevelTransition : MonoBehaviour
 
     IEnumerator LoadLevel(string levelName)
     {
-        transition.SetTrigger("Start");
+        TransitionAnimation.SetTrigger("Start");
 
-        yield return new WaitForSeconds(transitionTime);
+        yield return new WaitForSeconds(transitionTime); //make this wait for animation to end
 
         levelLoader.LoadLevel(levelName);
     }

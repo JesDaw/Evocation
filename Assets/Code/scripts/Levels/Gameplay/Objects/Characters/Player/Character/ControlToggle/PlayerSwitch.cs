@@ -10,6 +10,7 @@ public class PlayerSwitch : MonoBehaviour
 
     int activePlayerIndex = 0;
     int PlayerIDNumber;
+    
     void Start()
     {
         PlayerIDNumber = 1;
@@ -24,6 +25,7 @@ public class PlayerSwitch : MonoBehaviour
         {
             Debug.LogError("NextPlayer action not found in InputSystem!");
         }
+        
         InputAction prevPlayerAction = InputSystem.actions.FindAction("PreviousPlayer");
         if (prevPlayerAction != null)
         {
@@ -34,7 +36,6 @@ public class PlayerSwitch : MonoBehaviour
         {
             Debug.LogError("PreviousPlayer action not found in InputSystem!");
         }
-
 
         foreach (GameObject player in players)
         {
@@ -47,10 +48,22 @@ public class PlayerSwitch : MonoBehaviour
             {
                 Debug.LogError($"No CinemachineCamera found in {player.name}");
             }
+            
+            // Initialize all players as inactive
+            var playerSM = player.GetComponent<PlayerStateMachine>();
+            if (playerSM != null)
+            {
+                playerSM.SetActive(false);
+            }
         }
 
+        // Set up ActivePlayer reference and camera priorities, but DON'T enable inputs yet
+        // GameState will enable them when EngaugmentPartOne starts
         if (players.Count > 0)
-            ActivatePlayer(activePlayerIndex);
+        {
+            ActivePlayer.Instance.CurrentPlayer = players[activePlayerIndex];
+            playerCameras[activePlayerIndex].Priority = 2;
+        }
     }
 
     public void SwitchPlayerRight(InputAction.CallbackContext context)
@@ -68,9 +81,7 @@ public class PlayerSwitch : MonoBehaviour
 
         if (activePlayerIndex >= 0 && activePlayerIndex < players.Count && players[activePlayerIndex] != null)
         {
-            
             ActivePlayer.Instance.CurrentPlayer.GetComponent<PlayerStateMachine>().PlayerCommander.ClearAllCommands();
-            GlobalInputManager.Instance.UnregisterPlayerCharacterInputCallbacks();
             playerCameras[activePlayerIndex].Priority = 0;
         }
 
@@ -79,7 +90,7 @@ public class PlayerSwitch : MonoBehaviour
         {
             activePlayerIndex = (activePlayerIndex + 1) % players.Count;
         }
-        while (players[activePlayerIndex] == null && activePlayerIndex != startIndex); // Loop to find an active player
+        while (players[activePlayerIndex] == null && activePlayerIndex != startIndex);
 
         ActivatePlayer(activePlayerIndex);
     }
@@ -100,7 +111,6 @@ public class PlayerSwitch : MonoBehaviour
         if (activePlayerIndex >= 0 && activePlayerIndex < players.Count && players[activePlayerIndex] != null)
         {
             ActivePlayer.Instance.CurrentPlayer.GetComponent<PlayerStateMachine>().PlayerCommander.ClearAllCommands();
-            GlobalInputManager.Instance.UnregisterPlayerCharacterInputCallbacks();
             playerCameras[activePlayerIndex].Priority = 0;
         }
 
@@ -113,8 +123,6 @@ public class PlayerSwitch : MonoBehaviour
 
         ActivatePlayer(activePlayerIndex);
     }
-
-
 
     private void RemoveNullPlayers()
     {
@@ -133,34 +141,36 @@ public class PlayerSwitch : MonoBehaviour
         activePlayerIndex = Mathf.Clamp(activePlayerIndex, 0, players.Count - 1);
     }
 
-
-
     void ActivatePlayer(int index)
     {
+        Debug.Log($"ActivatePlayer called for index {index}");
+        
+        // Deactivate all players first
         for (int i = 0; i < players.Count; i++)
         {
-            var playerScript = players[i].GetComponent<PlayerStateMachine>();
-            if (playerScript == null) continue;
+            var playerSM = players[i].GetComponent<PlayerStateMachine>();
+            if (playerSM == null) continue;
 
             if (i == index)
             {
+                // Activate this player
                 playerCameras[i].Priority = 2;
                 ActivePlayer.Instance.CurrentPlayer = players[i];
-
-                var playerSM = players[i].GetComponent<PlayerStateMachine>();
-                GlobalInputManager.Instance.SetActivePlayer(playerSM);
+                playerSM.SetActive(true);  // Enable this player's inputs
+                //Debug.Log($"Activated player: {players[i].name}");
             }
             else
             {
+                // Deactivate other players
                 playerCameras[i].Priority = 0;
+                playerSM.SetActive(false);  // Disable other players' inputs
             }
         }
     }
 
-
     public void AddPlayer(GameObject newPlayer)
     {
-        Debug.Log("Adding " + newPlayer.name);
+        //Debug.Log("Adding " + newPlayer.name);
 
         var managePlayer = newPlayer.GetComponent<PlayerStateMachine>();
         managePlayer.PlayerID = PlayerIDNumber++;
@@ -179,7 +189,6 @@ public class PlayerSwitch : MonoBehaviour
 
         Debug.Log($"Added new player. Total players: {players.Count}");
     }
-
 
     public void RemovePlayer(GameObject playerToRemove)
     {
@@ -220,7 +229,4 @@ public class PlayerSwitch : MonoBehaviour
             players[i].GetComponent<PlayerStateMachine>().PlayerID = i;
         }
     }
-
-
-
 }

@@ -18,15 +18,29 @@ public class CameraControlSwitcher : MonoBehaviour
     public void DisableSwitching() { GlobalInputManager.Instance.DisableControlSwapping(); }
     public void EnableSwitching() { GlobalInputManager.Instance.EnableControlSwapping(); }
 
-    void Onable()
+    void Awake()
     {
-        inputActions = new InputSystem_Actions();
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
         Instance = this;
+        
+        inputActions = new InputSystem_Actions();
+    }
+
+    void OnEnable()
+    {
+        // Subscribe to toggle camera control
+        inputActions.ControlManager.ToggleCameraControl.performed += OnToggleCameraControl;
+        inputActions.ControlManager.Enable();
+    }
+
+    void OnDisable()
+    {
+        // Unsubscribe when disabled
+        inputActions.ControlManager.ToggleCameraControl.performed -= OnToggleCameraControl;
     }
 
     void Start()
@@ -35,11 +49,11 @@ public class CameraControlSwitcher : MonoBehaviour
             soundEffectsManager = FindAnyObjectByType<AudioManager>();
 
         GlobalInputManager.Instance.ControlSwitchingInputs = inputActions;
-        
     }
 
     public void OnToggleCameraControl(InputAction.CallbackContext context)
     {
+        Debug.Log("Switching camera button pressed"); 
         if (!_camModeIsTogglable) return;
         if (!context.performed) return;
 
@@ -48,7 +62,7 @@ public class CameraControlSwitcher : MonoBehaviour
             SwitchToCameraControl();
             return;
         }
-
+        
         soundEffectsManager?.Play("Switching Cameras");
         ToggleControl();
     }
@@ -64,10 +78,23 @@ public class CameraControlSwitcher : MonoBehaviour
     public void SwitchToPlayerControl()
     {
         FreeCamIsActive = false;
-        GlobalInputManager.Instance.EnableCharacterControls();
+        
+        // Disable freecam
         GlobalInputManager.Instance.DisableCameraControls();
-        //cameraMovement.enabled = false;
 
+        // Get the current active player and enable their inputs
+        var currentPlayer = ActivePlayer.Instance.CurrentPlayer?.GetComponent<PlayerStateMachine>();
+        if (currentPlayer != null)
+        {
+            currentPlayer.SetActive(true);
+            Debug.Log($"SwitchToPlayerControl: Enabled {currentPlayer.gameObject.name}");
+        }
+        else
+        {
+            Debug.LogError("SwitchToPlayerControl: No current player found!");
+        }
+
+        // Update camera priorities
         var playerCam = ActivePlayer.Instance.GetCurrentPlayerCamera();
         if (playerCam != null)
         {
@@ -78,30 +105,31 @@ public class CameraControlSwitcher : MonoBehaviour
         {
             freeCam.Priority = 1;
         }
-
-        var playerController = ActivePlayer.Instance.CurrentPlayer?.GetComponent<PlayerStateMachine>();
-        GlobalInputManager.Instance?.EnableCharacterControls();
     }
 
     public void SwitchToCameraControl()
     {
         FreeCamIsActive = true;
 
-        GlobalInputManager.Instance.DisableCharacterControls();
+        // Disable the current player's inputs
+        var currentPlayer = ActivePlayer.Instance.CurrentPlayer?.GetComponent<PlayerStateMachine>();
+        if (currentPlayer != null)
+        {
+            currentPlayer.SetActive(false);
+        }
+
+        // Enable freecam controls
         GlobalInputManager.Instance.EnableCameraControls();
 
+        // Update camera position and priority
         var playerCam = ActivePlayer.Instance.GetCurrentPlayerCamera();
-
-        freeCam.transform.position = playerCam.transform.position;
-        freeCam.Lens.FieldOfView = playerCam.Lens.FieldOfView;
-
-        freeCam.Priority = 2;
-
-        playerCam.Priority = 0;
-
-        //  disable control of the player while freecam is active
-        //var playerController = activePlayer.CurrentPlayer?.GetComponent<PlayerStateMachine>();
-        GlobalInputManager.Instance?.DisableCharacterControls();
+        if (playerCam != null && freeCam != null)
+        {
+            freeCam.transform.position = playerCam.transform.position;
+            freeCam.Lens.FieldOfView = playerCam.Lens.FieldOfView;
+            freeCam.Priority = 2;
+            playerCam.Priority = 0;
+        }
     }
 
     public void DeadFreeCam()
@@ -118,8 +146,12 @@ public class CameraControlSwitcher : MonoBehaviour
 
         playerCam.Priority = 0;
 
-        //var playerController = activePlayer.CurrentPlayer?.GetComponent<PlayerStateMachine>();
-        GlobalInputManager.Instance?.DisableCharacterControls();
+        // Disable current player
+        var currentPlayer = ActivePlayer.Instance.CurrentPlayer?.GetComponent<PlayerStateMachine>();
+        if (currentPlayer != null)
+        {
+            currentPlayer.SetActive(false);
+        }
 
         if (soundEffectsManager != null)
             soundEffectsManager.gameObject.SetActive(false);
