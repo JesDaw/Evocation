@@ -1,35 +1,61 @@
 using UnityEngine;
-using System.Collections;
 
 public class PlayerAttackState : PlayerBaseState
 {
     bool _attackOver = false;
+    float _timer = 0f;
+    enum AttackPhase { Startup, Cooldown, Done }
+    AttackPhase _phase = AttackPhase.Startup;
+    AttackType currentAttackType;
+
     public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
     {
         IsRootState = true;
-
     }
+
     public override void EnterState()
     {
         _attackOver = false;
-        Debug.Log("Attacking!!!");
-        HandleAttack();
+        
+        Ctx.PlayerCommander.TakePendingCmd(DiscretePlayerCommand.Attack);
+        
+        Ctx.Animator.SetBool("IsAttacking", true);
+        
+        currentAttackType = Ctx.ScrStats._AttackType;
+        if(currentAttackType == null) 
+        {
+            Debug.LogWarning("<color=yellow>No AttackType on player</color>");
+            _attackOver = true;
+            return;
+        }
+
+        _phase = AttackPhase.Startup;
+        _timer = 0f;
     }
 
     public override void UpdateState()
     {
+        Tick(Time.deltaTime);
         CheckSwitchStates();
     }
+    
     public override void CheckSwitchStates()
     {
-        if (Ctx.IsKnockedBack) { SwitchState(Factory.KnockedBack()); }
+        // Knockback can interrupt attack at any time
+        if (Ctx.IsKnockedBack) 
+        { 
+            SwitchState(Factory.KnockedBack()); 
+            return;
+        }
+        
+        // Only transition out when attack is complete
         if (_attackOver)
         {
             var nextState = Factory.GetNextState(Ctx.PlayerCommander);
+            
             if (this.Equals(nextState))
             {
-                // If we're here then there must be another attack command
-                // in the queue.  We'll service it by restarting this state.
+                // Another attack command is queued, restart the attack
                 EnterState();
             }
             else
@@ -39,62 +65,52 @@ public class PlayerAttackState : PlayerBaseState
         }
     }
 
+    public void Tick(float deltaTime)
+    {
+        _timer += deltaTime * 1000; 
+
+        switch (_phase)
+        {
+            case AttackPhase.Startup:
+                if (Ctx.AnimatorController.ShouldAttack())
+                {
+                    currentAttackType.Attack(Ctx);
+                    Ctx.AttackingAudio.Play();
+
+                    _timer = 0f;
+                    _phase = AttackPhase.Cooldown;
+                }
+                break;
+
+            case AttackPhase.Cooldown:
+                Ctx.Animator.SetBool("IsAttacking", false);
+                
+                if (_timer >= currentAttackType._AttackEndlag)
+                {
+                    _phase = AttackPhase.Done;
+                }
+                break;
+
+            case AttackPhase.Done:
+                // keep only 1 queued attack to prevent buffer locking
+                if (Ctx.PlayerCommander.IsCmdPending(DiscretePlayerCommand.Attack))
+                {
+                    Ctx.PlayerCommander.ClearPendingCmds(DiscretePlayerCommand.Attack);
+                    Ctx.PlayerCommander.SendCmd(DiscretePlayerCommand.Attack, null);
+                }
+                
+                _attackOver = true;
+                break;
+        }
+    }
+
     public override void ExitState()
     {
-        //if we want something to happen as the state is left
+        Ctx.Animator.SetBool("IsAttacking", false);
     }
 
     public override void InitializeSubState()
     {
-        // if this gets substates
-    }
-
-    void HandleAttack()
-    {
-        Ctx.StartCoroutine(AttackRoutine());
-    }
-    IEnumerator AttackRoutine()
-    {
-        yield return new WaitForSeconds(10);
-        _attackOver = false;
-
-        Ctx.PlayerCommander.TakePendingCmd(DiscretePlayerCommand.Attack);
-        yield return new WaitForSeconds(2);
-
-        // Active hit
-        AttackActive();
-        Ctx.AttackingAudio.Play();
-
-        // Endlag
-        yield return new WaitForSeconds(Ctx.PlayerAttackType._AttackEndlag);
-        _attackOver = true;
-
-        // If any attack commands are still in the buffer, only keep 1 of them so 
-        // attacks don't pile up
-
-        if (Ctx.PlayerCommander.IsCmdPending(DiscretePlayerCommand.Attack))
-        {
-            Ctx.PlayerCommander.ClearPendingCmds(DiscretePlayerCommand.Attack);
-            Ctx.PlayerCommander.SendCmd(DiscretePlayerCommand.Attack, null);
-        }
-        Ctx.PlayerCommander.ClearPendingCmds(DiscretePlayerCommand.Attack);
-    }
-    void AttackActive()
-    {
-        // animator.SetTrigger("Attack");
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(Ctx.AttackPoint.position, 0, Ctx.EnemyLayers);
-        Debug.Log("AttemptedAttacked");
-
-        foreach (Collider2D enemy in hitEnemies)
-        {
-            if (enemy.TryGetComponent<Stats>(out Stats enemyStats))
-            {
-                Ctx.PlayerAttackType.DealDamage(enemyStats);
-            }
-            else
-            {
-                Debug.LogError(enemy.name + " is missing Stats!");
-            }
-        }
+        // No substates needed
     }
 }

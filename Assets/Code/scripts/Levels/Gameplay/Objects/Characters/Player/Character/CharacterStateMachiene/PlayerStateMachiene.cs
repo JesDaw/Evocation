@@ -3,14 +3,16 @@ using UnityEngine.InputSystem;
 
 public class PlayerStateMachine : MonoBehaviour
 {
+    [SerializeField] ScriptableStats _scrStats; // Use the same ScriptableStats as CPU!
     [SerializeField] Stats _playerStats;
     [SerializeField] Animator _animator;
     [SerializeField] Rigidbody2D _rb;
     [SerializeField] AudioSource _walkingAudio;
-    [SerializeField] AttackType _playerAttackType;
-    [SerializeField] Transform attackPoint;
-    [SerializeField] LayerMask enemyLayers;
     [SerializeField] AudioSource attackingAudio;
+    [SerializeField] AnimationEventsController _animatorController;
+    
+    // Add this to match CPU's _AttackingStats
+    [HideInInspector] public Stats _AttackingStats;
 
     // Each player has their own input instance
     public InputSystem_Actions playerInputActions;
@@ -23,15 +25,14 @@ public class PlayerStateMachine : MonoBehaviour
     int playerId;
 
     //==========================================getters and setters=================================================
+    public ScriptableStats ScrStats { get { return _scrStats; } } // Add this
     public Stats PlayerStats { get { return _playerStats; } }
     public Animator Animator { get { return _animator; } }
+    public AnimationEventsController AnimatorController { get { return _animatorController; } }
     public PlayerCommander PlayerCommander { get { return _commander; } }
     public Rigidbody2D Rb { get { return _rb; } }
     public AudioSource WalkingAudio { get { return _walkingAudio; } }
-    public AttackType PlayerAttackType { get {return _playerAttackType;} }
     public AudioSource AttackingAudio { get { return attackingAudio; } }
-    public LayerMask EnemyLayers { get { return enemyLayers; } }
-    public Transform AttackPoint { get { return attackPoint; } }
     public int PlayerID { get; set; }
     
     public bool IsMovementPressed { get { return _commander.IsCmdActive(ContinuousPlayerCommand.Move); } }
@@ -66,6 +67,34 @@ public class PlayerStateMachine : MonoBehaviour
     void Start()
     {
         FindFreeCam();
+        InitializeStatsFromScriptable(); // Initialize player stats from ScriptableStats
+    }
+
+    void InitializeStatsFromScriptable()
+    {
+        if (_scrStats == null)
+        {
+            Debug.LogWarning("No ScriptableStats assigned to player!");
+            return;
+        }
+
+        // Initialize stats like CPU does in CpuStateManager.Start()
+        _playerStats._MaxHealth = _scrStats._MaxHealth;
+        _playerStats._CurrentHealth = _scrStats._MaxHealth;
+        _playerStats._MoveSpeed = _scrStats._MoveSpeed;
+        _playerStats._KnockBackHealth = _scrStats._KnockBackMax;
+        _playerStats._KnockBackMax = _scrStats._KnockBackMax;
+        
+        // Set clan/team (players are not enemies)
+        _playerStats._Enemy = false;
+        _playerStats._Clan = Evocation.Clans.ClansList.Player;
+        gameObject.tag = _playerStats._Clan.ToString();
+        
+        // Set up CPU priority for targeting
+        if (!_playerStats._CpuPriority.Contains(Evocation.Clans.ClansList.Enemy))
+        {
+            _playerStats._CpuPriority.Insert(0, Evocation.Clans.ClansList.Enemy);
+        }
     }
 
     void OnEnable()
@@ -116,28 +145,23 @@ public class PlayerStateMachine : MonoBehaviour
         if (active)
         {
             playerInputActions.Player.Enable();
-            //Debug.Log($"{gameObject.name} inputs ENABLED");
         }
         else
         {
             playerInputActions.Player.Disable();
-            //Debug.Log($"{gameObject.name} inputs DISABLED");
         }
     }
 
     //==========================================Input callbacks===================================================
-    // These only process input when this player is active
     public void OnMove(InputAction.CallbackContext context)
     {
-        //Debug.Log($"{gameObject.name} OnMove called - Active: {_isActive}, Value: {context.ReadValue<Vector2>()}");
-        if (!_isActive) return; // Block input if not active
+        if (!_isActive) return; 
         _commander.OnMove(context);
     }
 
     public void OnAttack(InputAction.CallbackContext context)
     {
-        //Debug.Log($"{gameObject.name} OnAttack called - Active: {_isActive}");
-        if (!_isActive) return; // Block input if not active
+        if (!_isActive) return; 
         _commander.OnAttack(context);
     }
 
@@ -148,7 +172,6 @@ public class PlayerStateMachine : MonoBehaviour
 
     void OnDestroy()
     {
-        // Clean up
         playerInputActions?.Dispose();
     }
 }
