@@ -17,7 +17,8 @@ public class PlayerMoveState : PlayerBaseState
 
     public override void EnterState()
     {
-        //Debug.Log($"{Ctx.gameObject.name}: Entered MOVE state");
+        //_context._Animator.SetBool("IsRunning", true);
+        //_context._Animator.SetFloat("RunningSpeed", _context._ScrStats._AnimationMoveSpeed);
     }
 
     public override void ExitState()
