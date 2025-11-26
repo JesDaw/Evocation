@@ -105,7 +105,7 @@ public class CpuStateManager : MonoBehaviour
 
     void replaceAnimation()
     {
-        Transform _cpuRig = transform.Find("CpuAppearance")?.Find("CpuRig");
+        Transform _cpuRig = transform.Find("Appearance")?.Find("Rig");
         if (_cpuRig == null || _ScrStats._animator == null)
         {
             Debug.LogWarning("No Cpu Rig!! (for animation)");

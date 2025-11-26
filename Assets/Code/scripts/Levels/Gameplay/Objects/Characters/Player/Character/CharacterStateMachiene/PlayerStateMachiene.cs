@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -5,11 +6,13 @@ public class PlayerStateMachine : MonoBehaviour
 {
     [SerializeField] ScriptableStats _scrStats; // Use the same ScriptableStats as CPU!
     [SerializeField] Stats _playerStats;
-    [SerializeField] Animator _animator;
     [SerializeField] Rigidbody2D _rb;
+    [Header("Audio")]
     [SerializeField] AudioSource _walkingAudio;
     [SerializeField] AudioSource attackingAudio;
+    [Header("Animation")]
     [SerializeField] AnimationEventsController _animatorController;
+    [SerializeField] Animator _animator;
     
     // Add this to match CPU's _AttackingStats
     [HideInInspector] public Stats _AttackingStats;
@@ -68,6 +71,7 @@ public class PlayerStateMachine : MonoBehaviour
     {
         FindFreeCam();
         InitializeStatsFromScriptable(); // Initialize player stats from ScriptableStats
+        StartCoroutine(Startup());
     }
 
     void InitializeStatsFromScriptable()
@@ -150,6 +154,87 @@ public class PlayerStateMachine : MonoBehaviour
         {
             playerInputActions.Player.Disable();
         }
+    }
+    //==animation replacement
+    void toggleEverything(bool enable)
+    {
+        var components = GetComponents<MonoBehaviour>();
+        foreach (var comp in components)
+        {
+            if (comp != this)
+            {
+                comp.enabled = enable;
+            }
+        }
+
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).gameObject.SetActive(enable);
+        }
+    }
+
+    IEnumerator Startup()
+    {
+        yield return new WaitUntil(() => transform.childCount >= ScrStats._Sprites.Length);
+        replaceAnimation();
+        toggleEverything(true);
+
+        if(Animator != null)
+        {
+            Animator.Rebind();
+            Animator.Update(0f);
+        }
+    }
+
+    void replaceAnimation()
+    {
+        Transform _Rig = transform.Find("Appearance")?.Find("Rig");
+        if (_Rig == null || ScrStats._animator == null)
+        {
+            Debug.LogWarning("No Cpu Rig!! (for animation)");
+            return;
+        }
+
+        for (int i = 0; i < ScrStats._Sprites.Length; ++i)
+        {
+            var spriteData = ScrStats._Sprites[i];
+            string rigName = null;
+
+            switch (spriteData.Key)
+            {
+                case animationRigs.animationKey.Idle: rigName = "IdleRig"; break;
+                case animationRigs.animationKey.Running: rigName = "RunningRig"; break;
+                case animationRigs.animationKey.Knockback: rigName = "KnockbackRig"; break;
+                case animationRigs.animationKey.Attack: rigName = "AttackingRig"; break;
+                default: continue;
+            }
+
+            var existing = _Rig.Find(rigName);
+            if (existing != null)
+                Destroy(existing.gameObject);
+
+            spriteData.Rig.transform.position = new Vector3(
+                spriteData.Offset.x,
+                spriteData.Offset.y,
+                spriteData.Rig.transform.position.z
+            );
+
+            if (ScrStats._Rotate)
+            {
+                spriteData.Rig.transform.rotation = Quaternion.Euler(0, 180, 0);
+            }
+            else
+            {
+                spriteData.Rig.transform.rotation = Quaternion.identity;
+            }
+
+            GameObject newRig = Instantiate(spriteData.Rig, _Rig);
+            newRig.name = rigName;
+
+            if(rigName != "RunningRig") newRig.SetActive(false);
+        }
+
+        Animator.runtimeAnimatorController = ScrStats._animator;
     }
 
     //==========================================Input callbacks===================================================
