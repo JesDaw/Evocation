@@ -156,28 +156,10 @@ public class PlayerStateMachine : MonoBehaviour
         }
     }
     //==animation replacement
-    void toggleEverything(bool enable)
-    {
-        var components = GetComponents<MonoBehaviour>();
-        foreach (var comp in components)
-        {
-            if (comp != this)
-            {
-                comp.enabled = enable;
-            }
-        }
-
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            transform.GetChild(i).gameObject.SetActive(enable);
-        }
-    }
-
     IEnumerator Startup()
     {
         yield return new WaitUntil(() => transform.childCount >= ScrStats._Sprites.Length);
         replaceAnimation();
-        toggleEverything(true);
 
         if(Animator != null)
         {
@@ -219,14 +201,7 @@ public class PlayerStateMachine : MonoBehaviour
                 spriteData.Rig.transform.position.z
             );
 
-            if (ScrStats._Rotate)
-            {
-                spriteData.Rig.transform.rotation = Quaternion.Euler(0, 180, 0);
-            }
-            else
-            {
-                spriteData.Rig.transform.rotation = Quaternion.identity;
-            }
+            spriteData.Rig.transform.rotation = Quaternion.Euler(0, 180, 0);
 
             GameObject newRig = Instantiate(spriteData.Rig, _Rig);
             newRig.name = rigName;

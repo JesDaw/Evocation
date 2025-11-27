@@ -14,6 +14,12 @@ public class PlayerIdleState : PlayerBaseState
 
     public override void EnterState()
     {
+        if(Ctx.Animator != null)
+        {
+            Ctx.Animator.Rebind();
+            Ctx.Animator.Update(0f);
+        }
+
         HandleIdle();
     }
 
