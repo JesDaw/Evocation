@@ -55,6 +55,8 @@ public class PlayerStateMachine : MonoBehaviour
     public bool IsClimbing { get { return _commander.IsCmdActive(ContinuousPlayerCommand.Climb); } }
     public bool IsKnockedBack { get { return _commander.IsCmdPending(DiscretePlayerCommand.KnockBack); } }
     public PlayerBaseState CurrentState { get { return _currentState; } set { _currentState = value; } }
+    [HideInInspector]
+    public bool isFacingRight = true;
 
     void Awake()
     {
