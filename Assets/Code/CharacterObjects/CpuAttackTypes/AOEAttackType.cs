@@ -56,7 +56,7 @@ public class AOEAttackType : AttackType
         Debug.Log("Player AOE Attack");
         
         sizeX += _StopDistance;
-        sizeX = _context.PlayerStats._Enemy ? -sizeX : sizeX;
+        sizeX = !_context.isFacingRight ? -sizeX : sizeX;
         
         var rect = new Rect(_context.transform.position.x, _context.transform.position.y, sizeX, sizeY);
         Debug.DrawLine(new Vector3(rect.x, rect.y), new Vector3(rect.x + rect.width, rect.y), Color.blue, 1f);

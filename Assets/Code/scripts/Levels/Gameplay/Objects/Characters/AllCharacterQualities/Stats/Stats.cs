@@ -10,8 +10,6 @@ public class Stats : MonoBehaviour
     // if you wannted to implement that you'll have to store the AttackType Variable somehwere else
     public List<ClansList> _CpuPriority;
     public ClansList _Clan;
-
-    //the above can be made into an enum, but i'll hold off on it until we get all the different clans
     public int _MaxHealth = 1;
     public float _CurrentHealth = 1;
     public float _MoveSpeed;

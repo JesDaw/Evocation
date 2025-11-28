@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class PlayerMoveState : PlayerBaseState
 {
-    bool isFacingRight = true;
-
     public PlayerMoveState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
     {
         IsRootState = true;
@@ -17,13 +15,14 @@ public class PlayerMoveState : PlayerBaseState
 
     public override void EnterState()
     {
-        //_context._Animator.SetBool("IsRunning", true);
-        //_context._Animator.SetFloat("RunningSpeed", _context._ScrStats._AnimationMoveSpeed);
+        Ctx.Animator.SetBool("IsRunning", true);
+        Ctx.Animator.SetFloat("RunningSpeed", Ctx.ScrStats._AnimationMoveSpeed);
     }
 
     public override void ExitState()
     {
-        //Debug.Log($"{Ctx.gameObject.name}: Exited MOVE state");
+        Debug.Log($"{Ctx.gameObject.name}: Exited MOVE state");
+        Ctx.Animator.SetBool("IsRunning", false);
         Ctx.Rb.linearVelocityX = 0;
         Ctx.WalkingAudio.Stop();
     }
@@ -44,8 +43,8 @@ public class PlayerMoveState : PlayerBaseState
 
             Ctx.Rb.linearVelocityX = horizontal * Ctx.PlayerStats._MoveSpeed;
             
-            if (!isFacingRight && horizontal > 0f) Flip();
-            else if (isFacingRight && horizontal < 0f) Flip();
+            if (!Ctx.isFacingRight && horizontal > 0f) Flip();
+            else if (Ctx.isFacingRight && horizontal < 0f) Flip();
         }
         else
         {
@@ -55,7 +54,7 @@ public class PlayerMoveState : PlayerBaseState
 
     private void Flip()
     {
-        isFacingRight = !isFacingRight;
+        Ctx.isFacingRight = !Ctx.isFacingRight;
         Vector3 localScale = Ctx.transform.localScale;
         localScale.x *= -1f;
         Ctx.transform.localScale = localScale;
