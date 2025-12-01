@@ -143,6 +143,12 @@ public class PlayerStateMachine : MonoBehaviour
         _currentState.UpdateStates();
     }
 
+    public void UpdateCurrentStateToKnockback()
+    {
+        _currentState = _states.KnockedBack();
+        _currentState.EnterState();
+    }
+
     // Called by PlayerSwitch to activate/deactivate this player's INPUTS
     public void SetActive(bool active)
     {

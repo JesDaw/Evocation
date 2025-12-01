@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using DG.Tweening;
 
 public class Projectile : MonoBehaviour
 {
@@ -35,11 +36,17 @@ public class Projectile : MonoBehaviour
         }
 
 
-        t += Time.deltaTime * speed;
+        t += Time.deltaTime;
         float yPos = curve.Evaluate(t);
 
+        float newX = Mathf.MoveTowards(
+            startPos.x,
+            target.position.x,
+            t * speed
+        );
+
         transform.position = new Vector3(
-            Mathf.Lerp(startPos.x, target.position.x, t),
+            newX,
             startPos.y + (yPos * distance),
             0f
         );
@@ -48,7 +55,7 @@ public class Projectile : MonoBehaviour
         float angle = Mathf.Atan2(nextY - yPos, 0.01f) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, angle + offset);
 
-        if (t >= 1f)
+        if (Mathf.Abs(transform.position.x - target.position.x) < 0.01f)
         {
             onHit?.Invoke();
             Destroy(gameObject);

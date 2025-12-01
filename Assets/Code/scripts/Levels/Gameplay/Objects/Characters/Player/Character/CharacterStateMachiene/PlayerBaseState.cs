@@ -1,3 +1,4 @@
+using UnityEngine;
 public abstract class PlayerBaseState
 {
     private bool _isRootState = false;
@@ -10,6 +11,14 @@ public abstract class PlayerBaseState
     protected bool IsRootState { get { return _isRootState; } set { _isRootState = value; } }
     protected PlayerStateMachine Ctx { get { return _ctx; } }
     protected PlayerStateFactory Factory { get { return _factory; } }
+
+    protected void Flip()
+    {
+        Ctx.isFacingRight = !Ctx.isFacingRight;
+        Vector3 localScale = Ctx.transform.localScale;
+        localScale.x *= -1f;
+        Ctx.transform.localScale = localScale;
+    }
 
 
     public PlayerBaseState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory)

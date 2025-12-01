@@ -41,6 +41,7 @@ public class BuildingStatsManager : MonoBehaviour
             _Stats._Clan = ClansList.Allies;
 
         gameObject.tag = _Stats._Clan.ToString();
+        SetMax();
         _Stats._CurrentHealth = _ScrStats._MaxHealth;
         _Stats._MoveSpeed = _ScrStats._MoveSpeed;
 
