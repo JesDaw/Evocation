@@ -42,8 +42,8 @@ GameObject:
   m_Component:
   - component: {fileID: 491020825800668630}
   m_Layer: 0
-  m_Name: CpuAppearance
-  m_TagString: Untagged
+  m_Name: Appearance
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -74,9 +74,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6556064229918282668}
   - component: {fileID: 7548955430503638842}
+  - component: {fileID: 3859775499832756399}
   m_Layer: 0
-  m_Name: CpuRig
-  m_TagString: Untagged
+  m_Name: Rig
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -90,7 +91,7 @@ Transform:
   m_GameObject: {fileID: 212470894599092082}
   serializedVersion: 2
   m_LocalRotation: {x: 1, y: -0, z: -0, w: 0}
-  m_LocalPosition: {x: 0, y: 2.15, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -122,6 +123,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3859775499832756399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 212470894599092082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ae0d9a0d53bb534398da044ca760a04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &359240073732573571
 GameObject:
   m_ObjectHideFlags: 0
@@ -1054,7 +1067,7 @@ GameObject:
   - component: {fileID: 2199311988452389250}
   m_Layer: 0
   m_Name: AttackingRig
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1068,7 +1081,7 @@ Transform:
   m_GameObject: {fileID: 3226075318321910640}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1447,7 +1460,7 @@ GameObject:
   - component: {fileID: 6618227199915539814}
   m_Layer: 0
   m_Name: RunningRig
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1461,7 +1474,7 @@ Transform:
   m_GameObject: {fileID: 3786476230260545861}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: -0.39, z: 0}
+  m_LocalPosition: {x: 0, y: 0.42, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1788,7 +1801,7 @@ GameObject:
   - component: {fileID: 5343377815608489414}
   m_Layer: 0
   m_Name: Healthbar
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2425,7 +2438,7 @@ GameObject:
   - component: {fileID: 2481943967807030432}
   m_Layer: 0
   m_Name: IdleRig
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2438,8 +2451,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5232665688660222708}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -1, w: 0}
-  m_LocalPosition: {x: 0.18, y: 2.8, z: 0}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: -1.82, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2456,7 +2469,7 @@ Transform:
   - {fileID: 7814105821656807900}
   - {fileID: 1758651914544456192}
   m_Father: {fileID: 6556064229918282668}
-  m_LocalEulerAnglesHint: {x: 180, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &5315693671573530907
 GameObject:
   m_ObjectHideFlags: 0
@@ -2558,7 +2571,7 @@ GameObject:
   - component: {fileID: 3396496971449982794}
   m_Layer: 0
   m_Name: CpuRaycast
-  m_TagString: TreeGang
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3864,7 +3877,7 @@ GameObject:
   - component: {fileID: 4909453454241894594}
   m_Layer: 0
   m_Name: KnockbackRig
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3878,7 +3891,7 @@ Transform:
   m_GameObject: {fileID: 6838455538930974439}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0.14, y: 2.92, z: 0}
+  m_LocalPosition: {x: 0, y: 0.42, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4575,13 +4588,13 @@ GameObject:
   - component: {fileID: 6780557470148160586}
   - component: {fileID: 5848340058514809631}
   - component: {fileID: 1539593309633758572}
-  - component: {fileID: 2713458167711584994}
+  - component: {fileID: 6265351297120461175}
   - component: {fileID: 5705592259659799490}
   - component: {fileID: 6552615881447152400}
   - component: {fileID: 8539166552315940901}
   m_Layer: 0
   m_Name: CpuEnemy
-  m_TagString: LavaBros
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4617,11 +4630,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58e63e2c27f90dc4490cca512f4dfe2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ScrStats: {fileID: 11400000, guid: b6992adb71df9b441bc53d51187ea154, type: 2}
+  _ScrStats: {fileID: 11400000, guid: d4daadf164451854c8c5982cee62e5f9, type: 2}
   _Stats: {fileID: 5848340058514809631}
   _Body: {fileID: 5705592259659799490}
   _Raycast: {fileID: 3396496971449982794}
   _Animator: {fileID: 7548955430503638842}
+  _AnimatorController: {fileID: 3859775499832756399}
   OnInitStats:
     _PersistentCalls: []
   _AttackingStats: {fileID: 0}
@@ -4655,26 +4669,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e04091fb59721b64188e07ceb7d885e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _CpuPriority:
-  - 
-  - 
-  _Clan: 
+  _CpuPriority: 0100000002000000
+  _Clan: 0
   _MaxHealth: 1
   _CurrentHealth: 1
-  _AttackDamage: 0
-  _AttackStartup: 0
-  _AttackEndlag: 0
   _MoveSpeed: 0
-  _StopDistance: 0
   _KnockBackMax: 0
   _KnockBackHealth: 0
-  _KnockBackVelocity: 0
   _spawnCost: 0
   _StatusEffects: []
   _StatusTicksMax: []
   _StatusTicks: []
-  _StatusMax: 0
-  _StatusHealth: 0
   OnDeath:
     _PersistentCalls: []
   OnDamage:
@@ -4706,7 +4711,6 @@ MonoBehaviour:
   _Invincible: 0
   _DontDestroy: 0
   _Enemy: 1
-  attackType: {fileID: 0}
 --- !u!114 &1539593309633758572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4720,8 +4724,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _body: {fileID: 5705592259659799490}
---- !u!58 &2713458167711584994
-CircleCollider2D:
+--- !u!70 &6265351297120461175
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -4736,7 +4740,7 @@ CircleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 2048
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -4754,8 +4758,9 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 0.5
+  m_Offset: {x: -0, y: 0}
+  m_Size: {x: 0.5, y: 1.5}
+  m_Direction: 0
 --- !u!50 &5705592259659799490
 Rigidbody2D:
   serializedVersion: 5
@@ -5338,7 +5343,7 @@ GameObject:
   - component: {fileID: 32801805885208401}
   m_Layer: 3
   m_Name: MiniMapIcon
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

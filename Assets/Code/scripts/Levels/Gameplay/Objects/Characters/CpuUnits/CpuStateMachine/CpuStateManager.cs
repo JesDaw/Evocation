@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using UnityEngine.Events;
+using System.Collections;
 using UnityEngine;
-using UnityEngine.Analytics;
+using DG.Tweening.Core.Enums;
 public class CpuStateManager : MonoBehaviour
 {
     public enum State
@@ -15,6 +15,7 @@ public class CpuStateManager : MonoBehaviour
     public Rigidbody2D _Body;
     public Transform _Raycast;
     public Animator _Animator;
+    public AnimationEventsController _AnimatorController;
     CpuBaseState _currentState;
 
     public Dictionary<State, CpuBaseState> _State = new Dictionary<State, CpuBaseState>();
@@ -22,61 +23,90 @@ public class CpuStateManager : MonoBehaviour
 
     //[HideInInspector]
     public Stats _AttackingStats;
-    void Awake()
+
+    void toggleEverything(bool enable)
     {
-        if (_ScrStats._Sprites.Length > 0) replaceAnimation(); 
+        var components = GetComponents<MonoBehaviour>();
+        foreach (var comp in components)
+        {
+            if (comp != this)
+            {
+                comp.enabled = enable;
+            }
+        }
+
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).gameObject.SetActive(enable);
+        }
     }
 
     void Start()
     {
-        _Stats._Clan = _ScrStats._Clan;
-        gameObject.tag = _Stats._Clan;
+        toggleEverything(false);
+        if(_Stats._Enemy)
+            _Stats._Clan = Evocation.Clans.ClansList.Enemy;
+        else
+            _Stats._Clan = Evocation.Clans.ClansList.Allies;
+
+        gameObject.tag = _Stats._Clan.ToString();
         _Stats._MaxHealth = _ScrStats._MaxHealth;
-        _Stats._CurrentHealth = _ScrStats._CurrentHealth;
+        _Stats._CurrentHealth = _ScrStats._MaxHealth;
 
         // info
-        _Stats._AttackStartup = _ScrStats._AttackStartup;
-        _Stats._AttackDamage = _ScrStats._AttackDamage;
-        _Stats._AttackEndlag = _ScrStats._AttackEndlag;
         _Stats._MoveSpeed = _ScrStats._MoveSpeed;
 
-        //just looks better if they slightyoffset
-        float randomNumber = Random.Range(-0.3f, 0.3f);
-        _Stats._StopDistance = _ScrStats._StopDistance + randomNumber;
-        _Stats._CpuPriority = _ScrStats._CpuPriority;
-        //if(_Stats._Enemy) _Stats._CpuPriority.Insert(0, "Player");
+        if(!_Stats._Enemy && !_Stats._CpuPriority.Contains(Evocation.Clans.ClansList.Enemy))
+            _Stats._CpuPriority.Insert(0, Evocation.Clans.ClansList.Enemy);
+
+        if(_Stats._Enemy && !_Stats._CpuPriority.Contains(Evocation.Clans.ClansList.Player))
+            _Stats._CpuPriority.Insert(0, Evocation.Clans.ClansList.Player);
+
+        if(_Stats._Enemy && !_Stats._CpuPriority.Contains(Evocation.Clans.ClansList.Allies))
+            _Stats._CpuPriority.Insert(0, Evocation.Clans.ClansList.Allies);
 
         //knockback
-        _Stats._KnockBackHealth = _ScrStats._KnockBackHealth;
-        _Stats._KnockBackVelocity = _ScrStats._KnockBackVelocity;
-        _Stats._KnockBackMax = _ScrStats._KnockBackHealth;
+        _Stats._KnockBackHealth = _ScrStats._KnockBackMax;
+        _Stats._KnockBackMax = _ScrStats._KnockBackMax;
 
-        //status effects
-        _Stats._StatusHealth = _ScrStats._StatusHealth;
-        _Stats._StatusMax = _ScrStats._StatusHealth;
-        
         OnInitStats.Invoke(_Stats);
-
 
         _State[State.Move] = new CpuMoveState(this);
         _State[State.Attack] = new CpuAttackState(this);
 
         _State[State.KnockBack] = new CpuKnockBackState(this);
 
+        StartCoroutine(Startup());
+    }
+    IEnumerator Startup()
+    {
+        UpdateCurrentState(State.Move);
+        yield return new WaitUntil(() => transform.childCount >= _ScrStats._Sprites.Length);
+        replaceAnimation();
+        toggleEverything(true);
+
+        if(_Animator != null)
+        {
+            _Animator.Rebind();
+            _Animator.Update(0f);
+        }
+
         UpdateCurrentState(State.Move);
     }
+
     public void UpdateCurrentState(State state)
     {
-        _Animator.Rebind();
-        _Animator.Update(0f);
+        if(_Animator != null)
+            _Animator.Rebind();
+
         _currentState = _State[state];
         _currentState.EnterState();
     }
 
     void replaceAnimation()
     {
-        Transform _cpuRig = transform.Find("CpuAppearance")?.Find("CpuRig");
-        if (_cpuRig == null)
+        Transform _cpuRig = transform.Find("Appearance")?.Find("Rig");
+        if (_cpuRig == null || _ScrStats._animator == null)
         {
             Debug.LogWarning("No Cpu Rig!! (for animation)");
             return;
@@ -106,22 +136,32 @@ public class CpuStateManager : MonoBehaviour
                 spriteData.Rig.transform.position.z
             );
 
+            if (_ScrStats._Rotate)
+            {
+                spriteData.Rig.transform.rotation = Quaternion.Euler(0, 180, 0);
+            }
+            else
+            {
+                spriteData.Rig.transform.rotation = Quaternion.identity;
+            }
+
             GameObject newRig = Instantiate(spriteData.Rig, _cpuRig);
             newRig.name = rigName;
+
             if (_Stats._Enemy)
                 newRig.transform.Rotate(0, 180, 0);
+            else
+                newRig.transform.Rotate(0, -180, 0);
 
             if(rigName != "RunningRig") newRig.SetActive(false);
         }
 
         _Animator.runtimeAnimatorController = _ScrStats._animator;
-        _Animator.Rebind();
-        _Animator.Update(0f);
     }
-
 
     void Update()
     {
         _currentState.UpdateState();
     }
+
 }

@@ -31,10 +31,8 @@ public class ActivePlayer : MonoBehaviour
         Instance = this;
     }
 
-    void Start()
-    {
-        GlobalInputManager.Instance.SetActivePlayer(GetCurrentPlayerController());
-    }
+    // Removed the GlobalInputManager.SetActivePlayer() call
+    // PlayerSwitch now handles activating player inputs directly
 
     public GameObject CurrentPlayer
     {
@@ -52,7 +50,6 @@ public class ActivePlayer : MonoBehaviour
 
     public CinemachineCamera GetCurrentPlayerCamera()
     {
-
         if (_currentPlayer == null)
         {
             Debug.LogError("Current player isnt set");
@@ -61,6 +58,7 @@ public class ActivePlayer : MonoBehaviour
 
         return _currentPlayer.GetComponentInChildren<CinemachineCamera>();
     }
+    
     public PlayerStateMachine GetCurrentPlayerController()
     {
         if (_currentPlayer == null)
@@ -72,4 +70,3 @@ public class ActivePlayer : MonoBehaviour
         return _currentPlayer?.GetComponent<PlayerStateMachine>();
     }
 }
-

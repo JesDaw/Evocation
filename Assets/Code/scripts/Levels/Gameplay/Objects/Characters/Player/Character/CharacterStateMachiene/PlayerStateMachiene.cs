@@ -1,38 +1,43 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerStateMachine : MonoBehaviour
 {
+    [SerializeField] ScriptableStats _scrStats; // Use the same ScriptableStats as CPU!
     [SerializeField] Stats _playerStats;
-    [SerializeField] Animator _animator;
-
     [SerializeField] Rigidbody2D _rb;
+    [Header("Audio")]
     [SerializeField] AudioSource _walkingAudio;
-
-    [SerializeField] Transform attackPoint;
-    [SerializeField] LayerMask enemyLayers;
     [SerializeField] AudioSource attackingAudio;
-    //internal bool controlable;
-    //internal bool _camModeIsTogglable;
+    [Header("Animation")]
+    [SerializeField] AnimationEventsController _animatorController;
+    [SerializeField] Animator _animator;
+    
+    // Add this to match CPU's _AttackingStats
+    [HideInInspector] public Stats _AttackingStats;
+
+    // Each player has their own input instance
+    public InputSystem_Actions playerInputActions;
+    private bool _isActive = false;
 
     // states
     PlayerBaseState _currentState;
     PlayerStateFactory _states;
-
     PlayerCommander _commander;
     int playerId;
 
     //==========================================getters and setters=================================================
-    //universal stuff 
+    public ScriptableStats ScrStats { get { return _scrStats; } } // Add this
     public Stats PlayerStats { get { return _playerStats; } }
     public Animator Animator { get { return _animator; } }
-
+    public AnimationEventsController AnimatorController { get { return _animatorController; } }
     public PlayerCommander PlayerCommander { get { return _commander; } }
-
-
-    // move state
     public Rigidbody2D Rb { get { return _rb; } }
     public AudioSource WalkingAudio { get { return _walkingAudio; } }
+    public AudioSource AttackingAudio { get { return attackingAudio; } }
+    public int PlayerID { get; set; }
+    
     public bool IsMovementPressed { get { return _commander.IsCmdActive(ContinuousPlayerCommand.Move); } }
     public float MovementContext
     {
@@ -43,29 +48,22 @@ public class PlayerStateMachine : MonoBehaviour
             {
                 return data.Value.AsVector2.Value.x;
             }
-
             return 0;
         }
     }
-
-    public AudioSource AttackingAudio { get { return attackingAudio; } }
-    public LayerMask EnemyLayers { get { return enemyLayers; } }
-    public Transform AttackPoint { get { return attackPoint; } }
     public bool IsAttackPressed { get { return _commander.IsCmdPending(DiscretePlayerCommand.Attack); } }
-
-    // Climb state
     public bool IsClimbing { get { return _commander.IsCmdActive(ContinuousPlayerCommand.Climb); } }
-
-    //knockback state
     public bool IsKnockedBack { get { return _commander.IsCmdPending(DiscretePlayerCommand.KnockBack); } }
-
-    // states
     public PlayerBaseState CurrentState { get { return _currentState; } set { _currentState = value; } }
-
-    public int PlayerID { get; set; }
+    [HideInInspector]
+    public bool isFacingRight = true;
 
     void Awake()
     {
+        // Create this player's own input instance
+        playerInputActions = new InputSystem_Actions();
+        
+        // Initialize state machine
         _states = new PlayerStateFactory(this);
         _currentState = _states.Idle();
         _currentState.EnterState();
@@ -74,11 +72,60 @@ public class PlayerStateMachine : MonoBehaviour
     void Start()
     {
         FindFreeCam();
+        InitializeStatsFromScriptable(); // Initialize player stats from ScriptableStats
+        StartCoroutine(Startup());
+    }
+
+    void InitializeStatsFromScriptable()
+    {
+        if (_scrStats == null)
+        {
+            Debug.LogWarning("No ScriptableStats assigned to player!");
+            return;
+        }
+
+        // Initialize stats like CPU does in CpuStateManager.Start()
+        _playerStats._MaxHealth = _scrStats._MaxHealth;
+        _playerStats._CurrentHealth = _scrStats._MaxHealth;
+        _playerStats._MoveSpeed = _scrStats._MoveSpeed;
+        _playerStats._KnockBackHealth = _scrStats._KnockBackMax;
+        _playerStats._KnockBackMax = _scrStats._KnockBackMax;
+        
+        // Set clan/team (players are not enemies)
+        _playerStats._Enemy = false;
+        _playerStats._Clan = Evocation.Clans.ClansList.Player;
+        gameObject.tag = _playerStats._Clan.ToString();
+        
+        // Set up CPU priority for targeting
+        if (!_playerStats._CpuPriority.Contains(Evocation.Clans.ClansList.Enemy))
+        {
+            _playerStats._CpuPriority.Insert(0, Evocation.Clans.ClansList.Enemy);
+        }
+    }
+
+    void OnEnable()
+    {
+        // Subscribe to this player's input events
+        playerInputActions.Player.Move.performed += OnMove;
+        playerInputActions.Player.Move.canceled += OnMove;
+        playerInputActions.Player.Attack.performed += OnAttack;
+        
+        // Start with inputs disabled (will be enabled when player becomes active)
+        playerInputActions.Player.Disable();
+    }
+
+    void OnDisable()
+    {
+        // Unsubscribe when disabled
+        playerInputActions.Player.Move.performed -= OnMove;
+        playerInputActions.Player.Move.canceled -= OnMove;
+        playerInputActions.Player.Attack.performed -= OnAttack;
+        
+        playerInputActions.Disable();
     }
 
     public void FindFreeCam()
     {
-        // Find the CameraControllerSwitcher script
         foreach (var obj in Resources.FindObjectsOfTypeAll<GameObject>())
         {
             CameraControlSwitcher ccs = obj.GetComponent<CameraControlSwitcher>();
@@ -92,31 +139,101 @@ public class PlayerStateMachine : MonoBehaviour
 
     void Update()
     {
-        //if (!controlable) return;
-        //Debug.Log($"current state = {_currentState}");
+        // Always update the state machine - idle, knockback, etc. still need to work
         _currentState.UpdateStates();
     }
 
-//==========================================all player input callbacks===================================================
+    // Called by PlayerSwitch to activate/deactivate this player's INPUTS
+    public void SetActive(bool active)
+    {
+        _isActive = active;
+        
+        if (active)
+        {
+            playerInputActions.Player.Enable();
+        }
+        else
+        {
+            playerInputActions.Player.Disable();
+        }
+    }
+    //==animation replacement
+    IEnumerator Startup()
+    {
+        yield return new WaitUntil(() => transform.childCount >= ScrStats._Sprites.Length);
+        replaceAnimation();
+
+        if(Animator != null)
+        {
+            Animator.Rebind();
+            Animator.Update(0f);
+        }
+    }
+
+    void replaceAnimation()
+    {
+        Transform _Rig = transform.Find("Appearance")?.Find("Rig");
+        if (_Rig == null || ScrStats._animator == null)
+        {
+            Debug.LogWarning("No Cpu Rig!! (for animation)");
+            return;
+        }
+
+        for (int i = 0; i < ScrStats._Sprites.Length; ++i)
+        {
+            var spriteData = ScrStats._Sprites[i];
+            string rigName = null;
+
+            switch (spriteData.Key)
+            {
+                case animationRigs.animationKey.Idle: rigName = "IdleRig"; break;
+                case animationRigs.animationKey.Running: rigName = "RunningRig"; break;
+                case animationRigs.animationKey.Knockback: rigName = "KnockbackRig"; break;
+                case animationRigs.animationKey.Attack: rigName = "AttackingRig"; break;
+                default: continue;
+            }
+
+            var existing = _Rig.Find(rigName);
+            if (existing != null)
+                Destroy(existing.gameObject);
+
+            spriteData.Rig.transform.position = new Vector3(
+                spriteData.Offset.x,
+                spriteData.Offset.y,
+                spriteData.Rig.transform.position.z
+            );
+
+            spriteData.Rig.transform.rotation = Quaternion.Euler(0, 180, 0);
+
+            GameObject newRig = Instantiate(spriteData.Rig, _Rig);
+            newRig.name = rigName;
+
+            if(rigName != "RunningRig") newRig.SetActive(false);
+        }
+
+        Animator.runtimeAnimatorController = ScrStats._animator;
+    }
+
+    //==========================================Input callbacks===================================================
     public void OnMove(InputAction.CallbackContext context)
     {
+        if (!_isActive) return; 
         _commander.OnMove(context);
     }
+
     public void OnAttack(InputAction.CallbackContext context)
     {
+        if (!_isActive) return; 
         _commander.OnAttack(context);
     }
 
- public void OnToggleFreeCam(InputAction.CallbackContext context)
+    public void OnToggleFreeCam(InputAction.CallbackContext context)
     {
-       /* if (!_camModeIsTogglable)
-        {
-            Debug.Log($" freecam taggle function is disabled");
-            return;
-        }
-        _commander.OnToggleFreeCam(context); */
-    } 
+        // Keep if needed
+    }
 
-    //all referance veraibles, player input callbacks
-
+    void OnDestroy()
+    {
+        playerInputActions?.Dispose();
+    }
 }

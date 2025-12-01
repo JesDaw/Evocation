@@ -2,12 +2,11 @@ using UnityEngine;
 
 public class PlayerMoveState : PlayerBaseState
 {
-    bool isFacingRight = true;
-
     public PlayerMoveState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
     {
         IsRootState = true;
     }
+    
     public override void UpdateState()
     {
         HandleMove();
@@ -16,12 +15,14 @@ public class PlayerMoveState : PlayerBaseState
 
     public override void EnterState()
     {
-
+        Ctx.Animator.SetBool("IsRunning", true);
+        Ctx.Animator.SetFloat("RunningSpeed", Ctx.ScrStats._AnimationMoveSpeed);
     }
 
     public override void ExitState()
     {
-        //Ctx.Rb.linearVelocity = new Vector2(0, Ctx.Rb.linearVelocity.y);
+        Debug.Log($"{Ctx.gameObject.name}: Exited MOVE state");
+        Ctx.Animator.SetBool("IsRunning", false);
         Ctx.Rb.linearVelocityX = 0;
         Ctx.WalkingAudio.Stop();
     }
@@ -33,15 +34,17 @@ public class PlayerMoveState : PlayerBaseState
 
     void HandleMove()
     {
-
         if (Ctx.IsMovementPressed)
         {
+            float horizontal = Ctx.MovementContext;
+            //Debug.Log($"{Ctx.gameObject.name}: Moving - Horizontal: {horizontal}, IsMovementPressed: {Ctx.IsMovementPressed}");
+            
             if (!Ctx.WalkingAudio.isPlaying) Ctx.WalkingAudio.Play();
 
-            float horizontal = Ctx.MovementContext;
             Ctx.Rb.linearVelocityX = horizontal * Ctx.PlayerStats._MoveSpeed;
-            if (!isFacingRight && horizontal > 0f) Flip();
-            else if (isFacingRight && horizontal < 0f) Flip();
+            
+            if (!Ctx.isFacingRight && horizontal > 0f) Flip();
+            else if (Ctx.isFacingRight && horizontal < 0f) Flip();
         }
         else
         {
@@ -51,10 +54,9 @@ public class PlayerMoveState : PlayerBaseState
 
     private void Flip()
     {
-        isFacingRight = !isFacingRight;
+        Ctx.isFacingRight = !Ctx.isFacingRight;
         Vector3 localScale = Ctx.transform.localScale;
         localScale.x *= -1f;
         Ctx.transform.localScale = localScale;
     }
 }
-

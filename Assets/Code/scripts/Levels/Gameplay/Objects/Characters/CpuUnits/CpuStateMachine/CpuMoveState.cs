@@ -17,6 +17,7 @@ public class CpuMoveState : CpuBaseState
     public override void EnterState()
     {
         _context._Animator.SetBool("IsRunning", true);
+        _context._Animator.SetFloat("RunningSpeed", _context._ScrStats._AnimationMoveSpeed);
     }
     public override void UpdateState()
     {
@@ -27,12 +28,13 @@ public class CpuMoveState : CpuBaseState
         _context.UpdateCurrentState(CpuStateManager.State.Attack);
     }
 
+    float stopOffset = Random.Range(-0.3f, 0.3f);
     void Moving()
     {
         _Body.linearVelocity = new Vector2(_Stats._MoveSpeed * _Transform.right.x, _Body.linearVelocity.y);
 
-        RaycastHit2D[] hits = Physics2D.RaycastAll(_Raycast.position, _Transform.right, _Stats._StopDistance);
-        Debug.DrawRay(_Raycast.position, _Transform.right * _Stats._StopDistance, Color.red);
+        RaycastHit2D[] hits = Physics2D.RaycastAll(_Raycast.position, _Transform.right, _context._ScrStats._AttackType._StopDistance + stopOffset);
+        Debug.DrawRay(_Raycast.position, _Transform.right * _context._ScrStats._AttackType._StopDistance, Color.red);
 
         if (hits.Length <= 0) return;
 
@@ -40,21 +42,13 @@ public class CpuMoveState : CpuBaseState
         {
             for (int II = 0; II < hits.Length; II++)
             {
-                if (hits[II].collider.CompareTag(_Stats._CpuPriority[I]))
+                if (hits[II].collider.CompareTag(_Stats._CpuPriority[I].ToString()))
                 {
                     //actual attackers
                     GameObject EnemyGameobject = hits[II].collider.gameObject;
-                    Debug.LogWarning(EnemyGameobject.name);
                     _context._AttackingStats = EnemyGameobject.GetComponent<Stats>();
                     if (_context._AttackingStats == null) Debug.LogWarning("Make sure the enemy has their collider and stats script on the same object");
                     //this section is for healing
-
-                    if (_context._AttackingStats._CurrentHealth >= _context._AttackingStats._MaxHealth &&
-                        _Stats._AttackDamage <= 0
-                        )
-                    {
-                        return;
-                    }
 
                     _Body.linearVelocity = Vector2.zero;
                     //heal
