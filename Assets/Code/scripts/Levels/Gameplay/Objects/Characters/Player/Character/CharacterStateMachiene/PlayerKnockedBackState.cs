@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlayerKnockedBackState : PlayerBaseState
 {
+    private bool _Knocked;
     public PlayerKnockedBackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
     {
         IsRootState = true;
@@ -11,30 +12,51 @@ public class PlayerKnockedBackState : PlayerBaseState
     public override void UpdateState()
     {
         CheckSwitchStates();
+        BackOnGround();
     }
     public override void CheckSwitchStates()
     {
         // if player touches ground maybe
     }
+    public override void InitializeSubState()
+    {
+
+    }
 
     public override void EnterState()
     {
-        HandleKnockback();
-        SwitchState(Factory.Idle());
+        Ctx.Animator.SetBool("IsKnockback", true);
+        ApplyKnockback();
+    }
+    void ApplyKnockback()
+    {
+        if (Ctx.Rb != null)
+        {
+            short knockbackDir = -1;
+            if (!Ctx.isFacingRight) knockbackDir = 1; 
+            Vector2 knockbackForce = new Vector2(knockbackDir * Ctx.ScrStats._KnockBackVelocity,
+                                                                Ctx.ScrStats._KnockBackVelocity);
+            Ctx.Rb.linearVelocity = Vector2.zero;
+            Ctx.Rb.AddForce(knockbackForce, ForceMode2D.Impulse);
+            _Knocked = true;
+        }
+    }
+
+    void BackOnGround()
+    {
+        if (Mathf.Abs(Ctx.Rb.linearVelocity.y) < 0.1f)
+        {
+            ExitState();
+        }
     }
 
     public override void ExitState()
     {
-        //if we want something to happen as the state is left
-    }
-
-    public override void InitializeSubState()
-    {
-        // if this gets substates
-    }
-
-    void HandleKnockback()
-    {
-        
+        if(_Knocked)
+        {
+            _Knocked = false;
+            Ctx.Animator.SetBool("IsKnockback", false);
+            SwitchState(Factory.Idle());
+        }
     }
 }

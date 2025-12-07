@@ -82,6 +82,7 @@ public class CpuStateManager : MonoBehaviour
     {
         UpdateCurrentState(State.Move);
         yield return new WaitUntil(() => transform.childCount >= _ScrStats._Sprites.Length);
+        yield return new WaitForSeconds(0.5f);
         replaceAnimation();
         toggleEverything(true);
 

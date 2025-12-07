@@ -44,8 +44,6 @@ public class Stats : MonoBehaviour
 
     IEnumerator StatusEffectLoop()
     {
-        if(_StatusEffects.Count == 0) StatusEffectLoop();
-
         //x = Tick
         //y = Length
 
