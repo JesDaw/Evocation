@@ -119,37 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &9712427
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 9712428}
-  m_Layer: 0
-  m_Name: Camera vision
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &9712428
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9712427}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6010277536743509261}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &16339824
 GameObject:
   m_ObjectHideFlags: 0
@@ -33921,6 +33890,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5899935989561569951}
     m_Modifications:
+    - target: {fileID: 3878648322206263563, guid: 8cbd9205f9bdd4a8e807b6d7b18cb3b2, type: 3}
+      propertyPath: Lens.FarClipPlane
+      value: 3001
+      objectReference: {fileID: 0}
     - target: {fileID: 5971380828545686785, guid: 8cbd9205f9bdd4a8e807b6d7b18cb3b2, type: 3}
       propertyPath: m_LocalPosition.x
       value: -93.298706
@@ -33965,6 +33938,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7170368770621601186, guid: 8cbd9205f9bdd4a8e807b6d7b18cb3b2, type: 3}
+      propertyPath: BoundingVolume
+      value: 
+      objectReference: {fileID: 8542112296921464399}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -41798,7 +41775,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.1
-  far clip plane: 5000
+  far clip plane: 3001
   field of view: 40
   orthographic: 0
   orthographic size: 7
@@ -52902,8 +52879,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 5, z: -32.5}
   m_LocalScale: {x: 190, y: 20, z: 35}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 9712428}
+  m_Children: []
   m_Father: {fileID: 1916448981473919374}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6026653952170056264
