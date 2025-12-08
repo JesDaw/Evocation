@@ -12,29 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 238e13654c5efff43b776bb1e518c913, type: 3}
   m_Name: WolfMage
   m_EditorClassIdentifier: 
-  _Clan: LavaBros
-  _CpuPriority:
-  - Player
-  - LavaBros
-  _animator: {fileID: 0}
-  _Sprites: []
+  _Rotate: 0
+  _animator: {fileID: 22100000, guid: bd2998f5ef785ad4fb2e510b129872d4, type: 2}
+  _Sprites:
+  - Key: 0
+    Rig: {fileID: 8163749845529899116, guid: 5f2ae9e70c2d78e4f9dc0be1efb35041, type: 3}
+    Offset: {x: 0, y: -0.8}
+  - Key: 1
+    Rig: {fileID: 8163749845529899116, guid: 5f2ae9e70c2d78e4f9dc0be1efb35041, type: 3}
+    Offset: {x: 0, y: -0.8}
+  - Key: 2
+    Rig: {fileID: 8163749845529899116, guid: 5f2ae9e70c2d78e4f9dc0be1efb35041, type: 3}
+    Offset: {x: 0, y: -0.8}
+  - Key: 3
+    Rig: {fileID: 8163749845529899116, guid: 5f2ae9e70c2d78e4f9dc0be1efb35041, type: 3}
+    Offset: {x: 0, y: -0.8}
+  _AnimationMoveSpeed: 1
   _MaxHealth: 5
-  _CurrentHealth: 0
-  _AttackDamage: 0
-  _AttackStartup: 50
-  _AttackActiveDuration: 0
-  _AttackEndlag: 100
-  _attackType: {fileID: 0}
-  _MoveSpeed: 20
-  _StopDistance: 1
+  _AttackType: {fileID: 11400000, guid: ef9347628bd239747ae263470cac6352, type: 2}
+  _MoveSpeed: 3
   _KnockBackMax: 10
-  _KnockBackHealth: 1
   _KnockBackVelocity: 5
   _spawnCost: 5
-  _StatusEffects: []
-  _EffectsToApply:
-  - {fileID: 11400000, guid: b09447a80e6bebf43805189595c14d8a, type: 2}
-  _StatusTicksMax: []
-  _StatusTicks: []
-  _StatusMax: 0
-  _StatusHealth: 1

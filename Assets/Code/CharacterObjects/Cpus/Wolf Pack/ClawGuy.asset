@@ -12,28 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 238e13654c5efff43b776bb1e518c913, type: 3}
   m_Name: ClawGuy
   m_EditorClassIdentifier: 
-  _Clan: LavaBros
-  _CpuPriority:
-  - Player
-  - TreeGang
+  _Rotate: 0
   _animator: {fileID: 0}
-  _Sprites: []
+  _Sprites:
+  - Key: 0
+    Rig: {fileID: 0}
+    Offset: {x: 0, y: 0}
+  _AnimationMoveSpeed: 1
   _MaxHealth: 5
-  _CurrentHealth: 0
-  _AttackDamage: 5
-  _AttackStartup: 50
-  _AttackActiveDuration: 0
-  _AttackEndlag: 100
-  _attackType: {fileID: 0}
+  _AttackType: {fileID: 0}
   _MoveSpeed: 20
-  _StopDistance: 1
   _KnockBackMax: 10
-  _KnockBackHealth: 1
   _KnockBackVelocity: 5
   _spawnCost: 5
-  _StatusEffects: []
-  _EffectsToApply: []
-  _StatusTicksMax: []
-  _StatusTicks: []
-  _StatusMax: 0
-  _StatusHealth: 1
