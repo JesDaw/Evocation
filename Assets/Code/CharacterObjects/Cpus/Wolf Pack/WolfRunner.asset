@@ -12,29 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 238e13654c5efff43b776bb1e518c913, type: 3}
   m_Name: WolfRunner
   m_EditorClassIdentifier: 
-  _Clan: LavaBros
-  _CpuPriority:
-  - Player
-  - LavaBros
-  _animator: {fileID: 0}
-  _Sprites: []
+  _Rotate: 0
+  _animator: {fileID: 22100000, guid: 2f2458847e5835942930771df2b9d0bc, type: 2}
+  _Sprites:
+  - Key: 0
+    Rig: {fileID: 4032883760896878660, guid: 159442620fc1369408f496536579ea3f, type: 3}
+    Offset: {x: 0, y: -0.8}
+  - Key: 1
+    Rig: {fileID: 4032883760896878660, guid: 159442620fc1369408f496536579ea3f, type: 3}
+    Offset: {x: 0, y: -0.8}
+  - Key: 2
+    Rig: {fileID: 4032883760896878660, guid: 159442620fc1369408f496536579ea3f, type: 3}
+    Offset: {x: 0, y: -0.8}
+  - Key: 3
+    Rig: {fileID: 4032883760896878660, guid: 159442620fc1369408f496536579ea3f, type: 3}
+    Offset: {x: 0, y: -0.8}
+  _AnimationMoveSpeed: 1
   _MaxHealth: 10
-  _CurrentHealth: 0
-  _AttackDamage: 4
-  _AttackStartup: 100
-  _AttackActiveDuration: 0
-  _AttackEndlag: 200
-  _attackType: {fileID: 0}
+  _AttackType: {fileID: 11400000, guid: 628ae05a03995a24790fa51f5cd367fb, type: 2}
   _MoveSpeed: 20
-  _StopDistance: 1
   _KnockBackMax: 10
-  _KnockBackHealth: 1
   _KnockBackVelocity: 5
   _spawnCost: 5
-  _StatusEffects:
-  - {fileID: 11400000, guid: b09447a80e6bebf43805189595c14d8a, type: 2}
-  _EffectsToApply: []
-  _StatusTicksMax: []
-  _StatusTicks: []
-  _StatusMax: 0
-  _StatusHealth: 1
