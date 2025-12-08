@@ -33,8 +33,8 @@ public class CpuMoveState : CpuBaseState
     {
         _Body.linearVelocity = new Vector2(_Stats._MoveSpeed * _Transform.right.x, _Body.linearVelocity.y);
 
-        RaycastHit2D[] hits = Physics2D.RaycastAll(_Raycast.position, _Transform.right, _context._ScrStats._AttackType._StopDistance + stopOffset);
-        Debug.DrawRay(_Raycast.position, _Transform.right * _context._ScrStats._AttackType._StopDistance, Color.red);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(_Transform.position, _context._ScrStats._AttackType._StopDistance);
+        DrawCircle(_Transform.position, _context._ScrStats._AttackType._StopDistance, Color.red);
 
         if (hits.Length <= 0) return;
 
@@ -42,10 +42,10 @@ public class CpuMoveState : CpuBaseState
         {
             for (int II = 0; II < hits.Length; II++)
             {
-                if (hits[II].collider.CompareTag(_Stats._CpuPriority[I].ToString()))
+                if (hits[II].GetComponent<Collider2D>().CompareTag(_Stats._CpuPriority[I].ToString()))
                 {
                     //actual attackers
-                    GameObject EnemyGameobject = hits[II].collider.gameObject;
+                    GameObject EnemyGameobject = hits[II].GetComponent<Collider2D>().gameObject;
                     _context._AttackingStats = EnemyGameobject.GetComponent<Stats>();
                     if (_context._AttackingStats == null) Debug.LogWarning("Make sure the enemy has their collider and stats script on the same object");
                     //this section is for healing
@@ -62,6 +62,23 @@ public class CpuMoveState : CpuBaseState
                     ExitState();             
                 }
             }
+        }
+    }
+
+    void DrawCircle(Vector3 center, float radius, Color color, int segments = 32)
+    {
+        float angle = 0f;
+        float increment = 360f / segments;
+
+        Vector3 prevPoint = center + new Vector3(Mathf.Cos(0f), Mathf.Sin(0f), 0f) * radius;
+
+        for (int i = 1; i <= segments; i++)
+        {
+            angle += increment;
+            Vector3 newPoint = center + new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0f) * radius;
+
+            Debug.DrawLine(prevPoint, newPoint, color);
+            prevPoint = newPoint;
         }
     }
 }
