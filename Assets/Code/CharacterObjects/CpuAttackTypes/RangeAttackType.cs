@@ -23,8 +23,7 @@ public class RangeAttackType : AttackType
             projectileCurve,
             speed,
             offset,
-            () => DealDamage(_context)
-        );
+            () => DealDamage(_context));
     }
 
     public override void Attack(PlayerStateMachine _context) // for Cpus enemies are declared in the movestate so the player needs to declare them here
