@@ -26,6 +26,7 @@ public class SceneActivityManager : MonoBehaviour
     internal GameObject currentActivity;
 
     internal GameObject initialActivity;
+    internal GameObject anchorActivity;
 
     /// <summary>
     /// Maps an ID to a SceneActivity GameObject
@@ -48,6 +49,7 @@ public class SceneActivityManager : MonoBehaviour
 
     public GameObject InitialSA { get => initialActivity; }
     public GameObject CurrentSA { get => currentActivity; }
+    public GameObject AnchorSA { get => anchorActivity; }
 
     // Flag to prevent adding to history when navigating back
     private bool isNavigatingBack = false;
@@ -57,6 +59,7 @@ public class SceneActivityManager : MonoBehaviour
         //Debug.Log("SceneActivityManager.Start", gameObject);
 
         CacheAllSAObjects();
+        anchorActivity = initialActivity;
 
         // Activate the 'Initial' SceneActivity and disable all others
         Activate(initialActivity, true);
@@ -113,7 +116,9 @@ public class SceneActivityManager : MonoBehaviour
     }
 
     public void ActivateInitialSA() { Activate(initialActivity); }
-    
+
+    public void ActivateAnchorSA() { Activate(anchorActivity); }
+
     public void ActivatePreviousSA()
     {
         if (changeHistory.Count > 0)
@@ -128,11 +133,11 @@ public class SceneActivityManager : MonoBehaviour
             Debug.LogWarning("No SceneActivity to go BACK to!", gameObject);
         }
     }
-    
+
     public void ActivateSettings() { Activate("Settings"); }
 
 
-    public void Activate(GameObject nextObj, bool disableAllOthers = false)
+    public void Activate(GameObject nextObj, bool disableAllOthers = false, bool makeAnchor = false)
     {
         GameObject currObj = GetCurrentActivity();
 
@@ -144,7 +149,7 @@ public class SceneActivityManager : MonoBehaviour
         if (currObj == null)
         {
             nextObj.GetComponent<SceneActivity>().StartActivity();
-        //    Debug.Log($"SceneActivityManager: -> {name}", nextObj);
+            //    Debug.Log($"SceneActivityManager: -> {name}", nextObj);
         }
         else if (!currObj.Equals(nextObj))
         {
@@ -165,6 +170,8 @@ public class SceneActivityManager : MonoBehaviour
 
         currentActivity = nextObj;
 
+        if (makeAnchor) anchorActivity = nextObj;
+
         // Notify all interested parties that an SceneActivity
         // change has occurred.
         ActivityChanged.Invoke();
@@ -183,9 +190,9 @@ public class SceneActivityManager : MonoBehaviour
         }
     }
 
-    public void Activate(string name)
+    public void Activate(string name, bool makeAnchor = false)
     {
-        Activate(FindActivity(name));
+        Activate(FindActivity(name), makeAnchor: makeAnchor);
     }
 
     public GameObject GetCurrentActivity()
@@ -200,6 +207,15 @@ public class SceneActivityManager : MonoBehaviour
     public bool InInitialSA()
     {
         return initialActivity.Equals(currentActivity);
+    }
+
+    /// <summary>
+    /// Indicates if the anchor activity is currently active
+    /// </summary>
+    /// <returns>true if active, false if not</returns>
+    public bool InAnchorSA()
+    {
+        return anchorActivity.Equals(currentActivity);
     }
 
     /// <summary>

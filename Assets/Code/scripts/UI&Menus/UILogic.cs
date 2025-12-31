@@ -3,9 +3,9 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class UILogic : MonoBehaviour
-{   
+{
     [SerializeField] int SceneToLoad;
-    
+
     AudioManager _audioManager;
     PlayerInput playerInput;
     GameState gameState;
@@ -18,7 +18,7 @@ public class UILogic : MonoBehaviour
 
     void Awake()
     {
-        
+
         playerInput = GetComponent<PlayerInput>();
 
         if (playerInput == null)
@@ -42,7 +42,7 @@ public class UILogic : MonoBehaviour
     public void ToggleCharacterSelect(InputAction.CallbackContext context)
     {
         //press 'c' to activate
-        if(!context.performed || GameIsPaused || gameState.currentlevelState != GameState.LevelState.Scouting) return;
+        if (!context.performed || GameIsPaused || gameState.currentlevelState != GameState.LevelState.Scouting) return;
 
         if (!CharacterSelectIsOpen)
         {
@@ -60,7 +60,7 @@ public class UILogic : MonoBehaviour
 
     public void TogglePause(InputAction.CallbackContext context)
     {
-        if(!context.performed) return;
+        if (!context.performed) return;
         if (GameIsPaused)
             Resume();
         else
@@ -71,7 +71,7 @@ public class UILogic : MonoBehaviour
     {
         if (GameIsPaused)
         {
-            sceneMgr.ActivateInitialSA();
+            sceneMgr.ActivateAnchorSA();
             Time.timeScale = 1;
             GameIsPaused = false;
             MenuIsOpen = false;

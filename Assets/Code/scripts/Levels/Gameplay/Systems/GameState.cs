@@ -14,18 +14,18 @@ public class GameState : MonoBehaviour
     [SerializeField] SpawnObjects _playerSpawnObjects, _enemySpawnObjects;
     [SerializeField] List<PlayableDirector> playableDirectors = new List<PlayableDirector>();
     [SerializeField] internal UltEvents.UltEvent LevelPartOne, LevelPartTwo, LevelPartThree;
-    
+
     // Music
     [SerializeField] internal UltEvents.UltEvent TrackfadeInOne, TrackfadeInTwo, TrackfadeInThree;
     [SerializeField] internal UltEvents.UltEvent TrackfadeOutOne, TrackfadeOutTwo, TrackfadeOutThree;
     [SerializeField] internal UltEvents.UltEvent GameWin, GameLoose;
-    
+
     public LevelState currentlevelState;
     InputAction engaugeAction, toggleCharacterSeceltAction;
     PlayerInput playerInput;
 
     SceneActivityManager sceneMgr;
-    
+
     public enum LevelState
     {
         Intro,
@@ -37,7 +37,7 @@ public class GameState : MonoBehaviour
         Loose,
         OutTro
     }
-    
+
     void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
@@ -81,7 +81,7 @@ public class GameState : MonoBehaviour
     internal void HandleLevelIntro()
     {
         currentlevelState = LevelState.Intro;
-        if(playableDirectors.Count > 0)
+        if (playableDirectors.Count > 0)
         {
             HandleInGameCutscene(0);
         }
@@ -108,15 +108,15 @@ public class GameState : MonoBehaviour
         Time.timeScale = 1;
         currentlevelState = LevelState.Scouting;
         sceneMgr.Activate("ScoutingUI");
-        StartTrackOne(); 
+        StartTrackOne();
         GlobalInputManager.Instance.EnableCameraControls();
     }
 
     public void OnEngaugeButtonPressed(InputAction.CallbackContext context)
-    {        
+    {
         if (currentlevelState != LevelState.Scouting || !context.performed) return;
-        
-        if(playableDirectors.Count > 1)
+
+        if (playableDirectors.Count > 1)
         {
             // 3, 2, 1 go cutscene
             HandleInGameCutscene(1);
@@ -131,10 +131,10 @@ public class GameState : MonoBehaviour
 
     public void EngaugmentPartOne()
     {
-        sceneMgr.Activate("GamePlayUI");
+        sceneMgr.Activate("GamePlayUI", makeAnchor: true);
         StopTrackOne();
         StartTrackTwo();
-        
+
         currentlevelState = LevelState.EngaugmentPartOne;
 
         // Enable global shared controls
@@ -144,25 +144,25 @@ public class GameState : MonoBehaviour
 
         // Switch to player control (this will enable the active player's inputs)
         controlSwitcher.SwitchToPlayerControl();
-        
+
         //Debug.Log("EngaugmentPartOne: Player control should now be active");
 
         // Enable spawning
         _playerSpawnObjects.SpawningIsActive = true;
         _enemySpawnObjects.SpawningIsActive = true;
-        
+
         _timeMachanic.TimeIsActive = true;
         _moneyMachanic.ActivateMoney();
 
         LevelPartOne?.Invoke();
     }
-    
+
     public void EngaugmentPartTwo()
     {
         currentlevelState = LevelState.EngaugmentPartTwo;
         LevelPartTwo?.Invoke();
     }
-    
+
     public void EngaugmentPartThree()
     {
         currentlevelState = LevelState.EngaugmentPartThree;
@@ -175,8 +175,8 @@ public class GameState : MonoBehaviour
         currentlevelState = LevelState.Win;
         _moneyMachanic.DeactivateMoney();
         _timeMachanic.DeactivateTimer();
-        
-        if(playableDirectors.Count > 2)
+
+        if (playableDirectors.Count > 2)
         {
             HandleInGameCutscene(2);
         }
@@ -193,8 +193,8 @@ public class GameState : MonoBehaviour
         currentlevelState = LevelState.Loose;
         _moneyMachanic.DeactivateMoney();
         _timeMachanic.DeactivateTimer();
-        
-        if(playableDirectors.Count > 3)
+
+        if (playableDirectors.Count > 3)
         {
             HandleInGameCutscene(3);
         }
@@ -212,17 +212,17 @@ public class GameState : MonoBehaviour
         Time.timeScale = 0;
         playableDirectors[director].Play();
     }
-    
+
     public void StartTrackOne()
     {
         TrackfadeInOne?.Invoke();
     }
-    
+
     public void StartTrackTwo()
     {
         TrackfadeInTwo?.Invoke();
     }
-    
+
     public void StartTrackThree()
     {
         TrackfadeInThree?.Invoke();
