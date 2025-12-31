@@ -71,8 +71,8 @@ public class FreeCamController : MonoBehaviour
             minZPosition = zMin;
         }
 
-        Debug.Log($"Bounds calculated - Min: {confineBounds.min}, Max: {confineBounds.max}");
-        Debug.Log($"Zoom bounds - Min Z: {minZPosition}, Max Z: {maxZPosition}");
+        //Debug.Log($"Bounds calculated - Min: {confineBounds.min}, Max: {confineBounds.max}");
+        //Debug.Log($"Zoom bounds - Min Z: {minZPosition}, Max Z: {maxZPosition}");
     }
 
     void OnEnable()

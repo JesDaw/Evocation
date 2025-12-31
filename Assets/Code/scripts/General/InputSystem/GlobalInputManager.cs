@@ -27,15 +27,26 @@ public class GlobalInputManager : MonoBehaviour
         InputActions = new InputSystem_Actions();
     }
     
-    void OnEnable() => EnableAllControls();
+    void Start() => EnableAllControls();
     
     void OnDisable() => DisableAllControls();
 
     // ========================= Enable / Disable Controls =========================
     // Now only manages shared/global action maps
     
-    public void EnableAllControls() => InputActions.Enable();
-    public void DisableAllControls() => InputActions.Disable();
+    public void EnableAllControls()
+    { 
+        InputActions.Enable();
+        EnableCameraControls();
+        EnableControlSwapping();
+    }
+    public void DisableAllControls()
+    { 
+        InputActions.Disable();
+        DisableCameraControls();
+        DisableControlSwapping();
+
+    }
 
     public void EnableCameraControls()
     {
@@ -49,6 +60,8 @@ public class GlobalInputManager : MonoBehaviour
     {
         if (FreecamInputs != null)
             FreecamInputs.Camera.Disable();
+        else
+            Debug.LogWarning("FreecamInputs is null");
     }
 
     public void EnableControlSwapping()
@@ -56,7 +69,7 @@ public class GlobalInputManager : MonoBehaviour
         if (ControlSwitchingInputs != null)
             ControlSwitchingInputs.ControlManager.Enable();
         else
-            InputActions.ControlManager.Enable();
+            Debug.LogWarning("ControlSwitchingInputs is null");
     }
     
     public void DisableControlSwapping()
@@ -64,7 +77,7 @@ public class GlobalInputManager : MonoBehaviour
         if (ControlSwitchingInputs != null)
             ControlSwitchingInputs.ControlManager.Disable();
         else
-            InputActions.ControlManager.Disable();
+            Debug.LogWarning("ControlSwitchingInputs is null");
     }
     
     public void EnableCharacterSpawnControls() => InputActions.SpawnerController.Enable();
