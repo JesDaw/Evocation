@@ -14,8 +14,6 @@ public class DialogueManager : MonoBehaviour
     Coroutine _typeLineCoroutine;
     string _currentLine;
     int slideCount = 0;
-    bool _firstLine = true;
-
     DailogueTrigger _dailogueTrigger;
 
     public bool DialogueActive { get; private set; }
@@ -26,7 +24,6 @@ public class DialogueManager : MonoBehaviour
         _dailogueTrigger = trigger;
 
         slideCount = 0;
-        _firstLine = true;
         DialogueActive = true;
 
         DialogueBox.SetActive(true);
@@ -35,15 +32,7 @@ public class DialogueManager : MonoBehaviour
 
     public void OnConfirmDialoguePressed(InputAction.CallbackContext context)
     {
-        Debug.Log($"Interact button pressed");
         if (!context.started || !DialogueActive) return;
-
-        if (_firstLine)
-        {
-            _firstLine = false;
-            return;
-        }
-
         OnConfirmDialoguePressedLogic();
     }
 
