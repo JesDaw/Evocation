@@ -64,7 +64,7 @@ public class DialogueManager : MonoBehaviour
         if (_typeLineCoroutine != null)
             StopCoroutine(_typeLineCoroutine);
 
-        _typeLineCoroutine = StartCoroutine(TypeLine(_currentLine, dialogueSlides[slideCount].DialogueSpeed));
+        _typeLineCoroutine = StartCoroutine(TypeLine(_currentLine, dialogueSlides[slideCount].DialogueDelaySeconds));
     }
 
     IEnumerator TypeLine(string line, float speed)
@@ -73,7 +73,8 @@ public class DialogueManager : MonoBehaviour
         foreach (char c in line)
         {
             dialogueText.text += c;
-            yield return new WaitForSeconds(speed);
+            yield return new WaitForSecondsRealtime(speed);
+            //yield return null;
         }
         _typeLineCoroutine = null;
     }

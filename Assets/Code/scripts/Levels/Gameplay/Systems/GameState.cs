@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Playables;
+using Debug = UnityEngine.Debug;
 
 public class GameState : MonoBehaviour
 {
@@ -14,7 +16,6 @@ public class GameState : MonoBehaviour
     [SerializeField] SpawnObjects _playerSpawnObjects, _enemySpawnObjects;
     [SerializeField] List<PlayableDirector> playableDirectors = new List<PlayableDirector>();
     [SerializeField] internal UltEvents.UltEvent LevelPartOne, LevelPartTwo, LevelPartThree;
-
     // Music
     [SerializeField] internal UltEvents.UltEvent TrackfadeInOne, TrackfadeInTwo, TrackfadeInThree;
     [SerializeField] internal UltEvents.UltEvent TrackfadeOutOne, TrackfadeOutTwo, TrackfadeOutThree;
@@ -73,7 +74,6 @@ public class GameState : MonoBehaviour
         else Debug.LogError("_timeMachanic is null");
         if (_moneyMachanic != null) _moneyMachanic.DeactivateMoney();
         else Debug.LogError("_moneyMachanic is null");
-
         HandleLevelIntro();
     }
 
@@ -83,6 +83,7 @@ public class GameState : MonoBehaviour
         currentlevelState = LevelState.Intro;
         if (playableDirectors.Count > 0)
         {
+            //Debug.Log("playing");
             HandleInGameCutscene(0);
         }
         else
@@ -199,6 +200,7 @@ public class GameState : MonoBehaviour
     {
         Time.timeScale = 0;
         playableDirectors[director].Play();
+        //Debug.Log($"Playing {playableDirectors[director]}");
     }
 
     public void StartTrackOne()
