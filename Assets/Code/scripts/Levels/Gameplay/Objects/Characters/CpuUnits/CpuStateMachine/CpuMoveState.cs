@@ -32,7 +32,7 @@ public class CpuMoveState : CpuBaseState
     void Moving()
     {
         _Body.linearVelocity = new Vector2(_Stats._MoveSpeed * _Transform.right.x, _Body.linearVelocity.y);
-
+        if(_context == null) Debug.Log("test");
         Collider2D[] hits = Physics2D.OverlapCircleAll(_Transform.position, _context._ScrStats._AttackType._StopDistance);
         DrawCircle(_Transform.position, _context._ScrStats._AttackType._StopDistance, Color.red);
 

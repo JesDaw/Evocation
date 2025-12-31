@@ -88,7 +88,7 @@ public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     
     public void OnPointerClick(PointerEventData eventData)
     {
-        StartCoroutine(ClickAnimation());
+       // StartCoroutine(ClickAnimation());
     }
 
     private IEnumerator ClickAnimation()
