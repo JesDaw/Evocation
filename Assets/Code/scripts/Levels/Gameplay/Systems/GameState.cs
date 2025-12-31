@@ -91,18 +91,6 @@ public class GameState : MonoBehaviour
         }
     }
 
-    public void OnIntroCutsceneFinishedTest(InputAction.CallbackContext context)
-    {
-        //Debug.Log("OnIntroCutsceneFinishedTest button pressed");
-        if (!context.performed) return;
-        OnIntroCutsceneFinished();
-    }
-
-    internal void OnIntroCutsceneFinished()
-    {
-        if (currentlevelState == LevelState.Intro) HandleLevelScoutingFaze();
-    }
-
     public void HandleLevelScoutingFaze()
     {
         Time.timeScale = 1;

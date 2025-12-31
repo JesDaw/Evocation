@@ -46,7 +46,7 @@ public class UILogic : MonoBehaviour
 
         if (!CharacterSelectIsOpen)
         {
-            sceneMgr.Activate("new Loadout Select");
+            sceneMgr.Activate("Loadout Select");
             CharacterSelectIsOpen = true;
             MenuIsOpen = true;
         }
