@@ -1,32 +1,50 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using TMPro; 
 
 public class LevelTransition : MonoBehaviour
 {
     public Animator TransitionAnimation;
-    [SerializeField] LevelLoader levelLoader;
-
+    public GameObject loadingScreen;
+    public Slider slider;
+    public TextMeshProUGUI progressText;
     public float transitionTime = 1f;
+    [SerializeField] string NextSceneName;
 
     // FInd way to avoid using update
     // Update is called once per frame
-    public void StartAnimationLevel1()
+    public void StartTransition()
     {
-        StartCoroutine(LoadLevel("this week"));
+        StartCoroutine(LoadScene(NextSceneName));
     }
 
-    public void StartAnimationLevel2()
-    {
-        StartCoroutine(LoadLevel("pathSelector"));
-    }
-
-    IEnumerator LoadLevel(string levelName)
+    IEnumerator LoadScene(string nextSceneName)
     {
         TransitionAnimation.SetTrigger("Start");
 
         yield return new WaitForSeconds(transitionTime); //make this wait for animation to end
 
-        levelLoader.LoadLevel(levelName);
+        StartCoroutine(LoadAsynchronously(nextSceneName));
+    }
+    
+
+    IEnumerator LoadAsynchronously(string sceneName)
+    {
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
+
+        loadingScreen.SetActive(true);
+        
+        while (!operation.isDone)
+        {
+            float progress = Mathf.Clamp01(operation.progress / 0.9f);
+
+            slider.value = progress;
+            progressText.text = (progress * 100f).ToString("F0") + "%"; 
+
+            yield return null;
+        }
     }
 
     //public void StartAnimation(int sceneID)
