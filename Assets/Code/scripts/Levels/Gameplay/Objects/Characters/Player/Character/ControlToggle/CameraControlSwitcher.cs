@@ -79,7 +79,7 @@ public class CameraControlSwitcher : MonoBehaviour
         FreeCamIsActive = false;
         
         // Use GlobalInputManager to switch control modes
-        GlobalInputManager.Instance.SetGameplayMode();
+        GlobalInputManager.Instance.SetPlayerCharacterMode();
 
         // Get the current active player and enable their inputs
         var currentPlayer = ActivePlayer.Instance.CurrentPlayer?.GetComponent<PlayerStateMachine>();
