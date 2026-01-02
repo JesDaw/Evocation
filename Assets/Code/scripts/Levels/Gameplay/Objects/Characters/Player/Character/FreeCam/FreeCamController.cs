@@ -4,9 +4,8 @@ using Unity.Cinemachine;
 
 public class FreeCamController : MonoBehaviour
 {
-    public InputSystem_Actions inputActions;
-    Vector2 moveInput;
-    CinemachineCamera _camera;
+    private Vector2 moveInput;
+    private CinemachineCamera _camera;
 
     // Movement and Zoom Variables
     [SerializeField] float moveSpeed = 10f;
@@ -25,8 +24,6 @@ public class FreeCamController : MonoBehaviour
     void Awake()
     {
         _ZoomToSpeedMultiplier = minZoomSpeedMultiplier;
-        inputActions = new InputSystem_Actions();
-        inputActions.Enable();
 
         _camera = GetComponent<CinemachineCamera>();
         if (_camera == null)
@@ -35,6 +32,48 @@ public class FreeCamController : MonoBehaviour
         }
 
         CalculateBounds();
+    }
+
+    void OnEnable()
+    {
+        // Subscribe to input from the GlobalInputManager (with safety check)
+        if (GlobalInputManager.Instance != null)
+        {
+            SubscribeToInputs();
+        }
+    }
+
+    void OnDisable()
+    {
+        // Unsubscribe when disabled
+        UnsubscribeFromInputs();
+    }
+
+    void SubscribeToInputs()
+    {
+        if (GlobalInputManager.Instance == null) return;
+
+        var cameraActions = GlobalInputManager.Instance.InputActions.Camera;
+        
+        cameraActions.Move.performed += OnMove;
+        cameraActions.Move.canceled += OnMove;
+        cameraActions.Zoom.performed += HandleZoom;
+    }
+
+    void UnsubscribeFromInputs()
+    {
+        if (GlobalInputManager.Instance == null) return;
+
+        var cameraActions = GlobalInputManager.Instance.InputActions.Camera;
+        
+        cameraActions.Move.performed -= OnMove;
+        cameraActions.Move.canceled -= OnMove;
+        cameraActions.Zoom.performed -= HandleZoom;
+    }
+
+    void OnMove(InputAction.CallbackContext context)
+    {
+        moveInput = context.ReadValue<Vector2>();
     }
 
     void CalculateBounds()
@@ -70,27 +109,6 @@ public class FreeCamController : MonoBehaviour
             maxZPosition = zMax;
             minZPosition = zMin;
         }
-
-        //Debug.Log($"Bounds calculated - Min: {confineBounds.min}, Max: {confineBounds.max}");
-        //Debug.Log($"Zoom bounds - Min Z: {minZPosition}, Max Z: {maxZPosition}");
-    }
-
-    void OnEnable()
-    {
-        GlobalInputManager.Instance.FreecamInputs = inputActions;
-        inputActions.Camera.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
-        inputActions.Camera.Move.canceled += ctx => moveInput = Vector2.zero;
-
-        inputActions.Camera.Zoom.performed += HandleZoom;
-
-        inputActions.Enable();
-        inputActions.Camera.Enable();
-    }
-
-    void OnDisable()
-    {
-        inputActions.Camera.Zoom.performed -= HandleZoom;
-        inputActions.Disable();
     }
 
     void Update()

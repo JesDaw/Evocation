@@ -9,14 +9,13 @@ public class CameraControlSwitcher : MonoBehaviour
     [SerializeField] IntVeriable player_lives;
     [SerializeField] AudioManager soundEffectsManager;
 
-    internal InputSystem_Actions inputActions;
     public bool FreeCamIsActive = false;
     internal bool _camModeIsTogglable = true; 
 
     public static CameraControlSwitcher Instance { get; set; }
 
-    public void DisableSwitching() { GlobalInputManager.Instance.DisableControlSwapping(); }
-    public void EnableSwitching() { GlobalInputManager.Instance.EnableControlSwapping(); }
+    public void DisableSwitching() => GlobalInputManager.Instance.DisableControlSwapping();
+    public void EnableSwitching() => GlobalInputManager.Instance.EnableControlSwapping();
 
     void Awake()
     {
@@ -26,34 +25,34 @@ public class CameraControlSwitcher : MonoBehaviour
             return;
         }
         Instance = this;
-        
-        inputActions = new InputSystem_Actions();
     }
 
     void OnEnable()
     {
-        // Subscribe to toggle camera control
-        inputActions.ControlManager.ToggleCameraControl.performed += OnToggleCameraControl;
-        inputActions.ControlManager.Enable();
+        // Subscribe to toggle camera control from GlobalInputManager
+        var controlManager = GlobalInputManager.Instance.InputActions.ControlManager;
+        controlManager.ToggleCameraControl.performed += OnToggleCameraControl;
     }
 
     void OnDisable()
     {
         // Unsubscribe when disabled
-        inputActions.ControlManager.ToggleCameraControl.performed -= OnToggleCameraControl;
+        if (GlobalInputManager.Instance != null)
+        {
+            var controlManager = GlobalInputManager.Instance.InputActions.ControlManager;
+            controlManager.ToggleCameraControl.performed -= OnToggleCameraControl;
+        }
     }
 
     void Start()
     {
         if (soundEffectsManager == null)
             soundEffectsManager = FindAnyObjectByType<AudioManager>();
-
-        GlobalInputManager.Instance.ControlSwitchingInputs = inputActions;
     }
 
     public void OnToggleCameraControl(InputAction.CallbackContext context)
     {
-        Debug.Log("Switching camera button pressed"); 
+        //Debug.Log("Switching camera button pressed"); 
         if (!_camModeIsTogglable) return;
         if (!context.performed) return;
 
@@ -79,15 +78,15 @@ public class CameraControlSwitcher : MonoBehaviour
     {
         FreeCamIsActive = false;
         
-        // Disable freecam
-        GlobalInputManager.Instance.DisableCameraControls();
+        // Use GlobalInputManager to switch control modes
+        GlobalInputManager.Instance.SetGameplayMode();
 
         // Get the current active player and enable their inputs
         var currentPlayer = ActivePlayer.Instance.CurrentPlayer?.GetComponent<PlayerStateMachine>();
         if (currentPlayer != null)
         {
             currentPlayer.SetActive(true);
-            Debug.Log($"SwitchToPlayerControl: Enabled {currentPlayer.gameObject.name}");
+            //Debug.Log($"SwitchToPlayerControl: Enabled {currentPlayer.gameObject.name}");
         }
         else
         {
@@ -118,8 +117,8 @@ public class CameraControlSwitcher : MonoBehaviour
             currentPlayer.SetActive(false);
         }
 
-        // Enable freecam controls
-        GlobalInputManager.Instance.EnableCameraControls();
+        // Use GlobalInputManager to switch control modes
+        GlobalInputManager.Instance.SetFreeCamMode();
 
         // Update camera position and priority
         var playerCam = ActivePlayer.Instance.GetCurrentPlayerCamera();
@@ -152,6 +151,9 @@ public class CameraControlSwitcher : MonoBehaviour
         {
             currentPlayer.SetActive(false);
         }
+
+        // Use GlobalInputManager to set appropriate mode
+        GlobalInputManager.Instance.SetFreeCamMode();
 
         if (soundEffectsManager != null)
             soundEffectsManager.gameObject.SetActive(false);

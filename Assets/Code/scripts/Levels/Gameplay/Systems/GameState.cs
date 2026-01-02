@@ -22,8 +22,6 @@ public class GameState : MonoBehaviour
     [SerializeField] internal UltEvents.UltEvent GameWin, GameLoose;
 
     public LevelState currentlevelState;
-    InputAction engaugeAction, toggleCharacterSeceltAction;
-    PlayerInput playerInput;
 
     SceneActivityManager sceneMgr;
 
@@ -41,7 +39,6 @@ public class GameState : MonoBehaviour
 
     void Awake()
     {
-        playerInput = GetComponent<PlayerInput>();
         foreach (PlayableDirector director in playableDirectors)
         {
             if (director != null)
@@ -51,8 +48,42 @@ public class GameState : MonoBehaviour
         }
     }
 
+    void OnEnable()
+    {
+        // Subscribe to the engage button (with safety check)
+        if (GlobalInputManager.Instance != null)
+        {
+            SubscribeToInputs();
+        }
+    }
+
+    void OnDisable()
+    {
+        // Unsubscribe when disabled
+        UnsubscribeFromInputs();
+    }
+
+    void SubscribeToInputs()
+    {
+        if (GlobalInputManager.Instance == null) return;
+
+        var uiActions = GlobalInputManager.Instance.InputActions.UI;
+        uiActions.StartEngaugment.performed += OnEngaugeButtonPressed;
+    }
+
+    void UnsubscribeFromInputs()
+    {
+        if (GlobalInputManager.Instance == null) return;
+
+        var uiActions = GlobalInputManager.Instance.InputActions.UI;
+        uiActions.StartEngaugment.performed -= OnEngaugeButtonPressed;
+    }
+
     void Start()
     {
+        // Ensure we're subscribed to inputs
+        SubscribeToInputs();
+
         // Find the SceneActivityManager
         foreach (var obj in Resources.FindObjectsOfTypeAll<SceneActivityManager>())
         {
@@ -60,7 +91,7 @@ public class GameState : MonoBehaviour
         }
         Debug.Assert(sceneMgr != null);
 
-        // Forces free cam mode
+        // Forces free cam mode with disabled controls during intro
         controlSwitcher.SwitchToCameraControl();
         GlobalInputManager.Instance.DisableControlSwapping();
         GlobalInputManager.Instance.DisableCameraControls();
@@ -74,6 +105,7 @@ public class GameState : MonoBehaviour
         else Debug.LogError("_timeMachanic is null");
         if (_moneyMachanic != null) _moneyMachanic.DeactivateMoney();
         else Debug.LogError("_moneyMachanic is null");
+        
         HandleLevelIntro();
     }
 
@@ -81,9 +113,12 @@ public class GameState : MonoBehaviour
     internal void HandleLevelIntro()
     {
         currentlevelState = LevelState.Intro;
+        
+        // Set cutscene mode - only UI controls (for skipping if implemented)
+        GlobalInputManager.Instance.SetCutsceneMode();
+        
         if (playableDirectors.Count > 0)
         {
-            //Debug.Log("playing");
             HandleInGameCutscene(0);
         }
         else
@@ -98,7 +133,12 @@ public class GameState : MonoBehaviour
         currentlevelState = LevelState.Scouting;
         sceneMgr.Activate("ScoutingUI");
         StartTrackOne();
-        GlobalInputManager.Instance.EnableCameraControls();
+        
+        // Enable freecam mode for scouting
+        GlobalInputManager.Instance.SetFreeCamMode();
+        
+        // Also enable the Engage button (assuming it's in UI action map)
+        GlobalInputManager.Instance.EnableUIControls();
     }
 
     public void OnEngaugeButtonPressed(InputAction.CallbackContext context)
@@ -126,10 +166,13 @@ public class GameState : MonoBehaviour
 
         currentlevelState = LevelState.EngaugmentPartOne;
 
-        // Enable global shared controls
-        GlobalInputManager.Instance.EnableCameraControls();
-        GlobalInputManager.Instance.EnableControlSwapping();
-        GlobalInputManager.Instance.EnableCharacterSpawnControls();
+        // Use the gameplay mode preset which enables:
+        // - Player controls
+        // - Camera switching
+        // - Player switching
+        // - Spawner controls
+        // - UI controls (pause menu)
+        GlobalInputManager.Instance.SetGameplayMode();
 
         // Switch to player control (this will enable the active player's inputs)
         controlSwitcher.SwitchToPlayerControl();
@@ -149,6 +192,8 @@ public class GameState : MonoBehaviour
     public void EngaugmentPartTwo()
     {
         currentlevelState = LevelState.EngaugmentPartTwo;
+        StopTrackTwo();
+        StartTrackThree();
         LevelPartTwo?.Invoke();
     }
 
@@ -167,14 +212,20 @@ public class GameState : MonoBehaviour
 
         if (playableDirectors.Count > 2)
         {
+            // Set cutscene mode for win cutscene
+            GlobalInputManager.Instance.SetCutsceneMode();
             HandleInGameCutscene(2);
         }
         else
         {
+            // Disable all controls except UI menu navigation
+            GlobalInputManager.Instance.SetPauseMenuMode();
             sceneMgr.Activate("Victory");
             Time.timeScale = 0;
             Debug.LogWarning($"No 'Win' PlayableDirector in playableDirectors list");
         }
+        
+        GameWin?.Invoke();
     }
 
     public void HandleLevelLoss()
@@ -185,20 +236,30 @@ public class GameState : MonoBehaviour
 
         if (playableDirectors.Count > 3)
         {
+            // Set cutscene mode for loss cutscene
+            GlobalInputManager.Instance.SetCutsceneMode();
             HandleInGameCutscene(3);
         }
         else
         {
+            // Disable all controls except UI menu navigation
+            GlobalInputManager.Instance.SetPauseMenuMode();
             sceneMgr.Activate("Defeat");
             Time.timeScale = 0;
             Debug.LogWarning($"No 'Loose' PlayableDirector in playableDirectors list");
         }
+        
+        GameLoose?.Invoke();
     }
 
     //===================================Music tracks=======================================
     internal void HandleInGameCutscene(int director)
     {
         Time.timeScale = 0;
+        
+        // Set cutscene mode when playing any cutscene
+        GlobalInputManager.Instance.SetCutsceneMode();
+        
         playableDirectors[director].Play();
         //Debug.Log($"Playing {playableDirectors[director]}");
     }
@@ -221,5 +282,15 @@ public class GameState : MonoBehaviour
     internal void StopTrackOne()
     {
         TrackfadeOutOne?.Invoke();
+    }
+
+    internal void StopTrackTwo()
+    {
+        TrackfadeOutTwo?.Invoke();
+    }
+
+    internal void StopTrackThree()
+    {
+        TrackfadeOutThree?.Invoke();
     }
 }

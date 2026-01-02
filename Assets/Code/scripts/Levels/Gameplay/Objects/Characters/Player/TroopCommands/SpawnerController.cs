@@ -8,7 +8,6 @@ public class SpawnController : MonoBehaviour
     [SerializeField] ScriptableStats[] spawnableCPUs;
     [SerializeField] SpawnObjects spawnObjects;
 
-
     [Header("Player Spawning")]
     [SerializeField] GameObject playerPrefab;
 
@@ -16,7 +15,7 @@ public class SpawnController : MonoBehaviour
     {
         if (GlobalInputManager.Instance == null)
         {
-            Debug.LogWarning("GlobalInputManager not found.");
+            Debug.LogError("GlobalInputManager not found! Spawning will not work.");
             return;
         }
 
@@ -33,8 +32,10 @@ public class SpawnController : MonoBehaviour
         input.Spawn9.performed += Spawn9Performed;
         input.SpawnPlayer.performed += SpawnPlayerPerformed;
 
-        // Make sure the SpawnerController map is active
-        GlobalInputManager.Instance.EnableCharacterSpawnControls();
+        //Debug.Log("SpawnController: Subscribed to all spawn inputs");
+        
+        // Check if the action map is enabled
+        //Debug.Log($"SpawnerController action map enabled: {input.enabled}");
     }
 
     void OnDisable()
@@ -53,23 +54,72 @@ public class SpawnController : MonoBehaviour
         input.Spawn8.performed -= Spawn8Performed;
         input.Spawn9.performed -= Spawn9Performed;
         input.SpawnPlayer.performed -= SpawnPlayerPerformed;
+        
+        //Debug.Log("SpawnController: Unsubscribed from all spawn inputs");
     }
 
-    public void Spawn1Performed(InputAction.CallbackContext context) => TrySpawnCPU(0, context); 
-    public void Spawn2Performed(InputAction.CallbackContext context) => TrySpawnCPU(1, context);
-    public void Spawn3Performed(InputAction.CallbackContext context) => TrySpawnCPU(2, context);
-    public void Spawn4Performed(InputAction.CallbackContext context) => TrySpawnCPU(3, context);
-    public void Spawn5Performed(InputAction.CallbackContext context) => TrySpawnCPU(4, context);
-    public void Spawn6Performed(InputAction.CallbackContext context) => TrySpawnCPU(5, context);
-    public void Spawn7Performed(InputAction.CallbackContext context) => TrySpawnCPU(6, context);
-    public void Spawn8Performed(InputAction.CallbackContext context) => TrySpawnCPU(7, context);
-    public void Spawn9Performed(InputAction.CallbackContext context) => TrySpawnCPU(8, context);
+    public void Spawn1Performed(InputAction.CallbackContext context)
+    {
+        //Debug.Log("Spawn1 button pressed!");
+        TrySpawnCPU(0, context);
+    }
+    
+    public void Spawn2Performed(InputAction.CallbackContext context)
+    {
+        //Debug.Log("Spawn2 button pressed!");
+        TrySpawnCPU(1, context);
+    }
+    
+    public void Spawn3Performed(InputAction.CallbackContext context)
+    {
+        //Debug.Log("Spawn3 button pressed!");
+        TrySpawnCPU(2, context);
+    }
+    
+    public void Spawn4Performed(InputAction.CallbackContext context)
+    {
+        //Debug.Log("Spawn4 button pressed!");
+        TrySpawnCPU(3, context);
+    }
+    
+    public void Spawn5Performed(InputAction.CallbackContext context)
+    {
+        //Debug.Log("Spawn5 button pressed!");
+        TrySpawnCPU(4, context);
+    }
+    
+    public void Spawn6Performed(InputAction.CallbackContext context)
+    {
+        //Debug.Log("Spawn6 button pressed!");
+        TrySpawnCPU(5, context);
+    }
+    
+    public void Spawn7Performed(InputAction.CallbackContext context)
+    {
+        //Debug.Log("Spawn7 button pressed!");
+        TrySpawnCPU(6, context);
+    }
+    
+    public void Spawn8Performed(InputAction.CallbackContext context)
+    {
+        //Debug.Log("Spawn8 button pressed!");
+        TrySpawnCPU(7, context);
+    }
+    
+    public void Spawn9Performed(InputAction.CallbackContext context)
+    {
+        //Debug.Log("Spawn9 button pressed!");
+        TrySpawnCPU(8, context);
+    }
 
     public void SpawnPlayerPerformed(InputAction.CallbackContext context)
     {
+        //Debug.Log("SpawnPlayer button pressed!");
+        
         if (playerPrefab != null && spawnObjects != null)
         {
             spawnObjects.SpawnPlayer(playerPrefab);
+            //Debug.Log("Player spawned successfully");
         }
         else
         {
@@ -79,21 +129,65 @@ public class SpawnController : MonoBehaviour
 
     void TrySpawnCPU(int index, InputAction.CallbackContext context)
     {
-        if (context.performed && spawnableCPUs != null && index >= 0 && index < spawnableCPUs.Length)
+        //Debug.Log($"TrySpawnCPU called for index {index}, performed: {context.performed}");
+        
+        if (!context.performed)
         {
-            if (spawnObjects != null && spawnableCPUs[index] != null)
-            {
-                spawnObjects.Spawn(spawnableCPUs[index]);
-                //Debug.Log("Spawned object at index: " + index);
-            }
-            else
-            {
-                Debug.LogWarning("SpawnObjects reference or spawnable at index " + index + " is null.");
-            }
+            Debug.LogWarning($"Context not performed for spawn {index}");
+            return;
         }
-        else
+        
+        if (spawnableCPUs == null)
         {
-            Debug.LogWarning("Invalid index or spawnables list not set.");
+            Debug.LogError("spawnableCPUs array is null!");
+            return;
         }
+        
+        if (index < 0 || index >= spawnableCPUs.Length)
+        {
+            Debug.LogWarning($"Invalid spawn index: {index} (array length: {spawnableCPUs.Length})");
+            return;
+        }
+        
+        if (spawnObjects == null)
+        {
+            Debug.LogError("SpawnObjects reference is null!");
+            return;
+        }
+        
+        if (spawnableCPUs[index] == null)
+        {
+            Debug.LogWarning($"Spawnable at index {index} is null!");
+            return;
+        }
+        
+        spawnObjects.Spawn(spawnableCPUs[index]);
+        //Debug.Log($"Successfully spawned CPU at index: {index}");
+    }
+    
+    // Add this method to check status at runtime
+    void Update()
+    {
+        // Press L to log the current state
+        if (Keyboard.current != null && Keyboard.current.lKey.wasPressedThisFrame)
+        {
+            LogSpawnControllerState();
+        }
+    }
+    
+    void LogSpawnControllerState()
+    {
+        if (GlobalInputManager.Instance == null)
+        {
+            Debug.LogError("GlobalInputManager is NULL!");
+            return;
+        }
+        
+        var spawnerMap = GlobalInputManager.Instance.InputActions.SpawnerController;
+        Debug.Log($"=== SpawnController Status ===");
+        Debug.Log($"SpawnerController action map enabled: {spawnerMap.enabled}");
+        Debug.Log($"Spawn1 action enabled: {spawnerMap.Spawn1.enabled}");
+        Debug.Log($"SpawnObjects reference: {(spawnObjects != null ? "Valid" : "NULL")}");
+        Debug.Log($"spawnableCPUs count: {(spawnableCPUs != null ? spawnableCPUs.Length.ToString() : "NULL")}");
     }
 }
