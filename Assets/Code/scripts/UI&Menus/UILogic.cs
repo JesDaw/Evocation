@@ -79,7 +79,7 @@ public class UILogic : MonoBehaviour
             MenuIsOpen = true;
             
             // Switch to spawning mode when character select opens
-            GlobalInputManager.Instance.SetSpawningMode();
+            GlobalInputManager.Instance.SetCharacterSelectingMode();
         }
         else
         {
@@ -95,7 +95,7 @@ public class UILogic : MonoBehaviour
             }
             else
             {
-                GlobalInputManager.Instance.SetGameplayMode();
+                GlobalInputManager.Instance.SetPlayerCharacterMode();
             }
         }
         
@@ -128,7 +128,7 @@ public class UILogic : MonoBehaviour
             }
             else
             {
-                GlobalInputManager.Instance.SetGameplayMode();
+                GlobalInputManager.Instance.SetPlayerCharacterMode();
             }
             
             UpdateCursorState();

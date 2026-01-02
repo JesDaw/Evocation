@@ -135,7 +135,7 @@ public class GameState : MonoBehaviour
         StartTrackOne();
         
         // Enable freecam mode for scouting
-        GlobalInputManager.Instance.SetFreeCamMode();
+        GlobalInputManager.Instance.SetScoutingMode();
         
         // Also enable the Engage button (assuming it's in UI action map)
         GlobalInputManager.Instance.EnableUIControls();
@@ -172,7 +172,7 @@ public class GameState : MonoBehaviour
         // - Player switching
         // - Spawner controls
         // - UI controls (pause menu)
-        GlobalInputManager.Instance.SetGameplayMode();
+        GlobalInputManager.Instance.SetPlayerCharacterMode();
 
         // Switch to player control (this will enable the active player's inputs)
         controlSwitcher.SwitchToPlayerControl();

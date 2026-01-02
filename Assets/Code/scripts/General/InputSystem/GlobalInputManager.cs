@@ -136,7 +136,7 @@ public class GlobalInputManager : MonoBehaviour
     /// <summary>
     /// Normal gameplay - player controls active, camera switching available
     /// </summary>
-    public void SetGameplayMode()
+    public void SetPlayerCharacterMode()
     {
         DisableAllControls();
         EnablePlayerControls();
@@ -156,7 +156,16 @@ public class GlobalInputManager : MonoBehaviour
         EnableCameraControls();
         EnableControlSwapping();
         EnablePlayerSwitching();
-        EnableUIControls(); // For pause menu
+        EnableSpawnerControls();
+        EnableUIControls(); 
+        //Debug.Log("Input Mode: FreeCam");
+    }
+
+    public void SetScoutingMode()
+    {
+        DisableAllControls();
+        EnableCameraControls();
+        EnableUIControls(); 
         //Debug.Log("Input Mode: FreeCam");
     }
     
@@ -193,11 +202,10 @@ public class GlobalInputManager : MonoBehaviour
     /// <summary>
     /// Character select/spawning mode
     /// </summary>
-    public void SetSpawningMode()
+    public void SetCharacterSelectingMode()
     {
         DisableAllControls();
-        EnableSpawnerControls();
-        EnableUIControls(); // For closing the menu
+        EnableUIControls();  
         //Debug.Log("Input Mode: Spawning");
     }
 
