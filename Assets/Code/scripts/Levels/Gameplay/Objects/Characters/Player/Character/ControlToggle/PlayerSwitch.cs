@@ -15,27 +15,11 @@ public class PlayerSwitch : MonoBehaviour
     {
         PlayerIDNumber = 1;
 
-        InputAction nextPlayerAction = InputSystem.actions.FindAction("NextPlayer");
-        if (nextPlayerAction != null)
-        {
-            nextPlayerAction.performed += SwitchPlayerRight;
-            nextPlayerAction.Enable();
-        }
-        else
-        {
-            Debug.LogError("NextPlayer action not found in InputSystem!");
-        }
+        // Subscribe to input from the GlobalInputManager
+        var controlManager = GlobalInputManager.Instance.InputActions.ControlManager;
         
-        InputAction prevPlayerAction = InputSystem.actions.FindAction("PreviousPlayer");
-        if (prevPlayerAction != null)
-        {
-            prevPlayerAction.performed += SwitchPlayerLeft;
-            prevPlayerAction.Enable();
-        }
-        else
-        {
-            Debug.LogError("PreviousPlayer action not found in InputSystem!");
-        }
+        controlManager.NextPlayer.performed += SwitchPlayerRight;
+        controlManager.PreviousPlayer.performed += SwitchPlayerLeft;
 
         foreach (GameObject player in players)
         {
@@ -57,12 +41,22 @@ public class PlayerSwitch : MonoBehaviour
             }
         }
 
-        // Set up ActivePlayer reference and camera priorities, but DON'T enable inputs yet
-        // GameState will enable them when EngaugmentPartOne starts
+        // Set up ActivePlayer reference and camera priorities
         if (players.Count > 0)
         {
             ActivePlayer.Instance.CurrentPlayer = players[activePlayerIndex];
             playerCameras[activePlayerIndex].Priority = 2;
+        }
+    }
+
+    void OnDestroy()
+    {
+        // Unsubscribe when destroyed
+        if (GlobalInputManager.Instance != null)
+        {
+            var controlManager = GlobalInputManager.Instance.InputActions.ControlManager;
+            controlManager.NextPlayer.performed -= SwitchPlayerRight;
+            controlManager.PreviousPlayer.performed -= SwitchPlayerLeft;
         }
     }
 
@@ -156,22 +150,19 @@ public class PlayerSwitch : MonoBehaviour
                 // Activate this player
                 playerCameras[i].Priority = 2;
                 ActivePlayer.Instance.CurrentPlayer = players[i];
-                playerSM.SetActive(true);  // Enable this player's inputs
-                //Debug.Log($"Activated player: {players[i].name}");
+                playerSM.SetActive(true);
             }
             else
             {
                 // Deactivate other players
                 playerCameras[i].Priority = 0;
-                playerSM.SetActive(false);  // Disable other players' inputs
+                playerSM.SetActive(false);
             }
         }
     }
 
     public void AddPlayer(GameObject newPlayer)
     {
-        //Debug.Log("Adding " + newPlayer.name);
-
         var managePlayer = newPlayer.GetComponent<PlayerStateMachine>();
         managePlayer.PlayerID = PlayerIDNumber++;
         players.Add(newPlayer);

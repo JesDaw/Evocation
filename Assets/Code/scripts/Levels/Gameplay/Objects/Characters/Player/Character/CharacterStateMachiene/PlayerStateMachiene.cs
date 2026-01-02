@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerStateMachine : MonoBehaviour
 {
-    [SerializeField] ScriptableStats _scrStats; // Use the same ScriptableStats as CPU!
+    [SerializeField] ScriptableStats _scrStats;
     [SerializeField] Stats _playerStats;
     [SerializeField] Rigidbody2D _rb;
     [Header("Audio")]
@@ -14,11 +14,8 @@ public class PlayerStateMachine : MonoBehaviour
     [SerializeField] AnimationEventsController _animatorController;
     [SerializeField] Animator _animator;
     
-    // Add this to match CPU's _AttackingStats
     [HideInInspector] public Stats _AttackingStats;
 
-    // Each player has their own input instance
-    public InputSystem_Actions playerInputActions;
     private bool _isActive = false;
 
     // states
@@ -28,7 +25,7 @@ public class PlayerStateMachine : MonoBehaviour
     int playerId;
 
     //==========================================getters and setters=================================================
-    public ScriptableStats ScrStats { get { return _scrStats; } } // Add this
+    public ScriptableStats ScrStats { get { return _scrStats; } }
     public Stats PlayerStats { get { return _playerStats; } }
     public Animator Animator { get { return _animator; } }
     public AnimationEventsController AnimatorController { get { return _animatorController; } }
@@ -60,9 +57,6 @@ public class PlayerStateMachine : MonoBehaviour
 
     void Awake()
     {
-        // Create this player's own input instance
-        playerInputActions = new InputSystem_Actions();
-        
         // Initialize state machine
         _states = new PlayerStateFactory(this);
         _currentState = _states.Idle();
@@ -72,7 +66,11 @@ public class PlayerStateMachine : MonoBehaviour
     void Start()
     {
         FindFreeCam();
-        InitializeStatsFromScriptable(); // Initialize player stats from ScriptableStats
+        InitializeStatsFromScriptable();
+        
+        // Ensure we're subscribed (in case OnEnable happened before GlobalInputManager existed)
+        SubscribeToInputs();
+        
         StartCoroutine(Startup());
     }
 
@@ -84,19 +82,16 @@ public class PlayerStateMachine : MonoBehaviour
             return;
         }
 
-        // Initialize stats like CPU does in CpuStateManager.Start()
         _playerStats._MaxHealth = _scrStats._MaxHealth;
         _playerStats._CurrentHealth = _scrStats._MaxHealth;
         _playerStats._MoveSpeed = _scrStats._MoveSpeed;
         _playerStats._KnockBackHealth = _scrStats._KnockBackMax;
         _playerStats._KnockBackMax = _scrStats._KnockBackMax;
         
-        // Set clan/team (players are not enemies)
         _playerStats._Enemy = false;
         _playerStats._Clan = Evocation.Clans.ClansList.Player;
         gameObject.tag = _playerStats._Clan.ToString();
         
-        // Set up CPU priority for targeting
         if (!_playerStats._CpuPriority.Contains(Evocation.Clans.ClansList.Enemy))
         {
             _playerStats._CpuPriority.Insert(0, Evocation.Clans.ClansList.Enemy);
@@ -105,23 +100,44 @@ public class PlayerStateMachine : MonoBehaviour
 
     void OnEnable()
     {
-        // Subscribe to this player's input events
-        playerInputActions.Player.Move.performed += OnMove;
-        playerInputActions.Player.Move.canceled += OnMove;
-        playerInputActions.Player.Attack.performed += OnAttack;
-        
-        // Start with inputs disabled (will be enabled when player becomes active)
-        playerInputActions.Player.Disable();
+        // Subscribe to input from GlobalInputManager (with safety check)
+        if (GlobalInputManager.Instance != null)
+        {
+            SubscribeToInputs();
+        }
+        else
+        {
+            // GlobalInputManager not ready yet, will subscribe in Start
+            Debug.LogWarning($"GlobalInputManager not ready when {gameObject.name} enabled. Will subscribe in Start.");
+        }
     }
 
     void OnDisable()
     {
         // Unsubscribe when disabled
-        playerInputActions.Player.Move.performed -= OnMove;
-        playerInputActions.Player.Move.canceled -= OnMove;
-        playerInputActions.Player.Attack.performed -= OnAttack;
+        UnsubscribeFromInputs();
+    }
+
+    void SubscribeToInputs()
+    {
+        if (GlobalInputManager.Instance == null) return;
+
+        var playerActions = GlobalInputManager.Instance.InputActions.Player;
         
-        playerInputActions.Disable();
+        playerActions.Move.performed += OnMove;
+        playerActions.Move.canceled += OnMove;
+        playerActions.Attack.performed += OnAttack;
+    }
+
+    void UnsubscribeFromInputs()
+    {
+        if (GlobalInputManager.Instance == null) return;
+
+        var playerActions = GlobalInputManager.Instance.InputActions.Player;
+        
+        playerActions.Move.performed -= OnMove;
+        playerActions.Move.canceled -= OnMove;
+        playerActions.Attack.performed -= OnAttack;
     }
 
     public void FindFreeCam()
@@ -149,20 +165,16 @@ public class PlayerStateMachine : MonoBehaviour
         _currentState.EnterState();
     }
 
-    // Called by PlayerSwitch to activate/deactivate this player's INPUTS
+    /// <summary>
+    /// Called by PlayerSwitch to activate/deactivate this player's ability to respond to inputs
+    /// Note: This doesn't enable/disable the action map, just sets a flag for this player
+    /// </summary>
     public void SetActive(bool active)
     {
         _isActive = active;
-        
-        if (active)
-        {
-            playerInputActions.Player.Enable();
-        }
-        else
-        {
-            playerInputActions.Player.Disable();
-        }
+        //Debug.Log($"Player {gameObject.name} set active: {active}");
     }
+
     //==animation replacement
     IEnumerator Startup()
     {
@@ -223,23 +235,15 @@ public class PlayerStateMachine : MonoBehaviour
     //==========================================Input callbacks===================================================
     public void OnMove(InputAction.CallbackContext context)
     {
+        // Only respond if this player is active
         if (!_isActive) return; 
         _commander.OnMove(context);
     }
 
     public void OnAttack(InputAction.CallbackContext context)
     {
+        // Only respond if this player is active
         if (!_isActive) return; 
         _commander.OnAttack(context);
-    }
-
-    public void OnToggleFreeCam(InputAction.CallbackContext context)
-    {
-        // Keep if needed
-    }
-
-    void OnDestroy()
-    {
-        playerInputActions?.Dispose();
     }
 }

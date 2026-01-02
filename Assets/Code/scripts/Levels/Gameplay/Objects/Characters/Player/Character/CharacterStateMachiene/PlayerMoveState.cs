@@ -21,7 +21,7 @@ public class PlayerMoveState : PlayerBaseState
 
     public override void ExitState()
     {
-        Debug.Log($"{Ctx.gameObject.name}: Exited MOVE state");
+        //Debug.Log($"{Ctx.gameObject.name}: Exited MOVE state");
         Ctx.Animator.SetBool("IsRunning", false);
         Ctx.Rb.linearVelocityX = 0;
         Ctx.WalkingAudio.Stop();

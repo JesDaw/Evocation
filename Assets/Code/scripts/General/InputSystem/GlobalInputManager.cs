@@ -3,15 +3,11 @@ using UnityEngine.InputSystem;
 
 public class GlobalInputManager : MonoBehaviour
 {
-    // Only manage shared/global inputs now
-    public InputSystem_Actions FreecamInputs;
-    public InputSystem_Actions ControlSwitchingInputs;
-    public InputSystem_Actions PauseMenuInputs;
-    public InputSystem_Actions CharacterSelectInputs;
-
-    //getters and setters
     public static GlobalInputManager Instance { get; private set; }
-    public InputSystem_Actions InputActions { get; private set; }
+    
+    // Single source of truth for all input actions
+    private InputSystem_Actions _inputActions;
+    public InputSystem_Actions InputActions => _inputActions;
 
     void Awake()
     {
@@ -23,63 +19,200 @@ public class GlobalInputManager : MonoBehaviour
 
         Instance = this;
         
-        // Only create shared input actions
-        InputActions = new InputSystem_Actions();
+        // Create the single InputSystem_Actions instance
+        _inputActions = new InputSystem_Actions();
+        
+        //Debug.Log("GlobalInputManager initialized");
     }
     
-    void Start() => EnableAllControls();
+    void Start()
+    {
+        // Start with everything disabled, then enable what's needed
+        DisableAllControls();
+    }
     
-    void OnDisable() => DisableAllControls();
+    void OnDestroy()
+    {
+        _inputActions?.Disable();
+        _inputActions?.Dispose();
+    }
 
-    // ========================= Enable / Disable Controls =========================
-    // Now only manages shared/global action maps
+    // ========================= Control Groups =========================
     
+    /// <summary>
+    /// Enable all controls - use sparingly, prefer specific enable methods
+    /// </summary>
     public void EnableAllControls()
-    { 
-        InputActions.Enable();
-        EnableCameraControls();
-        EnableControlSwapping();
+    {
+        _inputActions.Enable();
     }
+    
+    /// <summary>
+    /// Disable all controls - useful for cutscenes, game over, etc.
+    /// </summary>
     public void DisableAllControls()
-    { 
-        InputActions.Disable();
-        DisableCameraControls();
-        DisableControlSwapping();
-
+    {
+        _inputActions.Disable();
     }
 
+    // --------- Player Controls ---------
+    public void EnablePlayerControls()
+    {
+        _inputActions.Player.Enable();
+        //Debug.Log("Player controls enabled");
+    }
+    
+    public void DisablePlayerControls()
+    {
+        _inputActions.Player.Disable();
+        //Debug.Log("Player controls disabled");
+    }
+
+    // --------- Camera Controls ---------
     public void EnableCameraControls()
     {
-        if (FreecamInputs != null)
-            FreecamInputs.Camera.Enable();
-        else
-            Debug.LogWarning("FreecamInputs is null");
+        _inputActions.Camera.Enable();
+        //Debug.Log("Camera controls enabled");
     }
     
     public void DisableCameraControls()
     {
-        if (FreecamInputs != null)
-            FreecamInputs.Camera.Disable();
-        else
-            Debug.LogWarning("FreecamInputs is null");
+        _inputActions.Camera.Disable();
+        //Debug.Log("Camera controls disabled");
     }
 
+    // --------- Control Manager (switching between player/camera) ---------
     public void EnableControlSwapping()
     {
-        if (ControlSwitchingInputs != null)
-            ControlSwitchingInputs.ControlManager.Enable();
-        else
-            Debug.LogWarning("ControlSwitchingInputs is null");
+        _inputActions.ControlManager.Enable();
     }
     
     public void DisableControlSwapping()
     {
-        if (ControlSwitchingInputs != null)
-            ControlSwitchingInputs.ControlManager.Disable();
-        else
-            Debug.LogWarning("ControlSwitchingInputs is null");
+        _inputActions.ControlManager.Disable();
+    }
+
+    // --------- Player Switching (NextPlayer/PreviousPlayer) ---------
+    public void EnablePlayerSwitching()
+    {
+        // Assuming you have a PlayerSwitching action map
+        // If NextPlayer/PreviousPlayer are in ControlManager, use that instead
+        _inputActions.ControlManager.Enable();
     }
     
-    public void EnableCharacterSpawnControls() => InputActions.SpawnerController.Enable();
-    public void DisableCharacterSpawnControls() => InputActions.SpawnerController.Disable();
+    public void DisablePlayerSwitching()
+    {
+        _inputActions.ControlManager.Disable();
+    }
+
+    // --------- Spawner Controls ---------
+    public void EnableSpawnerControls()
+    {
+        _inputActions.SpawnerController.Enable();
+    }
+    
+    public void DisableSpawnerControls()
+    {
+        _inputActions.SpawnerController.Disable();
+    }
+    
+    // Aliases for backward compatibility
+    public void EnableCharacterSpawnControls() => EnableSpawnerControls();
+    public void DisableCharacterSpawnControls() => DisableSpawnerControls();
+
+    // --------- UI Controls ---------
+    public void EnableUIControls()
+    {
+        _inputActions.UI.Enable();
+    }
+    
+    public void DisableUIControls()
+    {
+        _inputActions.UI.Disable();
+    }
+
+    // ========================= Game State Presets =========================
+    
+    /// <summary>
+    /// Normal gameplay - player controls active, camera switching available
+    /// </summary>
+    public void SetGameplayMode()
+    {
+        DisableAllControls();
+        EnablePlayerControls();
+        EnableControlSwapping();
+        EnablePlayerSwitching();
+        EnableSpawnerControls();  // Added spawner controls
+        EnableUIControls(); // For pause menu
+        //Debug.Log("Input Mode: Gameplay");
+    }
+    
+    /// <summary>
+    /// Free camera mode - camera controls active
+    /// </summary>
+    public void SetFreeCamMode()
+    {
+        DisableAllControls();
+        EnableCameraControls();
+        EnableControlSwapping();
+        EnablePlayerSwitching();
+        EnableUIControls(); // For pause menu
+        //Debug.Log("Input Mode: FreeCam");
+    }
+    
+    /// <summary>
+    /// Cutscene mode - only pause/skip available
+    /// </summary>
+    public void SetCutsceneMode()
+    {
+        DisableAllControls();
+        EnableUIControls(); // Only UI controls (pause, skip)
+        //Debug.Log("Input Mode: Cutscene");
+    }
+    
+    /// <summary>
+    /// Dialogue mode - only dialogue progression and pause
+    /// </summary>
+    public void SetDialogueMode()
+    {
+        DisableAllControls();
+        EnableUIControls(); // For dialogue interaction and pause
+        //Debug.Log("Input Mode: Dialogue");
+    }
+    
+    /// <summary>
+    /// Pause menu - only menu navigation
+    /// </summary>
+    public void SetPauseMenuMode()
+    {
+        DisableAllControls();
+        EnableUIControls();
+        //Debug.Log("Input Mode: Pause Menu");
+    }
+    
+    /// <summary>
+    /// Character select/spawning mode
+    /// </summary>
+    public void SetSpawningMode()
+    {
+        DisableAllControls();
+        EnableSpawnerControls();
+        EnableUIControls(); // For closing the menu
+        //Debug.Log("Input Mode: Spawning");
+    }
+
+    // ========================= Utilities =========================
+    
+    /// <summary>
+    /// Get the current state of all action maps (for debugging)
+    /// </summary>
+    public void LogInputState()
+    {
+        Debug.Log($"=== Input State ===\n" +
+                  $"Player: {_inputActions.Player.enabled}\n" +
+                  $"Camera: {_inputActions.Camera.enabled}\n" +
+                  $"ControlManager: {_inputActions.ControlManager.enabled}\n" +
+                  $"SpawnerController: {_inputActions.SpawnerController.enabled}\n" +
+                  $"UI: {_inputActions.UI.enabled}");
+    }
 }
