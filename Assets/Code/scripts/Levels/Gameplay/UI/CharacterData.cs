@@ -6,5 +6,6 @@ public class CharacterData : ScriptableObject
     public string characterName;
     [TextArea] public string description;
     public Sprite portrait;
+    public Sprite headshot;
     public ScriptableStats scriptableStats;
 }
