@@ -24,6 +24,7 @@ public class GameState : MonoBehaviour
     public LevelState currentlevelState;
 
     SceneActivityManager sceneMgr;
+    bool EngaugeButtonWasPressed = false;
 
     public enum LevelState
     {
@@ -51,10 +52,7 @@ public class GameState : MonoBehaviour
     void OnEnable()
     {
         // Subscribe to the engage button (with safety check)
-        if (GlobalInputManager.Instance != null)
-        {
-            SubscribeToInputs();
-        }
+
     }
 
     void OnDisable()
@@ -69,6 +67,7 @@ public class GameState : MonoBehaviour
 
         var uiActions = GlobalInputManager.Instance.InputActions.UI;
         uiActions.StartEngaugment.performed += OnEngaugeButtonPressed;
+        uiActions.Return.performed += BackToScouting;
     }
 
     void UnsubscribeFromInputs()
@@ -77,12 +76,15 @@ public class GameState : MonoBehaviour
 
         var uiActions = GlobalInputManager.Instance.InputActions.UI;
         uiActions.StartEngaugment.performed -= OnEngaugeButtonPressed;
+        uiActions.Return.performed -= BackToScouting;
     }
 
     void Start()
     {
-        // Ensure we're subscribed to inputs
-        SubscribeToInputs();
+        if (GlobalInputManager.Instance != null)
+        {
+            SubscribeToInputs();
+        }
 
         // Find the SceneActivityManager
         foreach (var obj in Resources.FindObjectsOfTypeAll<SceneActivityManager>())
@@ -136,15 +138,36 @@ public class GameState : MonoBehaviour
         
         // Enable freecam mode for scouting
         GlobalInputManager.Instance.SetScoutingMode();
-        
-        // Also enable the Engage button (assuming it's in UI action map)
-        GlobalInputManager.Instance.EnableUIControls();
     }
 
     public void OnEngaugeButtonPressed(InputAction.CallbackContext context)
     {
         if (currentlevelState != LevelState.Scouting || !context.performed) return;
+        if (!EngaugeButtonWasPressed){
+            sceneMgr.Activate("ConfirmationUI");   
+            GlobalInputManager.Instance.SetCharacterSelectingMode();
+            EngaugeButtonWasPressed = true;
+        }
+        else
+        {
+            StartEngaugmentPartOne();
+        }
+    }
 
+    public void BackToScouting(InputAction.CallbackContext context)
+    {
+        if (currentlevelState != LevelState.Scouting || !context.performed || !EngaugeButtonWasPressed) return;
+        BackToScouting();
+    }
+    public void BackToScouting()
+    {
+        sceneMgr.Activate("ScoutingUI");
+        GlobalInputManager.Instance.SetScoutingMode();
+        EngaugeButtonWasPressed = false;
+    }
+
+    public void StartEngaugmentPartOne()
+    {
         if (playableDirectors.Count > 1)
         {
             // 3, 2, 1 go cutscene
@@ -256,6 +279,7 @@ public class GameState : MonoBehaviour
     internal void HandleInGameCutscene(int director)
     {
         Time.timeScale = 0;
+        sceneMgr.Activate("Blank UI");
         
         // Set cutscene mode when playing any cutscene
         GlobalInputManager.Instance.SetCutsceneMode();
