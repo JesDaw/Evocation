@@ -92,12 +92,8 @@ public class PlayerLivesManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Handle death when there are still lives remaining
-    /// </summary>
     private void HandlePlayerDeath(GameObject deadPlayer)
     {
-        // Get the dead player's camera position before doing anything
         CinemachineCamera deadPlayerCam = deadPlayer.GetComponentInChildren<CinemachineCamera>();
         Vector3 deathCameraPosition = Vector3.zero;
         float deathCameraFOV = 60f;
@@ -108,14 +104,12 @@ public class PlayerLivesManager : MonoBehaviour
             deathCameraFOV = deadPlayerCam.Lens.FieldOfView;
         }
 
-        // Remove the dead player from the list and switch to next player
-        // This will update ActivePlayer.CurrentPlayer to the next available player
+
         if (deadPlayer != null)
         {
             playerSwitch.RemovePlayer(deadPlayer);
         }
 
-        // Now switch to freecam mode at the death location
         if (cameraControlSwitcher != null)
         {
             cameraControlSwitcher.SwitchToFreeCamAtPosition(deathCameraPosition, deathCameraFOV);
