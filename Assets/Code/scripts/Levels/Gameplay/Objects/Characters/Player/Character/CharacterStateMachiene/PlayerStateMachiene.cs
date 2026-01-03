@@ -69,7 +69,10 @@ public class PlayerStateMachine : MonoBehaviour
         InitializeStatsFromScriptable();
         
         // Ensure we're subscribed (in case OnEnable happened before GlobalInputManager existed)
-        SubscribeToInputs();
+         if (GlobalInputManager.Instance != null)
+        {
+            SubscribeToInputs();
+        }
         
         StartCoroutine(Startup());
     }
@@ -100,16 +103,7 @@ public class PlayerStateMachine : MonoBehaviour
 
     void OnEnable()
     {
-        // Subscribe to input from GlobalInputManager (with safety check)
-        if (GlobalInputManager.Instance != null)
-        {
-            SubscribeToInputs();
-        }
-        else
-        {
-            // GlobalInputManager not ready yet, will subscribe in Start
-            Debug.LogWarning($"GlobalInputManager not ready when {gameObject.name} enabled. Will subscribe in Start.");
-        }
+  
     }
 
     void OnDisable()
