@@ -1,17 +1,50 @@
 using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.InputSystem;
 
 public class TimelineController : MonoBehaviour
 {
     PlayableDirector timeline;
     bool gameIsPaused;
-    float _jumpPoint;
+    [SerializeField] float _jumpPoint;
     double heldTime;
-    bool isHolding = false; 
+    bool isHolding = false;
+    
     void Start()
     {
         timeline = GetComponent<PlayableDirector>();
+    }
+
+    void OnEnable()
+    {
+        // Subscribe to the skip cutscene button
+        if (GlobalInputManager.Instance != null)
+        {
+            SubscribeToInputs();
+        }
+    }
+
+    void OnDisable()
+    {
+        // Unsubscribe when disabled
+        UnsubscribeFromInputs();
+    }
+
+    void SubscribeToInputs()
+    {
+        if (GlobalInputManager.Instance == null) return;
+
+        var uiActions = GlobalInputManager.Instance.InputActions.UI;
+        uiActions.SkipCutscene.performed += JumpTimelineToPoint;
+    }
+
+    void UnsubscribeFromInputs()
+    {
+        if (GlobalInputManager.Instance == null) return;
+
+        var uiActions = GlobalInputManager.Instance.InputActions.UI;
+        uiActions.SkipCutscene.performed -= JumpTimelineToPoint;
     }
 
     public void PlayTimeline()
@@ -74,8 +107,11 @@ public class TimelineController : MonoBehaviour
         }
     }
 
-    public void JumpTimelineToPoint()
+    public void JumpTimelineToPoint(InputAction.CallbackContext context)
     {
+        if (!context.performed) return;
+        
+        UnityEngine.Debug.Log($"Skipping cutscene to time: {_jumpPoint}");
         timeline.time = _jumpPoint;
     }
 
