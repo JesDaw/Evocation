@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
+using System.Collections.Generic;
 
 public class SpawnController : MonoBehaviour
 {
     [Header("Spawn Settings")]
-    [SerializeField] ScriptableStats[] spawnableCPUs;
+    [SerializeField] List<ScriptableStats> spawnableCPUs = new List<ScriptableStats>();
     [SerializeField] SpawnObjects spawnObjects;
 
     [Header("Player Spawning")]
@@ -56,6 +57,16 @@ public class SpawnController : MonoBehaviour
         input.SpawnPlayer.performed -= SpawnPlayerPerformed;
         
         //Debug.Log("SpawnController: Unsubscribed from all spawn inputs");
+    }
+
+    public void EquipCPU(ScriptableStats stats)
+    {
+        spawnableCPUs.Add(stats);
+    }
+
+    public void UnequipCPU(ScriptableStats stats)
+    {
+        spawnableCPUs.Remove(stats);
     }
 
     public void Spawn1Performed(InputAction.CallbackContext context)
@@ -143,9 +154,9 @@ public class SpawnController : MonoBehaviour
             return;
         }
         
-        if (index < 0 || index >= spawnableCPUs.Length)
+        if (index < 0 || index >= spawnableCPUs.Count)
         {
-            Debug.LogWarning($"Invalid spawn index: {index} (array length: {spawnableCPUs.Length})");
+            Debug.LogWarning($"Invalid spawn index: {index} (list Count: {spawnableCPUs.Count})");
             return;
         }
         
@@ -188,6 +199,6 @@ public class SpawnController : MonoBehaviour
         Debug.Log($"SpawnerController action map enabled: {spawnerMap.enabled}");
         Debug.Log($"Spawn1 action enabled: {spawnerMap.Spawn1.enabled}");
         Debug.Log($"SpawnObjects reference: {(spawnObjects != null ? "Valid" : "NULL")}");
-        Debug.Log($"spawnableCPUs count: {(spawnableCPUs != null ? spawnableCPUs.Length.ToString() : "NULL")}");
+        Debug.Log($"spawnableCPUs count: {(spawnableCPUs != null ? spawnableCPUs.Count.ToString() : "NULL")}");
     }
 }
