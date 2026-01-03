@@ -131,8 +131,9 @@ public class DialogueManager : MonoBehaviour
         dialogueText.text = _currentLine;
     }
 
-    void EndDialogue()
+    public void EndDialogue()
     {
+        if(DialogueActive == false) return;
         DialogueActive = false;
         slideCount = 0;
         _typeLineCoroutine = null;
