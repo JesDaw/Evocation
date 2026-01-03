@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,6 +9,7 @@ public class DialogueManager : MonoBehaviour
 {
     public TMP_Text nameText;
     public TMP_Text dialogueText;
+    // UILogic uILogic;
     [SerializeField] GameObject DialogueBox;
 
     List<Dialogue> dialogueSlides = new List<Dialogue>();
@@ -32,7 +34,8 @@ public class DialogueManager : MonoBehaviour
 
     public void OnConfirmDialoguePressed(InputAction.CallbackContext context)
     {
-        if (!context.started || !DialogueActive) return;
+        if (!context.started || !DialogueActive || UILogic.GameIsPaused) return;
+        //UnityEngine.Debug.Log("OnConfirmDialoguePressed pressed");
         OnConfirmDialoguePressedLogic();
     }
 
@@ -72,9 +75,12 @@ public class DialogueManager : MonoBehaviour
         dialogueText.text = "";
         foreach (char c in line)
         {
+            while (UILogic.GameIsPaused)
+            {
+                yield return null; 
+            } 
             dialogueText.text += c;
             yield return new WaitForSecondsRealtime(speed);
-            //yield return null;
         }
         _typeLineCoroutine = null;
     }

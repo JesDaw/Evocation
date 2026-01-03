@@ -1,18 +1,19 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 
 public class UILogic : MonoBehaviour
 {
     [SerializeField] int SceneToLoad;
-
     AudioManager _audioManager;
     GameState gameState;
     SceneActivityManager sceneMgr;
 
-    bool GameIsPaused = false;
+    public static bool GameIsPaused = false;
     bool CharacterSelectIsOpen = false;
     bool MenuIsOpen = false;
+    public UnityEvent PauseEvent, ResumeEvent;
 
     void Awake()
     {
@@ -132,6 +133,7 @@ public class UILogic : MonoBehaviour
             }
             
             UpdateCursorState();
+            ResumeEvent?.Invoke();
         }
     }
 
@@ -144,10 +146,10 @@ public class UILogic : MonoBehaviour
             GameIsPaused = true;
             MenuIsOpen = true;
             
-            // Switch to pause menu mode
             GlobalInputManager.Instance.SetPauseMenuMode();
             
             UpdateCursorState();
+            PauseEvent?.Invoke();
         }
     }
 
@@ -185,7 +187,14 @@ public class UILogic : MonoBehaviour
         SceneManager.LoadScene(SceneToLoad);
     }
 
-    public void QuitGame() => Application.Quit();
+    public void QuitGame() 
+    { 
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+            Application.Quit();
+        #endif
+    }
 
     // Called by events when scene changes
     public void OnEventRaised()
