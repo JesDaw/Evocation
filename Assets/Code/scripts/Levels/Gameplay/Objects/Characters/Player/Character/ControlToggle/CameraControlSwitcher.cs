@@ -93,14 +93,13 @@ public class CameraControlSwitcher : MonoBehaviour
             Debug.LogError("SwitchToPlayerControl: No current player found!");
         }
 
-        // Update camera priorities
         var playerCam = ActivePlayer.Instance.GetCurrentPlayerCamera();
-        if (playerCam != null)
+        if (playerCam != null && playerCam.Priority != 2)
         {
             playerCam.Priority = 2;
         }
 
-        if (freeCam != null)
+        if (freeCam != null && freeCam.Priority != 1)
         {
             freeCam.Priority = 1;
         }
@@ -131,24 +130,19 @@ public class CameraControlSwitcher : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Switch to freecam at a specific position (for ghost cam on death)
-    /// </summary>
-    public void SwitchToFreeCamAtPosition(Vector3 position, float fieldOfView)
+
+    public void SwitchToFreeCamAtPosition(Vector3 position, float fieldOfView) 
     {
         FreeCamIsActive = true;
 
-        // Disable the current player's inputs (if any)
         var currentPlayer = ActivePlayer.Instance.CurrentPlayer?.GetComponent<PlayerStateMachine>();
         if (currentPlayer != null)
         {
             currentPlayer.SetActive(false);
         }
 
-        // Use GlobalInputManager to switch control modes
         GlobalInputManager.Instance.SetFreeCamMode();
 
-        // Position freecam at the specified location
         if (freeCam != null)
         {
             freeCam.transform.position = position;
@@ -156,7 +150,6 @@ public class CameraControlSwitcher : MonoBehaviour
             freeCam.Priority = 2;
         }
 
-        // Lower priority of all player cameras
         var playerCam = ActivePlayer.Instance.GetCurrentPlayerCamera();
         if (playerCam != null)
         {
