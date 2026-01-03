@@ -15,6 +15,7 @@ public class Interactable : MonoBehaviour
     bool isHolding = false;
     bool ActivePlayerIsInRange;
     float currentHoldTime = 0f;
+    bool LocationClaimed = false;
 
     void Start()
     {
@@ -65,14 +66,35 @@ public class Interactable : MonoBehaviour
         //UnityEngine.Debug.Log("Interactable: Unsubscribed from Interact action");
     }
 
-    void ToggleIcon()
+    public void ClaimLocation()
     {
-        _iconIsActive = !_iconIsActive;
+        LocationClaimed = true;
+        ToggleIconOff();
+    }
+
+    public void UnclaimLocation()
+    {
+        LocationClaimed = false;
+    }
+
+    void ToggleIconOn()
+    {
+        if (LocationClaimed) return;
+        _iconIsActive = true;
         InteractionNotificationIcon.SetActive(_iconIsActive);
     }
 
+    void ToggleIconOff()
+    {
+        _iconIsActive = false;
+        InteractionNotificationIcon.SetActive(_iconIsActive);
+    }
+
+
+
     public void ActionPressed(InputAction.CallbackContext context)
     {
+        if (LocationClaimed) return;
         // Only respond if the active player is in range
         if (!CheckActivePlayerIsInRange()) return;
 
@@ -131,7 +153,7 @@ public class Interactable : MonoBehaviour
             if(CheckActivePlayerIsInRange())
             {
                 //UnityEngine.Debug.Log($"{collision.gameObject.name} entered interaction range");
-                ToggleIcon();
+                ToggleIconOn();
             }
         }
     }
@@ -149,7 +171,7 @@ public class Interactable : MonoBehaviour
             if (!CheckActivePlayerIsInRange())
             {
                 //UnityEngine.Debug.Log($"{collision.gameObject.name} left interaction range");
-                ToggleIcon();
+                ToggleIconOff();
             }
         }
     }

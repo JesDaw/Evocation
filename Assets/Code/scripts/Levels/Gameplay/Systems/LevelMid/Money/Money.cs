@@ -9,10 +9,8 @@ public class Money : MonoBehaviour
     [SerializeField] FloatVariable genPerSec;
     [SerializeField] FloatVariable moneyAmount;
     [SerializeField] TextMeshProUGUI moneyText;
-
     bool _money_is_active = false;
     float CurrentMoney = 0;
-
     public bool MoneyIsActive
     {
         get { return _money_is_active; }
@@ -44,7 +42,7 @@ public class Money : MonoBehaviour
                 yield return null;
                 continue;
             }
-            moneyAmount._Value++;
+            moneyAmount._Value += 1;
             UpdateMoneyDesplay();
             yield return new WaitForSeconds(1/genPerSec._Value);
         }
