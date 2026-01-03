@@ -7,6 +7,7 @@ using System.Collections.Generic;
 
 public class CharacterSelect : MonoBehaviour
 {
+    [Header("Character summary objects")]
     [SerializeField] TMP_Text characterNameText;
     [SerializeField] TMP_Text characterDescriptionText;
     [SerializeField] Image characterImage;
@@ -14,11 +15,12 @@ public class CharacterSelect : MonoBehaviour
     public List<CharacterData> party = new List<CharacterData>();
     public int partySize = 5;
 
+    [Header("Party size limitations")]
     [SerializeField] TMP_Text partyCountText;
     [SerializeField] GameObject maxMessage;
     [SerializeField] Image[] partySlots;
 
-    private CharacterData lastClicked = null;
+    CharacterData lastClicked = null;
 
     void Start()
     {
