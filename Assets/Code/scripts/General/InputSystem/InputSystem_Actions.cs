@@ -472,6 +472,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Return"",
+                    ""type"": ""Button"",
+                    ""id"": ""89b5aabf-8223-4208-bce4-eee43f82523e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -527,6 +536,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ConfirmDialogue"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7b9ce955-34b5-4818-9f57-9bf6c8dd6304"",
+                    ""path"": ""<Keyboard>/backspace"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Return"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -936,6 +956,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_UI_ToggleCharacterSelect = m_UI.FindAction("ToggleCharacterSelect", throwIfNotFound: true);
         m_UI_SkipCutscene = m_UI.FindAction("SkipCutscene", throwIfNotFound: true);
         m_UI_ConfirmDialogue = m_UI.FindAction("ConfirmDialogue", throwIfNotFound: true);
+        m_UI_Return = m_UI.FindAction("Return", throwIfNotFound: true);
         // ControlManager
         m_ControlManager = asset.FindActionMap("ControlManager", throwIfNotFound: true);
         m_ControlManager_NextPlayer = m_ControlManager.FindAction("NextPlayer", throwIfNotFound: true);
@@ -1272,6 +1293,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_ToggleCharacterSelect;
     private readonly InputAction m_UI_SkipCutscene;
     private readonly InputAction m_UI_ConfirmDialogue;
+    private readonly InputAction m_UI_Return;
     /// <summary>
     /// Provides access to input actions defined in input action map "UI".
     /// </summary>
@@ -1303,6 +1325,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "UI/ConfirmDialogue".
         /// </summary>
         public InputAction @ConfirmDialogue => m_Wrapper.m_UI_ConfirmDialogue;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/Return".
+        /// </summary>
+        public InputAction @Return => m_Wrapper.m_UI_Return;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1344,6 +1370,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ConfirmDialogue.started += instance.OnConfirmDialogue;
             @ConfirmDialogue.performed += instance.OnConfirmDialogue;
             @ConfirmDialogue.canceled += instance.OnConfirmDialogue;
+            @Return.started += instance.OnReturn;
+            @Return.performed += instance.OnReturn;
+            @Return.canceled += instance.OnReturn;
         }
 
         /// <summary>
@@ -1370,6 +1399,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ConfirmDialogue.started -= instance.OnConfirmDialogue;
             @ConfirmDialogue.performed -= instance.OnConfirmDialogue;
             @ConfirmDialogue.canceled -= instance.OnConfirmDialogue;
+            @Return.started -= instance.OnReturn;
+            @Return.performed -= instance.OnReturn;
+            @Return.canceled -= instance.OnReturn;
         }
 
         /// <summary>
@@ -1981,6 +2013,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnConfirmDialogue(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Return" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnReturn(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "ControlManager" which allows adding and removing callbacks.
