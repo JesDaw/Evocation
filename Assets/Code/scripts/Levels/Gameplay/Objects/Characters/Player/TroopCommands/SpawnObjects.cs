@@ -167,6 +167,19 @@ public class SpawnObjects : MonoBehaviour
         }
 
         GameObject CreatedObject = Instantiate(player, this.transform.position, this.transform.rotation, _PlayerContainer);
+        
+        // Subscribe to the player's death event using UltEvents
+        Stats playerStats = CreatedObject.GetComponent<Stats>();
+        if (playerStats != null)
+        {
+            // UltEvents uses AddPersistentCall or you can use the delegate directly
+            playerStats.OnDeath.DynamicCalls += () => PlayerCountManager.LooseLife(CreatedObject);
+        }
+        else
+        {
+            Debug.LogError("Player prefab does not have a Stats component!");
+        }
+        
         playerSwitch.AddPlayer(CreatedObject);
         PlayerCountManager.GainLife();
     }
