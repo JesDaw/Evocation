@@ -60,6 +60,7 @@ public class UILogic : MonoBehaviour
     {
         sceneMgr = FindFirstObjectByType<SceneActivityManager>();
         Debug.Assert(sceneMgr != null);
+        
     }
 
     public void ClickSound()

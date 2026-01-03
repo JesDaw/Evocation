@@ -9,7 +9,6 @@ public class DialogueManager : MonoBehaviour
 {
     public TMP_Text nameText;
     public TMP_Text dialogueText;
-    // UILogic uILogic;
     [SerializeField] GameObject DialogueBox;
 
     List<Dialogue> dialogueSlides = new List<Dialogue>();
@@ -20,6 +19,44 @@ public class DialogueManager : MonoBehaviour
 
     public bool DialogueActive { get; private set; }
 
+    void OnEnable()
+    {
+ 
+    }
+
+    void OnDisable()
+    {
+        // Unsubscribe when disabled
+        UnsubscribeFromInputs();
+    }
+
+    void SubscribeToInputs()
+    {
+        if (GlobalInputManager.Instance == null) 
+        {
+            UnityEngine.Debug.LogWarning($"DialogueManager didnt find the GlobalInputManager");
+            return;
+        }
+        var uiActions = GlobalInputManager.Instance.InputActions.UI;
+        uiActions.ConfirmDialogue.performed += OnConfirmDialoguePressed;
+    }
+
+    void Start()
+    {
+        if (GlobalInputManager.Instance != null)
+        {
+            SubscribeToInputs();
+        }
+    }
+
+    void UnsubscribeFromInputs()
+    {
+        if (GlobalInputManager.Instance == null) return;
+
+        var uiActions = GlobalInputManager.Instance.InputActions.UI;
+        uiActions.ConfirmDialogue.performed -= OnConfirmDialoguePressed;
+    }
+
     public void StartDialogue(List<Dialogue> slides, DailogueTrigger trigger)
     {
         dialogueSlides = slides;
@@ -29,32 +66,34 @@ public class DialogueManager : MonoBehaviour
         DialogueActive = true;
 
         DialogueBox.SetActive(true);
+        
+        GlobalInputManager.Instance.SetDialogueMode();
+        
         DisplayNextSlide(); 
     }
 
     public void OnConfirmDialoguePressed(InputAction.CallbackContext context)
     {
-        if (!context.started || !DialogueActive || UILogic.GameIsPaused) return;
-        //UnityEngine.Debug.Log("OnConfirmDialoguePressed pressed");
+        if (!context.performed || !DialogueActive || UILogic.GameIsPaused) return;
+        
+        //UnityEngine.Debug.Log("Dialogue confirm button pressed");
         OnConfirmDialoguePressedLogic();
     }
 
     void OnConfirmDialoguePressedLogic()
     {
-        if (_typeLineCoroutine != null) // still typing → skip
+        if (_typeLineCoroutine != null) 
         {
             SkipToEndOfLine();
             return;
         }
 
-        // Finished all lines?
         if (slideCount >= dialogueSlides.Count - 1)
         {
             EndDialogue();
             return;
         }
 
-        // Go to next slide properly
         slideCount++;
         DisplayNextSlide();
     }
@@ -98,6 +137,15 @@ public class DialogueManager : MonoBehaviour
         slideCount = 0;
         _typeLineCoroutine = null;
         _dailogueTrigger.EndDialogue();
+        
+        if (CameraControlSwitcher.Instance != null && CameraControlSwitcher.Instance.FreeCamIsActive)
+        {
+            GlobalInputManager.Instance.SetFreeCamMode();
+        }
+        else
+        {
+            GlobalInputManager.Instance.SetPlayerCharacterMode();
+        }
     }
 
     public void DeactivateDialogueBox()
