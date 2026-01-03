@@ -116,17 +116,9 @@ public class GameState : MonoBehaviour
     {
         currentlevelState = LevelState.Intro;
         
-        // Set cutscene mode - only UI controls (for skipping if implemented)
         GlobalInputManager.Instance.SetCutsceneMode();
+        StartCoroutine(WaitFrame());
         
-        if (playableDirectors.Count > 0)
-        {
-            HandleInGameCutscene(0);
-        }
-        else
-        {
-            Debug.LogWarning($"No PlayableDirectors in playableDirectors list");
-        }
     }
 
     public void HandleLevelScoutingFaze()
@@ -135,8 +127,6 @@ public class GameState : MonoBehaviour
         currentlevelState = LevelState.Scouting;
         sceneMgr.Activate("ScoutingUI");
         StartTrackOne();
-        
-        // Enable freecam mode for scouting
         GlobalInputManager.Instance.SetScoutingMode();
     }
 
@@ -280,7 +270,6 @@ public class GameState : MonoBehaviour
     //===================================Music tracks=======================================
     internal void HandleInGameCutscene(int director)
     {
-        Time.timeScale = 0;
         sceneMgr.Activate("Blank UI");
         
         // Set cutscene mode when playing any cutscene
@@ -318,5 +307,24 @@ public class GameState : MonoBehaviour
     internal void StopTrackThree()
     {
         TrackfadeOutThree?.Invoke();
+    }
+
+    // utility funchtion
+
+    IEnumerator WaitFrame()
+    {
+        yield return null;
+        if (playableDirectors.Count > 0)
+        {
+            if(playableDirectors[0].state != PlayState.Playing)
+            {
+                HandleInGameCutscene(0);
+            }
+            
+        }
+        else
+        {
+            Debug.LogWarning($"No PlayableDirectors in playableDirectors list");
+        }
     }
 }
