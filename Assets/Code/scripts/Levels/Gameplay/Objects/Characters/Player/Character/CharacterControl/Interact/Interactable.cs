@@ -6,21 +6,23 @@ using UnityEngine.Events;
 public class Interactable : MonoBehaviour
 {
     public UnityEvent interactAction;
-    public UnityEvent playerInRange;
     List<GameObject> _playersInRange = new List<GameObject>();
     [SerializeField] bool FreeCamActsAsActivePlayer;
+    [SerializeField] GameObject InteractionNotificationIcon;
+    bool _iconIsActive = false;
     bool ActivePlayerIsInRange;
+
+    void ToggleIcon()
+    {
+        _iconIsActive = !_iconIsActive;
+        InteractionNotificationIcon.SetActive(_iconIsActive);
+    }
 
     public void ActionPressed(InputAction.CallbackContext context)
     {
         if (!context.started) return;
         if (_playersInRange.Count == 0) return;
         if (CheckActivePlayerIsInRange()) interactAction.Invoke(); 
-    }
-
-    void TogglePlayerNotification()
-    {
-        playerInRange.Invoke();
     }
 
     bool CheckActivePlayerIsInRange()
@@ -42,7 +44,7 @@ public class Interactable : MonoBehaviour
             if(CheckActivePlayerIsInRange())
             {
                 //Debug.Log("in range");
-                TogglePlayerNotification();
+                ToggleIcon();
             }
         }
     }
@@ -59,7 +61,7 @@ public class Interactable : MonoBehaviour
             if (!CheckActivePlayerIsInRange())
             {
                 //Debug.Log("out of range");
-                TogglePlayerNotification();
+                ToggleIcon();
             }
         }
     }
