@@ -186,6 +186,6 @@ public class CameraControlSwitcher : MonoBehaviour
         if (soundEffectsManager != null)
             soundEffectsManager.gameObject.SetActive(false);
 
-        Debug.Log("All players dead - switched to freecam.");
+        //Debug.Log("All players dead - switched to freecam.");
     }
 }
