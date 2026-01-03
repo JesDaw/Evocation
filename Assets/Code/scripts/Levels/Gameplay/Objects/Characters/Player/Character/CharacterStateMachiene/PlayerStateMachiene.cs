@@ -246,4 +246,50 @@ public class PlayerStateMachine : MonoBehaviour
         if (!_isActive) return; 
         _commander.OnAttack(context);
     }
+
+//=========================== Cutscene functions ================================
+    /// <summary>
+    /// Start playing walk animation (called by Timeline signal)
+    /// </summary>
+    public void ManualWalkingAnimation()
+    {
+        if (_animator != null)
+        {
+            _animator.SetBool("IsRunning", true);
+            _animator.SetFloat("RunningSpeed", _scrStats._AnimationMoveSpeed);
+        }
+    }
+
+    /// <summary>
+    /// Stop walking and return to idle (called by Timeline signal)
+    /// </summary>
+    public void ManualWalkingAnimationStop()
+    {
+        if (_animator != null)
+        {
+            _animator.SetBool("IsRunning", false);
+        }
+    }
+
+   /// <summary>
+    /// Play attack animation (called by Timeline signal)
+    /// </summary>
+    public void ManualAttackAnimation()
+    {
+        if (_animator != null)
+        {
+            _animator.SetBool("IsAttacking", true);
+        }
+    }
+
+    /// <summary>
+    /// Stop attack animation and return to idle (called by Timeline signal)
+    /// </summary>
+    public void ManualAttackAnimationStop()
+    {
+        if (_animator != null)
+        {
+            _animator.SetBool("IsAttacking", false);
+        }
+    }
 }
