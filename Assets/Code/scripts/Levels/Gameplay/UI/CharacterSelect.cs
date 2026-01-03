@@ -7,6 +7,8 @@ using System.Collections.Generic;
 
 public class CharacterSelect : MonoBehaviour
 {
+
+    [SerializeField] SpawnController spawnController;
     [Header("Character summary objects")]
     [SerializeField] TMP_Text characterNameText;
     [SerializeField] TMP_Text characterDescriptionText;
@@ -51,11 +53,15 @@ public class CharacterSelect : MonoBehaviour
         if (party.Contains(character))
         {
             party.Remove(character);
+            spawnController.UnequipCPU(character.scriptableStats);
         }
         else
         {
             if (party.Count < partySize)
+            {
                 party.Add(character);
+                spawnController.EquipCPU(character.scriptableStats);
+            }
             else
             {
                 StartCoroutine(MaxMessageRoutine());
