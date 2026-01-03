@@ -2,27 +2,30 @@ using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
 
 public class TimelineController : MonoBehaviour
 {
     PlayableDirector timeline;
     bool gameIsPaused;
-    [SerializeField] float _jumpPoint;
+    [SerializeField] bool _skipable = false;
+    public UnityEvent SkipedTimeline;
     double heldTime;
     bool isHolding = false;
+
     
     void Start()
     {
         timeline = GetComponent<PlayableDirector>();
-    }
-
-    void OnEnable()
-    {
-        // Subscribe to the skip cutscene button
         if (GlobalInputManager.Instance != null)
         {
             SubscribeToInputs();
         }
+    }
+
+    void OnEnable()
+    {
+        
     }
 
     void OnDisable()
@@ -36,7 +39,7 @@ public class TimelineController : MonoBehaviour
         if (GlobalInputManager.Instance == null) return;
 
         var uiActions = GlobalInputManager.Instance.InputActions.UI;
-        uiActions.SkipCutscene.performed += JumpTimelineToPoint;
+        uiActions.SkipCutscene.performed += SkipTimeline;
     }
 
     void UnsubscribeFromInputs()
@@ -44,7 +47,7 @@ public class TimelineController : MonoBehaviour
         if (GlobalInputManager.Instance == null) return;
 
         var uiActions = GlobalInputManager.Instance.InputActions.UI;
-        uiActions.SkipCutscene.performed -= JumpTimelineToPoint;
+        uiActions.SkipCutscene.performed -= SkipTimeline;
     }
 
     public void PlayTimeline()
@@ -107,12 +110,14 @@ public class TimelineController : MonoBehaviour
         }
     }
 
-    public void JumpTimelineToPoint(InputAction.CallbackContext context)
+    public void SkipTimeline(InputAction.CallbackContext context)
     {
-        if (!context.performed) return;
+        if (!context.performed || !_skipable) return;
         
-        UnityEngine.Debug.Log($"Skipping cutscene to time: {_jumpPoint}");
-        timeline.time = _jumpPoint;
+        //UnityEngine.Debug.Log($"Skipping scene");
+        ResetTimeline();
+        SkipedTimeline?.Invoke();
+
     }
 
     void LateUpdate()

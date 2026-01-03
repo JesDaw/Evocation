@@ -174,7 +174,7 @@ public class GameState : MonoBehaviour
     public void EngaugmentPartOne()
     {
         Time.timeScale = 1;
-        UnityEngine.Debug.Log("EngaugmentPartOne starting");
+        //UnityEngine.Debug.Log("EngaugmentPartOne starting");
         sceneMgr.Activate("GamePlayUI", makeAnchor: true);
         StopTrackOne();
         StartTrackTwo();
