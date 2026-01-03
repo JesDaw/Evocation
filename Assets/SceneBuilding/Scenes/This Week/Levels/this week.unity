@@ -37268,6 +37268,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6100003531216662107, guid: 8cbd9205f9bdd4a8e807b6d7b18cb3b2, type: 3}
+      propertyPath: _Clan
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6100003531216662107, guid: 8cbd9205f9bdd4a8e807b6d7b18cb3b2, type: 3}
+      propertyPath: OnDeath._PersistentCalls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6100003531216662107, guid: 8cbd9205f9bdd4a8e807b6d7b18cb3b2, type: 3}
+      propertyPath: OnDeath._PersistentCalls.Array.data[0]._Target
+      value: 
+      objectReference: {fileID: 7987829860878830886}
+    - target: {fileID: 6100003531216662107, guid: 8cbd9205f9bdd4a8e807b6d7b18cb3b2, type: 3}
+      propertyPath: OnDeath._PersistentCalls.Array.data[0]._MemberName
+      value: LooseLife
+      objectReference: {fileID: 0}
     - target: {fileID: 7051032630218217497, guid: 8cbd9205f9bdd4a8e807b6d7b18cb3b2, type: 3}
       propertyPath: m_Name
       value: Player
@@ -60646,6 +60662,7 @@ MonoBehaviour:
   activePlayer: {fileID: 1665659409288972127}
   playerSwitch: {fileID: 7449825835338289313}
   playerLivesDisplay: {fileID: 194415400}
+  cameraControlSwitcher: {fileID: 8625856221613645924}
   canSpawnMore: 1
 --- !u!4 &8140393495653493198
 Transform:

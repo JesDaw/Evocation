@@ -10,7 +10,7 @@ public class AOEAttackType : AttackType
     {
         float sizeX = _SizeX;
         float sizeY = _SizeY;
-        Debug.Log("CPU AOE Attack");
+        //Debug.Log("CPU AOE Attack");
         
         sizeX += _StopDistance;
         sizeX = _context._Stats._Enemy ? -sizeX : sizeX;

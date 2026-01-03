@@ -15,7 +15,6 @@ public class PlayerSwitch : MonoBehaviour
     {
         PlayerIDNumber = 1;
 
-        // Subscribe to input from the GlobalInputManager
         var controlManager = GlobalInputManager.Instance.InputActions.ControlManager;
         
         controlManager.NextPlayer.performed += SwitchPlayerRight;
@@ -33,7 +32,6 @@ public class PlayerSwitch : MonoBehaviour
                 Debug.LogError($"No CinemachineCamera found in {player.name}");
             }
             
-            // Initialize all players as inactive
             var playerSM = player.GetComponent<PlayerStateMachine>();
             if (playerSM != null)
             {
@@ -41,7 +39,6 @@ public class PlayerSwitch : MonoBehaviour
             }
         }
 
-        // Set up ActivePlayer reference and camera priorities
         if (players.Count > 0)
         {
             ActivePlayer.Instance.CurrentPlayer = players[activePlayerIndex];
@@ -51,7 +48,6 @@ public class PlayerSwitch : MonoBehaviour
 
     void OnDestroy()
     {
-        // Unsubscribe when destroyed
         if (GlobalInputManager.Instance != null)
         {
             var controlManager = GlobalInputManager.Instance.InputActions.ControlManager;
@@ -73,9 +69,15 @@ public class PlayerSwitch : MonoBehaviour
             return;
         }
 
+        // FIX: Check if current player exists before accessing it
         if (activePlayerIndex >= 0 && activePlayerIndex < players.Count && players[activePlayerIndex] != null)
         {
-            ActivePlayer.Instance.CurrentPlayer.GetComponent<PlayerStateMachine>().PlayerCommander.ClearAllCommands();
+            var playerSM = players[activePlayerIndex].GetComponent<PlayerStateMachine>();
+            // FIX: Null check before accessing PlayerCommander
+            if (playerSM != null && playerSM.PlayerCommander != null)
+            {
+                playerSM.PlayerCommander.ClearAllCommands();
+            }
             playerCameras[activePlayerIndex].Priority = 0;
         }
 
@@ -102,9 +104,15 @@ public class PlayerSwitch : MonoBehaviour
             return;
         }
 
+        // FIX: Check if current player exists before accessing it
         if (activePlayerIndex >= 0 && activePlayerIndex < players.Count && players[activePlayerIndex] != null)
         {
-            ActivePlayer.Instance.CurrentPlayer.GetComponent<PlayerStateMachine>().PlayerCommander.ClearAllCommands();
+            var playerSM = players[activePlayerIndex].GetComponent<PlayerStateMachine>();
+            // FIX: Null check before accessing PlayerCommander
+            if (playerSM != null && playerSM.PlayerCommander != null)
+            {
+                playerSM.PlayerCommander.ClearAllCommands();
+            }
             playerCameras[activePlayerIndex].Priority = 0;
         }
 
@@ -137,20 +145,51 @@ public class PlayerSwitch : MonoBehaviour
 
     void ActivatePlayer(int index)
     {
-        Debug.Log($"ActivatePlayer called for index {index}");
+        //Debug.Log($"ActivatePlayer called for index {index}");
         
+        // FIX: Validate index before accessing
+        if (index < 0 || index >= players.Count)
+        {
+            Debug.LogError($"Invalid player index: {index}");
+            return;
+        }
+
+        // FIX: Validate the player at index exists
+        if (players[index] == null)
+        {
+            Debug.LogError($"Player at index {index} is null!");
+            return;
+        }
+
+        // Check if we're in freecam mode - if so, don't activate cameras
+        bool isFreeCamActive = CameraControlSwitcher.Instance != null && 
+                               CameraControlSwitcher.Instance.FreeCamIsActive;
+
         // Deactivate all players first
         for (int i = 0; i < players.Count; i++)
         {
+            // FIX: Skip null players
+            if (players[i] == null) continue;
+
             var playerSM = players[i].GetComponent<PlayerStateMachine>();
             if (playerSM == null) continue;
 
             if (i == index)
             {
-                // Activate this player
-                playerCameras[i].Priority = 2;
+                // Activate this player (but not their camera if in freecam mode)
+                if (!isFreeCamActive)
+                {
+                    playerCameras[i].Priority = 2;
+                }
+                else
+                {
+                    // Keep camera priority low when in freecam
+                    playerCameras[i].Priority = 0;
+                }
+                
                 ActivePlayer.Instance.CurrentPlayer = players[i];
-                playerSM.SetActive(true);
+                // Note: Don't call SetActive(true) here - keep them inactive in freecam
+                playerSM.SetActive(!isFreeCamActive);
             }
             else
             {
@@ -178,7 +217,7 @@ public class PlayerSwitch : MonoBehaviour
             Debug.LogError($"No CinemachineCamera found in {newPlayer.name}");
         }
 
-        Debug.Log($"Added new player. Total players: {players.Count}");
+        //Debug.Log($"Added new player. Total players: {players.Count}");
     }
 
     public void RemovePlayer(GameObject playerToRemove)
@@ -206,6 +245,8 @@ public class PlayerSwitch : MonoBehaviour
             else
             {
                 activePlayerIndex = -1;
+                // FIX: Clear CurrentPlayer when no players left
+                ActivePlayer.Instance.CurrentPlayer = null;
                 Debug.Log("No players left to control.");
             }
         }
@@ -217,7 +258,15 @@ public class PlayerSwitch : MonoBehaviour
         // Optional: reassign PlayerIDs
         for (int i = 0; i < players.Count; i++)
         {
-            players[i].GetComponent<PlayerStateMachine>().PlayerID = i;
+            // FIX: Null check before accessing
+            if (players[i] != null)
+            {
+                var playerSM = players[i].GetComponent<PlayerStateMachine>();
+                if (playerSM != null)
+                {
+                    playerSM.PlayerID = i;
+                }
+            }
         }
     }
 }

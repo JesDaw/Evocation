@@ -131,6 +131,41 @@ public class CameraControlSwitcher : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Switch to freecam at a specific position (for ghost cam on death)
+    /// </summary>
+    public void SwitchToFreeCamAtPosition(Vector3 position, float fieldOfView)
+    {
+        FreeCamIsActive = true;
+
+        // Disable the current player's inputs (if any)
+        var currentPlayer = ActivePlayer.Instance.CurrentPlayer?.GetComponent<PlayerStateMachine>();
+        if (currentPlayer != null)
+        {
+            currentPlayer.SetActive(false);
+        }
+
+        // Use GlobalInputManager to switch control modes
+        GlobalInputManager.Instance.SetFreeCamMode();
+
+        // Position freecam at the specified location
+        if (freeCam != null)
+        {
+            freeCam.transform.position = position;
+            freeCam.Lens.FieldOfView = fieldOfView;
+            freeCam.Priority = 2;
+        }
+
+        // Lower priority of all player cameras
+        var playerCam = ActivePlayer.Instance.GetCurrentPlayerCamera();
+        if (playerCam != null)
+        {
+            playerCam.Priority = 0;
+        }
+
+        //Debug.Log($"Ghost cam activated at position {position}");
+    }
+
     public void DeadFreeCam()
     {
         FreeCamIsActive = true;
