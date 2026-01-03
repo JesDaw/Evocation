@@ -13,8 +13,6 @@ public class LevelTransition : MonoBehaviour
     public float transitionTime = 1f;
     [SerializeField] string NextSceneName;
 
-    // FInd way to avoid using update
-    // Update is called once per frame
     public void StartTransition()
     {
         StartCoroutine(LoadScene(NextSceneName));
@@ -24,7 +22,7 @@ public class LevelTransition : MonoBehaviour
     {
         TransitionAnimation.SetTrigger("Start");
 
-        yield return new WaitForSeconds(transitionTime); //make this wait for animation to end
+        yield return new WaitForSeconds(transitionTime); 
 
         StartCoroutine(LoadAsynchronously(nextSceneName));
     }
