@@ -16131,8 +16131,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1704581875}
-  - {fileID: 387481080}
   - {fileID: 1039111749}
+  - {fileID: 387481080}
   - {fileID: 1825091493}
   - {fileID: 613965857}
   - {fileID: 847841445}
@@ -16170,6 +16170,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SceneToLoad: 0
+  PauseEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1836361928}
+        m_TargetAssemblyTypeName: TimelineController, CodeAssembly
+        m_MethodName: PauseGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  ResumeEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1836361928}
+        m_TargetAssemblyTypeName: TimelineController, CodeAssembly
+        m_MethodName: UnpauseGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &737291465
 GameObject:
   m_ObjectHideFlags: 0
@@ -35734,7 +35764,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 1836361928}
           m_TargetAssemblyTypeName: TimelineController, CodeAssembly
-          m_MethodName: PauseAnimation
+          m_MethodName: PauseTimeline
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}

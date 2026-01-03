@@ -1,13 +1,14 @@
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Playables;
 
 public class TimelineController : MonoBehaviour
 {
     PlayableDirector timeline;
-    float rewindTime;
-    private double heldTime;
-    private bool isHolding = false; // Track if we're intentionally holding
-
+    bool gameIsPaused;
+    float _jumpPoint;
+    double heldTime;
+    bool isHolding = false; 
     void Start()
     {
         timeline = GetComponent<PlayableDirector>();
@@ -23,7 +24,7 @@ public class TimelineController : MonoBehaviour
         timeline.Resume();
     }
 
-    public void PauseAnimation()
+    public void PauseTimeline()
     {
         if (timeline.playableGraph.IsValid())
         {
@@ -39,14 +40,53 @@ public class TimelineController : MonoBehaviour
         timeline.Stop();
     }
 
-    public void RewindTimeline()
+    public void PauseGame()
     {
-        timeline.time = rewindTime;
+        if (timeline.playableGraph.IsValid())
+        {
+            if (isHolding)
+            {
+                return;
+            }
+            else
+            {
+                timeline.playableGraph.GetRootPlayable(0).SetSpeed(0);
+                heldTime = timeline.time;
+                gameIsPaused = true;
+            }
+        }
+    }
+
+    public void UnpauseGame()
+    {
+        if (timeline.playableGraph.IsValid())
+        {
+            if (isHolding)
+            {
+                return;
+            }
+            else
+            {
+                timeline.playableGraph.GetRootPlayable(0).SetSpeed(1);
+                gameIsPaused = false;
+                timeline.Resume();
+            }
+        }
+    }
+
+    public void JumpTimelineToPoint()
+    {
+        timeline.time = _jumpPoint;
     }
 
     void LateUpdate()
     {
-        // Only try to hold if we're intentionally holding AND the graph is valid
+        if (gameIsPaused)
+        {
+            timeline.time = heldTime;
+            return;
+        }
+        
         if (isHolding && timeline.playableGraph.IsValid())
         {
             timeline.time = heldTime;
