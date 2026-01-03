@@ -114,7 +114,7 @@ public class Stats : MonoBehaviour
     {
         if (LastHitBy != null)
         {
-            Debug.Log(LastHitBy.IsEnemy);
+            //Debug.Log(LastHitBy.IsEnemy);
             OnWitFlagDeath.Invoke(LastHitBy.IsEnemy);
         }
         OnDeath.Invoke();
