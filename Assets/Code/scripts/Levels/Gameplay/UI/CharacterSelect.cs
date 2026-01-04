@@ -21,6 +21,7 @@ public class CharacterSelect : MonoBehaviour
     [SerializeField] TMP_Text partyCountText;
     [SerializeField] GameObject maxMessage;
     [SerializeField] Image[] partySlots;
+    [SerializeField] Image[] partySlotsGameplayUI;
 
     CharacterData lastClicked = null;
 
@@ -87,12 +88,16 @@ public class CharacterSelect : MonoBehaviour
         {
             partySlots[i].enabled = false;
             partySlots[i].sprite = null;
+            partySlotsGameplayUI[i].enabled = false;
+            partySlotsGameplayUI[i].sprite = null;
         }
 
         for (int i = 0; i < party.Count; i++)
         {
             partySlots[i].enabled = true;
-            partySlots[i].sprite = party[i].portrait;
+            partySlots[i].sprite = party[i].headshot;
+            partySlotsGameplayUI[i].enabled = true;
+            partySlotsGameplayUI[i].sprite = party[i].headshot;
         }
     }
 }
