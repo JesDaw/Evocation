@@ -7,6 +7,8 @@ public class FModEvents : MonoBehaviour
     [field: SerializeField] public EventReference menuClick { get; private set; }
     [field: Header("Ambiance")]
     [field: SerializeField] public EventReference ambiance { get; private set; }
+    [field: Header("Music")]
+    [field: SerializeField] public EventReference music { get; private set; }
     
     public static FModEvents instance { get; private set; } // lowercase to match
 

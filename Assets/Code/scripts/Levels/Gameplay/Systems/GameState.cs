@@ -29,6 +29,7 @@ public class GameState : MonoBehaviour
     SceneActivityManager sceneMgr;
     bool EngaugeButtonWasPressed = false;
     EventInstance ambienceEventInstance;
+    EventInstance musicEventInstance;
 
     public enum LevelState
     {
@@ -40,6 +41,14 @@ public class GameState : MonoBehaviour
         Win,
         Loose,
         OutTro
+    }
+
+    enum MusicState
+    {
+        PART_1 = 0,
+        PART_2 = 1,
+        PART_3 = 2,
+        LEVEL_WIN = 3
     }
 
     void Awake()
@@ -116,11 +125,13 @@ public class GameState : MonoBehaviour
     if (FModEvents.instance != null)
     {
         InitializeAmbience(FModEvents.instance.ambiance);
+        InitializeFModMusic(FModEvents.instance.music);
     }
     else
     {
         Debug.LogError("FModEvents.instance is null! Make sure FModEvents GameObject exists in the scene.");
     }
+ 
     
     HandleLevelIntro();
 }
@@ -130,6 +141,11 @@ public class GameState : MonoBehaviour
         // Create the instance directly using RuntimeManager
         ambienceEventInstance = RuntimeManager.CreateInstance(ambienceEventReference);
         ambienceEventInstance.start();
+    }
+    void InitializeFModMusic(EventReference musicEventReference)
+    {
+        // Create the instance and assign it to the class field musicEventInstance
+        musicEventInstance = RuntimeManager.CreateInstance(musicEventReference);
     }
 
     void OnDestroy()
@@ -157,7 +173,10 @@ public class GameState : MonoBehaviour
         Time.timeScale = 1;
         currentlevelState = LevelState.Scouting;
         sceneMgr.Activate("ScoutingUI");
-        StartTrackOne();
+        //StartTrackOne();
+        SetMusicSection(MusicState.PART_1);
+        musicEventInstance.start();
+        
         GlobalInputManager.Instance.SetScoutingMode();
     }
 
@@ -207,8 +226,9 @@ public class GameState : MonoBehaviour
         Time.timeScale = 1;
         //UnityEngine.Debug.Log("EngaugmentPartOne starting");
         sceneMgr.Activate("GamePlayUI", makeAnchor: true);
-        StopTrackOne();
-        StartTrackTwo();
+        //StopTrackOne();
+        //StartTrackTwo();
+        SetMusicSection(MusicState.PART_2);
 
         currentlevelState = LevelState.EngaugmentPartOne;
 
@@ -238,14 +258,15 @@ public class GameState : MonoBehaviour
     public void EngaugmentPartTwo()
     {
         currentlevelState = LevelState.EngaugmentPartTwo;
-        StopTrackTwo();
-        StartTrackThree();
+        //StopTrackTwo();
+        //StartTrackThree();
         LevelPartTwo?.Invoke();
     }
 
     public void EngaugmentPartThree()
     {
         currentlevelState = LevelState.EngaugmentPartThree;
+        SetMusicSection(MusicState.PART_3);
         LevelPartThree?.Invoke();
     }
 
@@ -255,6 +276,7 @@ public class GameState : MonoBehaviour
         currentlevelState = LevelState.Win;
         _moneyMachanic.DeactivateMoney();
         _timeMachanic.DeactivateTimer();
+        SetMusicSection(MusicState.LEVEL_WIN);
 
         if (playableDirectors.Count > 2)
         {
@@ -308,6 +330,14 @@ public class GameState : MonoBehaviour
         
         playableDirectors[director].Play();
         //Debug.Log($"Playing {playableDirectors[director]}");
+    }
+
+    
+
+    void SetMusicSection(MusicState state)
+    {
+        UnityEngine.Debug.Log($"Changing music to {state}");
+        musicEventInstance.setParameterByName("MountainLevelPhases", (float)state);
     }
 
     public void StartTrackOne()
