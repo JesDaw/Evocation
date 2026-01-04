@@ -1,0 +1,23 @@
+using UnityEngine;
+using FMODUnity;
+
+public class FModEvents : MonoBehaviour
+{
+    [field: Header("Click SFX")]
+    [field: SerializeField] public EventReference menuClick { get; private set; }
+    [field: Header("Ambiance")]
+    [field: SerializeField] public EventReference ambiance { get; private set; }
+    
+    public static FModEvents instance { get; private set; } // lowercase to match
+
+    void Awake()
+    {
+        if (instance != null && instance != this) // lowercase
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        instance = this; // lowercase
+    }
+}

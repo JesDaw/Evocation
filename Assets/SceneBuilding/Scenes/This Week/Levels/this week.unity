@@ -41895,6 +41895,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1973124969}
+  - component: {fileID: 1973124971}
+  - component: {fileID: 1973124970}
   m_Layer: 0
   m_Name: AudioManagers
   m_TagString: Untagged
@@ -41919,6 +41921,44 @@ Transform:
   - {fileID: 2012100001}
   m_Father: {fileID: 1101419785}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1973124970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1973124968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7222aab070c5e4562a0aa6baaed39098, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::FModEvents
+  <menuClick>k__BackingField:
+    Guid:
+      Data1: -296116831
+      Data2: 1270562992
+      Data3: -881035844
+      Data4: 1970319739
+    Path: event:/SFX/MenuesAndUI/Button Click
+  <ambiance>k__BackingField:
+    Guid:
+      Data1: -2119753150
+      Data2: 1197145996
+      Data3: 1943173521
+      Data4: -131422043
+    Path: event:/Ambience/LevelOneWind
+--- !u!114 &1973124971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1973124968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 256f432cf1e6741fda824bf6ea78f531, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::FModAudioManager
 --- !u!1 &1974441422
 GameObject:
   m_ObjectHideFlags: 0
@@ -50074,9 +50114,9 @@ GameObject:
   m_Component:
   - component: {fileID: 9221375061185458774}
   - component: {fileID: 1753169480247156267}
-  - component: {fileID: 8998134225814651132}
   - component: {fileID: 548435805307270911}
   - component: {fileID: 5685341644715062094}
+  - component: {fileID: 9221375061185458775}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -65961,14 +66001,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!81 &8998134225814651132
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1450861976659838497}
-  m_Enabled: 1
 --- !u!4 &9113109780379904942
 Transform:
   m_ObjectHideFlags: 0
@@ -66000,6 +66032,20 @@ Transform:
   - {fileID: 1381609983894784585}
   m_Father: {fileID: 1916448981473919374}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9221375061185458775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1450861976659838497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioListener
+  nonRigidbodyVelocity: 0
+  attenuationObject: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

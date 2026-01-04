@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Playables;
 using Debug = UnityEngine.Debug;
+using FMODUnity;
+using FMOD.Studio;
+using System.Dynamic;
 
 public class GameState : MonoBehaviour
 {
@@ -25,6 +28,7 @@ public class GameState : MonoBehaviour
 
     SceneActivityManager sceneMgr;
     bool EngaugeButtonWasPressed = false;
+    EventInstance ambienceEventInstance;
 
     public enum LevelState
     {
@@ -80,35 +84,62 @@ public class GameState : MonoBehaviour
     }
 
     void Start()
+{
+    if (GlobalInputManager.Instance != null)
     {
-        if (GlobalInputManager.Instance != null)
+        SubscribeToInputs();
+    }
+
+    // Find the SceneActivityManager
+    foreach (var obj in Resources.FindObjectsOfTypeAll<SceneActivityManager>())
+    {
+        sceneMgr = obj;
+    }
+    Debug.Assert(sceneMgr != null);
+
+    // Forces free cam mode with disabled controls during intro
+    controlSwitcher.SwitchToCameraControl();
+    GlobalInputManager.Instance.DisableControlSwapping();
+    GlobalInputManager.Instance.DisableCameraControls();
+
+    // Disables other parts of game
+    if (_playerSpawnObjects != null) _playerSpawnObjects.SpawningIsActive = false;
+    else Debug.LogError("_playerSpawnObjects is null");
+    if (_enemySpawnObjects != null) _enemySpawnObjects.SpawningIsActive = false;
+    else Debug.LogError("_enemySpawnObjects is null");
+    if (_timeMachanic != null) _timeMachanic.TimeIsActive = false;
+    else Debug.LogError("_timeMachanic is null");
+    if (_moneyMachanic != null) _moneyMachanic.DeactivateMoney();
+    else Debug.LogError("_moneyMachanic is null");
+    
+    // Initialize ambience using FModEvents
+    if (FModEvents.instance != null)
+    {
+        InitializeAmbience(FModEvents.instance.ambiance);
+    }
+    else
+    {
+        Debug.LogError("FModEvents.instance is null! Make sure FModEvents GameObject exists in the scene.");
+    }
+    
+    HandleLevelIntro();
+}
+
+    void InitializeAmbience(EventReference ambienceEventReference)
+    {
+        // Create the instance directly using RuntimeManager
+        ambienceEventInstance = RuntimeManager.CreateInstance(ambienceEventReference);
+        ambienceEventInstance.start();
+    }
+
+    void OnDestroy()
+    {
+        // Clean up the ambience instance when this object is destroyed
+        if (ambienceEventInstance.isValid())
         {
-            SubscribeToInputs();
+            ambienceEventInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+            ambienceEventInstance.release();
         }
-
-        // Find the SceneActivityManager
-        foreach (var obj in Resources.FindObjectsOfTypeAll<SceneActivityManager>())
-        {
-            sceneMgr = obj;
-        }
-        Debug.Assert(sceneMgr != null);
-
-        // Forces free cam mode with disabled controls during intro
-        controlSwitcher.SwitchToCameraControl();
-        GlobalInputManager.Instance.DisableControlSwapping();
-        GlobalInputManager.Instance.DisableCameraControls();
-
-        // Disables other parts of game
-        if (_playerSpawnObjects != null) _playerSpawnObjects.SpawningIsActive = false;
-        else Debug.LogError("_playerSpawnObjects is null");
-        if (_enemySpawnObjects != null) _enemySpawnObjects.SpawningIsActive = false;
-        else Debug.LogError("_enemySpawnObjects is null");
-        if (_timeMachanic != null) _timeMachanic.TimeIsActive = false;
-        else Debug.LogError("_timeMachanic is null");
-        if (_moneyMachanic != null) _moneyMachanic.DeactivateMoney();
-        else Debug.LogError("_moneyMachanic is null");
-        
-        HandleLevelIntro();
     }
 
     //=======================LEVEL START=======================================
