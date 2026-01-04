@@ -83,10 +83,16 @@ crashlytics-build.properties
 # Ignore the Cache folder since it is updated locally.
 /[Aa]ssets/Plugins/FMOD/Cache/*
 
-# Ignore bank files in the StreamingAssets folder.
-/[Aa]ssets/StreamingAssets/**/*.bank
-/[Aa]ssets/StreamingAssets/**/*.bank.meta
+# IMPORTANT: DO NOT ignore .bank files - your team needs these!
+# /[Aa]ssets/StreamingAssets/**/*.bank
+# /[Aa]ssets/StreamingAssets/**/*.bank.meta
 
-# If the source bank files are kept outside of the StreamingAssets folder then these can be ignored.
+# Ignore FMOD Studio project files (only you need these)
+*.fspro
+*.fspro.user
+*.restore
+*.unsaved
+*.user
+
 # Log files can be ignored.
 fmod_editor.log
