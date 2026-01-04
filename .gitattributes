@@ -1,2 +1,69 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Unity YAML files should always use LF
+*.meta text eol=lf
+*.prefab text eol=lf
+*.unity text eol=lf
+*.asset text eol=lf
+*.asmdef text eol=lf
+
+# Unity binary files
+*.cubemap binary
+*.unitypackage binary
+*.physicMaterial binary
+*.physicsMaterial2D binary
+
+# Image formats
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.gif binary
+*.psd binary
+*.ai binary
+*.tga binary
+*.tif binary
+*.tiff binary
+*.exr binary
+*.hdr binary
+
+# Audio formats
+*.mp3 binary
+*.ogg binary
+*.wav binary
+*.aiff binary
+*.aif binary
+*.mod binary
+*.it binary
+*.s3m binary
+*.xm binary
+*.bank binary
+
+# Video formats
+*.mov binary
+*.avi binary
+*.mp4 binary
+*.mpg binary
+*.mpeg binary
+
+# 3D model formats
+*.fbx binary
+*.obj binary
+*.max binary
+*.blend binary
+*.dae binary
+*.mb binary
+*.ma binary
+
+# Font formats
+*.ttf binary
+*.otf binary
+
+# Compiled code
+*.dll binary
+*.so binary
+*.dylib binary
+
+# FMOD specific
+Assets/Plugins/FMOD/**/*.bundle binary
+Assets/Plugins/FMOD/**/Info.plist text eol=lf
