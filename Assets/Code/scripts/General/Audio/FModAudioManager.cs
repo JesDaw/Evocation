@@ -14,7 +14,6 @@ public class FModAudioManager : MonoBehaviour
         }
 
         instance = this; // lowercase
-        DontDestroyOnLoad(gameObject);
     }
 
     public void PlayOneShot(EventReference sound, UnityEngine.Vector3 worldPosition)

@@ -5,6 +5,8 @@ public class FModEvents : MonoBehaviour
 {
     [field: Header("Click SFX")]
     [field: SerializeField] public EventReference menuClick { get; private set; }
+    [field: Header("Ambiance")]
+    [field: SerializeField] public EventReference ambiance { get; private set; }
     
     public static FModEvents instance { get; private set; } // lowercase to match
 
@@ -17,6 +19,5 @@ public class FModEvents : MonoBehaviour
         }
 
         instance = this; // lowercase
-        DontDestroyOnLoad(gameObject);
     }
 }
