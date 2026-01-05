@@ -115,7 +115,9 @@ public class TimelineManager : MonoBehaviour
                 onCutsceneStart?.Invoke();
                 
                 // Play the timeline
-                entry.director.Play();
+                //WaitBeforeStarting(entry);
+                StartCoroutine(WaitBeforeStarting(entry));
+                //entry.director.Play();
                 
                 if (showDebugLogs)
                     Debug.Log($"[TimelineManager] Playing cutscene: {timelineName}");
@@ -129,6 +131,13 @@ public class TimelineManager : MonoBehaviour
         {
             Debug.LogError($"[TimelineManager] Cutscene '{timelineName}' not found! Available: {string.Join(", ", timelinesByName.Keys)}");
         }
+    }
+    System.Collections.IEnumerator WaitBeforeStarting(TimelineEntry entry)
+    {
+        //Debug.Log("WaitBeforeStarting start");
+        yield return null; 
+        entry.director.Play();
+        //Debug.Log("WaitBeforeStarting end");
     }
     
     /// <summary>
