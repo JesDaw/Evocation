@@ -190,9 +190,21 @@ public class SceneActivityManager : MonoBehaviour
         }
     }
 
-    public void Activate(string name, bool makeAnchor = false)
+    public void Activate(string name, bool makeAnchor)
     {
         Activate(FindActivity(name), makeAnchor: makeAnchor);
+    }
+
+    public void Activate(string name)
+    {
+        Activate(FindActivity(name), makeAnchor: false);
+    }
+
+    // Unity seems to have a problem with optional arguments so this is a
+    // convenience method capable of being referenced within the Unity GUI.
+    public void ActivateAndMakeAnchor(string name)
+    {
+        Activate(FindActivity(name), makeAnchor: true);
     }
 
     public GameObject GetCurrentActivity()
