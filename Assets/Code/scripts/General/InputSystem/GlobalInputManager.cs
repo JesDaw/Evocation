@@ -8,6 +8,7 @@ public class GlobalInputManager : MonoBehaviour
     // Single source of truth for all input actions
     private InputSystem_Actions _inputActions;
     public InputSystem_Actions InputActions => _inputActions;
+    [SerializeField] bool DebugLogs = false;
 
     void Awake()
     {
@@ -59,26 +60,26 @@ public class GlobalInputManager : MonoBehaviour
     public void EnablePlayerControls()
     {
         _inputActions.Player.Enable();
-        //Debug.Log("Player controls enabled");
+        if(DebugLogs) Debug.Log("Player controls enabled");
     }
     
     public void DisablePlayerControls()
     {
         _inputActions.Player.Disable();
-        //Debug.Log("Player controls disabled");
+        if(DebugLogs) Debug.Log("Player controls disabled");
     }
 
     // --------- Camera Controls ---------
     public void EnableCameraControls()
     {
         _inputActions.Camera.Enable();
-        //Debug.Log("Camera controls enabled");
+        if(DebugLogs) Debug.Log("Camera controls enabled");
     }
     
     public void DisableCameraControls()
     {
         _inputActions.Camera.Disable();
-        //Debug.Log("Camera controls disabled");
+        if(DebugLogs) Debug.Log("Camera controls disabled");
     }
 
     // --------- Control Manager (switching between player/camera) ---------
@@ -142,9 +143,9 @@ public class GlobalInputManager : MonoBehaviour
         EnablePlayerControls();
         EnableControlSwapping();
         EnablePlayerSwitching();
-        EnableSpawnerControls();  // Added spawner controls
-        EnableUIControls(); // For pause menu
-        //Debug.Log("Input Mode: Gameplay");
+        EnableSpawnerControls();  
+        EnableUIControls(); 
+        if(DebugLogs) Debug.Log("Input Mode: Gameplay");
     }
     
     /// <summary>
@@ -158,7 +159,7 @@ public class GlobalInputManager : MonoBehaviour
         EnablePlayerSwitching();
         EnableSpawnerControls();
         EnableUIControls(); 
-        //Debug.Log("Input Mode: FreeCam");
+        if(DebugLogs) Debug.Log("Input Mode: FreeCam");
     }
 
     public void SetScoutingMode()
@@ -166,7 +167,7 @@ public class GlobalInputManager : MonoBehaviour
         DisableAllControls();
         EnableCameraControls();
         EnableUIControls(); 
-        //Debug.Log("Input Mode: FreeCam");
+        if(DebugLogs) Debug.Log("Input Mode: FreeCam");
     }
     
     /// <summary>
@@ -176,7 +177,7 @@ public class GlobalInputManager : MonoBehaviour
     {
         DisableAllControls();
         EnableUIControls(); // Only UI controls (pause, skip)
-        //Debug.Log("Input Mode: Cutscene");
+        if(DebugLogs) Debug.Log("Input Mode: Cutscene");
     }
     
     /// <summary>
@@ -186,7 +187,7 @@ public class GlobalInputManager : MonoBehaviour
     {
         DisableAllControls();
         EnableUIControls(); // For dialogue interaction and pause
-        //Debug.Log("Input Mode: Dialogue");
+        if(DebugLogs) Debug.Log("Input Mode: Dialogue");
     }
     
     /// <summary>
@@ -196,7 +197,7 @@ public class GlobalInputManager : MonoBehaviour
     {
         DisableAllControls();
         EnableUIControls();
-        //Debug.Log("Input Mode: Pause Menu");
+        if(DebugLogs) Debug.Log("Input Mode: Pause Menu");
     }
     
     /// <summary>
@@ -206,7 +207,7 @@ public class GlobalInputManager : MonoBehaviour
     {
         DisableAllControls();
         EnableUIControls();  
-        //Debug.Log("Input Mode: Spawning");
+        if(DebugLogs) Debug.Log("Input Mode: Spawning");
     }
 
     // ========================= Utilities =========================

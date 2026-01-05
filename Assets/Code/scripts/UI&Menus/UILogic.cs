@@ -23,11 +23,10 @@ public class UILogic : MonoBehaviour
 
     void OnEnable()
     {
-        // Subscribe to input from GlobalInputManager (with safety check)
         if (GlobalInputManager.Instance != null)
         {
             SubscribeToInputs();
-        }
+        }        
     }
 
     void OnDisable()
@@ -60,10 +59,14 @@ public class UILogic : MonoBehaviour
     {
         sceneMgr = FindFirstObjectByType<SceneActivityManager>();
         Debug.Assert(sceneMgr != null);
+        if (GlobalInputManager.Instance != null)
+        {
+            SubscribeToInputs();
+        }
         
     }
 
-    public void ClickSound()
+    public void ClickSound() // this should be in the audio manager
     {
         _audioManager?.Play("Button Click");
     }
@@ -71,7 +74,7 @@ public class UILogic : MonoBehaviour
     public void ToggleCharacterSelect(InputAction.CallbackContext context)
     {
         //press 'c' to activate
-        if (!context.performed || GameIsPaused || gameState.currentlevelState != GameState.LevelState.Scouting) 
+        if (!context.performed || GameIsPaused || !LevelStateManager.Instance.IsInState("ScoutingState")) 
             return;
 
         if (!CharacterSelectIsOpen)

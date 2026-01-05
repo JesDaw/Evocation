@@ -7,7 +7,8 @@ public class CameraControlSwitcher : MonoBehaviour
     [SerializeField] CinemachineCamera freeCam;
     [SerializeField] FreeCamController cameraMovement;
     [SerializeField] IntVeriable player_lives;
-    [SerializeField] AudioManager soundEffectsManager;
+    //[SerializeField] AudioManager soundEffectsManager;
+    [SerializeField] bool DebugLogs = false;
 
     public bool FreeCamIsActive = false;
     internal bool _camModeIsTogglable = true; 
@@ -29,9 +30,7 @@ public class CameraControlSwitcher : MonoBehaviour
 
     void OnEnable()
     {
-        // Subscribe to toggle camera control from GlobalInputManager
-        var controlManager = GlobalInputManager.Instance.InputActions.ControlManager;
-        controlManager.ToggleCameraControl.performed += OnToggleCameraControl;
+        
     }
 
     void OnDisable()
@@ -46,8 +45,10 @@ public class CameraControlSwitcher : MonoBehaviour
 
     void Start()
     {
-        if (soundEffectsManager == null)
-            soundEffectsManager = FindAnyObjectByType<AudioManager>();
+        //if (soundEffectsManager == null)
+          //  soundEffectsManager = FindAnyObjectByType<AudioManager>();
+        var controlManager = GlobalInputManager.Instance.InputActions.ControlManager;
+        controlManager.ToggleCameraControl.performed += OnToggleCameraControl;
     }
 
     public void OnToggleCameraControl(InputAction.CallbackContext context)
@@ -62,7 +63,7 @@ public class CameraControlSwitcher : MonoBehaviour
             return;
         }
         
-        soundEffectsManager?.Play("Switching Cameras");
+       // soundEffectsManager?.Play("Switching Cameras");
         ToggleControl();
     }
 
@@ -86,7 +87,7 @@ public class CameraControlSwitcher : MonoBehaviour
         if (currentPlayer != null)
         {
             currentPlayer.SetActive(true);
-            //Debug.Log($"SwitchToPlayerControl: Enabled {currentPlayer.gameObject.name}");
+            if(DebugLogs) Debug.Log($"SwitchToPlayerControl. Enabled: {currentPlayer.gameObject.name}");
         }
         else
         {
@@ -107,6 +108,11 @@ public class CameraControlSwitcher : MonoBehaviour
 
     public void SwitchToCameraControl()
     {
+        if (FreeCamIsActive) 
+        {
+            if (DebugLogs) UnityEngine.Debug.Log("Free Cam Is already Active");
+            return;
+        }
         FreeCamIsActive = true;
 
         // Disable the current player's inputs
@@ -183,8 +189,8 @@ public class CameraControlSwitcher : MonoBehaviour
         // Use GlobalInputManager to set appropriate mode
         GlobalInputManager.Instance.SetFreeCamMode();
 
-        if (soundEffectsManager != null)
-            soundEffectsManager.gameObject.SetActive(false);
+       // if (soundEffectsManager != null)
+           // soundEffectsManager.gameObject.SetActive(false);
 
         //Debug.Log("All players dead - switched to freecam.");
     }

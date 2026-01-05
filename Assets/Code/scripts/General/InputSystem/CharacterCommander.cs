@@ -309,7 +309,6 @@ public class PlayerCommander :
     public void OnMove(InputAction.CallbackContext context)
     {
         if (_isFreeCamActive) { return;  }
-
         if ((context.ReadValue<Vector2>() == Vector2.zero) || context.canceled)
         {
             SetActiveCmd(ContinuousPlayerCommand.Move, false, null);

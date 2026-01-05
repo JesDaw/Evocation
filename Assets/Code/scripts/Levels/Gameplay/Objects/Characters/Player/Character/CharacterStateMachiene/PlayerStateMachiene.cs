@@ -13,6 +13,8 @@ public class PlayerStateMachine : MonoBehaviour
     [Header("Animation")]
     [SerializeField] AnimationEventsController _animatorController;
     [SerializeField] Animator _animator;
+    [Header("Debug")]
+    [SerializeField] public bool DebugLogs = false;
     
     [HideInInspector] public Stats _AttackingStats;
 
@@ -114,13 +116,18 @@ public class PlayerStateMachine : MonoBehaviour
 
     void SubscribeToInputs()
     {
-        if (GlobalInputManager.Instance == null) return;
+        if (GlobalInputManager.Instance == null) 
+        {
+            Debug.LogWarning("Player cant find teh GlobalInputManager");
+            return;
+        }
 
         var playerActions = GlobalInputManager.Instance.InputActions.Player;
         
         playerActions.Move.performed += OnMove;
         playerActions.Move.canceled += OnMove;
         playerActions.Attack.performed += OnAttack;
+        if (DebugLogs) Debug.Log($"player character subscribed to inputs");
     }
 
     void UnsubscribeFromInputs()
@@ -132,6 +139,8 @@ public class PlayerStateMachine : MonoBehaviour
         playerActions.Move.performed -= OnMove;
         playerActions.Move.canceled -= OnMove;
         playerActions.Attack.performed -= OnAttack;
+
+       
     }
 
     public void FindFreeCam()
@@ -151,6 +160,7 @@ public class PlayerStateMachine : MonoBehaviour
     {
         // Always update the state machine - idle, knockback, etc. still need to work
         _currentState.UpdateStates();
+        //Debug.Log($"{_isActive}");
     }
 
     public void UpdateCurrentStateToKnockback()
@@ -229,6 +239,7 @@ public class PlayerStateMachine : MonoBehaviour
     //==========================================Input callbacks===================================================
     public void OnMove(InputAction.CallbackContext context)
     {
+        if (DebugLogs) Debug.Log($"Commander Move Received _isActive: {_isActive}");
         // Only respond if this player is active
         if (!_isActive) return; 
         _commander.OnMove(context);
@@ -251,6 +262,7 @@ public class PlayerStateMachine : MonoBehaviour
         {
             _animator.SetBool("IsRunning", true);
             _animator.SetFloat("RunningSpeed", _scrStats._AnimationMoveSpeed);
+            
         }
     }
 

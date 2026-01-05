@@ -17,6 +17,7 @@ public class PlayerMoveState : PlayerBaseState
     {
         Ctx.Animator.SetBool("IsRunning", true);
         Ctx.Animator.SetFloat("RunningSpeed", Ctx.ScrStats._AnimationMoveSpeed);
+        if (Ctx.DebugLogs) Debug.Log($"Player is running in move state");
     }
 
     public override void ExitState()
