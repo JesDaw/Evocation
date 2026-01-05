@@ -25,7 +25,6 @@ public class PlayerMoveState : PlayerBaseState
         //Debug.Log($"{Ctx.gameObject.name}: Exited MOVE state");
         Ctx.Animator.SetBool("IsRunning", false);
         Ctx.Rb.linearVelocityX = 0;
-        Ctx.WalkingAudio.Stop();
     }
 
     public override void InitializeSubState()
@@ -40,7 +39,6 @@ public class PlayerMoveState : PlayerBaseState
             float horizontal = Ctx.MovementContext;
             //Debug.Log($"{Ctx.gameObject.name}: Moving - Horizontal: {horizontal}, IsMovementPressed: {Ctx.IsMovementPressed}");
             
-            if (!Ctx.WalkingAudio.isPlaying) Ctx.WalkingAudio.Play();
 
             Ctx.Rb.linearVelocityX = horizontal * Ctx.PlayerStats._MoveSpeed;
             

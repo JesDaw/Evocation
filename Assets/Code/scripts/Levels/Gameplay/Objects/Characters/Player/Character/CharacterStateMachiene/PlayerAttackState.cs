@@ -75,7 +75,6 @@ public class PlayerAttackState : PlayerBaseState
                 if (Ctx.AnimatorController.ShouldAttack())
                 {
                     currentAttackType.Attack(Ctx);
-                    Ctx.AttackingAudio.Play();
 
                     _timer = 0f;
                     _phase = AttackPhase.Cooldown;

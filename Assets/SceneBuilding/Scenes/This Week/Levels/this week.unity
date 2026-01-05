@@ -30615,6 +30615,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 666031894}
+        m_TargetAssemblyTypeName: UILogic, CodeAssembly
+        m_MethodName: ClickSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 847841444}
         m_TargetAssemblyTypeName: SceneActivityManager, CodeAssembly
         m_MethodName: 
@@ -38468,7 +38480,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 666031894}
         m_TargetAssemblyTypeName: UILogic, CodeAssembly
-        m_MethodName: Resume
+        m_MethodName: ClickSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -38478,7 +38490,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 666031894}
         m_TargetAssemblyTypeName: UILogic, CodeAssembly
         m_MethodName: Resume
         m_Mode: 1
@@ -40624,7 +40636,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 666031894}
         m_TargetAssemblyTypeName: UILogic, CodeAssembly
-        m_MethodName: LoadScene
+        m_MethodName: ClickSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -40634,9 +40646,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 666031894}
         m_TargetAssemblyTypeName: UILogic, CodeAssembly
-        m_MethodName: LoadMenu
+        m_MethodName: LoadScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -41425,6 +41437,14 @@ PrefabInstance:
       propertyPath: DebugLogs
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4492581254548526527, guid: 8cbd9205f9bdd4a8e807b6d7b18cb3b2, type: 3}
+      propertyPath: _walkingAudio
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4492581254548526527, guid: 8cbd9205f9bdd4a8e807b6d7b18cb3b2, type: 3}
+      propertyPath: attackingAudio
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5971380828545686785, guid: 8cbd9205f9bdd4a8e807b6d7b18cb3b2, type: 3}
       propertyPath: m_LocalPosition.x
       value: -93.298706
@@ -41489,7 +41509,9 @@ PrefabInstance:
       propertyPath: BoundingVolume
       value: 
       objectReference: {fileID: 8542112296921464399}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1913349417055497358, guid: 8cbd9205f9bdd4a8e807b6d7b18cb3b2, type: 3}
+    - {fileID: 3944512928635723417, guid: 8cbd9205f9bdd4a8e807b6d7b18cb3b2, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

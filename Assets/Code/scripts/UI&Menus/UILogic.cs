@@ -68,7 +68,7 @@ public class UILogic : MonoBehaviour
 
     public void ClickSound() // this should be in the audio manager
     {
-        _audioManager?.Play("Button Click");
+        FModAudioManager.instance.PlayOneShot(FModEvents.instance.menuClick);
     }
 
     public void ToggleCharacterSelect(InputAction.CallbackContext context)

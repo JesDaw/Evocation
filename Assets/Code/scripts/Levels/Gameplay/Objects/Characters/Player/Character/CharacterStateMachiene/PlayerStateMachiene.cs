@@ -7,9 +7,6 @@ public class PlayerStateMachine : MonoBehaviour
     [SerializeField] ScriptableStats _scrStats;
     [SerializeField] Stats _playerStats;
     [SerializeField] Rigidbody2D _rb;
-    [Header("Audio")]
-    [SerializeField] AudioSource _walkingAudio;
-    [SerializeField] AudioSource attackingAudio;
     [Header("Animation")]
     [SerializeField] AnimationEventsController _animatorController;
     [SerializeField] Animator _animator;
@@ -33,8 +30,6 @@ public class PlayerStateMachine : MonoBehaviour
     public AnimationEventsController AnimatorController { get { return _animatorController; } }
     public PlayerCommander PlayerCommander { get { return _commander; } }
     public Rigidbody2D Rb { get { return _rb; } }
-    public AudioSource WalkingAudio { get { return _walkingAudio; } }
-    public AudioSource AttackingAudio { get { return attackingAudio; } }
     public int PlayerID { get; set; }
     
     public bool IsMovementPressed { get { return _commander.IsCmdActive(ContinuousPlayerCommand.Move); } }
