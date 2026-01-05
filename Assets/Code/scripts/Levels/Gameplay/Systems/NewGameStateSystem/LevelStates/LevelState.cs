@@ -74,7 +74,7 @@ public abstract class LevelState : ScriptableObject
         Time.timeScale = timeScale;
         
         // Update UI
-        if (!string.IsNullOrEmpty(uiCanvasName))
+        if (!string.IsNullOrEmpty(uiCanvasName) && context.SceneManager != null)
         {
             context.SceneManager.Activate(uiCanvasName, makeAnchor: makeUIAnchor);
         }
