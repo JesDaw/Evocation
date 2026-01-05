@@ -4,7 +4,6 @@ public class MainMenu : MonoBehaviour
 {
     public void click_sound()
     {
-        // Both lowercase 'instance'
         FModAudioManager.instance.PlayOneShot(FModEvents.instance.menuClick);
     }
 
