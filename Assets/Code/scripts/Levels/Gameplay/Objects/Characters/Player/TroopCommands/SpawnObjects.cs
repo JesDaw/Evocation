@@ -7,8 +7,9 @@ public class SpawnObjects : MonoBehaviour
     public bool StopFlag = false;
     public float CoolDown = 1f;
     [SerializeField] GameObject _Object;
-    [SerializeField] Transform _Container;
+    [SerializeField] Transform _CPUContainer;
     [SerializeField] Transform _PlayerContainer;
+    [SerializeField] Transform _SpawnLocation;
     [SerializeField] UnityEvent<GameObject> OnSpawn;
     [Header("Entites")]
     [SerializeField] ScriptableStats AttachedStats;
@@ -29,12 +30,13 @@ public class SpawnObjects : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(SpawnLoop());
+        StartCoroutine(SpawnLoop()); // tis is where the cpu spaner starts working
         _moneyDesplay = FindAnyObjectByType<Money>();
         if (_moneyDesplay == null) Debug.LogError("Spawn objects script can't find Money script to edit the money desplay");
+        if(_SpawnLocation == null) Debug.LogError("No place set to spawn objects so spawning wont work");
     }
 
-    IEnumerator SpawnLoop()
+    IEnumerator SpawnLoop() // cpu spawner
     {
         while (!StopFlag)
         {
@@ -45,12 +47,12 @@ public class SpawnObjects : MonoBehaviour
 
     //same overloaded bullshit spawn script
     //auto spawn
-    public void Spawn()
+    public void Spawn() // cpu spawner
     {
         if (!_spawning_is_active) return;
         if (!autoSpawner) return;
 
-        GameObject CreatedObject = Instantiate(_Object, this.transform.position, this.transform.rotation, _Container);
+        GameObject CreatedObject = Instantiate(_Object, _SpawnLocation.transform.position, _SpawnLocation.transform.rotation, _CPUContainer);
         CpuStateManager ObjectLogic = CreatedObject.GetComponent<CpuStateManager>();
         if (ObjectLogic != null) ObjectLogic._ScrStats = AttachedStats;
 
@@ -74,10 +76,11 @@ public class SpawnObjects : MonoBehaviour
 
         OnSpawn.Invoke(CreatedObject);
     }
-    public void SpawnFromSpawner(ScriptableStats attachedStat)
+    public void SpawnFromSpawner(ScriptableStats attachedStat) // I dont think this ever gets called what is the point of this?
     {
+        Debug.Log($"spawn from spawner function called");
         if (!_spawning_is_active) return;
-        GameObject CreatedObject = Instantiate(_Object, this.transform.position, this.transform.rotation, _Container);
+        GameObject CreatedObject = Instantiate(_Object, _SpawnLocation.transform.position, _SpawnLocation.transform.rotation, _CPUContainer);
         CpuStateManager ObjectLogic = CreatedObject.GetComponent<CpuStateManager>();
         if (ObjectLogic != null) ObjectLogic._ScrStats = attachedStat;
 
@@ -103,7 +106,7 @@ public class SpawnObjects : MonoBehaviour
     }
 
     // when player manually spawns
-    public void Spawn(ScriptableStats ScrStats)
+    public void Spawn(ScriptableStats ScrStats)// this is what the player uses
     {
         if (!_spawning_is_active)
         {
@@ -121,7 +124,7 @@ public class SpawnObjects : MonoBehaviour
         //Debug.Log("money updated:" + _Money._Value);
 
 
-        GameObject CreatedObject = Instantiate(_Object, this.transform.position, this.transform.rotation, _Container);
+        GameObject CreatedObject = Instantiate(_Object, _SpawnLocation.transform.position, _SpawnLocation.transform.rotation, _CPUContainer);
         CpuStateManager ObjectLogic = CreatedObject.GetComponent<CpuStateManager>();
         if (ObjectLogic != null) ObjectLogic._ScrStats = ScrStats;
         
@@ -150,7 +153,7 @@ public class SpawnObjects : MonoBehaviour
         }
         OnSpawn.Invoke(CreatedObject);
     }
-    public void SpawnPlayer(GameObject player)
+    public void SpawnPlayer(GameObject player) // player also uses this
     {
         if (!_spawning_is_active)
         {
@@ -166,7 +169,7 @@ public class SpawnObjects : MonoBehaviour
             return;
         }
 
-        GameObject CreatedObject = Instantiate(player, this.transform.position, this.transform.rotation, _PlayerContainer);
+        GameObject CreatedObject = Instantiate(player, _SpawnLocation.transform.position, _SpawnLocation.transform.rotation, _PlayerContainer);
         
         // Subscribe to the player's death event using UltEvents
         Stats playerStats = CreatedObject.GetComponent<Stats>();
