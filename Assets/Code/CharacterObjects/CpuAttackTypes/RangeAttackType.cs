@@ -1,98 +1,58 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "RangeAttack", menuName = "AttackType/RangeAttack")]
+[CreateAssetMenu(fileName = "RangeAttack", menuName = "AttackType/Range Attack")]
 public class RangeAttackType : AttackType
 {
-    public Sprite attackApperance;
-    public AnimationCurve projectileCurve;
-    public float speed;
-    public float offset = 2;
     public GameObject projObject;
+    
+    [Header("Video Trajectory Settings")]
+    public float projectileMaxRelativeHeight = 2f;
+    public AnimationCurve heightCurve;
+    public AnimationCurve axisCorrectionCurve;
+    public AnimationCurve speedCurve;
+
+    protected override DamageSource.DamageType GetDamageType() => DamageSource.DamageType.Ranged;
 
     public override void Attack(CpuStateManager _context)
     {
-        // this is for helping me visualize the attack area
-        DrawCircle(_context.transform.position, _AttackRange, Color.red);
-        
-        GameObject createdProj = Instantiate(projObject);
-
-        Projectile projectile = createdProj.GetComponent<Projectile>();
-        projectile?.Launch(
-            _context.transform.position,
-            _context._AttackingStats.transform,
-            projectileCurve,
-            speed,
-            offset,
-            () => DealDamage(_context));
+        ExecuteRangeAttack(_context.transform.position, _context._Stats, _context._Stats._Enemy, (target) => {
+             _context._AttackingStats = target;
+             DealDamage(_context);
+        });
     }
 
-    public override void Attack(PlayerStateMachine _context) // for Cpus enemies are declared in the movestate so the player needs to declare them here
+    public override void Attack(PlayerStateMachine _context)
     {
-        // this is for helping me visualize the attack area
-        DrawCircle(_context.transform.position, _AttackRange, Color.blue);
-        
-        Vector2 attackPosition = _context.transform.position;
-        
-        Collider2D[] hits = Physics2D.OverlapCircleAll(attackPosition, _AttackRange);
-
-        Transform targetTransform = null;
-        Stats targetStats = null;
-
-        for (int I = 0; I < _context.PlayerStats._CpuPriority.Count; I++)
-        {
-            for (int II = 0; II < hits.Length; II++)
-            {
-                if (hits[II].CompareTag(_context.PlayerStats._CpuPriority[I].ToString()))
-                {
-                    // Found a valid target
-                    targetStats = hits[II].gameObject.GetComponent<Stats>();
-                    if (targetStats == null)
-                    {
-                        Debug.LogWarning("Target missing Stats component: " + hits[II].name);
-                        continue;
-                    }
-
-                    targetTransform = hits[II].transform;
-                    _context._AttackingStats = targetStats;
-                    break;
-                }
-            }
-            if (targetTransform != null) break;
-        }
-
-        if (targetTransform == null)
-        {
-            Debug.Log("No valid targets in range for projectile");
-            return;
-        }
-
-        // we should have projectiles spawn regaudless of if there is an enemy there or not i think
-        GameObject createdProj = Instantiate(projObject);
-        Projectile projectile = createdProj.GetComponent<Projectile>();
-        projectile?.Launch(
-            _context.transform.position,
-            targetTransform,
-            projectileCurve,
-            speed,
-            offset,
-            () => DealDamage(_context)
-        );
+        ExecuteRangeAttack(_context.transform.position, _context.PlayerStats, !_context.isFacingRight, (target) => {
+             _context._AttackingStats = target;
+             DealDamage(_context);
+        });
     }
-    
-    void DrawCircle(Vector3 center, float radius, Color color)
+
+    private void ExecuteRangeAttack(Vector3 origin, Stats attackerStats, bool facingLeft, System.Action<Stats> onHitCallback)
     {
-        int segments = 32;
-        float angleStep = 360f / segments;
+        Vector2 range = attackerStats._AttackRange;
+        Vector2 center = CalculateAttackCenter(origin, facingLeft, range);
         
-        for (int i = 0; i < segments; i++)
+        List<Stats> targets = AttackDetection.FindTargetsInBox(center, range, attackerStats.targetTags, attackerStats);
+        Stats target = AttackDetection.FindClosestTarget(origin, targets);
+        
+        if (target != null)
         {
-            float angle1 = i * angleStep * Mathf.Deg2Rad;
-            float angle2 = (i + 1) * angleStep * Mathf.Deg2Rad;
-            
-            Vector3 point1 = center + new Vector3(Mathf.Cos(angle1) * radius, Mathf.Sin(angle1) * radius, 0);
-            Vector3 point2 = center + new Vector3(Mathf.Cos(angle2) * radius, Mathf.Sin(angle2) * radius, 0);
-            
-            Debug.DrawLine(point1, point2, color, 1f);
+            // Use Speed from Stats if available, otherwise fallback to a default
+            float moveSpeed = attackerStats._ProjectileSpeed > 0 ? attackerStats._ProjectileSpeed : 10f;
+            SpawnProjectile(origin, target.transform, moveSpeed, onHitCallback);
+        }
+    }
+
+    private void SpawnProjectile(Vector3 startPos, Transform target, float moveSpeed, System.Action<Stats> onHit)
+    {
+        if (projObject == null) return;
+        GameObject go = Instantiate(projObject, startPos, Quaternion.identity);
+        if (go.TryGetComponent(out Projectile p))
+        {
+            p.InitializeProjectile(target, moveSpeed, projectileMaxRelativeHeight, heightCurve, axisCorrectionCurve, speedCurve, onHit);
         }
     }
 }

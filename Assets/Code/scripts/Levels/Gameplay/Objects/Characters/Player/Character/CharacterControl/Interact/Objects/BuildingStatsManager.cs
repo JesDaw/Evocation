@@ -1,28 +1,54 @@
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
-using Evocation.Clans;
 
+/// <summary>
+/// Manages building stats and ownership
+/// Buildings can be: Enemy, Allies, or Blank (unclaimed amenities)
+/// </summary>
 public class BuildingStatsManager : MonoBehaviour
 {
-    //this scrip is cpuLogic but for buildings
     public SpriteRenderer _Renderer;
-    public ScriptableStats ScrStats;
-    public Stats _Stats;
-    [SerializeField] GameObject Building;
-    [Header("Buildings")]
+    public Stats _Stats;    
+    [Header("Building Types")]
     [SerializeField] ScriptableStats AllyBuilding;
     [SerializeField] ScriptableStats EnemyBuilding;
+    
+    [Header("Building Type")]
+    [SerializeField] bool isAmenity = false; // Amenity vs Base building
+
     void Start()
     {
-        gameObject.tag = "Blank";
+        // Amenities start unclaimed (CPUs ignore "Blank" tag)
+        if (isAmenity)
+        {
+            gameObject.tag = "Blank";
+        }
+        else
+        {
+            // Bases start with a team
+            SetupBuilding();
+        }
+
         if (_Renderer == null)
         {
             _Renderer = gameObject.GetComponent<SpriteRenderer>();
-            Debug.Log($"auto linked sprite renderor onto {gameObject.name} because it wasnt set in inspecter");
+            Debug.Log($"auto linked sprite renderer onto {gameObject.name}");
         }
-        SwapBuilding(ScrStats);
     }
+
+    void SetupBuilding()
+    {
+        // Set up building based on enemy flag
+        if (_Stats._Enemy)
+        {
+            SwapBuilding(EnemyBuilding, true);
+        }
+        else
+        {
+            SwapBuilding(AllyBuilding, false);
+        }
+    }
+
     public void buildingDebug()
     {
         Debug.Log("<color=cyan> Home base DESTROYED</color>");
@@ -30,54 +56,80 @@ public class BuildingStatsManager : MonoBehaviour
 
     public void SetMax()
     {
-        _Stats._MaxHealth = ScrStats._MaxHealth;
+        if (_Stats.scriptableStats == null) return;
+        _Stats._MaxHealth = _Stats.scriptableStats._MaxHealth;
     }
 
-    public void SwapBuilding(ScriptableStats _ScrStats)
+    /// <summary>
+    /// Swap building to new configuration
+    /// </summary>
+    public void SwapBuilding(ScriptableStats scrStats, bool isEnemy)
     {
-        if(_Stats._Enemy)
-            _Stats._Clan = ClansList.Enemy;
+        if (scrStats == null)
+        {
+            Debug.LogWarning($"Trying to swap {gameObject.name} to null ScriptableStats!");
+            return;
+        }
+
+        // Assign ScriptableStats
+        _Stats.scriptableStats = scrStats;
+        _Stats._Enemy = isEnemy;
+
+        // Set tag based on ownership
+        if (isEnemy)
+        {
+            gameObject.tag = "Enemy";
+        }
         else
-            _Stats._Clan = ClansList.Allies;
+        {
+            gameObject.tag = "Allies";
+        }
 
-        gameObject.tag = _Stats._Clan.ToString();
+        // CPUs don't target buildings (they have their own separate targeting)
+        // Buildings don't attack, so clear their target tags
+        _Stats.targetTags.Clear();
+
+        // Initialize stats
         SetMax();
-        _Stats._CurrentHealth = _ScrStats._MaxHealth;
-        _Stats._MoveSpeed = _ScrStats._MoveSpeed;
+        _Stats._CurrentHealth = scrStats._MaxHealth;
+        _Stats._MoveSpeed = 0; // Buildings don't move
+        _Stats._KnockBackHealth = scrStats._KnockBackMax;
+        _Stats._KnockBackMax = scrStats._KnockBackMax;
 
-        _Stats._KnockBackHealth = _ScrStats._KnockBackMax;
-        _Stats._KnockBackMax = _ScrStats._KnockBackMax;
-
-        _Stats._StatusEffects = new List<StatusEffect>();
-        _Stats._StatusTicksMax = new List<Vector2>();
-        _Stats._StatusTicks = new List<Vector2>();
+        Debug.Log($"{gameObject.name} swapped to {(isEnemy ? "Enemy" : "Ally")} building");
     }
+
+    /// <summary>
+    /// Swap building ownership (for when captured)
+    /// </summary>
     public void SwapAccordingToWho(bool IsEnemy)
     {
         if (IsEnemy)
         {
-            SwapBuilding(EnemyBuilding);
-            gameObject.tag = ClansList.Enemy.ToString();
+            SwapBuilding(EnemyBuilding, true);
         }
         else
         {
-            SwapBuilding(AllyBuilding);
-            gameObject.tag = ClansList.Allies.ToString();
+            SwapBuilding(AllyBuilding, false);
         }
 
         //delay is needed because status effect runs on update()
         StartCoroutine(ResetDestroyedAfterDelay());
     }
+
+    /// <summary>
+    /// Player claims the building (amenity)
+    /// </summary>
     public void SwapToPlayer()
     {
         Debug.Log("player claimed building");
-        SwapBuilding(AllyBuilding);
-        gameObject.tag = ClansList.Allies.ToString();
+        SwapBuilding(AllyBuilding, false);
+        StartCoroutine(ResetDestroyedAfterDelay());
     }
 
     private IEnumerator ResetDestroyedAfterDelay()
     {
-        yield return new WaitForSeconds(0.5f); // wait for status effects and any prelimary attacks
+        yield return new WaitForSeconds(0.5f); // wait for status effects and any preliminary attacks
         _Stats.SetDestroyed(false);
     }
 }

@@ -1,64 +1,61 @@
 using UnityEngine;
 using System;
-using DG.Tweening;
 
 public class Projectile : MonoBehaviour
 {
     private Transform target;
-    private AnimationCurve curve;
-    private float speed;
-    private float offset;
-    private Action onHit;
+    private float maxMoveSpeed, maxRelativeHeight;
+    private AnimationCurve heightCurve, axisCurve, speedCurve;
+    private Action<Stats> onHitAction;
+    private Vector3 startPoint;
+    private float aliveTimer = 0f;
 
-    private Vector3 startPos;
-    private float distance;
-    private float t = 0;
-
-    public void Launch(Vector3 start, Transform target, AnimationCurve curve, float speed, float offset, Action onHit)
+    public void InitializeProjectile(Transform target, float speed, float maxHeight, AnimationCurve h, AnimationCurve a, AnimationCurve s, Action<Stats> onHit)
     {
-        this.startPos = start;
-        this.target = target;
-        this.curve = curve;
-        this.speed = speed;
-        this.offset = offset;
-        this.onHit = onHit;
-
-        transform.position = startPos;
-        distance = Vector3.Distance(startPos, target.position);
+        this.target = target; this.maxMoveSpeed = speed; this.maxRelativeHeight = maxHeight;
+        this.heightCurve = h; this.axisCurve = a; this.speedCurve = s;
+        this.onHitAction = onHit; this.startPoint = transform.position;
     }
 
-    private void FixedUpdate()
+    void Update()
     {
-        if (target == null)
+        aliveTimer += Time.deltaTime;
+        if (target == null || aliveTimer > 10f) { Destroy(gameObject); return; }
+
+        Vector3 range = target.position - startPoint;
+        float totalDist = range.magnitude;
+        float curDist = Vector3.Distance(startPoint, transform.position);
+        float progress = totalDist > 0.01f ? Mathf.Clamp01(curDist / totalDist) : 1f;
+
+        float speed = speedCurve.Evaluate(progress) * maxMoveSpeed;
+        if (speed < 0.1f) speed = 0.1f;
+
+        Vector3 nextPos = (Mathf.Abs(range.x) >= Mathf.Abs(range.y)) ? CalcX(range) : CalcY(range);
+        Vector3 dir = (nextPos - transform.position).normalized;
+        
+        Debug.DrawLine(transform.position, nextPos, Color.red);
+        transform.position += dir * speed * Time.deltaTime;
+
+        if (dir != Vector3.zero) transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg);
+
+        if (Vector3.Distance(transform.position, target.position) < 0.5f)
         {
-            Destroy(gameObject);
-            return;
-        }
-
-
-        t += Time.deltaTime;
-        float yPos = curve.Evaluate(t);
-
-        float newX = Mathf.MoveTowards(
-            startPos.x,
-            target.position.x,
-            t * speed
-        );
-
-        transform.position = new Vector3(
-            newX,
-            startPos.y + (yPos * distance),
-            0f
-        );
-
-        float nextY = curve.Evaluate(Mathf.Clamp01(t + 0.01f));
-        float angle = Mathf.Atan2(nextY - yPos, 0.01f) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, angle + offset);
-
-        if (Mathf.Abs(transform.position.x - target.position.x) < 0.01f)
-        {
-            onHit?.Invoke();
+            if (target.TryGetComponent(out Stats s)) onHitAction?.Invoke(s);
             Destroy(gameObject);
         }
+    }
+
+    private Vector3 CalcX(Vector3 r)
+    {
+        float nX = transform.position.x + (Mathf.Sign(r.x) * maxMoveSpeed * Time.deltaTime);
+        float normX = (nX - startPoint.x) / (Mathf.Abs(r.x) < 0.01f ? 0.01f * Mathf.Sign(r.x) : r.x);
+        return new Vector3(nX, startPoint.y + (heightCurve.Evaluate(normX) * maxRelativeHeight * r.magnitude) + (axisCurve.Evaluate(normX) * r.y), 0);
+    }
+
+    private Vector3 CalcY(Vector3 r)
+    {
+        float nY = transform.position.y + (Mathf.Sign(r.y) * maxMoveSpeed * Time.deltaTime);
+        float normY = (nY - startPoint.y) / (Mathf.Abs(r.y) < 0.01f ? 0.01f * Mathf.Sign(r.y) : r.y);
+        return new Vector3(startPoint.x + (heightCurve.Evaluate(normY) * maxRelativeHeight * r.magnitude) + (axisCurve.Evaluate(normY) * r.x), nY, 0);
     }
 }

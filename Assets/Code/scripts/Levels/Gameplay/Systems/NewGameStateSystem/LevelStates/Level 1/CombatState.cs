@@ -14,7 +14,7 @@ public class CombatState : LevelState
     
     protected override void OnEnterState()
     {
-        Debug.Log($"[CombatState] Starting {phaseName} {phaseNumber}");
+        //Debug.Log($"[CombatState] Starting {phaseName} {phaseNumber}");
         
         // Switch to player control if configured
         if (switchToPlayerControl)

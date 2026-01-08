@@ -2,20 +2,19 @@ using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
 
-
-// Countdown timer functioality 
-// takes a number of seconds and a UI object from unity interface
-// convrts seconds to minuts and seconds and counts down to 0 from there 
-// desplays time in provided UI object
+/// <summary>
+/// Countdown timer functionality
+/// Takes a number of seconds and a UI object from unity interface
+/// Converts seconds to minutes and seconds and counts down to 0 from there
+/// Displays time in provided UI object
+/// </summary>
 public class Timer : MonoBehaviour
 {
-
-    
-    [SerializeField] float maxTimeRemaining = 1f;
-    [SerializeField] FloatVariable remainingTimeSeconds;
+    [SerializeField] public float maxTimeRemaining = 1f; // PUBLIC for AI system
+    [SerializeField] public FloatVariable remainingTimeSeconds; // PUBLIC for AI system
     [SerializeField] TextMeshProUGUI timerText;
     [SerializeField] UnityEvent _TimeHitZero;
-    
+    [SerializeField] UnityEvent _TimeStarted;
 
     bool _timer_is_active = false;
 
@@ -50,22 +49,26 @@ public class Timer : MonoBehaviour
     {
         if (remainingTimeSeconds._Value > 0)
         {
-            remainingTimeSeconds._Value -= Time.deltaTime; 
+            remainingTimeSeconds._Value -= Time.deltaTime;
         }
-        else 
+        else
         {
             remainingTimeSeconds._Value = 0;
             _TimeHitZero?.Invoke();
-            DeactivateTimer();    
+            DeactivateTimer();   
         }
     }
 
     public void DeactivateTimer(){ _timer_is_active = false; }
-    public void ActivateTimer(){ _timer_is_active = true;}
+    public void ActivateTimer()
+    { 
+        _timer_is_active = true;
+        _TimeStarted?.Invoke();
+    }
 
     public void ResetTimer() { remainingTimeSeconds.Reset(); }
 
-    // conversion from seconds to minuts and seconds and desplays it in UI
+    // conversion from seconds to minutes and seconds and displays it in UI
     void DesplayTime()
     {
         int minutes = Mathf.FloorToInt(remainingTimeSeconds._Value / 60);

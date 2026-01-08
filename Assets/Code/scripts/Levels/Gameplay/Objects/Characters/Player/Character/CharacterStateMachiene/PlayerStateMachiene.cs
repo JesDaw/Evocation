@@ -2,9 +2,11 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// Player state machine - now uses tag-based targeting like CPU
+/// </summary>
 public class PlayerStateMachine : MonoBehaviour
 {
-    [SerializeField] ScriptableStats _scrStats;
     [SerializeField] Stats _playerStats;
     [SerializeField] Rigidbody2D _rb;
     [Header("Animation")]
@@ -24,7 +26,7 @@ public class PlayerStateMachine : MonoBehaviour
     int playerId;
 
     //==========================================getters and setters=================================================
-    public ScriptableStats ScrStats { get { return _scrStats; } }
+    public ScriptableStats ScrStats { get { return _playerStats.scriptableStats; } }
     public Stats PlayerStats { get { return _playerStats; } }
     public Animator Animator { get { return _animator; } }
     public AnimationEventsController AnimatorController { get { return _animatorController; } }
@@ -63,7 +65,7 @@ public class PlayerStateMachine : MonoBehaviour
     void Start()
     {
         FindFreeCam();
-        InitializeStatsFromScriptable();
+        InitializePlayerStats();
         
         // Ensure we're subscribed (in case OnEnable happened before GlobalInputManager existed)
          if (GlobalInputManager.Instance != null)
@@ -74,28 +76,27 @@ public class PlayerStateMachine : MonoBehaviour
         StartCoroutine(Startup());
     }
 
-    void InitializeStatsFromScriptable()
+    /// <summary>
+    /// Initialize player stats using the new tag-based system
+    /// </summary>
+    void InitializePlayerStats()
     {
-        if (_scrStats == null)
+        if (_playerStats.scriptableStats == null)
         {
             Debug.LogWarning("No ScriptableStats assigned to player!");
             return;
         }
 
-        _playerStats._MaxHealth = _scrStats._MaxHealth;
-        _playerStats._CurrentHealth = _scrStats._MaxHealth;
-        _playerStats._MoveSpeed = _scrStats._MoveSpeed;
-        _playerStats._KnockBackHealth = _scrStats._KnockBackMax;
-        _playerStats._KnockBackMax = _scrStats._KnockBackMax;
-        
+        // Set as player
         _playerStats._Enemy = false;
-        _playerStats._Clan = Evocation.Clans.ClansList.Player;
-        gameObject.tag = _playerStats._Clan.ToString();
+        _playerStats.SetTag("Player");
         
-        if (!_playerStats._CpuPriority.Contains(Evocation.Clans.ClansList.Enemy))
-        {
-            _playerStats._CpuPriority.Insert(0, Evocation.Clans.ClansList.Enemy);
-        }
+        // Set up targeting (only attack enemies)
+        _playerStats.targetTags.Clear();
+        _playerStats.AddTargetTag("Enemy");
+        
+        // Initialize all stats from ScriptableStats
+        _playerStats.InitializeStats();
     }
 
     void OnEnable()
@@ -113,7 +114,7 @@ public class PlayerStateMachine : MonoBehaviour
     {
         if (GlobalInputManager.Instance == null) 
         {
-            Debug.LogWarning("Player cant find teh GlobalInputManager");
+            Debug.LogWarning("Player cant find the GlobalInputManager");
             return;
         }
 
@@ -192,7 +193,7 @@ public class PlayerStateMachine : MonoBehaviour
         Transform _Rig = transform.Find("Appearance")?.Find("Rig");
         if (_Rig == null || ScrStats._animator == null)
         {
-            Debug.LogWarning("No Cpu Rig!! (for animation)");
+            Debug.LogWarning("No Player Rig!! (for animation)");
             return;
         }
 
@@ -256,7 +257,7 @@ public class PlayerStateMachine : MonoBehaviour
         if (_animator != null)
         {
             _animator.SetBool("IsRunning", true);
-            _animator.SetFloat("RunningSpeed", _scrStats._AnimationMoveSpeed);
+            _animator.SetFloat("RunningSpeed", ScrStats._AnimationMoveSpeed);
             
         }
     }
