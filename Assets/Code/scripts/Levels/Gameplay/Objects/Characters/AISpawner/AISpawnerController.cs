@@ -4,8 +4,7 @@ using System.Collections;
 
 /// <summary>
 /// Main AI Controller - The Brain
-/// Now uses inline serializable data - no ScriptableObjects needed!
-/// Everything configurable right in the inspector
+/// FIXED: Better debugging for unit counts and utility calculations
 /// </summary>
 public class AISpawnerController : MonoBehaviour
 {
@@ -38,6 +37,7 @@ public class AISpawnerController : MonoBehaviour
     
     [Header("Debug")]
     [SerializeField] private bool showDebugLogs = true;
+    [SerializeField] private bool showUnitCountDetails = true;
 
     private AIMood currentMood;
     private int currentMoodIndex;
@@ -144,10 +144,17 @@ public class AISpawnerController : MonoBehaviour
             AIActionWrapper bestActionWrapper = null;
             AIAction bestAction = null;
             float bestUtility = float.MinValue;
-            DebugAllConsiderations();
 
             if (showDebugLogs)
-                Debug.Log($"=== AI Decision ({currentMood.moodName} mood) ===");
+            {
+                Debug.Log($"\n=== AI Decision ({currentMood.moodName} mood) ===");
+                Debug.Log($"Current Money: {context.GetCurrentMoney():F1}");
+                Debug.Log($"AI Units: {context.GetAIUnitCount()}");
+                if (showUnitCountDetails)
+                {
+                    DebugUnitCounts();
+                }
+            }
 
             foreach (AIActionWrapper wrapper in availableActions)
             {
@@ -165,21 +172,36 @@ public class AISpawnerController : MonoBehaviour
                 }
                 
                 if (showDebugLogs)
-                    Debug.Log($"  Evaluating: {action.actionName}");
+                    Debug.Log($"\n  Evaluating: {action.actionName}");
                 
-                float utility = action.CalculateUtility(context);
+                // Check if can execute
+                bool canExecute = action.CanExecute(context);
+                if (showDebugLogs)
+                    Debug.Log($"    Can Execute: {canExecute}");
+                
+                // Calculate utility
+                float baseUtility = action.CalculateUtility(context);
                 
                 if (showDebugLogs)
-                    Debug.Log($"    Base utility: {utility:F2}");
+                    Debug.Log($"    Base utility: {baseUtility:F2}");
                 
-                utility = currentMood.ModifyUtility(utility, wrapper);
-
-                if (showDebugLogs)
-                    Debug.Log($"    Final utility: {utility:F2}");
-
-                if (utility > bestUtility)
+                // Apply mood modifiers
+                float finalUtility = currentMood.ModifyUtility(baseUtility, wrapper);
+                
+                // DEBUG: Show modifier breakdown
+                if (showDebugLogs && baseUtility > float.MinValue)
                 {
-                    bestUtility = utility;
+                    Debug.Log($"    Mood Modifiers:");
+                    Debug.Log($"      Global Bonus: {currentMood.globalUtilityBonus}");
+                    Debug.Log($"      Global Multiplier: {currentMood.globalUtilityMultiplier}");
+                    Debug.Log($"      Action Bonus: {wrapper.bonusUtility}");
+                    Debug.Log($"      Action Multiplier: {wrapper.utilityMultiplier}");
+                    Debug.Log($"    Final utility: {finalUtility:F2}");
+                }
+
+                if (finalUtility > bestUtility)
+                {
+                    bestUtility = finalUtility;
                     bestAction = action;
                     bestActionWrapper = wrapper;
                 }
@@ -189,17 +211,32 @@ public class AISpawnerController : MonoBehaviour
             if (bestAction != null && bestUtility > float.MinValue)
             {
                 if (showDebugLogs)
-                    Debug.Log($"→ AI chose: {bestAction.actionName} (Utility: {bestUtility:F2})");
+                    Debug.Log($"\n→ AI chose: {bestAction.actionName} (Utility: {bestUtility:F2})");
                 
                 bestAction.Execute(context);
             }
             else
             {
                 if (showDebugLogs)
-                    Debug.Log("→ AI found no valid actions");
+                    Debug.Log("\n→ AI found no valid actions");
             }
 
             yield return new WaitForSeconds(decisionInterval);
+        }
+    }
+
+    /// <summary>
+    /// Debug what's being counted as AI units
+    /// </summary>
+    private void DebugUnitCounts()
+    {
+        GameObject[] aiUnits = GameObject.FindGameObjectsWithTag("Enemy");
+        
+        Debug.Log($"  Found {aiUnits.Length} GameObjects with 'Enemy' tag:");
+        foreach (GameObject obj in aiUnits)
+        {
+            string parentInfo = obj.transform.parent != null ? $" (parent: {obj.transform.parent.name})" : " (root object)";
+            Debug.Log($"    - {obj.name}{parentInfo}");
         }
     }
 
@@ -312,6 +349,40 @@ public class AISpawnerController : MonoBehaviour
         Debug.Log($"AI Units: {context.GetAIUnitCount()}");
     }
     
+    [ContextMenu("Debug Unit Counting")]
+    public void DebugUnitCountingFull()
+    {
+        Debug.Log("\n=== UNIT COUNT DEBUG ===");
+        
+        GameObject[] enemyObjs = GameObject.FindGameObjectsWithTag("Enemy");
+        Debug.Log($"\nTotal 'Enemy' tagged objects: {enemyObjs.Length}");
+        
+        Dictionary<string, int> parentCounts = new Dictionary<string, int>();
+        
+        foreach (GameObject obj in enemyObjs)
+        {
+            Transform rootParent = obj.transform;
+            while (rootParent.parent != null)
+                rootParent = rootParent.parent;
+            
+            string rootName = rootParent.name;
+            if (!parentCounts.ContainsKey(rootName))
+                parentCounts[rootName] = 0;
+            parentCounts[rootName]++;
+            
+            Debug.Log($"  {obj.name} → Root: {rootName}");
+        }
+        
+        Debug.Log($"\nGrouped by root parent:");
+        foreach (var kvp in parentCounts)
+        {
+            Debug.Log($"  {kvp.Key}: {kvp.Value} tagged objects");
+        }
+        
+        Debug.Log($"\nActual spawned units (root level): {parentCounts.Count}");
+        Debug.Log("=== END DEBUG ===\n");
+    }
+    
     [ContextMenu("Debug All Considerations")]
     public void DebugAllConsiderations()
     {
@@ -403,44 +474,6 @@ public class AISpawnerController : MonoBehaviour
         }
         
         Debug.Log("\n=== End Debug ===");
-    }
-    
-    [ContextMenu("Add Example Mood")]
-    public void AddExampleMood()
-    {
-        AIMood exampleMood = new AIMood
-        {
-            moodName = "Example Mood",
-            description = "An example mood with basic setup",
-            globalUtilityMultiplier = 1f,
-            availableActions = new List<AIActionWrapper>()
-        };
-        
-        // Add a spawn action example
-        AIActionWrapper spawnWrapper = new AIActionWrapper
-        {
-            actionType = ActionType.SpawnUnit,
-            spawnAction = new SpawnUnitAction
-            {
-                actionName = "Spawn Basic Unit",
-                description = "Spawn a basic unit",
-                considerations = new List<AIConsideration>
-                {
-                    new AIConsideration
-                    {
-                        considerationName = "Has Money",
-                        type = ConsiderationType.Money,
-                        responseCurve = AnimationCurve.Linear(0, 0, 1, 1),
-                        weight = 1f
-                    }
-                }
-            }
-        };
-        
-        exampleMood.availableActions.Add(spawnWrapper);
-        
-        moods.Add(exampleMood);
-        Debug.Log("Added example mood! Check the inspector.");
     }
     
     #endregion

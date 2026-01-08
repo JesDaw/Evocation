@@ -47184,11 +47184,36 @@ MonoBehaviour:
   scriptableStats: {fileID: 0}
   targetTags: []
   _Enemy: 1
-  _MaxHealth: 1
-  _CurrentHealth: 1
   _AttackDamage: 0
   _AttackEndlag: 0
   _AttackRange: {x: 0, y: 0}
+  _IsProjectile: 0
+  _IsAOE: 0
+  _MaxAOETargets: 0
+  _ProjectilePrefab: {fileID: 0}
+  _ProjectileSpeed: 0
+  _ProjectileMaxHeight: 0
+  _TrajectoryCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AxisCorrectionCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _SpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _EffectsToApply: []
+  _MaxHealth: 1
+  _CurrentHealth: 1
   _MoveSpeed: 0
   _KnockBackMax: 0
   _KnockBackHealth: 0
@@ -57843,8 +57868,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 445032754}
     - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: showDebugLogs
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
       propertyPath: moods.Array.size
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: showUnitCountDetails
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
       propertyPath: moods.Array.data[1].moodName
@@ -57856,6 +57889,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
       propertyPath: moods.Array.data[0].availableActions.Array.data[2].actionType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[0].utilityMultiplier
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[1].utilityMultiplier
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
@@ -57884,11 +57925,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
       propertyPath: moods.Array.data[0].availableActions.Array.data[0].spawnAction.maxOwnUnits
-      value: 10
+      value: 999
       objectReference: {fileID: 0}
     - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
       propertyPath: moods.Array.data[0].availableActions.Array.data[1].spawnAction.maxOwnUnits
-      value: 10
+      value: 999
       objectReference: {fileID: 0}
     - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
       propertyPath: moods.Array.data[0].availableActions.Array.data[2].spawnAction.maxOwnUnits

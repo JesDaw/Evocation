@@ -30,11 +30,9 @@ public class CpuMoveState : CpuBaseState
 
         Vector2 range = _Stats._AttackRange;
         bool facingLeft = _Transform.right.x < 0;
-        
-        // Use the same center logic as the attack to ensure slope detection matches
-        float offsetX = (range.x / 2f);
-        offsetX = facingLeft ? -offsetX : offsetX;
-        Vector2 detectionCenter = (Vector2)_Transform.position + new Vector2(offsetX, 0f);
+
+        // Use the same helper to ensure visual consistency
+        Vector2 detectionCenter = AttackLogic.CalculateAttackCenter(_Transform.position, facingLeft, range);
 
         List<Stats> targets = AttackDetection.FindTargetsInBox(detectionCenter, range, _Stats.targetTags, _Stats);
         AttackDetection.DrawDebugBox(detectionCenter, range, Color.yellow);

@@ -1,95 +1,61 @@
 using UnityEngine;
 using System;
-using System.Diagnostics.CodeAnalysis;
 
-/// <summary>
-/// handles projectile logic
-/// </summary>
 public class Projectile : MonoBehaviour
 {
     private Transform target;
-    private Vector3 startPos;
-    private AnimationCurve curve;
-    private float speed;
-    private float offset;
-    private Action onHit;
-    private float journeyLength;
-    private float distanceTraveled = 0f;
+    private float maxMoveSpeed, maxRelativeHeight;
+    private AnimationCurve heightCurve, axisCurve, speedCurve;
+    private Action<Stats> onHitAction;
+    private Vector3 startPoint;
+    private float aliveTimer = 0f;
 
-    /// <summary>
-    /// Launch projectile at constant speed
-    /// </summary>
-    /// <param name="start">Starting position</param>
-    /// <param name="targetTransform">Target to move towards</param>
-    /// <param name="heightCurve">Arc curve for projectile</param>
-    /// <param name="unitsPerSecond">Constant speed in units/second</param>
-    /// <param name="heightOffset">Height of arc</param>
-    /// <param name="onHitCallback">Callback when projectile reaches target</param>
-    public void Launch(Vector3 start, Transform targetTransform, AnimationCurve heightCurve, float unitsPerSecond, float heightOffset, Action onHitCallback)
+    public void InitializeProjectile(Transform target, float speed, float maxHeight, AnimationCurve h, AnimationCurve a, AnimationCurve s, Action<Stats> onHit)
     {
-        startPos = start;
-        target = targetTransform;
-        curve = heightCurve;
-        speed = unitsPerSecond;
-        offset = heightOffset;
-        onHit = onHitCallback;
-
-        transform.position = startPos;
-
-        if (target != null)
-        {
-            journeyLength = Vector3.Distance(startPos, target.position);
-        }
-        else // Default if no target
-        {
-            journeyLength = 10f;
-        }
+        this.target = target; this.maxMoveSpeed = speed; this.maxRelativeHeight = maxHeight;
+        this.heightCurve = h; this.axisCurve = a; this.speedCurve = s;
+        this.onHitAction = onHit; this.startPoint = transform.position;
     }
 
-    void FixedUpdate()
+    void Update()
     {
-        if (target == null)
+        aliveTimer += Time.deltaTime;
+        if (target == null || aliveTimer > 10f) { Destroy(gameObject); return; }
+
+        Vector3 range = target.position - startPoint;
+        float totalDist = range.magnitude;
+        float curDist = Vector3.Distance(startPoint, transform.position);
+        float progress = totalDist > 0.01f ? Mathf.Clamp01(curDist / totalDist) : 1f;
+
+        float speed = speedCurve.Evaluate(progress) * maxMoveSpeed;
+        if (speed < 0.1f) speed = 0.1f;
+
+        Vector3 nextPos = (Mathf.Abs(range.x) >= Mathf.Abs(range.y)) ? CalcX(range) : CalcY(range);
+        Vector3 dir = (nextPos - transform.position).normalized;
+        
+        Debug.DrawLine(transform.position, nextPos, Color.red);
+        transform.position += dir * speed * Time.deltaTime;
+
+        if (dir != Vector3.zero) transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg);
+
+        if (Vector3.Distance(transform.position, target.position) < 0.5f)
         {
-            Destroy(gameObject);
-            return;
-        }
-
-        distanceTraveled += speed * Time.fixedDeltaTime;
-
-        float progress = Mathf.Clamp01(distanceTraveled / journeyLength);
-
-        Vector3 currentPos = Vector3.Lerp(startPos, target.position, progress);
-
-        float height = curve.Evaluate(progress) * offset;
-        currentPos.y += height;
-
-        transform.position = currentPos;
-
-        if (progress < 1f)
-        {
-            float nextProgress = Mathf.Clamp01((distanceTraveled + 0.1f) / journeyLength);
-            Vector3 nextPos = Vector3.Lerp(startPos, target.position, nextProgress);
-            float nextHeight = curve.Evaluate(nextProgress) * offset;
-            nextPos.y += nextHeight;
-
-            Vector3 direction = (nextPos - transform.position).normalized;
-            if (direction != Vector3.zero)
-            {
-                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                transform.rotation = Quaternion.Euler(0, 0, angle);
-            }
-        }
-
-        if (progress >= 1f)
-        {
-            transform.position = target.position;
-            onHit?.Invoke();
+            if (target.TryGetComponent(out Stats s)) onHitAction?.Invoke(s);
             Destroy(gameObject);
         }
     }
 
-    void OnDestroy()
+    private Vector3 CalcX(Vector3 r)
     {
-        //Maybewe can make an explosion effect of something
+        float nX = transform.position.x + (Mathf.Sign(r.x) * maxMoveSpeed * Time.deltaTime);
+        float normX = (nX - startPoint.x) / (Mathf.Abs(r.x) < 0.01f ? 0.01f * Mathf.Sign(r.x) : r.x);
+        return new Vector3(nX, startPoint.y + (heightCurve.Evaluate(normX) * maxRelativeHeight * r.magnitude) + (axisCurve.Evaluate(normX) * r.y), 0);
+    }
+
+    private Vector3 CalcY(Vector3 r)
+    {
+        float nY = transform.position.y + (Mathf.Sign(r.y) * maxMoveSpeed * Time.deltaTime);
+        float normY = (nY - startPoint.y) / (Mathf.Abs(r.y) < 0.01f ? 0.01f * Mathf.Sign(r.y) : r.y);
+        return new Vector3(startPoint.x + (heightCurve.Evaluate(normY) * maxRelativeHeight * r.magnitude) + (axisCurve.Evaluate(normY) * r.x), nY, 0);
     }
 }

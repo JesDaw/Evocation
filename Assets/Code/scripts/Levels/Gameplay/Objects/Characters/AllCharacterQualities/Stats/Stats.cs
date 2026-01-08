@@ -5,61 +5,54 @@ using UnityEngine.Events;
 public class Stats : MonoBehaviour
 {
     [Header("Configuration")]
-    [Tooltip("Assign ScriptableStats here to configure this unit")]
     public ScriptableStats scriptableStats;
 
     [Header("Clan & Targeting")]
-    [Tooltip("What tags should this unit target? In priority order (first = highest priority)")]
     public List<string> targetTags = new List<string>();
-    
-    [Tooltip("Is this an enemy unit? If false, it's Player/Ally")]
     public bool _Enemy;
 
-    
-
-    [Header("Health")]
-    [HideInInspector] public int _MaxHealth = 1;
-    [HideInInspector] public float _CurrentHealth = 1;
-
-    [Header("Attack")]
+    [Header("Runtime Combat")]
     [HideInInspector] public int _AttackDamage;
     [HideInInspector] public float _AttackEndlag;
     [HideInInspector] public Vector2 _AttackRange;
+    [HideInInspector] public bool _IsProjectile; 
+    [HideInInspector] public bool _IsAOE;
+    [HideInInspector] public int _MaxAOETargets;
+    
+    [HideInInspector] public GameObject _ProjectilePrefab;
+    [HideInInspector] public float _ProjectileSpeed;
+    [HideInInspector] public float _ProjectileMaxHeight;
+    [HideInInspector] public AnimationCurve _TrajectoryCurve;
+    [HideInInspector] public AnimationCurve _AxisCorrectionCurve;
+    [HideInInspector] public AnimationCurve _SpeedCurve;
+    [HideInInspector] public List<StatusEffect> _EffectsToApply;
 
-    [Header("Movement")]
+    [Header("Health & Movement")]
+    [HideInInspector] public int _MaxHealth = 1;
+    [HideInInspector] public float _CurrentHealth = 1;
     [HideInInspector] public float _MoveSpeed;
-
-    [Header("Knockback")]
     [HideInInspector] public float _KnockBackMax;
     [HideInInspector] public float _KnockBackHealth;
-
-    [Header("Spawn")]
     [HideInInspector] public int _spawnCost;
 
     [Header("Events")]
     [SerializeField] internal UltEvents.UltEvent OnDeath, OnDamage, OnKnocked;
-    [SerializeField] internal UltEvents.UltEvent<bool> OnWitFlagDeath, OnWitFlagDamage;
+    [SerializeField] internal UltEvents.UltEvent<bool> OnWitFlagDeath, OnWitFlagDamage; // Restored
     [SerializeField] public UnityEvent OnStatsInitialized;
 
     [Header("Settings")]
     [SerializeField] bool _Invincible = false;
-    public bool _DontDestroy = false;
+    public bool _DontDestroy = false; // Restored
 
     [HideInInspector] public DamageHandler damageHandler;
     [HideInInspector] public StatusEffectManager statusEffectManager;
 
-    public DamageSource LastHitBy { get; set; }
+    public DamageSource LastHitBy { get; set; } // Restored
 
     void Awake()
     {
-        damageHandler = GetComponent<DamageHandler>();
-        if (damageHandler == null)
-            damageHandler = gameObject.AddComponent<DamageHandler>();
-
-        statusEffectManager = GetComponent<StatusEffectManager>();
-        if (statusEffectManager == null)
-            statusEffectManager = gameObject.AddComponent<StatusEffectManager>();
-
+        damageHandler = GetComponent<DamageHandler>() ?? gameObject.AddComponent<DamageHandler>();
+        statusEffectManager = GetComponent<StatusEffectManager>() ?? gameObject.AddComponent<StatusEffectManager>();
         damageHandler.Initialize(this);
         statusEffectManager.Initialize(this);
     }
@@ -67,42 +60,9 @@ public class Stats : MonoBehaviour
     public void InitializeStats()
     {
         SetupTag();
-        
         SetupTargetingPriorities();
-        
         InitializeFromScriptableStats();
-        
         OnStatsInitialized?.Invoke();
-        
-        //Debug.Log($"{gameObject.name} stats initialized. Tag: {gameObject.tag}");
-    }
-
-
-    void SetupTag()
-    {
-        if (_Enemy)
-        {
-            gameObject.tag = "Enemy";
-        }
-        else
-        {
-            gameObject.tag = "Allies"; 
-        }
-    }
-
-    void SetupTargetingPriorities()
-    {
-        if (targetTags.Count > 0) return;
-
-        if (_Enemy)
-        {
-            targetTags.Add("Player");
-            targetTags.Add("Allies");
-        }
-        else
-        {
-            targetTags.Add("Enemy");
-        }
     }
 
     void InitializeFromScriptableStats()
@@ -110,18 +70,33 @@ public class Stats : MonoBehaviour
         if (scriptableStats == null) return;
 
         _MaxHealth = scriptableStats._MaxHealth;
-        _CurrentHealth = scriptableStats._MaxHealth;
+        _CurrentHealth = _MaxHealth;
         _MoveSpeed = scriptableStats._MoveSpeed;
         _KnockBackMax = scriptableStats._KnockBackMax;
-        _KnockBackHealth = scriptableStats._KnockBackMax;
+        _KnockBackHealth = _KnockBackMax;
         _spawnCost = scriptableStats._spawnCost;
         
         _AttackDamage = scriptableStats._AttackDamage;
-        _AttackEndlag = scriptableStats._AttackEndlag; // Updated name
+        _AttackEndlag = scriptableStats._AttackEndlag;
         _AttackRange = new Vector2(scriptableStats._HorizontalRange, scriptableStats._VerticalRange);
         
+        _IsProjectile = scriptableStats._AttackStyle == AttackStyle.Projectile;
+        _IsAOE = scriptableStats._IsAOE;
+        _MaxAOETargets = scriptableStats._MaxAOETargets;
+        _EffectsToApply = scriptableStats._EffectsToApply;
+
+        if (_IsProjectile)
+        {
+            _ProjectilePrefab = scriptableStats._ProjectilePrefab;
+            _ProjectileSpeed = scriptableStats._ProjectileSpeed;
+            _ProjectileMaxHeight = scriptableStats._ProjectileMaxHeight;
+            _TrajectoryCurve = scriptableStats._TrajectoryCurve;
+            _AxisCorrectionCurve = scriptableStats._AxisCorrectionCurve;
+            _SpeedCurve = scriptableStats._SpeedCurve;
+        }
     }
 
+    // ============================ RESTORED METHODS ============================
 
     public void SetTag(string tag)
     {
@@ -170,5 +145,27 @@ public class Stats : MonoBehaviour
     public void SetDestroyed(bool shouldDestroy)
     {
         _DontDestroy = shouldDestroy;
+    }
+
+    // ===========================================================================
+
+    void SetupTag()
+    {
+        if (_Enemy) gameObject.tag = "Enemy";
+        else gameObject.tag = "Allies"; 
+    }
+
+    void SetupTargetingPriorities()
+    {
+        if (targetTags.Count > 0) return;
+        if (_Enemy)
+        {
+            targetTags.Add("Player");
+            targetTags.Add("Allies");
+        }
+        else
+        {
+            targetTags.Add("Enemy");
+        }
     }
 }

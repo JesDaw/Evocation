@@ -2,75 +2,66 @@ using System.Collections.Generic;
 using UnityEngine;
 using Evocation.Clans;
 
-/// <summary>
-/// ScriptableObject that defines a CPU's stats, appearance, and behavior
-/// Assign to CpuStateManager._ScrStats
-/// </summary>
 [CreateAssetMenu(fileName = "CpuStats", menuName = "CPU/Stats", order = 0)]
 public class ScriptableStats : ScriptableObject
 {
     [Header("Animation & Appearance")]
-    [Tooltip("Should the sprite be rotated 180 degrees?")]
     public bool _Rotate;
-    
-    [Tooltip("The animator controller for this CPU type")]
     public AnimatorOverrideController _animator;
-    
-    [Tooltip("Animation rigs for different states (Idle, Running, Attack, Knockback)")]
     public animationRigs[] _Sprites;
-    
-    [Tooltip("Speed multiplier for movement animation")]
     public float _AnimationMoveSpeed = 1f;
 
     [Space]
     [Header("General Stats")]
-    [Tooltip("Maximum health points")]
     public int _MaxHealth = 1;
+    public float _MoveSpeed;
+    public int _spawnCost;
 
-    [Header("Combat")]
-    public AttackType _AttackType;
+    [Header("Combat Configuration")]
+    public AttackStyle _AttackStyle;
+    
+    [Tooltip("If true, hits multiple targets in the range box.")]
+    public bool _IsAOE; 
+    public int _MaxAOETargets = 5;
+
+    [Header("Combat Stats")]
     public int _AttackDamage;
     public float _AttackEndlag;
-
+    
     [Header("Range Settings")]
     public float _HorizontalRange = 2f; 
     public float _VerticalRange = 2f;
+
+    [Header("Projectile Settings")]
+    public GameObject _ProjectilePrefab;
+    public float _ProjectileSpeed = 15f;
+    public float _ProjectileMaxHeight = 2f;
     
-    [Tooltip("Movement speed")]
-    public float _MoveSpeed;
-    
-    [Tooltip("Cost to spawn this unit")]
-    public int _spawnCost;
-    
+    [Header("Projectile Curves")]
+    public AnimationCurve _TrajectoryCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0)); 
+    public AnimationCurve _AxisCorrectionCurve = AnimationCurve.Linear(0, 0, 1, 1);
+    public AnimationCurve _SpeedCurve = AnimationCurve.Constant(0, 1, 1);
+
+    [Header("Status Effects")]
+    public List<StatusEffect> _EffectsToApply = new List<StatusEffect>();
+
     [Space]
     [Header("Knockback")]
-    [Tooltip("How many hits before being knocked back")]
     public float _KnockBackMax = 1;
-    
-    [Tooltip("Force of knockback when triggered")]
     public float _KnockBackVelocity;
 }
 
-/// <summary>
-/// Container for animation rig data
-/// </summary>
+public enum AttackStyle
+{
+    Melee,
+    Projectile
+}
+
 [System.Serializable]
 public class animationRigs
 {
-    public enum animationKey 
-    { 
-        Idle, 
-        Running, 
-        Attack, 
-        Knockback
-    }
-    
-    [Tooltip("Which animation state this rig is for")]
+    public enum animationKey { Idle, Running, Attack, Knockback }
     public animationKey Key;
-    
-    [Tooltip("The prefab containing the sprite rig")]
     public GameObject Rig;
-    
-    [Tooltip("Position offset for this rig")]
     public Vector2 Offset;
 }
