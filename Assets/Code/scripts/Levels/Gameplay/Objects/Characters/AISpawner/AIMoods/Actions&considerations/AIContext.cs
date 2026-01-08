@@ -47,12 +47,21 @@ public class AIContext
     /// </summary>
     public float GetNormalizedMoney()
     {
-        if (aiMoneyManager == null) return 0f;
+        if (aiMoneyManager == null)
+        {
+            Debug.LogWarning("AIContext: aiMoneyManager is null!");
+            return 0f;
+        }
         
         float current = aiMoneyManager.GetMoney();
-        float max = 9999f; // Default max - could expose this from AIMoneyManager if needed
+        float max = 100; 
         
-        return Mathf.Clamp01(current / max);
+        float normalized = Mathf.Clamp01(current / max);
+        
+        if (Application.isEditor)
+            Debug.Log($"      Money: current={current:F1}, max={max:F1}, normalized={normalized:F2}");
+        
+        return normalized;
     }
     
     /// <summary>

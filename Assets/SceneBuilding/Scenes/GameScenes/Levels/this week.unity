@@ -30260,6 +30260,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1526425375}
   m_CullTransparentMesh: 1
+--- !u!114 &1537985634 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+  m_PrefabInstance: {fileID: 5800069369276433655}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7729f604020c24ba39eefd22ad8327db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::AISpawnerController
 --- !u!1 &1543168610
 GameObject:
   m_ObjectHideFlags: 0
@@ -38820,9 +38831,36 @@ MonoBehaviour:
   _TimeHitZero:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1537985634}
+        m_TargetAssemblyTypeName: AISpawnerController, CodeAssembly
+        m_MethodName: StopAI
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1715531990}
         m_TargetAssemblyTypeName: MapZoneMaster, CodeAssembly
         m_MethodName: CompareAllZones
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _TimeStarted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1537985634}
+        m_TargetAssemblyTypeName: AISpawnerController, CodeAssembly
+        m_MethodName: StartAI
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -57633,6 +57671,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: HomeBase
       objectReference: {fileID: 0}
+    - target: {fileID: 7150298491999775040, guid: 301573f24ead492429fbc1b58b9d9d99, type: 3}
+      propertyPath: m_TagString
+      value: Allies
+      objectReference: {fileID: 0}
     - target: {fileID: 7592322541879619745, guid: 301573f24ead492429fbc1b58b9d9d99, type: 3}
       propertyPath: cpuPrefab
       value: 
@@ -57665,7 +57707,8 @@ PrefabInstance:
       propertyPath: playerLivesManager
       value: 
       objectReference: {fileID: 7987829860878830886}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1003792434389234155, guid: 301573f24ead492429fbc1b58b9d9d99, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -57788,9 +57831,305 @@ PrefabInstance:
       propertyPath: playerBase
       value: 
       objectReference: {fileID: 445032754}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[1].moodName
+      value: Agressive
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[2].actionType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[0].spawnAction.unitStats
+      value: 
+      objectReference: {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[1].spawnAction.unitStats
+      value: 
+      objectReference: {fileID: 11400000, guid: d4daadf164451854c8c5982cee62e5f9, type: 2}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[2].spawnAction.unitStats
+      value: 
+      objectReference: {fileID: 11400000, guid: d4daadf164451854c8c5982cee62e5f9, type: 2}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[0].spawnAction.actionName
+      value: Spawn Runner
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[1].spawnAction.actionName
+      value: Spawn hammer
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[2].spawnAction.actionName
+      value: Spawn hammer
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[0].spawnAction.maxOwnUnits
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[1].spawnAction.maxOwnUnits
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[2].spawnAction.maxOwnUnits
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[1].spawnAction.spawnCooldown
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[2].spawnAction.spawnCooldown
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[2].doNothingAction.actionName
+      value: Wait
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[0].spawnAction.minMoneyThreshold
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[1].spawnAction.minMoneyThreshold
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[0].spawnAction.considerations.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[1].spawnAction.considerations.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[2].spawnAction.considerations.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[2].doNothingAction.considerations.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[0].spawnAction.considerations.Array.data[0].weight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[1].spawnAction.considerations.Array.data[0].weight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[0].spawnAction.considerations.Array.data[0].targetZone
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[1].spawnAction.considerations.Array.data[0].targetZone
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[2].spawnAction.considerations.Array.data[0].targetZone
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[0].spawnAction.considerations.Array.data[0].considerationName
+      value: MoneyAmount
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[1].spawnAction.considerations.Array.data[0].considerationName
+      value: MoneyAmount
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[2].spawnAction.considerations.Array.data[0].considerationName
+      value: MoneyAmount
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[0].spawnAction.considerations.Array.data[0].responseCurve.m_PreInfinity
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[1].spawnAction.considerations.Array.data[0].responseCurve.m_PreInfinity
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[2].spawnAction.considerations.Array.data[0].responseCurve.m_PreInfinity
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[0].spawnAction.considerations.Array.data[0].responseCurve.m_PostInfinity
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[1].spawnAction.considerations.Array.data[0].responseCurve.m_PostInfinity
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[2].spawnAction.considerations.Array.data[0].responseCurve.m_PostInfinity
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[0].spawnAction.considerations.Array.data[0].responseCurve.m_RotationOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[1].spawnAction.considerations.Array.data[0].responseCurve.m_RotationOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[2].spawnAction.considerations.Array.data[0].responseCurve.m_RotationOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[0].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[1].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[2].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[0].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[1].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[0].time
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[1].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[2].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[0].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[1].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[0].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[1].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[2].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[0].value
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[2].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[0].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[0].inSlope
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[0].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[1].inSlope
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[1].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[0].inSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[1].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[1].inSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[2].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[0].inSlope
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[2].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[1].inSlope
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[0].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[0].outSlope
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[0].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[1].outSlope
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[1].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[0].outSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[1].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[1].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[1].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[1].outSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[2].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[0].outSlope
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[2].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[1].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[2].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[1].outSlope
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[1].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[0].outWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[2].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[0].outWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[0].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[0].tangentMode
+      value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[0].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[1].tangentMode
+      value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[1].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[0].tangentMode
+      value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[1].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[1].tangentMode
+      value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[2].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[0].tangentMode
+      value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359874849698756861, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: moods.Array.data[0].availableActions.Array.data[2].spawnAction.considerations.Array.data[0].responseCurve.m_Curve.Array.data[1].tangentMode
+      value: 34
+      objectReference: {fileID: 0}
     - target: {fileID: 8308683440751148610, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
       propertyPath: m_Name
       value: EnemyBase
+      objectReference: {fileID: 0}
+    - target: {fileID: 8308683440751148610, guid: 6beeaf0788908ce41be3f64aee80f0d5, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

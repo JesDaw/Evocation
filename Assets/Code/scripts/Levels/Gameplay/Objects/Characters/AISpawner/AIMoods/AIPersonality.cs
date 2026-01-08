@@ -2,22 +2,17 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// AI Mood/Personality - defines what actions are available and how they're modified
-/// Moods are now changed manually via events, not auto-evaluated!
-/// Think of these as "game phases" or "AI strategies"
+/// AI Mood/Personality - defines available actions and modifiers
+/// Now a serializable class - edit directly in inspector!
 /// </summary>
-[CreateAssetMenu(fileName = "NewMood", menuName = "AI/Mood")]
-public class AIPersonality : ScriptableObject
+[System.Serializable]
+public class AIMood
 {
     [Header("Mood Info")]
     public string moodName = "Balanced";
     
     [TextArea(3, 5)]
     public string description = "Describe this AI mood/strategy";
-    
-    [Header("Available Actions")]
-    [Tooltip("What can the AI do in this mood?")]
-    public List<AIAction> availableActions = new List<AIAction>();
     
     [Header("Utility Modifiers")]
     [Tooltip("Multiply ALL action utilities by this")]
@@ -27,14 +22,14 @@ public class AIPersonality : ScriptableObject
     [Tooltip("Add this flat bonus to all action utilities")]
     public float globalUtilityBonus = 0f;
     
-    [Header("Action-Specific Modifiers (Optional)")]
-    [Tooltip("Special multipliers for specific actions")]
-    public List<ActionModifier> actionModifiers = new List<ActionModifier>();
+    [Header("Available Actions")]
+    [Tooltip("What can the AI do in this mood?")]
+    public List<AIActionWrapper> availableActions = new List<AIActionWrapper>();
 
     /// <summary>
     /// Apply this mood's modifiers to an action's utility
     /// </summary>
-    public float ModifyUtility(float baseUtility, AIAction action)
+    public float ModifyUtility(float baseUtility, AIActionWrapper actionWrapper)
     {
         float modified = baseUtility;
         
@@ -42,37 +37,64 @@ public class AIPersonality : ScriptableObject
         modified = (modified + globalUtilityBonus) * globalUtilityMultiplier;
         
         // Apply action-specific modifiers
-        foreach (ActionModifier modifier in actionModifiers)
-        {
-            if (modifier.targetAction == action)
-            {
-                modified = (modified + modifier.bonusUtility) * modifier.utilityMultiplier;
-            }
-        }
+        modified = (modified + actionWrapper.bonusUtility) * actionWrapper.utilityMultiplier;
         
         return modified;
-    }
-
-    /// <summary>
-    /// Check if a specific action is available in this mood
-    /// </summary>
-    public bool HasAction(AIAction action)
-    {
-        return availableActions.Contains(action);
     }
 }
 
 /// <summary>
-/// Special modifier for specific actions within a mood
-/// Example: "In Defensive mood, tank spawns get 2x utility"
+/// Wrapper for actions with mood-specific modifiers
+/// Allows each mood to customize how actions behave
 /// </summary>
 [System.Serializable]
-public class ActionModifier
+public class AIActionWrapper
 {
-    public AIAction targetAction;
-    public float utilityMultiplier = 1f;
-    public float bonusUtility = 0f;
+    [Header("Action Type")]
+    public ActionType actionType;
     
-    [TextArea(2, 3)]
-    public string note = "Why this modifier?";
+    [Header("Spawn Action Settings")]
+    [Tooltip("Only used if actionType = SpawnUnit")]
+    public SpawnUnitAction spawnAction = new SpawnUnitAction();
+    
+    [Header("Wait Action Settings")]
+    [Tooltip("Only used if actionType = DoNothing")]
+    public DoNothingAction doNothingAction = new DoNothingAction();
+    
+    [Header("Mood-Specific Modifiers")]
+    [Tooltip("Multiply this action's utility in this mood")]
+    public float utilityMultiplier = 1f;
+    
+    [Tooltip("Add flat bonus to this action in this mood")]
+    public float bonusUtility = 0f;
+
+    /// <summary>
+    /// Get the actual action based on type
+    /// </summary>
+    public AIAction GetAction()
+    {
+        switch (actionType)
+        {
+            case ActionType.SpawnUnit:
+                return spawnAction;
+            case ActionType.DoNothing:
+                return doNothingAction;
+            default:
+                return null;
+        }
+    }
+}
+
+/// <summary>
+/// Types of actions available
+/// Add more action types here as you create them
+/// </summary>
+public enum ActionType
+{
+    SpawnUnit,
+    DoNothing
+    // Add more types here:
+    // UpgradeMoney,
+    // SendAllUnits,
+    // etc.
 }

@@ -14,6 +14,7 @@ public class Timer : MonoBehaviour
     [SerializeField] public FloatVariable remainingTimeSeconds; // PUBLIC for AI system
     [SerializeField] TextMeshProUGUI timerText;
     [SerializeField] UnityEvent _TimeHitZero;
+    [SerializeField] UnityEvent _TimeStarted;
 
     bool _timer_is_active = false;
 
@@ -59,7 +60,11 @@ public class Timer : MonoBehaviour
     }
 
     public void DeactivateTimer(){ _timer_is_active = false; }
-    public void ActivateTimer(){ _timer_is_active = true;}
+    public void ActivateTimer()
+    { 
+        _timer_is_active = true;
+        _TimeStarted?.Invoke();
+    }
 
     public void ResetTimer() { remainingTimeSeconds.Reset(); }
 
