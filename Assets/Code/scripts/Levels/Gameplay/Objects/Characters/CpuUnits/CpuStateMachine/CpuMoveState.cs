@@ -21,28 +21,23 @@ public class CpuMoveState : CpuBaseState
         _context._Animator.SetFloat("RunningSpeed", _context._ScrStats._AnimationMoveSpeed);
     }
 
-    public override void UpdateState()
-    {
-        Moving();
-    }
-
-    public override void ExitState()
-    {
-        _context.UpdateCurrentState(CpuStateManager.State.Attack);
-    }
+    public override void UpdateState() => Moving();
+    public override void ExitState() => _context.UpdateCurrentState(CpuStateManager.State.Attack);
 
     void Moving()
     {
         _Body.linearVelocity = new Vector2(_Stats._MoveSpeed * _Transform.right.x, _Body.linearVelocity.y);
 
-        List<Stats> targets = AttackDetection.FindTargetsInCircle(
-            _Transform.position,
-            _context._ScrStats._AttackType._StopDistance,
-            _Stats.targetTags,
-            _Stats
-        );
+        Vector2 range = _Stats._AttackRange;
+        bool facingLeft = _Transform.right.x < 0;
+        
+        // Use the same center logic as the attack to ensure slope detection matches
+        float offsetX = (range.x / 2f);
+        offsetX = facingLeft ? -offsetX : offsetX;
+        Vector2 detectionCenter = (Vector2)_Transform.position + new Vector2(offsetX, 0f);
 
-        AttackDetection.DrawDebugCircle(_Transform.position, _context._ScrStats._AttackType._StopDistance, Color.yellow);
+        List<Stats> targets = AttackDetection.FindTargetsInBox(detectionCenter, range, _Stats.targetTags, _Stats);
+        AttackDetection.DrawDebugBox(detectionCenter, range, Color.yellow);
 
         if (targets.Count > 0)
         {

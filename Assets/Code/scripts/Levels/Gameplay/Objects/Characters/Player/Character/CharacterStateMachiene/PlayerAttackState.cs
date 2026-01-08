@@ -41,21 +41,18 @@ public class PlayerAttackState : PlayerBaseState
     
     public override void CheckSwitchStates()
     {
-        // Knockback can interrupt attack at any time
         if (Ctx.IsKnockedBack) 
         { 
             SwitchState(Factory.KnockedBack()); 
             return;
         }
         
-        // Only transition out when attack is complete
         if (_attackOver)
         {
             var nextState = Factory.GetNextState(Ctx.PlayerCommander);
             
             if (this.Equals(nextState))
             {
-                // Another attack command is queued, restart the attack
                 EnterState();
             }
             else
@@ -67,15 +64,16 @@ public class PlayerAttackState : PlayerBaseState
 
     public void Tick(float deltaTime)
     {
+        // Convert deltaTime to milliseconds
         _timer += deltaTime * 1000; 
 
         switch (_phase)
         {
             case AttackPhase.Startup:
+                currentAttackType.boxSize = Ctx.PlayerStats._AttackRange;
                 if (Ctx.AnimatorController.ShouldAttack())
                 {
-                    currentAttackType.Attack(Ctx);
-
+                    currentAttackType.Attack(Ctx); 
                     _timer = 0f;
                     _phase = AttackPhase.Cooldown;
                 }
@@ -83,15 +81,13 @@ public class PlayerAttackState : PlayerBaseState
 
             case AttackPhase.Cooldown:
                 Ctx.Animator.SetBool("IsAttacking", false);
-                
-                if (_timer >= currentAttackType._AttackEndlag)
+                if (_timer >= Ctx.PlayerStats._AttackEndlag * 1000)
                 {
                     _phase = AttackPhase.Done;
                 }
                 break;
 
             case AttackPhase.Done:
-                // keep only 1 queued attack to prevent buffer locking
                 if (Ctx.PlayerCommander.IsCmdPending(DiscretePlayerCommand.Attack))
                 {
                     Ctx.PlayerCommander.ClearPendingCmds(DiscretePlayerCommand.Attack);

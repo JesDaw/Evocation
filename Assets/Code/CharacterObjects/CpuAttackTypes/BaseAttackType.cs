@@ -1,13 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Base class for all attack types
-/// </summary>
 public abstract class AttackType : ScriptableObject
 {
     [Header("Attack Settings")]
-    public float _StopDistance; // How close to get before attacking
+    public float _StopDistance; 
     public int _AttackDamage;
     public float _AttackEndlag;
 
@@ -15,18 +12,13 @@ public abstract class AttackType : ScriptableObject
     public List<StatusEffect> _EffectsToApply = new List<StatusEffect>();
 
     [Header("Attack Shape")]
-    public bool useBoxDetection = true; // Box vs Circle detection
+    public bool useBoxDetection = true; 
     public Vector2 boxSize = new Vector2(2f, 2f); 
     public float circleRadius = 1.5f; 
-
-    public virtual void Start() { }
 
     public abstract void Attack(CpuStateManager _context);
     public abstract void Attack(PlayerStateMachine _context);
 
-    /// <summary>
-    /// Deal damage and apply status effects to a target
-    /// </summary>
     protected void DealDamage(Stats attacker, Stats target)
     {
         if (target == null || attacker == null) return;
@@ -34,7 +26,7 @@ public abstract class AttackType : ScriptableObject
         DamageSource damageSource = new DamageSource(GetDamageType());
         damageSource.IsEnemy = attacker._Enemy;
 
-        target.damageHandler.TakeDamage(_AttackDamage, damageSource);
+        target.damageHandler.TakeDamage(attacker._AttackDamage, damageSource);
 
         foreach (StatusEffect effect in _EffectsToApply)
         {
@@ -42,27 +34,17 @@ public abstract class AttackType : ScriptableObject
         }
     }
 
-    /// <summary>
-    /// CPU version - uses CPU's _AttackingStats
-    /// </summary>
-    public void DealDamage(CpuStateManager _context)
-    {
-        DealDamage(_context._Stats, _context._AttackingStats);
-    }
+    public void DealDamage(CpuStateManager _context) => DealDamage(_context._Stats, _context._AttackingStats);
+    public void DealDamage(PlayerStateMachine _context) => DealDamage(_context.PlayerStats, _context._AttackingStats);
 
-    /// <summary>
-    /// Player version - uses Player's _AttackingStats
-    /// </summary>
-    public void DealDamage(PlayerStateMachine _context)
-    {
-        DealDamage(_context.PlayerStats, _context._AttackingStats);
-    }
+    protected virtual DamageSource.DamageType GetDamageType() => DamageSource.DamageType.Melee;
 
-    /// <summary>
-    /// Override this to specify the damage type for each attack
-    /// </summary>
-    protected virtual DamageSource.DamageType GetDamageType()
+    // The Fixed Center Calculation for Slopes
+    protected Vector2 CalculateAttackCenter(Vector2 position, bool facingLeft, Vector2 currentRange)
     {
-        return DamageSource.DamageType.Melee;
+        float offsetX = (currentRange.x / 2f);
+        offsetX = facingLeft ? -offsetX : offsetX;
+        // Y is 0 offset so the box extends UP and DOWN from the pivot
+        return position + new Vector2(offsetX, 0f); 
     }
 }

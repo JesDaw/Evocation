@@ -4,81 +4,35 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "AOEAttack", menuName = "AttackType/AOE Attack")]
 public class AOEAttackType : AttackType
 {
-    [Header("AOE-Specific Settings")]
-    public int maxTargets = 10; // Maximum number of targets to hit
+    public int maxTargets = 10;
 
-    protected override DamageSource.DamageType GetDamageType()
-    {
-        return DamageSource.DamageType.AOE;
-    }
+    protected override DamageSource.DamageType GetDamageType() => DamageSource.DamageType.AOE;
 
     public override void Attack(CpuStateManager _context)
     {
-        Vector2 attackCenter = CalculateAttackCenter(_context.transform.position, _context._Stats._Enemy);
+        Vector2 range = _context._Stats._AttackRange;
+        Vector2 attackCenter = CalculateAttackCenter(_context.transform.position, _context._Stats._Enemy, range);
         
-        // Visual debugging
-        AttackDetection.DrawDebugBox(attackCenter, boxSize, Color.red, 1f);
+        List<Stats> targets = AttackDetection.FindTargetsInBox(attackCenter, range, _context._Stats.targetTags, _context._Stats);
 
-        List<Stats> targets = AttackDetection.FindTargetsInBox(
-            attackCenter,
-            boxSize,
-            _context._Stats.targetTags, 
-            _context._Stats
-        );
-
-        int hitCount = 0;
-        foreach (Stats target in targets)
+        for (int i = 0; i < Mathf.Min(targets.Count, maxTargets); i++)
         {
-            if (hitCount >= maxTargets) break;
-
-            _context._AttackingStats = target;
+            _context._AttackingStats = targets[i];
             DealDamage(_context);
-            hitCount++;
-        }
-
-        if (hitCount == 0)
-        {
-            Debug.Log($"AOE attack found no targets at {attackCenter}");
         }
     }
 
     public override void Attack(PlayerStateMachine _context)
     {
-        Vector2 attackCenter = CalculateAttackCenter(_context.transform.position, !_context.isFacingRight);
+        Vector2 range = _context.PlayerStats._AttackRange;
+        Vector2 attackCenter = CalculateAttackCenter(_context.transform.position, !_context.isFacingRight, range);
         
-        AttackDetection.DrawDebugBox(attackCenter, boxSize, Color.blue, 1f);
+        List<Stats> targets = AttackDetection.FindTargetsInBox(attackCenter, range, _context.PlayerStats.targetTags, _context.PlayerStats);
 
-        List<Stats> targets = AttackDetection.FindTargetsInBox(
-            attackCenter,
-            boxSize,
-            _context.PlayerStats.targetTags, 
-            _context.PlayerStats
-        );
-
-        int hitCount = 0;
-        foreach (Stats target in targets)
+        for (int i = 0; i < Mathf.Min(targets.Count, maxTargets); i++)
         {
-            if (hitCount >= maxTargets) break;
-
-            _context._AttackingStats = target;
+            _context._AttackingStats = targets[i];
             DealDamage(_context);
-            hitCount++;
         }
-
-        if (hitCount == 0)
-        {
-            Debug.Log($"AOE attack found no targets at {attackCenter}");
-        }
-    }
-
-    /// <summary>
-    /// Calculate where the attack box should be centered based on facing direction
-    /// </summary>
-    private Vector2 CalculateAttackCenter(Vector2 position, bool facingLeft)
-    {
-        float offsetX = (boxSize.x / 2f) + _StopDistance;
-        offsetX = facingLeft ? -offsetX : offsetX;
-        
-        return position + new Vector2(offsetX, boxSize.y / 2f);
     }
 }

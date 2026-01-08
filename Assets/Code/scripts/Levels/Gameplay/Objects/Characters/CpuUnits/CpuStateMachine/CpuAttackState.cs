@@ -35,15 +35,18 @@ public class CpuAttackState : CpuBaseState
     }
     public void Tick(float deltaTime)
     {
+        // Convert deltaTime to milliseconds since your logic uses 1000 multiplier
         _timer += deltaTime * 1000;
 
         switch (_phase)
         {
             case AttackPhase.Startup:
+                // Use the range defined in the unit's stats
+                currentAttackType.boxSize = _context._Stats._AttackRange;
+
                 if (_context._AnimatorController.ShouldAttack())
                 {
                     currentAttackType.Attack(_context);
-
                     _timer = 0f;
                     _phase = AttackPhase.Cooldown;
                 }
@@ -51,7 +54,7 @@ public class CpuAttackState : CpuBaseState
 
             case AttackPhase.Cooldown:
                 _context._Animator.SetBool("IsAttacking", false);
-                if (_timer >= currentAttackType._AttackEndlag)
+                if (_timer >= _context._Stats._AttackEndlag * 1000) 
                 {
                     _phase = AttackPhase.Done;
                 }

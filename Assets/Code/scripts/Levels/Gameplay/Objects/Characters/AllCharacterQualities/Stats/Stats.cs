@@ -15,9 +15,16 @@ public class Stats : MonoBehaviour
     [Tooltip("Is this an enemy unit? If false, it's Player/Ally")]
     public bool _Enemy;
 
+    
+
     [Header("Health")]
     [HideInInspector] public int _MaxHealth = 1;
     [HideInInspector] public float _CurrentHealth = 1;
+
+    [Header("Attack")]
+    [HideInInspector] public int _AttackDamage;
+    [HideInInspector] public float _AttackEndlag;
+    [HideInInspector] public Vector2 _AttackRange;
 
     [Header("Movement")]
     [HideInInspector] public float _MoveSpeed;
@@ -98,13 +105,9 @@ public class Stats : MonoBehaviour
         }
     }
 
-       void InitializeFromScriptableStats()
+    void InitializeFromScriptableStats()
     {
-        if (scriptableStats == null)
-        {
-            Debug.LogWarning($"No ScriptableStats assigned to {gameObject.name}!");
-            return;
-        }
+        if (scriptableStats == null) return;
 
         _MaxHealth = scriptableStats._MaxHealth;
         _CurrentHealth = scriptableStats._MaxHealth;
@@ -112,8 +115,11 @@ public class Stats : MonoBehaviour
         _KnockBackMax = scriptableStats._KnockBackMax;
         _KnockBackHealth = scriptableStats._KnockBackMax;
         _spawnCost = scriptableStats._spawnCost;
-
-        //Debug.Log($"Stats initialized from {scriptableStats.name}");
+        
+        _AttackDamage = scriptableStats._AttackDamage;
+        _AttackEndlag = scriptableStats._AttackEndlag; // Updated name
+        _AttackRange = new Vector2(scriptableStats._HorizontalRange, scriptableStats._VerticalRange);
+        
     }
 
 

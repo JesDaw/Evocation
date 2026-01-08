@@ -26,17 +26,21 @@ public class ScriptableStats : ScriptableObject
     [Header("General Stats")]
     [Tooltip("Maximum health points")]
     public int _MaxHealth = 1;
+
+    [Header("Combat")]
+    public AttackType _AttackType;
+    public int _AttackDamage;
+    public float _AttackEndlag;
+
+    [Header("Range Settings")]
+    public float _HorizontalRange = 2f; 
+    public float _VerticalRange = 2f;
     
     [Tooltip("Movement speed")]
     public float _MoveSpeed;
     
     [Tooltip("Cost to spawn this unit")]
     public int _spawnCost;
-
-    [Space]
-    [Header("Combat")]
-    [Tooltip("The type of attack this CPU uses (Melee, Range, AOE, etc.)")]
-    public AttackType _AttackType;
     
     [Space]
     [Header("Knockback")]
