@@ -1,63 +1,104 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "DefaultAttack", menuName = "AttackType/DefaultAttack")]
+[CreateAssetMenu(fileName = "MeleeAttack", menuName = "AttackType/Melee Attack")]
 public class DefaultAttackType : AttackType
 {
+    protected override DamageSource.DamageType GetDamageType()
+    {
+        return DamageSource.DamageType.Melee;
+    }
+
     public override void Attack(CpuStateManager _context)
     {
-        // this is for helping me visualize the attack area
-        DrawCircle(_context.transform.position, _AttackRange, Color.red);
-        
-        DealDamage(_context);
+        Vector2 attackPosition = _context.transform.position;
+        List<Stats> targets;
+
+        if (useBoxDetection)
+        {
+            Vector2 attackCenter = CalculateAttackCenter(attackPosition, _context._Stats._Enemy);
+            AttackDetection.DrawDebugBox(attackCenter, boxSize, Color.red, 1f);
+            
+            targets = AttackDetection.FindTargetsInBox(
+                attackCenter,
+                boxSize,
+                _context._Stats.targetTags, // Use targetTags instead of _CpuPriority
+                _context._Stats
+            );
+        }
+        else
+        {
+            AttackDetection.DrawDebugCircle(attackPosition, circleRadius, Color.red);
+            
+            targets = AttackDetection.FindTargetsInCircle(
+                attackPosition,
+                circleRadius,
+                _context._Stats.targetTags, // Use targetTags instead of _CpuPriority
+                _context._Stats
+            );
+        }
+
+        // Attack first target found (already sorted by priority)
+        if (targets.Count > 0)
+        {
+            _context._AttackingStats = targets[0];
+            DealDamage(_context);
+        }
+        else
+        {
+            Debug.Log("Melee attack found no targets");
+        }
     }
 
     public override void Attack(PlayerStateMachine _context)
     {
-        // this is for helping me visualize the attack area
-        DrawCircle(_context.transform.position, _AttackRange, Color.blue);
-        
         Vector2 attackPosition = _context.transform.position;
-        
-        Collider2D[] hits = Physics2D.OverlapCircleAll(attackPosition, _AttackRange);
+        List<Stats> targets;
 
-        for (int I = 0; I < _context.PlayerStats._CpuPriority.Count; I++)
+        if (useBoxDetection)
         {
-            for (int II = 0; II < hits.Length; II++)
-            {
-                if (hits[II].CompareTag(_context.PlayerStats._CpuPriority[I].ToString()))
-                {
-                    // Found a valid target
-                    _context._AttackingStats = hits[II].gameObject.GetComponent<Stats>();
-                    if (_context._AttackingStats == null)
-                    {
-                        Debug.LogWarning("Target missing Stats component: " + hits[II].name);
-                        continue;
-                    }
-
-                    DealDamage(_context);
-                    return; // Attack first valid target found and exit
-                }
-            }
+            Vector2 attackCenter = CalculateAttackCenter(attackPosition, !_context.isFacingRight);
+            AttackDetection.DrawDebugBox(attackCenter, boxSize, Color.blue, 1f);
+            
+            targets = AttackDetection.FindTargetsInBox(
+                attackCenter,
+                boxSize,
+                _context.PlayerStats.targetTags, // Use targetTags instead of _CpuPriority
+                _context.PlayerStats
+            );
         }
-        
-        Debug.Log("No valid targets in melee range");
+        else
+        {
+            AttackDetection.DrawDebugCircle(attackPosition, circleRadius, Color.blue);
+            
+            targets = AttackDetection.FindTargetsInCircle(
+                attackPosition,
+                circleRadius,
+                _context.PlayerStats.targetTags, // Use targetTags instead of _CpuPriority
+                _context.PlayerStats
+            );
+        }
+
+        // Attack first target found (already sorted by priority)
+        if (targets.Count > 0)
+        {
+            _context._AttackingStats = targets[0];
+            DealDamage(_context);
+        }
+        else
+        {
+            Debug.Log("Melee attack found no targets");
+        }
     }
-    
-    // this is for helping me visualize the attack area
-    void DrawCircle(Vector3 center, float radius, Color color)
+
+    /// <summary>
+    /// Calculate where the attack box should be centered based on facing direction
+    /// </summary>
+    private Vector2 CalculateAttackCenter(Vector2 position, bool facingLeft)
     {
-        int segments = 32;
-        float angleStep = 360f / segments;
+        float offsetX = (boxSize.x / 2f) + _StopDistance;
+        offsetX = facingLeft ? -offsetX : offsetX;
         
-        for (int i = 0; i < segments; i++)
-        {
-            float angle1 = i * angleStep * Mathf.Deg2Rad;
-            float angle2 = (i + 1) * angleStep * Mathf.Deg2Rad;
-            
-            Vector3 point1 = center + new Vector3(Mathf.Cos(angle1) * radius, Mathf.Sin(angle1) * radius, 0);
-            Vector3 point2 = center + new Vector3(Mathf.Cos(angle2) * radius, Mathf.Sin(angle2) * radius, 0);
-            
-            Debug.DrawLine(point1, point2, color, 1f);
-        }
+        return position + new Vector2(offsetX, boxSize.y / 2f);
     }
 }

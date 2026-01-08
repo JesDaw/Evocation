@@ -1,16 +1,21 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// Player spawn controller - connects input to spawning
+/// </summary>
 public class SpawnController : MonoBehaviour
 {
     [Header("Spawn Settings")]
     [SerializeField] List<ScriptableStats> spawnableCPUs = new List<ScriptableStats>();
-    [SerializeField] SpawnObjects spawnObjects;
+    [SerializeField] SpawnObjects spawner;
 
     [Header("Player Spawning")]
     [SerializeField] GameObject playerPrefab;
+
+    [Header("Debug")]
+    [SerializeField] bool showDebugLogs = false;
 
     void Start()
     {
@@ -20,185 +25,131 @@ public class SpawnController : MonoBehaviour
             return;
         }
 
-        var input = GlobalInputManager.Instance.InputActions.SpawnerController;
-
-        input.Spawn1.performed += Spawn1Performed;
-        input.Spawn2.performed += Spawn2Performed;
-        input.Spawn3.performed += Spawn3Performed;
-        input.Spawn4.performed += Spawn4Performed;
-        input.Spawn5.performed += Spawn5Performed;
-        input.Spawn6.performed += Spawn6Performed;
-        input.Spawn7.performed += Spawn7Performed;
-        input.Spawn8.performed += Spawn8Performed;
-        input.Spawn9.performed += Spawn9Performed;
-        input.SpawnPlayer.performed += SpawnPlayerPerformed;
-
-        //Debug.Log("SpawnController: Subscribed to all spawn inputs");
-        
-        // Check if the action map is enabled
-        //Debug.Log($"SpawnerController action map enabled: {input.enabled}");
+        SubscribeToInput();
     }
 
-    void OnDisable()
+    void OnDestroy()
+    {
+        UnsubscribeFromInput();
+    }
+
+    void SubscribeToInput()
+    {
+        var input = GlobalInputManager.Instance.InputActions.SpawnerController;
+
+        input.Spawn1.performed += ctx => TrySpawnCPU(0);
+        input.Spawn2.performed += ctx => TrySpawnCPU(1);
+        input.Spawn3.performed += ctx => TrySpawnCPU(2);
+        input.Spawn4.performed += ctx => TrySpawnCPU(3);
+        input.Spawn5.performed += ctx => TrySpawnCPU(4);
+        input.Spawn6.performed += ctx => TrySpawnCPU(5);
+        input.Spawn7.performed += ctx => TrySpawnCPU(6);
+        input.Spawn8.performed += ctx => TrySpawnCPU(7);
+        input.Spawn9.performed += ctx => TrySpawnCPU(8);
+        input.SpawnPlayer.performed += ctx => SpawnPlayer();
+
+        if (showDebugLogs)
+            Debug.Log("SpawnController: Input subscribed");
+    }
+
+    void UnsubscribeFromInput()
     {
         if (GlobalInputManager.Instance == null) return;
 
         var input = GlobalInputManager.Instance.InputActions.SpawnerController;
 
-        input.Spawn1.performed -= Spawn1Performed;
-        input.Spawn2.performed -= Spawn2Performed;
-        input.Spawn3.performed -= Spawn3Performed;
-        input.Spawn4.performed -= Spawn4Performed;
-        input.Spawn5.performed -= Spawn5Performed;
-        input.Spawn6.performed -= Spawn6Performed;
-        input.Spawn7.performed -= Spawn7Performed;
-        input.Spawn8.performed -= Spawn8Performed;
-        input.Spawn9.performed -= Spawn9Performed;
-        input.SpawnPlayer.performed -= SpawnPlayerPerformed;
-        
-        //Debug.Log("SpawnController: Unsubscribed from all spawn inputs");
+        input.Spawn1.performed -= ctx => TrySpawnCPU(0);
+        input.Spawn2.performed -= ctx => TrySpawnCPU(1);
+        input.Spawn3.performed -= ctx => TrySpawnCPU(2);
+        input.Spawn4.performed -= ctx => TrySpawnCPU(3);
+        input.Spawn5.performed -= ctx => TrySpawnCPU(4);
+        input.Spawn6.performed -= ctx => TrySpawnCPU(5);
+        input.Spawn7.performed -= ctx => TrySpawnCPU(6);
+        input.Spawn8.performed -= ctx => TrySpawnCPU(7);
+        input.Spawn9.performed -= ctx => TrySpawnCPU(8);
+        input.SpawnPlayer.performed -= ctx => SpawnPlayer();
+
+        if (showDebugLogs)
+            Debug.Log("SpawnController: Input unsubscribed");
     }
 
-    public void EquipCPU(ScriptableStats stats)
+    void TrySpawnCPU(int index)
     {
-        spawnableCPUs.Add(stats);
-    }
-
-    public void UnequipCPU(ScriptableStats stats)
-    {
-        spawnableCPUs.Remove(stats);
-    }
-
-    public void Spawn1Performed(InputAction.CallbackContext context)
-    {
-        //Debug.Log("Spawn1 button pressed!");
-        TrySpawnCPU(0, context);
-    }
-    
-    public void Spawn2Performed(InputAction.CallbackContext context)
-    {
-        //Debug.Log("Spawn2 button pressed!");
-        TrySpawnCPU(1, context);
-    }
-    
-    public void Spawn3Performed(InputAction.CallbackContext context)
-    {
-        //Debug.Log("Spawn3 button pressed!");
-        TrySpawnCPU(2, context);
-    }
-    
-    public void Spawn4Performed(InputAction.CallbackContext context)
-    {
-        //Debug.Log("Spawn4 button pressed!");
-        TrySpawnCPU(3, context);
-    }
-    
-    public void Spawn5Performed(InputAction.CallbackContext context)
-    {
-        //Debug.Log("Spawn5 button pressed!");
-        TrySpawnCPU(4, context);
-    }
-    
-    public void Spawn6Performed(InputAction.CallbackContext context)
-    {
-        //Debug.Log("Spawn6 button pressed!");
-        TrySpawnCPU(5, context);
-    }
-    
-    public void Spawn7Performed(InputAction.CallbackContext context)
-    {
-        //Debug.Log("Spawn7 button pressed!");
-        TrySpawnCPU(6, context);
-    }
-    
-    public void Spawn8Performed(InputAction.CallbackContext context)
-    {
-        //Debug.Log("Spawn8 button pressed!");
-        TrySpawnCPU(7, context);
-    }
-    
-    public void Spawn9Performed(InputAction.CallbackContext context)
-    {
-        //Debug.Log("Spawn9 button pressed!");
-        TrySpawnCPU(8, context);
-    }
-
-    public void SpawnPlayerPerformed(InputAction.CallbackContext context)
-    {
-        //Debug.Log("SpawnPlayer button pressed!");
-        
-        if (playerPrefab != null && spawnObjects != null)
+        // Validation
+        if (spawner == null)
         {
-            spawnObjects.SpawnPlayer(playerPrefab);
-            //Debug.Log("Player spawned successfully");
-        }
-        else
-        {
-            Debug.LogWarning("Player GameObject or SpawnObjects reference not set in SpawnerController.");
-        }
-    }
-
-    void TrySpawnCPU(int index, InputAction.CallbackContext context)
-    {
-        //Debug.Log($"TrySpawnCPU called for index {index}, performed: {context.performed}");
-        
-        if (!context.performed)
-        {
-            Debug.LogWarning($"Context not performed for spawn {index}");
+            //Debug.LogError("No spawner assigned on player spawner!");
             return;
         }
-        
-        if (spawnableCPUs == null)
-        {
-            Debug.LogError("spawnableCPUs array is null!");
-            return;
-        }
-        
+
         if (index < 0 || index >= spawnableCPUs.Count)
         {
-            Debug.LogWarning($"Invalid spawn index: {index} (list Count: {spawnableCPUs.Count})");
+            if (showDebugLogs)
+                Debug.LogWarning($"Invalid spawn index: {index}");
             return;
         }
-        
-        if (spawnObjects == null)
+
+        ScriptableStats stats = spawnableCPUs[index];
+        if (stats == null)
         {
-            Debug.LogError("SpawnObjects reference is null!");
+            //Debug.LogWarning($"No stats at index {index}");
             return;
         }
-        
-        if (spawnableCPUs[index] == null)
+
+        // Spawn through the spawner (handles money deduction)
+        GameObject spawned = spawner.SpawnFromPlayer(stats);
+
+        if (spawned != null && showDebugLogs)
         {
-            Debug.LogWarning($"Spawnable at index {index} is null!");
-            return;
-        }
-        
-        spawnObjects.Spawn(spawnableCPUs[index]);
-        //Debug.Log($"Successfully spawned CPU at index: {index}");
-    }
-    
-    // Add this method to check status at runtime
-    void Update()
-    {
-        // Press L to log the current state
-        if (Keyboard.current != null && Keyboard.current.lKey.wasPressedThisFrame)
-        {
-            LogSpawnControllerState();
+            //Debug.Log($"Player spawned: {stats.name}");
         }
     }
-    
-    void LogSpawnControllerState()
+
+    void SpawnPlayer()
     {
-        if (GlobalInputManager.Instance == null)
+        if (spawner == null)
         {
-            Debug.LogError("GlobalInputManager is NULL!");
+            //Debug.LogError("No spawner assigned!");
             return;
         }
-        
-        var spawnerMap = GlobalInputManager.Instance.InputActions.SpawnerController;
-        Debug.Log($"=== SpawnController Status ===");
-        Debug.Log($"SpawnerController action map enabled: {spawnerMap.enabled}");
-        Debug.Log($"Spawn1 action enabled: {spawnerMap.Spawn1.enabled}");
-        Debug.Log($"SpawnObjects reference: {(spawnObjects != null ? "Valid" : "NULL")}");
-        Debug.Log($"spawnableCPUs count: {(spawnableCPUs != null ? spawnableCPUs.Count.ToString() : "NULL")}");
+
+        if (playerPrefab == null)
+        {
+            //Debug.LogWarning("No player prefab assigned!");
+            return;
+        }
+
+        GameObject spawned = spawner.SpawnPlayer(playerPrefab);
+
+        if (spawned != null && showDebugLogs)
+        {
+            //Debug.Log("Player character spawned");
+        }
+    }
+
+    /// <summary>
+    /// Add a CPU to the spawn list (for unlocking units)
+    /// </summary>
+    public void EquipCPU(ScriptableStats stats)
+    {
+        if (stats == null) return;
+        if (!spawnableCPUs.Contains(stats))
+        {
+            spawnableCPUs.Add(stats);
+            //Debug.Log($"Equipped: {stats.name}");
+        }
+    }
+
+    /// <summary>
+    /// Remove a CPU from the spawn list
+    /// </summary>
+    public void UnequipCPU(ScriptableStats stats)
+    {
+        if (stats == null) return;
+        if (spawnableCPUs.Contains(stats))
+        {
+            spawnableCPUs.Remove(stats);
+            //Debug.Log($"Unequipped: {stats.name}");
+        }
     }
 }

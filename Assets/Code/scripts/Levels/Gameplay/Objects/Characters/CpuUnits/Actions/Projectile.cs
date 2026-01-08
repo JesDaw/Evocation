@@ -1,33 +1,52 @@
 using UnityEngine;
 using System;
-using DG.Tweening;
+using System.Diagnostics.CodeAnalysis;
 
+/// <summary>
+/// handles projectile logic
+/// </summary>
 public class Projectile : MonoBehaviour
 {
     private Transform target;
+    private Vector3 startPos;
     private AnimationCurve curve;
     private float speed;
     private float offset;
     private Action onHit;
+    private float journeyLength;
+    private float distanceTraveled = 0f;
 
-    private Vector3 startPos;
-    private float distance;
-    private float t = 0;
-
-    public void Launch(Vector3 start, Transform target, AnimationCurve curve, float speed, float offset, Action onHit)
+    /// <summary>
+    /// Launch projectile at constant speed
+    /// </summary>
+    /// <param name="start">Starting position</param>
+    /// <param name="targetTransform">Target to move towards</param>
+    /// <param name="heightCurve">Arc curve for projectile</param>
+    /// <param name="unitsPerSecond">Constant speed in units/second</param>
+    /// <param name="heightOffset">Height of arc</param>
+    /// <param name="onHitCallback">Callback when projectile reaches target</param>
+    public void Launch(Vector3 start, Transform targetTransform, AnimationCurve heightCurve, float unitsPerSecond, float heightOffset, Action onHitCallback)
     {
-        this.startPos = start;
-        this.target = target;
-        this.curve = curve;
-        this.speed = speed;
-        this.offset = offset;
-        this.onHit = onHit;
+        startPos = start;
+        target = targetTransform;
+        curve = heightCurve;
+        speed = unitsPerSecond;
+        offset = heightOffset;
+        onHit = onHitCallback;
 
         transform.position = startPos;
-        distance = Vector3.Distance(startPos, target.position);
+
+        if (target != null)
+        {
+            journeyLength = Vector3.Distance(startPos, target.position);
+        }
+        else // Default if no target
+        {
+            journeyLength = 10f;
+        }
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
         if (target == null)
         {
@@ -35,30 +54,42 @@ public class Projectile : MonoBehaviour
             return;
         }
 
+        distanceTraveled += speed * Time.fixedDeltaTime;
 
-        t += Time.deltaTime;
-        float yPos = curve.Evaluate(t);
+        float progress = Mathf.Clamp01(distanceTraveled / journeyLength);
 
-        float newX = Mathf.MoveTowards(
-            startPos.x,
-            target.position.x,
-            t * speed
-        );
+        Vector3 currentPos = Vector3.Lerp(startPos, target.position, progress);
 
-        transform.position = new Vector3(
-            newX,
-            startPos.y + (yPos * distance),
-            0f
-        );
+        float height = curve.Evaluate(progress) * offset;
+        currentPos.y += height;
 
-        float nextY = curve.Evaluate(Mathf.Clamp01(t + 0.01f));
-        float angle = Mathf.Atan2(nextY - yPos, 0.01f) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, angle + offset);
+        transform.position = currentPos;
 
-        if (Mathf.Abs(transform.position.x - target.position.x) < 0.01f)
+        if (progress < 1f)
         {
+            float nextProgress = Mathf.Clamp01((distanceTraveled + 0.1f) / journeyLength);
+            Vector3 nextPos = Vector3.Lerp(startPos, target.position, nextProgress);
+            float nextHeight = curve.Evaluate(nextProgress) * offset;
+            nextPos.y += nextHeight;
+
+            Vector3 direction = (nextPos - transform.position).normalized;
+            if (direction != Vector3.zero)
+            {
+                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                transform.rotation = Quaternion.Euler(0, 0, angle);
+            }
+        }
+
+        if (progress >= 1f)
+        {
+            transform.position = target.position;
             onHit?.Invoke();
             Destroy(gameObject);
         }
+    }
+
+    void OnDestroy()
+    {
+        //Maybewe can make an explosion effect of something
     }
 }

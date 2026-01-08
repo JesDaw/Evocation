@@ -2,15 +2,14 @@ using UnityEngine;
 using TMPro;
 using System.Collections;
 
-
 public class Money : MonoBehaviour
 {
-    
-    [SerializeField] FloatVariable genPerSec;
-    [SerializeField] FloatVariable moneyAmount;
+    [SerializeField] public FloatVariable genPerSec; // PUBLIC for AI system
+    [SerializeField] public FloatVariable moneyAmount; // PUBLIC for AI system
     [SerializeField] TextMeshProUGUI moneyText;
     bool _money_is_active = false;
     float CurrentMoney = 0;
+    
     public bool MoneyIsActive
     {
         get { return _money_is_active; }
@@ -28,7 +27,7 @@ public class Money : MonoBehaviour
         }
     }
 
-    void Start ()
+    void Start()
     {
         StartCoroutine(moneyCount());
     }
@@ -58,6 +57,7 @@ public class Money : MonoBehaviour
     {
         moneyAmount._Value -= amount;
     }
+    
     public void DeactivateMoney() { _money_is_active = false; }
     public void ActivateMoney() { _money_is_active = true; }
     public void ResetMoney() { moneyAmount.Reset(); }
