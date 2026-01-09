@@ -2,66 +2,68 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// Base class for AI actions
-/// Now serializable - define inline in inspector!
+/// Base class for AI actions with clean debug logging
 /// </summary>
 [System.Serializable]
 public abstract class AIAction
 {
-    [Header("Action Info")]
     public string actionName = "AI Action";
-    
-    [TextArea(2, 4)]
-    public string description = "What does this action do?";
-    
-    [Header("Considerations")]
-    [Tooltip("All factors this action considers")]
     public List<AIConsideration> considerations = new List<AIConsideration>();
-    
-    [Header("Bonus Utility")]
-    [Tooltip("Flat bonus added to utility (use sparingly)")]
-    public float flatBonus = 0f;
 
     /// <summary>
-    /// Calculate utility by evaluating all considerations
+    /// Calculate utility by summing all consideration outputs
     /// </summary>
-    public virtual float CalculateUtility(AIContext context)
+    public virtual float CalculateUtility(AIContext context, bool debug)
     {
         if (!CanExecute(context))
+        {
+            if (debug)
+                Debug.Log($"✗ {actionName}: CANNOT EXECUTE");
             return float.MinValue;
+        }
         
-        float totalUtility = flatBonus;
+        if (debug)
+            Debug.Log($"\n▸ {actionName}:");
+        
+        if (considerations.Count == 0)
+        {
+            Debug.LogWarning($"[AI] {actionName} has NO considerations!");
+            return 0f;
+        }
+        
+        // Get unit stats if this is a spawn action
+        ScriptableStats unitStats = GetUnitStats();
+        
+        float totalUtility = 0f;
         
         foreach (AIConsideration consideration in considerations)
         {
-            if (consideration != null)
+            if (consideration == null)
             {
-                float considerationValue = consideration.Evaluate(context);
-                totalUtility += considerationValue;
-                
-                if (Application.isEditor)
-                    Debug.Log($"    {consideration.considerationName}: {considerationValue:F2} (weight: {consideration.weight})");
+                Debug.LogWarning($"[AI] Null consideration in {actionName}");
+                continue;
             }
+            
+            float value = consideration.Evaluate(context, debug, unitStats);
+            totalUtility += value;
         }
         
-        if (Application.isEditor && considerations.Count == 0)
-            Debug.LogWarning($"  {actionName} has NO considerations! Add at least one.");
+        if (debug)
+            Debug.Log($"  TOTAL UTILITY: {totalUtility:F2}");
         
         return totalUtility;
     }
 
     /// <summary>
-    /// Execute this action - implement in derived classes
+    /// Override in derived classes to provide unit stats for CanAffordUnit considerations
     /// </summary>
-    public abstract void Execute(AIContext context);
-
-    /// <summary>
-    /// Can this action be executed right now?
-    /// </summary>
-    public virtual bool CanExecute(AIContext context)
+    protected virtual ScriptableStats GetUnitStats()
     {
-        return true;
+        return null;
     }
+
+    public abstract void Execute(AIContext context);
+    public virtual bool CanExecute(AIContext context) => true;
 }
 
 /// <summary>
@@ -70,74 +72,35 @@ public abstract class AIAction
 [System.Serializable]
 public class SpawnUnitAction : AIAction
 {
-    [Header("Unit to Spawn")]
     public ScriptableStats unitStats;
 
     [Header("Spawn Requirements")]
-    [Tooltip("Minimum money required")]
-    public float minMoneyThreshold = 0f;
-    
-    [Tooltip("Can't spawn if we have this many or more units")]
-    public int maxOwnUnits = 999;
-    
-    [Header("Spawn Cooldown")]
-    [Tooltip("Minimum seconds between spawns (0 = no cooldown)")]
-    public float spawnCooldown = 0f;
-    
     private float lastSpawnTime = -999f;
+
+    protected override ScriptableStats GetUnitStats()
+    {
+        return unitStats;
+    }
 
     public override bool CanExecute(AIContext context)
     {
         if (unitStats == null)
         {
-            if (Application.isEditor)
-                Debug.LogWarning($"{actionName}: No unitStats assigned!");
+            Debug.LogWarning($"[AI] {actionName}: No unitStats assigned!");
             return false;
         }
         
         if (context.spawner == null)
         {
-            if (Application.isEditor)
-                Debug.LogWarning($"{actionName}: No spawner in context!");
+            Debug.LogWarning($"[AI] {actionName}: No spawner!");
             return false;
         }
         
         if (!context.spawner.spawningEnabled)
-        {
-            if (Application.isEditor)
-                Debug.Log($"{actionName}: Spawning is disabled");
             return false;
-        }
         
-        float currentMoney = context.GetCurrentMoney();
-        
-        if (currentMoney < unitStats._spawnCost)
-        {
-            if (Application.isEditor)
-                Debug.Log($"{actionName}: Not enough money! Need {unitStats._spawnCost}, have {currentMoney:F1}");
+        if (context.GetCurrentMoney() < unitStats._spawnCost)
             return false;
-        }
-        
-        if (currentMoney < minMoneyThreshold)
-        {
-            if (Application.isEditor)
-                Debug.Log($"{actionName}: Below minimum threshold! Need {minMoneyThreshold}, have {currentMoney:F1}");
-            return false;
-        }
-        
-        if (context.GetAIUnitCount() >= maxOwnUnits)
-        {
-            if (Application.isEditor)
-                Debug.Log($"{actionName}: Too many units! {context.GetAIUnitCount()}/{maxOwnUnits}");
-            return false;
-        }
-        
-        if (spawnCooldown > 0f && Time.time - lastSpawnTime < spawnCooldown)
-        {
-            if (Application.isEditor)
-                Debug.Log($"{actionName}: On cooldown! {(spawnCooldown - (Time.time - lastSpawnTime)):F1}s remaining");
-            return false;
-        }
         
         return true;
     }
@@ -153,8 +116,8 @@ public class SpawnUnitAction : AIAction
             context.aiMoneyManager.SpendMoney(unitStats._spawnCost);
             lastSpawnTime = Time.time;
             
-            if (Application.isEditor)
-                Debug.Log($"AI spawned {unitStats.name} (Cost: {unitStats._spawnCost})");
+            if (context.showDebugLogs)
+                Debug.Log($"[AI] ✓ Spawned {unitStats.name} (Cost: {unitStats._spawnCost})");
         }
     }
 }
@@ -165,19 +128,11 @@ public class SpawnUnitAction : AIAction
 [System.Serializable]
 public class DoNothingAction : AIAction
 {
-    [Header("Wait Message")]
-    public string waitMessage = "AI is saving money...";
-
     public override void Execute(AIContext context)
     {
-        if (!string.IsNullOrEmpty(waitMessage) && Application.isEditor)
-        {
-            Debug.Log($"{waitMessage} (Money: {context.GetCurrentMoney():F1})");
-        }
+        if (context.showDebugLogs)
+            Debug.Log($"[AI] Waiting... (Money: {context.GetCurrentMoney():F1})");
     }
 
-    public override bool CanExecute(AIContext context)
-    {
-        return true;
-    }
+    public override bool CanExecute(AIContext context) => true;
 }

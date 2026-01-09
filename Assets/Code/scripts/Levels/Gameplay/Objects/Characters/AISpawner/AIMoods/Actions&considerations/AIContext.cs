@@ -23,6 +23,9 @@ public class AIContext
     public Transform playerBase;
     public float maxDistance = 50f;
     
+    [Header("Debug")]
+    public bool showDebugLogs = false;
+    
     // Cached values (updated each frame)
     private float cachedClosestEnemyDistance;
     private int cachedPlayerUnits;
@@ -200,7 +203,7 @@ public class AIContext
         
         foreach (GameObject unit in playerUnits)
         {
-            if (unit == null || unit.transform.parent != null) continue; // Skip child objects
+            if (unit == null || unit.transform.parent != null) continue;
             float distance = Vector3.Distance(unit.transform.position, aiBase.position);
             if (distance < cachedClosestEnemyDistance)
                 cachedClosestEnemyDistance = distance;
@@ -208,7 +211,7 @@ public class AIContext
         
         foreach (GameObject unit in allyUnits)
         {
-            if (unit == null || unit.transform.parent != null) continue; // Skip child objects
+            if (unit == null || unit.transform.parent != null) continue;
             float distance = Vector3.Distance(unit.transform.position, aiBase.position);
             if (distance < cachedClosestEnemyDistance)
                 cachedClosestEnemyDistance = distance;

@@ -3,22 +3,18 @@ using System.Collections.Generic;
 using System.Collections;
 
 /// <summary>
-/// Main AI Controller - The Brain
-/// FIXED: Better debugging for unit counts and utility calculations
+/// Main AI Controller - Clean version with comprehensive debug logging
 /// </summary>
 public class AISpawnerController : MonoBehaviour
 {
     [Header("AI Moods")]
-    [Tooltip("All moods for this AI - edit directly in inspector!")]
     public List<AIMood> moods = new List<AIMood>();
-    
-    [Tooltip("Starting mood index (0 = first mood in list)")]
     [SerializeField] private int startingMoodIndex = 0;
     
     [Header("Decision Making")]
     [SerializeField] private float decisionInterval = 2f;
     
-    [Header("Spawner Setup - REQUIRED")]
+    [Header("Spawner Setup")]
     [SerializeField] private SpawnObjects spawner;
     [SerializeField] private AIMoneyManager aiMoneyManager;
     
@@ -33,11 +29,10 @@ public class AISpawnerController : MonoBehaviour
     [Header("Spatial")]
     [SerializeField] private Transform aiBase;
     [SerializeField] private Transform playerBase;
-    [SerializeField] private float maxDistance = 50f;
+    [SerializeField] private float maxDistance = 100f;
     
     [Header("Debug")]
-    [SerializeField] private bool showDebugLogs = true;
-    [SerializeField] private bool showUnitCountDetails = true;
+    [SerializeField] private bool showDebugLogs = false;
 
     private AIMood currentMood;
     private int currentMoodIndex;
@@ -55,18 +50,15 @@ public class AISpawnerController : MonoBehaviour
     {
         if (moods.Count == 0)
         {
-            Debug.LogError("AISpawnerController has no moods! Add at least one mood in the inspector.");
+            Debug.LogError("[AI] No moods configured! Add at least one mood in the inspector.");
             return;
         }
 
         if (spawner == null)
-            Debug.LogError("AISpawnerController: No SpawnObjects assigned!");
+            Debug.LogError("[AI] No SpawnObjects assigned!");
 
         if (aiMoneyManager == null)
-            Debug.LogError("AISpawnerController: No AIMoneyManager assigned!");
-
-        if (spawner != null && showDebugLogs)
-            Debug.Log("Make sure SpawnObjects has 'enemySpawner' checked!");
+            Debug.LogError("[AI] No AIMoneyManager assigned!");
     }
 
     void InitializeMood()
@@ -75,7 +67,7 @@ public class AISpawnerController : MonoBehaviour
         currentMood = moods[currentMoodIndex];
         
         if (showDebugLogs)
-            Debug.Log($"AI initialized with mood: {currentMood.moodName}");
+            Debug.Log($"[AI] Initialized with mood: {currentMood.moodName}");
     }
 
     void InitializeContext()
@@ -90,7 +82,8 @@ public class AISpawnerController : MonoBehaviour
             lowerZone = lowerZone,
             aiBase = aiBase,
             playerBase = playerBase,
-            maxDistance = maxDistance
+            maxDistance = maxDistance,
+            showDebugLogs = showDebugLogs
         };
     }
 
@@ -98,13 +91,13 @@ public class AISpawnerController : MonoBehaviour
     {
         if (isRunning)
         {
-            Debug.LogWarning("AI is already running!");
+            Debug.LogWarning("[AI] Already running!");
             return;
         }
 
         if (spawner == null || aiMoneyManager == null)
         {
-            Debug.LogError("Cannot start AI: Missing spawner or AIMoneyManager!");
+            Debug.LogError("[AI] Cannot start: Missing spawner or AIMoneyManager!");
             return;
         }
 
@@ -112,7 +105,7 @@ public class AISpawnerController : MonoBehaviour
         StartCoroutine(AIDecisionLoop());
         
         if (showDebugLogs)
-            Debug.Log($"AI Started in {currentMood.moodName} mood");
+            Debug.Log($"[AI] Started in {currentMood.moodName} mood");
     }
 
     public void StopAI()
@@ -121,7 +114,7 @@ public class AISpawnerController : MonoBehaviour
         StopAllCoroutines();
         
         if (showDebugLogs)
-            Debug.Log("AI Stopped");
+            Debug.Log("[AI] Stopped");
     }
 
     IEnumerator AIDecisionLoop()
@@ -134,76 +127,47 @@ public class AISpawnerController : MonoBehaviour
 
             if (availableActions.Count == 0)
             {
-                if (showDebugLogs)
-                    Debug.LogWarning($"AI mood '{currentMood.moodName}' has no actions!");
+                Debug.LogWarning($"[AI] Mood '{currentMood.moodName}' has no actions!");
                 yield return new WaitForSeconds(decisionInterval);
                 continue;
             }
 
-            // Find best action
-            AIActionWrapper bestActionWrapper = null;
+            // CRITICAL: Track best action
             AIAction bestAction = null;
             float bestUtility = float.MinValue;
 
             if (showDebugLogs)
             {
-                Debug.Log($"\n=== AI Decision ({currentMood.moodName} mood) ===");
-                Debug.Log($"Current Money: {context.GetCurrentMoney():F1}");
-                Debug.Log($"AI Units: {context.GetAIUnitCount()}");
-                if (showUnitCountDetails)
-                {
-                    DebugUnitCounts();
-                }
+                Debug.Log($"\n{'='}{'='} AI DECISION {'='}{' '}");
+                Debug.Log($"Mood: {currentMood.moodName}");
+                Debug.Log($"Money: {context.GetCurrentMoney():F1}");
+                //Debug.Log($"AI Units: {context.GetAIUnitCount()}\n");
             }
 
+            // Evaluate each action
             foreach (AIActionWrapper wrapper in availableActions)
             {
                 if (wrapper == null)
                 {
-                    Debug.LogWarning("  Null action wrapper in mood!");
+                    Debug.LogWarning("[AI] Null action wrapper!");
                     continue;
                 }
                 
                 AIAction action = wrapper.GetAction();
                 if (action == null)
                 {
-                    Debug.LogWarning($"  Action is null for type: {wrapper.actionType}");
+                    Debug.LogWarning($"[AI] Null action for type: {wrapper.actionType}");
                     continue;
                 }
-                
-                if (showDebugLogs)
-                    Debug.Log($"\n  Evaluating: {action.actionName}");
-                
-                // Check if can execute
-                bool canExecute = action.CanExecute(context);
-                if (showDebugLogs)
-                    Debug.Log($"    Can Execute: {canExecute}");
-                
-                // Calculate utility
-                float baseUtility = action.CalculateUtility(context);
-                
-                if (showDebugLogs)
-                    Debug.Log($"    Base utility: {baseUtility:F2}");
-                
-                // Apply mood modifiers
-                float finalUtility = currentMood.ModifyUtility(baseUtility, wrapper);
-                
-                // DEBUG: Show modifier breakdown
-                if (showDebugLogs && baseUtility > float.MinValue)
-                {
-                    Debug.Log($"    Mood Modifiers:");
-                    Debug.Log($"      Global Bonus: {currentMood.globalUtilityBonus}");
-                    Debug.Log($"      Global Multiplier: {currentMood.globalUtilityMultiplier}");
-                    Debug.Log($"      Action Bonus: {wrapper.bonusUtility}");
-                    Debug.Log($"      Action Multiplier: {wrapper.utilityMultiplier}");
-                    Debug.Log($"    Final utility: {finalUtility:F2}");
-                }
 
-                if (finalUtility > bestUtility)
+                // Calculate utility with detailed logging
+                float utility = action.CalculateUtility(context, showDebugLogs);
+
+                // Track best action
+                if (utility > bestUtility)
                 {
-                    bestUtility = finalUtility;
+                    bestUtility = utility;
                     bestAction = action;
-                    bestActionWrapper = wrapper;
                 }
             }
 
@@ -211,32 +175,17 @@ public class AISpawnerController : MonoBehaviour
             if (bestAction != null && bestUtility > float.MinValue)
             {
                 if (showDebugLogs)
-                    Debug.Log($"\n→ AI chose: {bestAction.actionName} (Utility: {bestUtility:F2})");
+                    Debug.Log($"\n→ CHOSEN: {bestAction.actionName} (Utility: {bestUtility:F2})\n");
                 
                 bestAction.Execute(context);
             }
             else
             {
                 if (showDebugLogs)
-                    Debug.Log("\n→ AI found no valid actions");
+                    Debug.Log($"\n→ NO VALID ACTIONS (Best utility: {bestUtility:F2})\n");
             }
 
             yield return new WaitForSeconds(decisionInterval);
-        }
-    }
-
-    /// <summary>
-    /// Debug what's being counted as AI units
-    /// </summary>
-    private void DebugUnitCounts()
-    {
-        GameObject[] aiUnits = GameObject.FindGameObjectsWithTag("Enemy");
-        
-        Debug.Log($"  Found {aiUnits.Length} GameObjects with 'Enemy' tag:");
-        foreach (GameObject obj in aiUnits)
-        {
-            string parentInfo = obj.transform.parent != null ? $" (parent: {obj.transform.parent.name})" : " (root object)";
-            Debug.Log($"    - {obj.name}{parentInfo}");
         }
     }
 
@@ -246,7 +195,7 @@ public class AISpawnerController : MonoBehaviour
     {
         if (moodIndex < 0 || moodIndex >= moods.Count)
         {
-            Debug.LogError($"Invalid mood index: {moodIndex}");
+            Debug.LogError($"[AI] Invalid mood index: {moodIndex}");
             return;
         }
 
@@ -255,7 +204,7 @@ public class AISpawnerController : MonoBehaviour
         currentMood = moods[currentMoodIndex];
         
         if (showDebugLogs)
-            Debug.Log($"AI mood changed: {oldMood?.moodName} → {currentMood.moodName}");
+            Debug.Log($"[AI] Mood changed: {oldMood?.moodName} → {currentMood.moodName}");
     }
     
     public void SetMoodByName(string moodName)
@@ -269,245 +218,65 @@ public class AISpawnerController : MonoBehaviour
             }
         }
         
-        Debug.LogError($"Mood '{moodName}' not found!");
-    }
-    
-    public void NextMood()
-    {
-        int nextIndex = (currentMoodIndex + 1) % moods.Count;
-        SetMood(nextIndex);
-    }
-    
-    public void PreviousMood()
-    {
-        int prevIndex = (currentMoodIndex - 1 + moods.Count) % moods.Count;
-        SetMood(prevIndex);
-    }
-    
-    public string GetCurrentMoodName()
-    {
-        return currentMood != null ? currentMood.moodName : "None";
+        Debug.LogError($"[AI] Mood '{moodName}' not found!");
     }
     
     #endregion
 
-    #region Debug/Testing
-    
-    [ContextMenu("Force AI Decision")]
-    public void ForceDecision()
-    {
-        if (context == null) InitializeContext();
-        
-        context.UpdateContext();
-
-        AIActionWrapper bestWrapper = null;
-        AIAction bestAction = null;
-        float bestUtility = float.MinValue;
-
-        foreach (AIActionWrapper wrapper in currentMood.availableActions)
-        {
-            if (wrapper == null) continue;
-            
-            AIAction action = wrapper.GetAction();
-            if (action == null) continue;
-            
-            float utility = action.CalculateUtility(context);
-            utility = currentMood.ModifyUtility(utility, wrapper);
-            
-            if (utility > bestUtility)
-            {
-                bestUtility = utility;
-                bestAction = action;
-                bestWrapper = wrapper;
-            }
-        }
-
-        if (bestAction != null)
-        {
-            Debug.Log($"Forced decision: {bestAction.actionName} (Utility: {bestUtility:F2})");
-            bestAction.Execute(context);
-        }
-    }
+    #region Debug Menu
     
     [ContextMenu("Print Context State")]
     public void PrintContextState()
     {
         if (context == null)
         {
-            Debug.Log("Context not initialized");
+            Debug.Log("[AI] Context not initialized");
             return;
         }
         
         context.UpdateContext();
         
-        Debug.Log("=== AI Context State ===");
+        Debug.Log("\n=== AI CONTEXT STATE ===");
         Debug.Log($"Money: {context.GetCurrentMoney():F1} (Normalized: {context.GetNormalizedMoney():F2})");
-        Debug.Log($"Time Elapsed: {context.GetTimeElapsed():F1}s");
-        Debug.Log($"Time Remaining: {context.GetTimeRemaining():F1}s");
-        Debug.Log($"Closest Enemy: {context.GetClosestEnemyDistance():F1}");
-        Debug.Log($"Player Units: {context.GetPlayerUnitCount()}");
-        Debug.Log($"AI Units: {context.GetAIUnitCount()}");
+        Debug.Log($"Time Elapsed: {context.GetTimeElapsed():F1}s (Norm: {context.GetNormalizedTimeElapsed():F2})");
+        Debug.Log($"Time Remaining: {context.GetTimeRemaining():F1}s (Norm: {context.GetNormalizedTimeRemaining():F2})");
+        Debug.Log($"Closest Enemy: {context.GetClosestEnemyDistance():F1} (Norm: {context.GetNormalizedClosestEnemy():F2})");
+        Debug.Log($"Player Units: {context.GetPlayerUnitCount()} (Norm: {context.GetNormalizedPlayerUnits():F2})");
+        Debug.Log($"AI Units: {context.GetAIUnitCount()} (Norm: {context.GetNormalizedAIUnits():F2})");
+        Debug.Log("===================\n");
     }
     
     [ContextMenu("Debug Unit Counting")]
-    public void DebugUnitCountingFull()
+    public void DebugUnitCounting()
     {
-        Debug.Log("\n=== UNIT COUNT DEBUG ===");
-        
         GameObject[] enemyObjs = GameObject.FindGameObjectsWithTag("Enemy");
-        Debug.Log($"\nTotal 'Enemy' tagged objects: {enemyObjs.Length}");
+        Debug.Log($"\n=== UNIT COUNT DEBUG ===");
+        Debug.Log($"Total 'Enemy' tagged objects: {enemyObjs.Length}");
         
-        Dictionary<string, int> parentCounts = new Dictionary<string, int>();
+        Dictionary<string, int> rootCounts = new Dictionary<string, int>();
         
         foreach (GameObject obj in enemyObjs)
         {
-            Transform rootParent = obj.transform;
-            while (rootParent.parent != null)
-                rootParent = rootParent.parent;
+            Transform root = obj.transform;
+            while (root.parent != null)
+                root = root.parent;
             
-            string rootName = rootParent.name;
-            if (!parentCounts.ContainsKey(rootName))
-                parentCounts[rootName] = 0;
-            parentCounts[rootName]++;
+            string rootName = root.name;
+            if (!rootCounts.ContainsKey(rootName))
+                rootCounts[rootName] = 0;
+            rootCounts[rootName]++;
             
-            Debug.Log($"  {obj.name} → Root: {rootName}");
+            string parentInfo = obj.transform.parent != null ? $" (child of {root.name})" : " (root)";
+            Debug.Log($"  {obj.name}{parentInfo}");
         }
         
-        Debug.Log($"\nGrouped by root parent:");
-        foreach (var kvp in parentCounts)
+        Debug.Log($"\nRoot objects: {rootCounts.Count}");
+        foreach (var kvp in rootCounts)
         {
-            Debug.Log($"  {kvp.Key}: {kvp.Value} tagged objects");
+            Debug.Log($"  {kvp.Key}: {kvp.Value} tagged object(s)");
         }
-        
-        Debug.Log($"\nActual spawned units (root level): {parentCounts.Count}");
-        Debug.Log("=== END DEBUG ===\n");
-    }
-    
-    [ContextMenu("Debug All Considerations")]
-    public void DebugAllConsiderations()
-    {
-        if (context == null)
-        {
-            Debug.LogError("Context not initialized! Start the game first.");
-            return;
-        }
-        
-        context.UpdateContext();
-        
-        Debug.Log("=== Debugging All Considerations ===");
-        
-        if (currentMood == null)
-        {
-            Debug.LogError("No current mood!");
-            return;
-        }
-        
-        Debug.Log($"Current Mood: {currentMood.moodName}");
-        Debug.Log($"Actions in mood: {currentMood.availableActions.Count}");
-        
-        foreach (AIActionWrapper wrapper in currentMood.availableActions)
-        {
-            if (wrapper == null)
-            {
-                Debug.LogWarning("  Null wrapper!");
-                continue;
-            }
-            
-            AIAction action = wrapper.GetAction();
-            if (action == null)
-            {
-                Debug.LogWarning($"  Null action for type: {wrapper.actionType}");
-                continue;
-            }
-            
-            Debug.Log($"\n  Action: {action.actionName}");
-            Debug.Log($"    Can Execute: {action.CanExecute(context)}");
-            Debug.Log($"    Considerations: {action.considerations.Count}");
-            
-            if (action.considerations.Count == 0)
-            {
-                Debug.LogWarning($"    WARNING: No considerations! This action will always return 0 utility.");
-            }
-            
-            foreach (AIConsideration consideration in action.considerations)
-            {
-                if (consideration == null)
-                {
-                    Debug.LogWarning("      Null consideration!");
-                    continue;
-                }
-                
-                Debug.Log($"      {consideration.considerationName}:");
-                Debug.Log($"        Type: {consideration.type}");
-                Debug.Log($"        Weight: {consideration.weight}");
-                
-                float normalized = 0f;
-                switch (consideration.type)
-                {
-                    case ConsiderationType.Money:
-                        normalized = context.GetNormalizedMoney();
-                        break;
-                    case ConsiderationType.TimeElapsed:
-                        normalized = context.GetNormalizedTimeElapsed();
-                        break;
-                    case ConsiderationType.TimeRemaining:
-                        normalized = context.GetNormalizedTimeRemaining();
-                        break;
-                    case ConsiderationType.ClosestEnemyDistance:
-                        normalized = context.GetNormalizedClosestEnemy();
-                        break;
-                    case ConsiderationType.PlayerUnitCount:
-                        normalized = context.GetNormalizedPlayerUnits();
-                        break;
-                    case ConsiderationType.AIUnitCount:
-                        normalized = context.GetNormalizedAIUnits();
-                        break;
-                }
-                
-                float curveValue = consideration.responseCurve.Evaluate(normalized);
-                float result = curveValue * consideration.weight;
-                
-                Debug.Log($"        Normalized: {normalized:F2}");
-                Debug.Log($"        Curve Output: {curveValue:F2}");
-                Debug.Log($"        Final Value: {result:F2}");
-            }
-        }
-        
-        Debug.Log("\n=== End Debug ===");
+        Debug.Log("====================\n");
     }
     
     #endregion
-
-    void OnDrawGizmosSelected()
-    {
-        if (aiBase != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(aiBase.position, maxDistance * 0.3f);
-            
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(aiBase.position, maxDistance);
-        }
-
-        if (upperZone != null)
-        {
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawLine(transform.position, upperZone.transform.position);
-        }
-        if (middleZone != null)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(transform.position, middleZone.transform.position);
-        }
-        if (lowerZone != null)
-        {
-            Gizmos.color = Color.magenta;
-            Gizmos.DrawLine(transform.position, lowerZone.transform.position);
-        }
-        if (spawner != null)
-        {
-            Gizmos.color = Color.white;
-            Gizmos.DrawLine(transform.position, spawner.transform.position);
-        }
-    }
 }
