@@ -7,7 +7,6 @@ using DG.Tweening.Core;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-
 public class VisualEffectsManager : MonoBehaviour
 {
     public static VisualEffectsManager Instance { get; private set; }
@@ -16,19 +15,17 @@ public class VisualEffectsManager : MonoBehaviour
     [SerializeField] GameObject[] particleEffectPrefabs;
     [SerializeField] Material[] shaderEffects;
     
+    // Add this to your manager's inspector
+    [Header("Shockwave Settings")]
+    [SerializeField] GameObject shockwavePrefab; 
+
     Dictionary<string, GameObject> activeParticleEffects = new Dictionary<string, GameObject>();
     List<Coroutine> activeCoroutines = new List<Coroutine>();
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        if (Instance == null) { Instance = this; }
+        else { Destroy(gameObject); }
     }
 
     #region Particle Effects
@@ -66,9 +63,34 @@ public class VisualEffectsManager : MonoBehaviour
     
     private List<Material> activeShaderInstances = new List<Material>();
 
+
+    public void SpawnShockwave(Vector3 position, float duration = 3f, float startSize = 0f, float endSize = .3f)
+    {
+        if (shockwavePrefab == null)
+        {
+            Debug.LogWarning("VisualEffectsManager: No shockwavePrefab assigned!");
+            return;
+        }
+
+        GameObject rippleObj = Instantiate(shockwavePrefab, position, Quaternion.identity);
+        Renderer rippleRenderer = rippleObj.GetComponent<Renderer>();
+
+        if (rippleRenderer != null)
+        {
+            TweenShaderFloat(rippleRenderer, "_RippleDistanceFromCenter", endSize, duration, startSize)
+                .SetEase(Ease.OutQuad)
+                .OnComplete(() => {
+                    if (rippleObj != null) Destroy(rippleObj);
+                });
+        }
+        else
+        {
+            Destroy(rippleObj, duration);
+        }
+    }
+
     public void CallShockwave(Renderer targetRenderer, float duration = 1.0f)
     {
-        // Ensure this matches the "Reference" name in your Shader Graph!
         TweenShaderFloat(targetRenderer, "_RippleDistanceFromCenter", 1.0f, duration, -0.1f)
             .SetEase(Ease.OutQuad); 
     }
@@ -77,10 +99,8 @@ public class VisualEffectsManager : MonoBehaviour
     {
         if (targetRenderer == null) return null;
         
-        // .material automatically creates a local instance for this object
         Material mat = targetRenderer.material; 
         
-        // Only add to the list if we haven't tracked this specific instance yet
         if (!activeShaderInstances.Contains(mat)) 
         {
             activeShaderInstances.Add(mat);

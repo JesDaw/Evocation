@@ -84,7 +84,12 @@ public class Interactable : MonoBehaviour
     {
         LocationClaimed = true;
         ToggleIconOff();
-        if(rippleEffect) VisualEffectsManager.Instance.TweenShaderFloat(targetRenderer, propertyName, endValue, duration, startValue);
+
+        if(rippleEffect) 
+        {
+            VisualEffectsManager.Instance.SpawnShockwave(transform.position); 
+        }
+
         if (DebugLog) Debug.Log($"{gameObject.name} claimed");
     }
 
