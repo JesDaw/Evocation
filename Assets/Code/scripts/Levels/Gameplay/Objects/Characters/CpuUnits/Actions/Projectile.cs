@@ -3,18 +3,19 @@ using System;
 
 public class Projectile : MonoBehaviour
 {
-    private Transform target;
-    private float maxMoveSpeed, maxRelativeHeight;
-    private AnimationCurve heightCurve, axisCurve, speedCurve;
-    private Action<Stats> onHitAction;
-    private Vector3 startPoint;
-    private float aliveTimer = 0f;
+    Transform target;
+    float maxMoveSpeed;
+    float _maxHeight;
+    AnimationCurve heightCurve, axisCurve, speedCurve;
+    Action<Stats> onHitAction;
+    Vector3 startPoint;
+    float aliveTimer = 0f;
 
     public void InitializeProjectile(Transform target, float speed, float maxHeight, AnimationCurve h, AnimationCurve a, AnimationCurve s, Action<Stats> onHit)
     {
         this.target = target; 
         this.maxMoveSpeed = speed; 
-        this.maxRelativeHeight = maxHeight;
+        this._maxHeight = maxHeight;
         this.heightCurve = h; 
         this.axisCurve = a; 
         this.speedCurve = s;
@@ -43,6 +44,7 @@ public class Projectile : MonoBehaviour
         Vector3 dir = (nextPos - transform.position).normalized;
         
         Debug.DrawLine(transform.position, nextPos, Color.red);
+
         transform.position += dir * speed * Time.deltaTime;
 
         if (dir != Vector3.zero) transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg);
@@ -58,13 +60,13 @@ public class Projectile : MonoBehaviour
     {
         float nX = transform.position.x + (Mathf.Sign(r.x) * maxMoveSpeed * Time.deltaTime);
         float normX = (nX - startPoint.x) / (Mathf.Abs(r.x) < 0.01f ? 0.01f * Mathf.Sign(r.x) : r.x);
-        return new Vector3(nX, startPoint.y + (heightCurve.Evaluate(normX) * maxRelativeHeight * r.magnitude) + (axisCurve.Evaluate(normX) * r.y), 0);
+        return new Vector3(nX, startPoint.y + (heightCurve.Evaluate(normX) * _maxHeight * r.magnitude) + (axisCurve.Evaluate(normX) * r.y), 0);
     }
 
     Vector3 CalcY(Vector3 r)
     {
         float nY = transform.position.y + (Mathf.Sign(r.y) * maxMoveSpeed * Time.deltaTime);
         float normY = (nY - startPoint.y) / (Mathf.Abs(r.y) < 0.01f ? 0.01f * Mathf.Sign(r.y) : r.y);
-        return new Vector3(startPoint.x + (heightCurve.Evaluate(normY) * maxRelativeHeight * r.magnitude) + (axisCurve.Evaluate(normY) * r.x), nY, 0);
+        return new Vector3(startPoint.x + (heightCurve.Evaluate(normY) * _maxHeight * r.magnitude) + (axisCurve.Evaluate(normY) * r.x), nY, 0);
     }
 }
