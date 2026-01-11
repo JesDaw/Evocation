@@ -15,14 +15,6 @@ public class Interactable : MonoBehaviour
     [SerializeField] UnityEngine.UI.Slider ProgressSlider;
     [Header("Ripple Effect stuff")]
     [SerializeField] bool rippleEffect = false;
-    [SerializeField]Renderer targetRenderer; 
-    [SerializeField]string propertyName = "_RippleDistanceFromCenter";
-    [SerializeField]float startValue = -0.1f;
-    [SerializeField]float endValue = 1f;
-    [SerializeField]float duration = 0.75f; 
-    
-
-
 
     bool _iconIsActive = false;
     bool isHolding = false;
