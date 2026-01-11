@@ -2,9 +2,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-/// <summary>
-/// Player state machine - now uses tag-based targeting like CPU
-/// </summary>
 public class PlayerStateMachine : MonoBehaviour
 {
     [SerializeField] Stats _playerStats;
@@ -18,8 +15,6 @@ public class PlayerStateMachine : MonoBehaviour
     [HideInInspector] public Stats _AttackingStats;
 
     private bool _isActive = false;
-
-    // states
     PlayerBaseState _currentState;
     PlayerStateFactory _states;
     PlayerCommander _commander;
@@ -56,7 +51,6 @@ public class PlayerStateMachine : MonoBehaviour
 
     void Awake()
     {
-        // Initialize state machine
         _states = new PlayerStateFactory(this);
         _currentState = _states.Idle();
         _currentState.EnterState();
@@ -67,16 +61,12 @@ public class PlayerStateMachine : MonoBehaviour
         FindFreeCam();
         InitializePlayerStats();
         
-        // Ensure we're subscribed (in case OnEnable happened before GlobalInputManager existed)
          if (GlobalInputManager.Instance != null)
         {
             SubscribeToInputs();
         }
     }
 
-    /// <summary>
-    /// Initialize player stats using the new tag-based system
-    /// </summary>
     void InitializePlayerStats()
     {
         if (_playerStats.scriptableStats == null)
@@ -85,15 +75,12 @@ public class PlayerStateMachine : MonoBehaviour
             return;
         }
 
-        // Set as player
         _playerStats._Enemy = false;
         _playerStats.SetTag("Player");
         
-        // Set up targeting (only attack enemies)
         _playerStats.targetTags.Clear();
         _playerStats.AddTargetTag("Enemy");
         
-        // Initialize all stats from ScriptableStats
         _playerStats.InitializeStats();
     }
 
@@ -104,7 +91,6 @@ public class PlayerStateMachine : MonoBehaviour
 
     void OnDisable()
     {
-        // Unsubscribe when disabled
         UnsubscribeFromInputs();
     }
 
@@ -152,7 +138,6 @@ public class PlayerStateMachine : MonoBehaviour
 
     void Update()
     {
-        // Always update the state machine - idle, knockback, etc. still need to work
         _currentState.UpdateStates();
         //Debug.Log($"{_isActive}");
     }
@@ -163,10 +148,6 @@ public class PlayerStateMachine : MonoBehaviour
         _currentState.EnterState();
     }
 
-    /// <summary>
-    /// Called by PlayerSwitch to activate/deactivate this player's ability to respond to inputs
-    /// Note: This doesn't enable/disable the action map, just sets a flag for this player
-    /// </summary>
     public void SetActive(bool active)
     {
         _isActive = active;
@@ -217,66 +198,16 @@ public class PlayerStateMachine : MonoBehaviour
         Animator.runtimeAnimatorController = ScrStats._animator;
     }
 
-    //==========================================Input callbacks===================================================
     public void OnMove(InputAction.CallbackContext context)
     {
         if (DebugLogs) Debug.Log($"Commander Move Received _isActive: {_isActive}");
-        // Only respond if this player is active
         if (!_isActive) return; 
         _commander.OnMove(context);
     }
 
     public void OnAttack(InputAction.CallbackContext context)
     {
-        // Only respond if this player is active
         if (!_isActive) return; 
         _commander.OnAttack(context);
-    }
-
-//=========================== Cutscene functions ================================
-    /// <summary>
-    /// Start playing walk animation (called by Timeline signal)
-    /// </summary>
-    public void ManualWalkingAnimation()
-    {
-        if (_animator != null)
-        {
-            _animator.SetBool("IsRunning", true);
-            _animator.SetFloat("RunningSpeed", ScrStats._AnimationMoveSpeed);
-            
-        }
-    }
-
-    /// <summary>
-    /// Stop walking and return to idle (called by Timeline signal)
-    /// </summary>
-    public void ManualWalkingAnimationStop()
-    {
-        if (_animator != null)
-        {
-            _animator.SetBool("IsRunning", false);
-        }
-    }
-
-   /// <summary>
-    /// Play attack animation (called by Timeline signal)
-    /// </summary>
-    public void ManualAttackAnimation()
-    {
-        if (_animator != null)
-        {
-            _animator.SetBool("IsAttacking", true);
-        }
-    }
-
-    /// <summary>
-    /// Stop attack animation and return to idle (called by Timeline signal)
-    /// </summary>
-    public void ManualAttackAnimationStop()
-    {
-        if (_animator != null)
-        {
-            _animator.SetBool("IsAttacking", false);
-        }
     }
 }
