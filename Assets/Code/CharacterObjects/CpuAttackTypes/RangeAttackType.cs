@@ -40,7 +40,6 @@ public class RangeAttackType : AttackType
         
         if (target != null)
         {
-            // Use Speed from Stats if available, otherwise fallback to a default
             float moveSpeed = attackerStats._ProjectileSpeed > 0 ? attackerStats._ProjectileSpeed : 10f;
             SpawnProjectile(origin, target.transform, moveSpeed, onHitCallback);
         }

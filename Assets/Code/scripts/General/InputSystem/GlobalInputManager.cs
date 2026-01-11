@@ -4,8 +4,6 @@ using UnityEngine.InputSystem;
 public class GlobalInputManager : MonoBehaviour
 {
     public static GlobalInputManager Instance { get; private set; }
-    
-    // Single source of truth for all input actions
     private InputSystem_Actions _inputActions;
     public InputSystem_Actions InputActions => _inputActions;
     [SerializeField] bool DebugLogs = false;
@@ -20,15 +18,13 @@ public class GlobalInputManager : MonoBehaviour
 
         Instance = this;
         
-        // Create the single InputSystem_Actions instance
         _inputActions = new InputSystem_Actions();
         
-        //Debug.Log("GlobalInputManager initialized");
+        if(DebugLogs) Debug.Log("GlobalInputManager initialized");
     }
     
     void Start()
     {
-        // Start with everything disabled, then enable what's needed
         DisableAllControls();
     }
     
@@ -40,17 +36,13 @@ public class GlobalInputManager : MonoBehaviour
 
     // ========================= Control Groups =========================
     
-    /// <summary>
-    /// Enable all controls - use sparingly, prefer specific enable methods
-    /// </summary>
+
     public void EnableAllControls()
     {
         _inputActions.Enable();
     }
     
-    /// <summary>
-    /// Disable all controls - useful for cutscenes, game over, etc.
-    /// </summary>
+
     public void DisableAllControls()
     {
         _inputActions.Disable();
@@ -96,8 +88,7 @@ public class GlobalInputManager : MonoBehaviour
     // --------- Player Switching (NextPlayer/PreviousPlayer) ---------
     public void EnablePlayerSwitching()
     {
-        // Assuming you have a PlayerSwitching action map
-        // If NextPlayer/PreviousPlayer are in ControlManager, use that instead
+
         _inputActions.ControlManager.Enable();
     }
     
@@ -117,7 +108,6 @@ public class GlobalInputManager : MonoBehaviour
         _inputActions.SpawnerController.Disable();
     }
     
-    // Aliases for backward compatibility
     public void EnableCharacterSpawnControls() => EnableSpawnerControls();
     public void DisableCharacterSpawnControls() => DisableSpawnerControls();
 
@@ -134,9 +124,6 @@ public class GlobalInputManager : MonoBehaviour
 
     // ========================= Game State Presets =========================
     
-    /// <summary>
-    /// Normal gameplay - player controls active, camera switching available
-    /// </summary>
     public void SetPlayerCharacterMode()
     {
         DisableAllControls();
@@ -148,9 +135,6 @@ public class GlobalInputManager : MonoBehaviour
         if(DebugLogs) Debug.Log("Input Mode: Gameplay");
     }
     
-    /// <summary>
-    /// Free camera mode - camera controls active
-    /// </summary>
     public void SetFreeCamMode()
     {
         DisableAllControls();
@@ -167,32 +151,23 @@ public class GlobalInputManager : MonoBehaviour
         DisableAllControls();
         EnableCameraControls();
         EnableUIControls(); 
-        if(DebugLogs) Debug.Log("Input Mode: FreeCam");
+        if(DebugLogs) Debug.Log("Input Mode: scouting");
     }
     
-    /// <summary>
-    /// Cutscene mode - only pause/skip available
-    /// </summary>
     public void SetCutsceneMode()
     {
         DisableAllControls();
-        EnableUIControls(); // Only UI controls (pause, skip)
+        EnableUIControls();
         if(DebugLogs) Debug.Log("Input Mode: Cutscene");
     }
     
-    /// <summary>
-    /// Dialogue mode - only dialogue progression and pause
-    /// </summary>
     public void SetDialogueMode()
     {
         DisableAllControls();
-        EnableUIControls(); // For dialogue interaction and pause
+        EnableUIControls();
         if(DebugLogs) Debug.Log("Input Mode: Dialogue");
     }
-    
-    /// <summary>
-    /// Pause menu - only menu navigation
-    /// </summary>
+
     public void SetPauseMenuMode()
     {
         DisableAllControls();
@@ -200,9 +175,6 @@ public class GlobalInputManager : MonoBehaviour
         if(DebugLogs) Debug.Log("Input Mode: Pause Menu");
     }
     
-    /// <summary>
-    /// Character select/spawning mode
-    /// </summary>
     public void SetCharacterSelectingMode()
     {
         DisableAllControls();

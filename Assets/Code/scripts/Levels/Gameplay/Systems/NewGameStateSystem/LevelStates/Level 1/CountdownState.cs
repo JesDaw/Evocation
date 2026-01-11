@@ -1,10 +1,7 @@
 using UnityEngine;
+using System; // Required for [Serializable]
 
-/// <summary>
-/// Plays a countdown cutscene before combat begins (e.g. "3, 2, 1, GO!").
-/// Automatically transitions to next state when countdown completes.
-/// </summary>
-[CreateAssetMenu(fileName = "State_Countdown", menuName = "Level States/Countdown State")]
+[Serializable]
 public class CountdownState : LevelState
 {
     [Header("Countdown Configuration")]
@@ -18,7 +15,7 @@ public class CountdownState : LevelState
         }
         else
         {
-            Debug.LogWarning($"[CountdownState] Timeline '{countdownCutsceneName}' not found, moving to gameplay immediately");
+            if (DebugLogs) Debug.LogWarning($"[CountdownState] Timeline '{countdownCutsceneName}' not found, moving to gameplay immediately");
             // No cutscene, move immediately to gameplay
             context.TransitionToNextState();
         }

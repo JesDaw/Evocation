@@ -2,18 +2,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-/// <summary>
-/// Manages all active status effects on a character
-/// </summary>
 public class StatusEffectManager : MonoBehaviour
 {
-    private Stats stats;
-    private List<ActiveStatusEffect> activeEffects = new List<ActiveStatusEffect>();
+    Stats stats;
+    List<ActiveStatusEffect> activeEffects = new List<ActiveStatusEffect>();
 
     [Header("Events")]
-    [SerializeField] private UnityEvent<StatusEffect> onEffectApplied;
-    [SerializeField] private UnityEvent<StatusEffect> onEffectRemoved;
-    [SerializeField] private UnityEvent<StatusEffect> onEffectTick;
+    [SerializeField] UnityEvent<StatusEffect> onEffectApplied;
+    [SerializeField] UnityEvent<StatusEffect> onEffectRemoved;
+    [SerializeField] UnityEvent<StatusEffect> onEffectTick;
 
     public void Initialize(Stats statsComponent)
     {

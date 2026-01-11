@@ -18,9 +18,7 @@ public class ScriptableStats : ScriptableObject
     public int _spawnCost;
 
     [Header("Combat Configuration")]
-    public AttackStyle _AttackStyle;
-    
-    [Tooltip("If true, hits multiple targets in the range box.")]
+    public AttackStyle _AttackStyle;    
     public bool _IsAOE; 
     public int _MaxAOETargets = 5;
 

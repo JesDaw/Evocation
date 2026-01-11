@@ -37,9 +37,7 @@ public class CpuAttackState : CpuBaseState
             case AttackPhase.Startup:
                 if (_context._AnimatorController.ShouldAttack())
                 {
-                    // CALL NEW LOGIC
                     AttackLogic.ExecuteAttack(_context);
-                    
                     _timer = 0f;
                     _phase = AttackPhase.Cooldown;
                 }
@@ -47,8 +45,6 @@ public class CpuAttackState : CpuBaseState
 
             case AttackPhase.Cooldown:
                 _context._Animator.SetBool("IsAttacking", false);
-                
-                // Use new Endlag variable
                 if (_timer >= _context._Stats._AttackEndlag * 1000) 
                 {
                     _phase = AttackPhase.Done;

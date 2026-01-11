@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using UnityEngine.Events;
-using System.Diagnostics;
 
 public class Interactable : MonoBehaviour
 {
@@ -11,11 +10,26 @@ public class Interactable : MonoBehaviour
     [SerializeField] bool FreeCamActsAsActivePlayer;
     [SerializeField] GameObject InteractionNotificationIcon;
     [SerializeField] float ActivationDuration = 0f;
+    [Header("UI Progress")]
+    [SerializeField] GameObject ProgressBarContainer;
+    [SerializeField] UnityEngine.UI.Slider ProgressSlider;
+    [Header("Ripple Effect stuff")]
+    [SerializeField] bool rippleEffect = false;
+    [SerializeField]Renderer targetRenderer; 
+    [SerializeField]string propertyName = "_RippleDistanceFromCenter";
+    [SerializeField]float startValue = -0.1f;
+    [SerializeField]float endValue = 1f;
+    [SerializeField]float duration = 0.75f; 
+    
+
+
+
     bool _iconIsActive = false;
     bool isHolding = false;
     bool ActivePlayerIsInRange;
     float currentHoldTime = 0f;
     bool LocationClaimed = false;
+    [SerializeField] bool DebugLog = false;
 
     void Start()
     {
@@ -70,11 +84,14 @@ public class Interactable : MonoBehaviour
     {
         LocationClaimed = true;
         ToggleIconOff();
+        if(rippleEffect) VisualEffectsManager.Instance.TweenShaderFloat(targetRenderer, propertyName, endValue, duration, startValue);
+        if (DebugLog) Debug.Log($"{gameObject.name} claimed");
     }
 
     public void UnclaimLocation()
     {
         LocationClaimed = false;
+        if (DebugLog) Debug.Log($"{gameObject.name} unclaimed");
     }
 
     void ToggleIconOn()
@@ -89,43 +106,54 @@ public class Interactable : MonoBehaviour
         _iconIsActive = false;
         InteractionNotificationIcon.SetActive(_iconIsActive);
     }
+    void Update()
+    {
+        if (isHolding)
+        {
+            currentHoldTime += Time.deltaTime;
+            
+            if (ProgressSlider != null)
+            {
+                ProgressSlider.value = currentHoldTime / ActivationDuration;
+            }
+            
+            if (currentHoldTime >= ActivationDuration)
+            {
+                interactAction?.Invoke();
+                if (DebugLog) Debug.Log($"Interaction action triggered on {gameObject.name}");
+                
+                StopHolding();
+            }
+        }
+    }
 
-
+    // Helper to clean up state
+    void StopHolding()
+    {
+        isHolding = false;
+        currentHoldTime = 0f;
+        if (ProgressBarContainer != null) ProgressBarContainer.SetActive(false);
+    }
 
     public void ActionPressed(InputAction.CallbackContext context)
     {
         if (LocationClaimed) return;
-        // Only respond if the active player is in range
         if (!CheckActivePlayerIsInRange()) return;
 
         if (context.started)
         {
             isHolding = true;
             currentHoldTime = 0f;
-            UnityEngine.Debug.Log("Interact started");
+            
+            if (ProgressBarContainer != null) ProgressBarContainer.SetActive(true);
+            if (ProgressSlider != null) ProgressSlider.value = 0;
+            
+            if (DebugLog) Debug.Log("Interact started");
         }
         else if (context.canceled)
         {
-            isHolding = false;
-            currentHoldTime = 0f;
-            UnityEngine.Debug.Log("Interact canceled");
-        }
-    }
-
-    void Update()
-    {
-        if (isHolding)
-        {
-            currentHoldTime += Time.deltaTime;
-            //UnityEngine.Debug.Log($"currentHoldTime: {currentHoldTime}");
-            
-            if (currentHoldTime >= ActivationDuration)
-            {
-                interactAction?.Invoke();
-                UnityEngine.Debug.Log($"Interaction action triggered on {gameObject.name}");
-                isHolding = false; 
-                currentHoldTime = 0f;
-            }
+            StopHolding();
+            if (DebugLog) Debug.Log("Interact canceled");
         }
     }
 
@@ -142,9 +170,12 @@ public class Interactable : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
+        if(DebugLog) Debug.Log($"{collision.gameObject.name} entered interaction range");
         bool playerEntered = false;
         if (collision.gameObject.CompareTag("Player")) playerEntered = true;
         if (collision.gameObject.CompareTag("FreeCam") && FreeCamActsAsActivePlayer) playerEntered = true;
+        if (DebugLog) Debug.Log($"playerEntered: {playerEntered}");
+
         
         if (playerEntered)
         {
@@ -152,7 +183,7 @@ public class Interactable : MonoBehaviour
            
             if(CheckActivePlayerIsInRange())
             {
-                //UnityEngine.Debug.Log($"{collision.gameObject.name} entered interaction range");
+                if (DebugLog) Debug.Log($"CheckActivePlayerIsInRange(): {CheckActivePlayerIsInRange()}");
                 ToggleIconOn();
             }
         }
@@ -160,6 +191,7 @@ public class Interactable : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D collision)
     {
+        if(DebugLog) Debug.Log($"{collision.gameObject.name} left interaction range");
         bool playerEntered = false;
         if (collision.gameObject.CompareTag("Player")) playerEntered = true;
         if (collision.gameObject.CompareTag("FreeCam") && FreeCamActsAsActivePlayer) playerEntered = true;
@@ -170,7 +202,7 @@ public class Interactable : MonoBehaviour
 
             if (!CheckActivePlayerIsInRange())
             {
-                //UnityEngine.Debug.Log($"{collision.gameObject.name} left interaction range");
+                
                 ToggleIconOff();
             }
         }

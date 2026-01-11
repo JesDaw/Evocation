@@ -1,16 +1,9 @@
 using UnityEngine;
+using System;
 
-/// <summary>
-/// Empty state that does nothing. Useful for testing or as a placeholder.
-/// </summary>
-[CreateAssetMenu(fileName = "State_Empty", menuName = "Level States/Empty State")]
+[Serializable]
 public class EmptyState : LevelState
 {
-    [Header("Empty State")]
     [SerializeField] private string message = "Empty state entered";
-    
-    protected override void OnEnterState()
-    {
-        Debug.Log($"[EmptyState] {message}");
-    }
+    protected override void OnEnterState() => Debug.Log($"[EmptyState] {message}");
 }

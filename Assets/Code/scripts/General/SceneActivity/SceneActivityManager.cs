@@ -54,11 +54,16 @@ public class SceneActivityManager : MonoBehaviour
     // Flag to prevent adding to history when navigating back
     private bool isNavigatingBack = false;
 
+    void OnEnable()
+    {
+        CacheAllSAObjects();
+    }
+
     internal void Start()
     {
         //Debug.Log("SceneActivityManager.Start", gameObject);
 
-        CacheAllSAObjects();
+        
         anchorActivity = initialActivity;
 
         // Activate the 'Initial' SceneActivity and disable all others
@@ -125,7 +130,7 @@ public class SceneActivityManager : MonoBehaviour
         {
             string targetName = changeHistory.Pop();
             isNavigatingBack = true; // Set flag to prevent re-pushing to history
-            Activate(targetName);
+            Activate(targetName, true);
             isNavigatingBack = false; // Reset flag
         }
         else

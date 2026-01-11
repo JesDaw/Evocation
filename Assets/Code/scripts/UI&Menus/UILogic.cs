@@ -14,6 +14,7 @@ public class UILogic : MonoBehaviour
     bool CharacterSelectIsOpen = false;
     bool MenuIsOpen = false;
     public UnityEvent PauseEvent, ResumeEvent;
+    [SerializeField] bool DebugLogs = false;
 
     void Awake()
     {
@@ -73,13 +74,16 @@ public class UILogic : MonoBehaviour
 
     public void ToggleCharacterSelect(InputAction.CallbackContext context)
     {
-        //press 'c' to activate
-        if (!context.performed || GameIsPaused || !LevelStateManager.Instance.IsInState("ScoutingState")) 
+        if (DebugLogs)Debug.Log($"character select pressed");
+        if (!context.performed || GameIsPaused || !LevelStateManager.Instance.IsInState("ScoutingState"))
+        {
             return;
+        }
+
 
         if (!CharacterSelectIsOpen)
         {
-            sceneMgr.Activate("LoadoutSelectUI");
+            sceneMgr.Activate("LoadoutSelectUI", true);
             CharacterSelectIsOpen = true;
             MenuIsOpen = true;
             
@@ -88,7 +92,7 @@ public class UILogic : MonoBehaviour
         }
         else
         {
-            sceneMgr.ActivatePreviousSA();
+            sceneMgr.Activate("ScoutingUI", true);
             CharacterSelectIsOpen = false;
             MenuIsOpen = false;
             

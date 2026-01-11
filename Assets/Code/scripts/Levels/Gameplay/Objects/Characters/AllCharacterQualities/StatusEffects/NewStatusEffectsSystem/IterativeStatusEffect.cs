@@ -13,7 +13,7 @@ public class IterativeStatusEffect : StatusEffect
 
     [Header("Stacking")]
     [SerializeField] private bool allowStacking = false;
-    [SerializeField] private int maxStacks = 3;
+    //[SerializeField] private int maxStacks = 3;
 
     public override void OnApply(Stats target)
     {
