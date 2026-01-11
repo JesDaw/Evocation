@@ -4,69 +4,161 @@ using System;
 public class Projectile : MonoBehaviour
 {
     Transform target;
+    float moveSpeed;
     float maxMoveSpeed;
-    float _maxHeight;
-    AnimationCurve heightCurve, axisCurve, speedCurve;
+    float trajectoryMaxRelativeHeight;
+    AnimationCurve heightCurve;
+    AnimationCurve axisCurve;
+    AnimationCurve speedCurve;
     Action<Stats> onHitAction;
+    
     Vector3 startPoint;
+    Vector3 moveDir;
     float aliveTimer = 0f;
+    float distanceToDestroy = 0.5f;
 
-    public void InitializeProjectile(Transform target, float speed, float maxHeight, AnimationCurve h, AnimationCurve a, AnimationCurve s, Action<Stats> onHit)
+    public void InitializeProjectile(Transform target, float speed, float maxHeight, AnimationCurve h, AnimationCurve a, AnimationCurve s, 
+                                     Action<Stats> onHit)
     {
-        this.target = target; 
-        this.maxMoveSpeed = speed; 
-        this._maxHeight = maxHeight;
-        this.heightCurve = h; 
-        this.axisCurve = a; 
+        this.target = target;
+        this.maxMoveSpeed = speed;
+        this.heightCurve = h;
+        this.axisCurve = a;
         this.speedCurve = s;
-        this.onHitAction = onHit; 
+        this.onHitAction = onHit;
         this.startPoint = transform.position;
+        
+        float xDistanceToTarget = target.position.x - startPoint.x;
+        this.trajectoryMaxRelativeHeight = Mathf.Abs(xDistanceToTarget) * maxHeight;
     }
 
     void Update()
     {
         aliveTimer += Time.deltaTime;
-        if (target == null || aliveTimer > 10f) 
-        { 
-            Destroy(gameObject); 
-            return; 
+        
+        if (target == null || aliveTimer > 10f)
+        {
+            Destroy(gameObject);
+            return;
         }
 
-        Vector3 range = target.position - startPoint;
-        float totalDist = range.magnitude;
-        float curDist = Vector3.Distance(startPoint, transform.position);
-        float progress = totalDist > 0.01f ? Mathf.Clamp01(curDist / totalDist) : 1f;
+        UpdateProjectilePosition();
 
-        float speed = speedCurve.Evaluate(progress) * maxMoveSpeed;
-        if (speed < 0.1f) speed = 0.1f;
-
-        Vector3 nextPos = (Mathf.Abs(range.x) >= Mathf.Abs(range.y)) ? CalcX(range) : CalcY(range);
-        Vector3 dir = (nextPos - transform.position).normalized;
-        
-        Debug.DrawLine(transform.position, nextPos, Color.red);
-
-        transform.position += dir * speed * Time.deltaTime;
-
-        if (dir != Vector3.zero) transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg);
-
-        if (Vector3.Distance(transform.position, target.position) < 0.5f)
+        if (Vector3.Distance(transform.position, target.position) < distanceToDestroy)
         {
-            if (target.TryGetComponent(out Stats s)) onHitAction?.Invoke(s);
+            if (target.TryGetComponent(out Stats s))
+            {
+                onHitAction?.Invoke(s);
+            }
             Destroy(gameObject);
         }
     }
 
-    Vector3 CalcX(Vector3 r)
+    private void UpdateProjectilePosition()
     {
-        float nX = transform.position.x + (Mathf.Sign(r.x) * maxMoveSpeed * Time.deltaTime);
-        float normX = (nX - startPoint.x) / (Mathf.Abs(r.x) < 0.01f ? 0.01f * Mathf.Sign(r.x) : r.x);
-        return new Vector3(nX, startPoint.y + (heightCurve.Evaluate(normX) * _maxHeight * r.magnitude) + (axisCurve.Evaluate(normX) * r.y), 0);
+        Vector3 trajectoryRange = target.position - startPoint;
+
+        if (Mathf.Abs(trajectoryRange.normalized.x) >= Mathf.Abs(trajectoryRange.normalized.y))
+        {
+            if (trajectoryRange.x < 0)
+            {
+                moveSpeed = -maxMoveSpeed;
+            }
+            else
+            {
+                moveSpeed = maxMoveSpeed;
+            }
+            UpdatePositionWithYCurve(trajectoryRange);
+        }
+        else
+        {
+            if (trajectoryRange.y < 0)
+            {
+                moveSpeed = -maxMoveSpeed;
+            }
+            else
+            {
+                moveSpeed = maxMoveSpeed;
+            }
+            UpdatePositionWithXCurve(trajectoryRange);
+        }
     }
 
-    Vector3 CalcY(Vector3 r)
+    private void UpdatePositionWithYCurve(Vector3 trajectoryRange)
     {
-        float nY = transform.position.y + (Mathf.Sign(r.y) * maxMoveSpeed * Time.deltaTime);
-        float normY = (nY - startPoint.y) / (Mathf.Abs(r.y) < 0.01f ? 0.01f * Mathf.Sign(r.y) : r.y);
-        return new Vector3(startPoint.x + (heightCurve.Evaluate(normY) * _maxHeight * r.magnitude) + (axisCurve.Evaluate(normY) * r.x), nY, 0);
+        float nextPositionX = transform.position.x + moveSpeed * Time.deltaTime;
+        float normalizedX = (nextPositionX - startPoint.x) / trajectoryRange.x;
+
+        float heightValue = heightCurve.Evaluate(normalizedX);
+        float yFromHeight = heightValue * trajectoryMaxRelativeHeight;
+
+        float axisCorrectionValue = axisCurve.Evaluate(normalizedX);
+        float yAxisCorrection = axisCorrectionValue * trajectoryRange.y;
+
+        float nextPositionY = startPoint.y + yFromHeight + yAxisCorrection;
+
+        Vector3 newPosition = new Vector3(nextPositionX, nextPositionY, 0);
+
+        UpdateSpeed(normalizedX);
+        
+        moveDir = newPosition - transform.position;
+
+        transform.position = newPosition;
+
+        if (moveDir != Vector3.zero)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 
+                Mathf.Atan2(moveDir.y, moveDir.x) * Mathf.Rad2Deg);
+        }
+    }
+
+    private void UpdatePositionWithXCurve(Vector3 trajectoryRange)
+    {
+        float nextPositionY = transform.position.y + moveSpeed * Time.deltaTime;
+        float normalizedY = (nextPositionY - startPoint.y) / trajectoryRange.y;
+
+        float heightValue = heightCurve.Evaluate(normalizedY);
+        float xFromHeight = heightValue * trajectoryMaxRelativeHeight;
+
+        if (trajectoryRange.x > 0 && trajectoryRange.y > 0)
+        {
+            xFromHeight = -xFromHeight;
+        }
+        if (trajectoryRange.x < 0 && trajectoryRange.y < 0)
+        {
+            xFromHeight = -xFromHeight;
+        }
+
+        float axisCorrectionValue = axisCurve.Evaluate(normalizedY);
+        float xAxisCorrection = axisCorrectionValue * trajectoryRange.x;
+
+        float nextPositionX = startPoint.x + xFromHeight + xAxisCorrection;
+
+        Vector3 newPosition = new Vector3(nextPositionX, nextPositionY, 0);
+
+        UpdateSpeed(normalizedY);
+        
+        moveDir = newPosition - transform.position;
+
+        transform.position = newPosition;
+
+        if (moveDir != Vector3.zero)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 
+                Mathf.Atan2(moveDir.y, moveDir.x) * Mathf.Rad2Deg);
+        }
+    }
+
+    private void UpdateSpeed(float normalizedProgress)
+    {
+        float speedMultiplier = speedCurve.Evaluate(normalizedProgress);
+        moveSpeed = speedMultiplier * maxMoveSpeed;
+        
+        if (moveSpeed == 0) moveSpeed = 0.1f * Mathf.Sign(maxMoveSpeed);
+    }
+
+    public Vector3 GetProjectileMoveDir()
+    {
+        return moveDir;
     }
 }

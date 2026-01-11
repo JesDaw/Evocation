@@ -30,7 +30,7 @@ public class RangeAttackType : AttackType
         });
     }
 
-    private void ExecuteRangeAttack(Vector3 origin, Stats attackerStats, bool facingLeft, System.Action<Stats> onHitCallback)
+    void ExecuteRangeAttack(Vector3 origin, Stats attackerStats, bool facingLeft, System.Action<Stats> onHitCallback)
     {
         Vector2 range = attackerStats._AttackRange;
         Vector2 center = CalculateAttackCenter(origin, facingLeft, range);
@@ -45,13 +45,21 @@ public class RangeAttackType : AttackType
         }
     }
 
-    private void SpawnProjectile(Vector3 startPos, Transform target, float moveSpeed, System.Action<Stats> onHit)
+    void SpawnProjectile(Vector3 startPos, Transform target, float moveSpeed, System.Action<Stats> onHit)
     {
         if (projObject == null) return;
         GameObject go = Instantiate(projObject, startPos, Quaternion.identity);
         if (go.TryGetComponent(out Projectile p))
         {
-            p.InitializeProjectile(target, moveSpeed, projectileMaxRelativeHeight, heightCurve, axisCorrectionCurve, speedCurve, onHit);
+            p.InitializeProjectile(
+                target, 
+                moveSpeed, 
+                projectileMaxRelativeHeight,
+                heightCurve,
+                axisCorrectionCurve, 
+                speedCurve, 
+                onHit
+            );
         }
     }
 }
