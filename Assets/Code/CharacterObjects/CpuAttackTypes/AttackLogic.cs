@@ -5,7 +5,6 @@ public static class AttackLogic
 {
     public static void ExecuteAttack(CpuStateManager context) => PerformAttack(context.transform.position, context._Stats, context._Stats._Enemy, context);
     public static void ExecuteAttack(PlayerStateMachine context) => PerformAttack(context.transform.position, context.PlayerStats, !context.isFacingRight, context);
-
     private static void PerformAttack(Vector3 origin, Stats attackerStats, bool facingLeft, object contextObj)
     {
         Vector2 range = attackerStats._AttackRange;
@@ -25,7 +24,7 @@ public static class AttackLogic
                 SpawnProjectile(origin, primaryTarget, attackerStats);
             }
         }
-        else // Melee
+        else 
         {
             if (attackerStats._IsAOE)
             {

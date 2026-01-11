@@ -1,17 +1,15 @@
 using UnityEngine;
 using UltEvents;
+using System;
 
-/// <summary>
-/// Base class for all level states. Each state represents a phase in the level.
-/// Derive from this to create custom states with specific behavior.
-/// All states are ScriptableObjects that can be configured in the inspector.
-/// </summary>
-public abstract class LevelState : ScriptableObject
+[Serializable]
+public abstract class LevelState
 {
     [Header("State Configuration")]
-    [SerializeField] protected string stateName = "Unnamed State";
+    public string stateName = "Unnamed State";
+    
     [Header("SceneActivity stuff")]
-    [SerializeField] protected string uiCanvasName = "";
+    [SerializeField] protected string sceneActivityName = "";
     [SerializeField] protected bool makeUIAnchor = false;
     
     [Header("Input Mode")]
@@ -34,173 +32,96 @@ public abstract class LevelState : ScriptableObject
     [SerializeField] protected string musicStateName = "";
     
     [Header("Events")]
-    [SerializeField] protected UltEvent onStateEnter;
-    [SerializeField] protected UltEvent onStateExit;
+    public UltEvent onStateEnter;
+    public UltEvent onStateExit;
 
     [Header("Debugging")]
-    [SerializeField] bool DebugLogs = false;
+    [SerializeField] protected bool DebugLogs = false;
     
     protected LevelStateManager context;
     
     public enum InputMode
     {
-        Disabled,
-        Cutscene,
-        Scouting,
-        Gameplay,
-        CharacterSelecting,
-        PauseMenu,
-        FreeCam
+        Disabled, Cutscene, Scouting, Gameplay, CharacterSelecting, PauseMenu, FreeCam
     }
     
     public string StateName => stateName;
     
-    /// <summary>
-    /// Initialize the state with a reference to the state manager
-    /// </summary>
     public virtual void Initialize(LevelStateManager manager)
     {
         context = manager;
     }
     
-    /// <summary>
-    /// Called when entering this state
-    /// </summary>
     public virtual void EnterState()
     {
         if (DebugLogs) Debug.Log($"[LevelState] Entering: {stateName}");
-        
-        // Apply time scale
         Time.timeScale = timeScale;
         
-        // Update UI
-        if (!string.IsNullOrEmpty(uiCanvasName) && context.SceneManager != null)
+        if (!string.IsNullOrEmpty(sceneActivityName) && context.SceneManager != null)
         {
-            context.SceneManager.Activate(uiCanvasName, makeAnchor: makeUIAnchor);
+            context.SceneManager.Activate(sceneActivityName, makeAnchor: makeUIAnchor);
         }
         
-        // Configure input
         ConfigureInput();
-        
-        // Configure camera control
         ConfigureCameraControl();
-        
-        // Configure game mechanics
         ConfigureGameMechanics();
-        
-        // Configure audio
         ConfigureAudio();
         
-        // Invoke custom events
         onStateEnter?.Invoke();
-        
-        // Allow derived classes to add custom behavior
         OnEnterState();
     }
     
-    /// <summary>
-    /// Called every frame while in this state
-    /// </summary>
-    public virtual void UpdateState()
-    {
-        OnUpdateState();
-    }
+    public virtual void UpdateState() => OnUpdateState();
     
-    /// <summary>
-    /// Called when exiting this state
-    /// </summary>
     public virtual void ExitState()
     {
         if (DebugLogs) Debug.Log($"[LevelState] Exiting: {stateName}");
-        
         onStateExit?.Invoke();
         OnExitState();
     }
     
-    /// <summary>
-    /// Override this for custom enter behavior
-    /// </summary>
     protected virtual void OnEnterState() { }
-    
-    /// <summary>
-    /// Override this for custom update behavior
-    /// </summary>
     protected virtual void OnUpdateState() { }
-    
-    /// <summary>
-    /// Override this for custom exit behavior
-    /// </summary>
     protected virtual void OnExitState() { }
     
     protected virtual void ConfigureInput()
     {
-        if (GlobalInputManager.Instance == null)
-        {
-            if (DebugLogs) Debug.LogWarning("GlobalInputManager not found!");
-            return;
-        }
-        
+        if (GlobalInputManager.Instance == null) return;
         switch (inputMode)
         {
-            case InputMode.Disabled:
-                GlobalInputManager.Instance.DisableAllControls();
-                break;
-            case InputMode.Cutscene:
-                GlobalInputManager.Instance.SetCutsceneMode();
-                break;
-            case InputMode.Scouting:
-                GlobalInputManager.Instance.SetScoutingMode();
-                break;
-            case InputMode.Gameplay:
-                GlobalInputManager.Instance.SetPlayerCharacterMode();
-                break;
-            case InputMode.CharacterSelecting:
-                GlobalInputManager.Instance.SetCharacterSelectingMode();
-                break;
-            case InputMode.PauseMenu:
-                GlobalInputManager.Instance.SetPauseMenuMode();
-                break;
-            case InputMode.FreeCam:
-                GlobalInputManager.Instance.SetFreeCamMode();
-                break;
+            case InputMode.Disabled: GlobalInputManager.Instance.DisableAllControls(); break;
+            case InputMode.Cutscene: GlobalInputManager.Instance.SetCutsceneMode(); break;
+            case InputMode.Scouting: GlobalInputManager.Instance.SetScoutingMode(); break;
+            case InputMode.Gameplay: GlobalInputManager.Instance.SetPlayerCharacterMode(); break;
+            case InputMode.CharacterSelecting: GlobalInputManager.Instance.SetCharacterSelectingMode(); break;
+            case InputMode.PauseMenu: GlobalInputManager.Instance.SetPauseMenuMode(); break;
+            case InputMode.FreeCam: GlobalInputManager.Instance.SetFreeCamMode(); break;
         }
     }
-    
+
     protected virtual void ConfigureCameraControl()
     {
         if (!alterPlayerControls) return;
         var controlSwitcher = CameraControlSwitcher.Instance;
         if (controlSwitcher == null) return;
-        
-        if (switchToPlayerControl)
-        {
-            controlSwitcher.SwitchToPlayerControl();
-        }
-        else if (switchToCameraControl)
-        {
-            controlSwitcher.SwitchToCameraControl();
-        }
+        if (switchToPlayerControl) controlSwitcher.SwitchToPlayerControl();
+        else if (switchToCameraControl) controlSwitcher.SwitchToCameraControl();
     }
-    
+
     protected virtual void ConfigureGameMechanics()
     {
         var mechanics = GameMechanicsManager.Instance;
         if (mechanics == null) return;
-        
         mechanics.SetMoneyActive(enableMoney);
         mechanics.SetTimerActive(enableTimer);
         mechanics.SetPlayerSpawningActive(enablePlayerSpawning);
         mechanics.SetEnemySpawningActive(enableEnemySpawning);
     }
-    
+
     protected virtual void ConfigureAudio()
     {
         var audio = LevelAudioManager.Instance;
         if (audio == null) return;
-        
-        if (playMusic && !string.IsNullOrEmpty(musicStateName))
-        {
-            audio.SetMusicState(musicStateName);
-        }
+        if (playMusic && !string.IsNullOrEmpty(musicStateName)) audio.SetMusicState(musicStateName);
     }
 }

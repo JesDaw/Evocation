@@ -29,8 +29,8 @@ public class SpawnObjects : MonoBehaviour
 
     [Header("Events")]
     [SerializeField] UnityEvent<GameObject> onSpawn;
+    [SerializeField] bool DebugLogs = false;
 
-    // Property for compatibility with old code
     public bool SpawningIsActive
     {
         get { return spawningEnabled; }
@@ -75,7 +75,6 @@ public class SpawnObjects : MonoBehaviour
             cpuContainer
         );
 
-        // Configure the CPU with stats
         Stats unitStats = spawnedUnit.GetComponent<Stats>();
         if (unitStats != null)
         {
@@ -87,34 +86,24 @@ public class SpawnObjects : MonoBehaviour
             Debug.LogError("Spawned unit has no Stats component!");
         }
 
-        // Set tag based on spawner type
         string unitTag = enemySpawner ? "Enemy" : "Allies";
         spawnedUnit.tag = unitTag;
 
-        // Set layer (keeping your original layer logic)
         int layer = enemySpawner ? 9 : 10;
         SetLayerRecursively(spawnedUnit, layer);
 
-        // Randomize Y position slightly
         RandomizeAppearancePosition(spawnedUnit);
 
-        // Trigger event
         onSpawn?.Invoke(spawnedUnit);
 
         return spawnedUnit;
     }
 
-    /// <summary>
-    /// Spawn a CPU from AI system (no money cost)
-    /// </summary>
     public GameObject SpawnFromSpawner(ScriptableStats stats)
     {
         return SpawnCPU(stats);
     }
 
-    /// <summary>
-    /// Spawn a CPU from player (costs money)
-    /// </summary>
     public GameObject SpawnFromPlayer(ScriptableStats stats)
     {
         if (!spawningEnabled)
@@ -129,31 +118,24 @@ public class SpawnObjects : MonoBehaviour
             return null;
         }
 
-        // Check money
         if (playerMoney._Value < stats._spawnCost)
         {
-            Debug.Log($"Not enough money! Need {stats._spawnCost}, have {playerMoney._Value}");
+            if (DebugLogs) Debug.Log($"Not enough money! Need {stats._spawnCost}, have {playerMoney._Value}");
             return null;
         }
 
-        // Deduct cost
         playerMoney._Value -= stats._spawnCost;
         
-        // Update display
         if (moneyDisplay != null)
             moneyDisplay.UpdateMoneyDesplay();
 
-        // Spawn the unit
         GameObject spawnedUnit = SpawnCPU(stats);
         
-        //Debug.Log($"Player spawned {stats.name} (Cost: {stats._spawnCost})");
+        if(DebugLogs)Debug.Log($"Player spawned {stats.name} (Cost: {stats._spawnCost})");
         
         return spawnedUnit;
     }
 
-    /// <summary>
-    /// Spawn a player character
-    /// </summary>
     public GameObject SpawnPlayer(GameObject playerPrefab)
     {
         if (!spawningEnabled)
@@ -168,7 +150,6 @@ public class SpawnObjects : MonoBehaviour
             return null;
         }
 
-        // Get cost
         Stats playerStats = playerPrefab.GetComponent<Stats>();
         if (playerStats == null)
         {
@@ -178,17 +159,14 @@ public class SpawnObjects : MonoBehaviour
 
         int cost = playerStats._spawnCost;
 
-        // Check money
         if (playerMoney._Value < cost)
         {
             Debug.Log($"Not enough money to spawn player! Need {cost}, have {playerMoney._Value}");
             return null;
         }
 
-        // Deduct cost
         playerMoney._Value -= cost;
 
-        // Spawn player
         GameObject spawnedPlayer = Instantiate(
             playerPrefab,
             spawnLocation.position,
@@ -196,11 +174,9 @@ public class SpawnObjects : MonoBehaviour
             playerContainer
         );
 
-        // Set up player stats
         Stats spawnedStats = spawnedPlayer.GetComponent<Stats>();
         if (spawnedStats != null)
         {
-            // Subscribe to death event
             spawnedStats.OnDeath.DynamicCalls += () => 
             {
                 if (playerLivesManager != null)
@@ -208,22 +184,17 @@ public class SpawnObjects : MonoBehaviour
             };
         }
 
-        // Register with player switch
         if (playerSwitch != null)
             playerSwitch.AddPlayer(spawnedPlayer);
 
-        // Register life
         if (playerLivesManager != null)
             playerLivesManager.GainLife();
 
-        //Debug.Log($"Player spawned (Cost: {cost})");
+        if (DebugLogs) Debug.Log($"Player spawned (Cost: {cost})");
 
         return spawnedPlayer;
     }
 
-    /// <summary>
-    /// Set layer recursively for all children
-    /// </summary>
     void SetLayerRecursively(GameObject obj, int layer)
     {
         obj.layer = layer;
@@ -233,9 +204,6 @@ public class SpawnObjects : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Randomize appearance position slightly
-    /// </summary>
     void RandomizeAppearancePosition(GameObject unit)
     {
         Transform appearance = unit.transform.Find("CpuAppearance");
@@ -247,14 +215,11 @@ public class SpawnObjects : MonoBehaviour
             float randomY = Random.Range(-0.5f, 0.5f);
             Vector3 pos = appearance.position;
             pos.y += randomY;
-            pos.z += randomY; // Depth sorting
+            pos.z += randomY; 
             appearance.position = pos;
         }
     }
 
-    /// <summary>
-    /// Enable/disable spawning
-    /// </summary>
     public void SetSpawningEnabled(bool enabled)
     {
         spawningEnabled = enabled;

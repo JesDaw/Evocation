@@ -14,18 +14,17 @@ public class BuildingStatsManager : MonoBehaviour
     [SerializeField] ScriptableStats EnemyBuilding;
     
     [Header("Building Type")]
-    [SerializeField] bool isAmenity = false; // Amenity vs Base building
+    [SerializeField] bool isAmenity = false;
+    [SerializeField] bool DebugLogs = false;
 
     void Start()
     {
-        // Amenities start unclaimed (CPUs ignore "Blank" tag)
         if (isAmenity)
         {
             gameObject.tag = "Blank";
         }
         else
         {
-            // Bases start with a team
             SetupBuilding();
         }
 
@@ -96,7 +95,7 @@ public class BuildingStatsManager : MonoBehaviour
         _Stats._KnockBackHealth = scrStats._KnockBackMax;
         _Stats._KnockBackMax = scrStats._KnockBackMax;
 
-        Debug.Log($"{gameObject.name} swapped to {(isEnemy ? "Enemy" : "Ally")} building");
+        if(DebugLogs) Debug.Log($"{gameObject.name} swapped to {(isEnemy ? "Enemy" : "Ally")} building");
     }
 
     /// <summary>

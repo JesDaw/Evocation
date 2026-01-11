@@ -66,6 +66,32 @@ public class VisualEffectsManager : MonoBehaviour
     
     private List<Material> activeShaderInstances = new List<Material>();
 
+    public void CallShockwave(Renderer targetRenderer, float duration = 1.0f)
+    {
+        // Ensure this matches the "Reference" name in your Shader Graph!
+        TweenShaderFloat(targetRenderer, "_RippleDistanceFromCenter", 1.0f, duration, -0.1f)
+            .SetEase(Ease.OutQuad); 
+    }
+
+    public Tween TweenShaderFloat(Renderer targetRenderer, string propertyName, float endValue, float duration, float startValue = 0f)
+    {
+        if (targetRenderer == null) return null;
+        
+        // .material automatically creates a local instance for this object
+        Material mat = targetRenderer.material; 
+        
+        // Only add to the list if we haven't tracked this specific instance yet
+        if (!activeShaderInstances.Contains(mat)) 
+        {
+            activeShaderInstances.Add(mat);
+        }
+
+        mat.SetFloat(propertyName, startValue);
+        return mat.DOFloat(endValue, propertyName, duration);
+    }
+
+    
+
     public void ApplyShaderEffect(Renderer targetRenderer, Material shaderMaterial)
     {
         if (targetRenderer != null && shaderMaterial != null)

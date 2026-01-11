@@ -10,6 +10,7 @@ public class Stats : MonoBehaviour
     [Header("Clan & Targeting")]
     public List<string> targetTags = new List<string>();
     public bool _Enemy;
+    [SerializeField] bool player = false;
 
     [Header("Runtime Combat")]
     [HideInInspector] public int _AttackDamage;
@@ -37,17 +38,17 @@ public class Stats : MonoBehaviour
 
     [Header("Events")]
     [SerializeField] internal UltEvents.UltEvent OnDeath, OnDamage, OnKnocked;
-    [SerializeField] internal UltEvents.UltEvent<bool> OnWitFlagDeath, OnWitFlagDamage; // Restored
+    [SerializeField] internal UltEvents.UltEvent<bool> OnWitFlagDeath, OnWitFlagDamage;
     [SerializeField] public UnityEvent OnStatsInitialized;
 
     [Header("Settings")]
     [SerializeField] bool _Invincible = false;
-    public bool _DontDestroy = false; // Restored
+    public bool _DontDestroy = false;
 
     [HideInInspector] public DamageHandler damageHandler;
     [HideInInspector] public StatusEffectManager statusEffectManager;
 
-    public DamageSource LastHitBy { get; set; } // Restored
+    public DamageSource LastHitBy { get; set; }
 
     void Awake()
     {
@@ -95,8 +96,6 @@ public class Stats : MonoBehaviour
             _SpeedCurve = scriptableStats._SpeedCurve;
         }
     }
-
-    // ============================ RESTORED METHODS ============================
 
     public void SetTag(string tag)
     {
@@ -147,12 +146,11 @@ public class Stats : MonoBehaviour
         _DontDestroy = shouldDestroy;
     }
 
-    // ===========================================================================
-
     void SetupTag()
     {
         if (_Enemy) gameObject.tag = "Enemy";
-        else gameObject.tag = "Allies"; 
+        else if(player) gameObject.tag = "Player"; 
+        else gameObject.tag = "Allies";
     }
 
     void SetupTargetingPriorities()

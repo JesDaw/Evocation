@@ -72,8 +72,6 @@ public class PlayerStateMachine : MonoBehaviour
         {
             SubscribeToInputs();
         }
-        
-        StartCoroutine(Startup());
     }
 
     /// <summary>
@@ -173,19 +171,6 @@ public class PlayerStateMachine : MonoBehaviour
     {
         _isActive = active;
         //Debug.Log($"Player {gameObject.name} set active: {active}");
-    }
-
-    //==animation replacement
-    IEnumerator Startup()
-    {
-        yield return new WaitUntil(() => transform.childCount >= ScrStats._Sprites.Length);
-        replaceAnimation();
-
-        if(Animator != null)
-        {
-            Animator.Rebind();
-            Animator.Update(0f);
-        }
     }
 
     void replaceAnimation()

@@ -4,9 +4,10 @@ using System.Collections;
 
 public class Money : MonoBehaviour
 {
-    [SerializeField] public FloatVariable genPerSec; // PUBLIC for AI system
-    [SerializeField] public FloatVariable moneyAmount; // PUBLIC for AI system
+    [SerializeField] public FloatVariable genPerSec;
+    [SerializeField] public FloatVariable moneyAmount;
     [SerializeField] TextMeshProUGUI moneyText;
+    [SerializeField] AIMoneyManager aIMoneyManager;
     bool _money_is_active = false;
     float CurrentMoney = 0;
     
@@ -58,8 +59,16 @@ public class Money : MonoBehaviour
         moneyAmount._Value -= amount;
     }
     
-    public void DeactivateMoney() { _money_is_active = false; }
-    public void ActivateMoney() { _money_is_active = true; }
-    public void ResetMoney() { moneyAmount.Reset(); }
-    public void IncreaseMoneyGen(){ genPerSec._Value *= 2; }
+    public void DeactivateMoney() 
+    { 
+        _money_is_active = false; 
+        aIMoneyManager.DeactivateMoney();
+    }
+    public void ActivateMoney() 
+    { 
+        _money_is_active = true; 
+        aIMoneyManager.ActivateMoney();
+    }
+    public void ResetMoney() => moneyAmount.Reset(); 
+    public void IncreaseMoneyGen() => genPerSec._Value *= 2; 
 }

@@ -31,7 +31,6 @@ public class CpuMoveState : CpuBaseState
         Vector2 range = _Stats._AttackRange;
         bool facingLeft = _Transform.right.x < 0;
 
-        // Use the same helper to ensure visual consistency
         Vector2 detectionCenter = AttackLogic.CalculateAttackCenter(_Transform.position, facingLeft, range);
 
         List<Stats> targets = AttackDetection.FindTargetsInBox(detectionCenter, range, _Stats.targetTags, _Stats);
