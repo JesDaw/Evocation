@@ -12,6 +12,7 @@ public abstract class HealthBarBase : MonoBehaviour
     [Header("Animation Settings")]
     [SerializeField] protected float _tweenDuration = 0.25f;
     [SerializeField] protected float _trailDelay = 0.4f;
+    protected DG.Tweening.Sequence _healthBarSequence;
 
     protected virtual void Start()
     {
@@ -28,15 +29,15 @@ public abstract class HealthBarBase : MonoBehaviour
 
     protected void AnimateHealthChange(float ratio)
     {
-        DOTween.To(() => _HealthFillImage.fillAmount,
-                   value => _HealthFillImage.fillAmount = value,
+        DOTween.To(() => _HealthFillImage != null ? _HealthFillImage.fillAmount : 0f,
+                   value => { if (_HealthFillImage != null) _HealthFillImage.fillAmount = value; },
                    ratio, _tweenDuration)
                .SetEase(Ease.InOutSine);
 
-        DOTween.Sequence()
+        _healthBarSequence = DOTween.Sequence()
                .AppendInterval(_trailDelay)
-               .Append(DOTween.To(() => _HealthTrailImage.fillAmount,
-                                  v => _HealthTrailImage.fillAmount = v,
+               .Append(DOTween.To(() => _HealthTrailImage != null ? _HealthTrailImage.fillAmount : 0f,
+                                  v => { if (_HealthTrailImage != null) _HealthTrailImage.fillAmount = v; },
                                   ratio, _tweenDuration)
                              .SetEase(Ease.InOutSine));
     }

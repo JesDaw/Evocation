@@ -30,7 +30,6 @@ public class DamageHandler : MonoBehaviour
             stats.OnWitFlagDamage?.Invoke(attackedBy.IsEnemy);
         }
 
-        // Update health UI directly to avoid event issues
         if (stats.entityHealthbar != null)
         {
             stats.entityHealthbar.UpdateHealth();

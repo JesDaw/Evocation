@@ -11,20 +11,22 @@ public static class AttackLogic
         Vector2 center = CalculateAttackCenter(origin, facingLeft, range);
         
         AttackDetection.DrawDebugBox(center, range, attackerStats._Enemy ? Color.red : Color.blue, 1f);
-        List<Stats> targets = AttackDetection.FindTargetsInBox(center, range, attackerStats.targetTags, attackerStats);
+        List<IDamageable> targets = AttackDetection.FindTargetsInBox(center, range, attackerStats.targetTags, attackerStats);
+
+        //Debug.Log($"{attackerStats.gameObject.name} found {targets.Count} targets in attack box");
 
         if (targets.Count == 0) return;
 
         if (attackerStats._IsProjectile)
         {
-            Stats primaryTarget = AttackDetection.FindClosestTarget(origin, targets);
+            IDamageable primaryTarget = AttackDetection.FindClosestTarget(origin, targets);
             if (primaryTarget != null)
             {
                 SetAttackingStatRef(contextObj, primaryTarget);
                 SpawnProjectile(origin, primaryTarget, attackerStats);
             }
         }
-        else 
+        else
         {
             if (attackerStats._IsAOE)
             {
@@ -39,7 +41,7 @@ public static class AttackLogic
             }
             else
             {
-                Stats primaryTarget = AttackDetection.FindClosestTarget(origin, targets);
+                IDamageable primaryTarget = AttackDetection.FindClosestTarget(origin, targets);
                 if (primaryTarget != null)
                 {
                     SetAttackingStatRef(contextObj, primaryTarget);
@@ -49,7 +51,7 @@ public static class AttackLogic
         }
     }
 
-    private static void SpawnProjectile(Vector3 start, Stats target, Stats attackerStats)
+    private static void SpawnProjectile(Vector3 start, IDamageable target, Stats attackerStats)
     {
         if (attackerStats._ProjectilePrefab == null) return;
         GameObject projGO = Object.Instantiate(attackerStats._ProjectilePrefab, start, Quaternion.identity);
@@ -57,25 +59,31 @@ public static class AttackLogic
         {
             p.InitializeProjectile(target.transform, attackerStats._ProjectileSpeed, attackerStats._ProjectileMaxHeight,
                 attackerStats._TrajectoryCurve, attackerStats._AxisCorrectionCurve, attackerStats._SpeedCurve,
-                (hitStat) => ApplyDamage(attackerStats, hitStat));
+                (hitDamageable) => ApplyDamage(attackerStats, hitDamageable));
         }
     }
 
-    private static void ApplyDamage(Stats attacker, Stats target)
+    private static void ApplyDamage(Stats attacker, IDamageable target)
     {
         DamageSource.DamageType type = attacker._IsProjectile ? DamageSource.DamageType.Ranged : DamageSource.DamageType.Melee;
         if (attacker._IsAOE) type = DamageSource.DamageType.AOE;
-        
-        target.damageHandler.TakeDamage(attacker._AttackDamage, new DamageSource(type) { IsEnemy = attacker._Enemy });
-        if (attacker._EffectsToApply != null) 
-            foreach (var e in attacker._EffectsToApply) target.statusEffectManager.AddEffect(e);
+
+        //Debug.Log($"{attacker.gameObject.name} attacking {target.gameObject.name} with {attacker._AttackDamage} damage");
+
+        target.TakeDamage(attacker._AttackDamage, new DamageSource(type) { IsEnemy = attacker._Enemy });
+
+        if (target is Stats statsTarget && attacker._EffectsToApply != null)
+        {
+            foreach (var e in attacker._EffectsToApply) statsTarget.statusEffectManager.AddEffect(e);
+        }
     }
 
     public static Vector2 CalculateAttackCenter(Vector2 pos, bool left, Vector2 range) => pos + new Vector2(left ? -range.x / 2f : range.x / 2f, 0f);
 
-    private static void SetAttackingStatRef(object context, Stats target)
+    private static void SetAttackingStatRef(object context, IDamageable target)
     {
-        if (context is CpuStateManager cpu) cpu._AttackingStats = target;
-        else if (context is PlayerStateMachine player) player._AttackingStats = target;
+        Stats statsTarget = target as Stats;
+        if (context is CpuStateManager cpu) cpu._AttackingStats = statsTarget;
+        else if (context is PlayerStateMachine player) player._AttackingStats = statsTarget;
     }
 }

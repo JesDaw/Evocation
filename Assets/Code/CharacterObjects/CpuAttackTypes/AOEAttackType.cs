@@ -12,12 +12,12 @@ public class AOEAttackType : AttackType
     {
         Vector2 range = _context._Stats._AttackRange;
         Vector2 attackCenter = CalculateAttackCenter(_context.transform.position, _context._Stats._Enemy, range);
-        
-        List<Stats> targets = AttackDetection.FindTargetsInBox(attackCenter, range, _context._Stats.targetTags, _context._Stats);
+
+        List<IDamageable> targets = AttackDetection.FindTargetsInBox(attackCenter, range, _context._Stats.targetTags, _context._Stats);
 
         for (int i = 0; i < Mathf.Min(targets.Count, maxTargets); i++)
         {
-            _context._AttackingStats = targets[i];
+            _context._AttackingStats = targets[i] as Stats;
             DealDamage(_context);
         }
     }
@@ -26,12 +26,12 @@ public class AOEAttackType : AttackType
     {
         Vector2 range = _context.PlayerStats._AttackRange;
         Vector2 attackCenter = CalculateAttackCenter(_context.transform.position, !_context.isFacingRight, range);
-        
-        List<Stats> targets = AttackDetection.FindTargetsInBox(attackCenter, range, _context.PlayerStats.targetTags, _context.PlayerStats);
+
+        List<IDamageable> targets = AttackDetection.FindTargetsInBox(attackCenter, range, _context.PlayerStats.targetTags, _context.PlayerStats);
 
         for (int i = 0; i < Mathf.Min(targets.Count, maxTargets); i++)
         {
-            _context._AttackingStats = targets[i];
+            _context._AttackingStats = targets[i] as Stats;
             DealDamage(_context);
         }
     }

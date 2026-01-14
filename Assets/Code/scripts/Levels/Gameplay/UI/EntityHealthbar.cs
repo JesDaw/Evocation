@@ -39,6 +39,12 @@ public class EntityHealthbar : HealthBarBase
 
     void OnDestroy()
     {
+
+        if (_healthBarSequence != null)
+        {
+            _healthBarSequence.Kill();
+            _healthBarSequence = null;
+        }
         if (_HealthFillImage != null)
             DOTween.Kill(_HealthFillImage);
         if (_HealthTrailImage != null)

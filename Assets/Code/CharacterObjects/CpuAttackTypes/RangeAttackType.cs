@@ -17,7 +17,7 @@ public class RangeAttackType : AttackType
     public override void Attack(CpuStateManager _context)
     {
         ExecuteRangeAttack(_context.transform.position, _context._Stats, _context._Stats._Enemy, (target) => {
-             _context._AttackingStats = target;
+             _context._AttackingStats = target as Stats;
              DealDamage(_context);
         });
     }
@@ -25,19 +25,19 @@ public class RangeAttackType : AttackType
     public override void Attack(PlayerStateMachine _context)
     {
         ExecuteRangeAttack(_context.transform.position, _context.PlayerStats, !_context.isFacingRight, (target) => {
-             _context._AttackingStats = target;
+             _context._AttackingStats = target as Stats;
              DealDamage(_context);
         });
     }
 
-    void ExecuteRangeAttack(Vector3 origin, Stats attackerStats, bool facingLeft, System.Action<Stats> onHitCallback)
+    void ExecuteRangeAttack(Vector3 origin, Stats attackerStats, bool facingLeft, System.Action<IDamageable> onHitCallback)
     {
         Vector2 range = attackerStats._AttackRange;
         Vector2 center = CalculateAttackCenter(origin, facingLeft, range);
-        
-        List<Stats> targets = AttackDetection.FindTargetsInBox(center, range, attackerStats.targetTags, attackerStats);
-        Stats target = AttackDetection.FindClosestTarget(origin, targets);
-        
+
+        List<IDamageable> targets = AttackDetection.FindTargetsInBox(center, range, attackerStats.targetTags, attackerStats);
+        IDamageable target = AttackDetection.FindClosestTarget(origin, targets);
+
         if (target != null)
         {
             float moveSpeed = attackerStats._ProjectileSpeed > 0 ? attackerStats._ProjectileSpeed : 10f;
@@ -45,7 +45,7 @@ public class RangeAttackType : AttackType
         }
     }
 
-    void SpawnProjectile(Vector3 startPos, Transform target, float moveSpeed, System.Action<Stats> onHit)
+    void SpawnProjectile(Vector3 startPos, Transform target, float moveSpeed, System.Action<IDamageable> onHit)
     {
         if (projObject == null) return;
         GameObject go = Instantiate(projObject, startPos, Quaternion.identity);
