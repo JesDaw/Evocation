@@ -659,9 +659,11 @@ GameObject:
   - component: {fileID: 8878333553698331049}
   - component: {fileID: 8642845343927698181}
   - component: {fileID: 7758967943616924297}
-  - component: {fileID: 2391128896491098164}
+  - component: {fileID: 1529094667312102677}
+  - component: {fileID: 8807434419973800241}
   - component: {fileID: 8455048207438629725}
   - component: {fileID: 4459471441712610284}
+  - component: {fileID: 745475365400753339}
   m_Layer: 0
   m_Name: CpuParent
   m_TagString: LavaBros
@@ -703,6 +705,35 @@ MonoBehaviour:
   scriptableStats: {fileID: 0}
   targetTags: []
   _Enemy: 0
+  player: 0
+  _AttackDamage: 0
+  _AttackEndlag: 0
+  _AttackRange: {x: 0, y: 0}
+  _IsProjectile: 0
+  _IsAOE: 0
+  _MaxAOETargets: 0
+  _ProjectilePrefab: {fileID: 0}
+  _ProjectileSpeed: 0
+  _ProjectileMaxHeight: 0
+  _TrajectoryCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AxisCorrectionCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _SpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _EffectsToApply: []
   _MaxHealth: 1
   _CurrentHealth: 1
   _MoveSpeed: 1
@@ -743,7 +774,7 @@ MonoBehaviour:
   _Animator: {fileID: 1782315311101503638}
   _AnimatorController: {fileID: 2286217819129223477}
   _AttackingStats: {fileID: 0}
---- !u!114 &2391128896491098164
+--- !u!114 &1529094667312102677
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -752,15 +783,36 @@ MonoBehaviour:
   m_GameObject: {fileID: 2248256087404518340}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3da0f5b7c70ecb4194af07b8bde4060, type: 3}
+  m_Script: {fileID: 11500000, guid: cbe122e98757f47ed86b8edf9c2047c5, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: CodeAssembly::EntityHealthbar
   HealthBarObject: {fileID: 4217944510201605646}
   _HealthFillImage: {fileID: 7659353711107503416}
   _HealthTrailImage: {fileID: 150695635640291682}
   _tweenDuration: 0.25
   _trailDelay: 0.4
   _Stats: {fileID: 8642845343927698181}
+--- !u!114 &8807434419973800241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2248256087404518340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a2c1cd01e4ad464f9453124840dbae2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::StatusEffectManager
+  onEffectApplied:
+    m_PersistentCalls:
+      m_Calls: []
+  onEffectRemoved:
+    m_PersistentCalls:
+      m_Calls: []
+  onEffectTick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!58 &8455048207438629725
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -824,6 +876,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &745475365400753339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2248256087404518340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8497bdc4168874ba99c8180ca3dbd99e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::DamageHandler
 --- !u!1 &2461844580367727198
 GameObject:
   m_ObjectHideFlags: 0
@@ -1763,7 +1827,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3847192231702851745}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1

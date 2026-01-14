@@ -3,17 +3,18 @@ using DG.Tweening;
 
 public class EntityHealthbar : HealthBarBase
 {
-    [SerializeField] Stats _Stats;
+    [SerializeField] bool DebugLogs;
+    Stats _Stats;
+
+    public void Initialize(Stats statsComponent)
+    {
+        _Stats = statsComponent;
+        UpdateHealth();
+    }
 
     protected override void Start()
     {
-        UpdateHealth();
-        base.Start();
-        
-        if (_Stats == null)
-        {
-            Debug.LogError($"{gameObject.name} missing Stats reference!");
-        }
+        base.Start();   
     }
 
     public override void UpdateHealth()
@@ -33,6 +34,7 @@ public class EntityHealthbar : HealthBarBase
         {
             HealthBarObject.SetActive(_Stats._CurrentHealth < _Stats._MaxHealth && _Stats._CurrentHealth > 0);
         }
+        if(DebugLogs) Debug.Log($"{gameObject.name} health now at {_Stats._CurrentHealth}/{_Stats._MaxHealth}");
     }
 
     void OnDestroy()

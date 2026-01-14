@@ -2526,9 +2526,11 @@ GameObject:
   - component: {fileID: 899014493961415775}
   - component: {fileID: 319218597411901608}
   - component: {fileID: 1117684528899802519}
-  - component: {fileID: 520336542923096696}
+  - component: {fileID: 6919732210290999509}
+  - component: {fileID: 3199865173308388635}
   - component: {fileID: 3986617133647790036}
   - component: {fileID: 3798137318090021558}
+  - component: {fileID: 5300245547809158291}
   m_Layer: 9
   m_Name: CpuFriend
   m_TagString: Allies
@@ -2570,6 +2572,35 @@ MonoBehaviour:
   scriptableStats: {fileID: 0}
   targetTags: []
   _Enemy: 0
+  player: 0
+  _AttackDamage: 0
+  _AttackEndlag: 0
+  _AttackRange: {x: 0, y: 0}
+  _IsProjectile: 0
+  _IsAOE: 0
+  _MaxAOETargets: 0
+  _ProjectilePrefab: {fileID: 0}
+  _ProjectileSpeed: 0
+  _ProjectileMaxHeight: 0
+  _TrajectoryCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AxisCorrectionCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _SpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _EffectsToApply: []
   _MaxHealth: 1
   _CurrentHealth: 1
   _MoveSpeed: 0
@@ -2580,7 +2611,7 @@ MonoBehaviour:
     _PersistentCalls: []
   OnDamage:
     _PersistentCalls:
-    - _Target: {fileID: 520336542923096696}
+    - _Target: {fileID: 0}
       _MemberName: UpdateHealth
       _PersistentArguments: []
   OnKnocked:
@@ -2625,7 +2656,7 @@ MonoBehaviour:
   _Animator: {fileID: 7592242119458481958}
   _AnimatorController: {fileID: 5316221638223677608}
   _AttackingStats: {fileID: 0}
---- !u!114 &520336542923096696
+--- !u!114 &6919732210290999509
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2634,15 +2665,36 @@ MonoBehaviour:
   m_GameObject: {fileID: 5332745155659718807}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3da0f5b7c70ecb4194af07b8bde4060, type: 3}
+  m_Script: {fileID: 11500000, guid: cbe122e98757f47ed86b8edf9c2047c5, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: CodeAssembly::EntityHealthbar
   HealthBarObject: {fileID: 3308870223969388923}
   _HealthFillImage: {fileID: 5243333258914038328}
   _HealthTrailImage: {fileID: 6032444138073473807}
   _tweenDuration: 0.25
   _trailDelay: 0.4
   _Stats: {fileID: 319218597411901608}
+--- !u!114 &3199865173308388635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5332745155659718807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a2c1cd01e4ad464f9453124840dbae2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::StatusEffectManager
+  onEffectApplied:
+    m_PersistentCalls:
+      m_Calls: []
+  onEffectRemoved:
+    m_PersistentCalls:
+      m_Calls: []
+  onEffectTick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!70 &3986617133647790036
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -2707,6 +2759,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &5300245547809158291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5332745155659718807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8497bdc4168874ba99c8180ca3dbd99e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::DamageHandler
 --- !u!1 &5384764442758481820
 GameObject:
   m_ObjectHideFlags: 0
@@ -4218,7 +4282,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7570772938560011846}
   - component: {fileID: 4657879184986053861}
-  m_Layer: 9
+  m_Layer: 3
   m_Name: MiniMapIcon
   m_TagString: Allies
   m_Icon: {fileID: 0}
@@ -4247,7 +4311,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7634416430059147417}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1

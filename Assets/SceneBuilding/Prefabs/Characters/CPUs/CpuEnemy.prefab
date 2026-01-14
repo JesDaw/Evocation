@@ -4652,9 +4652,11 @@ GameObject:
   - component: {fileID: 6314562445367654166}
   - component: {fileID: 5848340058514809631}
   - component: {fileID: 5362483315926961554}
-  - component: {fileID: 6780557470148160586}
   - component: {fileID: 6265351297120461175}
   - component: {fileID: 5705592259659799490}
+  - component: {fileID: 4399776709845711886}
+  - component: {fileID: 8081783696175150335}
+  - component: {fileID: 3574466801488959684}
   m_Layer: 10
   m_Name: CpuEnemy
   m_TagString: Enemy
@@ -4696,6 +4698,35 @@ MonoBehaviour:
   scriptableStats: {fileID: 0}
   targetTags: []
   _Enemy: 1
+  player: 0
+  _AttackDamage: 0
+  _AttackEndlag: 0
+  _AttackRange: {x: 0, y: 0}
+  _IsProjectile: 0
+  _IsAOE: 0
+  _MaxAOETargets: 0
+  _ProjectilePrefab: {fileID: 0}
+  _ProjectileSpeed: 0
+  _ProjectileMaxHeight: 0
+  _TrajectoryCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AxisCorrectionCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _SpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _EffectsToApply: []
   _MaxHealth: 1
   _CurrentHealth: 1
   _MoveSpeed: 0
@@ -4706,7 +4737,7 @@ MonoBehaviour:
     _PersistentCalls: []
   OnDamage:
     _PersistentCalls:
-    - _Target: {fileID: 6780557470148160586}
+    - _Target: {fileID: 0}
       _MemberName: UpdateHealth
       _PersistentArguments: []
   OnKnocked:
@@ -4751,24 +4782,6 @@ MonoBehaviour:
   _Animator: {fileID: 7548955430503638842}
   _AnimatorController: {fileID: 3859775499832756399}
   _AttackingStats: {fileID: 0}
---- !u!114 &6780557470148160586
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8081379975795946816}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3da0f5b7c70ecb4194af07b8bde4060, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HealthBarObject: {fileID: 4180944863909956266}
-  _HealthFillImage: {fileID: 5889495715472423893}
-  _HealthTrailImage: {fileID: 3815747256624054866}
-  _tweenDuration: 0.25
-  _trailDelay: 0.4
-  _Stats: {fileID: 5848340058514809631}
 --- !u!70 &6265351297120461175
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -4833,6 +4846,57 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &4399776709845711886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8081379975795946816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a2c1cd01e4ad464f9453124840dbae2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::StatusEffectManager
+  onEffectApplied:
+    m_PersistentCalls:
+      m_Calls: []
+  onEffectRemoved:
+    m_PersistentCalls:
+      m_Calls: []
+  onEffectTick:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &8081783696175150335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8081379975795946816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbe122e98757f47ed86b8edf9c2047c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::EntityHealthbar
+  HealthBarObject: {fileID: 4180944863909956266}
+  _HealthFillImage: {fileID: 5889495715472423893}
+  _HealthTrailImage: {fileID: 3815747256624054866}
+  _tweenDuration: 0.25
+  _trailDelay: 0.4
+  _Stats: {fileID: 5848340058514809631}
+--- !u!114 &3574466801488959684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8081379975795946816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8497bdc4168874ba99c8180ca3dbd99e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::DamageHandler
 --- !u!1 &8089450684006149743
 GameObject:
   m_ObjectHideFlags: 0
@@ -5198,7 +5262,7 @@ GameObject:
   m_Component:
   - component: {fileID: 700882649382917216}
   - component: {fileID: 32801805885208401}
-  m_Layer: 10
+  m_Layer: 3
   m_Name: MiniMapIcon
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -5227,7 +5291,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8494501892692663952}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
