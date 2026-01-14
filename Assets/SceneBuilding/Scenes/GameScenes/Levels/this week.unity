@@ -16497,25 +16497,25 @@ MonoBehaviour:
   PauseEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1836361928}
-        m_TargetAssemblyTypeName: TimelineController, CodeAssembly
-        m_MethodName: PauseGame
-        m_Mode: 1
+      - m_Target: {fileID: 1845527909}
+        m_TargetAssemblyTypeName: TimelineManager, CodeAssembly
+        m_MethodName: PauseCurrentCutscene
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
   ResumeEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1836361928}
-        m_TargetAssemblyTypeName: TimelineController, CodeAssembly
-        m_MethodName: UnpauseGame
-        m_Mode: 1
+      - m_Target: {fileID: 1845527909}
+        m_TargetAssemblyTypeName: TimelineManager, CodeAssembly
+        m_MethodName: PauseCurrentCutscene
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -48920,11 +48920,6 @@ MonoBehaviour:
   ProgressBarContainer: {fileID: 1837717186}
   ProgressSlider: {fileID: 1553197452}
   rippleEffect: 1
-  targetRenderer: {fileID: 0}
-  propertyName: _RippleDistanceFromCenter
-  startValue: -0.1
-  endValue: 0.3
-  duration: 3
   DebugLog: 0
 --- !u!4 &3108141719080562451
 Transform:
