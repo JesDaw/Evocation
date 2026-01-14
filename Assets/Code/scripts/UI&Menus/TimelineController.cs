@@ -113,11 +113,13 @@ public class TimelineController : MonoBehaviour
     public void SkipTimeline(InputAction.CallbackContext context)
     {
         if (!context.performed || !_skipable) return;
-        
-        //UnityEngine.Debug.Log($"Skipping scene");
+        SkipTimeline();
+    }
+
+    public void SkipTimeline()
+    {
         ResetTimeline();
         SkipedTimeline?.Invoke();
-
     }
 
     void LateUpdate()
