@@ -298,6 +298,7 @@ MonoBehaviour:
   onSpawn:
     m_PersistentCalls:
       m_Calls: []
+  DebugLogs: 0
 --- !u!1 &3000735483773122017
 GameObject:
   m_ObjectHideFlags: 0
@@ -417,10 +418,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a30756693be7f4bd2826ce574b1c3022, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::AIMoneyManager
-  moneyAmount: {fileID: 11400000, guid: b29e2462f225d4d418a4fd80056c7716, type: 2}
-  genPerSec: {fileID: 11400000, guid: 4f5aefc7c9699451baf51af1dadd14dc, type: 2}
+  moneyAmount: 0
+  genPerSec: 1
   maxMoney: 9999
-  autoStart: 1
+  DebugLogs: 0
 --- !u!1 &4052534500710638198
 GameObject:
   m_ObjectHideFlags: 0
@@ -430,7 +431,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2484450825184363797}
-  - component: {fileID: 1302010483101710148}
   - component: {fileID: 2722122035856089297}
   m_Layer: 0
   m_Name: Healthbar
@@ -462,23 +462,6 @@ RectTransform:
   m_AnchoredPosition: {x: 5.23, y: 2.62}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1302010483101710148
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4052534500710638198}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b19201595b73c4a03b7fcb187a89630d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HealthBarObject: {fileID: 4052534500710638198}
-  _HealthFillImage: {fileID: 522092999979108981}
-  _HealthTrailImage: {fileID: 4809115025163712209}
-  _tweenDuration: 0.25
-  _trailDelay: 0.4
 --- !u!223 &2722122035856089297
 Canvas:
   m_ObjectHideFlags: 0
@@ -549,13 +532,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::AISpawnerController
   moods:
-  - {fileID: 11400000, guid: c59c9056032134ef0b4a0306a41b4342, type: 2}
-  - {fileID: 11400000, guid: e31be4ad2e1c643e8834c8780a390a65, type: 2}
+  - moodName: Mood
+    description: Notes for if we need to remember what this mood is suposed to be
+      like
+    availableActions: []
+  - moodName: Mood
+    description: Notes for if we need to remember what this mood is suposed to be
+      like
+    availableActions: []
   startingMoodIndex: 0
   decisionInterval: 2
-  gameTimer: {fileID: 0}
-  aiMoneyManager: {fileID: 3265881506213894012}
   spawner: {fileID: 3905815257442861280}
+  aiMoneyManager: {fileID: 3265881506213894012}
+  gameTimer: {fileID: 0}
   upperZone: {fileID: 0}
   middleZone: {fileID: 0}
   lowerZone: {fileID: 0}
@@ -830,10 +819,10 @@ GameObject:
   - component: {fileID: 7741900184873366641}
   - component: {fileID: 5808712965920219349}
   - component: {fileID: 5365287178565380736}
-  - component: {fileID: 1872405905718846306}
+  - component: {fileID: 8390834995684749862}
   m_Layer: 9
   m_Name: EnemyBase
-  m_TagString: Blank
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -914,9 +903,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e04091fb59721b64188e07ceb7d885e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scriptableStats: {fileID: 0}
+  scriptableStats: {fileID: 11400000, guid: bd6292b4df758ce41b747b48aa7995a2, type: 2}
   targetTags: []
   _Enemy: 0
+  player: 0
+  _AttackDamage: 0
+  _AttackEndlag: 0
+  _AttackRange: {x: 0, y: 0}
+  _IsProjectile: 0
+  _IsAOE: 0
+  _MaxAOETargets: 0
+  _ProjectilePrefab: {fileID: 0}
+  _ProjectileSpeed: 0
+  _ProjectileMaxHeight: 0
+  _TrajectoryCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AxisCorrectionCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _SpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _EffectsToApply: []
   _MaxHealth: 1
   _CurrentHealth: 1
   _MoveSpeed: 0
@@ -957,7 +975,8 @@ MonoBehaviour:
   AllyBuilding: {fileID: 0}
   EnemyBuilding: {fileID: 0}
   isAmenity: 0
---- !u!114 &1872405905718846306
+  DebugLogs: 0
+--- !u!114 &8390834995684749862
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -966,15 +985,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 8308683440751148610}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0ccf6ff45cab407ab8c6f8975e24d97, type: 3}
+  m_Script: {fileID: 11500000, guid: cbe122e98757f47ed86b8edf9c2047c5, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::BuildingHealthBar
+  m_EditorClassIdentifier: CodeAssembly::EntityHealthbar
   HealthBarObject: {fileID: 4052534500710638198}
   _HealthFillImage: {fileID: 522092999979108981}
   _HealthTrailImage: {fileID: 4809115025163712209}
   _tweenDuration: 0.25
   _trailDelay: 0.4
-  _health: {fileID: 11400000, guid: d7b4b90a065f04ae2a1770df0e152c92, type: 2}
+  _Stats: {fileID: 5808712965920219349}
 --- !u!1 &9210188814284876578
 GameObject:
   m_ObjectHideFlags: 0
