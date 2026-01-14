@@ -645,6 +645,7 @@ MonoBehaviour:
   onSpawn:
     m_PersistentCalls:
       m_Calls: []
+  DebugLogs: 0
 --- !u!114 &4359895956730345943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -717,12 +718,12 @@ GameObject:
   m_Component:
   - component: {fileID: 4967289330092300024}
   - component: {fileID: 4938179679238714360}
-  - component: {fileID: 907619543852519127}
   - component: {fileID: 7923768806014698314}
   - component: {fileID: 872177882883084491}
+  - component: {fileID: 435945065755603586}
   m_Layer: 21
   m_Name: HomeBase
-  m_TagString: Blank
+  m_TagString: Allies
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -791,24 +792,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &907619543852519127
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7150298491999775040}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0ccf6ff45cab407ab8c6f8975e24d97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HealthBarObject: {fileID: 7265030333501102329}
-  _HealthFillImage: {fileID: 818525137013835990}
-  _HealthTrailImage: {fileID: 6246713185154958137}
-  _tweenDuration: 0.25
-  _trailDelay: 0.4
-  _health: {fileID: 11400000, guid: 75db399507af64f228c236bf0cc15982, type: 2}
 --- !u!114 &7923768806014698314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -821,9 +804,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e04091fb59721b64188e07ceb7d885e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scriptableStats: {fileID: 0}
+  scriptableStats: {fileID: 11400000, guid: 815ec8707850a0446aa33612a62243ee, type: 2}
   targetTags: []
   _Enemy: 0
+  player: 0
+  _AttackDamage: 0
+  _AttackEndlag: 0
+  _AttackRange: {x: 0, y: 0}
+  _IsProjectile: 0
+  _IsAOE: 0
+  _MaxAOETargets: 0
+  _ProjectilePrefab: {fileID: 0}
+  _ProjectileSpeed: 0
+  _ProjectileMaxHeight: 0
+  _TrajectoryCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AxisCorrectionCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _SpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _EffectsToApply: []
   _MaxHealth: 10000
   _CurrentHealth: 1
   _MoveSpeed: 0
@@ -864,6 +876,25 @@ MonoBehaviour:
   AllyBuilding: {fileID: 0}
   EnemyBuilding: {fileID: 0}
   isAmenity: 0
+  DebugLogs: 0
+--- !u!114 &435945065755603586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7150298491999775040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbe122e98757f47ed86b8edf9c2047c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::EntityHealthbar
+  HealthBarObject: {fileID: 7265030333501102329}
+  _HealthFillImage: {fileID: 818525137013835990}
+  _HealthTrailImage: {fileID: 6246713185154958137}
+  _tweenDuration: 0.25
+  _trailDelay: 0.4
+  _Stats: {fileID: 7923768806014698314}
 --- !u!1 &7265030333501102329
 GameObject:
   m_ObjectHideFlags: 0
@@ -873,7 +904,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5003633339681591913}
-  - component: {fileID: 7400474544230451932}
   - component: {fileID: 4380744561843342482}
   m_Layer: 0
   m_Name: Healthbar
@@ -881,7 +911,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5003633339681591913
 RectTransform:
   m_ObjectHideFlags: 0
@@ -905,23 +935,6 @@ RectTransform:
   m_AnchoredPosition: {x: 5.23, y: 2.62}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &7400474544230451932
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7265030333501102329}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b19201595b73c4a03b7fcb187a89630d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HealthBarObject: {fileID: 7265030333501102329}
-  _HealthFillImage: {fileID: 818525137013835990}
-  _HealthTrailImage: {fileID: 6246713185154958137}
-  _tweenDuration: 0.25
-  _trailDelay: 0.4
 --- !u!223 &4380744561843342482
 Canvas:
   m_ObjectHideFlags: 0

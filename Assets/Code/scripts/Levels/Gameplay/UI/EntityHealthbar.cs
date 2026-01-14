@@ -7,6 +7,7 @@ public class EntityHealthbar : HealthBarBase
 
     protected override void Start()
     {
+        UpdateHealth();
         base.Start();
         
         if (_Stats == null)
@@ -18,7 +19,10 @@ public class EntityHealthbar : HealthBarBase
     public override void UpdateHealth()
     {
         if (_Stats == null || _HealthFillImage == null || _HealthTrailImage == null)
+        {
+            Debug.LogError($"{gameObject.name} heathbar is missing reference!");
             return;
+        }
 
         float ratio = _Stats._MaxHealth > 0 ? (float)_Stats._CurrentHealth / _Stats._MaxHealth : 0f;
         ratio = Mathf.Clamp01(ratio);
