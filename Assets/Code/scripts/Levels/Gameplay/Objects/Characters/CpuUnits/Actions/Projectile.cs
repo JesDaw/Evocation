@@ -10,15 +10,15 @@ public class Projectile : MonoBehaviour
     AnimationCurve heightCurve;
     AnimationCurve axisCurve;
     AnimationCurve speedCurve;
-    Action<Stats> onHitAction;
+    Action<IDamageable> onHitAction;
     
     Vector3 startPoint;
     Vector3 moveDir;
     float aliveTimer = 0f;
     float distanceToDestroy = 0.5f;
 
-    public void InitializeProjectile(Transform target, float speed, float maxHeight, AnimationCurve h, AnimationCurve a, AnimationCurve s, 
-                                     Action<Stats> onHit)
+    public void InitializeProjectile(Transform target, float speed, float maxHeight, AnimationCurve h, AnimationCurve a, AnimationCurve s,
+                                     Action<IDamageable> onHit)
     {
         this.target = target;
         this.maxMoveSpeed = speed;

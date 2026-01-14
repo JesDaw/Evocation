@@ -19,18 +19,22 @@ public abstract class AttackType : ScriptableObject
     public abstract void Attack(CpuStateManager _context);
     public abstract void Attack(PlayerStateMachine _context);
 
-    protected void DealDamage(Stats attacker, Stats target)
+    protected void DealDamage(Stats attacker, IDamageable target)
     {
         if (target == null || attacker == null) return;
 
         DamageSource damageSource = new DamageSource(GetDamageType());
         damageSource.IsEnemy = attacker._Enemy;
 
-        target.damageHandler.TakeDamage(attacker._AttackDamage, damageSource);
+        target.TakeDamage(attacker._AttackDamage, damageSource);
 
-        foreach (StatusEffect effect in _EffectsToApply)
+        // Only apply effects to Stats targets
+        if (target is Stats statsTarget)
         {
-            target.statusEffectManager.AddEffect(effect);
+            foreach (StatusEffect effect in _EffectsToApply)
+            {
+                statsTarget.statusEffectManager.AddEffect(effect);
+            }
         }
     }
 

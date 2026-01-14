@@ -8,14 +8,14 @@ public class DefaultAttackType : AttackType
     {
         Vector2 range = _context._Stats._AttackRange;
         Vector2 attackCenter = CalculateAttackCenter(_context.transform.position, _context._Stats._Enemy, range);
-        
+
         AttackDetection.DrawDebugBox(attackCenter, range, Color.red, 1f);
 
-        List<Stats> targets = AttackDetection.FindTargetsInBox(attackCenter, range, _context._Stats.targetTags, _context._Stats);
+        List<IDamageable> targets = AttackDetection.FindTargetsInBox(attackCenter, range, _context._Stats.targetTags, _context._Stats);
 
         if (targets.Count > 0)
         {
-            _context._AttackingStats = targets[0];
+            _context._AttackingStats = targets[0] as Stats;
             DealDamage(_context);
         }
     }
@@ -24,14 +24,14 @@ public class DefaultAttackType : AttackType
     {
         Vector2 range = _context.PlayerStats._AttackRange;
         Vector2 attackCenter = CalculateAttackCenter(_context.transform.position, !_context.isFacingRight, range);
-        
+
         AttackDetection.DrawDebugBox(attackCenter, range, Color.blue, 1f);
-        
-        List<Stats> targets = AttackDetection.FindTargetsInBox(attackCenter, range, _context.PlayerStats.targetTags, _context.PlayerStats);
+
+        List<IDamageable> targets = AttackDetection.FindTargetsInBox(attackCenter, range, _context.PlayerStats.targetTags, _context.PlayerStats);
 
         if (targets.Count > 0)
         {
-            _context._AttackingStats = targets[0];
+            _context._AttackingStats = targets[0] as Stats;
             DealDamage(_context);
         }
     }

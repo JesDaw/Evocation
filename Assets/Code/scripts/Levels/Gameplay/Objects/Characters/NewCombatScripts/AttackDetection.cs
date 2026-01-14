@@ -4,32 +4,32 @@ using UnityEngine;
 public static class AttackDetection
 {
 
-    public static List<Stats> FindTargetsInBox(
-        Vector2 center, 
-        Vector2 size, 
+    public static List<IDamageable> FindTargetsInBox(
+        Vector2 center,
+        Vector2 size,
         List<string> targetTags,
         Stats attacker = null)
     {
-        List<Stats> targets = new List<Stats>();
-        
+        List<IDamageable> targets = new List<IDamageable>();
+
         Collider2D[] hits = Physics2D.OverlapBoxAll(center, size, 0f);
-        
+
         foreach (string targetTag in targetTags)
         {
             foreach (Collider2D hit in hits)
             {
                 if (hit.CompareTag(targetTag))
                 {
-                    Stats targetStats = hit.GetComponent<Stats>();
-                    
-                    if (targetStats != null && targetStats != attacker && !targets.Contains(targetStats))
+                    IDamageable targetDamageable = hit.GetComponent<IDamageable>();
+
+                    if (targetDamageable != null && targetDamageable != (IDamageable)attacker && !targets.Contains(targetDamageable))
                     {
-                        targets.Add(targetStats);
+                        targets.Add(targetDamageable);
                     }
                 }
             }
         }
-        
+
         return targets;
     }
 
@@ -62,16 +62,16 @@ public static class AttackDetection
         return targets;
     }
 
-    public static Stats FindClosestTarget(
+    public static IDamageable FindClosestTarget(
         Vector2 position,
-        List<Stats> targets)
+        List<IDamageable> targets)
     {
         if (targets == null || targets.Count == 0) return null;
-        
-        Stats closest = null;
+
+        IDamageable closest = null;
         float closestDistance = float.MaxValue;
-        
-        foreach (Stats target in targets)
+
+        foreach (IDamageable target in targets)
         {
             float distance = Vector2.Distance(position, target.transform.position);
             if (distance < closestDistance)
@@ -80,7 +80,7 @@ public static class AttackDetection
                 closest = target;
             }
         }
-        
+
         return closest;
     }
 

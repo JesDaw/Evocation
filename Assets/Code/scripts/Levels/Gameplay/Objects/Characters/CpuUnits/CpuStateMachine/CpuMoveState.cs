@@ -33,12 +33,12 @@ public class CpuMoveState : CpuBaseState
 
         Vector2 detectionCenter = AttackLogic.CalculateAttackCenter(_Transform.position, facingLeft, range);
 
-        List<Stats> targets = AttackDetection.FindTargetsInBox(detectionCenter, range, _Stats.targetTags, _Stats);
+        List<IDamageable> targets = AttackDetection.FindTargetsInBox(detectionCenter, range, _Stats.targetTags, _Stats);
         AttackDetection.DrawDebugBox(detectionCenter, range, Color.yellow);
 
         if (targets.Count > 0)
         {
-            _context._AttackingStats = targets[0];
+            _context._AttackingStats = targets[0] as Stats;
             _Body.linearVelocity = Vector2.zero;
             ExitState();
         }

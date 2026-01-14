@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Stats : MonoBehaviour
+public class Stats : MonoBehaviour, IDamageable
 {
     [Header("Configuration")]
     public ScriptableStats scriptableStats;
@@ -63,6 +63,10 @@ public class Stats : MonoBehaviour
         {
             statusEffectManager = gameObject.AddComponent<StatusEffectManager>();
         }
+        if (entityHealthbar == null)
+        {
+            entityHealthbar = GetComponent<EntityHealthbar>();
+        }
         if (damageHandler != null)
         {
             damageHandler.Initialize(this);
@@ -83,6 +87,7 @@ public class Stats : MonoBehaviour
         {
             entityHealthbar.Initialize(this);
         }
+        
     }
 
     public void InitializeStats()
@@ -169,21 +174,15 @@ public class Stats : MonoBehaviour
         {
             damageHandler.TakeDamage(damage, attackedBy);
         }
-        else
-        {
-            Debug.LogWarning($"no damage handler on {gameObject.name}");
-        }
-        if (entityHealthbar != null)
-        {
-            entityHealthbar.UpdateHealth();
-        }
-        else
-        {
-            Debug.LogWarning($"no Healthbar on {gameObject.name}");
-        }
-        
-
     }
+
+    void IDamageable.TakeDamage(float damage, DamageSource source)
+    {
+        TakeDamage(damage, source);
+    }
+
+    GameObject IDamageable.gameObject => gameObject;
+    Transform IDamageable.transform => transform;
 
     public void ToggleInvincibility() 
     { 
