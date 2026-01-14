@@ -4736,10 +4736,7 @@ MonoBehaviour:
   OnDeath:
     _PersistentCalls: []
   OnDamage:
-    _PersistentCalls:
-    - _Target: {fileID: 0}
-      _MemberName: UpdateHealth
-      _PersistentArguments: []
+    _PersistentCalls: []
   OnKnocked:
     _PersistentCalls:
     - _Target: {fileID: 5362483315926961554}
@@ -4765,6 +4762,7 @@ MonoBehaviour:
   _DontDestroy: 0
   damageHandler: {fileID: 0}
   statusEffectManager: {fileID: 0}
+  entityHealthbar: {fileID: 0}
 --- !u!114 &5362483315926961554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4884,7 +4882,7 @@ MonoBehaviour:
   _HealthTrailImage: {fileID: 3815747256624054866}
   _tweenDuration: 0.25
   _trailDelay: 0.4
-  _Stats: {fileID: 5848340058514809631}
+  DebugLogs: 0
 --- !u!114 &3574466801488959684
 MonoBehaviour:
   m_ObjectHideFlags: 0
