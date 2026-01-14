@@ -721,6 +721,8 @@ GameObject:
   - component: {fileID: 7923768806014698314}
   - component: {fileID: 872177882883084491}
   - component: {fileID: 435945065755603586}
+  - component: {fileID: 289564217834810609}
+  - component: {fileID: 7541237419202181003}
   m_Layer: 21
   m_Name: HomeBase
   m_TagString: Allies
@@ -859,6 +861,7 @@ MonoBehaviour:
   _DontDestroy: 0
   damageHandler: {fileID: 0}
   statusEffectManager: {fileID: 0}
+  entityHealthbar: {fileID: 0}
 --- !u!114 &872177882883084491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -894,7 +897,39 @@ MonoBehaviour:
   _HealthTrailImage: {fileID: 6246713185154958137}
   _tweenDuration: 0.25
   _trailDelay: 0.4
-  _Stats: {fileID: 7923768806014698314}
+--- !u!114 &289564217834810609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7150298491999775040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8497bdc4168874ba99c8180ca3dbd99e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::DamageHandler
+--- !u!114 &7541237419202181003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7150298491999775040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a2c1cd01e4ad464f9453124840dbae2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::StatusEffectManager
+  onEffectApplied:
+    m_PersistentCalls:
+      m_Calls: []
+  onEffectRemoved:
+    m_PersistentCalls:
+      m_Calls: []
+  onEffectTick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7265030333501102329
 GameObject:
   m_ObjectHideFlags: 0

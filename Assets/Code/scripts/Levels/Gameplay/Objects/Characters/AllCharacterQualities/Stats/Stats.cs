@@ -47,15 +47,42 @@ public class Stats : MonoBehaviour
 
     [HideInInspector] public DamageHandler damageHandler;
     [HideInInspector] public StatusEffectManager statusEffectManager;
+    [HideInInspector] public EntityHealthbar entityHealthbar;
 
     public DamageSource LastHitBy { get; set; }
 
     void Awake()
     {
-        damageHandler = GetComponent<DamageHandler>() ?? gameObject.AddComponent<DamageHandler>();
-        statusEffectManager = GetComponent<StatusEffectManager>() ?? gameObject.AddComponent<StatusEffectManager>();
-        damageHandler.Initialize(this);
-        statusEffectManager.Initialize(this);
+        damageHandler = GetComponent<DamageHandler>();
+        if (damageHandler == null)
+        {
+            damageHandler = gameObject.AddComponent<DamageHandler>();
+        }
+        statusEffectManager = GetComponent<StatusEffectManager>();
+        if (statusEffectManager == null)
+        {
+            statusEffectManager = gameObject.AddComponent<StatusEffectManager>();
+        }
+        if (damageHandler != null)
+        {
+            damageHandler.Initialize(this);
+        }
+        else
+        {
+            Debug.LogError($"{gameObject.name}: Failed to get or add DamageHandler component.");
+        }
+        if (statusEffectManager != null)
+        {
+            statusEffectManager.Initialize(this);
+        }
+        else
+        {
+            Debug.LogError($"{gameObject.name}: Failed to get or add StatusEffectManager component.");
+        }
+        if (entityHealthbar != null)
+        {
+            entityHealthbar.Initialize(this);
+        }
     }
 
     public void InitializeStats()
@@ -68,19 +95,30 @@ public class Stats : MonoBehaviour
 
     void InitializeFromScriptableStats()
     {
-        if (scriptableStats == null) return;
+        if (scriptableStats == null)
+        {
+            Debug.LogWarning($"{gameObject.name}: scriptableStats is null, cannot initialize.");
+            return;
+        }
 
         _MaxHealth = scriptableStats._MaxHealth;
+        if (_MaxHealth <= 0) Debug.LogWarning($"{gameObject.name}: MaxHealth is {_MaxHealth}, should be positive.");
+
         _CurrentHealth = _MaxHealth;
         _MoveSpeed = scriptableStats._MoveSpeed;
+        if (_MoveSpeed < 0) Debug.LogWarning($"{gameObject.name}: MoveSpeed is {_MoveSpeed}, should be non-negative.");
+
         _KnockBackMax = scriptableStats._KnockBackMax;
         _KnockBackHealth = _KnockBackMax;
         _spawnCost = scriptableStats._spawnCost;
-        
+        if (_spawnCost < 0) Debug.LogWarning($"{gameObject.name}: SpawnCost is {_spawnCost}, should be non-negative.");
+
         _AttackDamage = scriptableStats._AttackDamage;
+        if (_AttackDamage < 0) Debug.LogWarning($"{gameObject.name}: AttackDamage is {_AttackDamage}, should be non-negative.");
+
         _AttackEndlag = scriptableStats._AttackEndlag;
         _AttackRange = new Vector2(scriptableStats._HorizontalRange, scriptableStats._VerticalRange);
-        
+
         _IsProjectile = scriptableStats._AttackStyle == AttackStyle.Projectile;
         _IsAOE = scriptableStats._IsAOE;
         _MaxAOETargets = scriptableStats._MaxAOETargets;
@@ -89,11 +127,18 @@ public class Stats : MonoBehaviour
         if (_IsProjectile)
         {
             _ProjectilePrefab = scriptableStats._ProjectilePrefab;
+            if (_ProjectilePrefab == null) Debug.LogWarning($"{gameObject.name}: Projectile prefab is null.");
+
             _ProjectileSpeed = scriptableStats._ProjectileSpeed;
             _ProjectileMaxHeight = scriptableStats._ProjectileMaxHeight;
             _TrajectoryCurve = scriptableStats._TrajectoryCurve;
+            if (_TrajectoryCurve == null) Debug.LogWarning($"{gameObject.name}: Trajectory curve is null.");
+
             _AxisCorrectionCurve = scriptableStats._AxisCorrectionCurve;
+            if (_AxisCorrectionCurve == null) Debug.LogWarning($"{gameObject.name}: Axis correction curve is null.");
+
             _SpeedCurve = scriptableStats._SpeedCurve;
+            if (_SpeedCurve == null) Debug.LogWarning($"{gameObject.name}: Speed curve is null.");
         }
     }
 
@@ -124,6 +169,20 @@ public class Stats : MonoBehaviour
         {
             damageHandler.TakeDamage(damage, attackedBy);
         }
+        else
+        {
+            Debug.LogWarning($"no damage handler on {gameObject.name}");
+        }
+        if (entityHealthbar != null)
+        {
+            entityHealthbar.UpdateHealth();
+        }
+        else
+        {
+            Debug.LogWarning($"no Healthbar on {gameObject.name}");
+        }
+        
+
     }
 
     public void ToggleInvincibility() 

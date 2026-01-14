@@ -80,6 +80,7 @@ public class SpawnObjects : MonoBehaviour
         {
             unitStats.scriptableStats = stats;
             unitStats._Enemy = enemySpawner;
+            unitStats.InitializeStats();
         }
         else
         {

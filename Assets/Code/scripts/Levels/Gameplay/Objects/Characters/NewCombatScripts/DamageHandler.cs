@@ -3,23 +3,11 @@ using UnityEngine.Events;
 
 public class DamageHandler : MonoBehaviour
 {
-    private Stats stats;
-
-    [Header("Building stuff")]
-    [SerializeField] FloatVariable buildingHealthVariable; 
-    [SerializeField] bool isMainBase = false;
-    [SerializeField] bool isMoneyBuilding = false;
-    [SerializeField] UnityEvent onBuildingDestroyed;
-    [SerializeField] UnityEvent onMoneyBuildingDestroyed;
+    Stats stats;
 
     public void Initialize(Stats statsComponent)
     {
         stats = statsComponent;
-        
-        if (buildingHealthVariable != null)
-        {
-            buildingHealthVariable._Value = stats._MaxHealth;
-        }
     }
 
 
@@ -29,11 +17,6 @@ public class DamageHandler : MonoBehaviour
         if (stats.IsInvincible()) return;
 
         stats._CurrentHealth -= damage;
-        
-        if (buildingHealthVariable != null)
-        {
-            buildingHealthVariable._Value = stats._CurrentHealth;
-        }
 
         stats.LastHitBy = attackedBy;
 
@@ -46,7 +29,12 @@ public class DamageHandler : MonoBehaviour
         {
             stats.OnWitFlagDamage?.Invoke(attackedBy.IsEnemy);
         }
-        stats.OnDamage?.Invoke();
+
+        // Update health UI directly to avoid event issues
+        if (stats.entityHealthbar != null)
+        {
+            stats.entityHealthbar.UpdateHealth();
+        }
 
         if (stats._CurrentHealth <= 0)
         {
@@ -65,30 +53,12 @@ public class DamageHandler : MonoBehaviour
         if (stats == null) return;
 
         stats._CurrentHealth = 0;
-        
-        if (buildingHealthVariable != null)
-        {
-            buildingHealthVariable._Value = 0;
-        }
 
         if (stats.LastHitBy != null)
         {
             stats.OnWitFlagDeath?.Invoke(stats.LastHitBy.IsEnemy);
         }
-
         stats.OnDeath?.Invoke();
-
-        if (isMainBase)
-        {
-            onBuildingDestroyed?.Invoke();
-            Debug.Log("Main base destroyed!");
-        }
-        else if (isMoneyBuilding)
-        {
-            onMoneyBuildingDestroyed?.Invoke();
-            Debug.Log("Money building destroyed!");
-        }
-
         if (!stats._DontDestroy)
         {
             Destroy(gameObject);
@@ -101,29 +71,23 @@ public class DamageHandler : MonoBehaviour
         stats.OnKnocked?.Invoke();
     }
 
-    public void Heal(float amount) 
+    public void Heal(float amount)
     {
         if (stats == null) return;
-        
         stats._CurrentHealth = Mathf.Min(stats._CurrentHealth + amount, stats._MaxHealth);
-        
-        if (buildingHealthVariable != null)
+        if (stats.entityHealthbar != null)
         {
-            buildingHealthVariable._Value = stats._CurrentHealth;
+            stats.entityHealthbar.UpdateHealth();
         }
-        stats.OnDamage?.Invoke();
     }
 
     public void ResetHealth()
     {
         if (stats == null) return;
-        
         stats._CurrentHealth = stats._MaxHealth;
-        
-        if (buildingHealthVariable != null)
+        if (stats.entityHealthbar != null)
         {
-            buildingHealthVariable.Reset();
-            stats._CurrentHealth = buildingHealthVariable._Value;
+            stats.entityHealthbar.UpdateHealth();
         }
     }
 
