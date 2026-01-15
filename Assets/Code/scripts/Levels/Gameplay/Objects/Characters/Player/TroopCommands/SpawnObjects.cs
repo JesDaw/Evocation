@@ -176,14 +176,6 @@ public class SpawnObjects : MonoBehaviour
         );
 
         Stats spawnedStats = spawnedPlayer.GetComponent<Stats>();
-        if (spawnedStats != null)
-        {
-            spawnedStats.OnDeath.DynamicCalls += () => 
-            {
-                if (playerLivesManager != null)
-                    playerLivesManager.LooseLife(spawnedPlayer);
-            };
-        }
 
         if (playerSwitch != null)
             playerSwitch.AddPlayer(spawnedPlayer);

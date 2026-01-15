@@ -6,11 +6,41 @@ using UnityEngine.InputSystem;
 public class PlayerSwitch : MonoBehaviour
 {
     [SerializeField] List<GameObject> players = new List<GameObject>();
+    public List<GameObject> Players => players;
+    [SerializeField] GameObject cameraBounds;
     private List<CinemachineCamera> playerCameras = new List<CinemachineCamera>();
 
     int activePlayerIndex = 0;
     int PlayerIDNumber;
     
+    void SetupCameraConfiner(CinemachineCamera cam)
+    {
+        if (cam == null) return;
+
+        var confiner = cam.GetComponent<CinemachineConfiner3D>();
+        if (confiner == null)
+        {
+            confiner = cam.gameObject.AddComponent<CinemachineConfiner3D>();
+        }
+
+        if (cameraBounds != null)
+        {
+            Collider boundsCollider = cameraBounds.GetComponent<Collider>();
+            if (boundsCollider != null)
+            {
+                confiner.BoundingVolume = boundsCollider;
+            }
+            else
+            {
+                Debug.LogError("CameraBounds object has no Collider component!");
+            }
+        }
+        else
+        {
+            Debug.LogError("CameraBounds reference not set in PlayerSwitch!");
+        }
+    }
+
     void Start()
     {
         PlayerIDNumber = 1;
@@ -37,6 +67,12 @@ public class PlayerSwitch : MonoBehaviour
             {
                 playerSM.SetActive(false);
             }
+        }
+
+        // Set up camera confiners for all players
+        for (int i = 0; i < playerCameras.Count; i++)
+        {
+            SetupCameraConfiner(playerCameras[i]);
         }
 
         if (players.Count > 0)
@@ -210,6 +246,7 @@ public class PlayerSwitch : MonoBehaviour
         if (newCam != null)
         {
             newCam.Priority = 0;
+            SetupCameraConfiner(newCam);
             playerCameras.Add(newCam);
         }
         else
@@ -218,6 +255,9 @@ public class PlayerSwitch : MonoBehaviour
         }
 
         //Debug.Log($"Added new player. Total players: {players.Count}");
+
+        if (PlayerLivesManager.Instance != null)
+            PlayerLivesManager.Instance.OnPlayerAdded(newPlayer);
     }
 
     public void RemovePlayer(GameObject playerToRemove)
