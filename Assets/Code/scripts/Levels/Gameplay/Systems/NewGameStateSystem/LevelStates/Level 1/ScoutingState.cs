@@ -46,26 +46,35 @@ public class ScoutingState : LevelState
         }
     }
 
-    private void OnEngagePressed(InputAction.CallbackContext ctx)
+    void OnEngagePressed(InputAction.CallbackContext ctx)
     {
         if (context.CurrentState != this) return;
         
         if (!confirmationUIActive)
         {
             context.SceneManager.Activate(confirmationUIName);
-            GlobalInputManager.Instance.SetCharacterSelectingMode();
+            GlobalInputManager.Instance.SetPauseMenuMode();
             confirmationUIActive = true;
         }
         else
         {
-            context.TransitionToNextState();
+            StartBattle();
         }
     }
+
+    public void StartBattle()
+    {
+        context.TransitionToNextState();
+    }
     
-    private void OnReturnPressed(InputAction.CallbackContext ctx)
+    void OnReturnPressed(InputAction.CallbackContext ctx)
     {
         if (context.CurrentState != this || !confirmationUIActive) return;
-        
+        BackToScouting();
+    }
+
+    public void BackToScouting()
+    {
         context.SceneManager.Activate(sceneActivityName);
         GlobalInputManager.Instance.SetScoutingMode();
         confirmationUIActive = false;
