@@ -53,7 +53,8 @@ public class CameraControlSwitcher : MonoBehaviour
 
     public void OnToggleCameraControl(InputAction.CallbackContext context)
     {
-        //Debug.Log("Switching camera button pressed"); 
+        //Debug.Log("Switching camera button pressed");
+        if (DebugLogs) UnityEngine.Debug.Log($"[CameraControlSwitcher] OnToggleCameraControl called. FreeCamIsActive: {FreeCamIsActive}, _camModeIsTogglable: {_camModeIsTogglable}");
         if (!_camModeIsTogglable) return;
         if (!context.performed) return;
 
@@ -62,7 +63,7 @@ public class CameraControlSwitcher : MonoBehaviour
             SwitchToCameraControl();
             return;
         }
-        
+
        // soundEffectsManager?.Play("Switching Cameras");
         ToggleControl();
     }
@@ -108,7 +109,8 @@ public class CameraControlSwitcher : MonoBehaviour
 
     public void SwitchToCameraControl()
     {
-        if (FreeCamIsActive) 
+        if (DebugLogs) UnityEngine.Debug.Log($"[CameraControlSwitcher] Switching to camera control. FreeCamIsActive was: {FreeCamIsActive}");
+        if (FreeCamIsActive)
         {
             if (DebugLogs) UnityEngine.Debug.Log("Free Cam Is already Active");
             return;
@@ -124,6 +126,7 @@ public class CameraControlSwitcher : MonoBehaviour
 
         // Use GlobalInputManager to switch control modes
         GlobalInputManager.Instance.SetFreeCamMode();
+        if (DebugLogs) UnityEngine.Debug.Log($"[CameraControlSwitcher] Switched to camera control. FreeCam now active, player disabled.");
 
         // Update camera position and priority
         var playerCam = ActivePlayer.Instance.GetCurrentPlayerCamera();

@@ -72,6 +72,7 @@ public class LevelStateManager : MonoBehaviour
     public void TransitionToState(int stateIndex)
     {
         if (stateIndex < 0 || stateIndex >= levelStates.Count) return;
+        Debug.Log($"[LevelStateManager] Transitioning to state index {stateIndex}: {levelStates[stateIndex].StateName}");
         currentState?.ExitState();
         currentStateIndex = stateIndex;
         currentState = levelStates[stateIndex];

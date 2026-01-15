@@ -77,7 +77,7 @@ public class GlobalInputManager : MonoBehaviour
     public void EnableCameraControls()
     {
         _inputActions.Camera.Enable();
-        if(DebugLogs) Debug.Log("Camera controls enabled");
+        if(DebugLogs) Debug.Log($"Camera controls enabled from: {System.Environment.StackTrace}");
     }
     
     public void DisableCameraControls()
@@ -127,6 +127,7 @@ public class GlobalInputManager : MonoBehaviour
     public void EnableUIControls()
     {
         _inputActions.UI.Enable();
+        if(DebugLogs) Debug.Log($"UI controls enabled from: {System.Environment.StackTrace}");
     }
     
     public void DisableUIControls()
@@ -149,20 +150,22 @@ public class GlobalInputManager : MonoBehaviour
     
     public void SetFreeCamMode()
     {
+        if(DebugLogs) Debug.Log($"Input Mode: FreeCam - Before disable all, current enabled maps: Player({_inputActions.Player.enabled}), Camera({_inputActions.Camera.enabled}), UI({_inputActions.UI.enabled})");
         DisableAllControls();
         EnableCameraControls();
         EnableControlSwapping();
         EnablePlayerSwitching();
         EnableSpawnerControls();
-        EnableUIControls(); 
+        EnableUIControls();
         if(DebugLogs) Debug.Log("Input Mode: FreeCam");
     }
 
     public void SetScoutingMode()
     {
+        if(DebugLogs) Debug.Log($"Input Mode: scouting - Before disable all, current enabled maps: Player({_inputActions.Player.enabled}), Camera({_inputActions.Camera.enabled}), UI({_inputActions.UI.enabled})");
         DisableAllControls();
         EnableCameraControls();
-        EnableUIControls(); 
+        EnableUIControls();
         if(DebugLogs) Debug.Log("Input Mode: scouting");
     }
     

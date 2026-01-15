@@ -18,6 +18,8 @@ public class DamageHandler : MonoBehaviour
 
         stats._CurrentHealth -= damage;
 
+        stats.OnDamage?.Invoke();
+
         stats.LastHitBy = attackedBy;
 
         if (attackedBy != null && attackedBy.damageType == DamageSource.DamageType.StatusEffect)
