@@ -15,7 +15,7 @@ public class CpuKnockBackState : CpuBaseState
 
     public override void EnterState()
     {
-        Debug.Log("enter Knockback");
+        //Debug.Log("enter Knockback");
         _context._Animator.SetBool("IsKnockback", true);
         ApplyKnockback();
     }
@@ -27,8 +27,15 @@ public class CpuKnockBackState : CpuBaseState
 
     public override void ExitState()
     {
-        _context.UpdateCurrentState(CpuStateManager.State.Move);
         _context._Animator.SetBool("IsKnockback", false);
+        if (_Stats._IsDead)
+        {
+            Object.Destroy(_context.gameObject);
+        }
+        else
+        {
+            _context.UpdateCurrentState(CpuStateManager.State.Move);
+        }
     }
 
     void ApplyKnockback()

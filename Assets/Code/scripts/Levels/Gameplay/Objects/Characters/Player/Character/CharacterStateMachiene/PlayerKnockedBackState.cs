@@ -56,7 +56,14 @@ public class PlayerKnockedBackState : PlayerBaseState
         {
             _Knocked = false;
             Ctx.Animator.SetBool("IsKnockback", false);
-            SwitchState(Factory.Idle());
+            if (Ctx.PlayerStats._IsDead)
+            {
+                Object.Destroy(Ctx.gameObject);
+            }
+            else
+            {
+                SwitchState(Factory.Idle());
+            }
         }
     }
 }

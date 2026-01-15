@@ -52,16 +52,14 @@ public class DamageHandler : MonoBehaviour
         if (stats == null) return;
 
         stats._CurrentHealth = 0;
+        stats._IsDead = true;
 
         if (stats.LastHitBy != null)
         {
             stats.OnWitFlagDeath?.Invoke(stats.LastHitBy.IsEnemy);
         }
         stats.OnDeath?.Invoke();
-        if (!stats._DontDestroy)
-        {
-            Destroy(gameObject);
-        }
+        stats.OnKnocked?.Invoke(); // Trigger knockback animation before destruction
     }
 
     private void TriggerKnockback()

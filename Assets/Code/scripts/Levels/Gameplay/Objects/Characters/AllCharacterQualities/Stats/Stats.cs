@@ -31,6 +31,7 @@ public class Stats : MonoBehaviour, IDamageable
     [Header("Health & Movement")]
     [HideInInspector] public int _MaxHealth = 1;
     [HideInInspector] public float _CurrentHealth = 1;
+    [HideInInspector] public bool _IsDead = false;
     [HideInInspector] public float _MoveSpeed;
     [HideInInspector] public float _KnockBackMax;
     [HideInInspector] public float _KnockBackHealth;
