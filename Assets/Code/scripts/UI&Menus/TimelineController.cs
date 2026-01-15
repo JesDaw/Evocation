@@ -112,7 +112,7 @@ public class TimelineController : MonoBehaviour
 
     public void SkipTimeline(InputAction.CallbackContext context)
     {
-        if (!context.performed || !_skipable) return;
+        if (!context.performed || !_skipable || timeline == null || timeline.state != PlayState.Playing) return;
         SkipTimeline();
     }
 
