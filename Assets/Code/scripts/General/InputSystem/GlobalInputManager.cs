@@ -48,6 +48,18 @@ public class GlobalInputManager : MonoBehaviour
         _inputActions.Disable();
     }
 
+    public void EnableCursor()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    public void DisableCursor()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
     // --------- Player Controls ---------
     public void EnablePlayerControls()
     {
@@ -172,6 +184,7 @@ public class GlobalInputManager : MonoBehaviour
     {
         DisableAllControls();
         EnableUIControls();
+        EnableCursor();
         if(DebugLogs) Debug.Log("Input Mode: Pause Menu");
     }
     

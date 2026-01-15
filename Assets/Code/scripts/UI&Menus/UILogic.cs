@@ -11,7 +11,6 @@ public class UILogic : MonoBehaviour
 
     public static bool GameIsPaused = false;
     bool CharacterSelectIsOpen = false;
-    bool MenuIsOpen = false;
     public UnityEvent PauseEvent, ResumeEvent;
     [SerializeField] bool DebugLogs = false;
 
@@ -30,7 +29,6 @@ public class UILogic : MonoBehaviour
 
     void OnDisable()
     {
-        // Unsubscribe when disabled
         UnsubscribeFromInputs();
     }
 
@@ -83,19 +81,15 @@ public class UILogic : MonoBehaviour
         {
             sceneMgr.Activate("LoadoutSelectUI", true);
             CharacterSelectIsOpen = true;
-            MenuIsOpen = true;
             
-            // Switch to spawning mode when character select opens
             GlobalInputManager.Instance.SetCharacterSelectingMode();
+            GlobalInputManager.Instance.EnableCursor();
         }
         else
         {
             sceneMgr.Activate("ScoutingUI", true);
             CharacterSelectIsOpen = false;
-            MenuIsOpen = false;
-            
-            // Return to gameplay mode when character select closes
-            // Check if we're in freecam or player control mode
+            GlobalInputManager.Instance.DisableCursor();
             if (CameraControlSwitcher.Instance != null && CameraControlSwitcher.Instance.FreeCamIsActive)
             {
                 GlobalInputManager.Instance.SetFreeCamMode();
@@ -105,8 +99,6 @@ public class UILogic : MonoBehaviour
                 GlobalInputManager.Instance.SetPlayerCharacterMode();
             }
         }
-        
-        UpdateCursorState();
     }
 
     public void TogglePause(InputAction.CallbackContext context)
@@ -126,7 +118,6 @@ public class UILogic : MonoBehaviour
             sceneMgr.ActivateAnchorSA();
             Time.timeScale = 1;
             GameIsPaused = false;
-            MenuIsOpen = false;
             
             // Return to appropriate mode when unpausing
             if (CameraControlSwitcher.Instance != null && CameraControlSwitcher.Instance.FreeCamIsActive)
@@ -138,7 +129,7 @@ public class UILogic : MonoBehaviour
                 GlobalInputManager.Instance.SetPlayerCharacterMode();
             }
             
-            UpdateCursorState();
+            GlobalInputManager.Instance.DisableCursor();
             ResumeEvent?.Invoke();
         }
     }
@@ -150,28 +141,11 @@ public class UILogic : MonoBehaviour
             sceneMgr.Activate("Pause");
             Time.timeScale = 0;
             GameIsPaused = true;
-            MenuIsOpen = true;
             
             GlobalInputManager.Instance.SetPauseMenuMode();
             
-            UpdateCursorState();
+            GlobalInputManager.Instance.EnableCursor();
             PauseEvent?.Invoke();
-        }
-    }
-
-    void UpdateCursorState()
-    {
-        if (MenuIsOpen)
-        {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            //Debug.Log("LockMouse -> Release Cursor");
-        }
-        else
-        {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-            //Debug.Log("LockMouse -> Lock Cursor");
         }
     }
 
@@ -200,11 +174,5 @@ public class UILogic : MonoBehaviour
         #else
             Application.Quit();
         #endif
-    }
-
-    // Called by events when scene changes
-    public void OnEventRaised()
-    {
-        UpdateCursorState();
     }
 }
