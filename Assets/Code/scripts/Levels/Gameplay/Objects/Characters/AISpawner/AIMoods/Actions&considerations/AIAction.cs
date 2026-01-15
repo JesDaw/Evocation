@@ -8,6 +8,7 @@ using System.Collections.Generic;
 public abstract class AIAction
 {
     public string actionName = "AI Action";
+    [SerializeReference, SubclassSelector]
     public List<AIConsideration> considerations = new List<AIConsideration>();
 
     /// <summary>
@@ -70,6 +71,7 @@ public abstract class AIAction
 /// Action for spawning a specific unit
 /// </summary>
 [System.Serializable]
+[AddTypeMenu("Spawn Unit")]
 public class SpawnUnitAction : AIAction
 {
     public ScriptableStats unitStats;
@@ -126,6 +128,7 @@ public class SpawnUnitAction : AIAction
 /// Action for waiting/saving money
 /// </summary>
 [System.Serializable]
+[AddTypeMenu("Do Nothing")]
 public class DoNothingAction : AIAction
 {
     public override void Execute(AIContext context)

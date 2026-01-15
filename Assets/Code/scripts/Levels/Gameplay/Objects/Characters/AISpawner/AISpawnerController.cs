@@ -123,7 +123,7 @@ public class AISpawnerController : MonoBehaviour
         {
             context.UpdateContext();
 
-            List<AIActionWrapper> availableActions = currentMood.availableActions;
+            List<AIAction> availableActions = currentMood.availableActions;
 
             if (availableActions.Count == 0)
             {
@@ -145,18 +145,11 @@ public class AISpawnerController : MonoBehaviour
             }
 
             // Evaluate each action
-            foreach (AIActionWrapper wrapper in availableActions)
+            foreach (AIAction action in availableActions)
             {
-                if (wrapper == null)
-                {
-                    Debug.LogWarning("[AI] Null action wrapper!");
-                    continue;
-                }
-                
-                AIAction action = wrapper.GetAction();
                 if (action == null)
                 {
-                    Debug.LogWarning($"[AI] Null action for type: {wrapper.actionType}");
+                    Debug.LogWarning("[AI] Null action!");
                     continue;
                 }
 

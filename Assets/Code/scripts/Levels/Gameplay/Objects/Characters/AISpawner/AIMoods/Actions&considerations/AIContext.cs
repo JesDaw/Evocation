@@ -155,6 +155,12 @@ public class AIContext
     {
         return cachedClosestEnemyDistance;
     }
+
+    public int GetUnitsInZone(ZoneType zone, string tag)
+    {
+        string key = $"{zone}_{tag}";
+        return zoneUnitCounts.ContainsKey(key) ? zoneUnitCounts[key] : 0;
+    }
     
     #endregion
 

@@ -7,7 +7,6 @@ public class UILogic : MonoBehaviour
 {
     [SerializeField] int SceneToLoad;
     AudioManager _audioManager;
-    GameState gameState;
     SceneActivityManager sceneMgr;
 
     public static bool GameIsPaused = false;
@@ -18,7 +17,6 @@ public class UILogic : MonoBehaviour
 
     void Awake()
     {
-        gameState = FindFirstObjectByType<GameState>();
         _audioManager = FindFirstObjectByType<AudioManager>();
     }
 
