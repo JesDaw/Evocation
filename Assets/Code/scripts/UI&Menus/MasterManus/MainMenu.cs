@@ -4,7 +4,7 @@ public class MainMenu : MonoBehaviour
 {
     public void click_sound()
     {
-        FModAudioManager.instance.PlayOneShot(FModEvents.instance.menuClick);
+        FModAudioManager.instance.PlaySoundByName("menuClick");
     }
 
     public void QuitGame()
