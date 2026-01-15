@@ -15,6 +15,20 @@ public class PlayerLivesManager : MonoBehaviour
     public bool canSpawnMore = true;
     public static PlayerLivesManager Instance { get; private set; }
 
+    private void SubscribeToPlayerDeath(GameObject player)
+    {
+        Stats stats = player.GetComponent<Stats>();
+        if (stats != null)
+        {
+            stats.OnDeath.DynamicCalls += () => LooseLife(player);
+        }
+    }
+
+    public void OnPlayerAdded(GameObject player)
+    {
+        SubscribeToPlayerDeath(player);
+    }
+
     void Start()
     {
         if (Instance != null && Instance != this)
@@ -23,6 +37,16 @@ public class PlayerLivesManager : MonoBehaviour
             return;
         }
         Instance = this;
+
+        // Subscribe for existing players
+        if (playerSwitch != null)
+        {
+            foreach (GameObject player in playerSwitch.Players)
+            {
+                if (player != null)
+                    SubscribeToPlayerDeath(player);
+            }
+        }
     }
 
     public void GainLife()
@@ -42,10 +66,6 @@ public class PlayerLivesManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Called when a player dies. Pass the dead player's GameObject to remove it.
-    /// </summary>
-    /// <param name="deadPlayer">The GameObject of the player who died</param>
     public void LooseLife(GameObject deadPlayer)
     {
         LifeCount._Value--;
@@ -54,24 +74,16 @@ public class PlayerLivesManager : MonoBehaviour
 
         if (LifeCount._Value <= 0)
         {
-            // Game over - switch to freecam at dead player's position
             HandleGameOver(deadPlayer);
         }
         else
         {
-            // Still have lives - switch to ghost cam, then switch active player
             HandlePlayerDeath(deadPlayer);
         }
     }
 
-    /// <summary>
-    /// Legacy method - tries to figure out which player died.
-    /// Better to use LooseLife(GameObject deadPlayer) instead.
-    /// </summary>
     public void LooseLife()
     {
-        // This is called from player's onDeath event
-        // The problem is we don't know WHICH player died
         var currentPlayer = activePlayer.GetCurrentPlayerController();
         
         if (currentPlayer != null)
@@ -80,7 +92,6 @@ public class PlayerLivesManager : MonoBehaviour
         }
         else
         {
-            // Fallback if we can't determine the player
             LifeCount._Value--;
             canSpawnMore = true;
             playerLivesDisplay.UpdateTorchDisplay();
@@ -120,12 +131,8 @@ public class PlayerLivesManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Handle game over when no lives remain
-    /// </summary>
     private void HandleGameOver(GameObject deadPlayer)
     {
-        // Get the dead player's camera position
         CinemachineCamera deadPlayerCam = deadPlayer?.GetComponentInChildren<CinemachineCamera>();
         Vector3 deathCameraPosition = Vector3.zero;
         float deathCameraFOV = 60f;
@@ -136,10 +143,8 @@ public class PlayerLivesManager : MonoBehaviour
             deathCameraFOV = deadPlayerCam.Lens.FieldOfView;
         }
 
-        // Invoke game over events
         _loose_game.Invoke();
 
-        // Switch to freecam at death location
         if (cameraControlSwitcher != null)
         {
             cameraControlSwitcher.SwitchToFreeCamAtPosition(deathCameraPosition, deathCameraFOV);

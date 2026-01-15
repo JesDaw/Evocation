@@ -3815,10 +3815,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e04091fb59721b64188e07ceb7d885e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scriptableStats: {fileID: 0}
+  scriptableStats: {fileID: 11400000, guid: fff1ceee1dd00423eafd6f05f3936e71, type: 2}
   targetTags: []
   _Enemy: 0
-  player: 0
+  player: 1
   _AttackDamage: 0
   _AttackEndlag: 0
   _AttackRange: {x: 0, y: 0}
@@ -3849,15 +3849,13 @@ MonoBehaviour:
   _EffectsToApply: []
   _MaxHealth: 100
   _CurrentHealth: 100
+  _IsDead: 0
   _MoveSpeed: 10
   _KnockBackMax: 100
   _KnockBackHealth: 50
   _spawnCost: 15
   OnDeath:
-    _PersistentCalls:
-    - _Target: {fileID: 0}
-      _MemberName: LooseLife
-      _PersistentArguments: []
+    _PersistentCalls: []
   OnDamage:
     _PersistentCalls: []
   OnKnocked:
@@ -3876,6 +3874,7 @@ MonoBehaviour:
   _DontDestroy: 0
   damageHandler: {fileID: 0}
   statusEffectManager: {fileID: 0}
+  entityHealthbar: {fileID: 0}
 --- !u!114 &4492581254548526527
 MonoBehaviour:
   m_ObjectHideFlags: 0
