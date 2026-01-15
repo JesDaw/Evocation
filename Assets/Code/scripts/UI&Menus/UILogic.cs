@@ -6,17 +6,15 @@ using UnityEngine.Events;
 public class UILogic : MonoBehaviour
 {
     [SerializeField] int SceneToLoad;
-    AudioManager _audioManager;
     SceneActivityManager sceneMgr;
 
     public static bool GameIsPaused = false;
-    bool CharacterSelectIsOpen = false;
     public UnityEvent PauseEvent, ResumeEvent;
     [SerializeField] bool DebugLogs = false;
 
     void Awake()
     {
-        _audioManager = FindFirstObjectByType<AudioManager>();
+        
     }
 
     void OnEnable()
@@ -37,8 +35,7 @@ public class UILogic : MonoBehaviour
         if (GlobalInputManager.Instance == null) return;
 
         var uiActions = GlobalInputManager.Instance.InputActions.UI;
-        
-        uiActions.ToggleCharacterSelect.performed += ToggleCharacterSelect;
+
         uiActions.TogglePause.performed += TogglePause;
     }
 
@@ -47,8 +44,7 @@ public class UILogic : MonoBehaviour
         if (GlobalInputManager.Instance == null) return;
 
         var uiActions = GlobalInputManager.Instance.InputActions.UI;
-        
-        uiActions.ToggleCharacterSelect.performed -= ToggleCharacterSelect;
+
         uiActions.TogglePause.performed -= TogglePause;
     }
 
@@ -63,43 +59,7 @@ public class UILogic : MonoBehaviour
         
     }
 
-    public void ClickSound() // this should be in the audio manager
-    {
-        FModAudioManager.instance.PlayOneShot(FModEvents.instance.menuClick);
-    }
 
-    public void ToggleCharacterSelect(InputAction.CallbackContext context)
-    {
-        if (DebugLogs)Debug.Log($"character select pressed");
-        if (!context.performed || GameIsPaused || !LevelStateManager.Instance.IsInState("ScoutingState"))
-        {
-            return;
-        }
-
-
-        if (!CharacterSelectIsOpen)
-        {
-            sceneMgr.Activate("LoadoutSelectUI", true);
-            CharacterSelectIsOpen = true;
-            
-            GlobalInputManager.Instance.SetCharacterSelectingMode();
-            GlobalInputManager.Instance.EnableCursor();
-        }
-        else
-        {
-            sceneMgr.Activate("ScoutingUI", true);
-            CharacterSelectIsOpen = false;
-            GlobalInputManager.Instance.DisableCursor();
-            if (CameraControlSwitcher.Instance != null && CameraControlSwitcher.Instance.FreeCamIsActive)
-            {
-                GlobalInputManager.Instance.SetFreeCamMode();
-            }
-            else
-            {
-                GlobalInputManager.Instance.SetPlayerCharacterMode();
-            }
-        }
-    }
 
     public void TogglePause(InputAction.CallbackContext context)
     {

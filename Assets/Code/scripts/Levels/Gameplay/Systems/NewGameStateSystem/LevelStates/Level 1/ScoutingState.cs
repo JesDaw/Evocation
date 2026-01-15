@@ -7,8 +7,9 @@ public class ScoutingState : LevelState
 {
     [Header("Scouting Configuration")]
     [SerializeField] private string confirmationUIName = "ConfirmationUI";
-    
+
     bool confirmationUIActive = false;
+    bool characterSelectIsOpen = false;
     //bool isInitialized = false;
     
     public override void Initialize(LevelStateManager manager)
@@ -20,13 +21,15 @@ public class ScoutingState : LevelState
     protected override void OnEnterState()
     {
         confirmationUIActive = false;
+        characterSelectIsOpen = false;
         ToggleInputListeners(true);
     }
-    
+
     protected override void OnExitState()
     {
         ToggleInputListeners(false);
         confirmationUIActive = false;
+        characterSelectIsOpen = false;
     }
     
     private void ToggleInputListeners(bool enroll)
@@ -38,11 +41,13 @@ public class ScoutingState : LevelState
         {
             uiActions.StartEngaugment.performed += OnEngagePressed;
             uiActions.Return.performed += OnReturnPressed;
+            uiActions.ToggleCharacterSelect.performed += OnToggleCharacterSelect;
         }
         else
         {
             uiActions.StartEngaugment.performed -= OnEngagePressed;
             uiActions.Return.performed -= OnReturnPressed;
+            uiActions.ToggleCharacterSelect.performed -= OnToggleCharacterSelect;
         }
     }
 
@@ -71,6 +76,27 @@ public class ScoutingState : LevelState
     {
         if (context.CurrentState != this || !confirmationUIActive) return;
         BackToScouting();
+    }
+
+    void OnToggleCharacterSelect(InputAction.CallbackContext ctx)
+    {
+        if (context.CurrentState != this) return;
+
+        if (!characterSelectIsOpen)
+        {
+            context.SceneManager.Activate("LoadoutSelectUI", true);
+            characterSelectIsOpen = true;
+
+            GlobalInputManager.Instance.SetCharacterSelectingMode();
+            GlobalInputManager.Instance.EnableCursor();
+        }
+        else
+        {
+            context.SceneManager.Activate(sceneActivityName, true);
+            characterSelectIsOpen = false;
+            GlobalInputManager.Instance.DisableCursor();
+            GlobalInputManager.Instance.SetScoutingMode();
+        }
     }
 
     public void BackToScouting()
