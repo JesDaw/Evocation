@@ -40,6 +40,11 @@ public class FreeCamController : MonoBehaviour
         if (GlobalInputManager.Instance != null)
         {
             SubscribeToInputs();
+            Debug.Log("[FreeCamController] Subscribed to camera inputs");
+        }
+        else
+        {
+            Debug.LogError("[FreeCamController] GlobalInputManager instance null - cannot subscribe");
         }
     }
 
@@ -123,6 +128,7 @@ public class FreeCamController : MonoBehaviour
 
     public void HandleMovement()
     {
+        Debug.Log($"[FreeCamController] Handling movement: {moveInput}, speed: {moveSpeed * _ZoomToSpeedMultiplier}");
         Vector3 movement = new Vector3(moveInput.x, moveInput.y, 0) * moveSpeed * _ZoomToSpeedMultiplier * Time.deltaTime;
         Vector3 newPosition = transform.position + movement;
         

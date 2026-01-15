@@ -197,7 +197,17 @@ public class SceneActivityManager : MonoBehaviour
 
     public void Activate(string name, bool makeAnchor)
     {
-        Activate(FindActivity(name), makeAnchor: makeAnchor);
+        Debug.Log($"[SceneActivityManager] Activating '{name}' with anchor: {makeAnchor}");
+        GameObject activity = FindActivity(name);
+        if (activity != null)
+        {
+            Activate(activity, makeAnchor: makeAnchor);
+            Debug.Log($"[SceneActivityManager] Successfully activated '{name}'");
+        }
+        else
+        {
+            Debug.LogError($"[SceneActivityManager] Failed to find/activate '{name}'");
+        }
     }
 
     public void Activate(string name)

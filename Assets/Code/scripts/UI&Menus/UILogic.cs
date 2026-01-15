@@ -10,12 +10,7 @@ public class UILogic : MonoBehaviour
 
     public static bool GameIsPaused = false;
     public UnityEvent PauseEvent, ResumeEvent;
-    [SerializeField] bool DebugLogs = false;
-
-    void Awake()
-    {
-        
-    }
+    //[SerializeField] bool DebugLogs = false;
 
     void OnEnable()
     {
@@ -37,6 +32,7 @@ public class UILogic : MonoBehaviour
         var uiActions = GlobalInputManager.Instance.InputActions.UI;
 
         uiActions.TogglePause.performed += TogglePause;
+        Debug.Log("[UILogic] Subscribed to UI.TogglePause");
     }
 
     void UnsubscribeFromInputs()
@@ -59,12 +55,11 @@ public class UILogic : MonoBehaviour
         
     }
 
-
-
     public void TogglePause(InputAction.CallbackContext context)
     {
+        Debug.Log($"[UILogic] TogglePause called. performed: {context.performed}, GameIsPaused: {GameIsPaused}");
         if (!context.performed) return;
-        
+
         if (GameIsPaused)
             Resume();
         else

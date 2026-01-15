@@ -60,6 +60,7 @@ public abstract class LevelState
         if (!string.IsNullOrEmpty(sceneActivityName) && context.SceneManager != null)
         {
             context.SceneManager.Activate(sceneActivityName, makeAnchor: makeUIAnchor);
+            if (DebugLogs) Debug.Log($"[LevelState] activating scene: {sceneActivityName}");
         }
         
         ConfigureInput();
