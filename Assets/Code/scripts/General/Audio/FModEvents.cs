@@ -10,16 +10,16 @@ public class FModEvents : MonoBehaviour
     [field: Header("Music")]
     [field: SerializeField] public EventReference music { get; private set; }
     
-    public static FModEvents instance { get; private set; } // lowercase to match
+    public static FModEvents instance { get; private set; }
 
     void Awake()
     {
-        if (instance != null && instance != this) // lowercase
+        if (instance != null && instance != this) 
         {
             Destroy(gameObject);
             return;
         }
 
-        instance = this; // lowercase
+        instance = this;
     }
 }
