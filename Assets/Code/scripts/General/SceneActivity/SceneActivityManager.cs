@@ -12,6 +12,7 @@ using UnityEngine.Events;
 /// </summary>
 public class SceneActivityManager : MonoBehaviour
 {
+    [SerializeField] VisualEffectsManager visualEffectsManager;
     public class SAException : Exception
     {
         public SAException(string msg)
@@ -211,6 +212,31 @@ public class SceneActivityManager : MonoBehaviour
     public void Activate(string name)
     {
         Activate(FindActivity(name), makeAnchor: false);
+    }
+
+    public void ActivateWithFade(string name)
+    {
+        if (currentActivity == null)
+        {
+            Activate(name, makeAnchor: false);
+            return;
+        }
+
+        GameObject nextActivity = FindActivity(name);
+        if (nextActivity == null)
+        {
+            Debug.LogError($"[SceneActivityManager] Failed to find/activate '{name}'");
+            return;
+        }
+
+        visualEffectsManager.FadeOut(currentActivity.gameObject, .3f, () =>
+        {
+            nextActivity.GetComponent<CanvasGroup>().alpha = 0f;
+            Activate(nextActivity, makeAnchor: false);
+            visualEffectsManager.FadeIn(nextActivity.gameObject, .3f);
+        });
+
+        
     }
 
     // Unity seems to have a problem with optional arguments so this is a

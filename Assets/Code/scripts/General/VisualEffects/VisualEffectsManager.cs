@@ -127,41 +127,41 @@ public class VisualEffectsManager : MonoBehaviour
     #region Animation Effects (DOTween)
 
     public Tween FadeAlpha(GameObject target, float targetAlpha, float duration, System.Action onComplete = null)
-{
-    Tween fadeTween = null;
+    {
+        Tween fadeTween = null;
 
-    if (target.TryGetComponent<CanvasGroup>(out var canvasGroup))
-    {
-        fadeTween = canvasGroup.DOFade(targetAlpha, duration);
-    }
-    else if (target.TryGetComponent<SpriteRenderer>(out var spriteRenderer))
-    {
-        fadeTween = spriteRenderer.DOFade(targetAlpha, duration);
-    }
-    else if (target.TryGetComponent<Image>(out var image))
-    {
-        fadeTween = image.DOFade(targetAlpha, duration);
-    }
-    else
-    {
-        Debug.LogWarning($"FadeAlpha: No compatible component found on {target.name}");
-        return null;
+        if (target.TryGetComponent<CanvasGroup>(out var canvasGroup))
+        {
+            fadeTween = canvasGroup.DOFade(targetAlpha, duration);
+        }
+        else if (target.TryGetComponent<SpriteRenderer>(out var spriteRenderer))
+        {
+            fadeTween = spriteRenderer.DOFade(targetAlpha, duration);
+        }
+        else if (target.TryGetComponent<Image>(out var image))
+        {
+            fadeTween = image.DOFade(targetAlpha, duration);
+        }
+        else
+        {
+            Debug.LogWarning($"FadeAlpha: No compatible component found on {target.name}");
+            return null;
+        }
+
+        if (onComplete != null)
+        {
+            fadeTween.OnComplete(() => onComplete());
+        }
+
+        return fadeTween;
     }
 
-    if (onComplete != null)
-    {
-        fadeTween.OnComplete(() => onComplete());
-    }
-
-    return fadeTween;
-}
-
-    public Tween FadeIn(GameObject target, float duration, System.Action onComplete = null)
+    public Tween FadeIn(GameObject target, float duration = 1f, System.Action onComplete = null)
     {
         return FadeAlpha(target, 1f, duration, onComplete);
     }
 
-    public Tween FadeOut(GameObject target, float duration, System.Action onComplete = null)
+    public Tween FadeOut(GameObject target, float duration = 1f, System.Action onComplete = null)
     {
         return FadeAlpha(target, 0f, duration, onComplete);
     }

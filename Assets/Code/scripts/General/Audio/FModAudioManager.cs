@@ -16,10 +16,11 @@ public class FModAudioManager : MonoBehaviour
         }
 
         instance = this;
-
-        // Populate sound dictionary
+    }
+    void Start()
+    {
         soundDictionary.Add("menuClick", FModEvents.instance.menuClick);
-        // Add more sounds as needed, e.g., soundDictionary.Add("buttonHover", FModEvents.instance.buttonHover);
+
     }
 
     public void PlayOneShot(EventReference sound, UnityEngine.Vector3 worldPosition)
