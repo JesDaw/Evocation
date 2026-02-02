@@ -22,7 +22,6 @@ public class ScoutingState : LevelState
     {
         confirmationUIActive = false;
         characterSelectIsOpen = false;
-        Debug.Log($"[ScoutingState] Entering state. alterPlayerControls: {alterPlayerControls}, switchToCameraControl: {switchToCameraControl}, sceneActivityName: '{sceneActivityName}'");
         ToggleInputListeners(true);
     }
 
@@ -43,14 +42,12 @@ public class ScoutingState : LevelState
             uiActions.StartEngaugment.performed += OnEngagePressed;
             uiActions.Return.performed += OnReturnPressed;
             uiActions.ToggleCharacterSelect.performed += OnToggleCharacterSelect;
-            Debug.Log("[ScoutingState] Subscribed to UI actions: StartEngaugment, Return, ToggleCharacterSelect");
         }
         else
         {
             uiActions.StartEngaugment.performed -= OnEngagePressed;
             uiActions.Return.performed -= OnReturnPressed;
             uiActions.ToggleCharacterSelect.performed -= OnToggleCharacterSelect;
-            Debug.Log("[ScoutingState] Unsubscribed from UI actions");
         }
     }
 
@@ -85,7 +82,6 @@ public class ScoutingState : LevelState
     {
         if (context.CurrentState != this) return;
 
-        Debug.Log($"[ScoutingState] ToggleCharacterSelect called. Opening: {!characterSelectIsOpen}");
 
         if (!characterSelectIsOpen)
         {

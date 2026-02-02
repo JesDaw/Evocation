@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class UILogic : MonoBehaviour
 {
     [SerializeField] int SceneToLoad;
+    [SerializeField] bool DebugLogs;
     SceneActivityManager sceneMgr;
 
     public static bool GameIsPaused = false;
@@ -32,7 +33,7 @@ public class UILogic : MonoBehaviour
         var uiActions = GlobalInputManager.Instance.InputActions.UI;
 
         uiActions.TogglePause.performed += TogglePause;
-        Debug.Log("[UILogic] Subscribed to UI.TogglePause");
+        if(DebugLogs)Debug.Log("[UILogic] Subscribed to UI.TogglePause");
     }
 
     void UnsubscribeFromInputs()
