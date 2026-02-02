@@ -16,7 +16,7 @@ public class FreeCamController : MonoBehaviour
     float _ZoomToSpeedMultiplier;
 
     [SerializeField] GameObject CameraConfiner;
-    
+    [SerializeField] bool DebugLogs = false;
     Bounds confineBounds;
     float minZPosition;
     float maxZPosition;
@@ -40,7 +40,7 @@ public class FreeCamController : MonoBehaviour
         if (GlobalInputManager.Instance != null)
         {
             SubscribeToInputs();
-            Debug.Log("[FreeCamController] Subscribed to camera inputs");
+            if(DebugLogs)Debug.Log("[FreeCamController] Subscribed to camera inputs");
         }
         else
         {
@@ -128,7 +128,7 @@ public class FreeCamController : MonoBehaviour
 
     public void HandleMovement()
     {
-        Debug.Log($"[FreeCamController] Handling movement: {moveInput}, speed: {moveSpeed * _ZoomToSpeedMultiplier}");
+        if (DebugLogs) Debug.Log($"[FreeCamController] Handling movement: {moveInput}, speed: {moveSpeed * _ZoomToSpeedMultiplier}");
         Vector3 movement = new Vector3(moveInput.x, moveInput.y, 0) * moveSpeed * _ZoomToSpeedMultiplier * Time.deltaTime;
         Vector3 newPosition = transform.position + movement;
         
