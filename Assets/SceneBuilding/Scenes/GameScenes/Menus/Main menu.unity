@@ -341,7 +341,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 285799544}
         m_TargetAssemblyTypeName: SceneActivityManager, CodeAssembly
-        m_MethodName: ActivatePreviousSA
+        m_MethodName: ActivatePreviousSAWithFade
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1058,7 +1058,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 285799544}
         m_TargetAssemblyTypeName: SceneActivityManager, CodeAssembly
-        m_MethodName: Activate
+        m_MethodName: ActivateWithFade
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4829,7 +4829,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 285799544}
         m_TargetAssemblyTypeName: SceneActivityManager, CodeAssembly
-        m_MethodName: ActivatePreviousSA
+        m_MethodName: ActivatePreviousSAWithFade
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5131,14 +5131,14 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 285799544}
         m_TargetAssemblyTypeName: SceneActivityManager, CodeAssembly
-        m_MethodName: ActivateSettings
+        m_MethodName: ActivateSettingsWithFade
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Settings
           m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &752940757
@@ -5869,6 +5869,7 @@ GameObject:
   - component: {fileID: 933945786}
   - component: {fileID: 933945788}
   - component: {fileID: 933945787}
+  - component: {fileID: 933945789}
   m_Layer: 5
   m_Name: Credits
   m_TagString: Untagged
@@ -5931,6 +5932,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 365e8d733bcf54a7e8ba094d96743d1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!225 &933945789
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 933945785}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &938418826
 GameObject:
   m_ObjectHideFlags: 0
@@ -6230,6 +6243,7 @@ GameObject:
   - component: {fileID: 946757469}
   - component: {fileID: 946757467}
   - component: {fileID: 946757468}
+  - component: {fileID: 946757470}
   m_Layer: 5
   m_Name: Settings
   m_TagString: Untagged
@@ -6306,6 +6320,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 365e8d733bcf54a7e8ba094d96743d1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!225 &946757470
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 946757465}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &959113348
 GameObject:
   m_ObjectHideFlags: 0
@@ -7134,7 +7160,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 285799544}
         m_TargetAssemblyTypeName: SceneActivityManager, CodeAssembly
-        m_MethodName: ActivatePreviousSA
+        m_MethodName: ActivatePreviousSAWithFade
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7861,8 +7887,20 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: e3599e5888a834340b328025a76500f9, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: e3599e5888a834340b328025a76500f9, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: e3599e5888a834340b328025a76500f9, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: e3599e5888a834340b328025a76500f9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.06
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: e3599e5888a834340b328025a76500f9, type: 3}
       propertyPath: m_LocalPosition.y
@@ -7899,6 +7937,10 @@ PrefabInstance:
     - target: {fileID: -7552582706839291426, guid: e3599e5888a834340b328025a76500f9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: e3599e5888a834340b328025a76500f9, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -7437813851274597956, guid: e3599e5888a834340b328025a76500f9, type: 3}
       propertyPath: m_LocalRotation.w
@@ -9379,7 +9421,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 285799544}
         m_TargetAssemblyTypeName: SceneActivityManager, CodeAssembly
-        m_MethodName: ActivatePreviousSA
+        m_MethodName: ActivatePreviousSAWithFade
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11413,6 +11455,7 @@ GameObject:
   - component: {fileID: 1899490393}
   - component: {fileID: 1899490395}
   - component: {fileID: 1899490394}
+  - component: {fileID: 1899490396}
   m_Layer: 5
   m_Name: Controls
   m_TagString: Untagged
@@ -11472,6 +11515,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 365e8d733bcf54a7e8ba094d96743d1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!225 &1899490396
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1899490392}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1955747039
 GameObject:
   m_ObjectHideFlags: 0
@@ -11659,7 +11714,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 285799544}
         m_TargetAssemblyTypeName: SceneActivityManager, CodeAssembly
-        m_MethodName: Activate
+        m_MethodName: ActivateWithFade
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
