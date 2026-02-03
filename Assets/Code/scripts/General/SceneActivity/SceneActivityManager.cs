@@ -130,9 +130,24 @@ public class SceneActivityManager : MonoBehaviour
         if (changeHistory.Count > 0)
         {
             string targetName = changeHistory.Pop();
-            isNavigatingBack = true; // Set flag to prevent re-pushing to history
+            isNavigatingBack = true; 
             Activate(targetName, true);
-            isNavigatingBack = false; // Reset flag
+            isNavigatingBack = false; 
+        }
+        else
+        {
+            Debug.LogWarning("No SceneActivity to go BACK to!", gameObject);
+        }
+    }
+
+    public void ActivatePreviousSAWithFade()
+    {
+        if (changeHistory.Count > 0)
+        {
+            string targetName = changeHistory.Pop();
+            isNavigatingBack = true; 
+            FadeOutThenIn(FindActivity(targetName), .3f);
+            isNavigatingBack = false; 
         }
         else
         {
@@ -141,6 +156,10 @@ public class SceneActivityManager : MonoBehaviour
     }
 
     public void ActivateSettings() { Activate("Settings"); }
+    public void ActivateSettingsWithFade() 
+    { 
+        FadeOutThenIn(FindActivity("Settings"), .3f);
+    }
 
 
     public void Activate(GameObject nextObj, bool disableAllOthers = false, bool makeAnchor = false)
@@ -228,15 +247,22 @@ public class SceneActivityManager : MonoBehaviour
             Debug.LogError($"[SceneActivityManager] Failed to find/activate '{name}'");
             return;
         }
+        FadeOutThenIn(nextActivity.gameObject, .3f);
+    }
 
-        visualEffectsManager.FadeOut(currentActivity.gameObject, .3f, () =>
+    void FadeOutThenIn(GameObject toObj, float duration)
+    {
+        if (currentActivity.gameObject == null || toObj == null) return;
+        VisualEffectsManager.Instance.FadeOut(currentActivity.gameObject, duration, () =>
         {
-            nextActivity.GetComponent<CanvasGroup>().alpha = 0f;
-            Activate(nextActivity, makeAnchor: false);
-            visualEffectsManager.FadeIn(nextActivity.gameObject, .3f);
+            
+            var cg = toObj.GetComponent<CanvasGroup>();
+            if (cg != null) { cg.alpha = 0f; }
+            cg = currentActivity.gameObject.GetComponent<CanvasGroup>();
+            if (cg != null) { cg.alpha = 1f; }
+            Activate(toObj, true);
+            VisualEffectsManager.Instance.FadeIn(toObj, duration);
         });
-
-        
     }
 
     // Unity seems to have a problem with optional arguments so this is a
