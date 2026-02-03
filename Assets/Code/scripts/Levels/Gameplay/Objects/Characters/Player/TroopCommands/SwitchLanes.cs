@@ -5,6 +5,7 @@ public class SwitchLanes : MonoBehaviour
     BoxCollider2D myCollider;
     bool AbleToSwitch;
     [SerializeField] int currentLayer = 2;
+    [SerializeField] GameObject[] Groundlevels;
 
     void Awake()
     {
@@ -20,7 +21,7 @@ public class SwitchLanes : MonoBehaviour
 
         if (!AbleToSwitch) return;
 
-        if(currentLayer >= 2)
+        if(currentLayer >= Groundlevels.Length)
         {
             currentLayer = 0;
         }
