@@ -32,6 +32,8 @@ public class SceneActivityManager : MonoBehaviour
     /// <summary>
     /// Maps an ID to a SceneActivity GameObject
     /// </summary>
+    /// 
+    public GameObject[] SceneActivities;
     internal Dictionary<string, GameObject> objNamed = new Dictionary<string, GameObject>();
 
     /// <summary>
@@ -71,11 +73,18 @@ public class SceneActivityManager : MonoBehaviour
         Activate(initialActivity, true);
     }
 
+    void ClearCache()
+    {
+        objNamed.Clear();
+        initialActivity = null;
+        //currentActivity = null;
+    }
+
     void CacheAllSAObjects()
     {
         ClearCache();
 
-        foreach (var obj in Resources.FindObjectsOfTypeAll<GameObject>())
+        foreach (var obj in SceneActivities)
         {
             SceneActivity sa = obj.GetComponent<SceneActivity>();
             if (sa != null)
@@ -96,18 +105,6 @@ public class SceneActivityManager : MonoBehaviour
         }
     }
 
-    void OnDestroy()
-    {
-        //Debug.Log("SceneActivityManager.OnDestroy", gameObject);
-    }
-
-    void ClearCache()
-    {
-        objNamed.Clear();
-        initialActivity = null;
-        //currentActivity = null;
-    }
-
     void CacheSceneActivity(GameObject obj)
     {
         if (!objNamed.ContainsKey(obj.name))
@@ -117,8 +114,13 @@ public class SceneActivityManager : MonoBehaviour
         }
         else
         {
-            throw new SAException($"Name collision on '{obj.name}'");
+            throw new SAException($"Name collision on '{obj.name}' (meaning 2 scenes activities have the same name lol)");
         }
+    }
+
+    void OnDestroy()
+    {
+        //Debug.Log("SceneActivityManager.OnDestroy", gameObject);
     }
 
     public void ActivateInitialSA() { Activate(initialActivity); }

@@ -34,7 +34,7 @@ public class FreeCamController : MonoBehaviour
         CalculateBounds();
     }
 
-    void OnEnable()
+    void Start()
     {
         // Subscribe to input from the GlobalInputManager (with safety check)
         if (GlobalInputManager.Instance != null)

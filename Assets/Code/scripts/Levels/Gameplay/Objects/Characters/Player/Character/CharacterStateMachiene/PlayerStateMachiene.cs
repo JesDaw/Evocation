@@ -10,7 +10,7 @@ public class PlayerStateMachine : MonoBehaviour
     [SerializeField] AnimationEventsController _animatorController;
     [SerializeField] Animator _animator;
     [Header("Debug")]
-    [SerializeField] public bool DebugLogs = false;
+    public bool DebugLogs = false;
     
     [HideInInspector] public Stats _AttackingStats;
 
@@ -200,14 +200,14 @@ public class PlayerStateMachine : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        if (DebugLogs) Debug.Log($"Commander Move Received _isActive: {_isActive}");
-        if (!_isActive) return; 
+        if (DebugLogs) Debug.Log($"State Machiene Move Received _isActive: {_isActive}, free cam active: {CameraControlSwitcher.Instance.FreeCamIsActive}");
+        if (!_isActive || CameraControlSwitcher.Instance.FreeCamIsActive) return; 
         _commander.OnMove(context);
     }
 
     public void OnAttack(InputAction.CallbackContext context)
     {
-        if (!_isActive) return; 
+        if (!_isActive || CameraControlSwitcher.Instance.FreeCamIsActive) return; 
         _commander.OnAttack(context);
     }
 }

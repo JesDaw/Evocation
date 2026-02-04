@@ -4,6 +4,7 @@ using System.Data;
 using System.Numerics;
 using Codice.Client.BaseCommands;
 
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Profiling;
 using Vector2 = UnityEngine.Vector2;
@@ -308,13 +309,14 @@ public class PlayerCommander :
     /// <param name="context">context associated with the event</param>
     public void OnMove(InputAction.CallbackContext context)
     {
-        if (_isFreeCamActive) { return;  }
         if ((context.ReadValue<Vector2>() == Vector2.zero) || context.canceled)
         {
+            //Debug.Log("Player moving stopped in player commander");
             SetActiveCmd(ContinuousPlayerCommand.Move, false, null);
         }
         else
         {
+            //Debug.Log("Player moving in player commander");
             SetActiveCmd(
                 ContinuousPlayerCommand.Move,
                 true,
@@ -327,9 +329,7 @@ public class PlayerCommander :
     /// </summary>
     /// <param name="context">context associated with the event</param>
     public void OnAttack(InputAction.CallbackContext context)
-    {
-        if (_isFreeCamActive) { return; }
-        
+    {        
         if (context.performed && context.ReadValueAsButton())
         {
             SendCmd(DiscretePlayerCommand.Attack, null);
