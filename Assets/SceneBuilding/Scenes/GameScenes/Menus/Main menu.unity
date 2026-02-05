@@ -1650,6 +1650,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visualEffectsManager: {fileID: 2145348686}
+  SceneActivities:
+  - {fileID: 325152012}
+  - {fileID: 1547098797}
+  - {fileID: 1899490392}
+  - {fileID: 933945785}
+  - {fileID: 946757465}
   ActivityChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -8840,9 +8846,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1547098799}
-        m_TargetAssemblyTypeName: LevelLoader, Assembly-CSharp
-        m_MethodName: StartAnimationLevel2
+      - m_Target: {fileID: 1439452614}
+        m_TargetAssemblyTypeName: LevelTransition, CodeAssembly
+        m_MethodName: StartTransition
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8960,7 +8966,7 @@ MonoBehaviour:
   slider: {fileID: 424816874}
   progressText: {fileID: 1879514152}
   transitionTime: 1
-  NextSceneName: 
+  NextSceneName: Blank scene
 --- !u!1 &1441121616
 GameObject:
   m_ObjectHideFlags: 0
