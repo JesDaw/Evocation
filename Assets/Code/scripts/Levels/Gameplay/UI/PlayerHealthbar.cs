@@ -90,7 +90,7 @@ public class PlayerHealthbar : HealthBarBase
         getPlayerStats(out Stats stats);
         if (stats != null)
         {
-            Debug.Log($"[PlayerHealthbar] Health updated: {stats._CurrentHealth}/{_maxHealth}");
+            //Debug.Log($"[PlayerHealthbar] Health updated: {stats._CurrentHealth}/{_maxHealth}");
             updateHealthIndicator(stats._CurrentHealth);
         }
     }
