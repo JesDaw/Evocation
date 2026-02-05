@@ -74,6 +74,7 @@ public class PlayerLivesManager : MonoBehaviour
 
         if (LifeCount._Value <= 0)
         {
+            //Debug.Log($"Player life count = {LifeCount._Value} ending game");
             HandleGameOver(deadPlayer);
         }
         else
@@ -82,6 +83,7 @@ public class PlayerLivesManager : MonoBehaviour
         }
     }
 
+    //this one is called when the active player dies
     public void LooseLife()
     {
         var currentPlayer = activePlayer.GetCurrentPlayerController();
