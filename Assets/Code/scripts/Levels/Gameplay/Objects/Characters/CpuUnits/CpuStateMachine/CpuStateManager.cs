@@ -27,7 +27,7 @@ public class CpuStateManager : MonoBehaviour
     void Start()
     {
         toggleEverything(false);
-        _Stats.InitializeStats();
+       // _Stats.InitializeStats();
 
         _State[State.Move] = new CpuMoveState(this);
         _State[State.Attack] = new CpuAttackState(this);

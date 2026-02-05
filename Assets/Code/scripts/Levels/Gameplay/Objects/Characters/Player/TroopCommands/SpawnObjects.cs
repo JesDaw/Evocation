@@ -31,6 +31,9 @@ public class SpawnObjects : MonoBehaviour
     [SerializeField] UnityEvent<GameObject> onSpawn;
     [SerializeField] bool DebugLogs = false;
 
+    // Character layer - all characters spawn on MidLane
+    const string CHARACTER_MID_LAYER = "Character/MidLane";
+
     public bool SpawningIsActive
     {
         get { return spawningEnabled; }
@@ -87,17 +90,40 @@ public class SpawnObjects : MonoBehaviour
             Debug.LogError("Spawned unit has no Stats component!");
         }
 
+        // Set tag based on spawner type
         string unitTag = enemySpawner ? "Enemy" : "Allies";
         spawnedUnit.tag = unitTag;
 
-        int layer = enemySpawner ? 9 : 10;
-        SetLayerRecursively(spawnedUnit, layer);
+        // Set layer to Character/MidLane (default spawn lane)
+        SetCharacterLayer(spawnedUnit);
 
         RandomizeAppearancePosition(spawnedUnit);
 
         onSpawn?.Invoke(spawnedUnit);
 
+        if (DebugLogs) Debug.Log($"Spawned {unitTag} on layer: {LayerMask.LayerToName(spawnedUnit.layer)}");
+
         return spawnedUnit;
+    }
+
+    /// <summary>
+    /// Sets the character's layer to Character/MidLane
+    /// </summary>
+    private void SetCharacterLayer(GameObject unit)
+    {
+        string layerName = CHARACTER_MID_LAYER; 
+        
+        int layer = LayerMask.NameToLayer(layerName);
+        
+        if (layer == -1)
+        {
+            Debug.LogError($"Layer '{layerName}' not found! Make sure it exists in your project settings.");
+            return;
+        }
+
+        unit.layer = layer;
+
+        if (DebugLogs) Debug.Log($"Set {unit.name} to layer {layerName} (#{layer})");
     }
 
     public GameObject SpawnFromSpawner(ScriptableStats stats)
@@ -132,7 +158,7 @@ public class SpawnObjects : MonoBehaviour
 
         GameObject spawnedUnit = SpawnCPU(stats);
         
-        if(DebugLogs)Debug.Log($"Player spawned {stats.name} (Cost: {stats._spawnCost})");
+        if(DebugLogs) Debug.Log($"Player spawned {stats.name} (Cost: {stats._spawnCost})");
         
         return spawnedUnit;
     }
@@ -175,7 +201,8 @@ public class SpawnObjects : MonoBehaviour
             playerContainer
         );
 
-        Stats spawnedStats = spawnedPlayer.GetComponent<Stats>();
+        // Set player to Character/MidLane
+        SetCharacterLayer(spawnedPlayer);
 
         if (playerSwitch != null)
             playerSwitch.AddPlayer(spawnedPlayer);
@@ -183,18 +210,9 @@ public class SpawnObjects : MonoBehaviour
         if (playerLivesManager != null)
             playerLivesManager.GainLife();
 
-        if (DebugLogs) Debug.Log($"Player spawned (Cost: {cost})");
+        if (DebugLogs) Debug.Log($"Player spawned (Cost: {cost}) on layer: {LayerMask.LayerToName(spawnedPlayer.layer)}");
 
         return spawnedPlayer;
-    }
-
-    void SetLayerRecursively(GameObject obj, int layer)
-    {
-        obj.layer = layer;
-        /*foreach (Transform child in obj.transform)
-        {
-            SetLayerRecursively(child.gameObject, layer);
-        }*/
     }
 
     void RandomizeAppearancePosition(GameObject unit)
