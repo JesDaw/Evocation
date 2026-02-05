@@ -139,6 +139,12 @@ public class Interactable : MonoBehaviour
 
         if (context.started)
         {
+            if (ActivationDuration == 0f)
+            {
+                interactAction?.Invoke();
+                if (DebugLog) Debug.Log($"ActivationDuration = 0 so Interaction action triggered on {gameObject.name}");
+                return;
+            }
             isHolding = true;
             currentHoldTime = 0f;
             

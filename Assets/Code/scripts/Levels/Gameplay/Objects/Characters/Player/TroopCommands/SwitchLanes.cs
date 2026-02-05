@@ -1,11 +1,24 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class SwitchLanes : MonoBehaviour
 {
     BoxCollider2D myCollider;
-    bool AbleToSwitch;
-    [SerializeField] int currentLayer = 2;
+    [SerializeField] int currentLayer = 2; // 0 = Top, 1 = Mid, 2 = Bot
     [SerializeField] GameObject[] Groundlevels;
+    [SerializeField] GameObject[] ArrowSprites;
+    [SerializeField] bool DebugLogs = false;
+
+    // List to track characters in the collider
+    private List<GameObject> charactersInRange = new List<GameObject>();
+
+    // Layer names for each lane (CHARACTER layers, not ground)
+    private string[] laneLayerNames = new string[] 
+    {
+        "Character/TopLane",   // currentLayer 0
+        "Character/MidLane",   // currentLayer 1
+        "Character/BotLane"    // currentLayer 2
+    };
 
     void Awake()
     {
@@ -13,41 +26,114 @@ public class SwitchLanes : MonoBehaviour
     }
 
     public float switchCooldown = 1f;
-    private float lastSwitchTime = 0f;
+    float lastSwitchTime = 0f;
 
     public void ToggleLanes()
     {
-        if (Time.time - lastSwitchTime < switchCooldown) return;
+        if(DebugLogs) Debug.Log($"ToggleLanes invoked");
 
-        if (!AbleToSwitch) return;
+        if (Time.time - lastSwitchTime < switchCooldown) 
+        {
+            if(DebugLogs) Debug.Log($"Toggle is still cooling down: {Time.time - lastSwitchTime} left");
+            return;
+        }
 
-        if(currentLayer >= Groundlevels.Length)
+        // Cycle through lanes
+        if(currentLayer >= Groundlevels.Length - 1)
         {
             currentLayer = 0;
         }
-        else currentLayer++;
+        else 
+        {
+            currentLayer++;
+        }
+
+        if(DebugLogs) Debug.Log($"Lane switched to: {currentLayer} ({laneLayerNames[currentLayer]})");
+
+        // Update arrow sprites
+        for (int i = 0; i < ArrowSprites.Length; i++)
+        {
+            ArrowSprites[i].SetActive(i == currentLayer);
+        }
+
+        // Update all characters currently in the collider
+        UpdateAllCharacterLayers();
+
+        if(DebugLogs) Debug.Log($"currentLayer: {currentLayer}, Characters in range: {charactersInRange.Count}");
 
         lastSwitchTime = Time.time;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void UpdateAllCharacterLayers()
     {
-        Debug.Log("swiched layer from" + collision.gameObject.layer);
-
-        if (collision.gameObject.layer == 9 || collision.gameObject.layer == 18 || collision.gameObject.layer == 19 || collision.gameObject.layer == 20)
+        // Update layer for all characters in range
+        for (int i = charactersInRange.Count - 1; i >= 0; i--)
         {
-            if(currentLayer == 0) collision.gameObject.layer = 18;
-            if(currentLayer == 1) collision.gameObject.layer = 19;
-            if(currentLayer == 2) collision.gameObject.layer = 20;
+            GameObject character = charactersInRange[i];
+            
+            // Clean up null references (destroyed objects)
+            if (character == null)
+            {
+                charactersInRange.RemoveAt(i);
+                continue;
+            }
+            
+            SetCharacterLayer(character);
         }
-
-        if (collision.gameObject.layer == 10 || collision.gameObject.layer == 15 || collision.gameObject.layer == 16 || collision.gameObject.layer == 17)
-        {
-            if(currentLayer == 0) collision.gameObject.layer = 15;
-            if(currentLayer == 1) collision.gameObject.layer = 16;
-            if(currentLayer == 2) collision.gameObject.layer = 17;
-        }
-        Debug.Log("layer is now"+collision.gameObject.layer);
     }
 
+    private bool IsCharacter(GameObject obj)
+    {
+        return obj.CompareTag("Allies") || obj.CompareTag("Enemy") || obj.CompareTag("Player");
+    }
+
+    private void SetCharacterLayer(GameObject character)
+    {
+        string newLayerName = laneLayerNames[currentLayer];
+        int newLayer = LayerMask.NameToLayer(newLayerName);
+
+        if (newLayer != -1)
+        {
+            if(DebugLogs) Debug.Log($"Setting {character.name} to layer {newLayerName} (layer #{newLayer})");
+            character.layer = newLayer;
+        }
+        else
+        {
+            Debug.LogError($"Layer '{newLayerName}' not found! Make sure it exists in your project settings.");
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (IsCharacter(collision.gameObject))
+        {
+            if(DebugLogs) Debug.Log($"{collision.gameObject.name} entered lane switch. Previous layer: {LayerMask.LayerToName(collision.gameObject.layer)}");
+
+            // Add to list if not already present
+            if (!charactersInRange.Contains(collision.gameObject))
+            {
+                charactersInRange.Add(collision.gameObject);
+            }
+
+            // Set the character to the current lane
+            SetCharacterLayer(collision.gameObject);
+
+            if(DebugLogs) Debug.Log($"{collision.gameObject.name} layer is now: {LayerMask.LayerToName(collision.gameObject.layer)}");
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (IsCharacter(collision.gameObject))
+        {
+            if(DebugLogs) Debug.Log($"{collision.gameObject.name} left lane switch");
+
+            // Remove from list
+            if (charactersInRange.Contains(collision.gameObject))
+            {
+                charactersInRange.Remove(collision.gameObject);
+                if(DebugLogs) Debug.Log($"Removed {collision.gameObject.name} from list. Characters remaining: {charactersInRange.Count}");
+            }
+        }
+    }
 }
