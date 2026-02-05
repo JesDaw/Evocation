@@ -69,6 +69,7 @@ public class UILogic : MonoBehaviour
 
     public void Resume()
     {
+        if(DebugLogs) Debug.Log($"Game is paused was {DebugLogs} when trying to resume");
         if (GameIsPaused)
         {
             sceneMgr.ActivateAnchorSA();
@@ -92,9 +93,10 @@ public class UILogic : MonoBehaviour
 
     void Pause()
     {
+        if(DebugLogs) Debug.Log($"Game is paused was {DebugLogs} when trying to pause");
         if (!GameIsPaused)
         {
-            sceneMgr.Activate("Pause");
+            sceneMgr.Activate("Pause", false);
             Time.timeScale = 0;
             GameIsPaused = true;
             
