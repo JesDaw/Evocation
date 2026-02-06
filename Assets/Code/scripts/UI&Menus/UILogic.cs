@@ -125,6 +125,11 @@ public class UILogic : MonoBehaviour
         SceneManager.LoadScene(SceneToLoad);
     }
 
+    public void ButtonSound()
+    {
+        FModAudioManager.instance.PlaySoundByName("menuClick");
+    }
+
     public void QuitGame() 
     { 
         #if UNITY_EDITOR
