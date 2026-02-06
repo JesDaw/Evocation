@@ -139,4 +139,17 @@ public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
         targetTransform.localScale = targetScale;
     }
+
+    public void ClickSound()
+    {
+        FModAudioManager.instance.PlaySoundByName("menuClick");
+    }
+    public void QuitGame()
+    {
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+            Application.Quit();
+        #endif
+    }
 }

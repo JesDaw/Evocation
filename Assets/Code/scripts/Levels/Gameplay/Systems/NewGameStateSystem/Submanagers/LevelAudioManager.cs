@@ -15,6 +15,7 @@ public class LevelAudioManager : MonoBehaviour
     
     [Header("Music State Mapping")]
     [SerializeField] List<MusicStateMapping> musicStates = new List<MusicStateMapping>();
+    [SerializeField] bool StartMusicOnAwake = false;
     
     [Header("Debug")]
     [SerializeField] bool showDebugLogs = false;
@@ -89,6 +90,7 @@ public class LevelAudioManager : MonoBehaviour
         if (!fmodEvents.music.IsNull)
         {
             musicInstance = RuntimeManager.CreateInstance(fmodEvents.music);
+            if(StartMusicOnAwake) StartMusic();
             if (showDebugLogs) Debug.Log("[LevelAudioManager] Music system initialized");
         }
         else
