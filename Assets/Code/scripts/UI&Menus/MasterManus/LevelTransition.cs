@@ -6,11 +6,16 @@ using TMPro;
 
 public class LevelTransition : MonoBehaviour
 {
-    public Animator TransitionAnimation;
-    public GameObject loadingScreen;
-    public Slider slider;
-    public TextMeshProUGUI progressText;
-    public float transitionTime = 1f;
+    [Header("Animation stuff")]
+    [SerializeField] Animator TransitionAnimationClip;
+    [SerializeField] float transitionTime = 1f;
+    [SerializeField] string timelineCutsceneName;
+
+    [Header("Loading screen stuff")]
+    [SerializeField] GameObject loadingScreen;
+    [SerializeField] Slider slider;
+    [SerializeField] TextMeshProUGUI progressText;
+    [Header("Next scene")]
     [SerializeField] string NextSceneName;
 
     public void StartTransition()
@@ -20,10 +25,16 @@ public class LevelTransition : MonoBehaviour
 
     IEnumerator LoadScene(string nextSceneName)
     {
-        TransitionAnimation.SetTrigger("Start");
-
-        yield return new WaitForSeconds(transitionTime); 
-
+        if(TransitionAnimationClip != null)
+        {
+            TransitionAnimationClip.SetTrigger("Start");
+            yield return new WaitForSeconds(transitionTime); 
+        }
+        else if (TimelineManager.Instance != null && timelineCutsceneName != null)
+        {
+            TimelineManager.Instance.PlayCutscene(timelineCutsceneName);
+            yield return new WaitForSeconds(TimelineManager.Instance.GetCurrentCutsceneDuration());
+        }
         StartCoroutine(LoadAsynchronously(nextSceneName));
     }
     
@@ -44,11 +55,4 @@ public class LevelTransition : MonoBehaviour
             yield return null;
         }
     }
-
-    //public void StartAnimation(int sceneID)
-    //{
-    //    transition.SetTrigger("Start");
-
-    //    yield return new WaitForSeconds(transitionTime);
-    //}
 }

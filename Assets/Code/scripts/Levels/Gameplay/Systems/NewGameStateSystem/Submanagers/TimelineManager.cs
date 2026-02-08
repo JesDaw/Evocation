@@ -184,6 +184,11 @@ public class TimelineManager : MonoBehaviour
         return currentTimelineName;
     }
 
+    public float GetCurrentCutsceneDuration()
+    {
+        return (float)currentTimeline.duration;
+    }
+
     public PlayableDirector GetTimeline(string timelineName)
     {
         if (timelinesByName.TryGetValue(timelineName, out TimelineEntry entry))
