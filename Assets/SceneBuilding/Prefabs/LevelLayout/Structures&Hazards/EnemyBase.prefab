@@ -552,6 +552,9 @@ MonoBehaviour:
   playerBase: {fileID: 0}
   maxDistance: 50
   showDebugLogs: 1
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &5564187280530086294
 GameObject:
   m_ObjectHideFlags: 0
@@ -877,7 +880,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -939,6 +942,7 @@ MonoBehaviour:
   _EffectsToApply: []
   _MaxHealth: 1
   _CurrentHealth: 1
+  _IsDead: 0
   _MoveSpeed: 0
   _KnockBackMax: 0
   _KnockBackHealth: 0
@@ -996,6 +1000,7 @@ MonoBehaviour:
   _HealthTrailImage: {fileID: 4809115025163712209}
   _tweenDuration: 0.25
   _trailDelay: 0.4
+  DebugLogs: 0
 --- !u!114 &5907299214564457076
 MonoBehaviour:
   m_ObjectHideFlags: 0
