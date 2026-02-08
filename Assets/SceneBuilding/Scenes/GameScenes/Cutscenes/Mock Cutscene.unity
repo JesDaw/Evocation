@@ -533,7 +533,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &287885149
 RectTransform:
   m_ObjectHideFlags: 0
@@ -541,12 +541,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 287885148}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 99.541664}
+  m_LocalScale: {x: 0.9166666, y: 0.9166666, z: 0.9166666}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 992781945}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -975,6 +975,7 @@ Transform:
   - {fileID: 918881446}
   - {fileID: 162107867}
   - {fileID: 1962226652}
+  - {fileID: 827374166}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &476608325
@@ -1854,6 +1855,112 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &827374165
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 827374166}
+  - component: {fileID: 827374169}
+  - component: {fileID: 827374168}
+  - component: {fileID: 827374167}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &827374166
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 827374165}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -147.70798, y: -591.4332, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 471264761}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &827374167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 827374165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 999168f2b2556446ca56855d56bee063, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::LevelAudioManager
+  fmodEvents: {fileID: 827374168}
+  musicParameterName: MainMenuMusic
+  musicStates:
+  - stateName: MainMenuMusic
+    parameterValue: 0
+  StartMusicOnAwake: 0
+  StartAmbianceOnAwake: 1
+  showDebugLogs: 0
+--- !u!114 &827374168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 827374165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7222aab070c5e4562a0aa6baaed39098, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::FModEvents
+  <menuClick>k__BackingField:
+    Guid:
+      Data1: -296116831
+      Data2: 1270562992
+      Data3: -881035844
+      Data4: 1970319739
+    Path: event:/SFX/MenuesAndUI/Button Click
+  <dialogueType>k__BackingField:
+    Guid:
+      Data1: -296116831
+      Data2: 1270562992
+      Data3: -881035844
+      Data4: 1970319739
+    Path: event:/SFX/MenuesAndUI/Button Click
+  <ambiance>k__BackingField:
+    Guid:
+      Data1: -2119753150
+      Data2: 1197145996
+      Data3: 1943173521
+      Data4: -131422043
+    Path: event:/Ambience/LevelOneWind
+  <music>k__BackingField:
+    Guid:
+      Data1: -437181480
+      Data2: 1180986116
+      Data3: -1464707658
+      Data4: -202956336
+    Path: event:/Music/MainMenuMusic
+--- !u!114 &827374169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 827374165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 256f432cf1e6741fda824bf6ea78f531, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::FModAudioManager
 --- !u!1 &918881445
 GameObject:
   m_ObjectHideFlags: 0
@@ -2101,8 +2208,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2.475, y: 2.475, z: 2.475}
   m_ConstrainProportionsScale: 1
-  m_Children:
-  - {fileID: 287885149}
+  m_Children: []
   m_Father: {fileID: 2119260750}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -2519,9 +2625,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1249247924}
   - component: {fileID: 1249247923}
-  - component: {fileID: 1249247922}
   - component: {fileID: 1249247925}
   - component: {fileID: 1249247926}
+  - component: {fileID: 1249247927}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2529,14 +2635,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &1249247922
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1249247921}
-  m_Enabled: 1
 --- !u!20 &1249247923
 Camera:
   m_ObjectHideFlags: 0
@@ -2669,6 +2767,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1249247927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1249247921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioListener
+  nonRigidbodyVelocity: 0
+  attenuationObject: {fileID: 0}
 --- !u!1 &1356461283
 GameObject:
   m_ObjectHideFlags: 0
@@ -3452,11 +3564,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48fe2b40806e4cf45b8dd871304a1a2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::LevelTransition
-  TransitionAnimation: {fileID: 1925580157}
+  TransitionAnimationClip: {fileID: 0}
+  transitionTime: 1
+  timelineCutsceneName: 
   loadingScreen: {fileID: 480603037}
   slider: {fileID: 1086187273}
   progressText: {fileID: 382597951}
-  transitionTime: 1
   NextSceneName: Mountains
 --- !u!4 &1962226652
 Transform:
@@ -3933,3 +4046,4 @@ SceneRoots:
   - {fileID: 729216632}
   - {fileID: 471264761}
   - {fileID: 2042269281}
+  - {fileID: 287885149}
