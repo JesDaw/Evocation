@@ -20054,6 +20054,7 @@ MonoBehaviour:
   - stateName: LEVEL_WIN
     parameterValue: 3
   StartMusicOnAwake: 0
+  StartAmbianceOnAwake: 0
   showDebugLogs: 0
 --- !u!114 &971894640
 MonoBehaviour:
@@ -20068,6 +20069,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::FModEvents
   <menuClick>k__BackingField:
+    Guid:
+      Data1: -296116831
+      Data2: 1270562992
+      Data3: -881035844
+      Data4: 1970319739
+    Path: event:/SFX/MenuesAndUI/Button Click
+  <dialogueType>k__BackingField:
+    Guid:
+      Data1: -296116831
+      Data2: 1270562992
+      Data3: -881035844
+      Data4: 1970319739
+    Path: event:/SFX/MenuesAndUI/Button Click
+  <spawnTroop>k__BackingField:
     Guid:
       Data1: -296116831
       Data2: 1270562992
@@ -40679,11 +40694,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48fe2b40806e4cf45b8dd871304a1a2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::LevelTransition
-  TransitionAnimation: {fileID: 1769884037}
+  TransitionAnimationClip: {fileID: 0}
+  transitionTime: 1
+  timelineCutsceneName: 
   loadingScreen: {fileID: 675242669}
   slider: {fileID: 1486444638}
   progressText: {fileID: 1471048728}
-  transitionTime: 1
   NextSceneName: Main Menu
 --- !u!1 &1913237408
 GameObject:
@@ -59359,8 +59375,7 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.65
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1003792434389234155, guid: 301573f24ead492429fbc1b58b9d9d99, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 5991404969456606214, guid: 301573f24ead492429fbc1b58b9d9d99, type: 3}
