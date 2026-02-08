@@ -26,6 +26,7 @@ public class PlayerKnockedBackState : PlayerBaseState
     public override void EnterState()
     {
         Ctx.Animator.SetBool("IsKnockback", true);
+        FModAudioManager.instance.PlaySoundByName("knockback");
         ApplyKnockback();
     }
     void ApplyKnockback()
@@ -58,6 +59,7 @@ public class PlayerKnockedBackState : PlayerBaseState
             Ctx.Animator.SetBool("IsKnockback", false);
             if (Ctx.PlayerStats._IsDead)
             {
+                FModAudioManager.instance.PlaySoundByName("die");
                 Object.Destroy(Ctx.gameObject);
             }
             else

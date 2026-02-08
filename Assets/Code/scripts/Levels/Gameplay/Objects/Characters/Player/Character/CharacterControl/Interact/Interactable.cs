@@ -117,6 +117,7 @@ public class Interactable : MonoBehaviour
             if (currentHoldTime >= ActivationDuration)
             {
                 interactAction?.Invoke();
+                FModAudioManager.instance.PlaySoundByName("claimLocation");
                 if (DebugLog) Debug.Log($"Interaction action triggered on {gameObject.name}");
                 
                 StopHolding();

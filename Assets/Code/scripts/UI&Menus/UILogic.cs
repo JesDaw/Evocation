@@ -72,6 +72,7 @@ public class UILogic : MonoBehaviour
         if(DebugLogs) Debug.Log($"Game is paused was {DebugLogs} when trying to resume");
         if (GameIsPaused)
         {
+            FModAudioManager.instance.PlaySoundByName("resumeGame");
             sceneMgr.ActivateAnchorSA();
             Time.timeScale = 1;
             GameIsPaused = false;
@@ -96,6 +97,7 @@ public class UILogic : MonoBehaviour
         if(DebugLogs) Debug.Log($"Game is paused was {DebugLogs} when trying to pause");
         if (!GameIsPaused)
         {
+            FModAudioManager.instance.PlaySoundByName("pauseGame");
             sceneMgr.Activate("Pause", false);
             Time.timeScale = 0;
             GameIsPaused = true;

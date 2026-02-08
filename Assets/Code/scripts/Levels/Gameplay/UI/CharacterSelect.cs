@@ -45,6 +45,7 @@ public class CharacterSelect : MonoBehaviour
         if (lastClicked != character)
         {
             lastClicked = character;
+            FModAudioManager.instance.PlaySoundByName("showCharacterInfo");
             ShowCharacterInfo(character);
             return;
         }
@@ -54,6 +55,7 @@ public class CharacterSelect : MonoBehaviour
 
         if (party.Contains(character))
         {
+            FModAudioManager.instance.PlaySoundByName("removeCharacterFromParty");
             party.Remove(character);
             spawnController.UnequipCPU(character.scriptableStats);
         }
@@ -61,6 +63,7 @@ public class CharacterSelect : MonoBehaviour
         {
             if (party.Count < partySize)
             {
+                FModAudioManager.instance.PlaySoundByName("addCharacterToParty");
                 party.Add(character);
                 spawnController.EquipCPU(character.scriptableStats);
             }

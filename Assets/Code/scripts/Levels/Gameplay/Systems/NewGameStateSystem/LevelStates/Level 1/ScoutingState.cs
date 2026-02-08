@@ -57,7 +57,7 @@ public class ScoutingState : LevelState
         
         if (!confirmationUIActive)
         {
-            context.SceneManager.Activate(confirmationUIName);
+            context.SceneManager.Activate(confirmationUIName, true);
             GlobalInputManager.Instance.SetPauseMenuMode();
             confirmationUIActive = true;
         }
@@ -69,12 +69,14 @@ public class ScoutingState : LevelState
 
     public void StartBattle()
     {
+        FModAudioManager.instance.PlaySoundByName("engageInBattle");
         context.TransitionToNextState();
     }
     
     void OnReturnPressed(InputAction.CallbackContext ctx)
     {
         if (context.CurrentState != this || !confirmationUIActive) return;
+        FModAudioManager.instance.PlaySoundByName("backToScouting");
         BackToScouting();
     }
 
@@ -85,6 +87,7 @@ public class ScoutingState : LevelState
 
         if (!characterSelectIsOpen)
         {
+            FModAudioManager.instance.PlaySoundByName("openCharacterSelect");
             context.SceneManager.Activate("LoadoutSelectUI", true);
             characterSelectIsOpen = true;
 
@@ -93,6 +96,7 @@ public class ScoutingState : LevelState
         }
         else
         {
+            FModAudioManager.instance.PlaySoundByName("closeCharacterSelect");
             context.SceneManager.Activate(sceneActivityName, true);
             characterSelectIsOpen = false;
             GlobalInputManager.Instance.DisableCursor();
