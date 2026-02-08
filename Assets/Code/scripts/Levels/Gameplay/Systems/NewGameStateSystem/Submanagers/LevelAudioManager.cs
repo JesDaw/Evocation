@@ -16,6 +16,8 @@ public class LevelAudioManager : MonoBehaviour
     [Header("Music State Mapping")]
     [SerializeField] List<MusicStateMapping> musicStates = new List<MusicStateMapping>();
     [SerializeField] bool StartMusicOnAwake = false;
+    [Header("Ambiance State Mapping")]
+    [SerializeField] bool StartAmbianceOnAwake = false;
     
     [Header("Debug")]
     [SerializeField] bool showDebugLogs = false;
@@ -101,8 +103,8 @@ public class LevelAudioManager : MonoBehaviour
         if (!fmodEvents.ambiance.IsNull)
         {
             ambienceInstance = RuntimeManager.CreateInstance(fmodEvents.ambiance);
-            ambienceInstance.start();
-            if (showDebugLogs) Debug.Log("[LevelAudioManager] Ambience started");
+            if(StartAmbianceOnAwake) StartAmbience();
+            if (showDebugLogs) Debug.Log("[LevelAudioManager] Ambience initialized");
         }
         else
         {

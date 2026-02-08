@@ -119,6 +119,7 @@ public class DialogueManager : MonoBehaviour
                 yield return null; 
             } 
             dialogueText.text += c;
+            FModAudioManager.instance.PlaySoundByName("dialogueType");
             yield return new WaitForSecondsRealtime(speed);
         }
         _typeLineCoroutine = null;

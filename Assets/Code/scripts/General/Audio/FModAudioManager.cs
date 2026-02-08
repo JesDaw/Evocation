@@ -20,6 +20,7 @@ public class FModAudioManager : MonoBehaviour
     void Start()
     {
         soundDictionary.Add("menuClick", FModEvents.instance.menuClick);
+        soundDictionary.Add("dialogueType", FModEvents.instance.menuClick);
 
     }
 
