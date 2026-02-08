@@ -19,10 +19,30 @@ public class FModAudioManager : MonoBehaviour
     }
     void Start()
     {
+        //UI
         soundDictionary.Add("menuClick", FModEvents.instance.menuClick);
         soundDictionary.Add("dialogueType", FModEvents.instance.menuClick);
-        soundDictionary.Add("spawnTroop", FModEvents.instance.spawnTroop);
+        // Character select
+        soundDictionary.Add("showCharacterInfo", FModEvents.instance.showCharacterInfo);
+        soundDictionary.Add("removeCharacterFromParty", FModEvents.instance.removeCharacterFromParty);
+        soundDictionary.Add("addCharacterToParty", FModEvents.instance.addCharacterToParty);
+        // navigating menus
+        soundDictionary.Add("pauseGame", FModEvents.instance.pauseGame);
+        soundDictionary.Add("resumeGame", FModEvents.instance.unpauseGame);
+        soundDictionary.Add("openCharacterSelect", FModEvents.instance.openCharacterSelect);
+        soundDictionary.Add("closeCharacterSelect", FModEvents.instance.closeCharacterSelect);
+        //starting the battle
+        soundDictionary.Add("engageInBattle", FModEvents.instance.engageInBattle);
+        soundDictionary.Add("backToScouting", FModEvents.instance.backToScouting);
 
+        
+        // gameplay
+        soundDictionary.Add("spawnTroop", FModEvents.instance.spawnTroop);
+        soundDictionary.Add("attack", FModEvents.instance.attack);
+        soundDictionary.Add("takeDamage", FModEvents.instance.takeDamage);
+        soundDictionary.Add("knockback", FModEvents.instance.knockback);
+        soundDictionary.Add("die", FModEvents.instance.die);
+        soundDictionary.Add("claimLocation", FModEvents.instance.claimLocation);
     }
 
     public void PlayOneShot(EventReference sound, UnityEngine.Vector3 worldPosition)

@@ -13,8 +13,6 @@ public static class AttackLogic
         AttackDetection.DrawDebugBox(center, range, attackerStats._Enemy ? Color.red : Color.blue, 1f);
         List<IDamageable> targets = AttackDetection.FindTargetsInBox(center, range, attackerStats.targetTags, attackerStats);
 
-        //Debug.Log($"{attackerStats.gameObject.name} found {targets.Count} targets in attack box");
-
         if (targets.Count == 0) return;
 
         if (attackerStats._IsProjectile)

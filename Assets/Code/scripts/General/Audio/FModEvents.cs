@@ -6,9 +6,23 @@ public class FModEvents : MonoBehaviour
     [field: Header("UI SFX")]
     [field: SerializeField] public EventReference menuClick { get; private set; }
     [field: SerializeField] public EventReference dialogueType { get; private set; }
+    [field: SerializeField] public EventReference showCharacterInfo { get; private set; }
+    [field: SerializeField] public EventReference addCharacterToParty { get; private set; }
+    [field: SerializeField] public EventReference removeCharacterFromParty { get; private set; }
+    [field: SerializeField] public EventReference pauseGame { get; private set; }
+    [field: SerializeField] public EventReference unpauseGame { get; private set; }
+    [field: SerializeField] public EventReference openCharacterSelect { get; private set; }
+    [field: SerializeField] public EventReference closeCharacterSelect { get; private set; }
+    [field: SerializeField] public EventReference engageInBattle { get; private set; }
+    [field: SerializeField] public EventReference backToScouting { get; private set; }
 
     [field: Header("Gameplay SFX")]
     [field: SerializeField] public EventReference spawnTroop { get; private set; }
+    [field: SerializeField] public EventReference attack { get; private set; }
+    [field: SerializeField] public EventReference takeDamage { get; private set; }
+    [field: SerializeField] public EventReference knockback { get; private set; }
+    [field: SerializeField] public EventReference die { get; private set; }
+    [field: SerializeField] public EventReference claimLocation { get; private set; }
 
     [field: Header("Ambiance")]
     [field: SerializeField] public EventReference ambiance { get; private set; }
