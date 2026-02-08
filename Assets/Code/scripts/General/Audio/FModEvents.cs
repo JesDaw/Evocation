@@ -3,11 +3,16 @@ using FMODUnity;
 
 public class FModEvents : MonoBehaviour
 {
-    [field: Header("SFX")]
+    [field: Header("UI SFX")]
     [field: SerializeField] public EventReference menuClick { get; private set; }
     [field: SerializeField] public EventReference dialogueType { get; private set; }
+
+    [field: Header("Gameplay SFX")]
+    [field: SerializeField] public EventReference spawnTroop { get; private set; }
+
     [field: Header("Ambiance")]
     [field: SerializeField] public EventReference ambiance { get; private set; }
+
     [field: Header("Music")]
     [field: SerializeField] public EventReference music { get; private set; }
 

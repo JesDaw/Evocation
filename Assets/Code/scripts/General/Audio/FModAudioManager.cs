@@ -21,6 +21,7 @@ public class FModAudioManager : MonoBehaviour
     {
         soundDictionary.Add("menuClick", FModEvents.instance.menuClick);
         soundDictionary.Add("dialogueType", FModEvents.instance.menuClick);
+        soundDictionary.Add("spawnTroop", FModEvents.instance.spawnTroop);
 
     }
 

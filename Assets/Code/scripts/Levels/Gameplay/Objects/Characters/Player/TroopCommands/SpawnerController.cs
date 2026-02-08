@@ -78,7 +78,7 @@ public class SpawnController : MonoBehaviour
         // Validation
         if (spawner == null)
         {
-            //Debug.LogError("No spawner assigned on player spawner!");
+            if (showDebugLogs)Debug.LogError("No spawner assigned on player spawner!");
             return;
         }
 
@@ -92,16 +92,17 @@ public class SpawnController : MonoBehaviour
         ScriptableStats stats = spawnableCPUs[index];
         if (stats == null)
         {
-            //Debug.LogWarning($"No stats at index {index}");
+            if (showDebugLogs)Debug.LogWarning($"No stats at index {index}");
             return;
         }
 
         // Spawn through the spawner (handles money deduction)
         GameObject spawned = spawner.SpawnFromPlayer(stats);
 
-        if (spawned != null && showDebugLogs)
+        if (spawned != null)
         {
-            //Debug.Log($"Player spawned: {stats.name}");
+            FModAudioManager.instance.PlaySoundByName("spawnTroop");
+            if (showDebugLogs)Debug.Log($"Player spawned: {stats.name}");
         }
     }
 
@@ -109,21 +110,22 @@ public class SpawnController : MonoBehaviour
     {
         if (spawner == null)
         {
-            //Debug.LogError("No spawner assigned!");
+            if (showDebugLogs)Debug.LogError("No spawner assigned!");
             return;
         }
 
         if (playerPrefab == null)
         {
-            //Debug.LogWarning("No player prefab assigned!");
+            if (showDebugLogs)Debug.LogWarning("No player prefab assigned!");
             return;
         }
 
         GameObject spawned = spawner.SpawnPlayer(playerPrefab);
 
-        if (spawned != null && showDebugLogs)
+        if (spawned != null)
         {
-            //Debug.Log("Player character spawned");
+            FModAudioManager.instance.PlaySoundByName("spawnTroop");
+            if (showDebugLogs)Debug.Log("Player character spawned");
         }
     }
 
@@ -136,7 +138,7 @@ public class SpawnController : MonoBehaviour
         if (!spawnableCPUs.Contains(stats))
         {
             spawnableCPUs.Add(stats);
-            //Debug.Log($"Equipped: {stats.name}");
+            if (showDebugLogs)Debug.Log($"Equipped: {stats.name}");
         }
     }
 
@@ -149,7 +151,7 @@ public class SpawnController : MonoBehaviour
         if (spawnableCPUs.Contains(stats))
         {
             spawnableCPUs.Remove(stats);
-            //Debug.Log($"Unequipped: {stats.name}");
+            if (showDebugLogs)Debug.Log($"Unequipped: {stats.name}");
         }
     }
 }
