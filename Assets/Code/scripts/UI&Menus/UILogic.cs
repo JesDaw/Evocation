@@ -58,7 +58,7 @@ public class UILogic : MonoBehaviour
 
     public void TogglePause(InputAction.CallbackContext context)
     {
-        Debug.Log($"[UILogic] TogglePause called. performed: {context.performed}, GameIsPaused: {GameIsPaused}");
+        if(DebugLogs) Debug.Log($"[UILogic] TogglePause called. performed: {context.performed}, GameIsPaused: {GameIsPaused}");
         if (!context.performed) return;
 
         if (GameIsPaused)

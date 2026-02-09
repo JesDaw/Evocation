@@ -1,11 +1,17 @@
 using UnityEngine;
 using FMODUnity;
+using FMOD.Studio;
 using System.Collections.Generic;
 
 public class FModAudioManager : MonoBehaviour
 {
     public static FModAudioManager instance { get; private set; }
-    private Dictionary<string, EventReference> soundDictionary = new Dictionary<string, EventReference>();
+    Dictionary<string, EventReference> soundDictionary = new Dictionary<string, EventReference>();
+    [SerializeField] GameVolumeSO gameVolumeSO;
+    Bus masterBuss;
+    Bus MusicBuss;
+    Bus sfxBuss;
+
 
     void Awake()
     {
@@ -16,6 +22,14 @@ public class FModAudioManager : MonoBehaviour
         }
 
         instance = this;
+
+        if (gameVolumeSO == null) Debug.LogWarning($"[VolumeSlider] gameVolumeSO not assigned on {gameObject.name}");
+
+
+        masterBuss = RuntimeManager.GetBus("bus:/");
+        MusicBuss = RuntimeManager.GetBus("bus:/Music");
+        sfxBuss = RuntimeManager.GetBus("bus:/SoundEffects");
+
     }
     void Start()
     {
@@ -65,5 +79,12 @@ public class FModAudioManager : MonoBehaviour
         {
             Debug.LogWarning($"Sound '{soundName}' not found in dictionary.");
         }
+    }
+
+    void Update()
+    {
+        masterBuss.setVolume(gameVolumeSO.MasterVolume);
+        MusicBuss.setVolume(gameVolumeSO.MusicVolume);
+        sfxBuss.setVolume(gameVolumeSO.SFXVolume);
     }
 }

@@ -13,7 +13,6 @@ public class SceneActivity : MonoBehaviour
         if (!disableDefaultBehavior)
         {
             gameObject.SetActive(true); 
-
         }
         OnActivityStart.Invoke();
     }
