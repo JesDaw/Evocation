@@ -6,9 +6,9 @@ using Evocation.Clans;
 public class ScriptableStats : ScriptableObject
 {
     [Header("Animation & Appearance")]
-    public bool _Rotate;
-    public AnimatorOverrideController _animator;
-    public animationRigs[] _Sprites;
+    [HideInInspector] public bool _Rotate;
+    [HideInInspector] public AnimatorOverrideController _animator;
+    [HideInInspector] public animationRigs[] _Sprites;
     public float _AnimationMoveSpeed = 1f;
 
     [Space]
@@ -45,7 +45,7 @@ public class ScriptableStats : ScriptableObject
 
     [Space]
     [Header("Knockback")]
-    public float _KnockBackMax = 1;
+    public float _KnockBackMaxHealth = 1;
     public float _KnockBackVelocity;
 }
 
