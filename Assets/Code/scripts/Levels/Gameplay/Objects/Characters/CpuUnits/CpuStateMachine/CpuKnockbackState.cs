@@ -36,6 +36,7 @@ public class CpuKnockBackState : CpuBaseState
         }
         else
         {
+            //reset _KnockBackHealth
             _context.UpdateCurrentState(CpuStateManager.State.Move);
         }
     }
