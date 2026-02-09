@@ -92,8 +92,8 @@ public class BuildingStatsManager : MonoBehaviour
         SetMax();
         _Stats._CurrentHealth = scrStats._MaxHealth;
         _Stats._MoveSpeed = 0; // Buildings don't move
-        _Stats._KnockBackHealth = scrStats._KnockBackMax;
-        _Stats._KnockBackMax = scrStats._KnockBackMax;
+        _Stats._KnockBackHealth = scrStats._KnockBackMaxHealth;
+        _Stats._KnockBackMaxHealth = scrStats._KnockBackMaxHealth;
 
         if(DebugLogs) Debug.Log($"{gameObject.name} swapped to {(isEnemy ? "Enemy" : "Ally")} building");
     }

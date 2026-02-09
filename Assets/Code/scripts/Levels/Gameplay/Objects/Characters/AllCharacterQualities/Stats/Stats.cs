@@ -33,7 +33,7 @@ public class Stats : MonoBehaviour, IDamageable
     [HideInInspector] public float _CurrentHealth = 1;
     [HideInInspector] public bool _IsDead = false;
     [HideInInspector] public float _MoveSpeed;
-    [HideInInspector] public float _KnockBackMax;
+    [HideInInspector] public float _KnockBackMaxHealth;
     [HideInInspector] public float _KnockBackHealth;
     [HideInInspector] public int _spawnCost;
 
@@ -114,8 +114,8 @@ public class Stats : MonoBehaviour, IDamageable
         _MoveSpeed = scriptableStats._MoveSpeed;
         if (_MoveSpeed < 0) Debug.LogWarning($"{gameObject.name}: MoveSpeed is {_MoveSpeed}, should be non-negative.");
 
-        _KnockBackMax = scriptableStats._KnockBackMax;
-        _KnockBackHealth = _KnockBackMax;
+        _KnockBackMaxHealth = scriptableStats._KnockBackMaxHealth;
+        _KnockBackHealth = _KnockBackMaxHealth;
         _spawnCost = scriptableStats._spawnCost;
         if (_spawnCost < 0) Debug.LogWarning($"{gameObject.name}: SpawnCost is {_spawnCost}, should be non-negative.");
 

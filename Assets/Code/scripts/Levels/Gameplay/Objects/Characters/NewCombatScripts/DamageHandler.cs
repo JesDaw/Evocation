@@ -25,7 +25,7 @@ public class DamageHandler : MonoBehaviour
 
         if (attackedBy != null && attackedBy.damageType == DamageSource.DamageType.StatusEffect)
         {
-            stats._KnockBackHealth--;
+            stats._KnockBackHealth--; // attacks should have variable knockback buildup
         }
 
         if (attackedBy != null)
@@ -44,7 +44,7 @@ public class DamageHandler : MonoBehaviour
             return;
         }
 
-        if (stats._KnockBackHealth > 0 && stats._KnockBackHealth <= 0)
+        if (stats._KnockBackHealth <= 0)
         {
             TriggerKnockback();
         }
@@ -63,12 +63,12 @@ public class DamageHandler : MonoBehaviour
             stats.OnWitFlagDeath?.Invoke(stats.LastHitBy.IsEnemy);
         }
         stats.OnDeath?.Invoke();
-        stats.OnKnocked?.Invoke(); // Trigger knockback animation before destruction
+        TriggerKnockback();
     }
 
     private void TriggerKnockback()
     {
-        stats._KnockBackHealth = stats._KnockBackMax;
+        stats._KnockBackHealth = stats._KnockBackMaxHealth;
         stats.OnKnocked?.Invoke();
     }
 
