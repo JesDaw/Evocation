@@ -7,8 +7,8 @@ public class ScriptableStats : ScriptableObject
 {
     [Header("Animation & Appearance")]
     [HideInInspector] public bool _Rotate;
-    [HideInInspector] public AnimatorOverrideController _animator;
-    [HideInInspector] public animationRigs[] _Sprites;
+    public AnimatorOverrideController _animator;
+    public animationRigs[] _Sprites;
     public float _AnimationMoveSpeed = 1f;
 
     [Space]
