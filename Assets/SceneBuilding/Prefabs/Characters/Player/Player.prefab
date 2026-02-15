@@ -3742,10 +3742,10 @@ GameObject:
   - component: {fileID: 5971380828545686785}
   - component: {fileID: 6100003531216662107}
   - component: {fileID: 4492581254548526527}
-  - component: {fileID: 7170996237383625708}
-  - component: {fileID: 6451609478207083695}
   - component: {fileID: 4354507676696247666}
   - component: {fileID: 6429683390218926787}
+  - component: {fileID: 7170996237383625708}
+  - component: {fileID: 6451609478207083695}
   m_Layer: 14
   m_Name: Player
   m_TagString: Player
@@ -3819,7 +3819,7 @@ MonoBehaviour:
   _CurrentHealth: 100
   _IsDead: 0
   _MoveSpeed: 10
-  _KnockBackMax: 100
+  _KnockBackMaxHealth: 0
   _KnockBackHealth: 50
   _spawnCost: 15
   OnDeath:
@@ -3862,6 +3862,39 @@ MonoBehaviour:
   DebugLogs: 0
   _AttackingStats: {fileID: 0}
   isFacingRight: 1
+--- !u!114 &4354507676696247666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7051032630218217497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a2c1cd01e4ad464f9453124840dbae2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::StatusEffectManager
+  onEffectApplied:
+    m_PersistentCalls:
+      m_Calls: []
+  onEffectRemoved:
+    m_PersistentCalls:
+      m_Calls: []
+  onEffectTick:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &6429683390218926787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7051032630218217497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8497bdc4168874ba99c8180ca3dbd99e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::DamageHandler
 --- !u!50 &7170996237383625708
 Rigidbody2D:
   serializedVersion: 5
@@ -3926,39 +3959,6 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2}
   m_Direction: 0
---- !u!114 &4354507676696247666
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7051032630218217497}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a2c1cd01e4ad464f9453124840dbae2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::StatusEffectManager
-  onEffectApplied:
-    m_PersistentCalls:
-      m_Calls: []
-  onEffectRemoved:
-    m_PersistentCalls:
-      m_Calls: []
-  onEffectTick:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &6429683390218926787
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7051032630218217497}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8497bdc4168874ba99c8180ca3dbd99e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::DamageHandler
 --- !u!1 &7154460359775929340
 GameObject:
   m_ObjectHideFlags: 0

@@ -3,7 +3,6 @@ using DG.Tweening;
 
 public class PlayerHealthbar : HealthBarBase
 {
-
     int _maxHealth = 100;
 
     internal delegate void UpdateHealthDelegate(float value);
@@ -82,6 +81,12 @@ public class PlayerHealthbar : HealthBarBase
             stats.OnDeath += OnActivePlayerDeath;
         }
 
+        StartCoroutine(DelayedHealthUpdate());
+    }
+
+    System.Collections.IEnumerator DelayedHealthUpdate()
+    {
+        yield return null; 
         UpdateHealth();
     }
 
@@ -90,7 +95,6 @@ public class PlayerHealthbar : HealthBarBase
         getPlayerStats(out Stats stats);
         if (stats != null)
         {
-            //Debug.Log($"[PlayerHealthbar] Health updated: {stats._CurrentHealth}/{_maxHealth}");
             updateHealthIndicator(stats._CurrentHealth);
         }
     }

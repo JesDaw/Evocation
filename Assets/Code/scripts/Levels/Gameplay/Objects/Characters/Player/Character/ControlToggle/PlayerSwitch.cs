@@ -81,7 +81,6 @@ public class PlayerSwitch : MonoBehaviour
             }
         }
 
-        // Set up camera confiners for all players
         for (int i = 0; i < playerCameras.Count; i++)
         {
             SetupCameraConfiner(playerCameras[i]);
@@ -117,11 +116,9 @@ public class PlayerSwitch : MonoBehaviour
             return;
         }
 
-        // FIX: Check if current player exists before accessing it
         if (activePlayerIndex >= 0 && activePlayerIndex < players.Count && players[activePlayerIndex] != null)
         {
             var playerSM = players[activePlayerIndex].GetComponent<PlayerStateMachine>();
-            // FIX: Null check before accessing PlayerCommander
             if (playerSM != null && playerSM.PlayerCommander != null)
             {
                 playerSM.PlayerCommander.ClearAllCommands();
@@ -152,11 +149,9 @@ public class PlayerSwitch : MonoBehaviour
             return;
         }
 
-        // FIX: Check if current player exists before accessing it
         if (activePlayerIndex >= 0 && activePlayerIndex < players.Count && players[activePlayerIndex] != null)
         {
             var playerSM = players[activePlayerIndex].GetComponent<PlayerStateMachine>();
-            // FIX: Null check before accessing PlayerCommander
             if (playerSM != null && playerSM.PlayerCommander != null)
             {
                 playerSM.PlayerCommander.ClearAllCommands();
@@ -174,7 +169,7 @@ public class PlayerSwitch : MonoBehaviour
         ActivatePlayer(activePlayerIndex);
     }
 
-    private void RemoveNullPlayers()
+    void RemoveNullPlayers()
     {
         for (int i = players.Count - 1; i >= 0; i--)
         {
@@ -193,30 +188,23 @@ public class PlayerSwitch : MonoBehaviour
 
     void ActivatePlayer(int index)
     {
-        //Debug.Log($"ActivatePlayer called for index {index}");
-        
-        // FIX: Validate index before accessing
         if (index < 0 || index >= players.Count)
         {
             Debug.LogError($"Invalid player index: {index}");
             return;
         }
 
-        // FIX: Validate the player at index exists
         if (players[index] == null)
         {
             Debug.LogError($"Player at index {index} is null!");
             return;
         }
 
-        // Check if we're in freecam mode - if so, don't activate cameras
         bool isFreeCamActive = CameraControlSwitcher.Instance != null && 
                                CameraControlSwitcher.Instance.FreeCamIsActive;
 
-        // Deactivate all players first
         for (int i = 0; i < players.Count; i++)
         {
-            // FIX: Skip null players
             if (players[i] == null) continue;
 
             var playerSM = players[i].GetComponent<PlayerStateMachine>();
@@ -224,19 +212,17 @@ public class PlayerSwitch : MonoBehaviour
 
             if (i == index)
             {
-                // Activate this player (but not their camera if in freecam mode)
+                // Activate this player
                 if (!isFreeCamActive)
                 {
                     playerCameras[i].Priority = 2;
                 }
                 else
                 {
-                    // Keep camera priority low when in freecam
                     playerCameras[i].Priority = 0;
                 }
                 
                 ActivePlayer.Instance.CurrentPlayer = players[i];
-                // Note: Don't call SetActive(true) here - keep them inactive in freecam
                 playerSM.SetActive(!isFreeCamActive);
             }
             else
@@ -265,8 +251,6 @@ public class PlayerSwitch : MonoBehaviour
         {
             Debug.LogError($"No CinemachineCamera found in {newPlayer.name}");
         }
-
-        //Debug.Log($"Added new player. Total players: {players.Count}");
 
         if (PlayerLivesManager.Instance != null)
             PlayerLivesManager.Instance.OnPlayerAdded(newPlayer);
@@ -297,7 +281,6 @@ public class PlayerSwitch : MonoBehaviour
             else
             {
                 activePlayerIndex = -1;
-                // FIX: Clear CurrentPlayer when no players left
                 ActivePlayer.Instance.CurrentPlayer = null;
                 Debug.Log("No players left to control.");
             }
@@ -307,10 +290,8 @@ public class PlayerSwitch : MonoBehaviour
             activePlayerIndex--;
         }
 
-        // Optional: reassign PlayerIDs
         for (int i = 0; i < players.Count; i++)
         {
-            // FIX: Null check before accessing
             if (players[i] != null)
             {
                 var playerSM = players[i].GetComponent<PlayerStateMachine>();
