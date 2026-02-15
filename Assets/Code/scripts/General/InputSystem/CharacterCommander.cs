@@ -289,12 +289,15 @@ public struct PlayerCommandData
 /// <summary>
 /// BaseCharacterCommander specialized for Player Characters
 /// </summary>
+/// <summary>
+/// BaseCharacterCommander specialized for Player Characters
+/// </summary>
 public class PlayerCommander :
     BaseCharacterCommander<
         ContinuousPlayerCommand,
         DiscretePlayerCommand,
         PlayerCommandData
-        >
+    >
 {
     bool _isFreeCamActive;
 
@@ -311,12 +314,10 @@ public class PlayerCommander :
     {
         if ((context.ReadValue<Vector2>() == Vector2.zero) || context.canceled)
         {
-            //Debug.Log("Player moving stopped in player commander");
             SetActiveCmd(ContinuousPlayerCommand.Move, false, null);
         }
         else
         {
-            //Debug.Log("Player moving in player commander");
             SetActiveCmd(
                 ContinuousPlayerCommand.Move,
                 true,
@@ -324,15 +325,15 @@ public class PlayerCommander :
         }
     }
 
-    /// <summary>
-    /// Handle 'Attack' input action
-    /// </summary>
-    /// <param name="context">context associated with the event</param>
+
     public void OnAttack(InputAction.CallbackContext context)
     {        
         if (context.performed && context.ReadValueAsButton())
         {
-            SendCmd(DiscretePlayerCommand.Attack, null);
+            if (!IsCmdPending(DiscretePlayerCommand.Attack))
+            {
+                SendCmd(DiscretePlayerCommand.Attack, null);
+            }
         }
     }
 
@@ -360,7 +361,7 @@ public class PlayerCommander :
     /// <summary>
     /// Are any commands active or pending?
     /// </summary>
-    /// <returns>'true' if NO commands are active or pending, 'false' otherwise</returns>
+    /// <returns>'true' if NO commands are active or pending, 'false' if not</returns>
     public bool IsIdle()
     {
         return !IsCmdActive() && !IsCmdPending();

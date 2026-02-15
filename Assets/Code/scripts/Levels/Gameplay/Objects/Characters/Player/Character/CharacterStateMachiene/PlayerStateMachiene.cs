@@ -119,8 +119,6 @@ public class PlayerStateMachine : MonoBehaviour
         playerActions.Move.performed -= OnMove;
         playerActions.Move.canceled -= OnMove;
         playerActions.Attack.performed -= OnAttack;
-
-       
     }
 
     public void FindFreeCam()
@@ -139,7 +137,6 @@ public class PlayerStateMachine : MonoBehaviour
     void Update()
     {
         _currentState.UpdateStates();
-        //Debug.Log($"{_isActive}");
     }
 
     public void UpdateCurrentStateToKnockback()
@@ -151,7 +148,43 @@ public class PlayerStateMachine : MonoBehaviour
     public void SetActive(bool active)
     {
         _isActive = active;
-        //Debug.Log($"Player {gameObject.name} set active: {active}");
+        
+        if (active)
+        {
+            // When activating, check if any continuous inputs are currently held
+            SyncContinuousInputs();
+        }
+        else
+        {
+            // When deactivating, clear all commands
+            if (_commander != null)
+            {
+                _commander.ClearAllCommands();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Syncs the commander with the current state of continuous input actions
+    /// This ensures held inputs are recognized when switching to this character
+    /// </summary>
+    void SyncContinuousInputs()
+    {
+        if (GlobalInputManager.Instance == null || _commander == null) return;
+
+        var playerActions = GlobalInputManager.Instance.InputActions.Player;
+        
+        // Check if Move is currently pressed
+        Vector2 moveValue = playerActions.Move.ReadValue<Vector2>();
+        if (moveValue != Vector2.zero)
+        {
+            _commander.SetActiveCmd(
+                ContinuousPlayerCommand.Move,
+                true,
+                new PlayerCommandData(moveValue)
+            );
+            if (DebugLogs) Debug.Log($"Synced Move input on activation: {moveValue}");
+        }
     }
 
     void replaceAnimation()
@@ -200,7 +233,7 @@ public class PlayerStateMachine : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        if (DebugLogs) Debug.Log($"State Machiene Move Received _isActive: {_isActive}, free cam active: {CameraControlSwitcher.Instance.FreeCamIsActive}");
+        if (DebugLogs) Debug.Log($"State Machine Move Received _isActive: {_isActive}, free cam active: {CameraControlSwitcher.Instance.FreeCamIsActive}");
         if (!_isActive || CameraControlSwitcher.Instance.FreeCamIsActive) return; 
         _commander.OnMove(context);
     }

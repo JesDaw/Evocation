@@ -32,7 +32,6 @@ public class CameraControlSwitcher : MonoBehaviour
 
     void OnDisable()
     {
-        // Unsubscribe when disabled
         if (GlobalInputManager.Instance != null)
         {
             var controlManager = GlobalInputManager.Instance.InputActions.ControlManager;
@@ -42,15 +41,12 @@ public class CameraControlSwitcher : MonoBehaviour
 
     void Start()
     {
-        //if (soundEffectsManager == null)
-          //  soundEffectsManager = FindAnyObjectByType<AudioManager>();
         var controlManager = GlobalInputManager.Instance.InputActions.ControlManager;
         controlManager.ToggleCameraControl.performed += OnToggleCameraControl;
     }
 
     public void OnToggleCameraControl(InputAction.CallbackContext context)
     {
-        //Debug.Log("Switching camera button pressed");
         if (DebugLogs) UnityEngine.Debug.Log($"[CameraControlSwitcher] OnToggleCameraControl called. FreeCamIsActive: {FreeCamIsActive}, _camModeIsTogglable: {_camModeIsTogglable}");
         if (!_camModeIsTogglable) return;
         if (!context.performed) return;
@@ -61,7 +57,6 @@ public class CameraControlSwitcher : MonoBehaviour
             return;
         }
 
-       // soundEffectsManager?.Play("Switching Cameras");
         ToggleControl();
     }
 
@@ -77,10 +72,8 @@ public class CameraControlSwitcher : MonoBehaviour
     {
         FreeCamIsActive = false;
         
-        // Use GlobalInputManager to switch control modes
         GlobalInputManager.Instance.SetPlayerCharacterMode();
 
-        // Get the current active player and enable their inputs
         var currentPlayer = ActivePlayer.Instance.CurrentPlayer?.GetComponent<PlayerStateMachine>();
         if (currentPlayer != null)
         {
@@ -114,18 +107,15 @@ public class CameraControlSwitcher : MonoBehaviour
         }
         FreeCamIsActive = true;
 
-        // Disable the current player's inputs
         var currentPlayer = ActivePlayer.Instance.CurrentPlayer?.GetComponent<PlayerStateMachine>();
         if (currentPlayer != null)
         {
-            currentPlayer.SetActive(false);
+            currentPlayer.SetActive(false); 
         }
 
-        // Use GlobalInputManager to switch control modes
         GlobalInputManager.Instance.SetFreeCamMode();
         if (DebugLogs) UnityEngine.Debug.Log($"[CameraControlSwitcher] Switched to camera control. FreeCam now active, player disabled.");
 
-        // Update camera position and priority
         var playerCam = ActivePlayer.Instance.GetCurrentPlayerCamera();
         if (playerCam != null && freeCam != null)
         {
@@ -136,7 +126,6 @@ public class CameraControlSwitcher : MonoBehaviour
         }
     }
 
-
     public void SwitchToFreeCamAtPosition(Vector3 position, float fieldOfView) 
     {
         FreeCamIsActive = true;
@@ -144,7 +133,7 @@ public class CameraControlSwitcher : MonoBehaviour
         var currentPlayer = ActivePlayer.Instance.CurrentPlayer?.GetComponent<PlayerStateMachine>();
         if (currentPlayer != null)
         {
-            currentPlayer.SetActive(false);
+            currentPlayer.SetActive(false); 
         }
 
         GlobalInputManager.Instance.SetFreeCamMode();
@@ -161,8 +150,6 @@ public class CameraControlSwitcher : MonoBehaviour
         {
             playerCam.Priority = 0;
         }
-
-        //Debug.Log($"Ghost cam activated at position {position}");
     }
 
     public void DeadFreeCam()
@@ -179,19 +166,13 @@ public class CameraControlSwitcher : MonoBehaviour
 
         playerCam.Priority = 0;
 
-        // Disable current player
+        // Disable current player and clear commands
         var currentPlayer = ActivePlayer.Instance.CurrentPlayer?.GetComponent<PlayerStateMachine>();
         if (currentPlayer != null)
         {
             currentPlayer.SetActive(false);
         }
 
-        // Use GlobalInputManager to set appropriate mode
         GlobalInputManager.Instance.SetFreeCamMode();
-
-       // if (soundEffectsManager != null)
-           // soundEffectsManager.gameObject.SetActive(false);
-
-        //Debug.Log("All players dead - switched to freecam.");
     }
 }
