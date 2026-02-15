@@ -5,17 +5,23 @@ using Unity.Cinemachine;
 
 public class PlayerLivesManager : MonoBehaviour
 {
-    [SerializeField] public IntVeriable LifeCount;
     [SerializeField] public int MaxLives;
     [SerializeField] UnityEvent _loose_game;
-    [SerializeField] ActivePlayer activePlayer;
-    [SerializeField] PlayerSwitch playerSwitch;
-    [SerializeField] PlayerLivesDisplay playerLivesDisplay;
-    [SerializeField] CameraControlSwitcher cameraControlSwitcher;
     public bool canSpawnMore = true;
+    public int LifeCount = 1;
     public static PlayerLivesManager Instance { get; private set; }
 
-    private void SubscribeToPlayerDeath(GameObject player)
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
+
+    void SubscribeToPlayerDeath(GameObject player)
     {
         Stats stats = player.GetComponent<Stats>();
         if (stats != null)
@@ -31,17 +37,9 @@ public class PlayerLivesManager : MonoBehaviour
 
     void Start()
     {
-        if (Instance != null && Instance != this)
+        if (PlayerSwitch.Instance != null)
         {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-
-        // Subscribe for existing players
-        if (playerSwitch != null)
-        {
-            foreach (GameObject player in playerSwitch.Players)
+            foreach (GameObject player in PlayerSwitch.Instance.Players)
             {
                 if (player != null)
                     SubscribeToPlayerDeath(player);
@@ -53,9 +51,9 @@ public class PlayerLivesManager : MonoBehaviour
     {
         if (canSpawnMore)
         {
-            LifeCount._Value++;
-            playerLivesDisplay.UpdateTorchDisplay();
-            if (LifeCount._Value >= MaxLives) 
+            LifeCount++;
+            PlayerLivesDisplay.Instance.UpdateTorchDisplay();
+            if (LifeCount >= MaxLives) 
             {
                 canSpawnMore = false;
             }
@@ -68,13 +66,13 @@ public class PlayerLivesManager : MonoBehaviour
 
     public void LooseLife(GameObject deadPlayer)
     {
-        LifeCount._Value--;
+        LifeCount--;
         canSpawnMore = true;
-        playerLivesDisplay.UpdateTorchDisplay();
+        PlayerLivesDisplay.Instance.UpdateTorchDisplay();
 
-        if (LifeCount._Value <= 0)
+        if (LifeCount <= 0)
         {
-            //Debug.Log($"Player life count = {LifeCount._Value} ending game");
+            //Debug.Log($"Player life count = {_lifeCount} ending game");
             HandleGameOver(deadPlayer);
         }
         else
@@ -86,7 +84,7 @@ public class PlayerLivesManager : MonoBehaviour
     //this one is called when the active player dies
     public void LooseLife()
     {
-        var currentPlayer = activePlayer.GetCurrentPlayerController();
+        var currentPlayer = ActivePlayer.Instance.GetCurrentPlayerController();
         
         if (currentPlayer != null)
         {
@@ -94,11 +92,11 @@ public class PlayerLivesManager : MonoBehaviour
         }
         else
         {
-            LifeCount._Value--;
+            LifeCount--;
             canSpawnMore = true;
-            playerLivesDisplay.UpdateTorchDisplay();
+            PlayerLivesDisplay.Instance.UpdateTorchDisplay();
 
-            if (LifeCount._Value <= 0)
+            if (LifeCount <= 0)
             {
                 _loose_game.Invoke();
             }
@@ -120,12 +118,12 @@ public class PlayerLivesManager : MonoBehaviour
 
         if (deadPlayer != null)
         {
-            playerSwitch.RemovePlayer(deadPlayer);
+            PlayerSwitch.Instance.RemovePlayer(deadPlayer);
         }
 
-        if (cameraControlSwitcher != null)
+        if (CameraControlSwitcher.Instance != null)
         {
-            cameraControlSwitcher.SwitchToFreeCamAtPosition(deathCameraPosition, deathCameraFOV);
+            CameraControlSwitcher.Instance.SwitchToFreeCamAtPosition(deathCameraPosition, deathCameraFOV);
         }
         else
         {
@@ -147,9 +145,9 @@ public class PlayerLivesManager : MonoBehaviour
 
         _loose_game.Invoke();
 
-        if (cameraControlSwitcher != null)
+        if (CameraControlSwitcher.Instance != null)
         {
-            cameraControlSwitcher.SwitchToFreeCamAtPosition(deathCameraPosition, deathCameraFOV);
+            CameraControlSwitcher.Instance.SwitchToFreeCamAtPosition(deathCameraPosition, deathCameraFOV);
         }
     }
 }

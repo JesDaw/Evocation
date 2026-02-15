@@ -10,8 +10,8 @@ using TMPro;
 /// </summary>
 public class Timer : MonoBehaviour
 {
-    [SerializeField] public float maxTimeRemaining = 1f; // PUBLIC for AI system
-    [SerializeField] public FloatVariable remainingTimeSeconds; // PUBLIC for AI system
+    [SerializeField] public float maxTimeRemaining = 1f;
+    [HideInInspector] public float RemainingTimeSeconds;
     [SerializeField] TextMeshProUGUI timerText;
     [SerializeField] UnityEvent _TimeHitZero;
     [SerializeField] UnityEvent _TimeStarted;
@@ -23,10 +23,17 @@ public class Timer : MonoBehaviour
         get { return _timer_is_active; }
         set { _timer_is_active = value;}
     }
-
+    public static Timer Instance { get; private set; }
     void Awake()
     {
-        remainingTimeSeconds._Value = maxTimeRemaining;
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        
+        RemainingTimeSeconds = maxTimeRemaining;
         if (timerText == null)
         {
             GameObject timerTextObj = GameObject.Find("TimerText");
@@ -47,13 +54,13 @@ public class Timer : MonoBehaviour
     //counts down that stops at 0
     void Countdown()
     {
-        if (remainingTimeSeconds._Value > 0)
+        if (RemainingTimeSeconds > 0)
         {
-            remainingTimeSeconds._Value -= Time.deltaTime;
+            RemainingTimeSeconds -= Time.deltaTime;
         }
         else
         {
-            remainingTimeSeconds._Value = 0;
+            RemainingTimeSeconds = 0;
             _TimeHitZero?.Invoke();
             DeactivateTimer();   
         }
@@ -66,13 +73,16 @@ public class Timer : MonoBehaviour
         _TimeStarted?.Invoke();
     }
 
-    public void ResetTimer() { remainingTimeSeconds.Reset(); }
-
     // conversion from seconds to minutes and seconds and displays it in UI
     void DesplayTime()
     {
-        int minutes = Mathf.FloorToInt(remainingTimeSeconds._Value / 60);
-        int seconds = Mathf.FloorToInt(remainingTimeSeconds._Value % 60);
+        int minutes = Mathf.FloorToInt(RemainingTimeSeconds / 60);
+        int seconds = Mathf.FloorToInt(RemainingTimeSeconds % 60);
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+    }
+
+    public void ResetTimer()
+    {
+        RemainingTimeSeconds = maxTimeRemaining;
     }
 }

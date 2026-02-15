@@ -63,7 +63,7 @@ public class AIContext
     {
         if (timer == null || !timer.TimeIsActive) return 0f;
         
-        float elapsed = timer.maxTimeRemaining - timer.remainingTimeSeconds._Value;
+        float elapsed = timer.maxTimeRemaining - Timer.Instance.RemainingTimeSeconds;
         return Mathf.Clamp01(elapsed / timer.maxTimeRemaining);
     }
     
@@ -71,7 +71,7 @@ public class AIContext
     {
         if (timer == null || !timer.TimeIsActive) return 1f;
         
-        return Mathf.Clamp01(timer.remainingTimeSeconds._Value / timer.maxTimeRemaining);
+        return Mathf.Clamp01(Timer.Instance.RemainingTimeSeconds / timer.maxTimeRemaining);
     }
     
     public float GetNormalizedClosestEnemy()
@@ -133,12 +133,12 @@ public class AIContext
     public float GetTimeElapsed()
     {
         if (timer == null) return 0f;
-        return timer.maxTimeRemaining - timer.remainingTimeSeconds._Value;
+        return  Timer.Instance.maxTimeRemaining - Timer.Instance.RemainingTimeSeconds;
     }
     
     public float GetTimeRemaining()
     {
-        return timer != null ? timer.remainingTimeSeconds._Value : 0f;
+        return Timer.Instance != null ? Timer.Instance.RemainingTimeSeconds : 0f;
     }
     
     public int GetPlayerUnitCount()

@@ -9,30 +9,29 @@ public class AISpawnerController : MonoBehaviour
 {
     [Header("AI Moods")]
     public List<AIMood> moods = new List<AIMood>();
-    [SerializeField] private int startingMoodIndex = 0;
+    [SerializeField] int startingMoodIndex = 0;
     
     [Header("Decision Making")]
-    [SerializeField] private float decisionInterval = 2f;
+    [SerializeField] float decisionInterval = 2f;
     
     [Header("Spawner Setup")]
-    [SerializeField] private SpawnObjects spawner;
-    [SerializeField] private AIMoneyManager aiMoneyManager;
+    [SerializeField] AIMoneyManager aiMoneyManager;
     
     [Header("Game Systems")]
-    [SerializeField] private Timer gameTimer;
+    [SerializeField] Timer gameTimer;
     
     [Header("Map Zones")]
-    [SerializeField] private MapZonesManager upperZone;
-    [SerializeField] private MapZonesManager middleZone;
-    [SerializeField] private MapZonesManager lowerZone;
+    [SerializeField] MapZonesManager upperZone;
+    [SerializeField] MapZonesManager middleZone;
+    [SerializeField] MapZonesManager lowerZone;
     
     [Header("Spatial")]
-    [SerializeField] private Transform aiBase;
-    [SerializeField] private Transform playerBase;
-    [SerializeField] private float maxDistance = 100f;
+    [SerializeField] Transform aiBase;
+    [SerializeField] Transform playerBase;
+    [SerializeField] float maxDistance = 100f;
     
     [Header("Debug")]
-    [SerializeField] private bool showDebugLogs = false;
+    [SerializeField] bool showDebugLogs = false;
 
     private AIMood currentMood;
     private int currentMoodIndex;
@@ -54,7 +53,7 @@ public class AISpawnerController : MonoBehaviour
             return;
         }
 
-        if (spawner == null)
+        if (SpawnObjects.EnemyInstance == null)
             Debug.LogError("[AI] No SpawnObjects assigned!");
 
         if (aiMoneyManager == null)
@@ -74,7 +73,7 @@ public class AISpawnerController : MonoBehaviour
     {
         context = new AIContext
         {
-            spawner = spawner,
+            spawner = SpawnObjects.EnemyInstance,
             aiMoneyManager = aiMoneyManager,
             timer = gameTimer,
             upperZone = upperZone,
@@ -94,10 +93,14 @@ public class AISpawnerController : MonoBehaviour
             Debug.LogWarning("[AI] Already running!");
             return;
         }
-
-        if (spawner == null || aiMoneyManager == null)
+        if (SpawnObjects.EnemyInstance == null)
         {
-            Debug.LogError("[AI] Cannot start: Missing spawner or AIMoneyManager!");
+            Debug.LogError("[AI] Cannot start: Missing spawner");
+        }
+
+        if (aiMoneyManager == null)
+        {
+            Debug.LogError("[AI] Cannot start: Missing AIMoneyManager!");
             return;
         }
 

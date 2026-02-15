@@ -8,7 +8,6 @@ using System.Collections.Generic;
 public class CharacterSelect : MonoBehaviour
 {
 
-    [SerializeField] SpawnController spawnController;
     [Header("Character summary objects")]
     [SerializeField] TMP_Text characterNameText;
     [SerializeField] TMP_Text characterDescriptionText;
@@ -29,7 +28,7 @@ public class CharacterSelect : MonoBehaviour
     {
         maxMessage.SetActive(false);
         UpdatePartyUI();
-        if (!spawnController) Debug.LogError($"spawnController not set in {gameObject.name}");
+        if (!SpawnController.Instance) Debug.LogError($"spawnController not set in {gameObject.name}");
     }
 
     public void ShowCharacterInfo(CharacterData character)
@@ -57,7 +56,7 @@ public class CharacterSelect : MonoBehaviour
         {
             FModAudioManager.instance.PlaySoundByName("removeCharacterFromParty");
             party.Remove(character);
-            spawnController.UnequipCPU(character.scriptableStats);
+            SpawnController.Instance.UnequipCPU(character.scriptableStats);
         }
         else
         {
@@ -65,7 +64,7 @@ public class CharacterSelect : MonoBehaviour
             {
                 FModAudioManager.instance.PlaySoundByName("addCharacterToParty");
                 party.Add(character);
-                spawnController.EquipCPU(character.scriptableStats);
+                SpawnController.Instance.EquipCPU(character.scriptableStats);
             }
             else
             {

@@ -69,7 +69,7 @@ public class UILogic : MonoBehaviour
 
     public void Resume()
     {
-        if(DebugLogs) Debug.Log($"Game is paused was {DebugLogs} when trying to resume");
+        if(DebugLogs) Debug.Log($"Game is paused was {GameIsPaused} when trying to resume");
         if (GameIsPaused)
         {
             FModAudioManager.instance.PlaySoundByName("resumeGame");
@@ -94,7 +94,7 @@ public class UILogic : MonoBehaviour
 
     void Pause()
     {
-        if(DebugLogs) Debug.Log($"Game is paused was {DebugLogs} when trying to pause");
+        if(DebugLogs) Debug.Log($"Game is paused was {GameIsPaused} when trying to pause");
         if (!GameIsPaused)
         {
             FModAudioManager.instance.PlaySoundByName("pauseGame");

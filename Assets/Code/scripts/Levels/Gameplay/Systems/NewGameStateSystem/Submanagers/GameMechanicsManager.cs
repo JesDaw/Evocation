@@ -8,13 +8,7 @@ using UnityEngine;
 public class GameMechanicsManager : MonoBehaviour
 {
     public static GameMechanicsManager Instance { get; private set; }
-    
-    [Header("System References")]
-    [SerializeField] private Money moneySystem;
-    [SerializeField] private Timer timerSystem;
-    [SerializeField] private SpawnObjects playerSpawner;
-    [SerializeField] private SpawnObjects enemySpawner;
-    
+        
     [Header("Debug")]
     [SerializeField] private bool showDebugLogs = false;
     
@@ -53,35 +47,24 @@ public class GameMechanicsManager : MonoBehaviour
     
     private void AutoFindSystems()
     {
-        if (moneySystem == null)
-        {
-            moneySystem = FindAnyObjectByType<Money>();
-            if (moneySystem == null && showDebugLogs)
-                Debug.LogWarning("[GameMechanicsManager] Money system not found!");
-        }
-        
-        if (timerSystem == null)
-        {
-            timerSystem = FindAnyObjectByType<Timer>();
-            if (timerSystem == null && showDebugLogs)
-                Debug.LogWarning("[GameMechanicsManager] Timer system not found!");
-        }
+        if (Money.Instance == null && showDebugLogs) Debug.LogWarning("[GameMechanicsManager] Money system not found!");
+        if (Timer.Instance == null && showDebugLogs) Debug.LogWarning("[GameMechanicsManager] Timer system not found");
     }
     
     private void LogSystemReferences()
     {
         Debug.Log($"[GameMechanicsManager] Systems Found:\n" +
-                  $"  Money: {(moneySystem != null ? "✓" : "✗")}\n" +
-                  $"  Timer: {(timerSystem != null ? "✓" : "✗")}\n" +
-                  $"  Player Spawner: {(playerSpawner != null ? "✓" : "✗")}\n" +
-                  $"  Enemy Spawner: {(enemySpawner != null ? "✓" : "✗")}");
+                  $"  Money: {(Money.Instance != null ? "✓" : "✗")}\n" +
+                  $"  Timer: {(Timer.Instance != null ? "✓" : "✗")}\n" +
+                  $"  Player Spawner: {(SpawnObjects.PlayerInstance != null ? "✓" : "✗")}\n" +
+                  $"  Enemy Spawner: {(SpawnObjects.EnemyInstance != null ? "✓" : "✗")}");
     }
     
     #region Money System
     
     public void SetMoneyActive(bool active)
     {
-        if (moneySystem == null)
+        if (Money.Instance == null)
         {
             if (showDebugLogs)
                 Debug.LogWarning("[GameMechanicsManager] Money system not found!");
@@ -90,37 +73,37 @@ public class GameMechanicsManager : MonoBehaviour
         
         if (active)
         {
-            moneySystem.ActivateMoney();
+            Money.Instance.ActivateMoney();
             if (showDebugLogs) Debug.Log("[GameMechanicsManager] Money activated");
         }
         else
         {
-            moneySystem.DeactivateMoney();
+            Money.Instance.DeactivateMoney();
             if (showDebugLogs) Debug.Log("[GameMechanicsManager] Money deactivated");
         }
     }
     
     public void ResetMoney()
     {
-        if (moneySystem != null)
+        if (Money.Instance != null)
         {
-            moneySystem.ResetMoney();
+            Money.Instance.ResetMoney();
             if (showDebugLogs) Debug.Log("[GameMechanicsManager] Money reset");
         }
     }
     
     public void IncreaseMoneyGeneration()
     {
-        if (moneySystem != null)
+        if (Money.Instance != null)
         {
-            moneySystem.IncreaseMoneyGen();
+            Money.Instance.IncreaseMoneyGen();
             if (showDebugLogs) Debug.Log("[GameMechanicsManager] Money generation increased");
         }
     }
     
     public bool IsMoneyActive()
     {
-        return moneySystem != null && moneySystem.MoneyIsActive;
+        return Money.Instance != null && Money.Instance.MoneyIsActive;
     }
     
     #endregion
@@ -129,7 +112,7 @@ public class GameMechanicsManager : MonoBehaviour
     
     public void SetTimerActive(bool active)
     {
-        if (timerSystem == null)
+        if (Timer.Instance == null)
         {
             if (showDebugLogs)
                 Debug.LogWarning("[GameMechanicsManager] Timer system not found!");
@@ -138,28 +121,28 @@ public class GameMechanicsManager : MonoBehaviour
         
         if (active)
         {
-            timerSystem.ActivateTimer();
+            Timer.Instance.ActivateTimer();
             if (showDebugLogs) Debug.Log("[GameMechanicsManager] Timer activated");
         }
         else
         {
-            timerSystem.DeactivateTimer();
+            Timer.Instance.DeactivateTimer();
             if (showDebugLogs) Debug.Log("[GameMechanicsManager] Timer deactivated");
         }
     }
     
     public void ResetTimer()
     {
-        if (timerSystem != null)
+        if (Timer.Instance != null)
         {
-            timerSystem.ResetTimer();
+            Timer.Instance.ResetTimer();
             if (showDebugLogs) Debug.Log("[GameMechanicsManager] Timer reset");
         }
     }
     
     public bool IsTimerActive()
     {
-        return timerSystem != null && timerSystem.TimeIsActive;
+        return Timer.Instance != null && Timer.Instance.TimeIsActive;
     }
     
     #endregion
@@ -168,52 +151,39 @@ public class GameMechanicsManager : MonoBehaviour
     
     public void SetPlayerSpawningActive(bool active)
     {
-        if (playerSpawner == null)
+        if (SpawnObjects.PlayerInstance == null)
         {
             if (showDebugLogs)
                 Debug.LogWarning("[GameMechanicsManager] Player spawner not found!");
             return;
         }
         
-        playerSpawner.SpawningIsActive = active;
+        SpawnObjects.PlayerInstance.SpawningIsActive = active;
         if (showDebugLogs) 
             Debug.Log($"[GameMechanicsManager] Player spawning {(active ? "activated" : "deactivated")}");
     }
     
     public void SetEnemySpawningActive(bool active)
     {
-        if (enemySpawner == null)
+        if (SpawnObjects.EnemyInstance == null)
         {
             if (showDebugLogs)
                 Debug.LogWarning("[GameMechanicsManager] Enemy spawner not found!");
             return;
         }
         
-        enemySpawner.SpawningIsActive = active;
+        SpawnObjects.EnemyInstance.SpawningIsActive = active;
         if (showDebugLogs) 
             Debug.Log($"[GameMechanicsManager] Enemy spawning {(active ? "activated" : "deactivated")}");
     }
-    
-    public void SetPlayerSpawner(SpawnObjects spawner)
-    {
-        playerSpawner = spawner;
-        if (showDebugLogs) Debug.Log("[GameMechanicsManager] Player spawner assigned");
-    }
-    
-    public void SetEnemySpawner(SpawnObjects spawner)
-    {
-        enemySpawner = spawner;
-        if (showDebugLogs) Debug.Log("[GameMechanicsManager] Enemy spawner assigned");
-    }
-    
     public bool IsPlayerSpawningActive()
     {
-        return playerSpawner != null && playerSpawner.SpawningIsActive;
+        return SpawnObjects.PlayerInstance != null && SpawnObjects.PlayerInstance.SpawningIsActive;
     }
     
     public bool IsEnemySpawningActive()
     {
-        return enemySpawner != null && enemySpawner.SpawningIsActive;
+        return SpawnObjects.EnemyInstance != null && SpawnObjects.EnemyInstance.SpawningIsActive;
     }
     
     #endregion

@@ -4,21 +4,27 @@ using System.Collections;
 
 public class Money : MonoBehaviour
 {
-    [SerializeField] public FloatVariable genPerSec;
-    [SerializeField] public FloatVariable moneyAmount;
     [SerializeField] TextMeshProUGUI moneyText;
     [SerializeField] AIMoneyManager aIMoneyManager;
     bool _money_is_active = false;
-    float CurrentMoney = 0;
+    public float CurrentMoney = 0;
+    public float MoneyGainPerSec = 1; 
     
     public bool MoneyIsActive
     {
         get { return _money_is_active; }
     }
+    public static Money Instance { get; private set; }
 
     void Awake()
     {
-        CurrentMoney = moneyAmount._Value;
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
 
         if (moneyText == null)
         {
@@ -37,26 +43,26 @@ public class Money : MonoBehaviour
     {
         while(true)
         {
-            if (!_money_is_active && moneyAmount._Value < 9999)
+            if (!_money_is_active && CurrentMoney < 9999)
             {
                 yield return null;
                 continue;
             }
-            moneyAmount._Value += 1;
+            CurrentMoney += 1;
             UpdateMoneyDesplay();
-            yield return new WaitForSeconds(1/genPerSec._Value);
+            yield return new WaitForSeconds(1/MoneyGainPerSec);
         }
     }
 
     public void UpdateMoneyDesplay()
     {
-        moneyText.text = moneyAmount._Value.ToString("0");
+        moneyText.text = CurrentMoney.ToString("0");
         //Debug.Log("UpdateMoneyDesplay updated");
     }
 
     public void spendMoney(int amount)
     {
-        moneyAmount._Value -= amount;
+        CurrentMoney -= amount;
     }
     
     public void DeactivateMoney() 
@@ -69,6 +75,6 @@ public class Money : MonoBehaviour
         _money_is_active = true; 
         aIMoneyManager.ActivateMoney();
     }
-    public void ResetMoney() => moneyAmount.Reset(); 
-    public void IncreaseMoneyGen() => genPerSec._Value *= 2; 
+    public void ResetMoney() => CurrentMoney = 0; 
+    public void IncreaseMoneyGen() => MoneyGainPerSec *= 2; 
 }
