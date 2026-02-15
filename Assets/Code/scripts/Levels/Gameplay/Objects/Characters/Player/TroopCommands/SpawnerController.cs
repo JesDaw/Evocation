@@ -9,13 +9,24 @@ public class SpawnController : MonoBehaviour
 {
     [Header("Spawn Settings")]
     [SerializeField] List<ScriptableStats> spawnableCPUs = new List<ScriptableStats>();
-    [SerializeField] SpawnObjects spawner;
 
     [Header("Player Spawning")]
     [SerializeField] GameObject playerPrefab;
 
     [Header("Debug")]
     [SerializeField] bool showDebugLogs = false;
+    public static SpawnController Instance { get; private set; }
+
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+    }
 
     void Start()
     {
@@ -76,7 +87,7 @@ public class SpawnController : MonoBehaviour
     void TrySpawnCPU(int index)
     {
         // Validation
-        if (spawner == null)
+        if (SpawnObjects.PlayerInstance == null)
         {
             if (showDebugLogs)Debug.LogError("No spawner assigned on player spawner!");
             return;
@@ -97,7 +108,7 @@ public class SpawnController : MonoBehaviour
         }
 
         // Spawn through the spawner (handles money deduction)
-        GameObject spawned = spawner.SpawnFromPlayer(stats);
+        GameObject spawned = SpawnObjects.PlayerInstance.SpawnFromPlayer(stats);
 
         if (spawned != null)
         {
@@ -108,7 +119,7 @@ public class SpawnController : MonoBehaviour
 
     void SpawnPlayer()
     {
-        if (spawner == null)
+        if (SpawnObjects.PlayerInstance == null)
         {
             if (showDebugLogs)Debug.LogError("No spawner assigned!");
             return;
@@ -120,7 +131,7 @@ public class SpawnController : MonoBehaviour
             return;
         }
 
-        GameObject spawned = spawner.SpawnPlayer(playerPrefab);
+        GameObject spawned = SpawnObjects.PlayerInstance.SpawnPlayer(playerPrefab);
 
         if (spawned != null)
         {

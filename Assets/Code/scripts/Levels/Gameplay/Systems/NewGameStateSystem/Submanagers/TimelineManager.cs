@@ -62,7 +62,7 @@ public class TimelineManager : MonoBehaviour
         }
     }
     
-    private void InitializeTimelines()
+    void InitializeTimelines()
     {
         foreach (var entry in timelines)
         {
@@ -114,7 +114,7 @@ public class TimelineManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError($"[TimelineManager] Cutscene '{timelineName}' not found! Available: {string.Join(", ", timelinesByName.Keys)}");
+            Debug.LogError($"[TimelineManager] Cutscene '{timelineName}' not found! Available timelines: {string.Join(", ", timelinesByName.Keys)}");
         }
     }
     System.Collections.IEnumerator WaitBeforeStarting(TimelineEntry entry)

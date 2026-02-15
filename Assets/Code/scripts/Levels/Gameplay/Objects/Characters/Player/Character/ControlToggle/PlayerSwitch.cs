@@ -12,6 +12,18 @@ public class PlayerSwitch : MonoBehaviour
 
     int activePlayerIndex = 0;
     int PlayerIDNumber;
+    public static PlayerSwitch Instance { get; private set; }
+
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+    }
     
     void SetupCameraConfiner(CinemachineCamera cam)
     {

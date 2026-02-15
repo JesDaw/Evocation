@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Data.SqlTypes;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -22,16 +23,13 @@ public class SpawnObjects : MonoBehaviour
     [SerializeField] Transform spawnLocation;
 
     [Header("Player Spawning")]
-    [SerializeField] FloatVariable playerMoney;
-    [SerializeField] PlayerSwitch playerSwitch;
-    [SerializeField] PlayerLivesManager playerLivesManager;
-    [SerializeField] Money moneyDisplay;
 
     [Header("Events")]
     [SerializeField] UnityEvent<GameObject> onSpawn;
     [SerializeField] bool DebugLogs = false;
+    public static SpawnObjects EnemyInstance { get; private set; }
+    public static SpawnObjects PlayerInstance { get; private set; }
 
-    // Character layer - all characters spawn on MidLane
     const string CHARACTER_MID_LAYER = "Character/MidLane";
 
     public bool SpawningIsActive
@@ -40,12 +38,35 @@ public class SpawnObjects : MonoBehaviour
         set { spawningEnabled = value; }
     }
 
+    void Awake()
+    {
+        if (enemySpawner)
+        {
+            if (EnemyInstance != null && EnemyInstance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            EnemyInstance = this;
+        }
+        else
+        {
+            if (PlayerInstance != null && PlayerInstance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            PlayerInstance = this;
+        }
+
+
+    }
+
     void Start()
     {
-        if (moneyDisplay == null)
+        if (Money.Instance == null)
         {
-            moneyDisplay = FindAnyObjectByType<Money>();
-            if (moneyDisplay == null)
+            if (Money.Instance == null)
                 Debug.LogError("SpawnObjects can't find Money script!");
         }
 
@@ -139,22 +160,22 @@ public class SpawnObjects : MonoBehaviour
             return null;
         }
 
-        if (playerMoney == null || stats == null)
+        if (Money.Instance == null || stats == null)
         {
             Debug.LogWarning("Missing references for player spawn!");
             return null;
         }
 
-        if (playerMoney._Value < stats._spawnCost)
+        if (Money.Instance.CurrentMoney < stats._spawnCost)
         {
-            if (DebugLogs) Debug.Log($"Not enough money! Need {stats._spawnCost}, have {playerMoney._Value}");
+            if (DebugLogs) Debug.Log($"Not enough money! Need {stats._spawnCost}, have {Money.Instance.CurrentMoney}");
             return null;
         }
 
-        playerMoney._Value -= stats._spawnCost;
+        Money.Instance.CurrentMoney -= stats._spawnCost;
         
-        if (moneyDisplay != null)
-            moneyDisplay.UpdateMoneyDesplay();
+        if (Money.Instance != null)
+            Money.Instance.UpdateMoneyDesplay();
 
         GameObject spawnedUnit = SpawnCPU(stats);
         
@@ -171,7 +192,7 @@ public class SpawnObjects : MonoBehaviour
             return null;
         }
 
-        if (playerLivesManager != null && !playerLivesManager.canSpawnMore)
+        if (PlayerLivesManager.Instance != null && !PlayerLivesManager.Instance.canSpawnMore)
         {
             Debug.Log("Cannot spawn more players!");
             return null;
@@ -186,13 +207,13 @@ public class SpawnObjects : MonoBehaviour
 
         int cost = playerStats._spawnCost;
 
-        if (playerMoney._Value < cost)
+        if (Money.Instance.CurrentMoney < cost)
         {
-            Debug.Log($"Not enough money to spawn player! Need {cost}, have {playerMoney._Value}");
+            Debug.Log($"Not enough money to spawn player! Need {cost}, have {Money.Instance.CurrentMoney}");
             return null;
         }
 
-        playerMoney._Value -= cost;
+        Money.Instance.CurrentMoney -= cost;
 
         GameObject spawnedPlayer = Instantiate(
             playerPrefab,
@@ -204,11 +225,13 @@ public class SpawnObjects : MonoBehaviour
         // Set player to Character/MidLane
         SetCharacterLayer(spawnedPlayer);
 
-        if (playerSwitch != null)
-            playerSwitch.AddPlayer(spawnedPlayer);
+        if (PlayerSwitch.Instance != null)
+            PlayerSwitch.Instance.AddPlayer(spawnedPlayer);
+        else Debug.Log($"[SpawnObjects] playerSwitch = null");
 
-        if (playerLivesManager != null)
-            playerLivesManager.GainLife();
+        if (PlayerLivesManager.Instance != null)
+            PlayerLivesManager.Instance.GainLife();
+        else Debug.Log($"[SpawnObjects] playerLivesManager = null");
 
         if (DebugLogs) Debug.Log($"Player spawned (Cost: {cost}) on layer: {LayerMask.LayerToName(spawnedPlayer.layer)}");
 

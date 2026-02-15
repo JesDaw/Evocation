@@ -5,9 +5,6 @@ using Unity.Cinemachine;
 public class CameraControlSwitcher : MonoBehaviour
 {
     [SerializeField] CinemachineCamera freeCam;
-    [SerializeField] FreeCamController cameraMovement;
-    [SerializeField] IntVeriable player_lives;
-    //[SerializeField] AudioManager soundEffectsManager;
     [SerializeField] bool DebugLogs = false;
 
     public bool FreeCamIsActive = false;
@@ -58,7 +55,7 @@ public class CameraControlSwitcher : MonoBehaviour
         if (!_camModeIsTogglable) return;
         if (!context.performed) return;
 
-        if (player_lives != null && player_lives._Value <= 0 && !FreeCamIsActive)
+        if (PlayerLivesManager.Instance.LifeCount <= 0 && !FreeCamIsActive)
         {
             SwitchToCameraControl();
             return;

@@ -20,9 +20,18 @@ public class FreeCamController : MonoBehaviour
     Bounds confineBounds;
     float minZPosition;
     float maxZPosition;
+    public static FreeCamController Instance { get; private set; }
+
 
     void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+
         _ZoomToSpeedMultiplier = minZoomSpeedMultiplier;
 
         _camera = GetComponent<CinemachineCamera>();

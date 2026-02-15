@@ -14,9 +14,17 @@ public class AIMoneyManager : MonoBehaviour
 
     public bool MoneyIsActive => isActive;
     [SerializeField] bool DebugLogs = false;
+    public static AIMoneyManager Instance { get; private set; }
 
     void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
         CurrentMoney = moneyAmount;
     }
 
