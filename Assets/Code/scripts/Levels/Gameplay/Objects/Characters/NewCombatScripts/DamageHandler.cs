@@ -62,14 +62,16 @@ public class DamageHandler : MonoBehaviour
         {
             stats.OnWitFlagDeath?.Invoke(stats.LastHitBy.IsEnemy);
         }
-        stats.OnDeath?.Invoke();
         TriggerKnockback();
+        stats.OnDeath?.Invoke();
+
     }
 
     private void TriggerKnockback()
     {
-        stats._KnockBackHealth = stats._KnockBackMaxHealth;
         stats.OnKnocked?.Invoke();
+        stats._KnockBackHealth = stats._KnockBackMaxHealth;
+
     }
 
     public void Heal(float amount)

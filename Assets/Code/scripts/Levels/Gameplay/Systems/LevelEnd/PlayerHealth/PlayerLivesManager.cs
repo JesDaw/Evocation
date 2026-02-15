@@ -72,7 +72,6 @@ public class PlayerLivesManager : MonoBehaviour
 
         if (LifeCount <= 0)
         {
-            //Debug.Log($"Player life count = {_lifeCount} ending game");
             HandleGameOver(deadPlayer);
         }
         else
@@ -81,7 +80,6 @@ public class PlayerLivesManager : MonoBehaviour
         }
     }
 
-    //this one is called when the active player dies
     public void LooseLife()
     {
         var currentPlayer = ActivePlayer.Instance.GetCurrentPlayerController();
@@ -103,8 +101,12 @@ public class PlayerLivesManager : MonoBehaviour
         }
     }
 
-    private void HandlePlayerDeath(GameObject deadPlayer)
+    void HandlePlayerDeath(GameObject deadPlayer)
     {
+        bool isActivePlayer = deadPlayer == ActivePlayer.Instance.CurrentPlayer;
+        bool isInFreeCam = CameraControlSwitcher.Instance != null && 
+                          CameraControlSwitcher.Instance.FreeCamIsActive;
+
         CinemachineCamera deadPlayerCam = deadPlayer.GetComponentInChildren<CinemachineCamera>();
         Vector3 deathCameraPosition = Vector3.zero;
         float deathCameraFOV = 60f;
@@ -115,23 +117,28 @@ public class PlayerLivesManager : MonoBehaviour
             deathCameraFOV = deadPlayerCam.Lens.FieldOfView;
         }
 
-
         if (deadPlayer != null)
         {
             PlayerSwitch.Instance.RemovePlayer(deadPlayer);
         }
 
-        if (CameraControlSwitcher.Instance != null)
+        if (isActivePlayer)
         {
-            CameraControlSwitcher.Instance.SwitchToFreeCamAtPosition(deathCameraPosition, deathCameraFOV);
-        }
-        else
-        {
-            Debug.LogError("CameraControlSwitcher not assigned to PlayerLivesManager!");
+            if (CameraControlSwitcher.Instance != null)
+            {
+                if (!isInFreeCam)
+                {
+                    CameraControlSwitcher.Instance.SwitchToFreeCamAtPosition(deathCameraPosition, deathCameraFOV);
+                }
+            }
+            else
+            {
+                Debug.LogError("CameraControlSwitcher not assigned!");
+            }
         }
     }
 
-    private void HandleGameOver(GameObject deadPlayer)
+    void HandleGameOver(GameObject deadPlayer)
     {
         CinemachineCamera deadPlayerCam = deadPlayer?.GetComponentInChildren<CinemachineCamera>();
         Vector3 deathCameraPosition = Vector3.zero;
