@@ -5,9 +5,9 @@ using System;
 public class WinState : LevelState
 {
     [Header("Win Configuration")]
-    [SerializeField] private string winCutsceneName = "Victory";
-    [SerializeField] private bool hasWinCutscene = false;
-    [SerializeField] private string victoryUIName = "Victory";
+    [SerializeField] string winCutsceneName = "Victory";
+    [SerializeField] bool hasWinCutscene = false;
+    [SerializeField] string victoryUIName = "Victory";
     
     protected override void OnEnterState()
     {
