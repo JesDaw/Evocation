@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="MixerGroup" id="{877ea568-a7e0-42bd-9b2d-d23aad7d55ee}">
+		<property name="name">
+			<value>OneShot</value>
+		</property>
+		<relationship name="effectChain">
+			<destination>{80ac9747-3b6f-4ecc-853a-840b41d99b16}</destination>
+		</relationship>
+		<relationship name="panner">
+			<destination>{4dac1ca6-6203-4588-a18e-886ef4f6d29a}</destination>
+		</relationship>
+		<relationship name="output">
+			<destination>{932892c1-8378-458b-a5c0-755f0caca3e5}</destination>
+		</relationship>
+	</object>
+	<object class="MixerBusEffectChain" id="{80ac9747-3b6f-4ecc-853a-840b41d99b16}">
+		<relationship name="effects">
+			<destination>{c8abf559-7911-483d-b947-0a8856f49f9f}</destination>
+		</relationship>
+	</object>
+	<object class="MixerBusPanner" id="{4dac1ca6-6203-4588-a18e-886ef4f6d29a}" />
+	<object class="MixerBusFader" id="{c8abf559-7911-483d-b947-0a8856f49f9f}" />
+</objects>
