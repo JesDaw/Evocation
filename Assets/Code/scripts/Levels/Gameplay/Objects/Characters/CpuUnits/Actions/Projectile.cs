@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using System;
 
 public class Projectile : MonoBehaviour
@@ -30,29 +31,37 @@ public class Projectile : MonoBehaviour
         
         float xDistanceToTarget = target.position.x - startPoint.x;
         this.trajectoryMaxRelativeHeight = Mathf.Abs(xDistanceToTarget) * maxHeight;
+		StartCoroutine(ProjectileCycle());
     }
 
-    void Update()
-    {
-        aliveTimer += Time.deltaTime;
-        
-        if (target == null || aliveTimer > 10f)
-        {
-            Destroy(gameObject);
-            return;
-        }
+	IEnumerator ProjectileCycle()
+	{
+		while (true)
+		{
+			aliveTimer += Time.deltaTime;
+			
+			if (!(target == null || aliveTimer > 10f))
+			{
 
-        UpdateProjectilePosition();
+				UpdateProjectilePosition();
 
-        if (Vector3.Distance(transform.position, target.position) < distanceToDestroy)
-        {
-            if (target.TryGetComponent(out Stats s))
-            {
-                onHitAction?.Invoke(s);
-            }
-            Destroy(gameObject);
-        }
-    }
+				if (Vector3.Distance(transform.position, target.position) < distanceToDestroy)
+				{
+					if (target.TryGetComponent(out Stats s))
+					{
+						onHitAction?.Invoke(s);
+					}
+					Destroy(gameObject);
+				}
+			}
+			else
+			{
+				Destroy(gameObject);
+			}
+
+			yield return null;
+		}
+	}
 
     private void UpdateProjectilePosition()
     {
