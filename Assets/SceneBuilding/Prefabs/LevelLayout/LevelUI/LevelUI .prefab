@@ -4472,6 +4472,7 @@ GameObject:
   - component: {fileID: 5430508212320528179}
   - component: {fileID: 8784872507006162744}
   - component: {fileID: 5010388406374943200}
+  - component: {fileID: 7167969031425316667}
   m_Layer: 5
   m_Name: Victory
   m_TagString: Untagged
@@ -4569,10 +4570,32 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2704279535866865856}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!95 &7167969031425316667
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2704279535866865856}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2705586018523799337
 GameObject:
   m_ObjectHideFlags: 0
@@ -13012,6 +13035,7 @@ GameObject:
   - component: {fileID: 1356690923568280784}
   - component: {fileID: 5037463930254425325}
   - component: {fileID: 5582181206746191464}
+  - component: {fileID: 3216053527203905018}
   m_Layer: 5
   m_Name: Defeat
   m_TagString: Untagged
@@ -13108,10 +13132,32 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7296677894045332703}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!95 &3216053527203905018
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7296677894045332703}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7444487698172498854
 GameObject:
   m_ObjectHideFlags: 0
@@ -15250,7 +15296,6 @@ MonoBehaviour:
   - {fileID: 5105295668840932826}
   - {fileID: 1645733211988118425}
   - {fileID: 5527920685830698050}
-  LifeCount: {fileID: 11400000, guid: 134620333c1634a509ab78576b5ad9ac, type: 2}
 --- !u!1 &8305780194434593110
 GameObject:
   m_ObjectHideFlags: 0
@@ -16933,7 +16978,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a3527428be1c464da52e2b35202cda1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnController: {fileID: 0}
   characterNameText: {fileID: 2551442561613579806}
   characterDescriptionText: {fileID: 3375779598228135889}
   characterImage: {fileID: 1758441551959760863}
@@ -17146,13 +17190,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Settings
       objectReference: {fileID: 0}
+    - target: {fileID: 24552948991193106, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4344883908332739528, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5030252479491268277, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5882916455204527124, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
       propertyPath: m_Pivot.x
@@ -17236,19 +17284,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6096270626945781126, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6246665322025602998, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6327228504178873487, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6584170367140261207, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
