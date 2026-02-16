@@ -36,36 +36,53 @@ public class Projectile : MonoBehaviour
 
 	IEnumerator ProjectileCycle()
 	{
+		Vector3 endPosition = new Vector3();
+		CpuStateManager targetState = target.GetComponent<CpuStateManager>();
+
+		if(targetState.CurrentState == CpuStateManager.State.KnockBack)
+			Destroy(gameObject);
+
 		while (true)
 		{
 			aliveTimer += Time.deltaTime;
 			
-			if (!(target == null || aliveTimer > 10f))
+			if (!(target == null || aliveTimer > 10f) && targetState.CurrentState != CpuStateManager.State.KnockBack)
 			{
+				endPosition = target.position;
 
-				UpdateProjectilePosition();
-
-				if (Vector3.Distance(transform.position, target.position) < distanceToDestroy)
+				//magic number for how far before it gives up tracking
+				if(Vector3.Distance(target.position, endPosition) > 10f)
 				{
-					if (target.TryGetComponent(out Stats s))
+					UpdateProjectilePosition(endPosition);
+				}
+				else
+				{
+					UpdateProjectilePosition(target.position);
+
+					if (Vector3.Distance(transform.position, target.position) < distanceToDestroy)
 					{
-						onHitAction?.Invoke(s);
+						if (target.TryGetComponent(out Stats s))
+						{
+							onHitAction?.Invoke(s);
+						}
+						Destroy(gameObject);
 					}
-					Destroy(gameObject);
 				}
 			}
 			else
 			{
-				Destroy(gameObject);
+				UpdateProjectilePosition(endPosition);
+				if (Vector3.Distance(transform.position, endPosition) < distanceToDestroy)
+					Destroy(gameObject);
 			}
 
 			yield return null;
 		}
 	}
 
-    private void UpdateProjectilePosition()
+    private void UpdateProjectilePosition(Vector3 _targetPoint)
     {
-        Vector3 trajectoryRange = target.position - startPoint;
+        Vector3 trajectoryRange = _targetPoint - startPoint;
 
         if (Mathf.Abs(trajectoryRange.normalized.x) >= Mathf.Abs(trajectoryRange.normalized.y))
         {
