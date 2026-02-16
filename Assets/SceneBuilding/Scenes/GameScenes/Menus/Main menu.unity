@@ -138,7 +138,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &35994732
 RectTransform:
   m_ObjectHideFlags: 0
@@ -243,6 +243,7 @@ GameObject:
   - component: {fileID: 55162124}
   - component: {fileID: 55162123}
   - component: {fileID: 55162126}
+  - component: {fileID: 55162127}
   m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
@@ -329,6 +330,18 @@ MonoBehaviour:
       - m_Target: {fileID: 285799544}
         m_TargetAssemblyTypeName: SceneActivityManager, CodeAssembly
         m_MethodName: ActivatePreviousSAWithFade
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 55162127}
+        m_TargetAssemblyTypeName: AdamLenzini.UI.SetsUiElementOnSelect, CodeAssembly
+        m_MethodName: JumptToElement
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -429,6 +442,22 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
+--- !u!114 &55162127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 55162120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40d26c9735894d447bbc56d8d3b5f6ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::AdamLenzini.UI.SetsUiElementOnSelect
+  eventSystem: {fileID: 881879052}
+  elementToSelect: {fileID: 1974213573}
+  showVisualization: 0
+  navigationColour: {r: 0, g: 1, b: 1, a: 1}
 --- !u!1 &81228198
 GameObject:
   m_ObjectHideFlags: 0
@@ -524,6 +553,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -660,6 +690,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -790,6 +821,7 @@ GameObject:
   - component: {fileID: 128427850}
   - component: {fileID: 128427849}
   - component: {fileID: 128427853}
+  - component: {fileID: 128427854}
   m_Layer: 5
   m_Name: CreditsButton
   m_TagString: Untagged
@@ -897,6 +929,18 @@ MonoBehaviour:
           m_StringArgument: Credits
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 128427854}
+        m_TargetAssemblyTypeName: AdamLenzini.UI.SetsUiElementOnSelect, CodeAssembly
+        m_MethodName: JumptToElement
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &128427851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -988,6 +1032,22 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
+--- !u!114 &128427854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 128427847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40d26c9735894d447bbc56d8d3b5f6ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::AdamLenzini.UI.SetsUiElementOnSelect
+  eventSystem: {fileID: 881879052}
+  elementToSelect: {fileID: 1527392990}
+  showVisualization: 0
+  navigationColour: {r: 0, g: 1, b: 1, a: 1}
 --- !u!1 &141997103
 GameObject:
   m_ObjectHideFlags: 0
@@ -1276,6 +1336,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1842,6 +1903,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1883,6 +1945,38 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 334516304}
   m_CullTransparentMesh: 1
+--- !u!1 &358182630 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3917119352461375645, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+  m_PrefabInstance: {fileID: 1913832530}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &358182633 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7184194177459978584, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+  m_PrefabInstance: {fileID: 1913832530}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 358182630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &358182636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 358182630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40d26c9735894d447bbc56d8d3b5f6ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::AdamLenzini.UI.SetsUiElementOnSelect
+  eventSystem: {fileID: 881879052}
+  elementToSelect: {fileID: 752940756}
+  showVisualization: 0
+  navigationColour: {r: 0, g: 1, b: 1, a: 1}
 --- !u!1 &370140587
 GameObject:
   m_ObjectHideFlags: 0
@@ -2195,6 +2289,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -2510,6 +2605,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -2646,6 +2742,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -2782,6 +2879,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -2918,6 +3016,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -3129,6 +3228,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -3590,6 +3690,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -3775,12 +3876,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnDown: {fileID: 685060419}
+    m_SelectOnLeft: {fileID: 1626654607}
+    m_SelectOnRight: {fileID: 1439452610}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -3953,6 +4054,7 @@ GameObject:
   - component: {fileID: 685060420}
   - component: {fileID: 685060419}
   - component: {fileID: 685060422}
+  - component: {fileID: 685060423}
   m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
@@ -3994,9 +4096,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
+    m_SelectOnUp: {fileID: 1626654607}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
@@ -4040,6 +4142,18 @@ MonoBehaviour:
       - m_Target: {fileID: 285799544}
         m_TargetAssemblyTypeName: SceneActivityManager, CodeAssembly
         m_MethodName: ActivatePreviousSAWithFade
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 685060423}
+        m_TargetAssemblyTypeName: AdamLenzini.UI.SetsUiElementOnSelect, CodeAssembly
+        m_MethodName: JumptToElement
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4140,6 +4254,22 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
+--- !u!114 &685060423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685060416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40d26c9735894d447bbc56d8d3b5f6ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::AdamLenzini.UI.SetsUiElementOnSelect
+  eventSystem: {fileID: 881879052}
+  elementToSelect: {fileID: 941380259}
+  showVisualization: 0
+  navigationColour: {r: 0, g: 1, b: 1, a: 1}
 --- !u!1 &736687247
 GameObject:
   m_ObjectHideFlags: 0
@@ -4243,6 +4373,7 @@ GameObject:
   - component: {fileID: 752940756}
   - component: {fileID: 752940755}
   - component: {fileID: 752940759}
+  - component: {fileID: 752940760}
   m_Layer: 5
   m_Name: SettingsButton
   m_TagString: Untagged
@@ -4351,6 +4482,18 @@ MonoBehaviour:
           m_StringArgument: Settings
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 752940760}
+        m_TargetAssemblyTypeName: AdamLenzini.UI.SetsUiElementOnSelect, CodeAssembly
+        m_MethodName: JumptToElement
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &752940757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4442,6 +4585,22 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
+--- !u!114 &752940760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 752940753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40d26c9735894d447bbc56d8d3b5f6ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::AdamLenzini.UI.SetsUiElementOnSelect
+  eventSystem: {fileID: 881879052}
+  elementToSelect: {fileID: 1169570946}
+  showVisualization: 0
+  navigationColour: {r: 0, g: 1, b: 1, a: 1}
 --- !u!1 &753706799
 GameObject:
   m_ObjectHideFlags: 0
@@ -4612,6 +4771,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -4748,6 +4908,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -4939,7 +5100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
+  m_FirstSelected: {fileID: 941380256}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!4 &881879053
@@ -5092,6 +5253,7 @@ GameObject:
   - component: {fileID: 941380259}
   - component: {fileID: 941380258}
   - component: {fileID: 941380262}
+  - component: {fileID: 941380263}
   m_Layer: 5
   m_Name: LevelSelectButton
   m_TagString: Untagged
@@ -5144,10 +5306,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 1421586873}
+    m_SelectOnDown: {fileID: 752940756}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -5197,6 +5359,18 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: LevelSelectMenu
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 941380263}
+        m_TargetAssemblyTypeName: AdamLenzini.UI.SetsUiElementOnSelect, CodeAssembly
+        m_MethodName: JumptToElement
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &941380260
@@ -5290,6 +5464,22 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
+--- !u!114 &941380263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 941380256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40d26c9735894d447bbc56d8d3b5f6ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::AdamLenzini.UI.SetsUiElementOnSelect
+  eventSystem: {fileID: 881879052}
+  elementToSelect: {fileID: 677091745}
+  showVisualization: 0
+  navigationColour: {r: 0, g: 1, b: 1, a: 1}
 --- !u!1 &973816690
 GameObject:
   m_ObjectHideFlags: 0
@@ -5422,6 +5612,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -5647,6 +5838,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -5892,6 +6084,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -6028,6 +6221,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -6069,6 +6263,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1158539025}
   m_CullTransparentMesh: 1
+--- !u!114 &1169570946 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6571322674989824998, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+  m_PrefabInstance: {fileID: 1913832530}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1228505019
 GameObject:
   m_ObjectHideFlags: 0
@@ -6253,6 +6458,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -6472,6 +6678,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1275024640}
   m_CullTransparentMesh: 1
+--- !u!114 &1298029237 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2940142563584229745, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+  m_PrefabInstance: {fileID: 1913832530}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1325562799
 GameObject:
   m_ObjectHideFlags: 0
@@ -6959,6 +7176,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -7066,10 +7284,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 128427850}
+    m_SelectOnDown: {fileID: 941380259}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -7307,6 +7525,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -7403,12 +7622,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnDown: {fileID: 685060419}
+    m_SelectOnLeft: {fileID: 677091745}
+    m_SelectOnRight: {fileID: 1626654607}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -7799,6 +8018,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -8065,6 +8285,7 @@ GameObject:
   - component: {fileID: 1527392991}
   - component: {fileID: 1527392990}
   - component: {fileID: 1527392993}
+  - component: {fileID: 1527392994}
   m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
@@ -8151,6 +8372,18 @@ MonoBehaviour:
       - m_Target: {fileID: 285799544}
         m_TargetAssemblyTypeName: SceneActivityManager, CodeAssembly
         m_MethodName: ActivatePreviousSAWithFade
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1527392994}
+        m_TargetAssemblyTypeName: AdamLenzini.UI.SetsUiElementOnSelect, CodeAssembly
+        m_MethodName: JumptToElement
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8251,6 +8484,22 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
+--- !u!114 &1527392994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1527392987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40d26c9735894d447bbc56d8d3b5f6ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::AdamLenzini.UI.SetsUiElementOnSelect
+  eventSystem: {fileID: 881879052}
+  elementToSelect: {fileID: 128427850}
+  showVisualization: 0
+  navigationColour: {r: 0, g: 1, b: 1, a: 1}
 --- !u!1 &1547098797
 GameObject:
   m_ObjectHideFlags: 0
@@ -8520,6 +8769,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -8745,6 +8995,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -8970,6 +9221,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -9066,12 +9318,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnDown: {fileID: 685060419}
+    m_SelectOnLeft: {fileID: 1439452610}
+    m_SelectOnRight: {fileID: 677091745}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -9636,6 +9888,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -9863,6 +10116,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -9999,6 +10253,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -10174,6 +10429,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2940142563584229745, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2940142563584229745, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+      propertyPath: m_Navigation.m_SelectOnUp
+      value: 
+      objectReference: {fileID: 2092751526}
+    - target: {fileID: 2940142563584229745, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 358182633}
     - target: {fileID: 4344883908332739528, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -10286,8 +10553,52 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6411402738279290382, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6411402738279290382, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+      propertyPath: m_Navigation.m_SelectOnUp
+      value: 
+      objectReference: {fileID: 1169570946}
+    - target: {fileID: 6411402738279290382, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 1298029237}
+    - target: {fileID: 6571322674989824998, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6571322674989824998, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+      propertyPath: m_Navigation.m_SelectOnUp
+      value: 
+      objectReference: {fileID: 358182633}
+    - target: {fileID: 6571322674989824998, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 2092751526}
     - target: {fileID: 6584170367140261207, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184194177459978584, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184194177459978584, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+      propertyPath: m_Navigation.m_SelectOnUp
+      value: 
+      objectReference: {fileID: 1298029237}
+    - target: {fileID: 7184194177459978584, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 1169570946}
+    - target: {fileID: 7184194177459978584, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184194177459978584, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7184194177459978584, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
@@ -10295,13 +10606,40 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 285799544}
     - target: {fileID: 7184194177459978584, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 358182636}
+    - target: {fileID: 7184194177459978584, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184194177459978584, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: ActivatePreviousSAWithFade
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184194177459978584, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: JumptToElement
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184194177459978584, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: AdamLenzini.UI.SetsUiElementOnSelect, CodeAssembly
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184194177459978584, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184194177459978584, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3917119352461375645, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 358182636}
   m_SourcePrefab: {fileID: 100100000, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
 --- !u!224 &1913832531 stripped
 RectTransform:
@@ -10386,6 +10724,7 @@ GameObject:
   - component: {fileID: 1974213573}
   - component: {fileID: 1974213572}
   - component: {fileID: 1974213576}
+  - component: {fileID: 1974213577}
   m_Layer: 5
   m_Name: ControlsButton
   m_TagString: Untagged
@@ -10494,6 +10833,18 @@ MonoBehaviour:
           m_StringArgument: Controls
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1974213577}
+        m_TargetAssemblyTypeName: AdamLenzini.UI.SetsUiElementOnSelect, CodeAssembly
+        m_MethodName: JumptToElement
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1974213574
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10585,6 +10936,22 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
+--- !u!114 &1974213577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1974213570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40d26c9735894d447bbc56d8d3b5f6ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::AdamLenzini.UI.SetsUiElementOnSelect
+  eventSystem: {fileID: 881879052}
+  elementToSelect: {fileID: 55162123}
+  showVisualization: 0
+  navigationColour: {r: 0, g: 1, b: 1, a: 1}
 --- !u!1 &2006178833
 GameObject:
   m_ObjectHideFlags: 0
@@ -10680,6 +11047,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -11065,6 +11433,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -11106,6 +11475,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2090021568}
   m_CullTransparentMesh: 1
+--- !u!114 &2092751526 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6411402738279290382, guid: f9cdb1f9176a446f0bf62489ee4fdf0d, type: 3}
+  m_PrefabInstance: {fileID: 1913832530}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2145348684
 GameObject:
   m_ObjectHideFlags: 0
@@ -11171,6 +11551,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2317126484267437153
 SpriteRenderer:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -11216,6 +11597,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -1
+  m_MaskInteraction: 0
   m_Sprite: {fileID: 6368300104476092419, guid: e3599e5888a834340b328025a76500f9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 0
@@ -11225,7 +11607,6 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &3379680083245534270
 GameObject:
