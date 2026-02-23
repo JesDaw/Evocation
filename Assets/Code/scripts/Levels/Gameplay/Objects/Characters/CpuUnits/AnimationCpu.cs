@@ -6,19 +6,20 @@ public class AnimationCpu : MonoBehaviour
 	public Animator _Animator;
 	public AnimationEventsController _AnimatorController;
 	public ScriptableStats _ScrStats;
+    [SerializeField] Transform _rigTransform;
 
 	public bool _flip;
 
     void Start()
     {
-		replaceAnimation();        
-		//StartCoroutine(Startup());
+		StartCoroutine(Startup());
 	}
 
     IEnumerator Startup()
     {
-		yield return new WaitUntil(() => transform.childCount >= _ScrStats._Sprites.Length);
-		replaceAnimation();        
+		yield return new WaitUntil(() => _rigTransform.childCount >= _ScrStats._Sprites.Length);
+
+        replaceAnimation();        
 		if(_Animator != null)
 		{
 			_Animator.Rebind();
@@ -59,7 +60,7 @@ public class AnimationCpu : MonoBehaviour
 				spriteData.Rig.transform.position.z
 			);
 
-			if (_ScrStats._Rotate)
+			if (_flip)
 			{
 				spriteData.Rig.transform.rotation = Quaternion.Euler(0, 180, 0);
 			}
@@ -71,14 +72,24 @@ public class AnimationCpu : MonoBehaviour
 			GameObject newRig = Instantiate(spriteData.Rig, _cpuRig);
 			newRig.name = rigName;
 
-			if (_flip)
-				newRig.transform.Rotate(0, 180, 0);
-			else
-				newRig.transform.Rotate(0, -180, 0);
-
-			if(rigName != "RunningRig") newRig.SetActive(false);
+			if(rigName != "IdleRig") newRig.SetActive(false);
 		}
 
 		_Animator.runtimeAnimatorController = _ScrStats._animator;
 	}
+
+    public void SetIsRunning(bool _running)
+    {
+        _Animator.SetBool("IsRunning", _running);
+    }
+
+    public void SetIsAttacking(bool _attacking)
+    {
+        _Animator.SetBool("IsAttacking", _attacking);
+    }
+
+    public void SetIsKnockback(bool _knockback)
+    {
+        _Animator.SetBool("IsKnockback", _knockback);
+    }
 }
