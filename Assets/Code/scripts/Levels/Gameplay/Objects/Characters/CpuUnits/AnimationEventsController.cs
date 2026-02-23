@@ -3,7 +3,7 @@ using UnityEngine;
 public class AnimationEventsController : MonoBehaviour
 {
     bool shouldAttack;
-    void attackAnimationEnd()
+    public void attackAnimationEnd()
     {
         shouldAttack = true;
     }
