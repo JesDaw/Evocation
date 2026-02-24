@@ -10,16 +10,10 @@ public class AnimationCpu : MonoBehaviour
 
 	public bool _flip;
 
-    void Start()
+    void OnValidate()
     {
-		StartCoroutine(Startup());
-	}
-
-    IEnumerator Startup()
-    {
-		yield return new WaitUntil(() => _rigTransform.childCount >= _ScrStats._Sprites.Length);
-
         replaceAnimation();        
+
 		if(_Animator != null)
 		{
 			_Animator.Rebind();
@@ -52,7 +46,15 @@ public class AnimationCpu : MonoBehaviour
 
 			var existing = _cpuRig.Find(rigName);
 			if (existing != null)
-				Destroy(existing.gameObject);
+				DestroyImmediate(existing, true);
+            //extra unity stuff because sometimes it would save it and not destory
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.delayCall += () =>
+            {
+                if (existing != null)
+                    DestroyImmediate(existing.gameObject);
+            };
+#endif
 
 			spriteData.Rig.transform.position = new Vector3(
 				spriteData.Offset.x,
