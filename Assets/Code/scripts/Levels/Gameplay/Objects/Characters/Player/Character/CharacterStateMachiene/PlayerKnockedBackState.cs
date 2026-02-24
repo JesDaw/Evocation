@@ -35,6 +35,11 @@ public class PlayerKnockedBackState : PlayerBaseState
         {
             short knockbackDir = -1;
             if (!Ctx.isFacingRight) knockbackDir = 1; 
+
+            // Plan here is to get the enemy character's obj so I can essentially do
+            // enemyObj.Pos - playerObj.Pos to get a neg/pos num to dictate which way the 
+            // player is knocked back. (note for myself) - Chris S
+
             Vector2 knockbackForce = new Vector2(knockbackDir * Ctx.ScrStats._KnockBackVelocity,
                                                                 Ctx.ScrStats._KnockBackVelocity);
             Ctx.Rb.linearVelocity = Vector2.zero;
