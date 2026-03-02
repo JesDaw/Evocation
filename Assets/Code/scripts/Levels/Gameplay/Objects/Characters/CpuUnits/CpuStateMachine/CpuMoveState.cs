@@ -42,5 +42,12 @@ public class CpuMoveState : CpuBaseState
             _Body.linearVelocity = Vector2.zero;
             ExitState();
         }
+
+        bool isGrounded = Physics2D.Raycast(_Body.transform.position, Vector2.down, 0.1f);
+        if(!isGrounded)
+            _Body.gravityScale = 100.0f;
+        else
+            _Body.gravityScale = 1.0f;
+
     }
 }
