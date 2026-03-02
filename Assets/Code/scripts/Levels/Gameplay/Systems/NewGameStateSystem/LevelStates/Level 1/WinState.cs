@@ -15,6 +15,8 @@ public class WinState : LevelState
             TimelineManager.Instance.PlayCutscene(winCutsceneName);
         else
             ShowVictoryScreen();
+
+        SaveSystem.SaveGame(0); // Level 1 = index 0
     }
     
     public void ShowVictoryScreen()
