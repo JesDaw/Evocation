@@ -68,7 +68,8 @@ public static class AttackLogic
 
         //Debug.Log($"{attacker.gameObject.name} attacking {target.gameObject.name} with {attacker._AttackDamage} damage");
 
-        target.TakeDamage(attacker._AttackDamage, new DamageSource(type) { IsEnemy = attacker._Enemy });
+        target.TakeDamage(attacker._AttackDamage, attacker._KnockBackDamage, new DamageSource(type) { IsEnemy = attacker._Enemy });
+        Debug.Log(attacker._KnockBackDamage);
 
         if (target is Stats statsTarget && attacker._EffectsToApply != null)
         {
