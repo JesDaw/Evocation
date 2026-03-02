@@ -47,6 +47,7 @@ public class ScriptableStats : ScriptableObject
     [Header("Knockback")]
     public float _KnockBackMaxHealth = 1;
     public float _KnockBackVelocity;
+    public float _KnockBackDamage;
 }
 
 public enum AttackStyle

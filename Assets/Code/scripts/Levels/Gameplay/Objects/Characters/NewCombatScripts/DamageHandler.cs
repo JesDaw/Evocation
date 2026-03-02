@@ -11,6 +11,49 @@ public class DamageHandler : MonoBehaviour
     }
 
 
+    public void TakeDamage(float damage, float knockback_damage, DamageSource attackedBy = null)
+    {
+        if (stats == null) return;
+        if (stats.IsInvincible()) return;
+
+        stats._CurrentHealth -= damage;
+        FModAudioManager.instance.PlaySoundByName("takeDamage");
+
+        stats.OnDamage?.Invoke();
+
+        stats.LastHitBy = attackedBy;
+
+        // if (attackedBy != null && attackedBy.damageType == DamageSource.DamageType.StatusEffect)
+        // {
+             // stats._KnockBackHealth -= knockback_damage;
+        // }
+
+        if (attackedBy != null)
+        {
+            stats.OnWitFlagDamage?.Invoke(attackedBy.IsEnemy);
+            stats._KnockBackHealth -= knockback_damage; 
+
+            GameObject parent_obj = transform.parent.gameObject;
+            Debug.Log(knockback_damage + " knockback damage taken by: " + parent_obj);
+        }
+
+        if (stats.entityHealthbar != null)
+        {
+            stats.entityHealthbar.UpdateHealth();
+        }
+
+        if (stats._CurrentHealth <= 0)
+        {
+            Die();
+            return;
+        }
+
+        if (stats._KnockBackHealth <= 0)
+        {
+            TriggerKnockback();
+        }
+    }
+
     public void TakeDamage(float damage, DamageSource attackedBy = null)
     {
         if (stats == null) return;
@@ -25,7 +68,7 @@ public class DamageHandler : MonoBehaviour
 
         if (attackedBy != null && attackedBy.damageType == DamageSource.DamageType.StatusEffect)
         {
-            stats._KnockBackHealth--; // attacks should have variable knockback buildup
+            stats._KnockBackHealth-- ; 
         }
 
         if (attackedBy != null)
@@ -49,6 +92,7 @@ public class DamageHandler : MonoBehaviour
             TriggerKnockback();
         }
     }
+
 
     public void Die()
     {

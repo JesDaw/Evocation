@@ -33,8 +33,9 @@ public class Stats : MonoBehaviour, IDamageable
     [HideInInspector] public float _CurrentHealth = 1;
     [HideInInspector] public bool _IsDead = false;
     [HideInInspector] public float _MoveSpeed;
-    [HideInInspector] public float _KnockBackMaxHealth;
-    [HideInInspector] public float _KnockBackHealth;
+    public float _KnockBackMaxHealth;
+    public float _KnockBackHealth;
+    public float _KnockBackDamage = 0.5f;
     [HideInInspector] public int _spawnCost;
 
     [Header("Events")]
@@ -115,6 +116,7 @@ public class Stats : MonoBehaviour, IDamageable
         if (_MoveSpeed < 0) Debug.LogWarning($"{gameObject.name}: MoveSpeed is {_MoveSpeed}, should be non-negative.");
 
         _KnockBackMaxHealth = scriptableStats._KnockBackMaxHealth;
+        _KnockBackDamage = scriptableStats._KnockBackDamage;
         _KnockBackHealth = _KnockBackMaxHealth;
         _spawnCost = scriptableStats._spawnCost;
         if (_spawnCost < 0) Debug.LogWarning($"{gameObject.name}: SpawnCost is {_spawnCost}, should be non-negative.");
@@ -169,6 +171,14 @@ public class Stats : MonoBehaviour, IDamageable
         }
     }
 
+    public void TakeDamage(float damage, float knockback_damage, DamageSource attackedBy = null)
+    {
+        if (damageHandler != null)
+        {
+            damageHandler.TakeDamage(damage, knockback_damage, attackedBy);
+        }
+    }
+
     public void TakeDamage(float damage, DamageSource attackedBy = null)
     {
         if (damageHandler != null)
@@ -177,10 +187,16 @@ public class Stats : MonoBehaviour, IDamageable
         }
     }
 
+    void IDamageable.TakeDamage(float damage, float knockback_damage, DamageSource source)
+    {
+        TakeDamage(damage, knockback_damage, source);
+    }
+    
     void IDamageable.TakeDamage(float damage, DamageSource source)
     {
         TakeDamage(damage, source);
     }
+
 
     GameObject IDamageable.gameObject => gameObject;
     Transform IDamageable.transform => transform;
