@@ -37,11 +37,25 @@ public class CpuStateManager : MonoBehaviour
         StartCoroutine(Startup());
     }
 
+    bool MatchHierarchy(Transform a, Transform b)
+    {
+        if (a.childCount != b.childCount)
+            return false;
+
+        for (int i = 0; i < a.childCount; i++)
+        {
+            if (!MatchHierarchy(a.GetChild(i), b.GetChild(i)))
+                return false;
+        }
+
+        return true;
+    }
+
     IEnumerator Startup()
     {
-        yield return new WaitUntil(() => transform.childCount >= _ScrStats._Sprites.Length);
         replaceAnimation();
         toggleEverything(true);
+        yield return new WaitForSeconds(0.1f);
         if(_Animator != null)
         {
             _Animator.Rebind();
