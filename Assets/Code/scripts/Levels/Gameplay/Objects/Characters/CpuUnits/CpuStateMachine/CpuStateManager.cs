@@ -18,6 +18,7 @@ public class CpuStateManager : MonoBehaviour
     public AnimationEventsController _AnimatorController;
 
     [Header("State Management")]
+    public State CurrentState {get; private set;}
     CpuBaseState _currentState;
     public Dictionary<State, CpuBaseState> _State = new Dictionary<State, CpuBaseState>();
 
@@ -71,6 +72,7 @@ public class CpuStateManager : MonoBehaviour
             _Animator.Rebind();
 
         _currentState = _State[state];
+		CurrentState = state;
         _currentState.EnterState();
     }
 

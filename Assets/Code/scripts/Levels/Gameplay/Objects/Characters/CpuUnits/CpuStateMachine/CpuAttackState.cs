@@ -38,6 +38,7 @@ public class CpuAttackState : CpuBaseState
                 if (_context._AnimatorController.ShouldAttack())
                 {
                     AttackLogic.ExecuteAttack(_context);
+                    FModAudioManager.instance.PlaySoundByName("attack");
                     //have attack sould be called from Ctx.AnimatorController with a signal
                     // but this is the function to call the attacking audio: FModAudioManager.instance.PlaySoundByName("attack");
                     _timer = 0f;
