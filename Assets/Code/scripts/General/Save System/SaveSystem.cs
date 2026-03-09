@@ -9,8 +9,8 @@ public class GameData
 
     public GameData(int completeLevelIndex)
     {
-        for (int i = 0; i < 5; i++)
-            if (i ==  completeLevelIndex)
+        for (int i = 0; i < 5; i++)         // Only saves for the completed level, all others get marked as false
+            if (i ==  completeLevelIndex)   // Better method must be found
                 levelsComplete[i] = true;
             else
                 levelsComplete[i] = false;
