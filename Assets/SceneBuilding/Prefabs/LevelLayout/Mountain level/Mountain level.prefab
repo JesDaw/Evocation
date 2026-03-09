@@ -10739,6 +10739,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5287346686676795925}
+  - component: {fileID: 3948086924576680426}
+  - component: {fileID: 511359591933327500}
+  - component: {fileID: 1994349177102788899}
   m_Layer: 0
   m_Name: PlayerData
   m_TagString: Untagged
@@ -10763,6 +10766,66 @@ Transform:
   - {fileID: 5971229527078410982}
   m_Father: {fileID: 1834549165277763582}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3948086924576680426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4450598614731081996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffa0dfbf142048f449b28e92ce0584e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::SpellsManager
+  playerSpells:
+  - SpellName: Fireball
+    OnHit:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1994349177102788899}
+          m_TargetAssemblyTypeName: SpellsAffector, CodeAssembly
+          m_MethodName: FireballSpell
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    Cost: 2
+  - SpellName: Status Buff
+    OnHit:
+      m_PersistentCalls:
+        m_Calls: []
+    Cost: 3
+--- !u!114 &511359591933327500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4450598614731081996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a59e5568c52ec41b07e6682e671d09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::ManaSystem
+  <PlayerMana>k__BackingField: 5
+--- !u!114 &1994349177102788899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4450598614731081996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e223edbc526df54489dc2411fcaa86d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::SpellsAffector
 --- !u!1 &4879976734963390953
 GameObject:
   m_ObjectHideFlags: 0
