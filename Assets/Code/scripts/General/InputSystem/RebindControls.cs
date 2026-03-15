@@ -6,27 +6,29 @@ public class RebindControls : MonoBehaviour
 {
     public InputActionAsset InputActions;
 
-    private InputActionRebindingExtensions.RebindingOperation m_rebindingOperation;
+    InputActionRebindingExtensions.RebindingOperation m_rebindingOperation;
 
-    private InputAction m_jumpAction;
-    private Button m_rebindButton;
-    private Label m_rebindLabel;
+    InputAction m_walkLeftAction;
+    Button m_rebindButton;
+    Label m_rebindLabel;
 
-    private void Awake()
+    void Awake()
     {
         m_walkLeftAction = InputActions.FindAction("Left");
+
         VisualElement root = GetComponent<UIDocument>().rootVisualElement;
-        m_rebindButton = root.Q<m_rebindButton>("RebindButton");
-        m_rebindLabel = root.Q<m_rebindLabel>("RebindLabel");
+
+        m_rebindButton = root.Q<Button>("RebindButton");
+        m_rebindLabel = root.Q<Label>("RebindLabel");
     }
 
-    private void OnEnable()
+    void OnEnable()
     {
-        m_rebindbutton.Focus();
+        m_rebindButton.Focus();
         m_rebindButton.clicked += Rebind;
     }
 
-    private void OnDisable()
+    void OnDisable()
     {
         m_rebindButton.clicked -= Rebind;
     }
@@ -36,15 +38,18 @@ public class RebindControls : MonoBehaviour
         InputActions.FindActionMap("Player").Disable();
         m_rebindLabel.text = "Choose a new button";
         m_rebindButton.SetEnabled(false);
-        m_rebindingOperation = m_jumpAction.PerformInteractiveRebinding().OnComplete(operation => RebindCompleted());
-        m_rebindingOperation.Start();
+
+        m_rebindingOperation = m_walkLeftAction
+            .PerformInteractiveRebinding()
+            .OnComplete(operation => RebindCompleted())
+            .Start();
     }
 
     void RebindCompleted()
     {
         m_rebindingOperation.Dispose();
 
-        string newBinding = m_jumpAction.bindings[0].effectivePath;
+        string newBinding = m_walkLeftAction.bindings[0].effectivePath;
         m_rebindLabel.text = $"Rebind completed: {newBinding}";
 
         InputActions.FindActionMap("Player").Enable();

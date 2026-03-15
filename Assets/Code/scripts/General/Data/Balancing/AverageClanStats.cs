@@ -1,50 +1,72 @@
 using UnityEngine;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Convert;
 
 [CreateAssetMenu(fileName = "ClanStats", menuName = "Clan Stats")]
 public class ClanStats : ScriptableObject
 {
-    
     public ScriptableStats[] all_stats_scripts;
 
-    public Dictionary<string, float> averages = new Dictionary<string, float>
+    [Header("Avaeage cost")]
+    public float AvgCost;
+    [Space]
+
+    [Header("Summary")]
+    [Tooltip("MoveSpeed + KnockbackDamage")]
+    public float PunchingPower;
+    [Tooltip("AttackDamage / AttackEndlag")]
+    public float DPS;
+    [Tooltip("MaxHealth + KnockBackMaxHealth")]
+    public float Defense;
+
+    [Space]
+    [Header("Individual Averages")]
+    public float AvgMoveSpeed;
+    public float AvgKnockbackDamage;
+    public float AvgAttackDamage;
+    public float AvgAttackEndlag;
+    public float AvgMaxHP;
+    public float AvgKnockbackMaxHP;
+
+    void OnEnable() => UpdateAverages();
+
+    public void UpdateAverages()
+    {
+        if (all_stats_scripts == null || all_stats_scripts.Length == 0) 
         {
-          {"Avg. MaxHP", GetAverageOf("_MaxHealth")},
-          {"Avg. MoveSpeed", GetAverageOf("_MoveSpeed")},
-          {"Avg. Cost", GetAverageOf("_spawnCost")},
-          {"Avg. Damage", GetAverageOf("_AttackDamage")},
-          {"Avg. Endlag", GetAverageOf("_AttackEndlag")},
-          {"Avg. Knockback MaxHP", GetAverageOf("_KnockBackMaxHealth")},
-          {"Avg. Knockback Damage", GetAverageOf("_KnockBackDamage")},  
-        };
-
-    // No clue if the "ref" is needed because this is my first time using c#, I'll leave it there just in case... I'm used to it - chris
-
-    public void UpdateAverages(ref Dictionary<string, float> average_stats)
-    {
-        
-    }
-    public float GetAverageOf(string property_name)
-    {
-        int number_of_obj = 0;
-        float cur_total = 0f;
-
-        foreach (ScriptableStats enemy_stats in all_stats_scripts) {
-
-            number_of_obj += 1;
-            object value = GetValueByName(enemy_stats, property_name); 
-            
-            if (value is not float) {
-                cur_total += Convert.ToSingle(value);
-                continue;
-            }
-            
-            cur_total += value;
+            Debug.LogWarning($"[Average Clan Stats]: Aint nothin in that bih");
+            return;
         }
 
-        return number_of_obj/cur_total;
-    }
+        float totalCost = 0;
+        float totalMoveSpeed = 0;
+        float totalKnockbackDamage = 0;
+        float totalAttackDamage = 0;
+        float totalAttackEndlag = 0;
+        float totalMaxHP = 0;
+        float totalKnockbackMaxHP = 0;
 
+        foreach (ScriptableStats s in all_stats_scripts)
+        {
+            totalCost             += s._spawnCost;
+            totalMoveSpeed        += s._MoveSpeed;
+            totalKnockbackDamage  += s._KnockBackDamage;
+            totalAttackDamage     += s._AttackDamage;
+            totalAttackEndlag     += s._AttackEndlag;
+            totalMaxHP            += s._MaxHealth;
+            totalKnockbackMaxHP   += s._KnockBackMaxHealth;
+        }
+
+        int count = all_stats_scripts.Length;
+
+        AvgCost            = totalCost            / count;
+        AvgMoveSpeed       = totalMoveSpeed       / count;
+        AvgKnockbackDamage = totalKnockbackDamage / count;
+        AvgAttackDamage    = totalAttackDamage    / count;
+        AvgAttackEndlag    = totalAttackEndlag    / count;
+        AvgMaxHP           = totalMaxHP           / count;
+        AvgKnockbackMaxHP  = totalKnockbackMaxHP  / count;
+
+        PunchingPower = AvgMoveSpeed + AvgKnockbackDamage;
+        DPS           = AvgAttackEndlag > 0 ? AvgAttackDamage / AvgAttackEndlag : 0f;
+        Defense       = AvgMaxHP + AvgKnockbackMaxHP;
+    }
 }
