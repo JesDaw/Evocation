@@ -35,7 +35,7 @@ public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     private Coroutine currentAnimation;
     private bool isHovered = false;
-    private bool isKeyboardSelected = false; // for keyboard navigation
+    //private bool isKeyboardSelected = false; // for keyboard navigation
 
     private void Awake()
     {

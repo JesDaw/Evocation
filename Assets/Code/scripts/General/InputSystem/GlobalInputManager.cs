@@ -73,6 +73,19 @@ public class GlobalInputManager : MonoBehaviour
         if(DebugLogs) Debug.Log("Player controls disabled");
     }
 
+    // --------- Magic Controls ---------
+    public void EnableMagicControls()
+    {
+        _inputActions.MagicController.Enable();
+        if(DebugLogs) Debug.Log("Magic controls enabled");
+    }
+    
+    public void DisableMagicControls()
+    {
+        _inputActions.MagicController.Disable();
+        if(DebugLogs) Debug.Log("Magic controls disabled");
+    }
+
     // --------- Camera Controls ---------
     public void EnableCameraControls()
     {
@@ -145,6 +158,7 @@ public class GlobalInputManager : MonoBehaviour
         EnableControlSwapping();
         EnablePlayerSwitching();
         EnableSpawnerControls();  
+        EnableMagicControls();
         EnableUIControls(); 
         
     }

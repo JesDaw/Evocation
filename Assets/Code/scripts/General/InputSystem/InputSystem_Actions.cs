@@ -829,6 +829,94 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             ]
         },
         {
+            ""name"": ""MagicController"",
+            ""id"": ""83da7366-c971-4413-89eb-b3c4d874caff"",
+            ""actions"": [
+                {
+                    ""name"": ""CastSpell"",
+                    ""type"": ""Button"",
+                    ""id"": ""1e37d2a0-4c96-44d5-94b3-42670c9b114e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Look"",
+                    ""type"": ""Value"",
+                    ""id"": ""6e2167b7-6a63-4b5b-bd5c-2f01b12b4e0d"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""SwapSpell1"",
+                    ""type"": ""Button"",
+                    ""id"": ""a244d41b-c9ad-4c8f-ac7e-77b37128e037"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwapSpell2"",
+                    ""type"": ""Button"",
+                    ""id"": ""1f506af2-729a-4a6a-b492-d891865afc98"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""ee106646-4bf2-426f-a4cb-02eb09526ded"",
+                    ""path"": ""<Keyboard>/u"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CastSpell"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c19fbd7e-9561-4161-b79b-a508e86de2dd"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3e0d1230-78b8-4daa-b33c-7de18a950227"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwapSpell1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3b519c03-7db8-4068-903f-ab4dbe5931a2"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwapSpell2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
             ""name"": ""Test"",
             ""id"": ""141a12e8-214d-428d-8934-cc184fbab0c8"",
             ""actions"": [
@@ -974,6 +1062,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_SpawnerController_Spawn8 = m_SpawnerController.FindAction("Spawn8", throwIfNotFound: true);
         m_SpawnerController_Spawn9 = m_SpawnerController.FindAction("Spawn9", throwIfNotFound: true);
         m_SpawnerController_SpawnPlayer = m_SpawnerController.FindAction("SpawnPlayer", throwIfNotFound: true);
+        // MagicController
+        m_MagicController = asset.FindActionMap("MagicController", throwIfNotFound: true);
+        m_MagicController_CastSpell = m_MagicController.FindAction("CastSpell", throwIfNotFound: true);
+        m_MagicController_Look = m_MagicController.FindAction("Look", throwIfNotFound: true);
+        m_MagicController_SwapSpell1 = m_MagicController.FindAction("SwapSpell1", throwIfNotFound: true);
+        m_MagicController_SwapSpell2 = m_MagicController.FindAction("SwapSpell2", throwIfNotFound: true);
         // Test
         m_Test = asset.FindActionMap("Test", throwIfNotFound: true);
         m_Test_test1H = m_Test.FindAction("test1 (H)", throwIfNotFound: true);
@@ -987,6 +1081,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, InputSystem_Actions.UI.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_ControlManager.enabled, "This will cause a leak and performance issues, InputSystem_Actions.ControlManager.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_SpawnerController.enabled, "This will cause a leak and performance issues, InputSystem_Actions.SpawnerController.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_MagicController.enabled, "This will cause a leak and performance issues, InputSystem_Actions.MagicController.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_Test.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Test.Disable() has not been called.");
     }
 
@@ -1749,6 +1844,135 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     /// </summary>
     public SpawnerControllerActions @SpawnerController => new SpawnerControllerActions(this);
 
+    // MagicController
+    private readonly InputActionMap m_MagicController;
+    private List<IMagicControllerActions> m_MagicControllerActionsCallbackInterfaces = new List<IMagicControllerActions>();
+    private readonly InputAction m_MagicController_CastSpell;
+    private readonly InputAction m_MagicController_Look;
+    private readonly InputAction m_MagicController_SwapSpell1;
+    private readonly InputAction m_MagicController_SwapSpell2;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "MagicController".
+    /// </summary>
+    public struct MagicControllerActions
+    {
+        private @InputSystem_Actions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public MagicControllerActions(@InputSystem_Actions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "MagicController/CastSpell".
+        /// </summary>
+        public InputAction @CastSpell => m_Wrapper.m_MagicController_CastSpell;
+        /// <summary>
+        /// Provides access to the underlying input action "MagicController/Look".
+        /// </summary>
+        public InputAction @Look => m_Wrapper.m_MagicController_Look;
+        /// <summary>
+        /// Provides access to the underlying input action "MagicController/SwapSpell1".
+        /// </summary>
+        public InputAction @SwapSpell1 => m_Wrapper.m_MagicController_SwapSpell1;
+        /// <summary>
+        /// Provides access to the underlying input action "MagicController/SwapSpell2".
+        /// </summary>
+        public InputAction @SwapSpell2 => m_Wrapper.m_MagicController_SwapSpell2;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_MagicController; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="MagicControllerActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(MagicControllerActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="MagicControllerActions" />
+        public void AddCallbacks(IMagicControllerActions instance)
+        {
+            if (instance == null || m_Wrapper.m_MagicControllerActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_MagicControllerActionsCallbackInterfaces.Add(instance);
+            @CastSpell.started += instance.OnCastSpell;
+            @CastSpell.performed += instance.OnCastSpell;
+            @CastSpell.canceled += instance.OnCastSpell;
+            @Look.started += instance.OnLook;
+            @Look.performed += instance.OnLook;
+            @Look.canceled += instance.OnLook;
+            @SwapSpell1.started += instance.OnSwapSpell1;
+            @SwapSpell1.performed += instance.OnSwapSpell1;
+            @SwapSpell1.canceled += instance.OnSwapSpell1;
+            @SwapSpell2.started += instance.OnSwapSpell2;
+            @SwapSpell2.performed += instance.OnSwapSpell2;
+            @SwapSpell2.canceled += instance.OnSwapSpell2;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="MagicControllerActions" />
+        private void UnregisterCallbacks(IMagicControllerActions instance)
+        {
+            @CastSpell.started -= instance.OnCastSpell;
+            @CastSpell.performed -= instance.OnCastSpell;
+            @CastSpell.canceled -= instance.OnCastSpell;
+            @Look.started -= instance.OnLook;
+            @Look.performed -= instance.OnLook;
+            @Look.canceled -= instance.OnLook;
+            @SwapSpell1.started -= instance.OnSwapSpell1;
+            @SwapSpell1.performed -= instance.OnSwapSpell1;
+            @SwapSpell1.canceled -= instance.OnSwapSpell1;
+            @SwapSpell2.started -= instance.OnSwapSpell2;
+            @SwapSpell2.performed -= instance.OnSwapSpell2;
+            @SwapSpell2.canceled -= instance.OnSwapSpell2;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="MagicControllerActions.UnregisterCallbacks(IMagicControllerActions)" />.
+        /// </summary>
+        /// <seealso cref="MagicControllerActions.UnregisterCallbacks(IMagicControllerActions)" />
+        public void RemoveCallbacks(IMagicControllerActions instance)
+        {
+            if (m_Wrapper.m_MagicControllerActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="MagicControllerActions.AddCallbacks(IMagicControllerActions)" />
+        /// <seealso cref="MagicControllerActions.RemoveCallbacks(IMagicControllerActions)" />
+        /// <seealso cref="MagicControllerActions.UnregisterCallbacks(IMagicControllerActions)" />
+        public void SetCallbacks(IMagicControllerActions instance)
+        {
+            foreach (var item in m_Wrapper.m_MagicControllerActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_MagicControllerActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="MagicControllerActions" /> instance referencing this action map.
+    /// </summary>
+    public MagicControllerActions @MagicController => new MagicControllerActions(this);
+
     // Test
     private readonly InputActionMap m_Test;
     private List<ITestActions> m_TestActionsCallbackInterfaces = new List<ITestActions>();
@@ -2127,6 +2351,42 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSpawnPlayer(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "MagicController" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="MagicControllerActions.AddCallbacks(IMagicControllerActions)" />
+    /// <seealso cref="MagicControllerActions.RemoveCallbacks(IMagicControllerActions)" />
+    public interface IMagicControllerActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "CastSpell" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCastSpell(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Look" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnLook(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SwapSpell1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSwapSpell1(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SwapSpell2" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSwapSpell2(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Test" which allows adding and removing callbacks.

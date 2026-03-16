@@ -743,6 +743,94 @@
             ]
         },
         {
+            "name": "MagicController",
+            "id": "83da7366-c971-4413-89eb-b3c4d874caff",
+            "actions": [
+                {
+                    "name": "CastSpell",
+                    "type": "Button",
+                    "id": "1e37d2a0-4c96-44d5-94b3-42670c9b114e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Look",
+                    "type": "Value",
+                    "id": "6e2167b7-6a63-4b5b-bd5c-2f01b12b4e0d",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "SwapSpell1",
+                    "type": "Button",
+                    "id": "a244d41b-c9ad-4c8f-ac7e-77b37128e037",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SwapSpell2",
+                    "type": "Button",
+                    "id": "1f506af2-729a-4a6a-b492-d891865afc98",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "ee106646-4bf2-426f-a4cb-02eb09526ded",
+                    "path": "<Keyboard>/u",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CastSpell",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c19fbd7e-9561-4161-b79b-a508e86de2dd",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3e0d1230-78b8-4daa-b33c-7de18a950227",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwapSpell1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3b519c03-7db8-4068-903f-ab4dbe5931a2",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwapSpell2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
             "name": "Test",
             "id": "141a12e8-214d-428d-8934-cc184fbab0c8",
             "actions": [

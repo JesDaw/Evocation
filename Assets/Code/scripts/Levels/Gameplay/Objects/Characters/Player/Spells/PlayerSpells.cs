@@ -8,4 +8,6 @@ public class PlayerSpells
     public string SpellName;
     public UnityEvent<Transform[]> OnHit;
     public uint Cost;
+    [Tooltip("Size of selection")]
+    public float Radius = 2;
 }
