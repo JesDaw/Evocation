@@ -39,10 +39,8 @@ public class RebindControls : MonoBehaviour
         m_rebindLabel.text = "Choose a new button";
         m_rebindButton.SetEnabled(false);
 
-        m_rebindingOperation = m_walkLeftAction
-            .PerformInteractiveRebinding()
-            .OnComplete(operation => RebindCompleted())
-            .Start();
+        m_rebindingOperation = m_walkLeftAction.PerformInteractiveRebinding().OnComplete(operation => RebindCompleted());
+        m_rebindingOperation.Start();
     }
 
     void RebindCompleted()
