@@ -2122,6 +2122,11 @@ Transform:
   - {fileID: 2043972149}
   m_Father: {fileID: 570335103}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &156747760 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7245894933712562865, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
+  m_PrefabInstance: {fileID: 1073425895}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &160838238
 GameObject:
   m_ObjectHideFlags: 0
@@ -4572,6 +4577,17 @@ Transform:
   - {fileID: 778815340}
   m_Father: {fileID: 1862436491}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &333547614 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2840104297308467673, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
+  m_PrefabInstance: {fileID: 1073425895}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e274df268a1bd7346a9e950afcd572eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::AnimationCpu
 --- !u!1 &340850298
 GameObject:
   m_ObjectHideFlags: 0
@@ -13972,51 +13988,63 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1205457263766392975, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
-      propertyPath: rippleEffect
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1205457263766392975, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
-      propertyPath: ActivationDuration
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1205457263766392975, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
       propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1205457263766392975, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
-      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 1
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 1205457263766392975, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
-      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1336009704}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[3].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 1205457263766392975, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
       propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 1355626489820293112}
     - target: {fileID: 1205457263766392975, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
-      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 156747760}
+    - target: {fileID: 1205457263766392975, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[3].m_Target
+      value: 
+      objectReference: {fileID: 333547614}
+    - target: {fileID: 1205457263766392975, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1205457263766392975, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
-      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: TriggerDailogue
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[3].m_CallState
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1205457263766392975, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
-      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: SetDialogueMode
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: SetActive
       objectReference: {fileID: 0}
     - target: {fileID: 1205457263766392975, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
-      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: DailogueTrigger, CodeAssembly
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[3].m_MethodName
+      value: SetIsAttacking
       objectReference: {fileID: 0}
     - target: {fileID: 1205457263766392975, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
-      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: GlobalInputManager, CodeAssembly
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: UnityEngine.GameObject, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 1205457263766392975, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
-      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[3].m_TargetAssemblyTypeName
+      value: AnimationCpu, CodeAssembly
+      objectReference: {fileID: 0}
+    - target: {fileID: 1205457263766392975, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[3].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1205457263766392975, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 1205457263766392975, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[3].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 1782315311101503638, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
@@ -14040,24 +14068,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
     - target: {fileID: 3982514268777303044, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
-      propertyPath: Slides.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3982514268777303044, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
-      propertyPath: Slides.Array.data[0].Line
-      value: What up dawg
-      objectReference: {fileID: 0}
-    - target: {fileID: 3982514268777303044, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
-      propertyPath: Slides.Array.data[0].CharacterName
-      value: Princess
-      objectReference: {fileID: 0}
-    - target: {fileID: 3982514268777303044, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
       propertyPath: EndOfLines._PersistentCalls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3982514268777303044, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
-      propertyPath: Slides.Array.data[0].DialogueDelaySeconds
-      value: 0.03
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3982514268777303044, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
       propertyPath: EndOfLines._PersistentCalls.Array.data[0]._Target
@@ -14066,14 +14078,46 @@ PrefabInstance:
     - target: {fileID: 3982514268777303044, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
       propertyPath: EndOfLines._PersistentCalls.Array.data[1]._Target
       value: 
-      objectReference: {fileID: 2206988698430378501}
+      objectReference: {fileID: 156747760}
     - target: {fileID: 3982514268777303044, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
-      propertyPath: EndOfLines._PersistentCalls.Array.data[0]._MemberName
-      value: EndDialogue
-      objectReference: {fileID: 0}
+      propertyPath: EndOfLines._PersistentCalls.Array.data[2]._Target
+      value: 
+      objectReference: {fileID: 333547614}
     - target: {fileID: 3982514268777303044, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
       propertyPath: EndOfLines._PersistentCalls.Array.data[1]._MemberName
-      value: EndDialogue
+      value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 3982514268777303044, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
+      propertyPath: EndOfLines._PersistentCalls.Array.data[2]._MemberName
+      value: SetIsAttacking
+      objectReference: {fileID: 0}
+    - target: {fileID: 3982514268777303044, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
+      propertyPath: EndOfLines._PersistentCalls.Array.data[0]._PersistentArguments.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3982514268777303044, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
+      propertyPath: EndOfLines._PersistentCalls.Array.data[1]._PersistentArguments.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3982514268777303044, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
+      propertyPath: EndOfLines._PersistentCalls.Array.data[2]._PersistentArguments.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3982514268777303044, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
+      propertyPath: EndOfLines._PersistentCalls.Array.data[1]._PersistentArguments.Array.data[0]._Int
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3982514268777303044, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
+      propertyPath: EndOfLines._PersistentCalls.Array.data[2]._PersistentArguments.Array.data[0]._Int
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3982514268777303044, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
+      propertyPath: EndOfLines._PersistentCalls.Array.data[1]._PersistentArguments.Array.data[0]._Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3982514268777303044, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
+      propertyPath: EndOfLines._PersistentCalls.Array.data[2]._PersistentArguments.Array.data[0]._Type
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7531091913737653782, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
       propertyPath: m_LocalRotation.w
@@ -17661,17 +17705,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &1336009704 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3982514268777303044, guid: faa829cd607f113409b2edb52af02ddb, type: 3}
-  m_PrefabInstance: {fileID: 1073425895}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 874faff9495a840e69fda1f250e7cfcb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
 --- !u!1 &1336077991
 GameObject:
   m_ObjectHideFlags: 0
@@ -27848,11 +27881,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 837995658165343408, guid: 612838b3a6eaf446884960b9f8457800, type: 3}
       propertyPath: Slides.Array.data[1].Line
-      value: This is our Hub World
+      value: This is our Hub World?
       objectReference: {fileID: 0}
     - target: {fileID: 837995658165343408, guid: 612838b3a6eaf446884960b9f8457800, type: 3}
       propertyPath: Slides.Array.data[2].Line
-      value: Please enjoy your stay
+      value: Enjoy!
       objectReference: {fileID: 0}
     - target: {fileID: 837995658165343408, guid: 612838b3a6eaf446884960b9f8457800, type: 3}
       propertyPath: Slides.Array.data[1].CharacterName

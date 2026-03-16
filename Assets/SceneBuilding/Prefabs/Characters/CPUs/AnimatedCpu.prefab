@@ -3426,9 +3426,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 874faff9495a840e69fda1f250e7cfcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
-  Slides: []
+  Slides:
+  - CharacterName: Princess
+    Line: What up dawg
+    DialogueDelaySeconds: 0.03
   EndOfLines:
-    _PersistentCalls: []
+    _PersistentCalls:
+    - _Target: {fileID: 0}
+      _MemberName: DeactivateDialogueBox
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 1
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
 --- !u!1 &2942746451812061784
 GameObject:
   m_ObjectHideFlags: 0
@@ -11537,8 +11551,44 @@ PrefabInstance:
       value: Interactable
       objectReference: {fileID: 0}
     - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: rippleEffect
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: ActivationDuration
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
       propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3982514268777303044}
+    - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: TriggerDailogue
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: SetDialogueMode
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: DailogueTrigger, CodeAssembly
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: GlobalInputManager, CodeAssembly
       objectReference: {fileID: 0}
     - target: {fileID: 7648958909557937711, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
       propertyPath: m_LocalPosition.x
