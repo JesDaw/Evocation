@@ -3434,9 +3434,23 @@ MonoBehaviour:
     _PersistentCalls:
     - _Target: {fileID: 0}
       _MemberName: DeactivateDialogueBox
+      _PersistentArguments: []
+    - _Target: {fileID: 7245894933712562865}
+      _MemberName: SetActive
       _PersistentArguments:
       - _Type: 1
         _Int: 1
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
+    - _Target: {fileID: 2840104297308467673}
+      _MemberName: SetIsAttacking
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 0
         _String: 
         _X: 0
         _Y: 0
@@ -11546,9 +11560,41 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8878333553698331049}
     m_Modifications:
+    - target: {fileID: 875988017529705640, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.42
+      objectReference: {fileID: 0}
+    - target: {fileID: 875988017529705640, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 1255561413601067908, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1827722888905158018, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
       propertyPath: m_Name
       value: Interactable
+      objectReference: {fileID: 0}
+    - target: {fileID: 3392731173420525509, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5314998288701221267, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6508060454969541521, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6579036363176127800, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 6579036363176127800, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 1.28
       objectReference: {fileID: 0}
     - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
       propertyPath: rippleEffect
@@ -11560,11 +11606,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
       propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
       propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[3].m_Mode
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
       propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -11575,6 +11629,22 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 7245894933712562865}
+    - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[3].m_Target
+      value: 
+      objectReference: {fileID: 2840104297308467673}
+    - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[3].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
       propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: TriggerDailogue
       objectReference: {fileID: 0}
@@ -11583,12 +11653,40 @@ PrefabInstance:
       value: SetDialogueMode
       objectReference: {fileID: 0}
     - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[3].m_MethodName
+      value: SetIsAttacking
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
       propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: DailogueTrigger, CodeAssembly
       objectReference: {fileID: 0}
     - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
       propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
       value: GlobalInputManager, CodeAssembly
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: UnityEngine.GameObject, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[3].m_TargetAssemblyTypeName
+      value: AnimationCpu, CodeAssembly
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[3].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[3].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 7648958909557937711, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11638,5 +11736,10 @@ PrefabInstance:
 --- !u!4 &2289164394407329562 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7648958909557937711, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+  m_PrefabInstance: {fileID: 8494406244291602741}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7245894933712562865 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1255561413601067908, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
   m_PrefabInstance: {fileID: 8494406244291602741}
   m_PrefabAsset: {fileID: 0}
