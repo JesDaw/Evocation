@@ -27,9 +27,9 @@ namespace AdamLenzini.UI
             Gizmos.DrawLine(gameObject.transform.position, elementToSelect.transform.position);
         }
 
-        private void Reset()
+        void Reset()
         {
-            eventSystem = FindObjectOfType<EventSystem>();
+            eventSystem = Object.FindFirstObjectByType<EventSystem>();
 
             if (eventSystem == null)
                 Debug.Log("Did not find an Event System in your Scene.", this);

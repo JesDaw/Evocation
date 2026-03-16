@@ -32,7 +32,11 @@ public class LevelStateManager : MonoBehaviour
     
     void Awake()
     {
-        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        if (Instance != null && Instance != this) 
+        { 
+            Destroy(gameObject); 
+            return; 
+        }
         Instance = this;
         
         if (sceneManager == null) sceneManager = FindAnyObjectByType<SceneActivityManager>();
