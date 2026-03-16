@@ -5,7 +5,7 @@ public class ClanStats : ScriptableObject
 {
     public ScriptableStats[] all_stats_scripts;
 
-    [Header("Avaeage cost")]
+    [Header("Average cost")]
     public float AvgCost;
     [Space]
 

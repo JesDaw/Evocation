@@ -247,6 +247,92 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!1 &357468016
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 357468018}
+  - component: {fileID: 357468017}
+  - component: {fileID: 357468020}
+  - component: {fileID: 357468019}
+  m_Layer: 0
+  m_Name: BalancingScript
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &357468017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 357468016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57feec13c927f6043aa22b4f9883663b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::MasterBalancingScript
+  all_clan_stats:
+  - {fileID: 11400000, guid: 3c7ffc57a42390842b5fced0833dfeb9, type: 2}
+  OverallAvgCosts: 0
+  OverallPunchingPower: 0
+  OverallDPS: 0
+  OverallDefense: 0
+--- !u!4 &357468018
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 357468016}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.30597, y: 5.79291, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &357468019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 357468016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f18dda4b948d1b14e8530c94669948dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::OverallStatsDisplay
+  clan: {fileID: 11400000, guid: 91174aa3f0daa6541b05663053eafc64, type: 2}
+  AvgCosts: 0
+  PunchingPower: 0
+  DPS: 0
+  Defense: 0
+--- !u!114 &357468020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 357468016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f18dda4b948d1b14e8530c94669948dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::OverallStatsDisplay
+  clan: {fileID: 11400000, guid: 3c7ffc57a42390842b5fced0833dfeb9, type: 2}
+  AvgCosts: 0
+  PunchingPower: 0
+  DPS: 0
+  Defense: 0
 --- !u!1001 &724452377
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -265,7 +351,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6314562445367654166, guid: b5e3e16a45b071d4dbb72c954c0807f2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.3267454
+      value: 1.85
       objectReference: {fileID: 0}
     - target: {fileID: 6314562445367654166, guid: b5e3e16a45b071d4dbb72c954c0807f2, type: 3}
       propertyPath: m_LocalPosition.z
@@ -326,7 +412,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 899014493961415775, guid: 52135a68ff4a24ac4b84ed8d10b9c691, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.366151
+      value: 1.83
       objectReference: {fileID: 0}
     - target: {fileID: 899014493961415775, guid: 52135a68ff4a24ac4b84ed8d10b9c691, type: 3}
       propertyPath: m_LocalPosition.z
