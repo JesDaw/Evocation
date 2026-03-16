@@ -13,6 +13,10 @@ public class IntroState : LevelState
         if (TimelineManager.Instance != null && TimelineManager.Instance.HasTimeline(introCutsceneName))
             TimelineManager.Instance.PlayCutscene(introCutsceneName);
         else
-            context.TransitionToNextState();
+        {
+            Debug.LogWarning("Just an FYI if the intro state doesnt play a cutscene the other scripts dont have enough time to set up and the controls wont work");
+           context.TransitionToNextState(); 
+        }
+            
     }
 }
