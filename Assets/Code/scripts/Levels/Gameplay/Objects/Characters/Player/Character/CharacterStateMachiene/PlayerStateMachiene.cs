@@ -71,7 +71,7 @@ public class PlayerStateMachine : MonoBehaviour
     {
         if (_playerStats.scriptableStats == null)
         {
-            Debug.LogWarning("No ScriptableStats assigned to player!");
+            Debug.LogWarning("[Player state machiene] No ScriptableStats assigned to player!");
             return;
         }
 
@@ -98,7 +98,7 @@ public class PlayerStateMachine : MonoBehaviour
     {
         if (GlobalInputManager.Instance == null) 
         {
-            Debug.LogWarning("Player cant find the GlobalInputManager");
+            Debug.LogWarning("[Player state machiene] Player cant find the GlobalInputManager");
             return;
         }
 
@@ -107,7 +107,7 @@ public class PlayerStateMachine : MonoBehaviour
         playerActions.Move.performed += OnMove;
         playerActions.Move.canceled += OnMove;
         playerActions.Attack.performed += OnAttack;
-        if (DebugLogs) Debug.Log($"player character subscribed to inputs");
+        if (DebugLogs) Debug.Log($"[Player state machiene] player character subscribed to inputs");
     }
 
     void UnsubscribeFromInputs()
@@ -183,7 +183,7 @@ public class PlayerStateMachine : MonoBehaviour
                 true,
                 new PlayerCommandData(moveValue)
             );
-            if (DebugLogs) Debug.Log($"Synced Move input on activation: {moveValue}");
+            if (DebugLogs) Debug.Log($"[Player state machiene] Synced Move input on activation: {moveValue}");
         }
     }
 
@@ -192,7 +192,7 @@ public class PlayerStateMachine : MonoBehaviour
         Transform _Rig = transform.Find("Appearance")?.Find("Rig");
         if (_Rig == null || ScrStats._animator == null)
         {
-            Debug.LogWarning("No Player Rig!! (for animation)");
+            Debug.LogWarning("[Player state machiene] No Player Rig!! (for animation)");
             return;
         }
 
@@ -233,7 +233,7 @@ public class PlayerStateMachine : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        if (DebugLogs) Debug.Log($"State Machine Move Received _isActive: {_isActive}, free cam active: {CameraControlSwitcher.Instance.FreeCamIsActive}");
+        if (DebugLogs) Debug.Log($"[Player state machiene] State Machine Move Received _isActive: {_isActive}, free cam active: {CameraControlSwitcher.Instance.FreeCamIsActive}");
         if (!_isActive || CameraControlSwitcher.Instance.FreeCamIsActive) return; 
         _commander.OnMove(context);
     }

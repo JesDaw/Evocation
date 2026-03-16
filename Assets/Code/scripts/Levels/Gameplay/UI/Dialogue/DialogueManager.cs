@@ -76,7 +76,7 @@ public class DialogueManager : MonoBehaviour
     {
         if (!context.performed || !DialogueActive || UILogic.GameIsPaused) return;
         
-        //UnityEngine.Debug.Log("Dialogue confirm button pressed");
+        UnityEngine.Debug.Log("Dialogue confirm button pressed");
         OnConfirmDialoguePressedLogic();
     }
 

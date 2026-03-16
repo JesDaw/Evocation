@@ -10,17 +10,7 @@ public class AnimationCpu : MonoBehaviour
 
 	public bool _flip;
 
-    void OnValidate()
-    {
-        replaceAnimation();        
-
-		if(_Animator != null)
-		{
-			_Animator.Rebind();
-			_Animator.Update(0f);
-		}
-	}
-
+	[ContextMenu("Update Animation")]
 	void replaceAnimation()
 	{
 		Transform _cpuRig = transform.Find("Appearance")?.Find("Rig");
