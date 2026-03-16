@@ -10807,11 +10807,16 @@ MonoBehaviour:
             m_BoolArgument: 0
           m_CallState: 2
     Cost: 2
+    Radius: 5
   - SpellName: Status Buff
     OnHit:
       m_PersistentCalls:
         m_Calls: []
     Cost: 3
+    Radius: 0
+  currentSpellContext: 0
+  detectionRadiusObject: {fileID: 6856344091754560372}
+  DebugLogs: 0
 --- !u!114 &511359591933327500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10837,6 +10842,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e223edbc526df54489dc2411fcaa86d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::SpellsAffector
+  DebugLogs: 0
 --- !u!1 &4879976734963390953
 GameObject:
   m_ObjectHideFlags: 0
@@ -28531,6 +28537,11 @@ GameObject:
 --- !u!4 &1863450935152590714 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4967289330092300024, guid: 301573f24ead492429fbc1b58b9d9d99, type: 3}
+  m_PrefabInstance: {fileID: 6715735191897172354}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &6856344091754560372 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 150225228557849334, guid: 301573f24ead492429fbc1b58b9d9d99, type: 3}
   m_PrefabInstance: {fileID: 6715735191897172354}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7879593751091009044
