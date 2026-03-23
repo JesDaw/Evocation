@@ -7,6 +7,8 @@ using UnityEngine.InputSystem;
 
 public class DialogueManager : MonoBehaviour
 {
+    
+    public List<CharacterDialogueInfo> characterList;
     public TMP_Text nameText;
     public TMP_Text dialogueText;
     [SerializeField] GameObject DialogueBox;
@@ -16,8 +18,10 @@ public class DialogueManager : MonoBehaviour
     string _currentLine;
     int slideCount = 0;
     DailogueTrigger _dailogueTrigger;
-
     public bool DialogueActive { get; private set; }
+
+    public Color defaultTextColor = new Color(0.99f,0.99f,0.99f,1f);
+    public Color defaultNameColor = new Color(0f,0f,0f,1f);
 
     void OnEnable()
     {
@@ -61,6 +65,7 @@ public class DialogueManager : MonoBehaviour
     {
         dialogueSlides = slides;
         _dailogueTrigger = trigger;
+
 
         slideCount = 0;
         DialogueActive = true;
@@ -112,6 +117,17 @@ public class DialogueManager : MonoBehaviour
     IEnumerator TypeLine(string line, float speed)
     {
         dialogueText.text = "";
+        CharacterDialogueInfo speakingCharacter = FindCharacter(nameText.text);
+        
+        if (speakingCharacter != null)
+        {
+          nameText.color = speakingCharacter.nameColor; 
+          dialogueText.color = speakingCharacter.textColor; 
+        } else {
+            nameText.color = defaultNameColor;
+            dialogueText.color = defaultTextColor;
+        }
+
         foreach (char c in line)
         {
             while (UILogic.GameIsPaused)
@@ -154,4 +170,17 @@ public class DialogueManager : MonoBehaviour
     {
         DialogueBox.SetActive(false);
     }
+
+    public CharacterDialogueInfo FindCharacter(string name)
+    {
+        foreach (CharacterDialogueInfo character in characterList)
+        {
+            if (character.CharacterName == name)
+            {
+                return character;
+            }
+        }
+        return null;
+    }
+
 }
