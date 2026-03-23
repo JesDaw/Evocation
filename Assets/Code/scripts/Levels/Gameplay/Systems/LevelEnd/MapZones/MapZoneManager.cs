@@ -11,7 +11,7 @@ public class MapZonesManager : MonoBehaviour
     [System.Serializable]
     public class TrackingPoint
     {
-        public string tagToTrack;
+        public string[] tagsToTrack;
         public Transform trackingPoint;
     }
 
@@ -25,18 +25,22 @@ public class MapZonesManager : MonoBehaviour
     {
         foreach (var point in trackingPoints)
         {
-            if (!trackedObjects.ContainsKey(point.tagToTrack))
+            foreach(var tag in point.tagsToTrack)
             {
-                trackedObjects[point.tagToTrack] = new List<GameObject>();
+                if (!trackedObjects.ContainsKey(tag))
+                {
+                    trackedObjects[tag] = new List<GameObject>();
+                }
             }
+            
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D character)
     {
-        if (trackedObjects.ContainsKey(other.tag) && !trackedObjects[other.tag].Contains(other.gameObject))
+        if (trackedObjects.ContainsKey(character.tag) && !trackedObjects[character.tag].Contains(character.gameObject))
         {
-            trackedObjects[other.tag].Add(other.gameObject);
+            trackedObjects[character.tag].Add(character.gameObject);
         }
     }
 
@@ -81,16 +85,28 @@ public class MapZonesManager : MonoBehaviour
         {
             if (point.trackingPoint == null) continue;
 
-            GameObject obj = GetClosestObject(point.tagToTrack, point.trackingPoint.position);
-            if (obj != null)
+            GameObject closestForPoint = null;
+            float closestDistForPoint = Mathf.Infinity;
+            
+            foreach (var tag in point.tagsToTrack)
             {
-                float distance = Vector2.Distance(point.trackingPoint.position, obj.transform.position);
-                if (distance < smallestDistance)
+                GameObject obj = GetClosestObject(tag, point.trackingPoint.position);
+                if (obj != null)
                 {
-                    smallestDistance = distance;
-                    closestTrackerName = point.trackingPoint.name;
-                    closestObject = obj;
+                    float distance = Vector2.Distance(point.trackingPoint.position, obj.transform.position);
+                    if (distance < closestDistForPoint)
+                    {
+                        closestDistForPoint = distance;
+                        closestForPoint = obj;
+                    }
                 }
+            }
+            
+            if (closestForPoint != null && closestDistForPoint < smallestDistance)
+            {
+                smallestDistance = closestDistForPoint;
+                closestTrackerName = point.trackingPoint.name;
+                closestObject = closestForPoint;
             }
         }
         

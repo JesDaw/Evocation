@@ -28,7 +28,7 @@ public class CharacterSelect : MonoBehaviour
     {
         maxMessage.SetActive(false);
         UpdatePartyUI();
-        if (!SpawnController.Instance) Debug.LogError($"spawnController not set in {gameObject.name}");
+        if (SpawnController.Instance == null) Debug.LogError($"spawnController not found in {gameObject.name}");
     }
 
     public void ShowCharacterInfo(CharacterData character)

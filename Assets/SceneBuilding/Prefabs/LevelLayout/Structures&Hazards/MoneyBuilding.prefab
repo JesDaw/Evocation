@@ -122,9 +122,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 253974348391523074}
   - {fileID: 5629710872442029356}
-  - {fileID: 9008079617686614683}
+  - {fileID: 253974348391523074}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8422285075179505728
@@ -236,7 +235,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9008079617686614683}
   m_Layer: 21
-  m_Name: ShockWaveLocation
+  m_Name: EffectLocation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -250,12 +249,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7168296542496157704}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.4, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -1.4000001, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1044337692431387979}
+  m_Father: {fileID: 253974348391523074}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &7611298639120610605
 PrefabInstance:
@@ -311,7 +310,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 7648958909557937711, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9008079617686614683}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
 --- !u!4 &253974348391523074 stripped

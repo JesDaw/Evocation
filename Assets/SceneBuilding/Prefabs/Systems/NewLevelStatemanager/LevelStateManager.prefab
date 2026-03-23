@@ -1,0 +1,205 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7895908948681486901
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2308256406004837365}
+  - component: {fileID: 5236458035779570860}
+  m_Layer: 0
+  m_Name: LevelStateManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2308256406004837365
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7895908948681486901}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5236458035779570860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7895908948681486901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14f04683766854c069ff6948886c8d18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::LevelStateManager
+  levelStates:
+  - rid: 7479562236099821763
+  - rid: 7479562236099821764
+  - rid: 7479562236099821767
+  - rid: 7479562236099821768
+  initialStateIndex: 0
+  sceneManager: {fileID: 0}
+  winState:
+    rid: 7479562331668873414
+  lossState:
+    rid: 7479562331668873415
+  onLevelStart:
+    _PersistentCalls: []
+  onStateChanged:
+    _PersistentCalls: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 7479562236099821763
+      type: {class: IntroState, ns: , asm: CodeAssembly}
+      data:
+        stateName: Intro
+        sceneActivityName: 
+        makeUIAnchor: 1
+        inputMode: 1
+        enableMoney: 0
+        enableTimer: 0
+        enablePlayerSpawning: 0
+        enableEnemySpawning: 0
+        timeScale: 1
+        alterPlayerControls: 1
+        switchToPlayerControl: 0
+        switchToCameraControl: 1
+        playMusic: 0
+        musicStateName: 
+        onStateEnter:
+          _PersistentCalls: []
+        onStateExit:
+          _PersistentCalls: []
+        DebugLogs: 0
+        introCutsceneName: Intro
+    - rid: 7479562236099821764
+      type: {class: ScoutingState, ns: , asm: CodeAssembly}
+      data:
+        stateName: ScoutingState
+        sceneActivityName: ScoutingUI
+        makeUIAnchor: 1
+        inputMode: 2
+        enableMoney: 0
+        enableTimer: 0
+        enablePlayerSpawning: 0
+        enableEnemySpawning: 0
+        timeScale: 1
+        alterPlayerControls: 1
+        switchToPlayerControl: 0
+        switchToCameraControl: 1
+        playMusic: 1
+        musicStateName: PART_1
+        onStateEnter:
+          _PersistentCalls: []
+        onStateExit:
+          _PersistentCalls: []
+        DebugLogs: 0
+        confirmationUIName: ConfirmationUI
+    - rid: 7479562236099821767
+      type: {class: CountdownState, ns: , asm: CodeAssembly}
+      data:
+        stateName: CountdownState
+        sceneActivityName: BlankUI
+        makeUIAnchor: 1
+        inputMode: 1
+        enableMoney: 0
+        enableTimer: 0
+        enablePlayerSpawning: 0
+        enableEnemySpawning: 0
+        timeScale: 1
+        alterPlayerControls: 1
+        switchToPlayerControl: 1
+        switchToCameraControl: 0
+        playMusic: 1
+        musicStateName: PART_2
+        onStateEnter:
+          _PersistentCalls: []
+        onStateExit:
+          _PersistentCalls: []
+        DebugLogs: 0
+        countdownCutsceneName: LevelStart
+    - rid: 7479562236099821768
+      type: {class: CombatState, ns: , asm: CodeAssembly}
+      data:
+        stateName: Combat
+        sceneActivityName: GamePlayUI
+        makeUIAnchor: 1
+        inputMode: 3
+        enableMoney: 1
+        enableTimer: 1
+        enablePlayerSpawning: 1
+        enableEnemySpawning: 1
+        timeScale: 1
+        alterPlayerControls: 0
+        switchToPlayerControl: 0
+        switchToCameraControl: 0
+        playMusic: 0
+        musicStateName: 
+        onStateEnter:
+          _PersistentCalls: []
+        onStateExit:
+          _PersistentCalls: []
+        DebugLogs: 0
+    - rid: 7479562331668873414
+      type: {class: WinState, ns: , asm: CodeAssembly}
+      data:
+        stateName: Win
+        sceneActivityName: Victory
+        makeUIAnchor: 1
+        inputMode: 5
+        enableMoney: 0
+        enableTimer: 0
+        enablePlayerSpawning: 0
+        enableEnemySpawning: 0
+        timeScale: 1
+        alterPlayerControls: 1
+        switchToPlayerControl: 0
+        switchToCameraControl: 1
+        playMusic: 1
+        musicStateName: LEVEL_WIN
+        onStateEnter:
+          _PersistentCalls: []
+        onStateExit:
+          _PersistentCalls: []
+        DebugLogs: 0
+        winCutsceneName: LevelWin
+        hasWinCutscene: 1
+        victoryUIName: Victory
+    - rid: 7479562331668873415
+      type: {class: LossState, ns: , asm: CodeAssembly}
+      data:
+        stateName: Loss
+        sceneActivityName: Defeat
+        makeUIAnchor: 1
+        inputMode: 5
+        enableMoney: 0
+        enableTimer: 0
+        enablePlayerSpawning: 0
+        enableEnemySpawning: 0
+        timeScale: 1
+        alterPlayerControls: 1
+        switchToPlayerControl: 0
+        switchToCameraControl: 1
+        playMusic: 0
+        musicStateName: 
+        onStateEnter:
+          _PersistentCalls: []
+        onStateExit:
+          _PersistentCalls: []
+        DebugLogs: 0
+        lossCutsceneName: LevelLoose
+        hasLossCutscene: 1
+        defeatUIName: Defeat
