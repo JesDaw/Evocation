@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using System.Collections;
 using TMPro;
 
-public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, ISelectHandler, IDeselectHandler
 {
     [Header("Animation Settings")]
     [SerializeField] private float animationDuration = 0.2f;
@@ -35,6 +35,7 @@ public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     private Coroutine currentAnimation;
     private bool isHovered = false;
+    //private bool isKeyboardSelected = false; // for keyboard navigation
 
     private void Awake()
     {
@@ -85,7 +86,21 @@ public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         isHovered = false;
         AnimateToState(originalColor, originalTextColor, originalScale, animationDuration);
     }
-    
+
+    public void OnSelect(BaseEventData eventData)
+    {
+        //if (isKeyboardSelected) return;
+        //isKeyboardSelected = true;
+        AnimateToState(hoverColor, hoverTextColor, hoverScale, animationDuration);
+    }
+
+    public void OnDeselect(BaseEventData eventData)
+    {
+        //if (isKeyboardSelected) return;
+        //isKeyboardSelected = true;
+        AnimateToState(originalColor, originalTextColor, originalScale, animationDuration);
+    }
+
     public void OnPointerClick(PointerEventData eventData)
     {
        // StartCoroutine(ClickAnimation());

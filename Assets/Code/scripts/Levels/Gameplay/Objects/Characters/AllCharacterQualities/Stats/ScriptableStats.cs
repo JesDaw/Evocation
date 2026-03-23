@@ -8,27 +8,33 @@ public class ScriptableStats : ScriptableObject
     [Header("Animation & Appearance")]
     [HideInInspector] public bool _Rotate;
     public AnimatorOverrideController _animator;
-    public animationRigs[] _Sprites;
+    [HideInInspector] public animationRigs[] _Sprites;
     public float _AnimationMoveSpeed = 1f;
 
-    [Space]
-    [Header("General Stats")]
-    public int _MaxHealth = 1;
-    public float _MoveSpeed;
+    [Header("Spawn Cost")]
     public int _spawnCost;
 
+    [Header("Pushing Power")]
+    public float _MoveSpeed;
+    public float _KnockBackDamage;
+
+    [Header("Damage Per Second")]
+     public int _AttackDamage;
+     public float _AttackEndlag;
+
+    [Header("Defense")]
+    public int _MaxHealth = 1;
+    public float _KnockBackMaxHealth = 1;
+    public float _KnockBackVelocity;
+    public float _HorizontalRange = 2f; 
+    public float _VerticalRange = 2f;
+    
+    [Space]
+    [Space]
     [Header("Combat Configuration")]
     public AttackStyle _AttackStyle;    
     public bool _IsAOE; 
     public int _MaxAOETargets = 5;
-
-    [Header("Combat Stats")]
-    public int _AttackDamage;
-    public float _AttackEndlag;
-    
-    [Header("Range Settings")]
-    public float _HorizontalRange = 2f; 
-    public float _VerticalRange = 2f;
 
     [Header("Projectile Settings")]
     public GameObject _ProjectilePrefab;
@@ -43,10 +49,7 @@ public class ScriptableStats : ScriptableObject
     [Header("Status Effects")]
     public List<StatusEffect> _EffectsToApply = new List<StatusEffect>();
 
-    [Space]
-    [Header("Knockback")]
-    public float _KnockBackMaxHealth = 1;
-    public float _KnockBackVelocity;
+
 }
 
 public enum AttackStyle

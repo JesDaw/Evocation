@@ -1,0 +1,220 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5736147759857115511
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4062428415580126057}
+  - component: {fileID: 6090762317276568560}
+  - component: {fileID: 1292483789049197071}
+  - component: {fileID: 7331235989110839894}
+  m_Layer: 0
+  m_Name: LevelAudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4062428415580126057
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5736147759857115511}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6090762317276568560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5736147759857115511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 999168f2b2556446ca56855d56bee063, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::LevelAudioManager
+  fmodEvents: {fileID: 7331235989110839894}
+  musicParameterName: MountainLevelPhases
+  musicStates:
+  - stateName: PART_1
+    parameterValue: 0
+  - stateName: PART_2
+    parameterValue: 1
+  - stateName: PART_3
+    parameterValue: 2
+  - stateName: LEVEL_WIN
+    parameterValue: 3
+  StartMusicOnAwake: 0
+  StartAmbianceOnAwake: 0
+  showDebugLogs: 0
+--- !u!114 &1292483789049197071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5736147759857115511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 256f432cf1e6741fda824bf6ea78f531, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::FModAudioManager
+  gameVolumeSO: {fileID: 11400000, guid: 0b3db9e610541499cae2d7d1ce18bbd8, type: 2}
+--- !u!114 &7331235989110839894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5736147759857115511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7222aab070c5e4562a0aa6baaed39098, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::FModEvents
+  <menuClick>k__BackingField:
+    Guid:
+      Data1: -296116831
+      Data2: 1270562992
+      Data3: -881035844
+      Data4: 1970319739
+    Path: event:/SFX/MenuesAndUI/Button Click
+  <dialogueType>k__BackingField:
+    Guid:
+      Data1: -296116831
+      Data2: 1270562992
+      Data3: -881035844
+      Data4: 1970319739
+    Path: event:/SFX/MenuesAndUI/Button Click
+  <showCharacterInfo>k__BackingField:
+    Guid:
+      Data1: -296116831
+      Data2: 1270562992
+      Data3: -881035844
+      Data4: 1970319739
+    Path: event:/SFX/MenuesAndUI/Button Click
+  <addCharacterToParty>k__BackingField:
+    Guid:
+      Data1: -296116831
+      Data2: 1270562992
+      Data3: -881035844
+      Data4: 1970319739
+    Path: event:/SFX/MenuesAndUI/Button Click
+  <removeCharacterFromParty>k__BackingField:
+    Guid:
+      Data1: -296116831
+      Data2: 1270562992
+      Data3: -881035844
+      Data4: 1970319739
+    Path: event:/SFX/MenuesAndUI/Button Click
+  <pauseGame>k__BackingField:
+    Guid:
+      Data1: -296116831
+      Data2: 1270562992
+      Data3: -881035844
+      Data4: 1970319739
+    Path: event:/SFX/MenuesAndUI/Button Click
+  <unpauseGame>k__BackingField:
+    Guid:
+      Data1: -296116831
+      Data2: 1270562992
+      Data3: -881035844
+      Data4: 1970319739
+    Path: event:/SFX/MenuesAndUI/Button Click
+  <openCharacterSelect>k__BackingField:
+    Guid:
+      Data1: -296116831
+      Data2: 1270562992
+      Data3: -881035844
+      Data4: 1970319739
+    Path: event:/SFX/MenuesAndUI/Button Click
+  <closeCharacterSelect>k__BackingField:
+    Guid:
+      Data1: -296116831
+      Data2: 1270562992
+      Data3: -881035844
+      Data4: 1970319739
+    Path: event:/SFX/MenuesAndUI/Button Click
+  <engageInBattle>k__BackingField:
+    Guid:
+      Data1: -296116831
+      Data2: 1270562992
+      Data3: -881035844
+      Data4: 1970319739
+    Path: event:/SFX/MenuesAndUI/Button Click
+  <backToScouting>k__BackingField:
+    Guid:
+      Data1: -296116831
+      Data2: 1270562992
+      Data3: -881035844
+      Data4: 1970319739
+    Path: event:/SFX/MenuesAndUI/Button Click
+  <spawnTroop>k__BackingField:
+    Guid:
+      Data1: -296116831
+      Data2: 1270562992
+      Data3: -881035844
+      Data4: 1970319739
+    Path: event:/SFX/MenuesAndUI/Button Click
+  <attack>k__BackingField:
+    Guid:
+      Data1: -296116831
+      Data2: 1270562992
+      Data3: -881035844
+      Data4: 1970319739
+    Path: event:/SFX/MenuesAndUI/Button Click
+  <takeDamage>k__BackingField:
+    Guid:
+      Data1: -296116831
+      Data2: 1270562992
+      Data3: -881035844
+      Data4: 1970319739
+    Path: event:/SFX/MenuesAndUI/Button Click
+  <knockback>k__BackingField:
+    Guid:
+      Data1: -296116831
+      Data2: 1270562992
+      Data3: -881035844
+      Data4: 1970319739
+    Path: event:/SFX/MenuesAndUI/Button Click
+  <die>k__BackingField:
+    Guid:
+      Data1: -296116831
+      Data2: 1270562992
+      Data3: -881035844
+      Data4: 1970319739
+    Path: event:/SFX/MenuesAndUI/Button Click
+  <claimLocation>k__BackingField:
+    Guid:
+      Data1: -296116831
+      Data2: 1270562992
+      Data3: -881035844
+      Data4: 1970319739
+    Path: event:/SFX/MenuesAndUI/Button Click
+  <ambiance>k__BackingField:
+    Guid:
+      Data1: -2119753150
+      Data2: 1197145996
+      Data3: 1943173521
+      Data4: -131422043
+    Path: event:/Ambience/LevelOneWind
+  <music>k__BackingField:
+    Guid:
+      Data1: 463250374
+      Data2: 1198539564
+      Data3: -1588495476
+      Data4: 1673207342
+    Path: event:/Music/MountainLevelMusic

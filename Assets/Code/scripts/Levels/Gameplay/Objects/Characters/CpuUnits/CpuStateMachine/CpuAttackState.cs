@@ -5,10 +5,12 @@ public class CpuAttackState : CpuBaseState
     float _timer = 0f;
     enum AttackPhase { Startup, Cooldown, Done }
     AttackPhase _phase = AttackPhase.Startup;
+    Rigidbody2D _Body;
 
     public CpuAttackState(CpuStateManager context) : base(context)
     {
         _context = context;
+        _Body = _context._Body;
     }
 
     public override void EnterState()
@@ -30,6 +32,7 @@ public class CpuAttackState : CpuBaseState
 
     public void Tick(float deltaTime)
     {
+        _Body.linearVelocity = new Vector2(0.0f, 0.0f);
         _timer += deltaTime * 1000;
 
         switch (_phase)
@@ -38,6 +41,7 @@ public class CpuAttackState : CpuBaseState
                 if (_context._AnimatorController.ShouldAttack())
                 {
                     AttackLogic.ExecuteAttack(_context);
+                    FModAudioManager.instance.PlaySoundByName("attack");
                     //have attack sould be called from Ctx.AnimatorController with a signal
                     // but this is the function to call the attacking audio: FModAudioManager.instance.PlaySoundByName("attack");
                     _timer = 0f;

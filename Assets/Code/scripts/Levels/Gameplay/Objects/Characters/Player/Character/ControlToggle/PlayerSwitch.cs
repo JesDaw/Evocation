@@ -8,7 +8,9 @@ public class PlayerSwitch : MonoBehaviour
     [SerializeField] List<GameObject> players = new List<GameObject>();
     public List<GameObject> Players => players;
     [SerializeField] GameObject cameraBounds;
-    private List<CinemachineCamera> playerCameras = new List<CinemachineCamera>();
+    [SerializeField] bool AutoStartAsPlayerControls = false;
+    [SerializeField] bool DebugLogs = false;
+    List<CinemachineCamera> playerCameras = new List<CinemachineCamera>();
 
     int activePlayerIndex = 0;
     int PlayerIDNumber;
@@ -55,8 +57,9 @@ public class PlayerSwitch : MonoBehaviour
 
     void Start()
     {
-        PlayerIDNumber = 1;
+        if (GlobalInputManager.Instance == null) Debug.LogWarning("playerCameras switch cant find GlobalInputManager.Instance");
 
+        PlayerIDNumber = 1;
         var controlManager = GlobalInputManager.Instance.InputActions.ControlManager;
         
         controlManager.NextPlayer.performed += SwitchPlayerRight;
@@ -80,17 +83,24 @@ public class PlayerSwitch : MonoBehaviour
                 playerSM.SetActive(false);
             }
         }
+        if (DebugLogs) Debug.Log($"players.Count = {players.Count}");
+        if (players.Count > 0)
+        {
+            ActivePlayer.Instance.CurrentPlayer = players[activePlayerIndex];
+            playerCameras[activePlayerIndex].Priority = 2;
+            ActivePlayer.Instance.CurrentPlayer.SetActive(true);
+            if (AutoStartAsPlayerControls) 
+            {
+                CameraControlSwitcher.Instance.SwitchToPlayerControl();
+            }
+
+        }
 
         for (int i = 0; i < playerCameras.Count; i++)
         {
             SetupCameraConfiner(playerCameras[i]);
         }
 
-        if (players.Count > 0)
-        {
-            ActivePlayer.Instance.CurrentPlayer = players[activePlayerIndex];
-            playerCameras[activePlayerIndex].Priority = 2;
-        }
     }
 
     void OnDestroy()

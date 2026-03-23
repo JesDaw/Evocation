@@ -18,6 +18,7 @@ public class CpuStateManager : MonoBehaviour
     public AnimationEventsController _AnimatorController;
 
     [Header("State Management")]
+    public State CurrentState {get; private set;}
     CpuBaseState _currentState;
     public Dictionary<State, CpuBaseState> _State = new Dictionary<State, CpuBaseState>();
 
@@ -36,11 +37,25 @@ public class CpuStateManager : MonoBehaviour
         StartCoroutine(Startup());
     }
 
+    bool MatchHierarchy(Transform a, Transform b)
+    {
+        if (a.childCount != b.childCount)
+            return false;
+
+        for (int i = 0; i < a.childCount; i++)
+        {
+            if (!MatchHierarchy(a.GetChild(i), b.GetChild(i)))
+                return false;
+        }
+
+        return true;
+    }
+
     IEnumerator Startup()
     {
-        yield return new WaitUntil(() => transform.childCount >= _ScrStats._Sprites.Length);
         replaceAnimation();
         toggleEverything(true);
+        yield return new WaitForSeconds(0.1f);
         if(_Animator != null)
         {
             _Animator.Rebind();
@@ -71,6 +86,7 @@ public class CpuStateManager : MonoBehaviour
             _Animator.Rebind();
 
         _currentState = _State[state];
+		CurrentState = state;
         _currentState.EnterState();
     }
 

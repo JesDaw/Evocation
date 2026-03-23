@@ -7,7 +7,6 @@ public class GlobalInputManager : MonoBehaviour
     private InputSystem_Actions _inputActions;
     public InputSystem_Actions InputActions => _inputActions;
     [SerializeField] bool DebugLogs = false;
-
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -73,6 +72,19 @@ public class GlobalInputManager : MonoBehaviour
         if(DebugLogs) Debug.Log("Player controls disabled");
     }
 
+    // --------- Magic Controls ---------
+    public void EnableMagicControls()
+    {
+        _inputActions.MagicController.Enable();
+        if(DebugLogs) Debug.Log("Magic controls enabled");
+    }
+    
+    public void DisableMagicControls()
+    {
+        _inputActions.MagicController.Disable();
+        if(DebugLogs) Debug.Log("Magic controls disabled");
+    }
+
     // --------- Camera Controls ---------
     public void EnableCameraControls()
     {
@@ -127,7 +139,7 @@ public class GlobalInputManager : MonoBehaviour
     public void EnableUIControls()
     {
         _inputActions.UI.Enable();
-        if(DebugLogs) Debug.Log($"UI controls enabled from: {System.Environment.StackTrace}");
+        if(DebugLogs) Debug.Log($"UI controls enabled");
     }
     
     public void DisableUIControls()
@@ -139,63 +151,68 @@ public class GlobalInputManager : MonoBehaviour
     
     public void SetPlayerCharacterMode()
     {
+        if(DebugLogs) Debug.Log("=========Input Mode: Gameplay=========");
         DisableAllControls();
         EnablePlayerControls();
         EnableControlSwapping();
         EnablePlayerSwitching();
         EnableSpawnerControls();  
-        EnableUIControls(); 
-        if(DebugLogs) Debug.Log("Input Mode: Gameplay");
+        EnableMagicControls();
+        EnableUIControls();        
     }
     
     public void SetFreeCamMode()
     {
-        if(DebugLogs) Debug.Log($"Input Mode: FreeCam - Before disable all, current enabled maps: Player({_inputActions.Player.enabled}), Camera({_inputActions.Camera.enabled}), UI({_inputActions.UI.enabled})");
+        if(DebugLogs) Debug.Log("=========Input Mode: FreeCam=========");
         DisableAllControls();
         EnableCameraControls();
         EnableControlSwapping();
         EnablePlayerSwitching();
         EnableSpawnerControls();
         EnableUIControls();
-        if(DebugLogs) Debug.Log("Input Mode: FreeCam");
+        
     }
 
     public void SetScoutingMode()
     {
-        if(DebugLogs) Debug.Log($"Input Mode: scouting - Before disable all, current enabled maps: Player({_inputActions.Player.enabled}), Camera({_inputActions.Camera.enabled}), UI({_inputActions.UI.enabled})");
+        if(DebugLogs) Debug.Log("=========Input Mode: scouting=========");
         DisableAllControls();
         EnableCameraControls();
         EnableUIControls();
-        if(DebugLogs) Debug.Log("Input Mode: scouting");
+        
     }
     
     public void SetCutsceneMode()
     {
+        if(DebugLogs) Debug.Log("=========Input Mode: Cutscene=========");
         DisableAllControls();
         EnableUIControls();
-        if(DebugLogs) Debug.Log("Input Mode: Cutscene");
+        
     }
     
     public void SetDialogueMode()
     {
+        if(DebugLogs) Debug.Log("=========Input Mode: Dialogue=========");
         DisableAllControls();
         EnableUIControls();
-        if(DebugLogs) Debug.Log("Input Mode: Dialogue");
+        
     }
 
     public void SetPauseMenuMode()
     {
+        if(DebugLogs) Debug.Log("=========Input Mode: Pause Menu=========");
         DisableAllControls();
         EnableUIControls();
         EnableCursor();
-        if(DebugLogs) Debug.Log("Input Mode: Pause Menu");
+        
     }
     
     public void SetCharacterSelectingMode()
     {
+        if(DebugLogs) Debug.Log("=========Input Mode: Spawning=========");
         DisableAllControls();
         EnableUIControls();  
-        if(DebugLogs) Debug.Log("Input Mode: Spawning");
+        
     }
 
     // ========================= Utilities =========================

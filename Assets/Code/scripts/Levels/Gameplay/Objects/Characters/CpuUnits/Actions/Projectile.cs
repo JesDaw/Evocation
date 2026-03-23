@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using System;
 
 public class Projectile : MonoBehaviour
@@ -30,33 +31,58 @@ public class Projectile : MonoBehaviour
         
         float xDistanceToTarget = target.position.x - startPoint.x;
         this.trajectoryMaxRelativeHeight = Mathf.Abs(xDistanceToTarget) * maxHeight;
+		StartCoroutine(ProjectileCycle());
     }
 
-    void Update()
+	IEnumerator ProjectileCycle()
+	{
+		Vector3 endPosition = new Vector3();
+		CpuStateManager targetState = target.GetComponent<CpuStateManager>();
+
+		if(targetState.CurrentState == CpuStateManager.State.KnockBack)
+			Destroy(gameObject);
+
+		while (true)
+		{
+			aliveTimer += Time.deltaTime;
+			
+			if (!(target == null || aliveTimer > 10f) && targetState.CurrentState != CpuStateManager.State.KnockBack)
+			{
+				endPosition = target.position;
+
+				//magic number for how far before it gives up tracking
+				if(Vector3.Distance(target.position, endPosition) > 10f)
+				{
+					UpdateProjectilePosition(endPosition);
+				}
+				else
+				{
+					UpdateProjectilePosition(target.position);
+
+					if (Vector3.Distance(transform.position, target.position) < distanceToDestroy)
+					{
+						if (target.TryGetComponent(out Stats s))
+						{
+							onHitAction?.Invoke(s);
+						}
+						Destroy(gameObject);
+					}
+				}
+			}
+			else
+			{
+				UpdateProjectilePosition(endPosition);
+				if (Vector3.Distance(transform.position, endPosition) < distanceToDestroy)
+					Destroy(gameObject);
+			}
+
+			yield return null;
+		}
+	}
+
+    private void UpdateProjectilePosition(Vector3 _targetPoint)
     {
-        aliveTimer += Time.deltaTime;
-        
-        if (target == null || aliveTimer > 10f)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        UpdateProjectilePosition();
-
-        if (Vector3.Distance(transform.position, target.position) < distanceToDestroy)
-        {
-            if (target.TryGetComponent(out Stats s))
-            {
-                onHitAction?.Invoke(s);
-            }
-            Destroy(gameObject);
-        }
-    }
-
-    private void UpdateProjectilePosition()
-    {
-        Vector3 trajectoryRange = target.position - startPoint;
+        Vector3 trajectoryRange = _targetPoint - startPoint;
 
         if (Mathf.Abs(trajectoryRange.normalized.x) >= Mathf.Abs(trajectoryRange.normalized.y))
         {

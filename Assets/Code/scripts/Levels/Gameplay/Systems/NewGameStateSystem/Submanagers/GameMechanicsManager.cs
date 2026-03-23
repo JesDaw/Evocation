@@ -10,11 +10,10 @@ public class GameMechanicsManager : MonoBehaviour
     public static GameMechanicsManager Instance { get; private set; }
         
     [Header("Debug")]
-    [SerializeField] private bool showDebugLogs = false;
+    [SerializeField] bool showDebugLogs = false;
     
     void Awake()
     {
-        // Singleton pattern
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -22,13 +21,11 @@ public class GameMechanicsManager : MonoBehaviour
         }
         Instance = this;
         
-        // Auto-find systems if not assigned
         AutoFindSystems();
     }
     
     void Start()
     {
-        // Start with everything disabled
         DisableAllSystems();
         
         if (showDebugLogs)
