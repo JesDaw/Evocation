@@ -10,7 +10,24 @@ public class SpellsAffector : MonoBehaviour
         if(DebugLogs) Debug.Log("<color=green>SPELLS--Fireball</color>");
         for (int I = 0; I < _enemiesHit.Length; I++)
         {
-            _enemiesHit[I].GetComponent<DamageHandler>().TakeDamage(5);
+            DamageHandler currentDamager = _enemiesHit[I].GetComponent<DamageHandler>();
+            if(_enemiesHit[I].CompareTag("Allies")) continue;
+            if(_enemiesHit[I].CompareTag("Player")) continue;
+            if(currentDamager == null) continue;
+            currentDamager.TakeDamage(5);
+        }
+    }
+
+    public void BiggerFireballSpell(Transform[] _enemiesHit)
+    {
+        if(DebugLogs) Debug.Log("<color=green>SPELLS--Fireball</color>");
+        for (int I = 0; I < _enemiesHit.Length; I++)
+        {
+            DamageHandler currentDamager = _enemiesHit[I].GetComponent<DamageHandler>();
+            if(_enemiesHit[I].CompareTag("Allies")) continue;
+            if(_enemiesHit[I].CompareTag("Player")) continue;
+            if(currentDamager == null) continue;
+            currentDamager.TakeDamage(999);
         }
     }
     
@@ -19,7 +36,9 @@ public class SpellsAffector : MonoBehaviour
         for (int I = 0; I < _enemiesHit.Length; I++)
         {
             if(DebugLogs) Debug.Log("<color=green>SPELLS--Status Increase</color>");
-            _enemiesHit[I].GetComponent<DamageHandler>().TakeDamage(5);
+            DamageHandler currentDamager = _enemiesHit[I].GetComponent<DamageHandler>();
+            if(currentDamager == null) continue;
+            currentDamager.TakeDamage(5);
         }
     }
 }
