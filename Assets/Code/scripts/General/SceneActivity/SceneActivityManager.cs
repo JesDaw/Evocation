@@ -158,7 +158,6 @@ public class SceneActivityManager : MonoBehaviour
     }
 
     public void ActivateSettings() { Activate("Settings"); }
-    //public void DeactivateSettings() { Deactivate("Settings"); }
     public void ActivateSettingsWithFade() 
     { 
         FadeOutThenIn(FindActivity("Settings"), .3f);
