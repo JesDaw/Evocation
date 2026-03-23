@@ -7,7 +7,6 @@ public class GlobalInputManager : MonoBehaviour
     private InputSystem_Actions _inputActions;
     public InputSystem_Actions InputActions => _inputActions;
     [SerializeField] bool DebugLogs = false;
-
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -159,8 +158,7 @@ public class GlobalInputManager : MonoBehaviour
         EnablePlayerSwitching();
         EnableSpawnerControls();  
         EnableMagicControls();
-        EnableUIControls(); 
-        
+        EnableUIControls();        
     }
     
     public void SetFreeCamMode()
