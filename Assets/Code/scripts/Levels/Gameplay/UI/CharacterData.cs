@@ -8,4 +8,5 @@ public class CharacterData : ScriptableObject
     public Sprite portrait;
     public Sprite headshot;
     public ScriptableStats scriptableStats;
+    public string SoundName = "";
 }
