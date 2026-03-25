@@ -36,10 +36,16 @@ public class FModAudioManager : MonoBehaviour
         //UI
         soundDictionary.Add("menuClick", FModEvents.instance.menuClick);
         soundDictionary.Add("dialogueType", FModEvents.instance.menuClick);
+        soundDictionary.Add("back",FModEvents.instance.back);
         // Character select
         soundDictionary.Add("showCharacterInfo", FModEvents.instance.showCharacterInfo);
         soundDictionary.Add("removeCharacterFromParty", FModEvents.instance.removeCharacterFromParty);
         soundDictionary.Add("addCharacterToParty", FModEvents.instance.addCharacterToParty);
+        // Characters
+        soundDictionary.Add("WolfRunner", FModEvents.instance.WolfRunner);
+        soundDictionary.Add("WolfHammer",FModEvents.instance.WolfHammer);
+        soundDictionary.Add("HoodedGuy",FModEvents.instance.HoodedGuy);
+        soundDictionary.Add("WolfMage",FModEvents.instance.WolfMage);
         // navigating menus
         soundDictionary.Add("pauseGame", FModEvents.instance.pauseGame);
         soundDictionary.Add("resumeGame", FModEvents.instance.unpauseGame);
