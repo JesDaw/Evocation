@@ -60,6 +60,7 @@ public class ScoutingState : LevelState
             context.SceneManager.Activate(confirmationUIName, true);
             GlobalInputManager.Instance.SetPauseMenuMode();
             confirmationUIActive = true;
+            FModAudioManager.instance.PlaySoundByName("pauseGame");
         }
         else
         {
@@ -106,7 +107,7 @@ public class ScoutingState : LevelState
 
     public void BackToScouting()
     {
-        context.SceneManager.Activate(sceneActivityName);
+        context.SceneManager.Activate(sceneActivityName, true);
         GlobalInputManager.Instance.SetScoutingMode();
         confirmationUIActive = false;
     }
