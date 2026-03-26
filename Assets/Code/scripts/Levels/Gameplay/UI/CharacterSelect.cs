@@ -63,6 +63,8 @@ public class CharacterSelect : MonoBehaviour
             if (party.Count < partySize)
             {
                 FModAudioManager.instance.PlaySoundByName("addCharacterToParty");
+                if (character.SoundName != "") FModAudioManager.instance.PlaySoundByName(character.SoundName);
+
                 party.Add(character);
                 SpawnController.Instance.EquipCPU(character.scriptableStats);
             }

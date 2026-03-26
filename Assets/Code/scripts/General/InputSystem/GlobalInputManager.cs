@@ -20,6 +20,10 @@ public class GlobalInputManager : MonoBehaviour
         _inputActions = new InputSystem_Actions();
         
         if(DebugLogs) Debug.Log("GlobalInputManager initialized");
+
+        var rebinds = PlayerPrefs.GetString("rebinds");
+        if (!string.IsNullOrEmpty(rebinds))
+            InputActions.LoadBindingOverridesFromJson(rebinds);
     }
     
     void Start()

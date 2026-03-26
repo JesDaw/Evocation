@@ -16,17 +16,20 @@ MonoBehaviour:
   _animator: {fileID: 0}
   _Sprites: []
   _AnimationMoveSpeed: 1
-  _MaxHealth: 20
-  _MoveSpeed: 7
   _spawnCost: 5
+  _MoveSpeed: 7
+  _KnockBackDamage: 0
+  _AttackDamage: 3
+  _AttackEndlag: 2
+  _MaxHealth: 20
+  _KnockBackMaxHealth: 1
+  _KnockBackVelocity: 5
+  _HorizontalRange: 20
+  _VerticalRange: 5
   _AttackStyle: 1
   _IsAOE: 0
   _MaxAOETargets: 5
-  _AttackDamage: 3
-  _AttackEndlag: 2
-  _HorizontalRange: 20
-  _VerticalRange: 5
-  _ProjectilePrefab: {fileID: 6072924362752908747, guid: e36c33467359d0a44aa4493b4d80e7d9, type: 3}
+  _ProjectilePrefab: {fileID: 603826966979394658, guid: f7b010f898d3193499b2c1ad0f0882cd, type: 3}
   _ProjectileSpeed: 10
   _ProjectileMaxHeight: 2
   _TrajectoryCurve:
@@ -111,5 +114,3 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _EffectsToApply: []
-  _KnockBackMaxHealth: 1
-  _KnockBackVelocity: 5
