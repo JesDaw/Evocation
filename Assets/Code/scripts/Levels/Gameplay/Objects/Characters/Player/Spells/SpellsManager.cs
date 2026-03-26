@@ -1,15 +1,18 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(ManaSystem))]
 public class SpellsManager : MonoBehaviour
 {
-    public List<PlayerSpells> playerSpells = new List<PlayerSpells>();
+    public List<PlayerSpells> PlayerSpells = new List<PlayerSpells>();
     ManaSystem manaSystem;
-    Transform[] currentSelected = new Transform[0];
+    public List<Transform> CurrentlySelected = new List<Transform>();
+    public UnityEvent<PlayerSpells> OnSwapSpells;
     [SerializeField] uint currentSpellContext = 0;
     [SerializeField] Transform detectionRadiusObject;
+    [SerializeField] Transform playerPos;
     [SerializeField] bool DebugLogs = false;
     //this means spell is ready and primed (can't be switched)
     bool charged = false;
@@ -19,31 +22,48 @@ public class SpellsManager : MonoBehaviour
 
     void InvokeSpell()
     {
-        if(charged) return;
+        if(charged)
+        {
+            UseSpell();
+            return;
+        }
+
+        if(!manaSystem.SpendMana(PlayerSpells[(int)currentSpellContext].Cost)) return;
         charged = true;
 
-        detectionRadiusObject.localPosition = new Vector3(0, 0, 0);
+        GlobalInputManager.Instance.DisableCursor();
+        detectionRadiusObject.position = playerPos.position;
         detectionRadiusObject.gameObject.SetActive(true);
 
-        float radius = playerSpells[(int)currentSpellContext].Radius;
+        float radius = PlayerSpells[(int)currentSpellContext].Radius;
         detectionRadiusObject.localScale = new Vector3(radius, radius, 0);
-
         if(DebugLogs) Debug.Log("Spells Invoked");
-        if(manaSystem.SpendMana(playerSpells[(int)currentSpellContext].Cost))
-            playerSpells[(int)currentSpellContext].OnHit.Invoke(currentSelected);
+    }
+
+    void UseSpell()
+    {
+        PlayerSpells[(int)currentSpellContext].OnHit.Invoke(CurrentlySelected.ToArray());
+        PlayerSpells[(int)currentSpellContext].OnHitPosition.Invoke(detectionRadiusObject);
+        if(DebugLogs) Debug.Log("Spells Used");
+        detectionRadiusObject.gameObject.SetActive(false);
+        GlobalInputManager.Instance.EnableCursor();
+        charged = false;
     }
 
     void SwitchSpells(bool _forward)
     {
         if(charged) return;
-        int len = playerSpells.Count;
+        int len = PlayerSpells.Count;
         currentSpellContext = (uint)((currentSpellContext + (_forward ? 1 : len - 1)) % len);
+        OnSwapSpells.Invoke(PlayerSpells[(int)currentSpellContext]);
     }
 
     void Start()
     {
         detectionRadiusObject.gameObject.SetActive(false);
         SubscribeToSpells();
+
+        OnSwapSpells.Invoke(PlayerSpells[(int)currentSpellContext]);
     }
 
     Vector2 magicRadiusHoverInput;
