@@ -12,6 +12,7 @@ public class TimelineController : MonoBehaviour
     bool gameIsPaused; // if the game is pause stop the timeline
     double heldTime;
     bool isHolding = false; // the timeline can be stopped independantly of if the game is paused though
+    [SerializeField] bool ShowDebugLogs = false;
 
     
     void Start()
@@ -52,7 +53,10 @@ public class TimelineController : MonoBehaviour
 
     public void PlayTimeline()
     {
-        if (TimelineManager.Instance.showDebugLogs == true) Debug.Log($"[timelineControler] Playing timeline");
+        if (TimelineManager.Instance != null)
+        {
+            if (TimelineManager.Instance.showDebugLogs == true || ShowDebugLogs) Debug.Log($"[timelineControler] Playing timeline");
+        }
         isHolding = false;
         if (timeline.playableGraph.IsValid())
         {
@@ -63,7 +67,10 @@ public class TimelineController : MonoBehaviour
 
     public void PauseTimeline()
     {
-        if (TimelineManager.Instance.showDebugLogs == true) Debug.Log($"[timelineControler] Pausing timeline");
+        if (TimelineManager.Instance != null)
+        {
+            if (TimelineManager.Instance.showDebugLogs == true || ShowDebugLogs) Debug.Log($"[timelineControler] Pausing timeline");
+        }
         if (timeline.playableGraph.IsValid())
         {
             timeline.playableGraph.GetRootPlayable(0).SetSpeed(0);
