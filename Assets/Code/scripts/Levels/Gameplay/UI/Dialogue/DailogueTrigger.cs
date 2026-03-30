@@ -6,7 +6,7 @@ public class DailogueTrigger : MonoBehaviour
 {
     public List<Dialogue> Slides = new List<Dialogue>(); 
     DialogueManager dialogueManager;
-    [SerializeField] internal UltEvents.UltEvent EndOfLines;
+    [SerializeField] internal UltEvents.UltEvent[] EndOfLines;
 
     void Start()
     {
@@ -23,8 +23,8 @@ public class DailogueTrigger : MonoBehaviour
         dialogueManager.StartDialogue(Slides, this);
     }
     
-    public void EndDialogue()
+    public void EndDialogue(int eventToCall)
     {
-        EndOfLines?.Invoke();
+        EndOfLines[eventToCall]?.Invoke();
     }
 }
