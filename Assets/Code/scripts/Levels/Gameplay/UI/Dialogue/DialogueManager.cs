@@ -18,6 +18,7 @@ public class DialogueManager : MonoBehaviour
     string _currentLine;
     int slideCount = 0;
     DailogueTrigger _dailogueTrigger;
+    public bool _branches;
     public bool DialogueActive { get; private set; }
 
     public Color defaultTextColor = new Color(0.99f,0.99f,0.99f,1f);
@@ -65,7 +66,7 @@ public class DialogueManager : MonoBehaviour
     {
         dialogueSlides = slides;
         _dailogueTrigger = trigger;
-
+        _branches = false;
 
         slideCount = 0;
         DialogueActive = true;
@@ -92,12 +93,16 @@ public class DialogueManager : MonoBehaviour
             SkipToEndOfLine();
             return;
         }
-
+        if (_branches == true)
+        {
+            UnityEngine.Debug.Log("omg this dialogue branches??????? \n (or is supposed to)");
+        }
         if (slideCount >= dialogueSlides.Count - 1)
         {
             EndDialogue();
             return;
         }
+
 
         slideCount++;
         DisplayNextSlide();
@@ -107,10 +112,10 @@ public class DialogueManager : MonoBehaviour
     {
         nameText.text = dialogueSlides[slideCount].CharacterName;
         _currentLine = dialogueSlides[slideCount].Line;
+        _branches = dialogueSlides[slideCount].opensBranch;
 
         if (_typeLineCoroutine != null)
             StopCoroutine(_typeLineCoroutine);
-
         _typeLineCoroutine = StartCoroutine(TypeLine(_currentLine, dialogueSlides[slideCount].DialogueDelaySeconds));
     }
 
@@ -139,6 +144,7 @@ public class DialogueManager : MonoBehaviour
             yield return new WaitForSecondsRealtime(speed);
         }
         _typeLineCoroutine = null;
+
     }
 
     void SkipToEndOfLine()
@@ -154,7 +160,7 @@ public class DialogueManager : MonoBehaviour
         DialogueActive = false;
         slideCount = 0;
         _typeLineCoroutine = null;
-        _dailogueTrigger.EndDialogue();
+        _dailogueTrigger.EndDialogue(0);
         
         if (CameraControlSwitcher.Instance != null && CameraControlSwitcher.Instance.FreeCamIsActive)
         {
@@ -171,7 +177,7 @@ public class DialogueManager : MonoBehaviour
         DialogueBox.SetActive(false);
     }
 
-    public CharacterDialogueInfo FindCharacter(string name)
+    private CharacterDialogueInfo FindCharacter(string name)
     {
         foreach (CharacterDialogueInfo character in characterList)
         {
