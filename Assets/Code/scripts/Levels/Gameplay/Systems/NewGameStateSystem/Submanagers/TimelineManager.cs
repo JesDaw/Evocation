@@ -18,7 +18,7 @@ public class TimelineManager : MonoBehaviour
     [SerializeField] UltEvent onCutsceneEnd;
     
     [Header("Debug")]
-    [SerializeField] bool showDebugLogs = false;
+    public bool showDebugLogs = false;
     
     Dictionary<string, TimelineEntry> timelinesByName = new Dictionary<string, TimelineEntry>();
     PlayableDirector currentTimeline;
@@ -148,29 +148,26 @@ public class TimelineManager : MonoBehaviour
                 Debug.Log("[TimelineManager] Current cutscene stopped");
         }
     }
-
-    public void SkipCurrentCutscene()
-    {
-        if (currentTimelineController != null && currentTimeline.state == PlayState.Playing)
-        {
-           currentTimelineController.SkipTimeline();
-            
-            if (showDebugLogs)
-                Debug.Log($"[TimelineManager] Skipped cutscene: {currentTimelineName}");
-        }
-    }
     
-    public void PauseCurrentCutscene(bool pause)
+    public void PauseCurrentCutscene(bool pause) // this function just doesnt work idk why
     {
+        if(showDebugLogs) 
+        {
+            Debug.Log($"[TimelineManager] currentTimelineController != null {currentTimelineController != null}");
+            Debug.Log($"[TimelineManager] Pause timeline = {pause}");
+        }
         if (currentTimelineController != null)
         {
             if (pause)
+            {
+                if(showDebugLogs) Debug.Log($"[TimelineManager] Pausing timeline");
                 currentTimelineController.PauseGame();
+            }
             else
+            {
+                if(showDebugLogs) Debug.Log($"[TimelineManager] Unpausing timeline");
                 currentTimelineController.UnpauseGame();
-            
-            if (showDebugLogs)
-                Debug.Log($"[TimelineManager] Cutscene {(pause ? "paused" : "resumed")}");
+            }
         }
     }
 

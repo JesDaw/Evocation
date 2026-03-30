@@ -63,7 +63,7 @@ public class SpellsManager : MonoBehaviour
         detectionRadiusObject.gameObject.SetActive(false);
         SubscribeToSpells();
 
-        OnSwapSpells.Invoke(PlayerSpells[(int)currentSpellContext]);
+        OnSwapSpells.Invoke(PlayerSpells[(int)currentSpellContext]); // index error here
     }
 
     Vector2 magicRadiusHoverInput;
