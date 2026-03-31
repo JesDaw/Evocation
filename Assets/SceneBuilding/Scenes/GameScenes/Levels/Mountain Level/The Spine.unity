@@ -15834,6 +15834,90 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1579701460920491986, guid: 47ea39fbd74a043d1a9f823146810e4c, type: 3}
   m_PrefabInstance: {fileID: 8580836736672883974}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1244316001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1244316002}
+  - component: {fileID: 1244316005}
+  - component: {fileID: 1244316004}
+  - component: {fileID: 1244316003}
+  m_Layer: 0
+  m_Name: PlayerSpellSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1244316002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1244316001}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9091821980232541995}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1244316003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1244316001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e223edbc526df54489dc2411fcaa86d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::SpellsAffector
+  DebugLogs: 0
+--- !u!114 &1244316004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1244316001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffa0dfbf142048f449b28e92ce0584e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::SpellsManager
+  PlayerSpells: []
+  CurrentlySelected: []
+  OnSwapSpells:
+    m_PersistentCalls:
+      m_Calls: []
+  currentSpellContext: 0
+  detectionRadiusObject: {fileID: 1643894162}
+  playerPos: {fileID: 3028495144012357115}
+  DebugLogs: 0
+--- !u!114 &1244316005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1244316001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a59e5568c52ec41b07e6682e671d09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::ManaSystem
+  <PlayerMana>k__BackingField: 0
+  OnManaChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1301554423
 GameObject:
   m_ObjectHideFlags: 0
@@ -32024,27 +32108,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8625775512264793693}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4755266814349745554
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5402004010962042228}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ffa0dfbf142048f449b28e92ce0584e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::SpellsManager
-  PlayerSpells: []
-  CurrentlySelected: []
-  OnSwapSpells:
-    m_PersistentCalls:
-      m_Calls: []
-  currentSpellContext: 0
-  detectionRadiusObject: {fileID: 1643894162}
-  playerPos: {fileID: 3028495144012357115}
-  DebugLogs: 0
 --- !u!4 &4772193186651419684
 Transform:
   m_ObjectHideFlags: 0
@@ -32439,9 +32502,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4491241214383847021}
-  - component: {fileID: 4755266814349745554}
-  - component: {fileID: 8083049887897767156}
-  - component: {fileID: 7825338434088148315}
   m_Layer: 0
   m_Name: PlayerData
   m_TagString: Untagged
@@ -45171,19 +45231,6 @@ EdgeCollider2D:
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
   m_UseAdjacentEndPoint: 0
---- !u!114 &7825338434088148315
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5402004010962042228}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e223edbc526df54489dc2411fcaa86d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::SpellsAffector
-  DebugLogs: 0
 --- !u!4 &7920261044497516084
 Transform:
   m_ObjectHideFlags: 0
@@ -45355,22 +45402,6 @@ MonoBehaviour:
     - _Target: {fileID: 7339595501955656425}
       _MemberName: PlayTimeline
       _PersistentArguments: []
---- !u!114 &8083049887897767156
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5402004010962042228}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2a59e5568c52ec41b07e6682e671d09, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::ManaSystem
-  <PlayerMana>k__BackingField: 5
-  OnManaChanged:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!4 &8088543929562257389
 Transform:
   m_ObjectHideFlags: 0
@@ -46064,6 +46095,7 @@ Transform:
   - {fileID: 1229181317}
   - {fileID: 8684473756169179777}
   - {fileID: 540518280}
+  - {fileID: 1244316002}
   m_Father: {fileID: 412320063328540733}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &9188427063646259427
