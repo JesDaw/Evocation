@@ -178,7 +178,7 @@ public class Interactable : MonoBehaviour
         bool playerEntered = false;
         if (collision.gameObject.CompareTag("Player")) playerEntered = true;
         if (collision.gameObject.CompareTag("FreeCam") && FreeCamActsAsActivePlayer) playerEntered = true;
-        if (DebugLog) Debug.Log($"playerEntered: {playerEntered}");
+        if (DebugLog) Debug.Log($"[Interactable] playerEntered: {playerEntered}");
 
         
         if (playerEntered)
