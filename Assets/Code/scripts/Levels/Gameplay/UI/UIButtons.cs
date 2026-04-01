@@ -78,6 +78,7 @@ public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         if (isHovered) return;
         isHovered = true;
         AnimateToState(hoverColor, hoverTextColor, hoverScale, animationDuration);
+        FModAudioManager.instance.PlaySoundByName("showCharacterInfo");
     }
     
     public void OnPointerExit(PointerEventData eventData)
@@ -157,7 +158,11 @@ public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void ClickSound()
     {
-        FModAudioManager.instance.PlaySoundByName("menuClick");
+        FModAudioManager.instance.PlaySoundByName("addCharacterToParty");
+    }
+    public void BackSound()
+    {
+        FModAudioManager.instance.PlaySoundByName("removeCharacterFromParty");
     }
     public void QuitGame()
     {
