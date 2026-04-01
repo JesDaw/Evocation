@@ -17,7 +17,7 @@ public class DialogueManager : MonoBehaviour
     [Header("Debug")]
     [SerializeField] bool ShowDebugLogs = false;
 
-    
+
 
     List<Dialogue> dialogueSlides = new List<Dialogue>();
     Coroutine _typeLineCoroutine;
@@ -25,6 +25,7 @@ public class DialogueManager : MonoBehaviour
     int slideCount = 0;
     DailogueTrigger _dailogueTrigger;
     public bool DialogueActive { get; private set; }
+    public static DialogueManager Instance { get; private set; }
     void SubscribeToInputs()
     {
         if (GlobalInputManager.Instance == null) 
@@ -34,6 +35,16 @@ public class DialogueManager : MonoBehaviour
         }
         var uiActions = GlobalInputManager.Instance.InputActions.UI;
         uiActions.ConfirmDialogue.performed += OnConfirmDialoguePressed;
+    }
+
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
     }
 
     void Start()
@@ -65,7 +76,7 @@ public class DialogueManager : MonoBehaviour
         _dailogueTrigger = trigger;
         slideCount = 0;
         DialogueActive = true;
-
+        if (ShowDebugLogs) Debug.Log($"DialogueBox = {DialogueBox}, DialogueBox == null: {DialogueBox == null}");
         DialogueBox.SetActive(true);
         
         GlobalInputManager.Instance.SetDialogueMode();

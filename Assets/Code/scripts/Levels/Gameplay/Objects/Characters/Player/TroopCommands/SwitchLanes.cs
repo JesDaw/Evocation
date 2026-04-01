@@ -7,7 +7,8 @@ public class SwitchLanes : MonoBehaviour
     [SerializeField] int currentLayer = 2; // 0 = Top, 1 = Mid, 2 = Bot
     [SerializeField] GameObject[] Groundlevels;
     [SerializeField] GameObject[] ArrowSprites;
-    [SerializeField] bool DebugLogs = false;
+    [SerializeField] BoxCollider2D BoxCollider;
+    [SerializeField]bool DebugLogs = false;
 
     // List to track characters in the collider
     private List<GameObject> charactersInRange = new List<GameObject>();
@@ -22,7 +23,8 @@ public class SwitchLanes : MonoBehaviour
 
     void Awake()
     {
-        myCollider = GetComponent<BoxCollider2D>();
+        if (BoxCollider == null) myCollider = GetComponent<BoxCollider2D>();
+        if (BoxCollider == null) Debug.LogError("All forks need box coliders to know which characters it should effect");
     }
 
     public float switchCooldown = 1f;
@@ -112,6 +114,7 @@ public class SwitchLanes : MonoBehaviour
             // Add to list if not already present
             if (!charactersInRange.Contains(collision.gameObject))
             {
+                if(DebugLogs) Debug.Log($"Adding {collision.gameObject.name} to characters in range list");
                 charactersInRange.Add(collision.gameObject);
             }
 

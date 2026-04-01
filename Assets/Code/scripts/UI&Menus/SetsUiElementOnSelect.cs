@@ -14,6 +14,7 @@ namespace AdamLenzini.UI
         [Header("Visualization")]
         [SerializeField] private bool showVisualization;
         [SerializeField] private Color navigationColour = Color.cyan;
+        [SerializeField] bool ShowDebugLogs = true;
 
         private void OnDrawGizmos()
         {
@@ -31,16 +32,16 @@ namespace AdamLenzini.UI
         {
             eventSystem = Object.FindFirstObjectByType<EventSystem>();
 
-            if (eventSystem == null)
+            if (eventSystem == null && ShowDebugLogs)
                 Debug.Log("Did not find an Event System in your Scene.", this);
         }
 
         public void JumptToElement()
         {
-            if (eventSystem == null)
+            if (eventSystem == null && ShowDebugLogs)
                 Debug.Log("This item has no event system referenced yet.", this);
 
-            if (elementToSelect == null)
+            if (elementToSelect == null && ShowDebugLogs)
                 Debug.Log("This should jump where?", this);
 
             eventSystem.SetSelectedGameObject(elementToSelect.gameObject);
