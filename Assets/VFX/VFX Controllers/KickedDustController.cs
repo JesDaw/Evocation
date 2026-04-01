@@ -14,7 +14,7 @@ public class KickedDustController : MonoBehaviour
             }
             else
             {
-                dustParticle.Stop(withChildren:false, ParticleSystemStopBehavior.StopEmitting);
+                dustParticle.Stop(withChildren:true, ParticleSystemStopBehavior.StopEmitting);
             }
         };
     }
