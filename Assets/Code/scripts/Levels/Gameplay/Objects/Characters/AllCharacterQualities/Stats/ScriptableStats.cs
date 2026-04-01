@@ -49,7 +49,9 @@ public class ScriptableStats : ScriptableObject
     [Header("Status Effects")]
     public List<StatusEffect> _EffectsToApply = new List<StatusEffect>();
 
-
+    [Header("Animation Driven VFX")] 
+    public List<GameObject> vfx = new();
+    public List<Vector2> vfxOffsets = new();
 }
 
 public enum AttackStyle

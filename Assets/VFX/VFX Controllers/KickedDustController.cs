@@ -1,16 +1,21 @@
+using System;
 using UnityEngine;
 
 public class KickedDustController : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Awake()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        var dustParticle = GetComponent<ParticleSystem>();
+        GetComponentInParent<CpuStateManager>().OnCPUStateChange += state =>
+        {
+            if (state == CpuStateManager.State.Move)
+            {
+                dustParticle.Play(withChildren:true);
+            }
+            else
+            {
+                dustParticle.Stop(withChildren:false, ParticleSystemStopBehavior.StopEmitting);
+            }
+        };
     }
 }
