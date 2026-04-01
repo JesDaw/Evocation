@@ -10,11 +10,12 @@ public class KickedDustController : MonoBehaviour
         {
             if (state == CpuStateManager.State.Move)
             {
-                dustParticle.Play(withChildren:true);
+                dustParticle.Play(withChildren: true);
             }
             else
             {
-                dustParticle.Stop(withChildren:true, ParticleSystemStopBehavior.StopEmitting);
+                dustParticle.Stop(withChildren: true, ParticleSystemStopBehavior.StopEmitting);
             }
         };
+    }
 }
