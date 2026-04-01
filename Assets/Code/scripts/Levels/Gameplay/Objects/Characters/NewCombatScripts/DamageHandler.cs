@@ -34,7 +34,7 @@ public class DamageHandler : MonoBehaviour
             stats._KnockBackHealth -= knockback_damage; 
 
             GameObject parent_obj = transform.parent.gameObject;
-            Debug.Log(knockback_damage + " knockback damage taken by: " + parent_obj);
+            //Debug.Log(knockback_damage + " knockback damage taken by: " + parent_obj);
         }
 
         if (stats.entityHealthbar != null)

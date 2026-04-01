@@ -251,9 +251,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51f580323b3a2405abbeddb1fc9776b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterList: []
+  DialogueBox: {fileID: 476608325}
   nameText: {fileID: 743995766}
   dialogueText: {fileID: 1590273782}
-  DialogueBox: {fileID: 476608325}
+  defaultTextColor: {r: 0.99, g: 0.99, b: 0.99, a: 1}
+  defaultNameColor: {r: 0, g: 0, b: 0, a: 1}
+  ShowDebugLogs: 0
 --- !u!4 &162107867
 Transform:
   m_ObjectHideFlags: 0
@@ -1553,11 +1557,9 @@ MonoBehaviour:
   - CharacterName: Princess :3
     Line: Bark!
     DialogueDelaySeconds: 0.05
+    opensBranch: 0
   EndOfLines:
-    _PersistentCalls:
-    - _Target: {fileID: 162107866}
-      _MemberName: DeactivateDialogueBox
-      _PersistentArguments: []
+  - _PersistentCalls:
     - _Target: {fileID: 793868611}
       _MemberName: PlayTimeline
       _PersistentArguments: []
@@ -1656,6 +1658,7 @@ MonoBehaviour:
   SkipedTimeline:
     m_PersistentCalls:
       m_Calls: []
+  ShowDebugLogs: 1
 --- !u!114 &793868612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3268,11 +3271,9 @@ MonoBehaviour:
   - CharacterName: Jack
     Line: He's right behind me isent he?
     DialogueDelaySeconds: 0.05
+    opensBranch: 0
   EndOfLines:
-    _PersistentCalls:
-    - _Target: {fileID: 162107866}
-      _MemberName: DeactivateDialogueBox
-      _PersistentArguments: []
+  - _PersistentCalls:
     - _Target: {fileID: 793868611}
       _MemberName: PlayTimeline
       _PersistentArguments: []
@@ -3324,14 +3325,13 @@ MonoBehaviour:
   - CharacterName: Jack
     Line: More talking
     DialogueDelaySeconds: 0.05
+    opensBranch: 0
   - CharacterName: Cycero or however you spell it
     Line: Yep
     DialogueDelaySeconds: 0.05
+    opensBranch: 0
   EndOfLines:
-    _PersistentCalls:
-    - _Target: {fileID: 162107866}
-      _MemberName: DeactivateDialogueBox
-      _PersistentArguments: []
+  - _PersistentCalls:
     - _Target: {fileID: 793868611}
       _MemberName: PlayTimeline
       _PersistentArguments: []
@@ -3643,14 +3643,13 @@ MonoBehaviour:
   - CharacterName: Jack
     Line: HIIIIIIIIIIIIII
     DialogueDelaySeconds: 0.05
+    opensBranch: 0
   - CharacterName: ALPH
     Line: BYYYYYYYYYEEEEEE
     DialogueDelaySeconds: 0.05
+    opensBranch: 0
   EndOfLines:
-    _PersistentCalls:
-    - _Target: {fileID: 162107866}
-      _MemberName: DeactivateDialogueBox
-      _PersistentArguments: []
+  - _PersistentCalls:
     - _Target: {fileID: 793868611}
       _MemberName: PlayTimeline
       _PersistentArguments: []

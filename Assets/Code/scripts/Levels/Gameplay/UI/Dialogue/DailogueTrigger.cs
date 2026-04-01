@@ -6,11 +6,12 @@ public class DailogueTrigger : MonoBehaviour
 {
     public List<Dialogue> Slides = new List<Dialogue>(); 
     DialogueManager dialogueManager;
-    [SerializeField] internal UltEvents.UltEvent EndOfLines;
+    [SerializeField] public UltEvents.UltEvent[] EndOfLines;
 
     void Start()
     {
         dialogueManager = FindFirstObjectByType<DialogueManager>();
+        if (EndOfLines.Length <= 0) Debug.LogWarning($"[DailogueTrigger] No end of line events declared on {gameObject.name}");
     }
     public void TriggerDailogue(InputAction.CallbackContext context)
     {
@@ -23,8 +24,8 @@ public class DailogueTrigger : MonoBehaviour
         dialogueManager.StartDialogue(Slides, this);
     }
     
-    public void EndDialogue()
-    {
-        EndOfLines?.Invoke();
+    public void EndDialogue(int eventToCall) // either close the dialog box here or 
+    { 
+        EndOfLines[eventToCall]?.Invoke();
     }
 }

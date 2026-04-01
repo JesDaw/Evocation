@@ -98,7 +98,7 @@ public class CpuStateManager : MonoBehaviour
         Transform _cpuRig = transform.Find("Appearance")?.Find("Rig");
         if (_cpuRig == null || _ScrStats._animator == null)
         {
-            Debug.LogWarning("No Cpu Rig for animation!!");
+            Debug.LogWarning($"No Cpu Rig for animation on {gameObject.name}: _cpuRig == null {_cpuRig == null}, _ScrStats._animator == null {_ScrStats._animator == null}");
             return;
         }
 
