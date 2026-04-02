@@ -3,34 +3,32 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class BalancingGrapher : MonoBehaviour
 {
-    [Header("--- 1. THE MASTER SUM ---")]
+    [Header("Master Curve")]
     public AnimationCurve TotalPowerSum = new();
 
-    [Header("--- 2. LINEAR STAT GRAPHS ---")]
+    [Header("Graphs")]
     public AnimationCurve MoveSpeedCurve = new();
-    public AnimationCurve KBDamageCurve = new();
-    public AnimationCurve AttackDamageCurve = new();
-    public AnimationCurve HealthCurve = new();
-    public AnimationCurve KBHealthCurve = new();
-    public AnimationCurve RangeCurve = new();
-
-    [Header("--- 3. NON-LINEAR / MULTIPLIER GRAPHS ---")]
-    public AnimationCurve EndlagPenaltyCurve = new();
-    public AnimationCurve AOECurve = new();
-
-    [Header("--- 4. STAT WEIGHTS (Edit Here) ---")]
-    public float Weight_AttackDamage = 1.0f;
-    public float Weight_AttackEndlag = 1.0f; 
-    public float Weight_AOE_Efficiency = 0.2f;
-    [Space]
-    public float Weight_MaxHealth = 0.5f;
-    public float Weight_KnockBackHealth = 0.3f;
-    public float Weight_HorizontalRange = 0.2f;
-    [Space]
     public float Weight_MoveSpeed = 0.4f;
+    public AnimationCurve KBDamageCurve = new();
     public float Weight_KnockBackDamage = 0.3f;
+    public AnimationCurve AttackDamageCurve = new();
+    public float Weight_AttackDamage = 1.0f;
 
-    [Header("--- 5. GRAPH SETTINGS ---")]
+    public AnimationCurve HealthCurve = new();
+    public float Weight_MaxHealth = 0.5f;
+
+    public AnimationCurve KBHealthCurve = new();
+    public float Weight_KnockBackHealth = 0.3f;
+
+    public AnimationCurve RangeCurve = new();
+    public float Weight_HorizontalRange = 0.2f;
+
+    public AnimationCurve EndlagPenaltyCurve = new();
+    public float Weight_AttackEndlag = 1.0f; 
+    public AnimationCurve AOECurve = new();
+    public float Weight_AOE_Efficiency = 0.2f;
+
+    [Header("Graph Settings")]
     public int Resolution = 50; 
     public float MaxStatValue = 100f; 
 
@@ -50,8 +48,7 @@ public class BalancingGrapher : MonoBehaviour
             float pKBD = x * Weight_KnockBackDamage;
             float pAtk = x * Weight_AttackDamage;
             
-            // Non-Linear: Hyperbolic Endlag (Using 10 as a base damage for visual)
-            float pEnd = (10 * Weight_AttackDamage) / (Mathf.Max(x * Weight_AttackEndlag, 0.01f) + 0.5f);
+            float pEnd = (pAtk * Weight_AttackDamage) / (Mathf.Max(x * Weight_AttackEndlag, 0.01f) + 0.5f);
             
             // Defense
             float pHP = x * Weight_MaxHealth;
