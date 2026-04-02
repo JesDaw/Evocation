@@ -45,12 +45,20 @@ public class CpuKnockBackState : CpuBaseState
     {
         if (rb != null)
         {
-            short knockbackDir = -1;
-            if (_context._Stats._Enemy) knockbackDir = 1; 
-            Vector2 knockbackForce = new Vector2(knockbackDir * _context._ScrStats._KnockBackVelocity,
-                                                                _context._ScrStats._KnockBackVelocity);
+            float knockbackDir = _context._Stats._Enemy ? 1f : -1f;
+            
+            // Use the angle from our new physics-based stats
+            float angleRad = _context._ScrStats._KnockBackAngle * Mathf.Deg2Rad;
+            float force = _context._ScrStats._KnockBackVelocity;
+
+            // Calculate X and Y force based on the angle
+            float forceX = Mathf.Cos(angleRad) * force * knockbackDir;
+            float forceY = Mathf.Sin(angleRad) * force;
+
+            Vector2 knockbackVector = new Vector2(forceX, forceY);
+            
             rb.linearVelocity = Vector2.zero;
-            rb.AddForce(knockbackForce, ForceMode2D.Impulse);
+            rb.AddForce(knockbackVector, ForceMode2D.Impulse);
             _Knocked = true;
         }
     }
