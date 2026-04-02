@@ -25,8 +25,10 @@ public class ScriptableStats : ScriptableObject
     [Header("Defense")]
     public int _MaxHealth = 1;
     public float _KnockBackMaxHealth = 1;
-    public float _KnockBackVelocity;
     public float _HorizontalRange = 2f; 
+
+    [Header("Other modifiers")]
+    public float _KnockBackVelocity;
     public float _VerticalRange = 2f;
     
     [Space]
