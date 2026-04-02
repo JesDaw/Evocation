@@ -12,33 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 238e13654c5efff43b776bb1e518c913, type: 3}
   m_Name: WolfHammer
   m_EditorClassIdentifier: 
-  PersonalityNotes: 
-  _Rotate: 0
-  _animator: {fileID: 22100000, guid: 77b63d5cf92d04241904be854aa0fcda, type: 2}
-  _Sprites:
-  - Key: 0
-    Rig: {fileID: 5931000895928908881, guid: 1f889f7ae4e8a4e4a9ce5241e3c67e6d, type: 3}
-    Offset: {x: 0, y: -1}
-  - Key: 1
-    Rig: {fileID: 7538981178263470042, guid: 2f1dd45802dd6f649b82e7bf44400c8b, type: 3}
-    Offset: {x: 0, y: -0.8}
-  - Key: 2
-    Rig: {fileID: -8653719598885068355, guid: 86bb974b357fd426fbbc09e36d28081d, type: 3}
-    Offset: {x: 0, y: -0.8}
-  _AnimationMoveSpeed: 5
   _spawnCost: 5
+  _CalculatedPower: 3.8694074
+  _ValueDiscrepancy: -1.1305926
+  _Calc_PushingPower: 0
+  _Calc_DPS: 12.203391
+  _Calc_Defense: 21
+  Theme: Slow and slams with hammer
+  ODS: Defensive
+  RPS_Type: AOE
+  OtherNotes: 
   _MoveSpeed: 4
   _KnockBackDamage: 0
-  _AttackDamage: 10
-  _AttackEndlag: 3
+  _AttackDamage: 12
+  _AttackEndlag: 5.4
   _MaxHealth: 20
   _KnockBackMaxHealth: 1
   _HorizontalRange: 2
-  _KnockBackVelocity: 5
-  _VerticalRange: 2
   _AttackStyle: 0
   _IsAOE: 1
   _MaxAOETargets: 5
+  _KnockBackVelocity: 5
+  _KnockBackAngle: 45
+  _VerticalRange: 2
   _ProjectilePrefab: {fileID: 6072924362752908747, guid: e36c33467359d0a44aa4493b4d80e7d9, type: 3}
   _ProjectileSpeed: 15
   _ProjectileMaxHeight: 2
@@ -128,5 +124,16 @@ MonoBehaviour:
   - {fileID: 1097293097822383898, guid: c14ed469a11054e47a65c07cb0c06354, type: 3}
   vfxOffsets:
   - {x: 0, y: 0}
-  _CalculatedFairCost: 17.557142
-  _ValueDiscrepancy: 12.557142
+  _Rotate: 0
+  _animator: {fileID: 22100000, guid: 77b63d5cf92d04241904be854aa0fcda, type: 2}
+  _Sprites:
+  - Key: 0
+    Rig: {fileID: 5931000895928908881, guid: 1f889f7ae4e8a4e4a9ce5241e3c67e6d, type: 3}
+    Offset: {x: 0, y: -1}
+  - Key: 1
+    Rig: {fileID: 7538981178263470042, guid: 2f1dd45802dd6f649b82e7bf44400c8b, type: 3}
+    Offset: {x: 0, y: -0.8}
+  - Key: 2
+    Rig: {fileID: -8653719598885068355, guid: 86bb974b357fd426fbbc09e36d28081d, type: 3}
+    Offset: {x: 0, y: -0.8}
+  _AnimationMoveSpeed: 5
