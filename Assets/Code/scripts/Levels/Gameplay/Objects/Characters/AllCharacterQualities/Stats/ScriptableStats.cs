@@ -16,46 +16,47 @@ public class ScriptableStats : ScriptableObject
 
     [Header("Personality & Role")]
     public string Theme;
-    public string ODS; // Offense, Defense, Support
-    public string RPS_Type; // Rock, Paper, Scissors
+    public string ODS;
+    public string RPS_Type;
     [TextArea(2, 5)] public string OtherNotes;
 
     [Header("Pushing Power")]
-    public float _MoveSpeed;
-    public float _KnockBackDamage;
+    [Range(0, 100)] public float _MoveSpeed;
+    [Range(0, 100)] public float _KnockBackDamage;
 
     [Header("Damage Per Second")]
-    public int _AttackDamage;
-    public float _AttackEndlag;
+    [Range(0, 100)] public int _AttackDamage;
+    [Range(0, 100)] public float _AttackEndlag;
 
     [Header("Defense")]
     public int _MaxHealth = 1;
     public float _KnockBackMaxHealth = 1;
-    public float _HorizontalRange = 2f; 
+    [Range(0, 100)] public float _HorizontalRange = 2f;
 
-    [Header("Other Modifiers")]
-    public float _KnockBackVelocity;
-    public float _VerticalRange = 2f;
-    
     [Header("Combat Configuration")]
-    public AttackStyle _AttackStyle;    
-    public bool _IsAOE; 
-    public int _MaxAOETargets = 5;
+    public AttackStyle _AttackStyle;
+    public bool _IsAOE;
+    [Range(1, 100)] public int _MaxAOETargets = 5;
+
+    [Header("Knockback Physics")]
+    [Range(0, 100)] public float _KnockBackVelocity = 10f;
+    [Range(0, 90)] public float _KnockBackAngle = 45f;
+    [Range(0, 100)] public float _VerticalRange = 2f;
 
     [Header("Projectile Settings")]
     public GameObject _ProjectilePrefab;
-    public float _ProjectileSpeed = 15f;
-    public float _ProjectileMaxHeight = 2f;
-    
+    [Range(0, 100)] public float _ProjectileSpeed = 15f;
+    [Range(0, 100)] public float _ProjectileMaxHeight = 2f;
+
     [Header("Projectile Curves")]
-    public AnimationCurve _TrajectoryCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0)); 
+    public AnimationCurve _TrajectoryCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
     public AnimationCurve _AxisCorrectionCurve = AnimationCurve.Linear(0, 0, 1, 1);
     public AnimationCurve _SpeedCurve = AnimationCurve.Constant(0, 1, 1);
 
     [Header("Status Effects")]
     public List<StatusEffect> _EffectsToApply = new List<StatusEffect>();
 
-    [Header("Animation Driven VFX")] 
+    [Header("Animation Driven VFX")]
     public List<GameObject> vfx = new();
     public List<Vector2> vfxOffsets = new();
 
@@ -63,23 +64,101 @@ public class ScriptableStats : ScriptableObject
     public bool _Rotate;
     public AnimatorOverrideController _animator;
     public animationRigs[] _Sprites;
-    public float _AnimationMoveSpeed = 1f;
+    [Range(0, 10)] public float _AnimationMoveSpeed = 1f;
 
-    public void RefreshBalancing(float wAtk, float wEndlag, float wMove, float wKB_Dmg, float wHP, float wKB_HP, float wRange, float wAOE)
+    public void RefreshBalancing(
+    float wAtk, float wEnd, float wMove, float wKB_Dmg, float wHP, float wKB_HP, float wRange, float wAOE,
+    float avgHP, float avgKBMaxHealth, float avgMoveSpeed,
+    float spaceTarget)
     {
-        // Pushing Power
-        _Calc_PushingPower = (_MoveSpeed * wMove) + (_KnockBackDamage * wKB_Dmg);
-        
-        // DPS (Hyperbolic penalty for endlag)
-        float baseDPS = (_AttackDamage * wAtk) / (Mathf.Max(_AttackEndlag * wEndlag, 0.01f) + 0.5f);
-        float aoeMult = _IsAOE ? (1 + (_MaxAOETargets - 1) * wAOE) : 1f;
-        _Calc_DPS = baseDPS * aoeMult;
+        float gravity  = 9.81f;
+        float angleRad = _KnockBackAngle * Mathf.Deg2Rad;
+        float moveSpeed = _MoveSpeed * wMove;
+        float endlag    = Mathf.Max(_AttackEndlag * wEnd, 0.01f);
+        float hitsPerSecond = 1f / (endlag + 0.5f); // kept for display pillars
 
-        // Defense
-        _Calc_Defense = (_MaxHealth * wHP) + (_KnockBackMaxHealth * wKB_HP) + (_HorizontalRange * wRange);
+        // --- OUR KNOCKBACK PHYSICS ---
+        float kbRatio    = (_KnockBackDamage * wKB_Dmg) / 100f;
+        float vEff       = _KnockBackVelocity * kbRatio;
+        float airTime    = (2f * vEff * Mathf.Sin(angleRad)) / gravity;
+        float kbDistance = (Mathf.Pow(vEff, 2f) * Mathf.Sin(2f * angleRad)) / gravity;
 
-        // Resulting Power
-        _CalculatedPower = _Calc_PushingPower + _Calc_DPS + _Calc_Defense;
+        // --- DISPLAY PILLARS (inspector readability) ---
+        float aoeMult      = _IsAOE ? (1f + (_MaxAOETargets - 1) * wAOE) : 1f;
+        float rangeBonus   = 1f + (_HorizontalRange * 0.1f * wRange);
+        float kbResistance = 1f + (_KnockBackMaxHealth * 0.05f * wKB_HP);
+        _Calc_DPS     = (_AttackDamage * wAtk * hitsPerSecond * aoeMult) * rangeBonus;
+        _Calc_Defense = (_MaxHealth * wHP) * kbResistance;
+
+        // --- SIMULATION: time to claim spaceTarget units against the average enemy ---
+
+        float effectiveAtkDmg = Mathf.Max(_AttackDamage * wAtk * aoeMult * rangeBonus, 0f);
+        float effectiveKBDmg  = _KnockBackDamage * wKB_Dmg;
+
+        // How many of OUR hits does it take to kill / KB the average enemy?
+        float hitsToKill = (effectiveAtkDmg > 0f) ? (avgHP / effectiveAtkDmg)                         : float.MaxValue;
+        float hitsToKB   = (effectiveKBDmg  > 0f) ? Mathf.Max(avgKBMaxHealth / effectiveKBDmg, 1f) : float.MaxValue;
+
+        float killTime     = (hitsToKill < float.MaxValue) ? hitsToKill * endlag : float.MaxValue;
+        float kbAttackTime = (hitsToKB   < float.MaxValue) ? hitsToKB   * endlag : float.MaxValue;
+
+        // After a knockback: both units walk toward each other to re-engage
+        float combinedSpeed = moveSpeed + avgMoveSpeed;
+        float approachTime  = (combinedSpeed > 0f && kbDistance > 0f) ? kbDistance / combinedSpeed : 0f;
+
+        // A full KB cycle = wind-up attacks + enemy airborne + enemy walks back
+        float kbCycleTime     = (kbAttackTime < float.MaxValue) ? kbAttackTime + airTime + approachTime : float.MaxValue;
+        float spacePerKBCycle = moveSpeed * (airTime + approachTime); // we walk the whole time enemy is gone
+
+        // Store KB space rate for display
+        _Calc_PushingPower = (kbCycleTime > 0f && kbCycleTime < float.MaxValue)
+            ? spacePerKBCycle / kbCycleTime
+            : 0f;
+
+        // How many full KB cycles fit inside the kill window?
+        float numKBCycles     = (kbCycleTime < float.MaxValue && killTime < float.MaxValue && kbCycleTime > 0f)
+            ? killTime / kbCycleTime
+            : 0f;
+        float spaceDuringKill = numKBCycles * spacePerKBCycle;
+
+        // --- DETERMINE TIME TO REACH spaceTarget ---
+        bool canKill = effectiveAtkDmg > 0f;
+        bool canKB   = effectiveKBDmg  > 0f && spacePerKBCycle > 0f && kbCycleTime < float.MaxValue;
+
+        float timeToTarget;
+        float remainingSpace = spaceTarget - spaceDuringKill;
+
+        if (!canKill && !canKB)
+        {
+            // Unit can neither kill nor push — useless
+            timeToTarget = float.MaxValue;
+        }
+        else if (!canKill)
+        {
+            // Pure KB pusher: sweeps the enemy back forever at a fixed rate
+            float kbSpaceRate = spacePerKBCycle / kbCycleTime;
+            timeToTarget = (kbSpaceRate > 0f) ? spaceTarget / kbSpaceRate : float.MaxValue;
+        }
+        else if (remainingSpace <= 0f)
+        {
+            // Enough space was claimed through KB alone before the kill landed
+            timeToTarget = killTime;
+        }
+        else if (moveSpeed > 0f)
+        {
+            // Kill + walk freely through the remaining space
+            timeToTarget = killTime + remainingSpace / moveSpeed;
+        }
+        else
+        {
+            // Kills but is immobile — can never reach spaceTarget
+            timeToTarget = float.MaxValue;
+        }
+
+        _CalculatedPower  = (timeToTarget > 0f && timeToTarget < float.MaxValue)
+            ? spaceTarget / timeToTarget
+            : 0f;
+
         _ValueDiscrepancy = _CalculatedPower - _spawnCost;
     }
 }
