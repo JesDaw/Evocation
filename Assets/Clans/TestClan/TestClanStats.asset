@@ -12,17 +12,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3e3f6712a308d94da7eb25c6c17bc5d, type: 3}
   m_Name: TestClanStats
   m_EditorClassIdentifier: CodeAssembly::ClanStats
+  ClanIdentityNotes: Test clan
   all_stats_scripts:
   - {fileID: 11400000, guid: f65c42c7eaba14248803a93e9ba7b28c, type: 2}
   - {fileID: 11400000, guid: 7e6e8cc8682e1aa4dae224a642ea078f, type: 2}
   - {fileID: 11400000, guid: fab9813b2d37c634a97bf0c26b640b1c, type: 2}
-  AvgCost: 6.6666665
-  PunchingPower: 10
-  DPS: 0.01992032
-  Defense: 11
-  AvgMoveSpeed: 10
-  AvgKnockbackDamage: 0
-  AvgAttackDamage: 3.3333333
-  AvgAttackEndlag: 167.33333
-  AvgMaxHP: 10
-  AvgKnockbackMaxHP: 1
+  TotalPower: 51.100002
+  TotalCost: 20
+  ValueRatio: 2.555
+  AvgMove: 10
+  AvgKB_Dmg: 0
+  AvgAtk_Dmg: 3.3333333
+  AvgEndlag: 167.33333
+  AvgHP: 10
+  AvgKB_HP: 1
+  AvgRange: 2
+  PowerCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 23.2
+      inSlope: -12.500001
+      outSlope: -12.500001
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 10.7
+      inSlope: -3
+      outSlope: -3
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 2
+      value: 17.2
+      inSlope: 6.500001
+      outSlope: 6.500001
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

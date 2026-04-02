@@ -2,19 +2,51 @@ using UnityEngine;
 
 public class OverallStatsDisplay : MonoBehaviour
 {
-    public ClanStats ClanToDisplay;
+    public ClanStats Clan;
 
-    [Space]
-    [Header("Clan Stats")]    
-    public float AvgCosts;
-    [Tooltip("MoveSpeed + KnockbackDamage")]
-    public float PunchingPower;
-    [Tooltip("AttackDamage / AttackEndlag")]
-    public float DPS;
-    [Tooltip("MaxHealth + KnockBackMaxHealth")]
-    public float Defense;
+    [Header("Clan Identity")]
+    public string Theme;
+    [TextArea(2, 4)] public string Characteristics;
+    public ScriptableStats[] UnitsInClan;
 
-    void Start() {}
+    [Header("Value Metrics")]
+    public AnimationCurve InternalUnitPowerScaling;
 
-    void Update() {}
+    [Header("Clan Totals")]
+    public float TotalPower;
+    public float TotalPushingPower;
+    public float TotalDPS;
+    public float TotalDefense;
+
+    [Header("Stat Averages")]
+    public float MoveSpeed;
+    public float KnockbackDmg;
+    public float AttackDmg;
+    public float AttackEndlag;
+    public float MaxHP;
+    public float KnockbackHP;
+    public float HorizontalRange;
+
+    public void SyncWithClan()
+    {
+        if (Clan == null) return;
+        
+        Theme = Clan.ClanTheme;
+        Characteristics = Clan.Characteristics;
+        UnitsInClan = Clan.all_stats_scripts;
+        InternalUnitPowerScaling = Clan.InternalUnitPowerScaling;
+
+        TotalPower = Clan.TotalPower;
+        TotalPushingPower = Clan.TotalPushingPower;
+        TotalDPS = Clan.TotalDPS;
+        TotalDefense = Clan.TotalDefense;
+        
+        MoveSpeed = Clan.AvgMove;
+        KnockbackDmg = Clan.AvgKB_Dmg;
+        AttackDmg = Clan.AvgAtk_Dmg;
+        AttackEndlag = Clan.AvgEndlag;
+        MaxHP = Clan.AvgHP;
+        KnockbackHP = Clan.AvgKB_HP;
+        HorizontalRange = Clan.AvgRange;
+    }
 }
