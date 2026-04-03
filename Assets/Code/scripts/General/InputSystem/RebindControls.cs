@@ -1,58 +1,264 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
+using TMPro;
 
+/// <summary>
+/// Attach this to a GameObject in your Controls scene.
+/// For each rebindable action, drag the button and the "current control" label into the Inspector.
+/// The script handles the Minecraft-style click-to-rebind flow automatically.
+/// </summary>
 public class RebindControls : MonoBehaviour
 {
-    public InputActionAsset InputActions;
-
-    InputActionRebindingExtensions.RebindingOperation m_rebindingOperation;
-
-    InputAction m_attackAction;
-    Button m_rebindButton;
-    Label m_rebindLabel;
-
-    void Awake()
+    [System.Serializable]
+    public class RebindEntry
     {
-        m_attackAction = InputActions.FindAction("attack");
+        [Tooltip("The action map name, e.g. 'Player', 'MagicController'")]
+        public string actionMapName;
 
-        VisualElement root = GetComponent<UIDocument>().rootVisualElement;
+        [Tooltip("The action name, e.g. 'Attack', 'CastSpell'")]
+        public string actionName;
 
-        m_rebindButton = root.Q<Button>("RebindButton");
-        m_rebindLabel = root.Q<Label>("RebindLabel");
+        [Tooltip("Which binding index to rebind (0 = first binding for that action)")]
+        public int bindingIndex = 0;
+
+        [Tooltip("The button the player clicks to start rebinding this action")]
+        public Button rebindButton;
+
+        [Tooltip("The label that shows the current key binding (the 'A' labels in your screenshot)")]
+        public TextMeshProUGUI currentBindingLabel;
     }
+
+    [Header("Rebind Entries")]
+    [SerializeField] private RebindEntry[] rebindEntries;
+
+    [Header("UI Feedback")]
+    [SerializeField] private GameObject listeningOverlay;   // Optional: dim overlay while waiting for input
+    [SerializeField] private TextMeshProUGUI listeningLabel; // Optional: "Press a key..." text
+
+    private InputActionRebindingExtensions.RebindingOperation _rebindOperation;
+    private RebindEntry _currentEntry;
+    private bool _isRebinding;
+
+    // ========================= Lifecycle =========================
 
     void OnEnable()
     {
-        m_rebindButton.Focus();
-        m_rebindButton.clicked += Rebind;
+        RefreshAllLabels();
+        RegisterAllButtons();
     }
 
     void OnDisable()
     {
-        m_rebindButton.clicked -= Rebind;
+        UnregisterAllButtons();
+        CancelRebind(); // Safety: clean up if scene unloads mid-rebind
     }
 
-    void Rebind()
-    {
-        InputActions.FindActionMap("Player").Disable();
-        m_rebindLabel.text = "Choose a new button";
-        m_rebindButton.SetEnabled(false);
+    // ========================= Setup =========================
 
-        m_rebindingOperation = m_attackAction.PerformInteractiveRebinding().OnComplete(operation => RebindCompleted());
-        m_rebindingOperation.Start();
+    void RegisterAllButtons()
+    {
+        foreach (var entry in rebindEntries)
+        {
+            if (entry.rebindButton == null) continue;
+            var captured = entry; // Capture for lambda
+            entry.rebindButton.onClick.AddListener(() => StartRebind(captured));
+        }
     }
 
-    void RebindCompleted()
+    void UnregisterAllButtons()
     {
-        m_rebindingOperation.Dispose();
+        foreach (var entry in rebindEntries)
+        {
+            if (entry.rebindButton == null) continue;
+            entry.rebindButton.onClick.RemoveAllListeners();
+        }
+    }
 
-        string newBinding = m_attackAction.bindings[0].effectivePath;
-        m_rebindLabel.text = $"Rebind completed: {newBinding}";
+    // ========================= Label Refresh =========================
 
-        InputActions.FindActionMap("Player").Enable();
+    void RefreshAllLabels()
+    {
+        foreach (var entry in rebindEntries)
+            RefreshLabel(entry);
+    }
 
-        var rebinds = InputActions.SaveBindingOverridesAsJson();
-        PlayerPrefs.SetString("rebinds", rebinds);
+    void RefreshLabel(RebindEntry entry)
+    {
+        if (entry.currentBindingLabel == null) return;
+
+        var action = GetAction(entry);
+        if (action == null)
+        {
+            entry.currentBindingLabel.text = "???";
+            return;
+        }
+
+        // GetBindingDisplayString handles overrides automatically
+        entry.currentBindingLabel.text = action.GetBindingDisplayString(
+            entry.bindingIndex,
+            InputBinding.DisplayStringOptions.DontIncludeInteractions
+        );
+    }
+
+    // ========================= Rebinding =========================
+
+    void StartRebind(RebindEntry entry)
+    {
+        if (_isRebinding) return;
+
+        var action = GetAction(entry);
+        if (action == null)
+        {
+            Debug.LogWarning($"RebindControls: Could not find action '{entry.actionName}' in map '{entry.actionMapName}'");
+            return;
+        }
+
+        _isRebinding = true;
+        _currentEntry = entry;
+
+        
+
+        // Update UI to show "waiting" state
+        if (entry.currentBindingLabel != null)
+            entry.currentBindingLabel.text = "...";
+
+        SetButtonsInteractable(false);
+        ShowListeningOverlay(true);
+
+        _rebindOperation = action
+            .PerformInteractiveRebinding(entry.bindingIndex)
+            .WithControlsExcluding("<Mouse>/position")
+            .WithControlsExcluding("<Mouse>/delta")
+            .WithCancelingThrough("<Keyboard>/escape")
+            .WithControlsExcluding("<Mouse>/leftButton")
+            .OnMatchWaitForAnother(0.1f)
+            .OnComplete(_ => OnRebindComplete())
+            .OnCancel(_ => OnRebindCancelled());
+
+        _rebindOperation.Start();
+    }
+
+    void OnRebindComplete()
+    {
+        CleanupOperation();
+        RefreshLabel(_currentEntry);
+        SaveRebinds();
+        FinishRebind();
+    }
+
+    void OnRebindCancelled()
+    {
+        CleanupOperation();
+        RefreshLabel(_currentEntry); // Restore the original label
+        FinishRebind();
+    }
+
+    void CancelRebind()
+    {
+        if (!_isRebinding) return;
+        _rebindOperation?.Cancel();
+    }
+
+    void FinishRebind()
+    {
+        _isRebinding = false;
+
+        // Re-enable whichever map we disabled before rebinding
+        if (_currentEntry != null)
+        {
+            var action = GetAction(_currentEntry);
+            action?.actionMap.Enable();
+        }
+
+        _currentEntry = null;
+
+        SetButtonsInteractable(true);
+        ShowListeningOverlay(false);
+
+        // Now restore your actual intended input mode
+        GlobalInputManager.Instance.SetPauseMenuMode();
+    }
+
+    // ========================= Reset =========================
+
+    /// <summary>
+    /// Call this from a "Reset All" button's onClick if you want one.
+    /// </summary>
+    public void ResetAllBindings()
+    {
+        var inputActions = GlobalInputManager.Instance.InputActions;
+        inputActions.RemoveAllBindingOverrides();
+        PlayerPrefs.DeleteKey("rebinds");
+        PlayerPrefs.Save();
+        RefreshAllLabels();
+    }
+
+    /// <summary>
+    /// Reset a single entry. Wire this to individual reset buttons if desired.
+    /// </summary>
+    public void ResetBinding(int entryIndex)
+    {
+        if (entryIndex < 0 || entryIndex >= rebindEntries.Length) return;
+        var entry = rebindEntries[entryIndex];
+        var action = GetAction(entry);
+        action?.RemoveBindingOverride(entry.bindingIndex);
+        RefreshLabel(entry);
+        SaveRebinds();
+    }
+
+    // ========================= Helpers =========================
+
+    InputAction GetAction(RebindEntry entry)
+    {
+        var inputActions = GlobalInputManager.Instance.InputActions;
+        
+        InputActionMap? map = entry.actionMapName switch
+        {
+            "Player" => inputActions.Player,
+            "Camera" => inputActions.Camera,
+            "MagicController" => inputActions.MagicController,
+            "ControlManager" => inputActions.ControlManager,
+            "SpawnerController" => inputActions.SpawnerController,
+            "UI" => inputActions.UI,
+            _ => null
+        };
+        
+        return map?.FindAction(entry.actionName, throwIfNotFound: false);
+    }
+
+    void SaveRebinds()
+    {
+        var json = GlobalInputManager.Instance.InputActions.SaveBindingOverridesAsJson();
+        PlayerPrefs.SetString("rebinds", json);
+        PlayerPrefs.Save();
+    }
+
+    void SetButtonsInteractable(bool interactable)
+    {
+        foreach (var entry in rebindEntries)
+        {
+            if (entry.rebindButton != null)
+                entry.rebindButton.interactable = interactable;
+        }
+    }
+
+    void ShowListeningOverlay(bool show)
+    {
+        if (listeningOverlay != null)
+            listeningOverlay.SetActive(show);
+    }
+
+    void CleanupOperation()
+    {
+        _rebindOperation?.Dispose();
+        _rebindOperation = null;
+    }
+
+    void OnDestroy()
+    {
+        _rebindOperation?.Cancel();
+        CleanupOperation();
     }
 }
