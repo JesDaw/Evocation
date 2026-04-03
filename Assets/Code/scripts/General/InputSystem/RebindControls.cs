@@ -8,13 +8,13 @@ public class RebindControls : MonoBehaviour
 
     InputActionRebindingExtensions.RebindingOperation m_rebindingOperation;
 
-    InputAction m_walkLeftAction;
+    InputAction m_attackAction;
     Button m_rebindButton;
     Label m_rebindLabel;
 
     void Awake()
     {
-        m_walkLeftAction = InputActions.FindAction("Left");
+        m_attackAction = InputActions.FindAction("attack");
 
         VisualElement root = GetComponent<UIDocument>().rootVisualElement;
 
@@ -39,7 +39,7 @@ public class RebindControls : MonoBehaviour
         m_rebindLabel.text = "Choose a new button";
         m_rebindButton.SetEnabled(false);
 
-        m_rebindingOperation = m_walkLeftAction.PerformInteractiveRebinding().OnComplete(operation => RebindCompleted());
+        m_rebindingOperation = m_attackAction.PerformInteractiveRebinding().OnComplete(operation => RebindCompleted());
         m_rebindingOperation.Start();
     }
 
@@ -47,7 +47,7 @@ public class RebindControls : MonoBehaviour
     {
         m_rebindingOperation.Dispose();
 
-        string newBinding = m_walkLeftAction.bindings[0].effectivePath;
+        string newBinding = m_attackAction.bindings[0].effectivePath;
         m_rebindLabel.text = $"Rebind completed: {newBinding}";
 
         InputActions.FindActionMap("Player").Enable();
