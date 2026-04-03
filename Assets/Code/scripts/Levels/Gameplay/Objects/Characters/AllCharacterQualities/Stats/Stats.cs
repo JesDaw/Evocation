@@ -42,6 +42,8 @@ public class Stats : MonoBehaviour, IDamageable
     [SerializeField] internal UltEvents.UltEvent OnDeath, OnDamage, OnKnocked;
     [SerializeField] internal UltEvents.UltEvent<bool> OnWitFlagDeath, OnWitFlagDamage;
     [SerializeField] public UnityEvent OnStatsInitialized;
+    public UnityEvent DamageTrigger;
+    public float DamageTriggerAmount = -100.0f;
 
     [Header("Settings")]
     [SerializeField] bool _Invincible = false;

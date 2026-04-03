@@ -4,7 +4,7 @@ using UnityEngine.Events;
 public class DamageHandler : MonoBehaviour
 {
     Stats stats;
-
+    bool DamageTriggerInvoked = false;
     public void Initialize(Stats statsComponent)
     {
         stats = statsComponent;
@@ -20,6 +20,11 @@ public class DamageHandler : MonoBehaviour
         FModAudioManager.instance.PlaySoundByName("takeDamage");
 
         stats.OnDamage?.Invoke();
+        if (stats.DamageTriggerAmount >= stats._CurrentHealth && !DamageTriggerInvoked) 
+        {
+            stats.DamageTrigger?.Invoke();
+            DamageTriggerInvoked = true;
+        }
 
         stats.LastHitBy = attackedBy;
 
