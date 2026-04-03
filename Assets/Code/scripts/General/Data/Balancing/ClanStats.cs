@@ -13,14 +13,12 @@ public class ClanStats : ScriptableObject
     [HideInInspector] public float TotalPower, TotalCost;
     [HideInInspector] public float TotalPushingPower, TotalDPS, TotalDefense;
     [HideInInspector] public float AvgMove, AvgKB_Dmg, AvgAtk_Dmg, AvgEndlag, AvgHP, AvgKB_HP, AvgRange;
-    [HideInInspector] public float[] UnitPowerValues;
+    [HideInInspector] public float[] UnitValueDiscrepancies;
 
-    // Called by MasterBalancingScript after global averages are known.
-    // avgHP, avgKBMaxHealth, avgMoveSpeed are the global averages across all units in the game.
     public void UpdateAverages(
-        float wAtk, float wEnd, float wMove, float wKB_Dmg, float wHP, float wKB_HP, float wRange, float wAOE,
-        float avgHP, float avgKBMaxHealth, float avgMoveSpeed,
-        float spaceTarget)
+    float wAtk, float wEnd, float wMove, float wKB_Dmg, float wHP, float wKB_HP, float wRange, float wAOE,
+    float gHP, float gKB_HP, float gMove, float gKB_Dmg, float gAtk, float gEnd, float gRange,
+    float baseVelocity, float baseAngle)
     {
         if (all_stats_scripts == null || all_stats_scripts.Length == 0) return;
 
@@ -29,7 +27,7 @@ public class ClanStats : ScriptableObject
         float tMove = 0, tKBD = 0, tAD = 0, tEnd = 0, tHP = 0, tKBH = 0, tRange = 0;
 
         var sorted = all_stats_scripts.OrderBy(s => s._spawnCost).ToArray();
-        UnitPowerValues = new float[sorted.Length];
+        UnitValueDiscrepancies = new float[sorted.Length];
 
         for (int i = 0; i < sorted.Length; i++)
         {
@@ -38,8 +36,8 @@ public class ClanStats : ScriptableObject
 
             s.RefreshBalancing(
                 wAtk, wEnd, wMove, wKB_Dmg, wHP, wKB_HP, wRange, wAOE,
-                avgHP, avgKBMaxHealth, avgMoveSpeed,
-                spaceTarget);
+                gHP, gKB_HP, gMove, gKB_Dmg, gAtk, gEnd, gRange,
+                baseVelocity, baseAngle); // <-- new
 
             TotalPower        += s._CalculatedPower;
             TotalCost         += s._spawnCost;
@@ -52,11 +50,11 @@ public class ClanStats : ScriptableObject
             tHP    += s._MaxHealth;        tKBH += s._KnockBackMaxHealth;
             tRange += s._HorizontalRange;
 
-            UnitPowerValues[i] = s._CalculatedPower;
+            UnitValueDiscrepancies[i] = s._ValueDiscrepancy;
         }
 
         float count  = sorted.Length;
-        AvgMove      = tMove  / count;  AvgKB_Dmg  = tKBD / count;
+        AvgMove      = tMove  / count;  AvgKB_Dmg = tKBD / count;
         AvgAtk_Dmg   = tAD   / count;  AvgEndlag  = tEnd / count;
         AvgHP        = tHP   / count;  AvgKB_HP   = tKBH / count;
         AvgRange     = tRange / count;

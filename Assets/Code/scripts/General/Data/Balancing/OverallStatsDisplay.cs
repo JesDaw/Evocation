@@ -4,16 +4,21 @@ public class OverallStatsDisplay : MonoBehaviour
 {
     public ClanStats Clan;
 
-    [Header("Clan Identity")]
+    // Stored locally — edit freely here without affecting the ScriptableObject.
+    [Header("Clan Identity (edit here)")]
     public string Theme;
     [TextArea(2, 4)] public string Characteristics;
+
     public ScriptableStats[] UnitsInClan;
 
-    [Header("Unit Power Values (Cheapest → Most Expensive)")]
-    public int[] UnitPowerValues;
+    // Value discrepancy = how powerful a unit is relative to its spawn cost.
+    // Positive = underpriced (strong for cost), negative = overpriced (weak for cost).
+    [Header("Unit Value Discrepancies (Cheapest → Most Expensive)")]
+    public float[] UnitValueDiscrepancies;
 
     [Header("Clan Totals")]
     public float TotalPower;
+    public float AverageValueDiscrepancy;
     public float TotalPushingPower;
     public float TotalDPS;
     public float TotalDefense;
@@ -31,15 +36,22 @@ public class OverallStatsDisplay : MonoBehaviour
     {
         if (Clan == null) return;
 
-        Theme           = Clan.ClanTheme;
-        Characteristics = Clan.Characteristics;
-        UnitsInClan     = Clan.all_stats_scripts;
+        // Theme and Characteristics are NOT synced from Clan —
+        // edit them directly on this component.
+        UnitsInClan = Clan.all_stats_scripts;
 
-        if (Clan.UnitPowerValues != null)
+        if (Clan.UnitValueDiscrepancies != null)
         {
-            UnitPowerValues = new int[Clan.UnitPowerValues.Length];
-            for (int i = 0; i < Clan.UnitPowerValues.Length; i++)
-                UnitPowerValues[i] = Mathf.RoundToInt(Clan.UnitPowerValues[i]);
+            UnitValueDiscrepancies = new float[Clan.UnitValueDiscrepancies.Length];
+            float discrepancySum = 0f;
+            for (int i = 0; i < Clan.UnitValueDiscrepancies.Length; i++)
+            {
+                UnitValueDiscrepancies[i] = Clan.UnitValueDiscrepancies[i];
+                discrepancySum += Clan.UnitValueDiscrepancies[i];
+            }
+            AverageValueDiscrepancy = Clan.UnitValueDiscrepancies.Length > 0
+                ? discrepancySum / Clan.UnitValueDiscrepancies.Length
+                : 0f;
         }
 
         TotalPower        = Clan.TotalPower;
@@ -47,12 +59,12 @@ public class OverallStatsDisplay : MonoBehaviour
         TotalDPS          = Clan.TotalDPS;
         TotalDefense      = Clan.TotalDefense;
 
-        MoveSpeed      = Clan.AvgMove;
-        KnockbackDmg   = Clan.AvgKB_Dmg;
-        AttackDmg      = Clan.AvgAtk_Dmg;
-        AttackEndlag   = Clan.AvgEndlag;
-        MaxHP          = Clan.AvgHP;
-        KnockbackHP    = Clan.AvgKB_HP;
+        MoveSpeed       = Clan.AvgMove;
+        KnockbackDmg    = Clan.AvgKB_Dmg;
+        AttackDmg       = Clan.AvgAtk_Dmg;
+        AttackEndlag    = Clan.AvgEndlag;
+        MaxHP           = Clan.AvgHP;
+        KnockbackHP     = Clan.AvgKB_HP;
         HorizontalRange = Clan.AvgRange;
     }
 }

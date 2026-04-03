@@ -68,98 +68,75 @@ public class ScriptableStats : ScriptableObject
 
     public void RefreshBalancing(
     float wAtk, float wEnd, float wMove, float wKB_Dmg, float wHP, float wKB_HP, float wRange, float wAOE,
-    float avgHP, float avgKBMaxHealth, float avgMoveSpeed,
-    float spaceTarget)
+    float avgHP = 50f, float avgKB_HP = 50f, float avgMove = 5f, float avgKB_Dmg = 10f,
+    float avgAtk = 10f, float avgEndlag = 1f, float avgRange = 2f,
+    float baseVelocity = 5f, float baseAngle = 45f) // <-- new
     {
-        float gravity  = 9.81f;
-        float angleRad = _KnockBackAngle * Mathf.Deg2Rad;
-        float moveSpeed = _MoveSpeed * wMove;
-        float endlag    = Mathf.Max(_AttackEndlag * wEnd, 0.01f);
-        float hitsPerSecond = 1f / (endlag + 0.5f); // kept for display pillars
+        float g           = 9.81f;
+        float avgAngleRad = baseAngle * Mathf.Deg2Rad; // <-- was hardcoded 45f
+        float avgKBVel    = baseVelocity;              // <-- was hardcoded 10f
 
-        // --- OUR KNOCKBACK PHYSICS ---
-        float kbRatio    = (_KnockBackDamage * wKB_Dmg) / 100f;
-        float vEff       = _KnockBackVelocity * kbRatio;
-        float airTime    = (2f * vEff * Mathf.Sin(angleRad)) / gravity;
-        float kbDistance = (Mathf.Pow(vEff, 2f) * Mathf.Sin(2f * angleRad)) / gravity;
+        // ── APPLY WEIGHTS TO CHARACTER A ──────────────────────────────────────────
+        float A_HP     = _MaxHealth          * wHP;
+        float A_KB_HP  = _KnockBackMaxHealth * wKB_HP;
+        float A_Move   = _MoveSpeed          * wMove;
+        float A_KB_Dmg = _KnockBackDamage    * wKB_Dmg;
+        float A_Atk    = _AttackDamage       * wAtk;
+        float A_Endlag = Mathf.Max(_AttackEndlag * wEnd, 0.01f);
+        float A_Range  = _HorizontalRange    * wRange;
+        float aoeMult  = _IsAOE ? Mathf.Max(_MaxAOETargets * wAOE, 1f) : 1f;
+        A_Atk *= aoeMult;
 
-        // --- DISPLAY PILLARS (inspector readability) ---
-        float aoeMult      = _IsAOE ? (1f + (_MaxAOETargets - 1) * wAOE) : 1f;
-        float rangeBonus   = 1f + (_HorizontalRange * 0.1f * wRange);
-        float kbResistance = 1f + (_KnockBackMaxHealth * 0.05f * wKB_HP);
-        _Calc_DPS     = (_AttackDamage * wAtk * hitsPerSecond * aoeMult) * rangeBonus;
-        _Calc_Defense = (_MaxHealth * wHP) * kbResistance;
+        // ── ATTACK FREQUENCIES ────────────────────────────────────────────────────
+        float FreqA = 1f / (A_Endlag + 0.5f);
+        float FreqB = 1f / (Mathf.Max(avgEndlag, 0.01f) + 0.5f);
 
-        // --- SIMULATION: time to claim spaceTarget units against the average enemy ---
+        // ── 1. FIGHT DURATION ─────────────────────────────────────────────────────
+        float TTK_A     = (A_Atk  * FreqA) > 0f ? avgHP / (A_Atk  * FreqA) : float.MaxValue;
+        float TTK_B     = (avgAtk * FreqB) > 0f ? A_HP  / (avgAtk * FreqB) : float.MaxValue;
+        float TimeFight = Mathf.Max(Mathf.Min(TTK_A, TTK_B), 0.01f);
 
-        float effectiveAtkDmg = Mathf.Max(_AttackDamage * wAtk * aoeMult * rangeBonus, 0f);
-        float effectiveKBDmg  = _KnockBackDamage * wKB_Dmg;
+        // ── 2. FREE HITS FROM RANGE ADVANTAGE ────────────────────────────────────
+        float FreeHitsA = (Mathf.Max(0f, A_Range - avgRange) / Mathf.Max(avgMove, 0.01f)) * FreqA;
+        float FreeHitsB = (Mathf.Max(0f, avgRange - A_Range) / Mathf.Max(A_Move,  0.01f)) * FreqB;
 
-        // How many of OUR hits does it take to kill / KB the average enemy?
-        float hitsToKill = (effectiveAtkDmg > 0f) ? (avgHP / effectiveAtkDmg)                         : float.MaxValue;
-        float hitsToKB   = (effectiveKBDmg  > 0f) ? Mathf.Max(avgKBMaxHealth / effectiveKBDmg, 1f) : float.MaxValue;
+        // ── 3. CHARACTER A KNOCKBACK PHYSICS ─────────────────────────────────────
+        float angleRadA = _KnockBackAngle * Mathf.Deg2Rad;
+        float kbRatioA  = A_KB_Dmg / Mathf.Max(avgKB_HP, 0.01f);
+        float vEffA     = _KnockBackVelocity * kbRatioA;
+        float D_KB_A    = (vEffA * vEffA * Mathf.Sin(2f * angleRadA)) / g;
+        float AirTime_A = (2f * vEffA * Mathf.Sin(angleRadA)) / g;
+        float t_meet_A  = (D_KB_A + (avgMove * AirTime_A) + (A_Move * A_Endlag))
+                        / Mathf.Max(A_Move + avgMove, 0.01f);
+        float D_gainA   = A_Move * Mathf.Max(t_meet_A - A_Endlag, 0f);
 
-        float killTime     = (hitsToKill < float.MaxValue) ? hitsToKill * endlag : float.MaxValue;
-        float kbAttackTime = (hitsToKB   < float.MaxValue) ? hitsToKB   * endlag : float.MaxValue;
+        // ── 4. CHARACTER B KNOCKBACK PHYSICS (uses grapher baselines) ────────────
+        float kbRatioB  = (avgKB_Dmg * wKB_Dmg) / Mathf.Max(A_KB_HP, 0.01f);
+        float vEffB     = avgKBVel * kbRatioB;           // avgKBVel = Base_Velocity
+        float D_KB_B    = (vEffB * vEffB * Mathf.Sin(2f * avgAngleRad)) / g; // avgAngleRad = Base_Angle
+        float AirTime_B = (2f * vEffB * Mathf.Sin(avgAngleRad)) / g;
+        float t_meet_B  = (D_KB_B + (A_Move * AirTime_B) + (avgMove * avgEndlag))
+                        / Mathf.Max(avgMove + A_Move, 0.01f);
+        float D_gainB   = avgMove * Mathf.Max(t_meet_B - avgEndlag, 0f);
 
-        // After a knockback: both units walk toward each other to re-engage
-        float combinedSpeed = moveSpeed + avgMoveSpeed;
-        float approachTime  = (combinedSpeed > 0f && kbDistance > 0f) ? kbDistance / combinedSpeed : 0f;
+        // ── 5. TOTAL KNOCKBACKS ───────────────────────────────────────────────────
+        float HTKB_A = Mathf.Max(avgKB_HP / Mathf.Max(A_KB_Dmg,  0.01f), 1f);
+        float HTKB_B = Mathf.Max(A_KB_HP  / Mathf.Max(avgKB_Dmg, 0.01f), 1f);
 
-        // A full KB cycle = wind-up attacks + enemy airborne + enemy walks back
-        float kbCycleTime     = (kbAttackTime < float.MaxValue) ? kbAttackTime + airTime + approachTime : float.MaxValue;
-        float spacePerKBCycle = moveSpeed * (airTime + approachTime); // we walk the whole time enemy is gone
+        float TotalKB_A = ((TimeFight * FreqA) + FreeHitsA) / HTKB_A;
+        float TotalKB_B = ((TimeFight * FreqB) + FreeHitsB) / HTKB_B;
 
-        // Store KB space rate for display
-        _Calc_PushingPower = (kbCycleTime > 0f && kbCycleTime < float.MaxValue)
-            ? spacePerKBCycle / kbCycleTime
-            : 0f;
+        // ── 6. NET DISPLACEMENT & FINAL POWER ────────────────────────────────────
+        float NetDisplacement = (TotalKB_A * D_gainA) - (TotalKB_B * D_gainB);
+        float V_net           = NetDisplacement / TimeFight;
+        float SurvivalMult    = TTK_B / Mathf.Max(TTK_A, 0.01f);
 
-        // How many full KB cycles fit inside the kill window?
-        float numKBCycles     = (kbCycleTime < float.MaxValue && killTime < float.MaxValue && kbCycleTime > 0f)
-            ? killTime / kbCycleTime
-            : 0f;
-        float spaceDuringKill = numKBCycles * spacePerKBCycle;
-
-        // --- DETERMINE TIME TO REACH spaceTarget ---
-        bool canKill = effectiveAtkDmg > 0f;
-        bool canKB   = effectiveKBDmg  > 0f && spacePerKBCycle > 0f && kbCycleTime < float.MaxValue;
-
-        float timeToTarget;
-        float remainingSpace = spaceTarget - spaceDuringKill;
-
-        if (!canKill && !canKB)
-        {
-            // Unit can neither kill nor push — useless
-            timeToTarget = float.MaxValue;
-        }
-        else if (!canKill)
-        {
-            // Pure KB pusher: sweeps the enemy back forever at a fixed rate
-            float kbSpaceRate = spacePerKBCycle / kbCycleTime;
-            timeToTarget = (kbSpaceRate > 0f) ? spaceTarget / kbSpaceRate : float.MaxValue;
-        }
-        else if (remainingSpace <= 0f)
-        {
-            // Enough space was claimed through KB alone before the kill landed
-            timeToTarget = killTime;
-        }
-        else if (moveSpeed > 0f)
-        {
-            // Kill + walk freely through the remaining space
-            timeToTarget = killTime + remainingSpace / moveSpeed;
-        }
-        else
-        {
-            // Kills but is immobile — can never reach spaceTarget
-            timeToTarget = float.MaxValue;
-        }
-
-        _CalculatedPower  = (timeToTarget > 0f && timeToTarget < float.MaxValue)
-            ? spaceTarget / timeToTarget
-            : 0f;
-
+        _CalculatedPower  = V_net * SurvivalMult;
         _ValueDiscrepancy = _CalculatedPower - _spawnCost;
+
+        _Calc_PushingPower = (TotalKB_A * D_gainA) / TimeFight;
+        _Calc_DPS          = A_Atk * FreqA;
+        _Calc_Defense      = TTK_B;
     }
 }
 
