@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 4314514135436141201}
   - component: {fileID: 3914629505268304871}
   - component: {fileID: 6539289897946455648}
-  - component: {fileID: 5794428690250040104}
   m_Layer: 5
   m_Name: 'Walk Right Button '
   m_TagString: Untagged
@@ -189,21 +188,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &5794428690250040104
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8497051228206976}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9ce7245e3a82a1418d4717f39ee8c6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::RebindControls
-  rebindEntries: []
-  listeningOverlay: {fileID: 0}
-  listeningLabel: {fileID: 0}
 --- !u!1 &47674741260461184
 GameObject:
   m_ObjectHideFlags: 0
@@ -569,7 +553,6 @@ GameObject:
   - component: {fileID: 5605490398672478826}
   - component: {fileID: 4281492679980540527}
   - component: {fileID: 7124838440451445716}
-  - component: {fileID: 7636280001861238009}
   m_Layer: 5
   m_Name: SpawnCharacter1 (1)
   m_TagString: Untagged
@@ -745,21 +728,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &7636280001861238009
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 286175501452277292}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9ce7245e3a82a1418d4717f39ee8c6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::RebindControls
-  rebindEntries: []
-  listeningOverlay: {fileID: 0}
-  listeningLabel: {fileID: 0}
 --- !u!1 &698859330879098099
 GameObject:
   m_ObjectHideFlags: 0
@@ -910,7 +878,6 @@ GameObject:
   - component: {fileID: 5080950327273697345}
   - component: {fileID: 384663427425523018}
   - component: {fileID: 4242250686041890855}
-  - component: {fileID: 8359513903671512149}
   m_Layer: 5
   m_Name: SwapPlayerLeft
   m_TagString: Untagged
@@ -1086,21 +1053,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &8359513903671512149
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 877016045085076822}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9ce7245e3a82a1418d4717f39ee8c6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::RebindControls
-  rebindEntries: []
-  listeningOverlay: {fileID: 0}
-  listeningLabel: {fileID: 0}
 --- !u!1 &903349956513564840
 GameObject:
   m_ObjectHideFlags: 0
@@ -1407,6 +1359,7 @@ RectTransform:
   m_Children:
   - {fileID: 5623336760417227197}
   - {fileID: 5805791653280330706}
+  - {fileID: 9173578274990666479}
   - {fileID: 1760716555750580408}
   - {fileID: 326337844347614499}
   - {fileID: 3349704518670532659}
@@ -1432,7 +1385,7 @@ MonoBehaviour:
   rebindEntries:
   - actionMapName: Player
     actionName: Attack
-    bindingIndex: 0
+    bindingIndex: 4
     rebindButton: {fileID: 933311064210627803}
     currentBindingLabel: {fileID: 1223213093393808301}
   listeningOverlay: {fileID: 0}
@@ -1745,7 +1698,6 @@ GameObject:
   - component: {fileID: 6415452596361956348}
   - component: {fileID: 933311064210627803}
   - component: {fileID: 6090274569759112691}
-  - component: {fileID: 701707871957066751}
   m_Layer: 5
   m_Name: Attack Button
   m_TagString: Untagged
@@ -1921,21 +1873,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &701707871957066751
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2049859350679168067}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9ce7245e3a82a1418d4717f39ee8c6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::RebindControls
-  rebindEntries: []
-  listeningOverlay: {fileID: 0}
-  listeningLabel: {fileID: 0}
 --- !u!1 &2070269604089994210
 GameObject:
   m_ObjectHideFlags: 0
@@ -1949,7 +1886,6 @@ GameObject:
   - component: {fileID: 8804437356322689266}
   - component: {fileID: 631268177894207610}
   - component: {fileID: 3091112372780076925}
-  - component: {fileID: 4735616173655266876}
   m_Layer: 5
   m_Name: SpawnCharacter1 (3)
   m_TagString: Untagged
@@ -2125,21 +2061,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &4735616173655266876
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2070269604089994210}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9ce7245e3a82a1418d4717f39ee8c6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::RebindControls
-  rebindEntries: []
-  listeningOverlay: {fileID: 0}
-  listeningLabel: {fileID: 0}
 --- !u!1 &2311313158551666004
 GameObject:
   m_ObjectHideFlags: 0
@@ -2427,7 +2348,6 @@ GameObject:
   - component: {fileID: 7427588328091255229}
   - component: {fileID: 3641828547634909708}
   - component: {fileID: 1564400140155489473}
-  - component: {fileID: 8114947128348217030}
   m_Layer: 5
   m_Name: SpawnPlayer
   m_TagString: Untagged
@@ -2603,21 +2523,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &8114947128348217030
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2501773361589052084}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9ce7245e3a82a1418d4717f39ee8c6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::RebindControls
-  rebindEntries: []
-  listeningOverlay: {fileID: 0}
-  listeningLabel: {fileID: 0}
 --- !u!1 &2577239079922696709
 GameObject:
   m_ObjectHideFlags: 0
@@ -3179,7 +3084,6 @@ GameObject:
   - component: {fileID: 1932137052278036066}
   - component: {fileID: 2044364889868563026}
   - component: {fileID: 3678904724886707294}
-  - component: {fileID: 7891319441872654648}
   m_Layer: 5
   m_Name: Back
   m_TagString: Untagged
@@ -3355,21 +3259,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &7891319441872654648
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2936786972091656814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9ce7245e3a82a1418d4717f39ee8c6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::RebindControls
-  rebindEntries: []
-  listeningOverlay: {fileID: 0}
-  listeningLabel: {fileID: 0}
 --- !u!1 &3007366945426115288
 GameObject:
   m_ObjectHideFlags: 0
@@ -3383,7 +3272,6 @@ GameObject:
   - component: {fileID: 2267722268617727032}
   - component: {fileID: 8957500541480715719}
   - component: {fileID: 4718554595957762668}
-  - component: {fileID: 3957368986048585927}
   m_Layer: 5
   m_Name: ToggleFreecam
   m_TagString: Untagged
@@ -3559,21 +3447,145 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &3957368986048585927
+--- !u!1 &3056872696967792323
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6460881893258838127}
+  - component: {fileID: 889919548624917323}
+  - component: {fileID: 6486692257761136170}
+  m_Layer: 5
+  m_Name: Text (TMP)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &6460881893258838127
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3056872696967792323}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9173578274990666479}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0.5, y: 4.9000015}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &889919548624917323
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3056872696967792323}
+  m_CullTransparentMesh: 1
+--- !u!114 &6486692257761136170
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3007366945426115288}
+  m_GameObject: {fileID: 3056872696967792323}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9ce7245e3a82a1418d4717f39ee8c6b, type: 3}
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::RebindControls
-  rebindEntries: []
-  listeningOverlay: {fileID: 0}
-  listeningLabel: {fileID: 0}
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: 'Reset Controls
+
+'
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4293910738
+  m_fontColor: {r: 0.8235295, g: 0.87843144, b: 0.93725497, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 25
+  m_fontSizeBase: 25
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 0
+  m_fontSizeMax: 0
+  m_fontStyle: 1
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 0
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &3316478048979472269
 GameObject:
   m_ObjectHideFlags: 0
@@ -3587,7 +3599,6 @@ GameObject:
   - component: {fileID: 8445766529238561565}
   - component: {fileID: 8762627694393790245}
   - component: {fileID: 8152512640461447983}
-  - component: {fileID: 6410812225443480924}
   m_Layer: 5
   m_Name: SpawnCharacter1
   m_TagString: Untagged
@@ -3763,21 +3774,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &6410812225443480924
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3316478048979472269}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9ce7245e3a82a1418d4717f39ee8c6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::RebindControls
-  rebindEntries: []
-  listeningOverlay: {fileID: 0}
-  listeningLabel: {fileID: 0}
 --- !u!1 &3320958765115015106
 GameObject:
   m_ObjectHideFlags: 0
@@ -4341,7 +4337,6 @@ GameObject:
   - component: {fileID: 8341892592899910446}
   - component: {fileID: 4243450740586819371}
   - component: {fileID: 9198745545885340937}
-  - component: {fileID: 8432391830992129234}
   m_Layer: 5
   m_Name: Walk Left Button
   m_TagString: Untagged
@@ -4517,21 +4512,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &8432391830992129234
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3714317134286653110}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9ce7245e3a82a1418d4717f39ee8c6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::RebindControls
-  rebindEntries: []
-  listeningOverlay: {fileID: 0}
-  listeningLabel: {fileID: 0}
 --- !u!1 &4049224115759275214
 GameObject:
   m_ObjectHideFlags: 0
@@ -4545,7 +4525,6 @@ GameObject:
   - component: {fileID: 5795841836745184422}
   - component: {fileID: 4582701052267621758}
   - component: {fileID: 849723440375236940}
-  - component: {fileID: 8881007332746820761}
   m_Layer: 5
   m_Name: Open Character Select
   m_TagString: Untagged
@@ -4721,21 +4700,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &8881007332746820761
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4049224115759275214}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9ce7245e3a82a1418d4717f39ee8c6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::RebindControls
-  rebindEntries: []
-  listeningOverlay: {fileID: 0}
-  listeningLabel: {fileID: 0}
 --- !u!1 &4160390479701221310
 GameObject:
   m_ObjectHideFlags: 0
@@ -5241,7 +5205,6 @@ GameObject:
   - component: {fileID: 5227018846693964993}
   - component: {fileID: 1912836675851272158}
   - component: {fileID: 7577866624279401819}
-  - component: {fileID: 7183116289835390801}
   m_Layer: 5
   m_Name: Pause
   m_TagString: Untagged
@@ -5417,21 +5380,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &7183116289835390801
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4686953128872912775}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9ce7245e3a82a1418d4717f39ee8c6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::RebindControls
-  rebindEntries: []
-  listeningOverlay: {fileID: 0}
-  listeningLabel: {fileID: 0}
 --- !u!1 &4775594336337903005
 GameObject:
   m_ObjectHideFlags: 0
@@ -5445,7 +5393,6 @@ GameObject:
   - component: {fileID: 28301622241873389}
   - component: {fileID: 3108389291816659491}
   - component: {fileID: 3350065317248222895}
-  - component: {fileID: 3045231225269972979}
   m_Layer: 5
   m_Name: Confirm
   m_TagString: Untagged
@@ -5621,21 +5568,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &3045231225269972979
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4775594336337903005}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9ce7245e3a82a1418d4717f39ee8c6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::RebindControls
-  rebindEntries: []
-  listeningOverlay: {fileID: 0}
-  listeningLabel: {fileID: 0}
 --- !u!1 &4870044111520559211
 GameObject:
   m_ObjectHideFlags: 0
@@ -6197,7 +6129,6 @@ GameObject:
   - component: {fileID: 2111400705170711345}
   - component: {fileID: 9115039951428762526}
   - component: {fileID: 2756283411217992442}
-  - component: {fileID: 4471887782802596138}
   m_Layer: 5
   m_Name: Player Ability
   m_TagString: Untagged
@@ -6373,21 +6304,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &4471887782802596138
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6011266340161486227}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9ce7245e3a82a1418d4717f39ee8c6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::RebindControls
-  rebindEntries: []
-  listeningOverlay: {fileID: 0}
-  listeningLabel: {fileID: 0}
 --- !u!1 &6194911702721965726
 GameObject:
   m_ObjectHideFlags: 0
@@ -6540,7 +6456,6 @@ GameObject:
   - component: {fileID: 6689971098069941877}
   - component: {fileID: 5096766071175711189}
   - component: {fileID: 534808825068709444}
-  - component: {fileID: 7213700484984235176}
   m_Layer: 5
   m_Name: StartBattle
   m_TagString: Untagged
@@ -6716,21 +6631,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &7213700484984235176
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6453177192307678940}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9ce7245e3a82a1418d4717f39ee8c6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::RebindControls
-  rebindEntries: []
-  listeningOverlay: {fileID: 0}
-  listeningLabel: {fileID: 0}
 --- !u!1 &6481956183897029407
 GameObject:
   m_ObjectHideFlags: 0
@@ -7772,6 +7672,223 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &7068586501265681443
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9173578274990666479}
+  - component: {fileID: 5151837048100786759}
+  - component: {fileID: 8012095253822660973}
+  - component: {fileID: 5292568748660782335}
+  - component: {fileID: 4569431405438588206}
+  - component: {fileID: 2079516636019726260}
+  m_Layer: 5
+  m_Name: Reset Controls
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &9173578274990666479
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7068586501265681443}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children:
+  - {fileID: 6460881893258838127}
+  m_Father: {fileID: 3624722181611170255}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 401, y: 395}
+  m_SizeDelta: {x: 238.2599, y: 88.3007}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &5151837048100786759
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7068586501265681443}
+  m_CullTransparentMesh: 1
+--- !u!114 &8012095253822660973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7068586501265681443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0.049598217, b: 1, a: 0.8784314}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 2986095105091660353, guid: 5c7ce5500a6ef6349990430b4c6b4ff9, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5292568748660782335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7068586501265681443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 1, g: 0, b: 0, a: 0.48235294}
+    m_PressedColor: {r: 1, g: 0, b: 0, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 8012095253822660973}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4569431405438588206}
+        m_TargetAssemblyTypeName: UIButtons, CodeAssembly
+        m_MethodName: BackSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 2184013637426555749}
+        m_TargetAssemblyTypeName: RebindControls, CodeAssembly
+        m_MethodName: ResetAllBindings
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+--- !u!114 &4569431405438588206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7068586501265681443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ac7cf1042ab8af4f9335af05aff8d69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::UIButtons
+  animationDuration: 0.2
+  animationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverTextColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverScale: {x: 1.05, y: 1.05, z: 1.05}
+  clickColor: {r: 1, g: 1, b: 1, a: 1}
+  clickTextColor: {r: 1, g: 1, b: 1, a: 1}
+  clickScale: {x: 0.9, y: 0.9, z: 0.9}
+  clickDuration: 0.1
+  postClickColor: {r: 1, g: 1, b: 1, a: 1}
+  postClickTextColor: {r: 1, g: 1, b: 1, a: 1}
+  postClickScale: {x: 1.05, y: 1.05, z: 1.05}
+  targetImage: {fileID: 8012095253822660973}
+  targetText: {fileID: 6486692257761136170}
+  targetTransform: {fileID: 9173578274990666479}
+  originalColor: {r: 1, g: 1, b: 1, a: 1}
+  originalTextColor: {r: 1, g: 1, b: 1, a: 1}
+  originalScale: {x: 1, y: 1, z: 1}
+--- !u!114 &2079516636019726260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7068586501265681443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40d26c9735894d447bbc56d8d3b5f6ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::AdamLenzini.UI.SetsUiElementOnSelect
+  eventSystem: {fileID: 0}
+  elementToSelect: {fileID: 0}
+  showVisualization: 0
+  navigationColour: {r: 0, g: 1, b: 1, a: 1}
+  ShowDebugLogs: 1
 --- !u!1 &7148261702503644143
 GameObject:
   m_ObjectHideFlags: 0
@@ -7922,7 +8039,6 @@ GameObject:
   - component: {fileID: 1618411740357606385}
   - component: {fileID: 4450455357702344805}
   - component: {fileID: 4962850141302400817}
-  - component: {fileID: 7329688809048275913}
   m_Layer: 5
   m_Name: SpawnCharacter1 (4)
   m_TagString: Untagged
@@ -8098,21 +8214,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &7329688809048275913
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7152470369382740196}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9ce7245e3a82a1418d4717f39ee8c6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::RebindControls
-  rebindEntries: []
-  listeningOverlay: {fileID: 0}
-  listeningLabel: {fileID: 0}
 --- !u!1 &7216825815958439205
 GameObject:
   m_ObjectHideFlags: 0
@@ -8263,7 +8364,6 @@ GameObject:
   - component: {fileID: 890246485452384388}
   - component: {fileID: 8981281169305292331}
   - component: {fileID: 2741481252119566113}
-  - component: {fileID: 2118897095819946431}
   m_Layer: 5
   m_Name: SwapPlayerRight
   m_TagString: Untagged
@@ -8439,21 +8539,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &2118897095819946431
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7261858170327432586}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9ce7245e3a82a1418d4717f39ee8c6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::RebindControls
-  rebindEntries: []
-  listeningOverlay: {fileID: 0}
-  listeningLabel: {fileID: 0}
 --- !u!1 &7283836834088642664
 GameObject:
   m_ObjectHideFlags: 0
@@ -8467,7 +8552,6 @@ GameObject:
   - component: {fileID: 5147756290985800558}
   - component: {fileID: 1319836425874690443}
   - component: {fileID: 5646011124635370834}
-  - component: {fileID: 2558381827575239365}
   m_Layer: 5
   m_Name: SpawnCharacter1 (2)
   m_TagString: Untagged
@@ -8643,21 +8727,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &2558381827575239365
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7283836834088642664}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9ce7245e3a82a1418d4717f39ee8c6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::RebindControls
-  rebindEntries: []
-  listeningOverlay: {fileID: 0}
-  listeningLabel: {fileID: 0}
 --- !u!1 &7405311589665087150
 GameObject:
   m_ObjectHideFlags: 0
@@ -9264,7 +9333,6 @@ GameObject:
   - component: {fileID: 755488727847267966}
   - component: {fileID: 3419159864694488940}
   - component: {fileID: 7472313758858914128}
-  - component: {fileID: 4185126574793182723}
   m_Layer: 5
   m_Name: Interact
   m_TagString: Untagged
@@ -9440,21 +9508,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &4185126574793182723
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8701561704246133229}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9ce7245e3a82a1418d4717f39ee8c6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::RebindControls
-  rebindEntries: []
-  listeningOverlay: {fileID: 0}
-  listeningLabel: {fileID: 0}
 --- !u!1 &8793145752816323290
 GameObject:
   m_ObjectHideFlags: 0

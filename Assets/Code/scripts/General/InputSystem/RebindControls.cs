@@ -127,8 +127,6 @@ public class RebindControls : MonoBehaviour
         SetButtonsInteractable(false);
         ShowListeningOverlay(true);
 
-        action.actionMap.Disable();
-
         _rebindOperation = action
             .PerformInteractiveRebinding(entry.bindingIndex)
             .WithControlsExcluding("<Mouse>/position")
@@ -136,10 +134,6 @@ public class RebindControls : MonoBehaviour
             .WithCancelingThrough("<Keyboard>/escape")
             .WithControlsExcluding("<Mouse>/leftButton")
             .OnMatchWaitForAnother(0.1f)
-            .OnPotentialMatch(op =>
-                {
-                    Debug.Log("Potential match: " + op.selectedControl);
-                })
             .OnComplete(_ => OnRebindComplete())
             .OnCancel(_ => OnRebindCancelled());
 
@@ -194,8 +188,8 @@ public class RebindControls : MonoBehaviour
     /// </summary>
     public void ResetAllBindings()
     {
-        var asset = GlobalInputManager.Instance.InputActions.asset;
-        asset.RemoveAllBindingOverrides();
+        var inputActions = GlobalInputManager.Instance.InputActions;
+        inputActions.RemoveAllBindingOverrides();
         PlayerPrefs.DeleteKey("rebinds");
         PlayerPrefs.Save();
         RefreshAllLabels();
@@ -218,14 +212,25 @@ public class RebindControls : MonoBehaviour
 
     InputAction GetAction(RebindEntry entry)
     {
-        var asset = GlobalInputManager.Instance.InputActions.asset;
-        var map = asset.FindActionMap(entry.actionMapName, throwIfNotFound: false);
+        var inputActions = GlobalInputManager.Instance.InputActions;
+        
+        InputActionMap? map = entry.actionMapName switch
+        {
+            "Player" => inputActions.Player,
+            "Camera" => inputActions.Camera,
+            "MagicController" => inputActions.MagicController,
+            "ControlManager" => inputActions.ControlManager,
+            "SpawnerController" => inputActions.SpawnerController,
+            "UI" => inputActions.UI,
+            _ => null
+        };
+        
         return map?.FindAction(entry.actionName, throwIfNotFound: false);
     }
 
     void SaveRebinds()
     {
-        var json = GlobalInputManager.Instance.InputActions.asset.SaveBindingOverridesAsJson();
+        var json = GlobalInputManager.Instance.InputActions.SaveBindingOverridesAsJson();
         PlayerPrefs.SetString("rebinds", json);
         PlayerPrefs.Save();
     }

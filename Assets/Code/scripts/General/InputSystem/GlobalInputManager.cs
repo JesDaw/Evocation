@@ -204,8 +204,6 @@ public class GlobalInputManager : MonoBehaviour
 
     public void SetPauseMenuMode()
     {
-        Debug.Log($"SetPauseMenuMode called from:\n{System.Environment.StackTrace}");
-
         if(DebugLogs) Debug.Log("=========Input Mode: Pause Menu=========");
         DisableAllControls();
         EnableUIControls();
