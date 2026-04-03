@@ -35,27 +35,35 @@ public class MasterBalancingScript : MonoBehaviour
 #endif
         }
 
-        // Pass 1: raw stat read to get global averages
         ComputeGlobalAverages();
 
-        // Pass 2: update graphs and unit scores using those averages
-        grapher.UpdateGraphs(
-            Global_AvgHP, Global_AvgKB_MaxHealth, Global_AvgMoveSpeed,
-            Global_AvgKB_Dmg, Global_AvgAtk_Dmg, Global_AvgEndlag, Global_AvgRange);
-
         GlobalPowerCurve = new AnimationCurve();
+        
         for (int i = 0; i < all_clan_stats.Length; i++)
         {
             if (all_clan_stats[i] == null) continue;
 
             all_clan_stats[i].UpdateAverages(
-                grapher.Weight_AttackDamage, grapher.Weight_AttackEndlag,
-                grapher.Weight_MoveSpeed,    grapher.Weight_KnockBackDamage,
-                grapher.Weight_MaxHealth,    grapher.Weight_KnockBackHealth,
-                grapher.Weight_HorizontalRange, grapher.Weight_AOE_Efficiency,
-                Global_AvgHP, Global_AvgKB_MaxHealth, Global_AvgMoveSpeed,
-                Global_AvgKB_Dmg, Global_AvgAtk_Dmg, Global_AvgEndlag, Global_AvgRange,
-                grapher.Base_Velocity, grapher.Base_Angle);
+                grapher.Weight_AttackDamage, 
+                grapher.Weight_AttackEndlag,
+                grapher.Weight_MoveSpeed,    
+                grapher.Weight_KnockBackDamage,
+                grapher.Weight_MaxHealth,    
+                grapher.Weight_KnockBackHealth,
+                grapher.Weight_HorizontalRange, 
+                1f, 
+                Global_AvgHP, 
+                Global_AvgKB_MaxHealth, 
+                Global_AvgMoveSpeed,
+                Global_AvgKB_Dmg, 
+                Global_AvgAtk_Dmg, 
+                Global_AvgEndlag, 
+                Global_AvgRange,
+                grapher.Base_Velocity, 
+                45f,
+                grapher.SimulationDistance, 
+                grapher.MaxStatValue
+            );
 
             GlobalPowerCurve.AddKey(i, all_clan_stats[i].TotalPower);
         }
@@ -74,9 +82,12 @@ public class MasterBalancingScript : MonoBehaviour
             foreach (var s in clan.all_stats_scripts)
             {
                 if (s == null) continue;
-                tHP    += s._MaxHealth;        tKBH  += s._KnockBackMaxHealth;
-                tMove  += s._MoveSpeed;        tKBD  += s._KnockBackDamage;
-                tAD    += s._AttackDamage;     tEnd  += s._AttackEndlag;
+                tHP    += s._MaxHealth;        
+                tKBH   += s._KnockBackMaxHealth;
+                tMove  += s._MoveSpeed;        
+                tKBD   += s._KnockBackDamage;
+                tAD    += s._AttackDamage;     
+                tEnd   += s._AttackEndlag;
                 tRange += s._HorizontalRange;
                 count++;
             }

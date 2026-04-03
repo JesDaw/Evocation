@@ -9,6 +9,9 @@ public class ClanStats : ScriptableObject
     [TextArea(3, 6)] public string Characteristics;
 
     public ScriptableStats[] all_stats_scripts;
+    public float AvgPushingPower; 
+    public float AvgDPS;         
+    public float AvgDefense;
 
     [HideInInspector] public float TotalPower, TotalCost;
     [HideInInspector] public float TotalPushingPower, TotalDPS, TotalDefense;
@@ -17,46 +20,43 @@ public class ClanStats : ScriptableObject
 
     public void UpdateAverages(
     float wAtk, float wEnd, float wMove, float wKB_Dmg, float wHP, float wKB_HP, float wRange, float wAOE,
-    float gHP, float gKB_HP, float gMove, float gKB_Dmg, float gAtk, float gEnd, float gRange,
-    float baseVelocity, float baseAngle)
+    float avgHP, float avgKB_HP, float avgMove, float avgKB_Dmg,
+    float avgAtk, float avgEndlag, float avgRange,
+    float baseVelocity, float baseAngle,
+    float universalSimDist, float universalMaxStat) // <-- Match the new signature
     {
-        if (all_stats_scripts == null || all_stats_scripts.Length == 0) return;
+        float tPower = 0;
+        float tPush = 0;
+        float tDPS = 0;
+        float tDef = 0;
+        int count = 0;
 
-        TotalPower = 0; TotalCost = 0;
-        TotalPushingPower = 0; TotalDPS = 0; TotalDefense = 0;
-        float tMove = 0, tKBD = 0, tAD = 0, tEnd = 0, tHP = 0, tKBH = 0, tRange = 0;
-
-        var sorted = all_stats_scripts.OrderBy(s => s._spawnCost).ToArray();
-        UnitValueDiscrepancies = new float[sorted.Length];
-
-        for (int i = 0; i < sorted.Length; i++)
+        foreach (var s in all_stats_scripts)
         {
-            var s = sorted[i];
             if (s == null) continue;
 
+            // Pass the new universal parameters here
             s.RefreshBalancing(
                 wAtk, wEnd, wMove, wKB_Dmg, wHP, wKB_HP, wRange, wAOE,
-                gHP, gKB_HP, gMove, gKB_Dmg, gAtk, gEnd, gRange,
-                baseVelocity, baseAngle); // <-- new
+                avgHP, avgKB_HP, avgMove, avgKB_Dmg,
+                avgAtk, avgEndlag, avgRange,
+                baseVelocity, baseAngle, 
+                universalSimDist, universalMaxStat);
 
-            TotalPower        += s._CalculatedPower;
-            TotalCost         += s._spawnCost;
-            TotalPushingPower += s._Calc_PushingPower;
-            TotalDPS          += s._Calc_DPS;
-            TotalDefense      += s._Calc_Defense;
-
-            tMove  += s._MoveSpeed;        tKBD += s._KnockBackDamage;
-            tAD    += s._AttackDamage;     tEnd += s._AttackEndlag;
-            tHP    += s._MaxHealth;        tKBH += s._KnockBackMaxHealth;
-            tRange += s._HorizontalRange;
-
-            UnitValueDiscrepancies[i] = s._ValueDiscrepancy;
+            tPower += s._CalculatedPower;
+            
+            // Fix: Use the new 'Calculated_Totals' struct paths
+            tPush += s.Calculated_Totals.PushingPower; 
+            tDPS  += s.Calculated_Totals.DPS;
+            tDef  += s.Calculated_Totals.Defense_TTK;
+            count++;
         }
 
-        float count  = sorted.Length;
-        AvgMove      = tMove  / count;  AvgKB_Dmg = tKBD / count;
-        AvgAtk_Dmg   = tAD   / count;  AvgEndlag  = tEnd / count;
-        AvgHP        = tHP   / count;  AvgKB_HP   = tKBH / count;
-        AvgRange     = tRange / count;
+        if (count == 0) return;
+
+        TotalPower = tPower / count;
+        AvgPushingPower = tPush / count;
+        AvgDPS = tDPS / count;
+        AvgDefense = tDef / count;
     }
 }
