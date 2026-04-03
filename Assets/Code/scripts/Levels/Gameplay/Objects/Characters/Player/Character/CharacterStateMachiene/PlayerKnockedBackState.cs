@@ -50,7 +50,19 @@ public class PlayerKnockedBackState : PlayerBaseState
 
     void BackOnGround()
     {
-        if (Mathf.Abs(Ctx.Rb.linearVelocity.y) < 0.1f)
+        if (!_Knocked) return;
+        
+        if (Ctx.Rb.linearVelocity.y > 0) return;
+        
+        Collider2D collider = Ctx.Rb.GetComponent<Collider2D>();
+        if (collider == null) return;
+        
+        Vector2 rayOrigin = new Vector2(collider.bounds.center.x, collider.bounds.min.y);
+        float rayDistance = collider.bounds.extents.y + 0.1f;
+        
+        RaycastHit2D groundCheck = Physics2D.Raycast(rayOrigin, Vector2.down, rayDistance, LayerMask.GetMask("Ground/TopLane", "Ground/MidLane", "Ground/BotLane"));
+        
+        if (groundCheck.collider != null)
         {
             ExitState();
         }

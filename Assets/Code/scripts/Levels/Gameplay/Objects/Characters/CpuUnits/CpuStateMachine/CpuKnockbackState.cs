@@ -66,7 +66,18 @@ public class CpuKnockBackState : CpuBaseState
     void BackOnGround()
     {
         if (!_Knocked) return;
-        if (Mathf.Abs(rb.linearVelocity.y) < 0.1f)
+        
+        if (rb.linearVelocity.y > 0) return;
+        
+        Collider2D collider = rb.GetComponent<Collider2D>();
+        if (collider == null) return;
+        
+        Vector2 rayOrigin = new Vector2(collider.bounds.center.x, collider.bounds.min.y);
+        float rayDistance = collider.bounds.extents.y + 0.1f;
+        
+        RaycastHit2D groundCheck = Physics2D.Raycast(rayOrigin, Vector2.down, rayDistance, LayerMask.GetMask("Ground/TopLane", "Ground/MidLane", "Ground/BotLane"));
+        
+        if (groundCheck.collider != null)
         {
             ExitState();
         }
