@@ -12,30 +12,118 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 238e13654c5efff43b776bb1e518c913, type: 3}
   m_Name: TreeHealer
   m_EditorClassIdentifier: 
-  _CpuPriority:
-  - Player
-  - TreeGang
-  _Sprite: {fileID: 21300000, guid: 38f07a4b6d08c7243b482a84dc73ea52, type: 3}
-  _Clan: TreeGang
-  _MaxHealth: 10
-  _CurrentHealth: 1
-  _AttackDamage: 0
-  _AttackStartup: 500
-  _AttackActiveDuration: 1
-  _AttackEndlag: 500
-  _MoveSpeed: 5
-  _StopDistance: 2
-  _KnockBackMax: 1
-  _KnockBackHealth: 1
-  _KnockBackVelocity: 5
   _spawnCost: 5
-  _StatusEffects: []
+  _CalculatedPower: -1.7060616
+  _ValueDiscrepancy: -6.7060614
+  _Calc_PushingPower: 0.24474311
+  _Calc_DPS: 0.6666667
+  _Calc_Defense: 1
+  Theme: 
+  ODS: 
+  RPS_Type: 
+  OtherNotes: 
+  _MoveSpeed: 1
+  _KnockBackDamage: 1
+  _AttackDamage: 1
+  _AttackEndlag: 1
+  _MaxHealth: 1
+  _KnockBackMaxHealth: 1
+  _HorizontalRange: 1
+  _AttackStyle: 0
+  _IsAOE: 0
+  _MaxAOETargets: 5
+  _KnockBackVelocity: 5
+  _KnockBackAngle: 45
+  _VerticalRange: 2
+  _ProjectilePrefab: {fileID: 0}
+  _ProjectileSpeed: 15
+  _ProjectileMaxHeight: 2
+  _TrajectoryCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AxisCorrectionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _SpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _EffectsToApply:
-  - {fileID: 11400000, guid: b09447a80e6bebf43805189595c14d8a, type: 2}
-  _StatusTicksMax: []
-  _StatusTicks: []
-  _StatusMax: 0
-  _StatusHealth: 2
-  OnAttack: 
-  _Projectiles: []
-  ExtraStats: {fileID: 0}
+  - {fileID: 0}
+  vfx: []
+  vfxOffsets: []
+  _Rotate: 0
+  _animator: {fileID: 0}
+  _Sprites: []
+  _AnimationMoveSpeed: 1
