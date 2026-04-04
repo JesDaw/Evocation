@@ -1,225 +1,100 @@
 using UnityEngine;
+using System.Collections.Generic;
 
-/// <summary>
-/// Base class for AI considerations - now supports subclassing for clean inspector
-/// </summary>
 [System.Serializable]
 public abstract class AIConsideration
 {
-    [Header("Consideration Info")]
     public string considerationName = "New Consideration";
-
-    [Header("Evaluation")]
     [Tooltip("Maps normalized input (0-1) to output value")]
     public AnimationCurve responseCurve = AnimationCurve.Linear(0, 0, 1, 1);
 
-    /// <summary>
-    /// Evaluate and return curve output
-    /// </summary>
     public float Evaluate(AIContext context, bool debug, ScriptableStats unitStats)
     {
         float normalizedInput = GetNormalizedValue(context, unitStats);
         float curveOutput = responseCurve.Evaluate(normalizedInput);
 
         if (debug)
-        {
-            string rawValue = GetRawValueString(context, unitStats);
-            Debug.Log(
-                $"    • {considerationName}: {rawValue} → norm={normalizedInput:F2} → curve={curveOutput:F2}"
-            );
-        }
+            Debug.Log($"    • {considerationName}: {GetRawValueString(context, unitStats)} → norm={normalizedInput:F2} → curve={curveOutput:F2}");
 
         return curveOutput;
     }
 
-    /// <summary>
-    /// Get normalized (0-1) value - implemented by subclasses
-    /// </summary>
     protected abstract float GetNormalizedValue(AIContext context, ScriptableStats unitStats);
-
-    /// <summary>
-    /// Get the raw value as a readable string for debugging - implemented by subclasses
-    /// </summary>
     protected abstract string GetRawValueString(AIContext context, ScriptableStats unitStats);
 }
 
-/// <summary>
-/// Consideration for current AI money amount
-/// </summary>
 [System.Serializable]
 [AddTypeMenu("Money")]
 public class MoneyConsideration : AIConsideration
 {
-    protected override float GetNormalizedValue(AIContext context, ScriptableStats unitStats)
-    {
-        return context.GetNormalizedMoney();
-    }
-
-    protected override string GetRawValueString(AIContext context, ScriptableStats unitStats)
-    {
-        return $"${context.GetCurrentMoney():F1}";
-    }
+    protected override float GetNormalizedValue(AIContext context, ScriptableStats unitStats) => context.GetNormalizedMoney();
+    protected override string GetRawValueString(AIContext context, ScriptableStats unitStats) => $"${context.GetCurrentMoney():F1}";
 }
 
-/// <summary>
-/// Consideration for whether AI can afford a specific unit
-/// </summary>
-[System.Serializable]
-[AddTypeMenu("Can Afford Unit")]
-public class CanAffordUnitConsideration : AIConsideration
-{
-    protected override float GetNormalizedValue(AIContext context, ScriptableStats unitStats)
-    {
-        if (unitStats == null)
-        {
-            Debug.LogWarning(
-                $"[AI] {considerationName}: No unitStats provided for CanAffordUnit!"
-            );
-            return 0f;
-        }
-        return context.GetCurrentMoney() >= unitStats._spawnCost ? 1f : 0f;
-    }
-
-    protected override string GetRawValueString(AIContext context, ScriptableStats unitStats)
-    {
-        if (unitStats != null)
-        {
-            return $"${context.GetCurrentMoney():F1} vs ${unitStats._spawnCost}";
-        }
-        return "NO UNIT STATS";
-    }
-}
-
-/// <summary>
-/// Consideration for time elapsed since level start
-/// </summary>
 [System.Serializable]
 [AddTypeMenu("Time Elapsed")]
 public class TimeElapsedConsideration : AIConsideration
 {
-    protected override float GetNormalizedValue(AIContext context, ScriptableStats unitStats)
-    {
-        return context.GetNormalizedTimeElapsed();
-    }
-
-    protected override string GetRawValueString(AIContext context, ScriptableStats unitStats)
-    {
-        return $"{context.GetTimeElapsed():F1}s";
-    }
+    protected override float GetNormalizedValue(AIContext context, ScriptableStats unitStats) => context.GetNormalizedTimeElapsed();
+    protected override string GetRawValueString(AIContext context, ScriptableStats unitStats) => $"{context.GetTimeElapsed():F1}s";
 }
 
-/// <summary>
-/// Consideration for time remaining in level
-/// </summary>
-[System.Serializable]
-[AddTypeMenu("Time Remaining")]
-public class TimeRemainingConsideration : AIConsideration
-{
-    protected override float GetNormalizedValue(AIContext context, ScriptableStats unitStats)
-    {
-        return context.GetNormalizedTimeRemaining();
-    }
-
-    protected override string GetRawValueString(AIContext context, ScriptableStats unitStats)
-    {
-        return $"{context.GetTimeRemaining():F1}s";
-    }
-}
-
-/// <summary>
-/// Consideration for distance to closest enemy
-/// </summary>
 [System.Serializable]
 [AddTypeMenu("Closest Enemy Distance")]
 public class ClosestEnemyDistanceConsideration : AIConsideration
 {
-    protected override float GetNormalizedValue(AIContext context, ScriptableStats unitStats)
-    {
-        return context.GetNormalizedClosestEnemy();
-    }
-
-    protected override string GetRawValueString(AIContext context, ScriptableStats unitStats)
-    {
-        return $"{context.GetClosestEnemyDistance():F1}";
-    }
+    protected override float GetNormalizedValue(AIContext context, ScriptableStats unitStats) => context.GetNormalizedClosestEnemy();
+    protected override string GetRawValueString(AIContext context, ScriptableStats unitStats) => $"{context.GetClosestEnemyDistance():F1}m";
 }
 
-/// <summary>
-/// Consideration for number of player units
-/// </summary>
 [System.Serializable]
 [AddTypeMenu("Player Unit Count")]
 public class PlayerUnitCountConsideration : AIConsideration
 {
-    protected override float GetNormalizedValue(AIContext context, ScriptableStats unitStats)
-    {
-        return context.GetNormalizedPlayerUnits();
-    }
-
-    protected override string GetRawValueString(AIContext context, ScriptableStats unitStats)
-    {
-        return $"{context.GetPlayerUnitCount()} units";
-    }
+    protected override float GetNormalizedValue(AIContext context, ScriptableStats unitStats) => context.GetNormalizedPlayerUnits();
+    protected override string GetRawValueString(AIContext context, ScriptableStats unitStats) => $"{context.GetPlayerUnitCount()} units";
 }
 
-/// <summary>
-/// Consideration for number of AI units
-/// </summary>
 [System.Serializable]
 [AddTypeMenu("AI Unit Count")]
 public class AIUnitCountConsideration : AIConsideration
 {
-    protected override float GetNormalizedValue(AIContext context, ScriptableStats unitStats)
-    {
-        return context.GetNormalizedAIUnits();
-    }
-
-    protected override string GetRawValueString(AIContext context, ScriptableStats unitStats)
-    {
-        return $"{context.GetAIUnitCount()} units";
-    }
+    protected override float GetNormalizedValue(AIContext context, ScriptableStats unitStats) => context.GetNormalizedAIUnits();
+    protected override string GetRawValueString(AIContext context, ScriptableStats unitStats) => $"{context.GetAIUnitCount()} units";
 }
 
-/// <summary>
-/// Consideration for number of units in a specific zone
-/// </summary>
 [System.Serializable]
-[AddTypeMenu("Units In Zone")]
-public class UnitsInZoneConsideration : AIConsideration
+[AddTypeMenu("Closest Enemy Power Level")]
+public class ClosestEnemyPowerLevelConsideration : AIConsideration
 {
-    [Header("Zone Settings")]
-    public ZoneType targetZone = ZoneType.Upper;
-    public string unitTagToCheck = "Player";
-
-    protected override float GetNormalizedValue(AIContext context, ScriptableStats unitStats)
-    {
-        return context.GetNormalizedUnitsInZone(targetZone, unitTagToCheck);
-    }
-
-    protected override string GetRawValueString(AIContext context, ScriptableStats unitStats)
-    {
-        return $"{context.GetUnitsInZone(targetZone, unitTagToCheck)} units in {targetZone}";
-    }
+    protected override float GetNormalizedValue(AIContext context, ScriptableStats unitStats) => context.GetNormalizedClosestEnemyPower();
+    protected override string GetRawValueString(AIContext context, ScriptableStats unitStats) => $"Power: {context.GetRawClosestEnemyPower():F1}";
 }
 
-/// <summary>
-/// Consideration for zone dominance (AI units vs player units in zone)
-/// </summary>
 [System.Serializable]
-[AddTypeMenu("Zone Dominance")]
-public class ZoneDominanceConsideration : AIConsideration
+[AddTypeMenu("Time Since Last Action")]
+public class TimeSinceLastActionConsideration : AIConsideration
 {
-    [Header("Zone Settings")]
+    protected override float GetNormalizedValue(AIContext context, ScriptableStats unitStats) => context.GetNormalizedTimeSinceLastAction();
+    protected override string GetRawValueString(AIContext context, ScriptableStats unitStats) => $"{context.GetRawTimeSinceLastAction():F1}s ago";
+}
+
+[System.Serializable]
+[AddTypeMenu("Zone Pressure")]
+public class ZonePressureConsideration : AIConsideration
+{
     public ZoneType targetZone = ZoneType.Upper;
 
     protected override float GetNormalizedValue(AIContext context, ScriptableStats unitStats)
     {
-        return context.GetZoneDominance(targetZone);
+        float dominance = context.GetNormalizedZoneDominance(targetZone);
+        return 1.0f - dominance;
     }
 
     protected override string GetRawValueString(AIContext context, ScriptableStats unitStats)
     {
-        return $"Dominance: {context.GetZoneDominance(targetZone):F2} in {targetZone}";
+        float pressure = 1.0f - context.GetNormalizedZoneDominance(targetZone);
+        return $"Pressure in {targetZone}: {pressure:P0}";
     }
 }
 
@@ -229,4 +104,27 @@ public enum ZoneType
     Middle,
     Lower,
     All
+}
+
+[System.Serializable]
+[AddTypeMenu("Actions Since Last Picked")]
+public class ActionsSinceLastPickedConsideration : AIConsideration
+{
+    [Tooltip("The name of the action to track (must match the action's actionName in the inspector)")]
+    public string actionNameToTrack = "";
+    [Tooltip("Max loops to normalize against (e.g., 10 means after 10 loops, utility is 1.0)")]
+    public int maxLoopsForNormalization = 10;
+    
+    protected override float GetNormalizedValue(AIContext context, ScriptableStats unitStats)
+    {
+        string trackName = string.IsNullOrEmpty(actionNameToTrack) ? considerationName : actionNameToTrack;
+        return context.GetLoopsSinceLastPickedNormalized(trackName, maxLoopsForNormalization);
+    }
+    
+    protected override string GetRawValueString(AIContext context, ScriptableStats unitStats)
+    {
+        string trackName = string.IsNullOrEmpty(actionNameToTrack) ? considerationName : actionNameToTrack;
+        int loops = context.GetLoopsSinceLastPicked(trackName);
+        return $"{loops} loops ago";
+    }
 }

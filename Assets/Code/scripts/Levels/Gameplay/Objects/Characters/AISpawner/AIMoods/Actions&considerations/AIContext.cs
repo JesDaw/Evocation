@@ -1,10 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-/// <summary>
-/// Context data passed to AI for decision making
-/// FIXED: Only counts root-level units, not child objects
-/// </summary>
 [System.Serializable]
 public class AIContext
 {
@@ -23,250 +19,182 @@ public class AIContext
     public Transform playerBase;
     public float maxDistance = 50f;
     
+    [Header("Normalization Settings")]
+    public float maxMoney = 100f;
+    public float maxUnits = 20f;
+    public float maxEnemyPower = 50f;
+    public float maxActionWaitTime = 15f;
+    
     [Header("Debug")]
     public bool showDebugLogs = false;
     
-    // Cached values (updated each frame)
+    [HideInInspector] public float lastActionTime = 0f;
+
+    [HideInInspector] public int currentLoopCount = 0;
+    private Dictionary<string, int> actionLastExecutedLoop = new Dictionary<string, int>();
+
     private float cachedClosestEnemyDistance;
+    private float cachedClosestEnemyPower;
     private int cachedPlayerUnits;
     private int cachedAIUnits;
-    private Dictionary<string, int> zoneUnitCounts = new Dictionary<string, int>();
 
-    /// <summary>
-    /// Update all cached values from game systems
-    /// Call this at the start of each AI decision
-    /// </summary>
     public void UpdateContext()
     {
         UpdateUnitCounts();
         UpdateClosestEnemy();
-        CacheZoneData();
     }
 
     #region Normalized Getters (0-1 range)
     
-    public float GetNormalizedMoney()
-    {
-        if (aiMoneyManager == null)
-        {
-            Debug.LogWarning("AIContext: aiMoneyManager is null!");
-            return 0f;
-        }
-        
-        float current = aiMoneyManager.GetMoney();
-        float max = 100; 
-        
-        return Mathf.Clamp01(current / max);
-    }
+    public float GetNormalizedMoney() => aiMoneyManager != null ? Mathf.Clamp01(aiMoneyManager.GetMoney() / maxMoney) : 0f;
     
-    public float GetNormalizedTimeElapsed()
-    {
-        if (timer == null || !timer.TimeIsActive) return 0f;
-        
-        float elapsed = timer.maxTimeRemaining - Timer.Instance.RemainingTimeSeconds;
-        return Mathf.Clamp01(elapsed / timer.maxTimeRemaining);
-    }
+    public float GetNormalizedTimeElapsed() => (timer != null && timer.TimeIsActive) ? Mathf.Clamp01((timer.maxTimeRemaining - Timer.Instance.RemainingTimeSeconds) / timer.maxTimeRemaining) : 0f;
     
-    public float GetNormalizedTimeRemaining()
-    {
-        if (timer == null || !timer.TimeIsActive) return 1f;
-        
-        return Mathf.Clamp01(Timer.Instance.RemainingTimeSeconds / timer.maxTimeRemaining);
-    }
+    public float GetNormalizedTimeRemaining() => (timer != null && timer.TimeIsActive) ? Mathf.Clamp01(Timer.Instance.RemainingTimeSeconds / timer.maxTimeRemaining) : 1f;
     
-    public float GetNormalizedClosestEnemy()
-    {
-        return Mathf.Clamp01(cachedClosestEnemyDistance / maxDistance);
-    }
+    public float GetNormalizedClosestEnemy() => Mathf.Clamp01(cachedClosestEnemyDistance / maxDistance);
     
-    public float GetNormalizedPlayerUnits()
-    {
-        float reasonableMax = 20f;
-        return Mathf.Clamp01(cachedPlayerUnits / reasonableMax);
-    }
+    public float GetNormalizedPlayerUnits() => Mathf.Clamp01(cachedPlayerUnits / maxUnits);
     
-    public float GetNormalizedAIUnits()
-    {
-        float reasonableMax = 20f;
-        return Mathf.Clamp01(cachedAIUnits / reasonableMax);
-    }
+    public float GetNormalizedAIUnits() => Mathf.Clamp01(cachedAIUnits / maxUnits);
+    
+    public float GetNormalizedClosestEnemyPower() => Mathf.Clamp01(cachedClosestEnemyPower / maxEnemyPower);
+    
+    public float GetNormalizedTimeSinceLastAction() => Mathf.Clamp01((Time.time - lastActionTime) / maxActionWaitTime);
     
     public float GetNormalizedUnitsInZone(ZoneType zone, string tag)
     {
-        string key = $"{zone}_{tag}";
-        if (!zoneUnitCounts.ContainsKey(key)) return 0f;
+        MapZonesManager manager = GetZoneManager(zone);
+        if (manager == null) return 0f;
         
-        float reasonableMax = 10f;
-        return Mathf.Clamp01(zoneUnitCounts[key] / reasonableMax);
+        int count = manager.GetCountByTag(tag);
+        return Mathf.Clamp01(count / maxUnits);
     }
     
-    public float GetZoneDominance(ZoneType zone)
+    public float GetNormalizedZoneDominance(ZoneType zone)
     {
-        MapZonesManager targetZone = GetZoneManager(zone);
-        if (targetZone == null) return 0.5f;
+        MapZonesManager manager = GetZoneManager(zone);
+        if (manager == null) return 0.5f;
         
-        string playerKey = $"{zone}_Player";
-        string allyKey = $"{zone}_Allies";
-        string enemyKey = $"{zone}_Enemy";
-        
-        int playerUnits = zoneUnitCounts.ContainsKey(playerKey) ? zoneUnitCounts[playerKey] : 0;
-        int allyUnits = zoneUnitCounts.ContainsKey(allyKey) ? zoneUnitCounts[allyKey] : 0;
-        int enemyUnits = zoneUnitCounts.ContainsKey(enemyKey) ? zoneUnitCounts[enemyKey] : 0;
-        
-        int totalPlayer = playerUnits + allyUnits;
-        int totalUnits = totalPlayer + enemyUnits;
-        
-        if (totalUnits == 0) return 0.5f;
-        
-        return (float)enemyUnits / totalUnits;
+        return manager.GetTagRatio("Enemy", "Player");
     }
     
     #endregion
 
     #region Raw Value Getters
     
-    public float GetCurrentMoney()
-    {
-        return aiMoneyManager != null ? aiMoneyManager.GetMoney() : 0f;
-    }
+    public float GetCurrentMoney() => aiMoneyManager != null ? aiMoneyManager.GetMoney() : 0f;
     
-    public float GetTimeElapsed()
-    {
-        if (timer == null) return 0f;
-        return  Timer.Instance.maxTimeRemaining - Timer.Instance.RemainingTimeSeconds;
-    }
+    public float GetTimeElapsed() => timer != null ? timer.maxTimeRemaining - Timer.Instance.RemainingTimeSeconds : 0f;
     
-    public float GetTimeRemaining()
-    {
-        return Timer.Instance != null ? Timer.Instance.RemainingTimeSeconds : 0f;
-    }
+    public float GetTimeRemaining() => Timer.Instance != null ? Timer.Instance.RemainingTimeSeconds : 0f;
     
-    public int GetPlayerUnitCount()
-    {
-        return cachedPlayerUnits;
-    }
+    public int GetPlayerUnitCount() => cachedPlayerUnits;
     
-    public int GetAIUnitCount()
-    {
-        return cachedAIUnits;
-    }
+    public int GetAIUnitCount() => cachedAIUnits;
     
-    public float GetClosestEnemyDistance()
-    {
-        return cachedClosestEnemyDistance;
-    }
-
+    public float GetClosestEnemyDistance() => cachedClosestEnemyDistance;
+    
+    public float GetRawClosestEnemyPower() => cachedClosestEnemyPower;
+    
+    public float GetRawTimeSinceLastAction() => Time.time - lastActionTime;
+    
     public int GetUnitsInZone(ZoneType zone, string tag)
     {
-        string key = $"{zone}_{tag}";
-        return zoneUnitCounts.ContainsKey(key) ? zoneUnitCounts[key] : 0;
+        MapZonesManager manager = GetZoneManager(zone);
+        return manager != null ? manager.GetCountByTag(tag) : 0;
     }
     
     #endregion
 
     #region Private Update Methods
     
-    /// <summary>
-    /// FIXED: Only count root-level GameObjects with tags
-    /// Ignores child objects to prevent duplicate counting
-    /// </summary>
     private void UpdateUnitCounts()
     {
-        // Get all objects with tags
-        GameObject[] playerObjs = GameObject.FindGameObjectsWithTag("Player");
-        GameObject[] allyObjs = GameObject.FindGameObjectsWithTag("Allies");
-        GameObject[] aiObjs = GameObject.FindGameObjectsWithTag("Enemy");
+        cachedPlayerUnits = 0;
+        cachedAIUnits = 0;
         
-        // Only count root-level objects (no parent)
-        cachedPlayerUnits = CountRootObjects(playerObjs) + CountRootObjects(allyObjs);
-        cachedAIUnits = CountRootObjects(aiObjs);
-    }
-    
-    /// <summary>
-    /// Count only root-level GameObjects (objects with no parent)
-    /// </summary>
-    private int CountRootObjects(GameObject[] objects)
-    {
-        int count = 0;
-        foreach (GameObject obj in objects)
+        if (upperZone != null)
         {
-            if (obj != null && obj.transform.parent == null)
-            {
-                count++;
-            }
+            cachedPlayerUnits += upperZone.GetCountByTag("Player") + upperZone.GetCountByTag("Allies");
+            cachedAIUnits += upperZone.GetCountByTag("Enemy");
         }
-        return count;
+        if (middleZone != null)
+        {
+            cachedPlayerUnits += middleZone.GetCountByTag("Player") + middleZone.GetCountByTag("Allies");
+            cachedAIUnits += middleZone.GetCountByTag("Enemy");
+        }
+        if (lowerZone != null)
+        {
+            cachedPlayerUnits += lowerZone.GetCountByTag("Player") + lowerZone.GetCountByTag("Allies");
+            cachedAIUnits += lowerZone.GetCountByTag("Enemy");
+        }
     }
     
     private void UpdateClosestEnemy()
     {
         cachedClosestEnemyDistance = maxDistance;
+        cachedClosestEnemyPower = 0f;
         
-        if (aiBase == null) return;
-        
-        GameObject[] playerUnits = GameObject.FindGameObjectsWithTag("Player");
-        GameObject[] allyUnits = GameObject.FindGameObjectsWithTag("Allies");
-        
-        foreach (GameObject unit in playerUnits)
+        if (aiBase == null)
         {
-            if (unit == null || unit.transform.parent != null) continue;
-            float distance = Vector3.Distance(unit.transform.position, aiBase.position);
-            if (distance < cachedClosestEnemyDistance)
-                cachedClosestEnemyDistance = distance;
+            if (showDebugLogs) Debug.LogWarning("[AIContext] aiBase is null!");
+            return;
         }
         
-        foreach (GameObject unit in allyUnits)
-        {
-            if (unit == null || unit.transform.parent != null) continue;
-            float distance = Vector3.Distance(unit.transform.position, aiBase.position);
-            if (distance < cachedClosestEnemyDistance)
-                cachedClosestEnemyDistance = distance;
-        }
-    }
-    
-    private void CacheZoneData()
-    {
-        zoneUnitCounts.Clear();
+        if (showDebugLogs) Debug.Log($"[AIContext] aiBase position: {aiBase.position}");
         
-        CacheZoneCounts(upperZone, ZoneType.Upper);
-        CacheZoneCounts(middleZone, ZoneType.Middle);
-        CacheZoneCounts(lowerZone, ZoneType.Lower);
+        CheckClosestInZone(upperZone);
+        CheckClosestInZone(middleZone);
+        CheckClosestInZone(lowerZone);
+        
+        if (showDebugLogs) Debug.Log($"[AIContext] Final closest enemy distance: {cachedClosestEnemyDistance}");
     }
     
-    private void CacheZoneCounts(MapZonesManager zone, ZoneType zoneType)
+    private void CheckClosestInZone(MapZonesManager zone)
     {
         if (zone == null) return;
         
-        string[] tagsToTrack = { "Player", "Allies", "Enemy" };
+        List<GameObject> playerUnits = zone.GetObjectsByTag("Player");
+        List<GameObject> allyUnits = zone.GetObjectsByTag("Allies");
         
-        foreach (string tag in tagsToTrack)
+        if (showDebugLogs)
         {
-            int count = CountUnitsInZone(zone, tag);
-            string key = $"{zoneType}_{tag}";
-            zoneUnitCounts[key] = count;
+            Debug.Log($"[AIContext] Zone {zone.name}: Player={playerUnits.Count}, Allies={allyUnits.Count}");
         }
+        
+        CheckUnitsInList(playerUnits);
+        CheckUnitsInList(allyUnits);
     }
     
-    private int CountUnitsInZone(MapZonesManager zone, string tag)
+    private void CheckUnitsInList(List<GameObject> units)
     {
-        Collider2D zoneCollider = zone.GetComponent<Collider2D>();
-        if (zoneCollider == null) return 0;
-        
-        Collider2D[] hits = Physics2D.OverlapBoxAll(
-            zoneCollider.bounds.center,
-            zoneCollider.bounds.size,
-            0f
-        );
-        
-        int count = 0;
-        foreach (Collider2D hit in hits)
+        foreach (GameObject unit in units)
         {
-            // Only count root objects
-            if (hit.CompareTag(tag) && hit.transform.parent == null)
-                count++;
+            if (unit == null)
+            {
+                if (showDebugLogs) Debug.Log($"[AIContext] Skipping null unit");
+                continue;
+            }
+            
+            float distance = Vector3.Distance(unit.transform.position, aiBase.position);
+            
+            if (showDebugLogs)
+            {
+                Debug.Log($"[AIContext] Checking {unit.name} at distance {distance:F1} from aiBase");
+            }
+            
+            if (distance < cachedClosestEnemyDistance)
+            {
+                cachedClosestEnemyDistance = distance;
+                
+                Stats unitStats = unit.GetComponent<Stats>();
+                if (unitStats != null && unitStats.scriptableStats != null)
+                {
+                    cachedClosestEnemyPower = unitStats.scriptableStats._CalculatedPower;
+                }
+            }
         }
-        
-        return count;
     }
     
     private MapZonesManager GetZoneManager(ZoneType zone)
@@ -276,8 +204,30 @@ public class AIContext
             case ZoneType.Upper: return upperZone;
             case ZoneType.Middle: return middleZone;
             case ZoneType.Lower: return lowerZone;
+            case ZoneType.All: return null;
             default: return null;
         }
+    }
+    
+    #endregion
+
+    #region Action Tracking
+    
+    public void RecordActionExecuted(string actionName)
+    {
+        actionLastExecutedLoop[actionName] = currentLoopCount;
+    }
+    
+    public int GetLoopsSinceLastPicked(string actionName)
+    {
+        if (!actionLastExecutedLoop.ContainsKey(actionName))
+            return currentLoopCount;
+        return currentLoopCount - actionLastExecutedLoop[actionName];
+    }
+    
+    public float GetLoopsSinceLastPickedNormalized(string actionName, int maxLoops = 10)
+    {
+        return Mathf.Clamp01((float)GetLoopsSinceLastPicked(actionName) / maxLoops);
     }
     
     #endregion
