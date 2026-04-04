@@ -775,19 +775,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7729f604020c24ba39eefd22ad8327db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::AISpawnerController
-  moods:
-  - moodName: Wolf Start
-    description: 'Proactivly spawns wolves to rush down
-
-      when player team gets
-      closter hammers start spawning as defense
-
-      Maybe have wolf mage be a
-      mini boss that spawns when they are really threatened in the next mood'
-    availableActions:
-    - rid: 7479562325664464970
-    - rid: 7479562325664464972
-    - rid: 7479562325664464975
+  moods: []
   startingMoodIndex: 0
   decisionInterval: 2
   aiMoneyManager: {fileID: 3948372016706591346}
@@ -797,124 +785,14 @@ MonoBehaviour:
   lowerZone: {fileID: 0}
   aiBase: {fileID: 49987513823387449}
   playerBase: {fileID: 0}
-  maxDistance: 100
+  maxMoney: 100
+  maxUnits: 20
+  maxEnemyPower: 50
+  maxActionWaitTime: 15
   showDebugLogs: 0
   references:
     version: 2
-    RefIds:
-    - rid: 1788620782409613398
-      type: {class: TimeElapsedConsideration, ns: , asm: CodeAssembly}
-      data:
-        considerationName: Hammer time elapsed
-        responseCurve:
-          serializedVersion: 2
-          m_Curve:
-          - serializedVersion: 3
-            time: 0
-            value: 0
-            inSlope: -0.055478495
-            outSlope: -0.055478495
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0.85833347
-          - serializedVersion: 3
-            time: 0.05
-            value: 0.75
-            inSlope: 41.90485
-            outSlope: 41.90485
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0.074999854
-            outWeight: 0
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
-    - rid: 7479562325664464970
-      type: {class: SpawnUnitAction, ns: , asm: CodeAssembly}
-      data:
-        actionName: Spawn Runner
-        considerations:
-        - rid: 7479562325664464971
-        unitStats: {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
-    - rid: 7479562325664464971
-      type: {class: MoneyConsideration, ns: , asm: CodeAssembly}
-      data:
-        considerationName: Wolf runner money
-        responseCurve:
-          serializedVersion: 2
-          m_Curve:
-          - serializedVersion: 3
-            time: 0
-            value: 0.5
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 1
-            value: 0.5
-            inSlope: -0
-            outSlope: -0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0.24166667
-            outWeight: 0
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
-    - rid: 7479562325664464972
-      type: {class: SpawnUnitAction, ns: , asm: CodeAssembly}
-      data:
-        actionName: Spawn Hammer
-        considerations:
-        - rid: 1788620782409613398
-        unitStats: {fileID: 11400000, guid: d4daadf164451854c8c5982cee62e5f9, type: 2}
-    - rid: 7479562325664464975
-      type: {class: DoNothingAction, ns: , asm: CodeAssembly}
-      data:
-        actionName: AI Action
-        considerations:
-        - rid: 7479562325664464976
-    - rid: 7479562325664464976
-      type: {class: MoneyConsideration, ns: , asm: CodeAssembly}
-      data:
-        considerationName: Do cothing cus broke
-        responseCurve:
-          serializedVersion: 2
-          m_Curve:
-          - serializedVersion: 3
-            time: 0
-            value: 1
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 0.05
-            value: 1
-            inSlope: -0.0040409258
-            outSlope: -0.0040409258
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0.6566809
-            outWeight: 0.33333334
-          - serializedVersion: 3
-            time: 1
-            value: 1
-            inSlope: -0.0037840153
-            outSlope: -0.0037840153
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0.33333334
-            outWeight: 0.38356027
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
+    RefIds: []
 --- !u!1 &7538470120974499551
 GameObject:
   m_ObjectHideFlags: 0

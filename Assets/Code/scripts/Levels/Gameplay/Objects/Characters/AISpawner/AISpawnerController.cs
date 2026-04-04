@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using System.Linq;
 
 /// <summary>
 /// Main AI Controller - Clean version with comprehensive debug logging
@@ -28,7 +29,17 @@ public class AISpawnerController : MonoBehaviour
     [Header("Spatial")]
     [SerializeField] Transform aiBase;
     [SerializeField] Transform playerBase;
-    [SerializeField] float maxDistance = 100f;
+    // maxDistance is now calculated automatically from base positions
+    
+    [Header("Normalization Settings")]
+    [Tooltip("Max money for normalization (0-1)")]
+    [SerializeField] float maxMoney = 100f;
+    [Tooltip("Max unit count for normalization")]
+    [SerializeField] float maxUnits = 20f;
+    [Tooltip("Max enemy power for normalization")]
+    [SerializeField] float maxEnemyPower = 50f;
+    [Tooltip("Time in seconds before TimeSinceLastAction maxes out")]
+    [SerializeField] float maxActionWaitTime = 15f;
     
     [Header("Debug")]
     [SerializeField] bool showDebugLogs = false;
@@ -71,6 +82,10 @@ public class AISpawnerController : MonoBehaviour
 
     void InitializeContext()
     {
+        float calculatedMaxDistance = (aiBase != null && playerBase != null) 
+            ? Vector3.Distance(aiBase.position, playerBase.position) 
+            : 100f;
+
         context = new AIContext
         {
             spawner = SpawnObjects.EnemyInstance,
@@ -81,8 +96,13 @@ public class AISpawnerController : MonoBehaviour
             lowerZone = lowerZone,
             aiBase = aiBase,
             playerBase = playerBase,
-            maxDistance = maxDistance,
-            showDebugLogs = showDebugLogs
+            maxDistance = calculatedMaxDistance,
+            maxMoney = maxMoney,
+            maxUnits = maxUnits,
+            maxEnemyPower = maxEnemyPower,
+            maxActionWaitTime = maxActionWaitTime,
+            showDebugLogs = showDebugLogs,
+            lastActionTime = Time.time
         };
     }
 
@@ -136,8 +156,10 @@ public class AISpawnerController : MonoBehaviour
             }
 
             // CRITICAL: Track best action
+            // With multiplication, utility is always between 0 and 1
+            // 0 means absolute veto (action can't be taken)
             AIAction bestAction = null;
-            float bestUtility = float.MinValue;
+            float bestUtility = 0f;
 
             if (showDebugLogs)
             {
@@ -167,18 +189,32 @@ public class AISpawnerController : MonoBehaviour
                 }
             }
 
-            // Execute best action
-            if (bestAction != null && bestUtility > float.MinValue)
+            // Execute best action only if utility >= 0.1
+            if (bestAction != null && bestUtility >= 0.1f)
             {
                 if (showDebugLogs)
                     Debug.Log($"\n→ CHOSEN: {bestAction.actionName} (Utility: {bestUtility:F2})\n");
                 
                 bestAction.Execute(context);
+                context.lastActionTime = Time.time;
+                context.currentLoopCount++;
             }
             else
             {
-                if (showDebugLogs)
-                    Debug.Log($"\n→ NO VALID ACTIONS (Best utility: {bestUtility:F2})\n");
+                // Fallback: if no action could execute, try DoNothingAction
+                DoNothingAction doNothing = availableActions.OfType<DoNothingAction>().FirstOrDefault();
+                if (doNothing != null)
+                {
+                    if (showDebugLogs)
+                        Debug.Log($"\n→ FALLBACK: No valid actions, doing nothing\n");
+                    
+                    doNothing.Execute(context);
+                    context.currentLoopCount++;
+                }
+                else if (showDebugLogs)
+                {
+                    Debug.Log($"\n→ NO ACTIONS AVAILABLE (no DoNothing fallback found)\n");
+                }
             }
 
             yield return new WaitForSeconds(decisionInterval);
