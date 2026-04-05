@@ -33,11 +33,11 @@ public class ClanStats : ScriptableObject
         float baseVelocity, float baseAngle,
         float universalSimDist, 
         float mMove, float mEnd, float mRange, float mHP, float mAtk, float mKBD, float mKBH,
-        float powerOffset) // Match the new signature
+        float powerOffset)
     {
         if (all_stats_scripts == null || all_stats_scripts.Length == 0) return;
 
-        float tPower = 0, tPush = 0, tDPS = 0, tDef = 0;
+        float tPower = 0, tPush = 0, tDef = 0;
         float tMove = 0, tKBD = 0, tAD = 0, tEnd = 0, tHP = 0, tKBH = 0, tRng = 0;
         
         UnitValueDiscrepancies = new float[all_stats_scripts.Length];
@@ -47,16 +47,15 @@ public class ClanStats : ScriptableObject
             var s = all_stats_scripts[i];
             if (s == null) continue;
 
-            s.RefreshBalancing(
-                wAtk, wEnd, wMove, wKB_Dmg, wHP, wKB_HP, wRange, wAOE,
-                avgHP, avgKB_HP, avgMove, avgKB_Dmg,
-                avgAtk, avgEndlag, avgRange,
-                baseVelocity, baseAngle, 
-                universalSimDist, 
-                mMove, mEnd, mRange, mHP, mAtk, mKBD, mKBH,
-                powerOffset);
+            float calculatedPower = CharacterStatBalancer.CalculatePower(
+                s, wAtk, wEnd, wMove, wKB_Dmg, wHP, wKB_HP, wRange,
+                avgHP, avgKB_HP, avgMove, avgKB_Dmg, avgAtk, avgEndlag, avgRange,
+                baseVelocity, universalSimDist, powerOffset);
+            
+            s._CalculatedPower = calculatedPower;
+            s._ValueDiscrepancy = calculatedPower - s._spawnCost;
 
-            tPower += s._CalculatedPower;
+            tPower += calculatedPower;
             UnitValueDiscrepancies[i] = s._ValueDiscrepancy;
 
             tMove += s._MoveSpeed;
@@ -67,8 +66,8 @@ public class ClanStats : ScriptableObject
             tKBH  += s._KnockBackMaxHealth;
             tRng  += s._HorizontalRange;
 
-            tDef  += s.Comparison_Metrics.My_TTK_Seconds; 
-            tPush += s.Comparison_Metrics.My_HitsToKB;
+            tDef  += s._MaxHealth;
+            tPush += s._KnockBackMaxHealth;
         }
 
         int count = all_stats_scripts.Length;
