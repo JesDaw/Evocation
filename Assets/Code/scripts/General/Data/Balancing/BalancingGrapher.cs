@@ -24,4 +24,15 @@ public class BalancingGrapher : MonoBehaviour
     public float Weight_MaxHealth       = 1.0f;
     public float Weight_KnockBackHealth = 1.0f;
     public float Weight_HorizontalRange = 1.0f;
+
+    [Header("Stat Parity Constants")]
+    public float K_MoveSpeed = 1f;
+    public float K_Range = 1f;
+    public float K_AttackRate = 1f;
+
+    [Header("Stat Weights")]
+    public float W_Attack = 1f;
+    public float W_Health = 1f;
+    public float W_KB_Damage = 1f;
+    public float W_KB_Health = 1f;
 }

@@ -48,7 +48,7 @@ public class MasterBalancingScript : MonoBehaviour
                 if (bal?.Stats == null) continue;
                 var s = bal.Stats;
                 float raw = CharacterStatBalancer.CalculatePowerRaw(
-                    s._AttackDamage, s._AttackEndlag, s._MoveSpeed, s._KnockBackDamage, s._MaxHealth, s._KnockBackMaxHealth, s._HorizontalRange,
+                    s._AttackDamage, s._ExtraEndlag, s._MoveSpeed, s._KnockBackDamage, s._MaxHealth, s._KnockBackMaxHealth, s._HorizontalRange,
                     grapher.Weight_AttackDamage, grapher.Weight_AttackEndlag, grapher.Weight_MoveSpeed, grapher.Weight_KnockBackDamage, 
                     grapher.Weight_MaxHealth, grapher.Weight_KnockBackHealth, grapher.Weight_HorizontalRange,
                     Global_AvgHP, Global_AvgKB_MaxHealth, Global_AvgMoveSpeed, Global_AvgKB_Dmg, Global_AvgAtk_Dmg, Global_AvgEndlag, Global_AvgRange,
@@ -76,7 +76,7 @@ public class MasterBalancingScript : MonoBehaviour
                 MinPowerOffset 
             );
 
-            totalPowerSum += all_clan_stats[i].TotalPower;
+            totalPowerSum += all_clan_stats[i].TotalLevel;
             activeUnits++;
         }
 
@@ -92,6 +92,7 @@ public class MasterBalancingScript : MonoBehaviour
 
         Global_AvgPower = activeUnits > 0 ? totalPowerSum / activeUnits : 0;
         SyncDisplayComponents();
+        UpdateLevelDisplays();
     }
 
     void ComputeGlobalAverages()
@@ -106,7 +107,7 @@ public class MasterBalancingScript : MonoBehaviour
             {
                 if (s == null) continue;
                 tHP += s._MaxHealth; tKBH += s._KnockBackMaxHealth; tMove += s._MoveSpeed;
-                tKBD += s._KnockBackDamage; tAD += s._AttackDamage; tEnd += s._AttackEndlag;
+                tKBD += s._KnockBackDamage; tAD += s._AttackDamage; tEnd += s._ExtraEndlag;
                 tRange += s._HorizontalRange;
                 count++;
             }
@@ -119,7 +120,7 @@ public class MasterBalancingScript : MonoBehaviour
                 if (bal?.Stats == null) continue;
                 var s = bal.Stats;
                 tHP += s._MaxHealth; tKBH += s._KnockBackMaxHealth; tMove += s._MoveSpeed;
-                tKBD += s._KnockBackDamage; tAD += s._AttackDamage; tEnd += s._AttackEndlag;
+                tKBD += s._KnockBackDamage; tAD += s._AttackDamage; tEnd += s._ExtraEndlag;
                 tRange += s._HorizontalRange;
                 count++;
             }
@@ -143,5 +144,43 @@ public class MasterBalancingScript : MonoBehaviour
             d.Clan = all_clan_stats[i];
             d.SyncWithClan();
         }
+    }
+
+    void UpdateLevelDisplays()
+    {
+        if (grapher == null) return;
+
+        if (all_clan_stats != null)
+        {
+            foreach (var clan in all_clan_stats)
+            {
+                if (clan?.all_stats_scripts == null) continue;
+                foreach (var s in clan.all_stats_scripts)
+                {
+                    if (s == null) continue;
+                    PopulateLevelFields(s);
+                }
+            }
+        }
+
+        if (all_balancers != null)
+        {
+            foreach (var bal in all_balancers)
+            {
+                if (bal?.Stats == null) continue;
+                PopulateLevelFields(bal.Stats);
+            }
+        }
+    }
+
+    void PopulateLevelFields(ScriptableStats s)
+    {
+        var breakdown = LevelBalancerMath.GetLevelBreakdown(s, grapher);
+        s.Attack = breakdown.attack;
+        s.Defense = breakdown.defense;
+        s.SpaceControl = breakdown.spaceControl;
+        s.AttackFrequency = breakdown.attackFrequency;
+        s.Level_Total = breakdown.total;
+        s.Level_Discrepancy = breakdown.total - s._spawnCost;
     }
 }

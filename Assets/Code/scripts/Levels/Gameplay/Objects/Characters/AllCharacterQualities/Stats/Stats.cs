@@ -14,7 +14,7 @@ public class Stats : MonoBehaviour, IDamageable
 
     [Header("Runtime Combat")]
     [HideInInspector] public int _AttackDamage;
-    [HideInInspector] public float _AttackEndlag;
+    [HideInInspector] public float _ExtraEndlag;
     [HideInInspector] public Vector2 _AttackRange;
     [HideInInspector] public bool _IsProjectile; 
     [HideInInspector] public bool _IsAOE;
@@ -33,6 +33,8 @@ public class Stats : MonoBehaviour, IDamageable
     [HideInInspector] public float _CurrentHealth = 1;
     [HideInInspector] public bool _IsDead = false;
     [HideInInspector] public float _MoveSpeed;
+    [HideInInspector] public float _AnimationStartupTime;
+    [HideInInspector] public float _AnimationRecoveryTime;
     public float _KnockBackMaxHealth;
     public float _KnockBackHealth;
     public float _KnockBackDamage = 0.5f;
@@ -126,7 +128,9 @@ public class Stats : MonoBehaviour, IDamageable
         _AttackDamage = scriptableStats._AttackDamage;
         if (_AttackDamage < 0) Debug.LogWarning($"{gameObject.name}: AttackDamage is {_AttackDamage}, should be non-negative.");
 
-        _AttackEndlag = scriptableStats._AttackEndlag;
+        _ExtraEndlag = scriptableStats._ExtraEndlag;
+        _AnimationStartupTime = scriptableStats._AnimationStartupTime;
+        _AnimationRecoveryTime = scriptableStats._AnimationRecoveryTime;
         _AttackRange = new Vector2(scriptableStats._HorizontalRange, scriptableStats._VerticalRange);
 
         _IsProjectile = scriptableStats._AttackStyle == AttackStyle.Projectile;

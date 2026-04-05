@@ -84,9 +84,6 @@ public class CpuStateManager : MonoBehaviour
 
     public void UpdateCurrentState(State state)
     {
-        if(_Animator != null)
-            _Animator.Rebind();
-
         _currentState = _State[state];
 		CurrentState = state;
         _currentState.EnterState();

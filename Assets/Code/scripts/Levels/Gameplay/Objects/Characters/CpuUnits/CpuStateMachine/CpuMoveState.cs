@@ -22,7 +22,11 @@ public class CpuMoveState : CpuBaseState
     }
 
     public override void UpdateState() => Moving();
-    public override void ExitState() => _context.UpdateCurrentState(CpuStateManager.State.Attack);
+    public override void ExitState()
+    {
+        _context._Animator.SetBool("IsRunning", false);
+        _context.UpdateCurrentState(CpuStateManager.State.Attack);
+    }
 
     void Moving()
     {
