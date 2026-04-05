@@ -17,11 +17,11 @@ public class OverallStatsDisplay : MonoBehaviour
     public float[] UnitValueDiscrepancies;
 
     [Header("Clan Totals")]
-    public float TotalPower;
-    public float AverageValueDiscrepancy;
-    public float TotalPushingPower;
-    public float TotalDPS;
-    public float TotalDefense;
+    public float TotalLevel;
+    public float SumAttack;
+    public float SumDefense;
+    public float SumSpaceControl;
+    public float AvgAttackFrequency;
 
     [Header("Clan Stat Averages")]
     public float MoveSpeed;
@@ -43,21 +43,17 @@ public class OverallStatsDisplay : MonoBehaviour
         if (Clan.UnitValueDiscrepancies != null)
         {
             UnitValueDiscrepancies = new float[Clan.UnitValueDiscrepancies.Length];
-            float discrepancySum = 0f;
             for (int i = 0; i < Clan.UnitValueDiscrepancies.Length; i++)
             {
                 UnitValueDiscrepancies[i] = Clan.UnitValueDiscrepancies[i];
-                discrepancySum += Clan.UnitValueDiscrepancies[i];
             }
-            AverageValueDiscrepancy = Clan.UnitValueDiscrepancies.Length > 0
-                ? discrepancySum / Clan.UnitValueDiscrepancies.Length
-                : 0f;
         }
 
-        TotalPower        = Clan.TotalPower;
-        TotalPushingPower = Clan.TotalPushingPower;
-        TotalDPS          = Clan.TotalDPS;
-        TotalDefense      = Clan.TotalDefense;
+        TotalLevel           = Clan.TotalLevel;
+        SumAttack            = Clan.SumAttack;
+        SumDefense           = Clan.SumDefense;
+        SumSpaceControl      = Clan.SumSpaceControl;
+        AvgAttackFrequency  = Clan.AvgAttackFrequency;
 
         MoveSpeed       = Clan.AvgMove;
         KnockbackDmg    = Clan.AvgKB_Dmg;

@@ -40,7 +40,7 @@ public class PlayerAttackState : PlayerBaseState
 
             case AttackPhase.Cooldown:
                 Ctx.Animator.SetBool("IsAttacking", false);
-                if (_timer >= Ctx.PlayerStats._AttackEndlag * 1000) _phase = AttackPhase.Done;
+                if (_timer >= Ctx.PlayerStats._ExtraEndlag * 1000) _phase = AttackPhase.Done;
                 break;
 
             case AttackPhase.Done:

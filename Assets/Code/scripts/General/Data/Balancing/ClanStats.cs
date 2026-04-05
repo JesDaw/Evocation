@@ -8,11 +8,12 @@ public class ClanStats : ScriptableObject
 
     public ScriptableStats[] all_stats_scripts;
 
-    [Header("Clan Totals & Averages")]
-    public float TotalPower;
-    public float TotalPushingPower;
-    public float TotalDPS;
-    public float TotalDefense;
+    [Header("Clan Level Totals")]
+    public float TotalLevel;
+    public float SumAttack;
+    public float SumDefense;
+    public float SumSpaceControl;
+    public float AvgAttackFrequency;
 
     [Header("Individual Stat Averages")]
     public float AvgMove;
@@ -37,7 +38,7 @@ public class ClanStats : ScriptableObject
     {
         if (all_stats_scripts == null || all_stats_scripts.Length == 0) return;
 
-        float tPower = 0, tPush = 0, tDef = 0;
+        float tAttack = 0, tDefense = 0, tSpaceControl = 0, tAttackFreq = 0, tLevel = 0;
         float tMove = 0, tKBD = 0, tAD = 0, tEnd = 0, tHP = 0, tKBH = 0, tRng = 0;
         
         UnitValueDiscrepancies = new float[all_stats_scripts.Length];
@@ -55,25 +56,29 @@ public class ClanStats : ScriptableObject
             s._CalculatedPower = calculatedPower;
             s._ValueDiscrepancy = calculatedPower - s._spawnCost;
 
-            tPower += calculatedPower;
             UnitValueDiscrepancies[i] = s._ValueDiscrepancy;
+
+            tAttack += s.Attack;
+            tDefense += s.Defense;
+            tSpaceControl += s.SpaceControl;
+            tAttackFreq += s.AttackFrequency;
+            tLevel += s.Level_Total;
 
             tMove += s._MoveSpeed;
             tKBD  += s._KnockBackDamage;
             tAD   += s._AttackDamage;
-            tEnd  += s._AttackEndlag;
+            tEnd  += s._ExtraEndlag;
             tHP   += s._MaxHealth;
             tKBH  += s._KnockBackMaxHealth;
             tRng  += s._HorizontalRange;
-
-            tDef  += s._MaxHealth;
-            tPush += s._KnockBackMaxHealth;
         }
 
         int count = all_stats_scripts.Length;
-        TotalPower = tPower / count;
-        TotalDefense = tDef / count;
-        TotalPushingPower = tPush / count;
+        TotalLevel = tLevel;
+        SumAttack = tAttack;
+        SumDefense = tDefense;
+        SumSpaceControl = tSpaceControl;
+        AvgAttackFrequency = tAttackFreq / count;
 
         AvgMove = tMove / count;
         AvgKB_Dmg = tKBD / count;

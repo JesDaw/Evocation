@@ -50,7 +50,7 @@ public class ClanMatchupAnalyst : MonoBehaviour
         {
             if (s == null) continue;
             float p = CharacterStatBalancer.CalculatePowerRaw(
-                s._AttackDamage, s._AttackEndlag, s._MoveSpeed, s._KnockBackDamage, s._MaxHealth, s._KnockBackMaxHealth, s._HorizontalRange,
+                s._AttackDamage, s._ExtraEndlag, s._MoveSpeed, s._KnockBackDamage, s._MaxHealth, s._KnockBackMaxHealth, s._HorizontalRange,
                 grapher.Weight_AttackDamage, grapher.Weight_AttackEndlag, grapher.Weight_MoveSpeed, grapher.Weight_KnockBackDamage, 
                 grapher.Weight_MaxHealth, grapher.Weight_KnockBackHealth, grapher.Weight_HorizontalRange,
                 bHP, bKBH, bMove, bKBD, bAtk, bEnd, bRng,
@@ -66,7 +66,7 @@ public class ClanMatchupAnalyst : MonoBehaviour
         {
             if (s == null) continue;
             float p = CharacterStatBalancer.CalculatePowerRaw(
-                s._AttackDamage, s._AttackEndlag, s._MoveSpeed, s._KnockBackDamage, s._MaxHealth, s._KnockBackMaxHealth, s._HorizontalRange,
+                s._AttackDamage, s._ExtraEndlag, s._MoveSpeed, s._KnockBackDamage, s._MaxHealth, s._KnockBackMaxHealth, s._HorizontalRange,
                 grapher.Weight_AttackDamage, grapher.Weight_AttackEndlag, grapher.Weight_MoveSpeed, grapher.Weight_KnockBackDamage, 
                 grapher.Weight_MaxHealth, grapher.Weight_KnockBackHealth, grapher.Weight_HorizontalRange,
                 aHP, aKBH, aMove, aKBD, aAtk, aEnd, aRng,
