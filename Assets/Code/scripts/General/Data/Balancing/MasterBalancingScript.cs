@@ -20,6 +20,9 @@ public class MasterBalancingScript : MonoBehaviour
     public float Global_AvgEndlag;
     public float Global_AvgRange;
 
+    [Header("4. Character Balancers")]
+    public CharacterStatBalancer[] all_balancers;
+
     private BalancingGrapher grapher;
 
     void Update()
@@ -37,13 +40,14 @@ public class MasterBalancingScript : MonoBehaviour
 
         // Pass 2: Find the Lowest Raw Power to determine Offset
         float minPowerFound = 0;
-        foreach (var clan in all_clan_stats)
+        
+        if (all_balancers != null)
         {
-            if (clan?.all_stats_scripts == null) continue;
-            foreach (var s in clan.all_stats_scripts)
+            foreach (var bal in all_balancers)
             {
-                if (s == null) continue;
-                float raw = s.SimulatePower(
+                if (bal?.Stats == null) continue;
+                var s = bal.Stats;
+                float raw = CharacterStatBalancer.CalculatePowerRaw(
                     s._AttackDamage, s._AttackEndlag, s._MoveSpeed, s._KnockBackDamage, s._MaxHealth, s._KnockBackMaxHealth, s._HorizontalRange,
                     grapher.Weight_AttackDamage, grapher.Weight_AttackEndlag, grapher.Weight_MoveSpeed, grapher.Weight_KnockBackDamage, 
                     grapher.Weight_MaxHealth, grapher.Weight_KnockBackHealth, grapher.Weight_HorizontalRange,
@@ -76,6 +80,16 @@ public class MasterBalancingScript : MonoBehaviour
             activeUnits++;
         }
 
+        if (all_balancers != null)
+        {
+            foreach (var bal in all_balancers)
+            {
+                if (bal?.Stats == null) continue;
+                totalPowerSum += bal.Stats._CalculatedPower;
+                activeUnits++;
+            }
+        }
+
         Global_AvgPower = activeUnits > 0 ? totalPowerSum / activeUnits : 0;
         SyncDisplayComponents();
     }
@@ -91,6 +105,19 @@ public class MasterBalancingScript : MonoBehaviour
             foreach (var s in clan.all_stats_scripts)
             {
                 if (s == null) continue;
+                tHP += s._MaxHealth; tKBH += s._KnockBackMaxHealth; tMove += s._MoveSpeed;
+                tKBD += s._KnockBackDamage; tAD += s._AttackDamage; tEnd += s._AttackEndlag;
+                tRange += s._HorizontalRange;
+                count++;
+            }
+        }
+
+        if (all_balancers != null)
+        {
+            foreach (var bal in all_balancers)
+            {
+                if (bal?.Stats == null) continue;
+                var s = bal.Stats;
                 tHP += s._MaxHealth; tKBH += s._KnockBackMaxHealth; tMove += s._MoveSpeed;
                 tKBD += s._KnockBackDamage; tAD += s._AttackDamage; tEnd += s._AttackEndlag;
                 tRange += s._HorizontalRange;

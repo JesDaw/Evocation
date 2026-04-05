@@ -48,7 +48,8 @@ public class ClanMatchupAnalyst : MonoBehaviour
         float rawPowerA = 0;
         foreach(var s in ClanA.all_stats_scripts)
         {
-            float p = s.SimulatePower(
+            if (s == null) continue;
+            float p = CharacterStatBalancer.CalculatePowerRaw(
                 s._AttackDamage, s._AttackEndlag, s._MoveSpeed, s._KnockBackDamage, s._MaxHealth, s._KnockBackMaxHealth, s._HorizontalRange,
                 grapher.Weight_AttackDamage, grapher.Weight_AttackEndlag, grapher.Weight_MoveSpeed, grapher.Weight_KnockBackDamage, 
                 grapher.Weight_MaxHealth, grapher.Weight_KnockBackHealth, grapher.Weight_HorizontalRange,
@@ -63,7 +64,8 @@ public class ClanMatchupAnalyst : MonoBehaviour
         float rawPowerB = 0;
         foreach(var s in ClanB.all_stats_scripts)
         {
-            float p = s.SimulatePower(
+            if (s == null) continue;
+            float p = CharacterStatBalancer.CalculatePowerRaw(
                 s._AttackDamage, s._AttackEndlag, s._MoveSpeed, s._KnockBackDamage, s._MaxHealth, s._KnockBackMaxHealth, s._HorizontalRange,
                 grapher.Weight_AttackDamage, grapher.Weight_AttackEndlag, grapher.Weight_MoveSpeed, grapher.Weight_KnockBackDamage, 
                 grapher.Weight_MaxHealth, grapher.Weight_KnockBackHealth, grapher.Weight_HorizontalRange,
