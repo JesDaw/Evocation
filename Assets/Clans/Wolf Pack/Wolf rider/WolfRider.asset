@@ -12,24 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 238e13654c5efff43b776bb1e518c913, type: 3}
   m_Name: WolfRider
   m_EditorClassIdentifier: 
-  _spawnCost: 5
-  _CalculatedPower: -2.8933878
-  _ValueDiscrepancy: -7.893388
-  Theme: 
-  ODS: 
-  RPS_Type: 
-  OtherNotes: 
-  _MoveSpeed: 1
-  _KnockBackDamage: 1
-  _AttackDamage: 1
-  _AttackEndlag: 1
-  _MaxHealth: 10
-  _KnockBackMaxHealth: 1
-  _VerticalRange: 2
-  _HorizontalRange: 1
-  _AttackStyle: 0
+  Theme: Fast with a quick wolf
+  ODS: Aggressive
+  RPS_Type: Single
   _IsAOE: 0
+  _AttackStyle: 0
+  OtherNotes: 
+  _spawnCost: 2
+  Level_Total: 60.24178
+  Level_Discrepancy: 50.24178
+  _CalculatedPower: -0.6289495
+  _ValueDiscrepancy: -10.628949
+  Attack: 15
+  Defense: 40
+  SpaceControl: 5
+  AttackFrequency: 0.24177949
+  _AttackDamage: 5
+  _KnockBackDamage: 10
+  _MoveSpeed: 10
+  _MaxHealth: 20
+  _KnockBackMaxHealth: 20
+  _HorizontalRange: 2
+  _ExtraEndlag: 4
   _MaxAOETargets: 5
+  _VerticalRange: 3
   _KnockBackVelocity: 10
   _KnockBackAngle: 45
   _ProjectilePrefab: {fileID: 6072924362752908747, guid: e36c33467359d0a44aa4493b4d80e7d9, type: 3}
@@ -117,78 +123,20 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _EffectsToApply: []
+  _Rotate: 0
+  _animator: {fileID: 22100000, guid: 92393e777906c1f4b8ee8d40b3574eb3, type: 2}
+  _Sprites:
+  - Key: 0
+    Rig: {fileID: 7188185332527596761, guid: dcf32bba4df40b1488b363d625fd3050, type: 3}
+    Offset: {x: 0, y: -1}
+  - Key: 1
+    Rig: {fileID: 7188185332527596761, guid: dcf32bba4df40b1488b363d625fd3050, type: 3}
+    Offset: {x: 0, y: -0.8}
+  - Key: 2
+    Rig: {fileID: 7188185332527596761, guid: dcf32bba4df40b1488b363d625fd3050, type: 3}
+    Offset: {x: 0, y: -0.8}
+  _AnimationMoveSpeed: 1.5
   vfx: []
   vfxOffsets: []
-  _Rotate: 0
-  _animator: {fileID: 0}
-  _Sprites: []
-  _AnimationMoveSpeed: 1
-  Marginal_Utility:
-    AttackDamage:
-      PlusOne: 0
-      MinusOne: 0
-    AttackEndlag:
-      PlusOne: 0
-      MinusOne: 0
-    MoveSpeed:
-      PlusOne: 0
-      MinusOne: 0
-    KnockBackDamage:
-      PlusOne: 0
-      MinusOne: 0
-    MaxHealth:
-      PlusOne: 0
-      MinusOne: 0
-    KB_MaxHealth:
-      PlusOne: 0
-      MinusOne: 0
-    Range:
-      PlusOne: 0
-      MinusOne: 0
-  Power_Curves:
-    AttackDamage:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    AttackEndlag:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    MoveSpeed:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    KnockBackDamage:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    MaxHealth:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    KnockBackMaxHealth:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    HorizontalRange:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  Calculated_Totals:
-    PushingPower: 0
-    DPS: 0
-    Defense_TTK: 0
+  _AnimationStartupTime: 55
+  _AnimationRecoveryTime: 81
