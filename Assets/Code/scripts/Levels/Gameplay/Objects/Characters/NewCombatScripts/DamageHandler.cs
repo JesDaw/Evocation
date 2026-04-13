@@ -4,7 +4,7 @@ using UnityEngine.Events;
 public class DamageHandler : MonoBehaviour
 {
     Stats stats;
-
+    bool DamageTriggerInvoked = false;
     public void Initialize(Stats statsComponent)
     {
         stats = statsComponent;
@@ -20,6 +20,11 @@ public class DamageHandler : MonoBehaviour
         FModAudioManager.instance.PlaySoundByName("takeDamage");
 
         stats.OnDamage?.Invoke();
+        if (stats.DamageTriggerAmount >= stats._CurrentHealth && !DamageTriggerInvoked) 
+        {
+            stats.DamageTrigger?.Invoke();
+            DamageTriggerInvoked = true;
+        }
 
         stats.LastHitBy = attackedBy;
 
@@ -34,7 +39,7 @@ public class DamageHandler : MonoBehaviour
             stats._KnockBackHealth -= knockback_damage; 
 
             GameObject parent_obj = transform.parent.gameObject;
-            Debug.Log(knockback_damage + " knockback damage taken by: " + parent_obj);
+            //Debug.Log(knockback_damage + " knockback damage taken by: " + parent_obj);
         }
 
         if (stats.entityHealthbar != null)

@@ -1,0 +1,144 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 238e13654c5efff43b776bb1e518c913, type: 3}
+  m_Name: WolfHammer
+  m_EditorClassIdentifier: 
+  Theme: Slow and slams with hammer
+  ODS: Defensive
+  RPS_Type: AOE
+  _IsAOE: 1
+  _AttackStyle: 0
+  OtherNotes: 
+  _spawnCost: 10
+  Level_Total: 60.24178
+  Level_Discrepancy: 50.24178
+  _CalculatedPower: -0.6289495
+  _ValueDiscrepancy: -10.628949
+  Attack: 15
+  Defense: 40
+  SpaceControl: 5
+  AttackFrequency: 0.24177949
+  _AttackDamage: 5
+  _KnockBackDamage: 10
+  _MoveSpeed: 3
+  _MaxHealth: 20
+  _KnockBackMaxHealth: 20
+  _HorizontalRange: 2
+  _ExtraEndlag: 4
+  _MaxAOETargets: 5
+  _VerticalRange: 3
+  _KnockBackVelocity: 10
+  _KnockBackAngle: 45
+  _ProjectilePrefab: {fileID: 6072924362752908747, guid: e36c33467359d0a44aa4493b4d80e7d9, type: 3}
+  _ProjectileSpeed: 15
+  _ProjectileMaxHeight: 2
+  _TrajectoryCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AxisCorrectionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _SpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _EffectsToApply: []
+  _Rotate: 0
+  _animator: {fileID: 22100000, guid: 77b63d5cf92d04241904be854aa0fcda, type: 2}
+  _Sprites:
+  - Key: 0
+    Rig: {fileID: 5931000895928908881, guid: 1f889f7ae4e8a4e4a9ce5241e3c67e6d, type: 3}
+    Offset: {x: 0, y: -1}
+  - Key: 1
+    Rig: {fileID: 7538981178263470042, guid: 2f1dd45802dd6f649b82e7bf44400c8b, type: 3}
+    Offset: {x: 0, y: -0.8}
+  - Key: 2
+    Rig: {fileID: -8653719598885068355, guid: 86bb974b357fd426fbbc09e36d28081d, type: 3}
+    Offset: {x: 0, y: -0.8}
+  _AnimationMoveSpeed: 5
+  vfx:
+  - {fileID: 1097293097822383898, guid: c14ed469a11054e47a65c07cb0c06354, type: 3}
+  vfxOffsets:
+  - {x: 0, y: 0}
+  _AnimationStartupTime: 55
+  _AnimationRecoveryTime: 81

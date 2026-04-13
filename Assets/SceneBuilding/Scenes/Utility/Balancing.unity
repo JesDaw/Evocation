@@ -256,11 +256,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 357468018}
+  - component: {fileID: 357468021}
   - component: {fileID: 357468017}
   - component: {fileID: 357468020}
   - component: {fileID: 357468019}
   m_Layer: 0
-  m_Name: BalancingScript
+  m_Name: BalancingSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -279,12 +280,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::MasterBalancingScript
   all_clan_stats:
-  - {fileID: 11400000, guid: 3c7ffc57a42390842b5fced0833dfeb9, type: 2}
   - {fileID: 11400000, guid: 91174aa3f0daa6541b05663053eafc64, type: 2}
-  OverallAvgCosts: 0
-  OverallPunchingPower: 0
-  OverallDPS: 0
-  OverallDefense: 0
+  - {fileID: 11400000, guid: 3c7ffc57a42390842b5fced0833dfeb9, type: 2}
+  Global_AvgPower: -0.67198324
+  MinPowerOffset: 1
+  Global_TotalUnitCount: 8
+  Global_AvgHP: 11.25
+  Global_AvgKB_MaxHealth: 3.25
+  Global_AvgMoveSpeed: 2.25
+  Global_AvgKB_Dmg: 2.125
+  Global_AvgAtk_Dmg: 2.875
+  Global_AvgEndlag: 1.75
+  Global_AvgRange: 1.5
+  all_balancers: []
 --- !u!4 &357468018
 Transform:
   m_ObjectHideFlags: 0
@@ -294,7 +302,7 @@ Transform:
   m_GameObject: {fileID: 357468016}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.30597, y: 5.79291, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -312,11 +320,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f18dda4b948d1b14e8530c94669948dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::OverallStatsDisplay
-  ClanToDisplay: {fileID: 11400000, guid: 91174aa3f0daa6541b05663053eafc64, type: 2}
-  AvgCosts: 0
-  PunchingPower: 0
-  DPS: 0
-  Defense: 0
+  Clan: {fileID: 11400000, guid: 3c7ffc57a42390842b5fced0833dfeb9, type: 2}
+  Theme: 
+  Characteristics: 
+  UnitsInClan:
+  - {fileID: 11400000, guid: d4daadf164451854c8c5982cee62e5f9, type: 2}
+  - {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
+  - {fileID: 11400000, guid: 9bc80ac74d98ee645a559cbf527a224a, type: 2}
+  - {fileID: 11400000, guid: b6992adb71df9b441bc53d51187ea154, type: 2}
+  - {fileID: 11400000, guid: 58e597be392f6de4b990a16d2b0be8fa, type: 2}
+  UnitValueDiscrepancies:
+  - -3.987392
+  - 1.8836417
+  - -8.594954
+  - -8.594954
+  - -8.594954
+  TotalPower: 0.42227784
+  AverageValueDiscrepancy: -5.577722
+  TotalPushingPower: 4.6
+  TotalDPS: 0
+  TotalDefense: 12
+  MoveSpeed: 3
+  KnockbackDmg: 2.8
+  AttackDmg: 3.6
+  AttackEndlag: 2.2
+  MaxHP: 12
+  KnockbackHP: 4.6
+  HorizontalRange: 1.8
 --- !u!114 &357468020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,11 +359,57 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f18dda4b948d1b14e8530c94669948dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::OverallStatsDisplay
-  ClanToDisplay: {fileID: 11400000, guid: 3c7ffc57a42390842b5fced0833dfeb9, type: 2}
-  AvgCosts: 0
-  PunchingPower: 0
-  DPS: 0
-  Defense: 0
+  Clan: {fileID: 11400000, guid: 91174aa3f0daa6541b05663053eafc64, type: 2}
+  Theme: 
+  Characteristics: 
+  UnitsInClan:
+  - {fileID: 11400000, guid: f65c42c7eaba14248803a93e9ba7b28c, type: 2}
+  - {fileID: 11400000, guid: 7e6e8cc8682e1aa4dae224a642ea078f, type: 2}
+  - {fileID: 11400000, guid: fab9813b2d37c634a97bf0c26b640b1c, type: 2}
+  UnitValueDiscrepancies:
+  - -4.5949535
+  - -3.108826
+  - -3.5949535
+  TotalPower: -1.7662443
+  AverageValueDiscrepancy: -3.7662442
+  TotalPushingPower: 1
+  TotalDPS: 0
+  TotalDefense: 10
+  MoveSpeed: 1
+  KnockbackDmg: 1
+  AttackDmg: 1.6666666
+  AttackEndlag: 1
+  MaxHP: 10
+  KnockbackHP: 1
+  HorizontalRange: 1
+--- !u!114 &357468021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 357468016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5836d4545691f4725bc1446d20ddd86f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::BalancingGrapher
+  SimulationDistance: 100
+  Base_Velocity: 10
+  Max_MoveSpeed: 15
+  Max_Endlag: 30
+  Max_Range: 30
+  Max_Health: 100
+  Max_Damage: 100
+  Max_KBDamage: 100
+  Max_KBHealth: 100
+  Weight_MoveSpeed: 1
+  Weight_KnockBackDamage: 1
+  Weight_AttackDamage: 1
+  Weight_AttackEndlag: 1
+  Weight_MaxHealth: 1
+  Weight_KnockBackHealth: 1
+  Weight_HorizontalRange: 1
 --- !u!1001 &724452377
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -594,7 +670,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!1 &1533726234
+--- !u!1 &1929949891
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -602,29 +678,135 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1533726235}
+  - component: {fileID: 1929949893}
+  - component: {fileID: 1929949892}
+  - component: {fileID: 1929949894}
   m_Layer: 0
-  m_Name: GameBalancing system
+  m_Name: ClanMatchupAnalyst
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1533726235
+--- !u!114 &1929949892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1929949891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fbd8ecd91efc4ba895e7a834a6c01c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::ClanMatchupAnalyst
+  ClanA: {fileID: 11400000, guid: 3c7ffc57a42390842b5fced0833dfeb9, type: 2}
+  ClanB: {fileID: 11400000, guid: 91174aa3f0daa6541b05663053eafc64, type: 2}
+  ClanA_Advantage: 8.79933
+  Analysis_A: ' vs  local power: 8.80 (Offset: +6.6)'
+  ClanB_Advantage: 3.1605122
+  Analysis_B: ' vs  local power: 3.16 (Offset: +6.6)'
+  LocalMinOffset: 6.6323137
+  grapher: {fileID: 357468021}
+--- !u!4 &1929949893
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1533726234}
+  m_GameObject: {fileID: 1929949891}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.32942, y: -0, z: -0.49048}
+  m_LocalPosition: {x: 76.74648, y: 1.35109, z: -16.93457}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1929949894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1929949891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa592c3cbbeea4d4f805f9f43e497675, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::CharacterStatBalancer
+  Stats: {fileID: 11400000, guid: d4daadf164451854c8c5982cee62e5f9, type: 2}
+  MasterBalancing: {fileID: 357468017}
+  Marginal_Utility:
+    AttackDamage:
+      PlusOne: 0
+      MinusOne: 0
+    AttackEndlag:
+      PlusOne: 0
+      MinusOne: 0
+    MoveSpeed:
+      PlusOne: 0
+      MinusOne: 0
+    KnockBackDamage:
+      PlusOne: 0
+      MinusOne: 0
+    MaxHealth:
+      PlusOne: 0
+      MinusOne: 0
+    KB_MaxHealth:
+      PlusOne: 0
+      MinusOne: 0
+    Range:
+      PlusOne: 0
+      MinusOne: 0
+  Power_Curves:
+    AttackDamage:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    AttackEndlag:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    MoveSpeed:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    KnockBackDamage:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    MaxHealth:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    KnockBackMaxHealth:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    HorizontalRange:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  Comparison_Metrics:
+    TimeToDie_Vs_Avg: 
+    HitsToKB_Vs_Avg: 
+    My_TTK_Seconds: 0
+    My_HitsToKB: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -633,5 +815,5 @@ SceneRoots:
   - {fileID: 1265728527}
   - {fileID: 724452377}
   - {fileID: 1135827879}
-  - {fileID: 1533726235}
   - {fileID: 357468018}
+  - {fileID: 1929949893}

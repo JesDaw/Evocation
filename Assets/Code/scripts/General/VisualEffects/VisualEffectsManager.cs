@@ -122,6 +122,8 @@ public class VisualEffectsManager : MonoBehaviour
         }
     }
 
+    
+
     #endregion
 
     #region Animation Effects (DOTween)

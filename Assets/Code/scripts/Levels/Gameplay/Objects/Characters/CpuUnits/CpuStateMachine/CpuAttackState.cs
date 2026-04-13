@@ -16,6 +16,7 @@ public class CpuAttackState : CpuBaseState
     public override void EnterState()
     {
         _context._Animator.SetBool("IsAttacking", true);
+        _context._Animator.SetBool("IsRunning", false);
         _phase = AttackPhase.Startup;
         _timer = 0;
     }
@@ -42,18 +43,25 @@ public class CpuAttackState : CpuBaseState
                 {
                     AttackLogic.ExecuteAttack(_context);
                     FModAudioManager.instance.PlaySoundByName("attack");
-                    //have attack sould be called from Ctx.AnimatorController with a signal
-                    // but this is the function to call the attacking audio: FModAudioManager.instance.PlaySoundByName("attack");
                     _timer = 0f;
                     _phase = AttackPhase.Cooldown;
                 }
                 break;
 
             case AttackPhase.Cooldown:
-                _context._Animator.SetBool("IsAttacking", false);
-                if (_timer >= _context._Stats._AttackEndlag * 1000) 
+                AnimatorStateInfo stateInfo = _context._Animator.GetCurrentAnimatorStateInfo(0);
+                bool animationFinished = stateInfo.normalizedTime >= 1f && !_context._Animator.IsInTransition(0);
+                
+                if (animationFinished)
                 {
-                    _phase = AttackPhase.Done;
+                    _context._Animator.SetBool("IsAttacking", false);
+                    
+                    float totalEndlagMs = (_context._Stats._ExtraEndlag * 1000f) + _context._Stats._AnimationRecoveryTime;
+                    
+                    if (_timer >= totalEndlagMs)
+                    {
+                        _phase = AttackPhase.Done;
+                    }
                 }
                 break;
 

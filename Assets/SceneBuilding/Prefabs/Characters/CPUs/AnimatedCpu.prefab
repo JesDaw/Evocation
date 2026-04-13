@@ -2724,7 +2724,7 @@ Transform:
   m_Children:
   - {fileID: 3982948821676690101}
   - {fileID: 8086529470144547710}
-  - {fileID: 2289164394407329562}
+  - {fileID: 6557842208811609000}
   - {fileID: 5004918081023968018}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3430,33 +3430,9 @@ MonoBehaviour:
   - CharacterName: Princess
     Line: What up dawg
     DialogueDelaySeconds: 0.03
+    opensBranch: 0
   EndOfLines:
-    _PersistentCalls:
-    - _Target: {fileID: 0}
-      _MemberName: DeactivateDialogueBox
-      _PersistentArguments: []
-    - _Target: {fileID: 7245894933712562865}
-      _MemberName: SetActive
-      _PersistentArguments:
-      - _Type: 1
-        _Int: 1
-        _String: 
-        _X: 0
-        _Y: 0
-        _Z: 0
-        _W: 0
-        _Object: {fileID: 0}
-    - _Target: {fileID: 2840104297308467673}
-      _MemberName: SetIsAttacking
-      _PersistentArguments:
-      - _Type: 1
-        _Int: 0
-        _String: 
-        _X: 0
-        _Y: 0
-        _Z: 0
-        _W: 0
-        _Object: {fileID: 0}
+  - _PersistentCalls: []
 --- !u!1 &2942746451812061784
 GameObject:
   m_ObjectHideFlags: 0
@@ -4953,6 +4929,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4418490336419408944}
   - component: {fileID: 1782315311101503638}
+  - component: {fileID: 5262337104186032195}
   m_Layer: 14
   m_Name: Rig
   m_TagString: Untagged
@@ -5001,6 +4978,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5262337104186032195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4060158379439853145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcaf83138e3d37245b74e814ce8c93a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimationDrivenVFXController
 --- !u!1 &4064485797910046635
 GameObject:
   m_ObjectHideFlags: 0
@@ -11560,21 +11549,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8878333553698331049}
     m_Modifications:
-    - target: {fileID: 875988017529705640, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -1.42
-      objectReference: {fileID: 0}
-    - target: {fileID: 875988017529705640, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.35
-      objectReference: {fileID: 0}
     - target: {fileID: 1255561413601067908, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
       propertyPath: m_IsActive
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1827722888905158018, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
-      propertyPath: m_Name
-      value: Interactable
       objectReference: {fileID: 0}
     - target: {fileID: 3392731173420525509, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
       propertyPath: m_IsActive
@@ -11631,7 +11608,7 @@ PrefabInstance:
     - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
       propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
-      objectReference: {fileID: 7245894933712562865}
+      objectReference: {fileID: 0}
     - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
       propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[3].m_Target
       value: 
@@ -11639,14 +11616,6 @@ PrefabInstance:
     - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
       propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
-      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[3].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
-      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: TriggerDailogue
       objectReference: {fileID: 0}
     - target: {fileID: 7302751206297418170, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
       propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
@@ -11728,18 +11697,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3377721466578207389, guid: f18b8ae2771bd4011b72510901c1aadf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.42
+      objectReference: {fileID: 0}
+    - target: {fileID: 3377721466578207389, guid: f18b8ae2771bd4011b72510901c1aadf, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 4081588263631635229, guid: f18b8ae2771bd4011b72510901c1aadf, type: 3}
+      propertyPath: m_Name
+      value: Interactable
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
---- !u!4 &2289164394407329562 stripped
+  m_SourcePrefab: {fileID: 100100000, guid: f18b8ae2771bd4011b72510901c1aadf, type: 3}
+--- !u!4 &6557842208811609000 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 7648958909557937711, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
-  m_PrefabInstance: {fileID: 8494406244291602741}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &7245894933712562865 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1255561413601067908, guid: 4f1ca9db3376f46fbaf277a239f48f02, type: 3}
+  m_CorrespondingSourceObject: {fileID: 3377721466578207389, guid: f18b8ae2771bd4011b72510901c1aadf, type: 3}
   m_PrefabInstance: {fileID: 8494406244291602741}
   m_PrefabAsset: {fileID: 0}

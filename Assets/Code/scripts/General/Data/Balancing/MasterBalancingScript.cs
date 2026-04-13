@@ -1,51 +1,186 @@
 using UnityEngine;
 
+[ExecuteInEditMode]
 public class MasterBalancingScript : MonoBehaviour
 {
-
+    [Header("1. Clan Roster")]
     public ClanStats[] all_clan_stats;
-    private Component[] displays;
-    [Header("Summary")]
-    public float OverallAvgCosts;
-    public float OverallPunchingPower;
-    public float OverallDPS;
-    public float OverallDefense;
 
+    [Header("2. Global Power Stats")]
+    public float Global_AvgPower;
+    public float MinPowerOffset; 
 
-    void Start()
-    {
-        displays = GetComponentsInParent<OverallStatsDisplay>();
+    [Header("3. Global Stat Averages")]
+    public int   Global_TotalUnitCount;
+    public float Global_AvgHP;
+    public float Global_AvgKB_MaxHealth;
+    public float Global_AvgMoveSpeed;
+    public float Global_AvgKB_Dmg;
+    public float Global_AvgAtk_Dmg;
+    public float Global_AvgEndlag;
+    public float Global_AvgRange;
 
-    }
+    [Header("4. Character Balancers")]
+    public CharacterStatBalancer[] all_balancers;
+
+    private BalancingGrapher grapher;
+
     void Update()
     {
-        float oAvgCost = 0f;
-        float oPunchingPower = 0f;
-        float oDPS = 0f;
-        float oDefense = 0f;
+        if (all_clan_stats == null) return;
 
-        foreach (ClanStats clan in all_clan_stats)
+        if (grapher == null)
         {
-            clan.UpdateAverages();
-            oAvgCost += clan.AvgCost;
-            oPunchingPower += clan.PunchingPower;
-            oDPS += clan.DPS;
-            oDefense += clan.Defense;
+            grapher = GetComponent<BalancingGrapher>();
+            if (grapher == null) grapher = gameObject.AddComponent<BalancingGrapher>();
+        }
 
-            foreach (OverallStatsDisplay display in displays)
+        // Pass 1: Compute Raw Stat Averages
+        ComputeGlobalAverages();
+
+        // Pass 2: Find the Lowest Raw Power to determine Offset
+        float minPowerFound = 0;
+        
+        if (all_balancers != null)
+        {
+            foreach (var bal in all_balancers)
             {
-                if (clan.name == display.ClanToDisplay.name)
+                if (bal?.Stats == null) continue;
+                var s = bal.Stats;
+                float raw = CharacterStatBalancer.CalculatePowerRaw(
+                    s._AttackDamage, s._ExtraEndlag, s._MoveSpeed, s._KnockBackDamage, s._MaxHealth, s._KnockBackMaxHealth, s._HorizontalRange,
+                    grapher.Weight_AttackDamage, grapher.Weight_AttackEndlag, grapher.Weight_MoveSpeed, grapher.Weight_KnockBackDamage, 
+                    grapher.Weight_MaxHealth, grapher.Weight_KnockBackHealth, grapher.Weight_HorizontalRange,
+                    Global_AvgHP, Global_AvgKB_MaxHealth, Global_AvgMoveSpeed, Global_AvgKB_Dmg, Global_AvgAtk_Dmg, Global_AvgEndlag, Global_AvgRange,
+                    grapher.Base_Velocity, grapher.SimulationDistance
+                );
+                if (raw < minPowerFound) minPowerFound = raw;
+            }
+        }
+        MinPowerOffset = Mathf.Abs(minPowerFound) + 1f;
+
+        // Pass 3: Final Update with Offset
+        float totalPowerSum = 0;
+        int activeUnits = 0;
+
+        for (int i = 0; i < all_clan_stats.Length; i++)
+        {
+            if (all_clan_stats[i] == null) continue;
+
+            all_clan_stats[i].UpdateAverages(
+                grapher.Weight_AttackDamage, grapher.Weight_AttackEndlag, grapher.Weight_MoveSpeed, grapher.Weight_KnockBackDamage,
+                grapher.Weight_MaxHealth, grapher.Weight_KnockBackHealth, grapher.Weight_HorizontalRange, 1f,
+                Global_AvgHP, Global_AvgKB_MaxHealth, Global_AvgMoveSpeed, Global_AvgKB_Dmg, Global_AvgAtk_Dmg, Global_AvgEndlag, Global_AvgRange,
+                grapher.Base_Velocity, 45f, grapher.SimulationDistance,
+                grapher.Max_MoveSpeed, grapher.Max_Endlag, grapher.Max_Range, grapher.Max_Health, grapher.Max_Damage, grapher.Max_KBDamage, grapher.Max_KBHealth,
+                MinPowerOffset 
+            );
+
+            totalPowerSum += all_clan_stats[i].TotalLevel;
+            activeUnits++;
+        }
+
+        if (all_balancers != null)
+        {
+            foreach (var bal in all_balancers)
+            {
+                if (bal?.Stats == null) continue;
+                totalPowerSum += bal.Stats._CalculatedPower;
+                activeUnits++;
+            }
+        }
+
+        Global_AvgPower = activeUnits > 0 ? totalPowerSum / activeUnits : 0;
+        SyncDisplayComponents();
+        UpdateLevelDisplays();
+    }
+
+    void ComputeGlobalAverages()
+    {
+        float tHP = 0, tKBH = 0, tMove = 0, tKBD = 0, tAD = 0, tEnd = 0, tRange = 0;
+        int count = 0;
+
+        foreach (var clan in all_clan_stats)
+        {
+            if (clan?.all_stats_scripts == null) continue;
+            foreach (var s in clan.all_stats_scripts)
+            {
+                if (s == null) continue;
+                tHP += s._MaxHealth; tKBH += s._KnockBackMaxHealth; tMove += s._MoveSpeed;
+                tKBD += s._KnockBackDamage; tAD += s._AttackDamage; tEnd += s._ExtraEndlag;
+                tRange += s._HorizontalRange;
+                count++;
+            }
+        }
+
+        if (all_balancers != null)
+        {
+            foreach (var bal in all_balancers)
+            {
+                if (bal?.Stats == null) continue;
+                var s = bal.Stats;
+                tHP += s._MaxHealth; tKBH += s._KnockBackMaxHealth; tMove += s._MoveSpeed;
+                tKBD += s._KnockBackDamage; tAD += s._AttackDamage; tEnd += s._ExtraEndlag;
+                tRange += s._HorizontalRange;
+                count++;
+            }
+        }
+
+        if (count == 0) return;
+        Global_TotalUnitCount = count;
+        Global_AvgHP = tHP / count; Global_AvgKB_MaxHealth = tKBH / count;
+        Global_AvgMoveSpeed = tMove / count; Global_AvgKB_Dmg = tKBD / count;
+        Global_AvgAtk_Dmg = tAD / count; Global_AvgEndlag = tEnd / count;
+        Global_AvgRange = tRange / count;
+    }
+
+    void SyncDisplayComponents()
+    {
+        var existingDisplays = GetComponents<OverallStatsDisplay>();
+        for (int i = 0; i < all_clan_stats.Length; i++)
+        {
+            if (all_clan_stats[i] == null) continue;
+            OverallStatsDisplay d = (i < existingDisplays.Length) ? existingDisplays[i] : gameObject.AddComponent<OverallStatsDisplay>();
+            d.Clan = all_clan_stats[i];
+            d.SyncWithClan();
+        }
+    }
+
+    void UpdateLevelDisplays()
+    {
+        if (grapher == null) return;
+
+        if (all_clan_stats != null)
+        {
+            foreach (var clan in all_clan_stats)
+            {
+                if (clan?.all_stats_scripts == null) continue;
+                foreach (var s in clan.all_stats_scripts)
                 {
-                    display.AvgCosts = clan.AvgCost;
-                    display.PunchingPower = clan.PunchingPower;
-                    display.DPS = clan.DPS;
-                    display.Defense = clan.Defense;
+                    if (s == null) continue;
+                    PopulateLevelFields(s);
                 }
             }
         }
-        OverallAvgCosts = oAvgCost / all_clan_stats.Length;
-        OverallPunchingPower = oPunchingPower / all_clan_stats.Length;
-        OverallDPS = oDPS / all_clan_stats.Length;
-        OverallDefense = oDefense / all_clan_stats.Length;
+
+        if (all_balancers != null)
+        {
+            foreach (var bal in all_balancers)
+            {
+                if (bal?.Stats == null) continue;
+                PopulateLevelFields(bal.Stats);
+            }
+        }
+    }
+
+    void PopulateLevelFields(ScriptableStats s)
+    {
+        var breakdown = LevelBalancerMath.GetLevelBreakdown(s, grapher);
+        s.Attack = breakdown.attack;
+        s.Defense = breakdown.defense;
+        s.SpaceControl = breakdown.spaceControl;
+        s.AttackFrequency = breakdown.attackFrequency;
+        s.Level_Total = breakdown.total;
+        s.Level_Discrepancy = breakdown.total - s._spawnCost;
     }
 }

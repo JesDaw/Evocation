@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
@@ -24,6 +25,7 @@ public class CpuStateManager : MonoBehaviour
 
     [HideInInspector] public Stats _AttackingStats;
     public ScriptableStats _ScrStats => _Stats.scriptableStats;
+    public Action<State> OnCPUStateChange = delegate { };
 
     void Start()
     {
@@ -82,12 +84,10 @@ public class CpuStateManager : MonoBehaviour
 
     public void UpdateCurrentState(State state)
     {
-        if(_Animator != null)
-            _Animator.Rebind();
-
         _currentState = _State[state];
 		CurrentState = state;
         _currentState.EnterState();
+        OnCPUStateChange?.Invoke(state);
     }
 
     void replaceAnimation()
@@ -95,7 +95,7 @@ public class CpuStateManager : MonoBehaviour
         Transform _cpuRig = transform.Find("Appearance")?.Find("Rig");
         if (_cpuRig == null || _ScrStats._animator == null)
         {
-            Debug.LogWarning("No Cpu Rig for animation!!");
+            Debug.LogWarning($"No Cpu Rig for animation on {gameObject.name}: _cpuRig == null {_cpuRig == null}, _ScrStats._animator == null {_ScrStats._animator == null}");
             return;
         }
 

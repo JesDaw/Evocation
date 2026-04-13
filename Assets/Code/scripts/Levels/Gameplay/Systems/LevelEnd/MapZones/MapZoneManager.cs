@@ -17,7 +17,7 @@ public class MapZonesManager : MonoBehaviour
 
     public List<TrackingPoint> trackingPoints = new List<TrackingPoint>();
     [SerializeField] GameObject AllyTracker;
-    
+    [SerializeField] bool DebugLogs = false;
     // Make this public so AI can access it!
     public Dictionary<string, List<GameObject>> trackedObjects = new Dictionary<string, List<GameObject>>();
 
@@ -41,14 +41,16 @@ public class MapZonesManager : MonoBehaviour
         if (trackedObjects.ContainsKey(character.tag) && !trackedObjects[character.tag].Contains(character.gameObject))
         {
             trackedObjects[character.tag].Add(character.gameObject);
+            if (DebugLogs) Debug.Log($"Adding {character.gameObject.name} to tracking list");
         }
     }
 
-    private void OnTriggerExit2D(Collider2D other)
+    private void OnTriggerExit2D(Collider2D character)
     {
-        if (trackedObjects.ContainsKey(other.tag))
+        if (trackedObjects.ContainsKey(character.tag))
         {
-            trackedObjects[other.tag].Remove(other.gameObject);
+            trackedObjects[character.tag].Remove(character.gameObject);
+            if (DebugLogs) Debug.Log($"removing {character.gameObject.name} from tracking list");
         }
     }
 

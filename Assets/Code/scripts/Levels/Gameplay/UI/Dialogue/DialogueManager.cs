@@ -1,40 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class DialogueManager : MonoBehaviour
 {
-    
-    public List<CharacterDialogueInfo> characterList;
+    public List<CharacterDialogueInfo> characterList; // whats this for?
+    [Header("Text box referances")]
+    [SerializeField] GameObject DialogueBox;
     public TMP_Text nameText;
     public TMP_Text dialogueText;
-    [SerializeField] GameObject DialogueBox;
+    [Header("Text box customisation")]
+    public Color defaultTextColor = new Color(0.99f,0.99f,0.99f,1f);
+    public Color defaultNameColor = new Color(0f,0f,0f,1f);
+    [Header("Debug")]
+    [SerializeField] bool ShowDebugLogs = false;
+
+
 
     List<Dialogue> dialogueSlides = new List<Dialogue>();
     Coroutine _typeLineCoroutine;
     string _currentLine;
     int slideCount = 0;
     DailogueTrigger _dailogueTrigger;
-    public bool _branches;
     public bool DialogueActive { get; private set; }
-
-    public Color defaultTextColor = new Color(0.99f,0.99f,0.99f,1f);
-    public Color defaultNameColor = new Color(0f,0f,0f,1f);
-
-    void OnEnable()
-    {
- 
-    }
-
-    void OnDisable()
-    {
-        // Unsubscribe when disabled
-        UnsubscribeFromInputs();
-    }
-
+    public static DialogueManager Instance { get; private set; }
     void SubscribeToInputs()
     {
         if (GlobalInputManager.Instance == null) 
@@ -46,14 +37,31 @@ public class DialogueManager : MonoBehaviour
         uiActions.ConfirmDialogue.performed += OnConfirmDialoguePressed;
     }
 
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
+
     void Start()
     {
         if (GlobalInputManager.Instance != null)
         {
             SubscribeToInputs();
         }
+        else
+        { 
+            Debug.Log($"[DialogueManager] cant find globalinputmanager");
+        }
     }
-
+    void OnDisable()
+    {
+        UnsubscribeFromInputs();
+    }
     void UnsubscribeFromInputs()
     {
         if (GlobalInputManager.Instance == null) return;
@@ -66,11 +74,9 @@ public class DialogueManager : MonoBehaviour
     {
         dialogueSlides = slides;
         _dailogueTrigger = trigger;
-        _branches = false;
-
         slideCount = 0;
         DialogueActive = true;
-
+        if (ShowDebugLogs) Debug.Log($"DialogueBox = {DialogueBox}, DialogueBox == null: {DialogueBox == null}");
         DialogueBox.SetActive(true);
         
         GlobalInputManager.Instance.SetDialogueMode();
@@ -82,7 +88,7 @@ public class DialogueManager : MonoBehaviour
     {
         if (!context.performed || !DialogueActive || UILogic.GameIsPaused) return;
         
-        //UnityEngine.Debug.Log("Dialogue confirm button pressed");
+        if(ShowDebugLogs) UnityEngine.Debug.Log("Dialogue confirm button pressed");
         OnConfirmDialoguePressedLogic();
     }
 
@@ -92,10 +98,6 @@ public class DialogueManager : MonoBehaviour
         {
             SkipToEndOfLine();
             return;
-        }
-        if (_branches == true)
-        {
-            UnityEngine.Debug.Log("omg this dialogue branches??????? \n (or is supposed to)");
         }
         if (slideCount >= dialogueSlides.Count - 1)
         {
@@ -112,7 +114,6 @@ public class DialogueManager : MonoBehaviour
     {
         nameText.text = dialogueSlides[slideCount].CharacterName;
         _currentLine = dialogueSlides[slideCount].Line;
-        _branches = dialogueSlides[slideCount].opensBranch;
 
         if (_typeLineCoroutine != null)
             StopCoroutine(_typeLineCoroutine);
@@ -144,6 +145,7 @@ public class DialogueManager : MonoBehaviour
             yield return new WaitForSecondsRealtime(speed);
         }
         _typeLineCoroutine = null;
+        if (_dailogueTrigger.EndOfLines.Length > 1) OpenChoiceBox();
 
     }
 
@@ -152,6 +154,12 @@ public class DialogueManager : MonoBehaviour
         StopCoroutine(_typeLineCoroutine);
         _typeLineCoroutine = null;
         dialogueText.text = _currentLine;
+        if (_dailogueTrigger.EndOfLines.Length > 1) OpenChoiceBox();
+    }
+
+    public void OpenChoiceBox()
+    {
+        UnityEngine.Debug.Log("idk how the choice bax is going to work yet");
     }
 
     public void EndDialogue()
@@ -160,6 +168,9 @@ public class DialogueManager : MonoBehaviour
         DialogueActive = false;
         slideCount = 0;
         _typeLineCoroutine = null;
+        DeactivateDialogueBox();
+        dialogueText.text = "";
+        nameText.text = "";
         _dailogueTrigger.EndDialogue(0);
         
         if (CameraControlSwitcher.Instance != null && CameraControlSwitcher.Instance.FreeCamIsActive)

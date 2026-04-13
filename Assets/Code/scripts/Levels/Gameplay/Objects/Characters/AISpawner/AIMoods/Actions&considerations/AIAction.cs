@@ -12,7 +12,8 @@ public abstract class AIAction
     public List<AIConsideration> considerations = new List<AIConsideration>();
 
     /// <summary>
-    /// Calculate utility by summing all consideration outputs
+    /// Calculate utility by multiplying all consideration outputs
+    /// Multiplication acts as a veto - if any consideration is 0, utility becomes 0
     /// </summary>
     public virtual float CalculateUtility(AIContext context, bool debug)
     {
@@ -20,7 +21,7 @@ public abstract class AIAction
         {
             if (debug)
                 Debug.Log($"✗ {actionName}: CANNOT EXECUTE");
-            return float.MinValue;
+            return 0f;
         }
         
         if (debug)
@@ -32,10 +33,9 @@ public abstract class AIAction
             return 0f;
         }
         
-        // Get unit stats if this is a spawn action
         ScriptableStats unitStats = GetUnitStats();
         
-        float totalUtility = 0f;
+        float totalUtility = 1f;
         
         foreach (AIConsideration consideration in considerations)
         {
@@ -46,7 +46,14 @@ public abstract class AIAction
             }
             
             float value = consideration.Evaluate(context, debug, unitStats);
-            totalUtility += value;
+            totalUtility *= value;
+            
+            if (totalUtility <= 0f)
+            {
+                if (debug)
+                    Debug.Log($"    ✗ VETOED by {consideration.considerationName}");
+                break;
+            }
         }
         
         if (debug)
@@ -65,6 +72,11 @@ public abstract class AIAction
 
     public abstract void Execute(AIContext context);
     public virtual bool CanExecute(AIContext context) => true;
+    
+    public virtual void RecordExecution(AIContext context)
+    {
+        context.RecordActionExecuted(actionName);
+    }
 }
 
 /// <summary>
@@ -74,21 +86,20 @@ public abstract class AIAction
 [AddTypeMenu("Spawn Unit")]
 public class SpawnUnitAction : AIAction
 {
-    public ScriptableStats unitStats;
+    public ScriptableStats unitToSpawn;
 
-    [Header("Spawn Requirements")]
     private float lastSpawnTime = -999f;
 
     protected override ScriptableStats GetUnitStats()
     {
-        return unitStats;
+        return unitToSpawn;
     }
 
     public override bool CanExecute(AIContext context)
     {
-        if (unitStats == null)
+        if (unitToSpawn == null)
         {
-            Debug.LogWarning($"[AI] {actionName}: No unitStats assigned!");
+            Debug.LogWarning($"[AI] {actionName}: No unitToSpawn assigned!");
             return false;
         }
         
@@ -101,7 +112,8 @@ public class SpawnUnitAction : AIAction
         if (!context.spawner.spawningEnabled)
             return false;
         
-        if (context.GetCurrentMoney() < unitStats._spawnCost)
+        // Binary check: can we afford it?
+        if (context.GetCurrentMoney() < unitToSpawn._spawnCost)
             return false;
         
         return true;
@@ -111,15 +123,17 @@ public class SpawnUnitAction : AIAction
     {
         if (!CanExecute(context)) return;
 
-        GameObject spawnedUnit = context.spawner.SpawnFromSpawner(unitStats);
+        GameObject spawnedUnit = context.spawner.SpawnFromSpawner(unitToSpawn);
         
         if (spawnedUnit != null && context.aiMoneyManager != null)
         {
-            context.aiMoneyManager.SpendMoney(unitStats._spawnCost);
+            context.aiMoneyManager.SpendMoney(unitToSpawn._spawnCost);
             lastSpawnTime = Time.time;
             
             if (context.showDebugLogs)
-                Debug.Log($"[AI] ✓ Spawned {unitStats.name} (Cost: {unitStats._spawnCost})");
+                Debug.Log($"[AI] ✓ Spawned {unitToSpawn.name} (Cost: {unitToSpawn._spawnCost})");
+            
+            RecordExecution(context);
         }
     }
 }
