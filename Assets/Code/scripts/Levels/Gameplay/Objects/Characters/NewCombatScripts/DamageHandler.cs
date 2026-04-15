@@ -22,6 +22,7 @@ public class DamageHandler : MonoBehaviour
         stats.OnDamage?.Invoke();
         if (stats.DamageTriggerAmount >= stats._CurrentHealth && !DamageTriggerInvoked) 
         {
+            //Debug.Log("Activating damage trigger event");
             stats.DamageTrigger?.Invoke();
             DamageTriggerInvoked = true;
         }

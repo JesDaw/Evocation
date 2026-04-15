@@ -10,36 +10,36 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 238e13654c5efff43b776bb1e518c913, type: 3}
-  m_Name: HoodGuy
+  m_Name: WolfMage
   m_EditorClassIdentifier: 
   Theme: 
   ODS: 
   RPS_Type: 
   _IsAOE: 0
-  _AttackStyle: 1
+  _AttackStyle: 0
   OtherNotes: 
   _spawnCost: 5
-  Level_Total: 32.54386
-  Level_Discrepancy: 27.543861
-  _CalculatedPower: -6.5444965
-  _ValueDiscrepancy: -11.544497
+  Level_Total: 152.6923
+  Level_Discrepancy: 147.6923
+  _CalculatedPower: 3.5097895
+  _ValueDiscrepancy: -1.4902105
   Attack: 2
-  Defense: 11
-  SpaceControl: 2
-  AttackFrequency: 17.54386
-  _AttackDamage: 5
-  _KnockBackDamage: 5
+  Defense: 140
+  SpaceControl: 3
+  AttackFrequency: 7.6923075
+  _AttackDamage: 1
+  _KnockBackDamage: 1
   _MoveSpeed: 2
-  _MaxHealth: 15
-  _KnockBackMaxHealth: 10
-  _HorizontalRange: 7
-  _ExtraEndlag: 3
+  _MaxHealth: 70
+  _KnockBackMaxHealth: 70
+  _HorizontalRange: 1
+  _ExtraEndlag: 0
   _MaxAOETargets: 5
-  _VerticalRange: 5
-  _KnockBackVelocity: 5
+  _VerticalRange: 2
+  _KnockBackVelocity: 10
   _KnockBackAngle: 45
-  _ProjectilePrefab: {fileID: 603826966979394658, guid: f7b010f898d3193499b2c1ad0f0882cd, type: 3}
-  _ProjectileSpeed: 10
+  _ProjectilePrefab: {fileID: 6072924362752908747, guid: e36c33467359d0a44aa4493b4d80e7d9, type: 3}
+  _ProjectileSpeed: 15
   _ProjectileMaxHeight: 2
   _TrajectoryCurve:
     serializedVersion: 2
@@ -54,8 +54,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.0874939
-      value: 0.18333435
+      time: 0.5
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -124,10 +124,22 @@ MonoBehaviour:
     m_RotationOrder: 4
   _EffectsToApply: []
   _Rotate: 0
-  _animator: {fileID: 0}
-  _Sprites: []
+  _animator: {fileID: 22100000, guid: bd2998f5ef785ad4fb2e510b129872d4, type: 2}
+  _Sprites:
+  - Key: 0
+    Rig: {fileID: 8163749845529899116, guid: 5f2ae9e70c2d78e4f9dc0be1efb35041, type: 3}
+    Offset: {x: 0, y: -0.8}
+  - Key: 1
+    Rig: {fileID: 8163749845529899116, guid: 5f2ae9e70c2d78e4f9dc0be1efb35041, type: 3}
+    Offset: {x: 0, y: -0.8}
+  - Key: 2
+    Rig: {fileID: 8163749845529899116, guid: 5f2ae9e70c2d78e4f9dc0be1efb35041, type: 3}
+    Offset: {x: 0, y: -0.8}
+  - Key: 3
+    Rig: {fileID: 8163749845529899116, guid: 5f2ae9e70c2d78e4f9dc0be1efb35041, type: 3}
+    Offset: {x: 0, y: -0.8}
   _AnimationMoveSpeed: 1
   vfx: []
   vfxOffsets: []
-  _AnimationStartupTime: 27
-  _AnimationRecoveryTime: 30
+  _AnimationStartupTime: 120
+  _AnimationRecoveryTime: 10

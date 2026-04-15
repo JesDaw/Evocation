@@ -48,6 +48,18 @@ public class AISpawnerController : MonoBehaviour
     private int currentMoodIndex;
     private AIContext context;
     private bool isRunning = false;
+   public static AISpawnerController Instance { get; private set; }
+
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+    }
 
     void Start()
     {
@@ -88,7 +100,6 @@ public class AISpawnerController : MonoBehaviour
 
         context = new AIContext
         {
-            spawner = SpawnObjects.EnemyInstance,
             aiMoneyManager = aiMoneyManager,
             timer = gameTimer,
             upperZone = upperZone,

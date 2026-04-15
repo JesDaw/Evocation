@@ -103,16 +103,15 @@ public class SpawnUnitAction : AIAction
             return false;
         }
         
-        if (context.spawner == null)
+        if (SpawnObjects.EnemyInstance == null)
         {
             Debug.LogWarning($"[AI] {actionName}: No spawner!");
             return false;
         }
         
-        if (!context.spawner.spawningEnabled)
+        if (!SpawnObjects.EnemyInstance.spawningEnabled)
             return false;
         
-        // Binary check: can we afford it?
         if (context.GetCurrentMoney() < unitToSpawn._spawnCost)
             return false;
         
@@ -123,16 +122,12 @@ public class SpawnUnitAction : AIAction
     {
         if (!CanExecute(context)) return;
 
-        GameObject spawnedUnit = context.spawner.SpawnFromSpawner(unitToSpawn);
+        GameObject spawnedUnit = SpawnObjects.EnemyInstance.SpawnFromAISpawner(unitToSpawn);
         
-        if (spawnedUnit != null && context.aiMoneyManager != null)
+        if (spawnedUnit != null)
         {
-            context.aiMoneyManager.SpendMoney(unitToSpawn._spawnCost);
             lastSpawnTime = Time.time;
-            
-            if (context.showDebugLogs)
-                Debug.Log($"[AI] ✓ Spawned {unitToSpawn.name} (Cost: {unitToSpawn._spawnCost})");
-            
+            if (context.showDebugLogs) Debug.Log($"[AI] ✓ Spawned {unitToSpawn.name} (Cost: {unitToSpawn._spawnCost})");
             RecordExecution(context);
         }
     }

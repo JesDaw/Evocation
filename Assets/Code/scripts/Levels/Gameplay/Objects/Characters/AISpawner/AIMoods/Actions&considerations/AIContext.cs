@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class AIContext
 {
     [Header("Game Systems - Assign These!")]
-    public SpawnObjects spawner;
     public AIMoneyManager aiMoneyManager;
     public Timer timer;
     
