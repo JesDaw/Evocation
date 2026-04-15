@@ -63,6 +63,7 @@ public class Money : MonoBehaviour
     public void spendMoney(int amount)
     {
         CurrentMoney -= amount;
+        UpdateMoneyDesplay();
     }
     
     public void DeactivateMoney() 

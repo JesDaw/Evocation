@@ -3068,7 +3068,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b0d710e72b9d16498b52ddc63c5d2cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 11400000, guid: d1d06b3b2087bd749a9ec7ad412577a6, type: 2}
+  character: {fileID: 0}
   selector: {fileID: 2018846795445791979}
   headshotFrame: {fileID: 5319857864997180116}
 --- !u!1 &3104249261173821123
@@ -4395,7 +4395,19 @@ MonoBehaviour:
   disableDefaultBehavior: 0
   OnActivityStart:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6660193547477404171}
+        m_TargetAssemblyTypeName: AdamLenzini.UI.SetsUiElementOnSelect, CodeAssembly
+        m_MethodName: JumptToElement
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnActivityStop:
     m_PersistentCalls:
       m_Calls: []
@@ -4741,6 +4753,7 @@ GameObject:
   - component: {fileID: 6373527028973223696}
   - component: {fileID: 7303992110169397452}
   - component: {fileID: 206666479331942757}
+  - component: {fileID: 6660193547477404171}
   m_Layer: 5
   m_Name: Character frame (1)
   m_TagString: Untagged
@@ -4889,6 +4902,23 @@ MonoBehaviour:
   character: {fileID: 11400000, guid: d1d06b3b2087bd749a9ec7ad412577a6, type: 2}
   selector: {fileID: 2018846795445791979}
   headshotFrame: {fileID: 590295632987343480}
+--- !u!114 &6660193547477404171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6831626966771836586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40d26c9735894d447bbc56d8d3b5f6ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::AdamLenzini.UI.SetsUiElementOnSelect
+  eventSystem: {fileID: 0}
+  elementToSelect: {fileID: 7303992110169397452}
+  showVisualization: 0
+  navigationColour: {r: 0, g: 1, b: 1, a: 1}
+  ShowDebugLogs: 1
 --- !u!1 &6929753918880078797
 GameObject:
   m_ObjectHideFlags: 0
@@ -6489,7 +6519,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b0d710e72b9d16498b52ddc63c5d2cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 11400000, guid: d1d06b3b2087bd749a9ec7ad412577a6, type: 2}
+  character: {fileID: 11400000, guid: 295b7fbe7059347dbaf01914570b2cb0, type: 2}
   selector: {fileID: 2018846795445791979}
   headshotFrame: {fileID: 645911472381948745}
 --- !u!1 &8790424959216970053

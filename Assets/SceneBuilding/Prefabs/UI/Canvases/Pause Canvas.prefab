@@ -600,6 +600,7 @@ MonoBehaviour:
   elementToSelect: {fileID: 0}
   showVisualization: 0
   navigationColour: {r: 0, g: 1, b: 1, a: 1}
+  ShowDebugLogs: 1
 --- !u!1 &5861347221252183415
 GameObject:
   m_ObjectHideFlags: 0
@@ -794,6 +795,7 @@ MonoBehaviour:
   elementToSelect: {fileID: 0}
   showVisualization: 0
   navigationColour: {r: 0, g: 1, b: 1, a: 1}
+  ShowDebugLogs: 1
 --- !u!1 &6320962272258255779
 GameObject:
   m_ObjectHideFlags: 0
@@ -968,6 +970,7 @@ MonoBehaviour:
   elementToSelect: {fileID: 0}
   showVisualization: 0
   navigationColour: {r: 0, g: 1, b: 1, a: 1}
+  ShowDebugLogs: 1
 --- !u!1 &7256609500358599468
 GameObject:
   m_ObjectHideFlags: 0
@@ -1203,7 +1206,19 @@ MonoBehaviour:
   disableDefaultBehavior: 0
   OnActivityStart:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7697596849455244886}
+        m_TargetAssemblyTypeName: AdamLenzini.UI.SetsUiElementOnSelect, CodeAssembly
+        m_MethodName: JumptToElement
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnActivityStop:
     m_PersistentCalls:
       m_Calls: []
