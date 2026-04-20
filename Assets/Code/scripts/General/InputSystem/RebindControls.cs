@@ -1,3 +1,5 @@
+#nullable disable
+
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -34,8 +36,8 @@ public class RebindControls : MonoBehaviour
     [SerializeField] private RebindEntry[] rebindEntries;
 
     [Header("UI Feedback")]
-    [SerializeField] private GameObject listeningOverlay;   // Optional: dim overlay while waiting for input
-    [SerializeField] private TextMeshProUGUI listeningLabel; // Optional: "Press a key..." text
+    [SerializeField] private GameObject listeningOverlay;   //dim overlay while waiting for input
+    [SerializeField] private TextMeshProUGUI listeningLabel; //"Press a key..." text
 
     private InputActionRebindingExtensions.RebindingOperation _rebindOperation;
     private RebindEntry _currentEntry;
@@ -52,7 +54,7 @@ public class RebindControls : MonoBehaviour
     void OnDisable()
     {
         UnregisterAllButtons();
-        CancelRebind(); // Safety: clean up if scene unloads mid-rebind
+        CancelRebind();
     }
 
     // ========================= Setup =========================
@@ -62,7 +64,7 @@ public class RebindControls : MonoBehaviour
         foreach (var entry in rebindEntries)
         {
             if (entry.rebindButton == null) continue;
-            var captured = entry; // Capture for lambda
+            var captured = entry; 
             entry.rebindButton.onClick.AddListener(() => StartRebind(captured));
         }
     }
@@ -214,7 +216,7 @@ public class RebindControls : MonoBehaviour
     {
         var inputActions = GlobalInputManager.Instance.InputActions;
         
-        InputActionMap? map = entry.actionMapName switch
+        InputActionMap map = entry.actionMapName switch
         {
             "Player" => inputActions.Player,
             "Camera" => inputActions.Camera,

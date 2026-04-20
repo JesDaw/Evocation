@@ -123,9 +123,9 @@ MonoBehaviour:
   - CharacterName: Cicero
     Line: You.
     DialogueDelaySeconds: 0.05
-    opensBranch: 0
-  EndOfLines:
-  - _PersistentCalls:
+  EndOfLines: []
+  DefultEvent:
+    _PersistentCalls:
     - _Target: {fileID: 8349607311230937711}
       _MemberName: PlayTimeline
       _PersistentArguments: []
@@ -447,9 +447,9 @@ MonoBehaviour:
   - CharacterName: Cicero
     Line: LETS GET THEM!!!
     DialogueDelaySeconds: 0.05
-    opensBranch: 0
-  EndOfLines:
-  - _PersistentCalls:
+  EndOfLines: []
+  DefultEvent:
+    _PersistentCalls:
     - _Target: {fileID: 8349607311230937711}
       _MemberName: PlayTimeline
       _PersistentArguments: []
@@ -656,9 +656,9 @@ MonoBehaviour:
   - CharacterName: Cicero
     Line: Building
     DialogueDelaySeconds: 0.05
-    opensBranch: 0
-  EndOfLines:
-  - _PersistentCalls:
+  EndOfLines: []
+  DefultEvent:
+    _PersistentCalls:
     - _Target: {fileID: 8349607311230937711}
       _MemberName: PlayTimeline
       _PersistentArguments: []
@@ -722,7 +722,7 @@ PlayableDirector:
     value: {fileID: 0}
   m_ExposedReferences:
     m_References:
-    - bf002652c4aa27046afc1fc1109af8c4: {fileID: 0}
+    - bf002652c4aa27046afc1fc1109af8c4: {fileID: 4704444014515019701}
     - 1b8d2bb748140d544a4268b6c3a48c2e: {fileID: 0}
     - e5e185f6650b34231b2ed0e1e09ce3be: {fileID: 0}
     - 8db17472cad782a4fa9e12c91a89277d: {fileID: 0}
@@ -732,7 +732,7 @@ PlayableDirector:
     - b639aaa27a50f43d4827ff00c3ab1854: {fileID: 0}
     - 5dc550eafe4484cb6bd84e1ab643c710: {fileID: 0}
     - b8c16b790dabc421e957a88e90fd329e: {fileID: 0}
-    - 71bc23cefb21be04fbdd7bb1f4f8408d: {fileID: 0}
+    - 71bc23cefb21be04fbdd7bb1f4f8408d: {fileID: 4704444014515019701}
 --- !u!114 &1033366357437203071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1047,17 +1047,15 @@ MonoBehaviour:
   - CharacterName: Cicero
     Line: House
     DialogueDelaySeconds: 0.05
-    opensBranch: 0
   - CharacterName: ???
     Line: wolf
     DialogueDelaySeconds: 0.05
-    opensBranch: 0
   - CharacterName: Cicero
     Line: O_o
     DialogueDelaySeconds: 0.05
-    opensBranch: 0
-  EndOfLines:
-  - _PersistentCalls:
+  EndOfLines: []
+  DefultEvent:
+    _PersistentCalls:
     - _Target: {fileID: 8349607311230937711}
       _MemberName: PlayTimeline
       _PersistentArguments: []
@@ -1099,7 +1097,11 @@ PrefabInstance:
       objectReference: {fileID: 3697440920841766314}
     - target: {fileID: 2801597943274457735, guid: d74e4d4c92be74049839512a3c86ec2f, type: 3}
       propertyPath: showDebugLogs
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2801597943274457735, guid: d74e4d4c92be74049839512a3c86ec2f, type: 3}
+      propertyPath: decisionInterval
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 2801597943274457735, guid: d74e4d4c92be74049839512a3c86ec2f, type: 3}
       propertyPath: moods.Array.size
@@ -1395,6 +1397,10 @@ PrefabInstance:
       propertyPath: timelines.Array.data[3].director
       value: 
       objectReference: {fileID: 364516751645834730}
+    - target: {fileID: 7840882143070554404, guid: 9752977288b084cefa2ff3ae7d12a56a, type: 3}
+      propertyPath: m_ReverseArrangement
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8002221834769399480, guid: 9752977288b084cefa2ff3ae7d12a56a, type: 3}
       propertyPath: playerPos
       value: 
@@ -1527,9 +1533,17 @@ PrefabInstance:
       propertyPath: 'SceneActivities.Array.data[1]'
       value: 
       objectReference: {fileID: 941526430348979631}
+    - target: {fileID: 1452539722467868910, guid: 05c83b941abef4b0f97930f10a0d5250, type: 3}
+      propertyPath: ShowDebugLogs
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4229790203686502565, guid: 05c83b941abef4b0f97930f10a0d5250, type: 3}
+      propertyPath: sceneMgr
+      value: 
+      objectReference: {fileID: 5806555882352333376}
     - target: {fileID: 4229790203686502565, guid: 05c83b941abef4b0f97930f10a0d5250, type: 3}
       propertyPath: DebugLogs
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6591789322545535420, guid: 05c83b941abef4b0f97930f10a0d5250, type: 3}
       propertyPath: livesManager
@@ -1743,6 +1757,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4cfecefd1f25e480e9777df454a9c0a0, type: 3}
+--- !u!114 &4704444014515019701 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3986526243221292133, guid: 4cfecefd1f25e480e9777df454a9c0a0, type: 3}
+  m_PrefabInstance: {fileID: 8510526319411010512}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &5314024009665983951 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4585863121743293983, guid: 4cfecefd1f25e480e9777df454a9c0a0, type: 3}

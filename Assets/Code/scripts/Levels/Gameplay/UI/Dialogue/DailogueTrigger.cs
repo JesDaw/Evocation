@@ -5,7 +5,8 @@ using UnityEngine.InputSystem;
 public class DailogueTrigger : MonoBehaviour
 {
     public List<Dialogue> Slides = new List<Dialogue>(); 
-    [SerializeField] public UltEvents.UltEvent[] EndOfLines;
+    [SerializeField] public DialogueChoice[] EndOfLines;
+    public UltEvents.UltEvent DefultEvent;
 
     void Start()
     {
@@ -21,9 +22,19 @@ public class DailogueTrigger : MonoBehaviour
     {
         DialogueManager.Instance.StartDialogue(Slides, this);
     }
-    
-    public void EndDialogue(int eventToCall) // either close the dialog box here or 
+    public void EndDialogueDefultEvent() 
     { 
-        EndOfLines[eventToCall]?.Invoke();
+        DefultEvent?.Invoke();
     }
+    
+    public void EndDialogue(int eventToCall) 
+    { 
+        EndOfLines[eventToCall].ultEvent?.Invoke();
+    }
+}
+[System.Serializable]
+public class DialogueChoice
+{
+    public string Text = "null";
+    public UltEvents.UltEvent ultEvent;
 }
