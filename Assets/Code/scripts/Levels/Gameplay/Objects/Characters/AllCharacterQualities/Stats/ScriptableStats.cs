@@ -61,8 +61,6 @@ public class ScriptableStats : ScriptableObject
     public List<Vector2> vfxOffsets = new();   
     [Tooltip("in ms")] public float _AnimationStartupTime;
     [Tooltip("in ms")] public float _AnimationRecoveryTime; 
-
-    
 }
 
 public enum AttackStyle { Melee, Projectile }
