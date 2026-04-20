@@ -4,16 +4,16 @@ using UnityEngine;
 public class DayCycle : ScriptableObject
 {
     public int maxActions = 3;
-    public int actionCounter = maxActions;
-    private int dayCounter = 3;
-    public void decreaseActionCounter()
+    public int actionCounter = 0;
+    public int dayCounter = 0;
+    public void IncromentActionCounter()
     {
-        actionCounter--;
+        actionCounter++;
 
-        if (actionCounter <= 0)
+        if (actionCounter >= maxActions)
         {
-            dayCounter--;
-            actionCounter = maxActions;
+            dayCounter++;
+            actionCounter = 0;
         }
     }
 }
