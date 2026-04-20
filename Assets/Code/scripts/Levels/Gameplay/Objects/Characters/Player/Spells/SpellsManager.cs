@@ -22,6 +22,7 @@ public class SpellsManager : MonoBehaviour
 
     void InvokeSpell()
     {
+        if(PlayerSpells.Count == 0) return;
         if(charged)
         {
             UseSpell();
@@ -42,6 +43,7 @@ public class SpellsManager : MonoBehaviour
 
     void UseSpell()
     {
+        if(PlayerSpells.Count == 0) return;
         PlayerSpells[(int)currentSpellContext].OnHit.Invoke(CurrentlySelected.ToArray());
         PlayerSpells[(int)currentSpellContext].OnHitPosition.Invoke(detectionRadiusObject);
         if(DebugLogs) Debug.Log("Spells Used");
@@ -60,6 +62,7 @@ public class SpellsManager : MonoBehaviour
 
     void Start()
     {
+        if(PlayerSpells.Count == 0) return;
         detectionRadiusObject.gameObject.SetActive(false);
         SubscribeToSpells();
 

@@ -39,12 +39,17 @@ namespace AdamLenzini.UI
         public void JumptToElement()
         {
             if (eventSystem == null && ShowDebugLogs)
+            {
                 Debug.Log("This item has no event system referenced yet.", this);
-
-            if (elementToSelect == null && ShowDebugLogs)
-                Debug.Log("This should jump where?", this);
-
-            eventSystem.SetSelectedGameObject(elementToSelect.gameObject);
+            }
+            if (elementToSelect == null)
+            {
+                Debug.LogError($"elementToSelect is null", this);
+            }
+            else
+            {
+                eventSystem.SetSelectedGameObject(elementToSelect.gameObject);
+            }
         }
     }
 }

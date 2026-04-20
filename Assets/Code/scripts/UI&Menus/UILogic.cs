@@ -7,7 +7,7 @@ public class UILogic : MonoBehaviour
 {
     [SerializeField] int SceneToLoad;
     [SerializeField] bool DebugLogs;
-    SceneActivityManager sceneMgr;
+    [SerializeField] SceneActivityManager sceneMgr;
 
     public static bool GameIsPaused = false;
     public UnityEvent PauseEvent, ResumeEvent;
@@ -47,7 +47,7 @@ public class UILogic : MonoBehaviour
 
     void Start()
     {
-        sceneMgr = FindFirstObjectByType<SceneActivityManager>();
+        if (sceneMgr == null)sceneMgr = FindFirstObjectByType<SceneActivityManager>();
         Debug.Assert(sceneMgr != null);
         if (GlobalInputManager.Instance != null)
         {
@@ -94,19 +94,16 @@ public class UILogic : MonoBehaviour
 
     void Pause()
     {
+        
+        FModAudioManager.instance.PlaySoundByName("pauseGame");
+        sceneMgr.Activate("Pause", false);
+        Time.timeScale = 0;
+        GameIsPaused = true;
+        GlobalInputManager.Instance.SetPauseMenuMode();
+        
+        GlobalInputManager.Instance.EnableCursor();
+        PauseEvent?.Invoke();
         if(DebugLogs) Debug.Log($"Game is paused was {GameIsPaused} when trying to pause");
-        if (!GameIsPaused)
-        {
-            FModAudioManager.instance.PlaySoundByName("pauseGame");
-            sceneMgr.Activate("Pause", false);
-            Time.timeScale = 0;
-            GameIsPaused = true;
-            
-            GlobalInputManager.Instance.SetPauseMenuMode();
-            
-            GlobalInputManager.Instance.EnableCursor();
-            PauseEvent?.Invoke();
-        }
     }
 
     public void ReloadCurrentScene()
