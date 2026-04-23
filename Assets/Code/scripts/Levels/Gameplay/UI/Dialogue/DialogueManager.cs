@@ -134,6 +134,12 @@ public class DialogueManager : MonoBehaviour
             dialogueText.color = defaultTextColor;
         }
 
+        if (InteractionMinigameManager.Instance != null)
+        {
+            InteractionMinigameManager.Instance.SetCharacterBody(dialogueSlides[slideCount].CharacterBody);
+            InteractionMinigameManager.Instance.SetCharacterFace(dialogueSlides[slideCount].CharacterFace);
+        }
+
         foreach (char c in line)
         {
             while (UILogic.GameIsPaused)
@@ -145,7 +151,7 @@ public class DialogueManager : MonoBehaviour
             yield return new WaitForSecondsRealtime(speed);
         }
         _typeLineCoroutine = null;
-        if (_dailogueTrigger.EndOfLines.Length > 0) OpenChoiceBox();
+        if (_dailogueTrigger.EndOfLines.Length > 0 && slideCount >= dialogueSlides.Count - 1) OpenChoiceBox();
 
     }
 
@@ -154,7 +160,7 @@ public class DialogueManager : MonoBehaviour
         StopCoroutine(_typeLineCoroutine);
         _typeLineCoroutine = null;
         dialogueText.text = _currentLine;
-        if (_dailogueTrigger.EndOfLines.Length > 0) OpenChoiceBox();
+        if (_dailogueTrigger.EndOfLines.Length > 0 && slideCount >= dialogueSlides.Count - 1) OpenChoiceBox();
     }
 
     public void OpenChoiceBox()
