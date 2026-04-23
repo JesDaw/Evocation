@@ -7,6 +7,7 @@ public class GlobalInputManager : MonoBehaviour
     private InputSystem_Actions _inputActions;
     public InputSystem_Actions InputActions => _inputActions;
     [SerializeField] bool DebugLogs = false;
+    #region Start and stop
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -36,10 +37,8 @@ public class GlobalInputManager : MonoBehaviour
         _inputActions?.Disable();
         _inputActions?.Dispose();
     }
-
-    // ========================= Control Groups =========================
-    
-
+    #endregion
+    #region Control Groups
     public void EnableAllControls()
     {
         _inputActions.Enable();
@@ -151,7 +150,8 @@ public class GlobalInputManager : MonoBehaviour
         _inputActions.UI.Disable();
     }
 
-    // ========================= Game State Presets =========================
+    #endregion
+    #region Game State Presets
     
     public void SetPlayerCharacterMode()
     {
@@ -218,12 +218,7 @@ public class GlobalInputManager : MonoBehaviour
         EnableUIControls();  
         
     }
-
-    // ========================= Utilities =========================
-    
-    /// <summary>
-    /// Get the current state of all action maps (for debugging)
-    /// </summary>
+    #endregion
     public void LogInputState()
     {
         Debug.Log($"=== Input State ===\n" +
