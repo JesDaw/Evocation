@@ -2745,6 +2745,7 @@ MonoBehaviour:
   _ScrStats: {fileID: 11400000, guid: d4daadf164451854c8c5982cee62e5f9, type: 2}
   _rigTransform: {fileID: 4418490336419408944}
   _flip: 0
+  _quickEdit: 0
 --- !u!1 &2259205194331980856
 GameObject:
   m_ObjectHideFlags: 0
@@ -3430,9 +3431,14 @@ MonoBehaviour:
   - CharacterName: Princess
     Line: What up dawg
     DialogueDelaySeconds: 0.03
-    opensBranch: 0
+    CharacterBody: 0
+    CharacterFace: 0
   EndOfLines:
-  - _PersistentCalls: []
+  - Text: null
+    ultEvent:
+      _PersistentCalls: []
+  DefultEvent:
+    _PersistentCalls: []
 --- !u!1 &2942746451812061784
 GameObject:
   m_ObjectHideFlags: 0
@@ -11704,6 +11710,34 @@ PrefabInstance:
     - target: {fileID: 3377721466578207389, guid: f18b8ae2771bd4011b72510901c1aadf, type: 3}
       propertyPath: m_LocalPosition.y
       value: 1.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 4077327004687175018, guid: f18b8ae2771bd4011b72510901c1aadf, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4077327004687175018, guid: f18b8ae2771bd4011b72510901c1aadf, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4077327004687175018, guid: f18b8ae2771bd4011b72510901c1aadf, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 3982514268777303044}
+    - target: {fileID: 4077327004687175018, guid: f18b8ae2771bd4011b72510901c1aadf, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4077327004687175018, guid: f18b8ae2771bd4011b72510901c1aadf, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: TriggerDailogue
+      objectReference: {fileID: 0}
+    - target: {fileID: 4077327004687175018, guid: f18b8ae2771bd4011b72510901c1aadf, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: DailogueTrigger, CodeAssembly
+      objectReference: {fileID: 0}
+    - target: {fileID: 4077327004687175018, guid: f18b8ae2771bd4011b72510901c1aadf, type: 3}
+      propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 4081588263631635229, guid: f18b8ae2771bd4011b72510901c1aadf, type: 3}
       propertyPath: m_Name
