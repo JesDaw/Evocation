@@ -3,6 +3,13 @@ using UnityEngine.Events;
 
 public class ManaSystem : MonoBehaviour
 {
+    public static ManaSystem Instance;
+
+    void Awake()
+    {
+        Instance = this;
+    }
+
     [field: SerializeField]
     public int PlayerMana {private set; get;}
     [Tooltip("First one is total, second is amount changed")]

@@ -257,10 +257,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2a59e5568c52ec41b07e6682e671d09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::ManaSystem
-  <PlayerMana>k__BackingField: 0
+  <PlayerMana>k__BackingField: 20
   OnManaChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: UpdateMagicUIFunctions, CodeAssembly
+        m_MethodName: UpdateTotalMana
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &4068080231543088761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,11 +285,65 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffa0dfbf142048f449b28e92ce0584e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::SpellsManager
-  PlayerSpells: []
+  PlayerSpells:
+  - SpellName: Fireball
+    OnHit:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11400000, guid: bbb3cb2748da5fd4a843a2f8d59c930e, type: 2}
+          m_TargetAssemblyTypeName: 
+          m_MethodName: 
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    OnHitPosition:
+      m_PersistentCalls:
+        m_Calls: []
+    Cost: 2
+    Radius: 3
+  - SpellName: Not Fireball
+    OnHit:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11400000, guid: bbb3cb2748da5fd4a843a2f8d59c930e, type: 2}
+          m_TargetAssemblyTypeName: 
+          m_MethodName: 
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    OnHitPosition:
+      m_PersistentCalls:
+        m_Calls: []
+    Cost: 4
+    Radius: 3
   CurrentlySelected: []
   OnSwapSpells:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: UpdateMagicUIFunctions, CodeAssembly
+        m_MethodName: UpdateSpellGUI
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   currentSpellContext: 0
   detectionRadiusObject: {fileID: 3218463498466943359}
   playerPos: {fileID: 0}

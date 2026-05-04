@@ -34,13 +34,16 @@ public class IterativeStatusEffect : StatusEffect
         else if (damagePerTick < 0)
         {
             // Healing
-            target.damageHandler.Heal(-damagePerTick);
+            target.damageHandler.Heal(damagePerTick);
             
             // Prevent healing from killing
+            // Do we need this? i'll just remove it for now...
+            /*
             if (!canKill && target._CurrentHealth < 1f)
             {
                 target._CurrentHealth = 1f;
             }
+            */
         }
     }
 
