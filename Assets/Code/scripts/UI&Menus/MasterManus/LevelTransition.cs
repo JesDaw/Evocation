@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using TMPro; 
+using TMPro;
 
 public class LevelTransition : MonoBehaviour
 {
@@ -17,6 +17,7 @@ public class LevelTransition : MonoBehaviour
     [SerializeField] TextMeshProUGUI progressText;
     [Header("Next scene")]
     [SerializeField] string NextSceneName;
+    [SerializeField] bool DebugLogs = false;
 
     public void StartTransition()
     {
@@ -36,6 +37,7 @@ public class LevelTransition : MonoBehaviour
             yield return new WaitForSeconds(TimelineManager.Instance.GetCurrentCutsceneDuration());
         }
         StartCoroutine(LoadAsynchronously(nextSceneName));
+        if (DebugLogs) Debug.Log($"Loading scene: " + nextSceneName);
     }
     
 
@@ -44,6 +46,7 @@ public class LevelTransition : MonoBehaviour
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
 
         loadingScreen.SetActive(true);
+        if (DebugLogs) Debug.Log($"Loading screen active");
         
         while (!operation.isDone)
         {
