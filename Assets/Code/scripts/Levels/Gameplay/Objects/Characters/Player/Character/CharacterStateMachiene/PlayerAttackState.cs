@@ -31,8 +31,7 @@ public class PlayerAttackState : PlayerBaseState
                 if (Ctx.AnimatorController.ShouldAttack())
                 {
                     AttackLogic.ExecuteAttack(Ctx);
-                    //have attack sould be called from Ctx.AnimatorController with a signal
-                    // but this is the function to call the attacking audio: FModAudioManager.instance.PlaySoundByName("attack");
+                    FModAudioManager.instance.PlaySoundByName("attack");
                     _timer = 0f;
                     _phase = AttackPhase.Cooldown;
                 }

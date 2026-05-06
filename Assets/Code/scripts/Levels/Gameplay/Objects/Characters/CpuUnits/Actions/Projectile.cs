@@ -40,7 +40,10 @@ public class Projectile : MonoBehaviour
 		CpuStateManager targetState = target.GetComponent<CpuStateManager>();
 
 		if(targetState.CurrentState == CpuStateManager.State.KnockBack)
-			Destroy(gameObject);
+        {
+            Destroy(gameObject);
+        }
+			
 
 		while (true)
 		{
@@ -73,7 +76,13 @@ public class Projectile : MonoBehaviour
 			{
 				UpdateProjectilePosition(endPosition);
 				if (Vector3.Distance(transform.position, endPosition) < distanceToDestroy)
-					Destroy(gameObject);
+                {
+                    //visual effect
+                    FModAudioManager.instance.PlaySoundByName("fireballHit");
+                    Destroy(gameObject);
+                    
+                }
+					
 			}
 
 			yield return null;
