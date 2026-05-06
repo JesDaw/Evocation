@@ -990,17 +990,24 @@ MonoBehaviour:
   - CharacterName: Jesse
     Line: Hello and welcome!
     DialogueDelaySeconds: 0.05
-    opensBranch: 0
+    CharacterBody: 0
+    CharacterFace: 0
   - CharacterName: Jesse
     Line: This is our Hub World!
     DialogueDelaySeconds: 0.05
-    opensBranch: 0
+    CharacterBody: 0
+    CharacterFace: 0
   - CharacterName: Jesse
     Line: Enjoy!
     DialogueDelaySeconds: 0.05
-    opensBranch: 0
+    CharacterBody: 0
+    CharacterFace: 0
   EndOfLines:
-  - _PersistentCalls: []
+  - Text: null
+    ultEvent:
+      _PersistentCalls: []
+  DefultEvent:
+    _PersistentCalls: []
 --- !u!1 &6038247692569691739
 GameObject:
   m_ObjectHideFlags: 0
@@ -2289,6 +2296,70 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 171897238652515327}
     m_Modifications:
+    - target: {fileID: 596234195473050975, guid: 7f07f2c1a3ca04d3682f9ea845af02a3, type: 3}
+      propertyPath: <die>k__BackingField.Path
+      value: event:/SFX/MenuesAndUI/Test sound effects/Button Click
+      objectReference: {fileID: 0}
+    - target: {fileID: 596234195473050975, guid: 7f07f2c1a3ca04d3682f9ea845af02a3, type: 3}
+      propertyPath: <attack>k__BackingField.Path
+      value: event:/SFX/MenuesAndUI/Test sound effects/Button Click
+      objectReference: {fileID: 0}
+    - target: {fileID: 596234195473050975, guid: 7f07f2c1a3ca04d3682f9ea845af02a3, type: 3}
+      propertyPath: <knockback>k__BackingField.Path
+      value: event:/SFX/MenuesAndUI/Test sound effects/Button Click
+      objectReference: {fileID: 0}
+    - target: {fileID: 596234195473050975, guid: 7f07f2c1a3ca04d3682f9ea845af02a3, type: 3}
+      propertyPath: <menuClick>k__BackingField.Path
+      value: event:/SFX/MenuesAndUI/Test sound effects/Button Click
+      objectReference: {fileID: 0}
+    - target: {fileID: 596234195473050975, guid: 7f07f2c1a3ca04d3682f9ea845af02a3, type: 3}
+      propertyPath: <pauseGame>k__BackingField.Path
+      value: event:/SFX/MenuesAndUI/Test sound effects/Button Click
+      objectReference: {fileID: 0}
+    - target: {fileID: 596234195473050975, guid: 7f07f2c1a3ca04d3682f9ea845af02a3, type: 3}
+      propertyPath: <spawnTroop>k__BackingField.Path
+      value: event:/SFX/MenuesAndUI/Test sound effects/Button Click
+      objectReference: {fileID: 0}
+    - target: {fileID: 596234195473050975, guid: 7f07f2c1a3ca04d3682f9ea845af02a3, type: 3}
+      propertyPath: <takeDamage>k__BackingField.Path
+      value: event:/SFX/MenuesAndUI/Test sound effects/Button Click
+      objectReference: {fileID: 0}
+    - target: {fileID: 596234195473050975, guid: 7f07f2c1a3ca04d3682f9ea845af02a3, type: 3}
+      propertyPath: <unpauseGame>k__BackingField.Path
+      value: event:/SFX/MenuesAndUI/Test sound effects/Button Click
+      objectReference: {fileID: 0}
+    - target: {fileID: 596234195473050975, guid: 7f07f2c1a3ca04d3682f9ea845af02a3, type: 3}
+      propertyPath: <claimLocation>k__BackingField.Path
+      value: event:/SFX/MenuesAndUI/Test sound effects/Button Click
+      objectReference: {fileID: 0}
+    - target: {fileID: 596234195473050975, guid: 7f07f2c1a3ca04d3682f9ea845af02a3, type: 3}
+      propertyPath: <backToScouting>k__BackingField.Path
+      value: event:/SFX/MenuesAndUI/Test sound effects/Button Click
+      objectReference: {fileID: 0}
+    - target: {fileID: 596234195473050975, guid: 7f07f2c1a3ca04d3682f9ea845af02a3, type: 3}
+      propertyPath: <engageInBattle>k__BackingField.Path
+      value: event:/SFX/MenuesAndUI/Test sound effects/Button Click
+      objectReference: {fileID: 0}
+    - target: {fileID: 596234195473050975, guid: 7f07f2c1a3ca04d3682f9ea845af02a3, type: 3}
+      propertyPath: <showCharacterInfo>k__BackingField.Path
+      value: event:/SFX/MenuesAndUI/Test sound effects/Button Click
+      objectReference: {fileID: 0}
+    - target: {fileID: 596234195473050975, guid: 7f07f2c1a3ca04d3682f9ea845af02a3, type: 3}
+      propertyPath: <addCharacterToParty>k__BackingField.Path
+      value: event:/SFX/MenuesAndUI/Test sound effects/Button Click
+      objectReference: {fileID: 0}
+    - target: {fileID: 596234195473050975, guid: 7f07f2c1a3ca04d3682f9ea845af02a3, type: 3}
+      propertyPath: <openCharacterSelect>k__BackingField.Path
+      value: event:/SFX/MenuesAndUI/Test sound effects/Button Click
+      objectReference: {fileID: 0}
+    - target: {fileID: 596234195473050975, guid: 7f07f2c1a3ca04d3682f9ea845af02a3, type: 3}
+      propertyPath: <closeCharacterSelect>k__BackingField.Path
+      value: event:/SFX/MenuesAndUI/Test sound effects/Button Click
+      objectReference: {fileID: 0}
+    - target: {fileID: 596234195473050975, guid: 7f07f2c1a3ca04d3682f9ea845af02a3, type: 3}
+      propertyPath: <removeCharacterFromParty>k__BackingField.Path
+      value: event:/SFX/MenuesAndUI/Test sound effects/Button Click
+      objectReference: {fileID: 0}
     - target: {fileID: 3964133330635255414, guid: 7f07f2c1a3ca04d3682f9ea845af02a3, type: 3}
       propertyPath: m_Name
       value: HubworldBackend managers

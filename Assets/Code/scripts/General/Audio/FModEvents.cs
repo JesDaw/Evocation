@@ -30,11 +30,21 @@ public class FModEvents : MonoBehaviour
 
     [field: Header("Gameplay SFX")]
     [field: SerializeField] public EventReference spawnTroop { get; private set; }
+    [field: SerializeField] public EventReference claimLocation { get; private set; }
+    
+    //footsteps
+    [field: SerializeField] public EventReference walkWood { get; private set; }
+    [field: SerializeField] public EventReference walkstone { get; private set; }
+
+
+    [field: Header("Melee Combat SFX")]    
     [field: SerializeField] public EventReference attack { get; private set; }
     [field: SerializeField] public EventReference takeDamage { get; private set; }
     [field: SerializeField] public EventReference knockback { get; private set; }
     [field: SerializeField] public EventReference die { get; private set; }
-    [field: SerializeField] public EventReference claimLocation { get; private set; }
+    [field: Header("projectile Combat SFX")]
+    [field: SerializeField] public EventReference shootFireball { get; private set; }
+    [field: SerializeField] public EventReference fireballHit { get; private set; }
 
     [field: Header("Ambiance")]
     [field: SerializeField] public EventReference ambiance { get; private set; }

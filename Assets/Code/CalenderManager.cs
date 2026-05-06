@@ -1,10 +1,13 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CalenderManager : MonoBehaviour
 {
     public static CalenderManager Instance { get; private set; }
-    private DayCycle dayCycle;
-    private CalenderEvent[] events;
+    DayCycle dayCycle;
+    public CalenderEvent[] events;
+    [SerializeField] UnityEvent[] dayEvent;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -19,7 +22,6 @@ public class CalenderManager : MonoBehaviour
     public void isEventDay()
     {
         // Still needs work
-        return dayCycle != null;
     }
 }
 
@@ -28,10 +30,4 @@ public class CalenderEvent
 {
     public int day;
     public int month;
-    UnityEvent dayEvent;
-
-    public void Invoke()
-    {
-        dayEvent.Invoke();
-    }
 }
