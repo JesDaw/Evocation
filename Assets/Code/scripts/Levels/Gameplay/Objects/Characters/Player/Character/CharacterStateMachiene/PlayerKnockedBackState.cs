@@ -25,6 +25,9 @@ public class PlayerKnockedBackState : PlayerBaseState
 
     public override void EnterState()
     {
+        Ctx.Animator.SetBool("IsAttacking", false);
+        Ctx.Animator.SetBool("IsRunning", false);
+        Ctx.Animator.Play("Knockback", 0, 0f);
         Ctx.Animator.SetBool("IsKnockback", true);
         FModAudioManager.instance.PlaySoundByName("knockback");
         ApplyKnockback();

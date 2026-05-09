@@ -15,7 +15,9 @@ public class CpuKnockBackState : CpuBaseState
 
     public override void EnterState()
     {
-        //Debug.Log("enter Knockback");
+        _context._Animator.SetBool("IsAttacking", false);
+        _context._Animator.SetBool("IsRunning", false);
+        _context._Animator.Play("Knockback", 0, 0f);
         _context._Animator.SetBool("IsKnockback", true);
         FModAudioManager.instance.PlaySoundByName("knockback");
         ApplyKnockback();
