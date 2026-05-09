@@ -39,6 +39,8 @@ public class AIPersonality
 public class AILoop
 {
     [Header("Loop Info")]
+    [Tooltip("Disable to skip this loop entirely")]
+    [SerializeField] public bool enabled = true;
     public string loopName = "New Loop";
     
     [Header("Timing")]
@@ -52,6 +54,10 @@ public class AILoop
     [Tooltip("All possible actions this loop can choose from")]
     [SerializeReference, SubclassSelector]
     public List<AIAction> possibleActions = new List<AIAction>();
+    
+    [Header("Debug")]
+    [Tooltip("Toggle debug logs for this specific loop")]
+    [SerializeField] public bool showDebugLogs = false;
     
     // Runtime state (not serialized)
     [System.NonSerialized] public float currentTimer = 0f;

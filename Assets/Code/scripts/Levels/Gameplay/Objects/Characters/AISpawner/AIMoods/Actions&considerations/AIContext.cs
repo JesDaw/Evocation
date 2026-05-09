@@ -29,9 +29,6 @@ public class AIContext
     [Tooltip("Max enemy power for normalization")]
     public float maxEnemyPower = 50f;
     
-    [Header("Debug")]
-    public bool showDebugLogs = false;
-    
     // Cached values
     private float cachedClosestEnemyDistance;
     private float cachedClosestEnemyPower;

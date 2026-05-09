@@ -73,14 +73,14 @@ public class SpawnSequenceAction : AIAction
     {
         if (!CanExecute(context))
         {
-            if (context.showDebugLogs)
+            if (parentLoop.showDebugLogs)
                 Debug.Log($"[AI] {actionName}: Cannot execute");
             yield break;
         }
         
         parentLoop.isExecutingSequence = true;
         
-        if (context.showDebugLogs)
+        if (parentLoop.showDebugLogs)
             Debug.Log($"[AI] ▶ Starting sequence: {actionName} ({spawnSequence.Count} units)");
         
         foreach (SpawnStep step in spawnSequence)
@@ -91,25 +91,24 @@ public class SpawnSequenceAction : AIAction
                 continue;
             }
             
-            // Spawn the unit
             GameObject spawned = SpawnObjects.EnemyInstance.SpawnFromAISpawner(step.unitToSpawn);
             
-            if (spawned != null && context.showDebugLogs)
+            if (spawned != null && parentLoop.showDebugLogs)
             {
                 Debug.Log($"[AI]   ✓ Spawned {step.unitToSpawn.name}");
             }
             
-            // Wait for delay before next spawn
             if (step.delayAfter > 0f)
             {
-                if (context.showDebugLogs)
+                if (parentLoop.showDebugLogs)
                     Debug.Log($"[AI]   ⏱ Waiting {step.delayAfter}s...");
                     
                 yield return new WaitForSeconds(step.delayAfter);
+                if (parentLoop.showDebugLogs) Debug.Log($"[AI] actions in sequence {spawnSequence.Count}");
             }
         }
         
-        if (context.showDebugLogs)
+        if (parentLoop.showDebugLogs)
             Debug.Log($"[AI] ✓ Sequence complete: {actionName}");
         
         parentLoop.isExecutingSequence = false;
@@ -125,7 +124,7 @@ public class DoNothingAction : AIAction
 {
     public override IEnumerator Execute(AIContext context, AILoop parentLoop)
     {
-        if (context.showDebugLogs)
+        if (parentLoop.showDebugLogs)
             Debug.Log($"[AI] {actionName}: Waiting...");
         
         yield break;

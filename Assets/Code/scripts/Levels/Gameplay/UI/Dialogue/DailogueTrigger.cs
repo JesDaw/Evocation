@@ -10,7 +10,7 @@ public class DailogueTrigger : MonoBehaviour
 
     void Start()
     {
-        if (EndOfLines.Length <= 0) Debug.LogWarning($"[DailogueTrigger] No end of line events declared on {gameObject.name}");
+        //if (EndOfLines.Length <= 0) Debug.LogWarning($"[DailogueTrigger] No end of line events declared on {gameObject.name}");
     }
     public void TriggerDailogue(InputAction.CallbackContext context)
     {
