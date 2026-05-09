@@ -30,9 +30,6 @@ public class AISpawnerController : MonoBehaviour
     [SerializeField] private float maxUnits = 20f;
     [SerializeField] private float maxEnemyPower = 50f;
     
-    [Header("Debug")]
-    [SerializeField] private bool showDebugLogs = false;
-    
     public static AISpawnerController Instance { get; private set; }
     
     private AIContext context;
@@ -52,8 +49,8 @@ public class AISpawnerController : MonoBehaviour
     
     void Start()
     {
-        ValidateSetup();
         InitializeContext();
+        ValidateSetup();
     }
     
     void ValidateSetup()
@@ -90,8 +87,7 @@ public class AISpawnerController : MonoBehaviour
             playerBase = playerBase,
             maxDistance = calculatedMaxDistance,
             maxUnits = maxUnits,
-            maxEnemyPower = maxEnemyPower,
-            showDebugLogs = showDebugLogs
+            maxEnemyPower = maxEnemyPower
         };
         
         if (aiClan.moods != null && aiClan.moods.Count > 0)
@@ -138,10 +134,6 @@ public class AISpawnerController : MonoBehaviour
                     foreach (var loop in currentLoops)
                         loop.Initialize();
                 }
-                
-                if (showDebugLogs)
-                    Debug.Log($"[AI] Switched to mood '{moodName}'");
-                return;
             }
         }
         Debug.LogWarning($"[AI] Mood '{moodName}' not found!");
@@ -171,18 +163,12 @@ public class AISpawnerController : MonoBehaviour
         
         // Start update coroutine
         StartCoroutine(UpdateAllLoops());
-        
-        if (showDebugLogs)
-            Debug.Log($"[AI] Started {aiClan.clanName} with {currentLoops.Length} loops");
     }
     
     public void StopAI()
     {
         isRunning = false;
         StopAllCoroutines();
-        
-        if (showDebugLogs)
-            Debug.Log("[AI] Stopped");
     }
     
     /// <summary>
@@ -198,6 +184,9 @@ public class AISpawnerController : MonoBehaviour
             // Check each loop
             foreach (var loop in currentLoops)
             {
+                if (!loop.enabled)
+                    continue;
+                    
                 if (loop.UpdateTimer(Time.deltaTime))
                 {
                     // Time to make a decision!
@@ -215,7 +204,7 @@ public class AISpawnerController : MonoBehaviour
     /// </summary>
     private IEnumerator ExecuteLoop(AILoop loop)
     {
-        if (showDebugLogs)
+        if (loop.showDebugLogs)
             Debug.Log($"\n=== LOOP: {loop.loopName} ===");
         
         // Find best action
@@ -232,14 +221,14 @@ public class AISpawnerController : MonoBehaviour
             
             if (!action.CanExecute(context))
             {
-                if (showDebugLogs)
+                if (loop.showDebugLogs)
                     Debug.Log($"  ✗ {action.actionName}: Cannot execute");
                 continue;
             }
             
             float utility = action.CalculateUtility(context);
             
-            if (showDebugLogs)
+            if (loop.showDebugLogs)
             {
                 if (action.rootConsideration != null)
                     Debug.Log($"  • {action.actionName}: {action.rootConsideration.GetDebugString(context)}");
@@ -257,14 +246,14 @@ public class AISpawnerController : MonoBehaviour
         // Execute best action
         if (bestAction != null && bestUtility > 0f)
         {
-            if (showDebugLogs)
+            if (loop.showDebugLogs)
                 Debug.Log($"→ CHOSEN: {bestAction.actionName} (Utility: {bestUtility:F2})");
             
             yield return StartCoroutine(bestAction.Execute(context, loop));
         }
         else
         {
-            if (showDebugLogs)
+            if (loop.showDebugLogs)
                 Debug.Log($"→ NO VALID ACTION (best utility: {bestUtility:F2})");
         }
     }
@@ -278,7 +267,7 @@ public class AISpawnerController : MonoBehaviour
         if (loop != null)
         {
             loop.AddDelay(additionalTime);
-            if (showDebugLogs)
+            if (loop.showDebugLogs)
                 Debug.Log($"[AI] Added {additionalTime}s delay to loop '{loopName}'");
         }
         else
@@ -296,9 +285,6 @@ public class AISpawnerController : MonoBehaviour
         {
             loop.AddDelay(additionalTime);
         }
-        
-        if (showDebugLogs)
-            Debug.Log($"[AI] Added {additionalTime}s delay to all loops");
     }
     
     #region Debug Methods
@@ -337,6 +323,7 @@ public class AISpawnerController : MonoBehaviour
         foreach (var loop in currentLoops)
         {
             Debug.Log($"{loop.loopName}:");
+            Debug.Log($"  Enabled: {loop.enabled}");
             Debug.Log($"  Timer: {loop.currentTimer:F2}/{loop.currentInterval:F2}s");
             Debug.Log($"  Executing Sequence: {loop.isExecutingSequence}");
             Debug.Log($"  Available Actions: {loop.possibleActions.Count}");
