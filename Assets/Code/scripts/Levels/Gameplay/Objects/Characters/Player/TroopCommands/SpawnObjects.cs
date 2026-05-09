@@ -81,20 +81,10 @@ public class SpawnObjects : MonoBehaviour
 
     public GameObject SpawnFromAISpawner(ScriptableStats stats, bool SpawnForFree = false)
     {
-        if (AIMoneyManager.Instance == null || stats == null)
+        if (stats == null)
         {
-            Debug.LogWarning($"AIMoneyManager.Instance exists: {AIMoneyManager.Instance == null}");
             Debug.LogWarning($"stats exists: {stats == null}");
             return null;
-        }
-        if (!SpawnForFree)
-        {
-            if (AIMoneyManager.Instance.CurrentMoney < stats._spawnCost)
-            {
-                if (DebugLogs) Debug.Log($"AimoneyManager doesnt have enough money. Need {stats._spawnCost}, have {Money.Instance.CurrentMoney}");
-                return null;
-            }
-            AIMoneyManager.Instance.SpendMoney(stats._spawnCost);
         }
         return SpawnCPU(stats);
     }

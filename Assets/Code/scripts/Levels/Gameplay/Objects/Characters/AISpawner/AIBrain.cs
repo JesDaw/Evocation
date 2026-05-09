@@ -159,6 +159,7 @@ public class AISpawnerController : MonoBehaviour
         foreach (var loop in currentLoops)
         {
             loop.Initialize();
+            //Debug.Log($"[TIMING] Initialized '{loop.loopName}' with interval={loop.baseInterval}s, first fire at Time={Time.time + loop.baseInterval:F3}s");
         }
         
         // Start update coroutine
@@ -190,6 +191,7 @@ public class AISpawnerController : MonoBehaviour
                 if (loop.UpdateTimer(Time.deltaTime))
                 {
                     // Time to make a decision!
+                    //Debug.Log($"[TIMING] Loop '{loop.loopName}' FIRED at Time={Time.time:F3}s, Frame={Time.frameCount}");
                     StartCoroutine(ExecuteLoop(loop));
                     loop.ResetTimer();
                 }
@@ -322,7 +324,7 @@ public class AISpawnerController : MonoBehaviour
         Debug.Log("\n=== LOOP STATES ===");
         foreach (var loop in currentLoops)
         {
-            Debug.Log($"{loop.loopName}:");
+            Debug.Log($"[{Time.time:F3}s] {loop.loopName}:");
             Debug.Log($"  Enabled: {loop.enabled}");
             Debug.Log($"  Timer: {loop.currentTimer:F2}/{loop.currentInterval:F2}s");
             Debug.Log($"  Executing Sequence: {loop.isExecutingSequence}");

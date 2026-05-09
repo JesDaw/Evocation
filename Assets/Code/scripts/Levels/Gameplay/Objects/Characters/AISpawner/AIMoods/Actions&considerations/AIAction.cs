@@ -83,8 +83,14 @@ public class SpawnSequenceAction : AIAction
         if (parentLoop.showDebugLogs)
             Debug.Log($"[AI] ▶ Starting sequence: {actionName} ({spawnSequence.Count} units)");
         
+        //Debug.Log($"[TIMING] Sequence '{actionName}' STARTED at Time={Time.time:F3}s, {spawnSequence.Count} steps");
+        
+        int stepIndex = 0;
         foreach (SpawnStep step in spawnSequence)
         {
+            stepIndex++;
+            //Debug.Log($"[TIMING] Step {stepIndex}/{spawnSequence.Count} attempting spawn: {(step.unitToSpawn ? step.unitToSpawn.name : "NULL")}");
+            
             if (step.unitToSpawn == null)
             {
                 Debug.LogWarning($"[AI] {actionName}: Null unit in sequence, skipping");
@@ -92,6 +98,8 @@ public class SpawnSequenceAction : AIAction
             }
             
             GameObject spawned = SpawnObjects.EnemyInstance.SpawnFromAISpawner(step.unitToSpawn);
+            
+            //Debug.Log($"[TIMING] Step {stepIndex} result: {(spawned ? spawned.name : "NULL")} at Time={Time.time:F3}s");
             
             if (spawned != null && parentLoop.showDebugLogs)
             {
@@ -104,9 +112,12 @@ public class SpawnSequenceAction : AIAction
                     Debug.Log($"[AI]   ⏱ Waiting {step.delayAfter}s...");
                     
                 yield return new WaitForSeconds(step.delayAfter);
+                //Debug.Log($"[TIMING] Step {stepIndex} delay complete at Time={Time.time:F3}s");
                 if (parentLoop.showDebugLogs) Debug.Log($"[AI] actions in sequence {spawnSequence.Count}");
             }
         }
+        
+        //Debug.Log($"[TIMING] Sequence '{actionName}' COMPLETED at Time={Time.time:F3}s");
         
         if (parentLoop.showDebugLogs)
             Debug.Log($"[AI] ✓ Sequence complete: {actionName}");

@@ -4,9 +4,8 @@ using UnityEngine.Events;
 public class CalenderManager : MonoBehaviour
 {
     public static CalenderManager Instance { get; private set; }
-    DayCycle dayCycle;
+    public DayCycle dayCycle;
     public CalenderEvent[] events;
-    [SerializeField] UnityEvent[] dayEvent;
 
     void Awake()
     {
@@ -30,4 +29,5 @@ public class CalenderEvent
 {
     public int day;
     public int month;
+    [SerializeField] UnityEvent[] dayEvent;
 }

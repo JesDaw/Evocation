@@ -3,9 +3,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "DayCycle", menuName = "Scriptable Objects/DayCycle")]
 public class DayCycle : ScriptableObject
 {
+    [Header("Max actions")]
+    public int soulCounter = 5;
     public int maxActions = 3;
     public int actionCounter = 0;
-    public int soulCounter = 5;
+    [Header("Days")]
     public int dayCounter = 0;
     public int monthCounter = 0;
     public int yearCounter = 0;
@@ -20,14 +22,9 @@ public class DayCycle : ScriptableObject
         }
     }
 
-    public void IncreaseSoul(int soul)
+    public void ChangeSoul(int soul)
     {
         soulCounter += soul;
-    }
-
-    public int GetSoul()
-    {
-        return soulCounter;
     }
 
     public void IncrementDayCounter()
@@ -42,11 +39,6 @@ public class DayCycle : ScriptableObject
         }
     }
 
-    public int GetDay()
-    {
-        return dayCounter;
-    }
-
     public void IncrementMonthCounter()
     {
         monthCounter++;
@@ -58,18 +50,9 @@ public class DayCycle : ScriptableObject
         }
     }
 
-    public int GetMonth()
-    {
-        return monthCounter;
-    }
-
     public void IncrementYearCounter()
     {
         yearCounter++;
     }
 
-    public int GetYear()
-    {
-        return yearCounter;
-    }
 }
