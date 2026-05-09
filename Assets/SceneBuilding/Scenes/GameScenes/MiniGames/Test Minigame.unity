@@ -164,15 +164,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
   Slides:
-  - CharacterName: Name
-    Line: habuydbwjbfckje
-    DialogueDelaySeconds: 0.2
-    CharacterBody: 0
-    CharacterFace: 0
   - CharacterName: Archer
     Line: wym ydk?
     DialogueDelaySeconds: 0.1
-    CharacterBody: 2
+    CharacterBody: 1
+    CharacterFace: 1
+  - CharacterName: Archer
+    Line: Thats weird
+    DialogueDelaySeconds: 0.1
+    CharacterBody: 1
+    CharacterFace: 1
+  - CharacterName: Archer
+    Line: 'More talking ...
+
+'
+    DialogueDelaySeconds: 0.1
+    CharacterBody: 1
+    CharacterFace: 0
+  - CharacterName: Archer
+    Line: 'Look new body
+
+'
+    DialogueDelaySeconds: 0.1
+    CharacterBody: 0
     CharacterFace: 0
   EndOfLines:
   - Text: idk
@@ -220,9 +234,10 @@ MonoBehaviour:
       _PersistentArguments: []
   Bondies:
   - {fileID: 569652437197627795}
-  - {fileID: 569652438038628398}
-  - {fileID: 569652436905307460}
-  faces: []
+  - {fileID: 702948001}
+  faces:
+  - {fileID: 1258559174}
+  - {fileID: 1819229276}
 --- !u!4 &141166754
 Transform:
   m_ObjectHideFlags: 0
@@ -478,7 +493,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8753751174965233019, guid: d2ba0aee282b14a49a063a103308638b, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -589,22 +604,22 @@ MonoBehaviour:
   - CharacterName: Archer
     Line: Hey, its nice to fainally meet you.
     DialogueDelaySeconds: 0.1
-    CharacterBody: 0
+    CharacterBody: 1
     CharacterFace: 0
   - CharacterName: Archer
     Line: My name is...
     DialogueDelaySeconds: 0.1
-    CharacterBody: 0
+    CharacterBody: 1
     CharacterFace: 0
   - CharacterName: Archer
     Line: Idk yet
     DialogueDelaySeconds: 0.1
-    CharacterBody: 0
+    CharacterBody: 1
     CharacterFace: 0
   - CharacterName: Archer
     Line: Whats yours?
     DialogueDelaySeconds: 0.1
-    CharacterBody: 0
+    CharacterBody: 1
     CharacterFace: 0
   EndOfLines:
   - Text: My name is Theo
@@ -1099,7 +1114,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &657874207
 Transform:
   m_ObjectHideFlags: 0
@@ -1220,6 +1235,11 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &702948001 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -8653719598885068355, guid: d2ba0aee282b14a49a063a103308638b, type: 3}
+  m_PrefabInstance: {fileID: 283378164}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &769931450 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 481663998957524165, guid: d2ba0aee282b14a49a063a103308638b, type: 3}
@@ -1427,6 +1447,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1258559174 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -1465793803513798296, guid: d2ba0aee282b14a49a063a103308638b, type: 3}
+  m_PrefabInstance: {fileID: 283378164}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1291886208
 GameObject:
   m_ObjectHideFlags: 0
@@ -1625,6 +1650,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66a987b593cfb45f2b2314ebe7f4a648, type: 3}
+--- !u!1 &1819229276 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -2643444367684867239, guid: d2ba0aee282b14a49a063a103308638b, type: 3}
+  m_PrefabInstance: {fileID: 283378164}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2033005450
 GameObject:
   m_ObjectHideFlags: 0
@@ -1811,7 +1841,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &569652437197627795
 GameObject:
   m_ObjectHideFlags: 0
@@ -1827,7 +1857,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &569652438038628398
 GameObject:
   m_ObjectHideFlags: 0
@@ -1843,7 +1873,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &659379579236196256
 MonoBehaviour:
   m_ObjectHideFlags: 0
