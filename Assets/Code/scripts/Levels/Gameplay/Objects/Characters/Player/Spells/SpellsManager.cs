@@ -16,9 +16,9 @@ public class SpellsManager : MonoBehaviour
     [SerializeField] bool DebugLogs = false;
     //this means spell is ready and primed (can't be switched)
     bool charged = false;
+    Vector2 magicRadiusHoverInput;
 
-    void Awake() =>
-        manaSystem = GetComponent<ManaSystem>();
+    void Awake() => manaSystem = GetComponent<ManaSystem>();
 
     void InvokeSpell()
     {
@@ -68,8 +68,6 @@ public class SpellsManager : MonoBehaviour
 
         OnSwapSpells.Invoke(PlayerSpells[(int)currentSpellContext]); // index error here
     }
-
-    Vector2 magicRadiusHoverInput;
 
     void Update()
     {
