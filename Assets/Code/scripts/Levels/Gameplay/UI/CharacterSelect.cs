@@ -33,6 +33,7 @@ public class CharacterSelect : MonoBehaviour
 
     public void ShowCharacterInfo(CharacterData character)
     {
+        characterImage.enabled = true;
         characterImage.sprite = character.portrait;
         characterNameText.text = character.characterName;
         characterDescriptionText.text = character.description;

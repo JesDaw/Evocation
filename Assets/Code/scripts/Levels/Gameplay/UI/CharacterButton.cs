@@ -10,11 +10,14 @@ public class CharacterButton : MonoBehaviour
     
     void Start ()
     {
-        headshotFrame.sprite = character.headshot;
+        headshotFrame.enabled = true;
+        if (character != null) headshotFrame.sprite = character.headshot;
+        else headshotFrame.enabled = false;
     }
 
     public void OnClick()
     {
+        if (character == null) return;
         selector.OnCharacterClicked(character);
     }
 }
