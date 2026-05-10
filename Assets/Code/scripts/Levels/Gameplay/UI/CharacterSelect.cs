@@ -12,6 +12,7 @@ public class CharacterSelect : MonoBehaviour
     [SerializeField] TMP_Text characterNameText;
     [SerializeField] TMP_Text characterDescriptionText;
     [SerializeField] Image characterImage;
+    
 
     public List<CharacterData> party = new List<CharacterData>();
     public int partySize = 5;
@@ -21,6 +22,7 @@ public class CharacterSelect : MonoBehaviour
     [SerializeField] GameObject maxMessage;
     [SerializeField] Image[] partySlots;
     [SerializeField] Image[] partySlotsGameplayUI;
+    [SerializeField] TMP_Text[] characterPrice;
 
     CharacterData lastClicked = null;
 
@@ -96,6 +98,8 @@ public class CharacterSelect : MonoBehaviour
             partySlots[i].sprite = null;
             partySlotsGameplayUI[i].enabled = false;
             partySlotsGameplayUI[i].sprite = null;
+            characterPrice[i].enabled = false;
+
         }
 
         for (int i = 0; i < party.Count; i++)
@@ -104,6 +108,8 @@ public class CharacterSelect : MonoBehaviour
             partySlots[i].sprite = party[i].headshot;
             partySlotsGameplayUI[i].enabled = true;
             partySlotsGameplayUI[i].sprite = party[i].headshot;
+            characterPrice[i].enabled = true;
+            characterPrice[i].text = party[i].scriptableStats._spawnCost.ToString(); // crazy ahh line right here
         }
     }
 }
