@@ -12,7 +12,6 @@ public class SpellsManager : MonoBehaviour
     public UnityEvent<PlayerSpells> OnSwapSpells;
     [SerializeField] uint currentSpellContext = 0;
     [SerializeField] Transform detectionRadiusObject;
-    [SerializeField] Transform playerPos;
     [SerializeField] bool DebugLogs = false;
     //this means spell is ready and primed (can't be switched)
     bool charged = false;
@@ -33,7 +32,7 @@ public class SpellsManager : MonoBehaviour
         charged = true;
 
         GlobalInputManager.Instance.DisableCursor();
-        detectionRadiusObject.position = playerPos.position;
+        detectionRadiusObject.position = ActivePlayer.Instance.CurrentPlayer.transform.position;
         detectionRadiusObject.gameObject.SetActive(true);
 
         float radius = PlayerSpells[(int)currentSpellContext].Radius;
@@ -48,7 +47,6 @@ public class SpellsManager : MonoBehaviour
         PlayerSpells[(int)currentSpellContext].OnHitPosition.Invoke(detectionRadiusObject);
         if(DebugLogs) Debug.Log("Spells Used");
         detectionRadiusObject.gameObject.SetActive(false);
-        GlobalInputManager.Instance.EnableCursor();
         charged = false;
     }
 

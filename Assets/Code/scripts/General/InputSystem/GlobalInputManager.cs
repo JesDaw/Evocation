@@ -162,7 +162,8 @@ public class GlobalInputManager : MonoBehaviour
         EnablePlayerSwitching();
         EnableSpawnerControls();  
         EnableMagicControls();
-        EnableUIControls();        
+        EnableUIControls();
+        DisableCursor();        
     }
     
     public void SetFreeCamMode()
@@ -174,6 +175,7 @@ public class GlobalInputManager : MonoBehaviour
         EnablePlayerSwitching();
         EnableSpawnerControls();
         EnableUIControls();
+        DisableCursor();
         
     }
 
@@ -183,6 +185,7 @@ public class GlobalInputManager : MonoBehaviour
         DisableAllControls();
         EnableCameraControls();
         EnableUIControls();
+        DisableCursor();
         
     }
     
@@ -191,6 +194,7 @@ public class GlobalInputManager : MonoBehaviour
         if(DebugLogs) Debug.Log("=========Input Mode: Cutscene=========");
         DisableAllControls();
         EnableUIControls();
+        DisableCursor();
         
     }
     
@@ -199,6 +203,7 @@ public class GlobalInputManager : MonoBehaviour
         if(DebugLogs) Debug.Log("=========Input Mode: Dialogue=========");
         DisableAllControls();
         EnableUIControls();
+        EnableCursor();
         
     }
 
@@ -215,7 +220,8 @@ public class GlobalInputManager : MonoBehaviour
     {
         if(DebugLogs) Debug.Log("=========Input Mode: Spawning=========");
         DisableAllControls();
-        EnableUIControls();  
+        EnableUIControls();
+        EnableCursor();  
         
     }
     #endregion
