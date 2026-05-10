@@ -11,7 +11,7 @@ namespace ChristinaCreatesGames.UI
     public class HotkeyButton : Selectable, IPointerClickHandler, ISubmitHandler
     {
         [Header("Input Conditionals")] 
-        [SerializeField] private InputActionReference assignedHotkeyButton;
+        [SerializeField] InputActionReference assignedHotkeyButton;
 
         [Header("Visuals Setup")] 
         [SerializeField] private TMP_Text hotkeyLabel;

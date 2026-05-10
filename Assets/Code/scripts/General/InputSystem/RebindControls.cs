@@ -16,11 +16,8 @@ public class RebindControls : MonoBehaviour
     [System.Serializable]
     public class RebindEntry
     {
-        [Tooltip("The action map name, e.g. 'Player', 'MagicController'")]
-        public string actionMapName;
-
-        [Tooltip("The action name, e.g. 'Attack', 'CastSpell'")]
-        public string actionName;
+        [Tooltip("The InputAction to rebind (drag from Input System asset)")]
+        [SerializeField] private InputActionReference actionReference;
 
         [Tooltip("Which binding index to rebind (0 = first binding for that action)")]
         public int bindingIndex = 0;
@@ -30,6 +27,8 @@ public class RebindControls : MonoBehaviour
 
         [Tooltip("The label that shows the current key binding (the 'A' labels in your screenshot)")]
         public TextMeshProUGUI currentBindingLabel;
+
+        public InputAction Action => actionReference?.action;
     }
 
     [Header("Rebind Entries")]
@@ -113,7 +112,7 @@ public class RebindControls : MonoBehaviour
         var action = GetAction(entry);
         if (action == null)
         {
-            Debug.LogWarning($"RebindControls: Could not find action '{entry.actionName}' in map '{entry.actionMapName}'");
+            Debug.LogWarning("RebindControls: Could not find action from reference");
             return;
         }
 
@@ -214,20 +213,7 @@ public class RebindControls : MonoBehaviour
 
     InputAction GetAction(RebindEntry entry)
     {
-        var inputActions = GlobalInputManager.Instance.InputActions;
-        
-        InputActionMap map = entry.actionMapName switch
-        {
-            "Player" => inputActions.Player,
-            "Camera" => inputActions.Camera,
-            "MagicController" => inputActions.MagicController,
-            "ControlManager" => inputActions.ControlManager,
-            "SpawnerController" => inputActions.SpawnerController,
-            "UI" => inputActions.UI,
-            _ => null
-        };
-        
-        return map?.FindAction(entry.actionName, throwIfNotFound: false);
+        return entry.Action;
     }
 
     void SaveRebinds()
