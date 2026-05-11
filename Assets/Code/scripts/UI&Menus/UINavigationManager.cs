@@ -61,7 +61,11 @@ public class UINavigationManager : MonoBehaviour
 
     private void Update()
     {
-        if (GlobalInputManager.Instance.MenuNavigation == false)return;
+        if (GlobalInputManager.Instance.MenuNavigation == false) 
+        {
+            //Debug.Log("here");
+            return;
+        }
         if (DetectKeyboardNavigation())
         {
             if (isKeyboardMode)

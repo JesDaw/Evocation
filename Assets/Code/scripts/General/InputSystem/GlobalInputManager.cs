@@ -7,7 +7,7 @@ public class GlobalInputManager : MonoBehaviour
     private InputSystem_Actions _inputActions;
     public InputSystem_Actions InputActions => _inputActions;
     [SerializeField] bool DebugLogs = false;
-    [HideInInspector] public bool MenuNavigation = false;
+    public bool MenuNavigation = false;
     #region Start and stop
     void Awake()
     {
