@@ -33,21 +33,11 @@ public class CharacterSelect : MonoBehaviour
         if (SpawnController.Instance == null) Debug.LogError($"spawnController not found in {gameObject.name}");
     }
 
-    public void ShowCharacterInfo(CharacterData character)
-    {
-        characterImage.enabled = true;
-        characterImage.sprite = character.portrait;
-        characterNameText.text = character.characterName;
-        characterDescriptionText.text = character.description;
-    }
-
     public void OnCharacterClicked(CharacterData character)
     {
         //first click shows the character info only
         if (lastClicked != character)
         {
-            lastClicked = character;
-            FModAudioManager.instance.PlaySoundByName("showCharacterInfo");
             ShowCharacterInfo(character);
             return;
         }
@@ -63,7 +53,26 @@ public class CharacterSelect : MonoBehaviour
         }
         else
         {
-            if (party.Count < partySize)
+            AddCharacterToParty(character);
+        }
+
+        UpdatePartyUI();
+    }
+
+    public void ShowCharacterInfo(CharacterData character)
+    {
+        if (character == null) return;
+        lastClicked = character;
+        //FModAudioManager.instance.PlaySoundByName("showCharacterInfo");
+        characterImage.enabled = true;
+        characterImage.sprite = character.portrait;
+        characterNameText.text = character.characterName;
+        characterDescriptionText.text = character.description;
+    }
+
+    public void AddCharacterToParty(CharacterData character)
+    {
+        if (party.Count < partySize)
             {
                 FModAudioManager.instance.PlaySoundByName("addCharacterToParty");
                 if (character.SoundName != "") FModAudioManager.instance.PlaySoundByName(character.SoundName);
@@ -76,10 +85,8 @@ public class CharacterSelect : MonoBehaviour
                 StartCoroutine(MaxMessageRoutine());
                 return;
             }
-        }
-
-        UpdatePartyUI();
     }
+
 
     IEnumerator MaxMessageRoutine()
     {

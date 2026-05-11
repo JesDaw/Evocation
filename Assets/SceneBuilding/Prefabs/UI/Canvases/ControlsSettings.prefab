@@ -1582,6 +1582,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::SceneActivity
   disableDefaultBehavior: 0
+  defaultSelectedButton: {fileID: 0}
   OnActivityStart:
     m_PersistentCalls:
       m_Calls: []
@@ -7437,7 +7438,6 @@ GameObject:
   - component: {fileID: 4487158594396833745}
   - component: {fileID: 7089222958252069455}
   - component: {fileID: 7072559691057803220}
-  - component: {fileID: 6559528674678518600}
   m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
@@ -7559,7 +7559,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 6559528674678518600}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: AdamLenzini.UI.SetsUiElementOnSelect, CodeAssembly
         m_MethodName: JumptToElement
         m_Mode: 1
@@ -7636,23 +7636,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &6559528674678518600
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6650306573466057266}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40d26c9735894d447bbc56d8d3b5f6ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::AdamLenzini.UI.SetsUiElementOnSelect
-  eventSystem: {fileID: 0}
-  elementToSelect: {fileID: 0}
-  showVisualization: 0
-  navigationColour: {r: 0, g: 1, b: 1, a: 1}
-  ShowDebugLogs: 1
 --- !u!1 &6689592675689762820
 GameObject:
   m_ObjectHideFlags: 0
@@ -8077,7 +8060,6 @@ GameObject:
   - component: {fileID: 8012095253822660973}
   - component: {fileID: 5292568748660782335}
   - component: {fileID: 4569431405438588206}
-  - component: {fileID: 2079516636019726260}
   m_Layer: 5
   m_Name: Reset Controls
   m_TagString: Untagged
@@ -8264,23 +8246,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &2079516636019726260
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7068586501265681443}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40d26c9735894d447bbc56d8d3b5f6ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::AdamLenzini.UI.SetsUiElementOnSelect
-  eventSystem: {fileID: 0}
-  elementToSelect: {fileID: 0}
-  showVisualization: 0
-  navigationColour: {r: 0, g: 1, b: 1, a: 1}
-  ShowDebugLogs: 1
 --- !u!1 &7148261702503644143
 GameObject:
   m_ObjectHideFlags: 0

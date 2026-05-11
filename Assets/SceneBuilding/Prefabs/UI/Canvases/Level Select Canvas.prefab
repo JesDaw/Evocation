@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 220195392418778095}
   - component: {fileID: 7132701013733714078}
   - component: {fileID: 8467304530659509815}
-  - component: {fileID: 7095238344820978470}
   m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
@@ -148,7 +147,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 7095238344820978470}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: AdamLenzini.UI.SetsUiElementOnSelect, CodeAssembly
         m_MethodName: JumptToElement
         m_Mode: 1
@@ -213,23 +212,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &7095238344820978470
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1224968302656215788}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40d26c9735894d447bbc56d8d3b5f6ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::AdamLenzini.UI.SetsUiElementOnSelect
-  eventSystem: {fileID: 0}
-  elementToSelect: {fileID: 0}
-  showVisualization: 0
-  navigationColour: {r: 0, g: 1, b: 1, a: 1}
-  ShowDebugLogs: 1
 --- !u!1 &2600293148998481692
 GameObject:
   m_ObjectHideFlags: 0
@@ -421,6 +403,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   disableDefaultBehavior: 0
+  defaultSelectedButton: {fileID: 0}
   OnActivityStart:
     m_PersistentCalls:
       m_Calls: []
@@ -659,6 +642,7 @@ MonoBehaviour:
   slider: {fileID: 0}
   progressText: {fileID: 0}
   NextSceneName: Blank scene
+  DebugLogs: 0
 --- !u!1 &5293718527331631699
 GameObject:
   m_ObjectHideFlags: 0
@@ -1051,6 +1035,7 @@ MonoBehaviour:
   slider: {fileID: 0}
   progressText: {fileID: 0}
   NextSceneName: 
+  DebugLogs: 0
 --- !u!1 &5923236081414851578
 GameObject:
   m_ObjectHideFlags: 0
@@ -1752,3 +1737,4 @@ MonoBehaviour:
   slider: {fileID: 0}
   progressText: {fileID: 0}
   NextSceneName: Test Cutscene
+  DebugLogs: 0
