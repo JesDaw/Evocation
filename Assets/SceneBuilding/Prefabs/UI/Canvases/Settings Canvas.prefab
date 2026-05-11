@@ -207,7 +207,6 @@ GameObject:
   - component: {fileID: 4390513630902894546}
   - component: {fileID: 3098115978884999449}
   - component: {fileID: 3972952892885757442}
-  - component: {fileID: 2175775292613915879}
   m_Layer: 5
   m_Name: Controls
   m_TagString: Untagged
@@ -292,7 +291,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 6525141957818370081}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 1, g: 0, b: 0, a: 0.48235294}
@@ -341,7 +340,7 @@ MonoBehaviour:
           m_StringArgument: ControlSettings
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 2175775292613915879}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: AdamLenzini.UI.SetsUiElementOnSelect, CodeAssembly
         m_MethodName: JumptToElement
         m_Mode: 1
@@ -406,23 +405,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &2175775292613915879
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 985559009080079341}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40d26c9735894d447bbc56d8d3b5f6ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::AdamLenzini.UI.SetsUiElementOnSelect
-  eventSystem: {fileID: 0}
-  elementToSelect: {fileID: 8544725720475725487}
-  showVisualization: 0
-  navigationColour: {r: 0, g: 1, b: 1, a: 1}
-  ShowDebugLogs: 1
 --- !u!1 &1534531620784556118
 GameObject:
   m_ObjectHideFlags: 0
@@ -698,6 +680,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   disableDefaultBehavior: 0
+  defaultSelectedButton: {fileID: 3098115978884999449}
   OnActivityStart:
     m_PersistentCalls:
       m_Calls: []
@@ -1164,7 +1147,6 @@ GameObject:
   - component: {fileID: 1180760925298350336}
   - component: {fileID: 6525141957818370081}
   - component: {fileID: 9194411314187010890}
-  - component: {fileID: 8753741359406831021}
   m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
@@ -1249,7 +1231,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 7761117329849831041}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 1, g: 0, b: 0, a: 0.48235294}
@@ -1298,7 +1280,7 @@ MonoBehaviour:
           m_StringArgument: Pause
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 8753741359406831021}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: AdamLenzini.UI.SetsUiElementOnSelect, CodeAssembly
         m_MethodName: JumptToElement
         m_Mode: 1
@@ -1363,23 +1345,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &8753741359406831021
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4553497066011675889}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40d26c9735894d447bbc56d8d3b5f6ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::AdamLenzini.UI.SetsUiElementOnSelect
-  eventSystem: {fileID: 0}
-  elementToSelect: {fileID: 0}
-  showVisualization: 0
-  navigationColour: {r: 0, g: 1, b: 1, a: 1}
-  ShowDebugLogs: 1
 --- !u!1 &4577865849291335340
 GameObject:
   m_ObjectHideFlags: 0
@@ -2628,14 +2593,3 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3624722181611170255, guid: b4cc8a50f2eaa44798f9321e41fa7e02, type: 3}
   m_PrefabInstance: {fileID: 1510126982005914848}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8544725720475725487 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7089222958252069455, guid: b4cc8a50f2eaa44798f9321e41fa7e02, type: 3}
-  m_PrefabInstance: {fileID: 1510126982005914848}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
