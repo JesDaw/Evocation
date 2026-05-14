@@ -22,7 +22,7 @@ MonoBehaviour:
     decisionLoops:
     - enabled: 1
       loopName: offense vs devense
-      baseInterval: 5
+      baseInterval: 8
       intervalVariance: 0
       possibleActions:
       - rid: 5778630850789507072
@@ -30,15 +30,15 @@ MonoBehaviour:
       showDebugLogs: 0
     - enabled: 1
       loopName: Wolf party
-      baseInterval: 12
+      baseInterval: 25
       intervalVariance: 0
       possibleActions:
-      - rid: 5778630850789507075
+      - rid: 5778631008273563843
       showDebugLogs: 0
     - enabled: 1
-      loopName: Wolf party
-      baseInterval: 12
-      intervalVariance: 0
+      loopName: Wolf pack
+      baseInterval: 25
+      intervalVariance: 10
       possibleActions:
       - rid: 5778630850789507075
       showDebugLogs: 0
@@ -139,6 +139,47 @@ MonoBehaviour:
       type: {class: ClosestEnemyDistanceConsideration, ns: , asm: CodeAssembly}
       data:
         considerationName: Player Unit count
+        responseCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+    - rid: 5778631008273563843
+      type: {class: SpawnSequenceAction, ns: , asm: CodeAssembly}
+      data:
+        actionName: New Action
+        rootConsideration:
+          rid: 5778631008273563844
+        spawnSequence:
+        - unitToSpawn: {fileID: 11400000, guid: 1b58dbc454df5e14c89b0997be5b88b3, type: 2}
+          delayAfter: 0.25
+        - unitToSpawn: {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
+          delayAfter: 0
+        - unitToSpawn: {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
+          delayAfter: 0
+    - rid: 5778631008273563844
+      type: {class: PlayerUnitCountConsideration, ns: , asm: CodeAssembly}
+      data:
+        considerationName: New Consideration
         responseCurve:
           serializedVersion: 2
           m_Curve:
