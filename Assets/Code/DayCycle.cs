@@ -1,5 +1,6 @@
 using UnityEngine;
 
+
 [CreateAssetMenu(fileName = "DayCycle", menuName = "Scriptable Objects/DayCycle")]
 public class DayCycle : ScriptableObject
 {
@@ -11,6 +12,7 @@ public class DayCycle : ScriptableObject
     public int dayCounter = 0;
     public int monthCounter = 0;
     public int yearCounter = 0;
+    public CalenderEvent[] events;
     public void IncrementActionCounter()
     {
         actionCounter++;
@@ -35,7 +37,12 @@ public class DayCycle : ScriptableObject
         if (dayCounter > 30)
         {
             IncrementMonthCounter();
-            dayCounter = 0;
+            dayCounter = 1;
+        }
+
+        if (soulCounter <= 0)
+        {
+            //Game over
         }
     }
 
@@ -46,7 +53,7 @@ public class DayCycle : ScriptableObject
         if (monthCounter > 12)
         {
             IncrementYearCounter();
-            monthCounter = 0;
+            monthCounter = 1;
         }
     }
 
@@ -55,4 +62,17 @@ public class DayCycle : ScriptableObject
         yearCounter++;
     }
 
+    public void isEventDay()
+    {
+        // Still needs work
+    }
+
+}
+
+[System.Serializable]
+public class CalenderEvent
+{
+    public int day;
+    public int month;
+    //[SerializeField] UnityEvent dayEvent;
 }
