@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
+using ChristinaCreatesGames.UI;
 
 
 public class CharacterSelect : MonoBehaviour
@@ -21,7 +22,7 @@ public class CharacterSelect : MonoBehaviour
     [SerializeField] TMP_Text partyCountText;
     [SerializeField] GameObject maxMessage;
     [SerializeField] Image[] partySlots;
-    [SerializeField] Image[] partySlotsGameplayUI;
+    [SerializeField] GameObject[] partySlotsGameplayUI;
     [SerializeField] TMP_Text[] characterPrice;
 
     CharacterData lastClicked = null;
@@ -103,8 +104,8 @@ public class CharacterSelect : MonoBehaviour
         {
             partySlots[i].enabled = false;
             partySlots[i].sprite = null;
-            partySlotsGameplayUI[i].enabled = false;
-            partySlotsGameplayUI[i].sprite = null;
+            partySlotsGameplayUI[i].transform.Find("CharacterHeadshot").gameObject.GetComponent<Image>().enabled = false;
+            partySlotsGameplayUI[i].transform.Find("CharacterHeadshot").gameObject.GetComponent<Image>().sprite = null;
             characterPrice[i].enabled = false;
 
         }
@@ -113,10 +114,12 @@ public class CharacterSelect : MonoBehaviour
         {
             partySlots[i].enabled = true;
             partySlots[i].sprite = party[i].headshot;
-            partySlotsGameplayUI[i].enabled = true;
-            partySlotsGameplayUI[i].sprite = party[i].headshot;
+            partySlotsGameplayUI[i].transform.Find("CharacterHeadshot").gameObject.GetComponent<Image>().enabled = true;
+            partySlotsGameplayUI[i].transform.Find("CharacterHeadshot").gameObject.GetComponent<Image>().sprite = party[i].headshot;
             characterPrice[i].enabled = true;
-            characterPrice[i].text = party[i].scriptableStats._spawnCost.ToString(); // crazy ahh line right here
+            partySlotsGameplayUI[i].GetComponent<HotkeyButton>()._characterPrice = party[i].scriptableStats._spawnCost;
+            characterPrice[i].text = party[i].scriptableStats._spawnCost.ToString();
+
         }
     }
 }

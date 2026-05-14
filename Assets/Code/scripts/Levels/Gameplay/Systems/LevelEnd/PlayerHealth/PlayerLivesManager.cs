@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
 using Unity.Cinemachine;
+using System.Data.SqlTypes;
 
 public class PlayerLivesManager : MonoBehaviour
 {
@@ -53,6 +54,7 @@ public class PlayerLivesManager : MonoBehaviour
         {
             LifeCount++;
             PlayerLivesDisplay.Instance.UpdateTorchDisplay();
+            Money.Instance.UpdateMoneyGen();
             if (LifeCount >= MaxLives) 
             {
                 canSpawnMore = false;
@@ -69,6 +71,7 @@ public class PlayerLivesManager : MonoBehaviour
         LifeCount--;
         canSpawnMore = true;
         PlayerLivesDisplay.Instance.UpdateTorchDisplay();
+        Money.Instance.UpdateMoneyGen();
 
         if (LifeCount <= 0)
         {

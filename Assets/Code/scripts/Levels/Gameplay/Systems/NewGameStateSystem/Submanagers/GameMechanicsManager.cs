@@ -84,15 +84,6 @@ public class GameMechanicsManager : MonoBehaviour
         }
     }
     
-    public void IncreaseMoneyGeneration()
-    {
-        if (Money.Instance != null)
-        {
-            Money.Instance.IncreaseMoneyGen();
-            if (showDebugLogs) Debug.Log("[GameMechanicsManager] Money generation increased");
-        }
-    }
-    
     public bool IsMoneyActive()
     {
         return Money.Instance != null && Money.Instance.MoneyIsActive;
