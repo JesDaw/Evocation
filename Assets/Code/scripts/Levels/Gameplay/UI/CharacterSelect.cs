@@ -67,7 +67,7 @@ public class CharacterSelect : MonoBehaviour
                 {
                     var member = members[currentMemberIndex]; 
 
-                    if (member.RelationshipLevelRequironment < clan.Depth_Level)
+                    if (member.RelationshipLevelRequironment <= clan.Depth_Level)
                     {
                         frame.character = member;
                         frame.UpdateFrame();
