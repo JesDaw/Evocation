@@ -5,14 +5,13 @@ using System.Collections.Generic;
 
 public class FModAudioManager : MonoBehaviour
 {
-    public static FModAudioManager instance { get; private set; }
     Dictionary<string, EventReference> soundDictionary = new Dictionary<string, EventReference>();
     [SerializeField] GameVolumeSO gameVolumeSO;
     Bus masterBuss;
     Bus MusicBuss;
     Bus sfxBuss;
 
-
+    public static FModAudioManager instance { get; private set; }
     void Awake()
     {
         if (instance != null && instance != this)

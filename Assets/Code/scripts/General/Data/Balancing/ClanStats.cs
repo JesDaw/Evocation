@@ -6,7 +6,7 @@ public class ClanStats : ScriptableObject
     public string ClanTheme;
     [TextArea(3, 6)] public string Characteristics;
 
-    public ScriptableStats[] all_stats_scripts;
+    public CharacterData[] all_stats_scripts;
 
     [Header("Clan Level Totals")]
     public float TotalLevel;
@@ -45,8 +45,9 @@ public class ClanStats : ScriptableObject
 
         for (int i = 0; i < all_stats_scripts.Length; i++)
         {
-            var s = all_stats_scripts[i];
-            if (s == null) continue;
+            var cd = all_stats_scripts[i];
+            if (cd == null) continue;
+            var s = cd.scriptableStats;
 
             float calculatedPower = CharacterStatBalancer.CalculatePower(
                 s, wAtk, wEnd, wMove, wKB_Dmg, wHP, wKB_HP, wRange,

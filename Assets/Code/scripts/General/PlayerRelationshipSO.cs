@@ -5,17 +5,17 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "RelationshipClass", menuName = "Scriptable Objects/PlayerRelationship")]
 public class PlayerRelationshipSO : ScriptableObject
 {
-    [SerializeField] PlayerNPC_relations[] RelationStats;
+    public PlayerNPC_relations[] RelationStats;
 }
 
 [System.Serializable]
 public class PlayerNPC_relations
 {
-    [SerializeField] string CharName = "None"; 
-    [SerializeField] int Relationship_Quality = 0; 
-    [SerializeField] int Depth_Level = 0; 
-
-    public void CheckRQ(int Relationship_Quality, int Relationship_Depth_Level)
+    public string CharName = "None"; 
+    public int Relationship_Quality = 0; 
+    public int Depth_Level = 1; 
+    public ClanStats clanStats;
+    public void CheckRQ()
     {
         if (Relationship_Quality >= 100)
         {

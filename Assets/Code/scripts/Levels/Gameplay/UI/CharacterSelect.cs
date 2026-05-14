@@ -17,7 +17,9 @@ public class CharacterSelect : MonoBehaviour
 
     public List<CharacterData> party = new List<CharacterData>();
     public int partySize = 5;
-
+    [Header("Loadlout screen")]
+    [SerializeField] PlayerRelationshipSO playerRelationshipSO;
+    [SerializeField] CharacterButton[] LoadoutSlotsUI;
     [Header("Party size limitations")]
     [SerializeField] TMP_Text partyCountText;
     [SerializeField] GameObject maxMessage;
@@ -27,11 +29,59 @@ public class CharacterSelect : MonoBehaviour
 
     CharacterData lastClicked = null;
 
+    public static CharacterSelect Instance { get; private set; }
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
+
     void Start()
     {
         maxMessage.SetActive(false);
+        UpdateSelactableUI();
         UpdatePartyUI();
         if (SpawnController.Instance == null) Debug.LogError($"spawnController not found in {gameObject.name}");
+    }
+
+    void UpdateSelactableUI()
+    {
+        var relationshipStats = playerRelationshipSO.RelationStats;
+        
+        int currentClanIndex = 0;
+        int currentMemberIndex = 0;
+
+        foreach (CharacterButton frame in LoadoutSlotsUI)
+        {
+            bool frameAssigned = false;
+            for (; currentClanIndex < relationshipStats.Length; currentClanIndex++)
+            {
+                var clan = relationshipStats[currentClanIndex];
+                var members = clan.clanStats.all_stats_scripts;
+
+                for (; currentMemberIndex < members.Length; currentMemberIndex++)
+                {
+                    var member = members[currentMemberIndex]; 
+
+                    if (member.RelationshipLevelRequironment < clan.Depth_Level)
+                    {
+                        frame.character = member;
+                        frame.UpdateFrame();
+                        currentMemberIndex++; 
+                        frameAssigned = true;
+                        break;
+                    }
+                }
+
+                if (frameAssigned) break;
+                currentMemberIndex = 0;
+            }
+            if (!frameAssigned) break;
+        }
     }
 
     public void OnCharacterClicked(CharacterData character)
@@ -60,10 +110,16 @@ public class CharacterSelect : MonoBehaviour
         UpdatePartyUI();
     }
 
+    public void UpdateCurrentDesplayedCharacter(CharacterData character)
+    {
+        ShowCharacterInfo(character);
+    }
+
     public void ShowCharacterInfo(CharacterData character)
     {
         if (character == null) return;
         lastClicked = character;
+        //Debug.Log($"last clicked = {character.characterName}");
         //FModAudioManager.instance.PlaySoundByName("showCharacterInfo");
         characterImage.enabled = true;
         characterImage.sprite = character.portrait;

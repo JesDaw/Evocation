@@ -103,9 +103,10 @@ public class MasterBalancingScript : MonoBehaviour
         foreach (var clan in all_clan_stats)
         {
             if (clan?.all_stats_scripts == null) continue;
-            foreach (var s in clan.all_stats_scripts)
+            foreach (var cd in clan.all_stats_scripts)
             {
-                if (s == null) continue;
+                if (cd == null || cd.scriptableStats == null) continue;
+                var s = cd.scriptableStats;
                 tHP += s._MaxHealth; tKBH += s._KnockBackMaxHealth; tMove += s._MoveSpeed;
                 tKBD += s._KnockBackDamage; tAD += s._AttackDamage; tEnd += s._ExtraEndlag;
                 tRange += s._HorizontalRange;
@@ -155,10 +156,10 @@ public class MasterBalancingScript : MonoBehaviour
             foreach (var clan in all_clan_stats)
             {
                 if (clan?.all_stats_scripts == null) continue;
-                foreach (var s in clan.all_stats_scripts)
+                foreach (var cd in clan.all_stats_scripts)
                 {
-                    if (s == null) continue;
-                    PopulateLevelFields(s);
+                    if (cd == null || cd.scriptableStats == null) continue;
+                    PopulateLevelFields(cd.scriptableStats);
                 }
             }
         }

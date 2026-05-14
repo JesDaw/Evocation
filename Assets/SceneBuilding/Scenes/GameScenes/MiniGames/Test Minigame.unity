@@ -628,12 +628,34 @@ MonoBehaviour:
       - _Target: {fileID: 955234561}
         _MemberName: TriggerDailogue
         _PersistentArguments: []
+      - _Target: {fileID: 324996912}
+        _MemberName: AlterRelationshipStatus
+        _PersistentArguments:
+        - _Type: 3
+          _Int: 10
+          _String: 
+          _X: 0
+          _Y: 0
+          _Z: 0
+          _W: 0
+          _Object: {fileID: 0}
   - Text: Idk
     ultEvent:
       _PersistentCalls:
       - _Target: {fileID: 108649554}
         _MemberName: TriggerDailogue
         _PersistentArguments: []
+      - _Target: {fileID: 324996912}
+        _MemberName: AlterRelationshipStatus
+        _PersistentArguments:
+        - _Type: 3
+          _Int: -10
+          _String: 
+          _X: 0
+          _Y: 0
+          _Z: 0
+          _W: 0
+          _Object: {fileID: 0}
   DefultEvent:
     _PersistentCalls: []
 --- !u!4 &315996493
@@ -653,6 +675,52 @@ Transform:
   - {fileID: 108649553}
   m_Father: {fileID: 465994361}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &324996910
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 324996911}
+  - component: {fileID: 324996912}
+  m_Layer: 0
+  m_Name: RelationshipManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &324996911
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 324996910}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4568428093005270365}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &324996912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 324996910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b82877207b8448bab7f8218d107b36d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RelationshipManager
+  playerRelationshipSO: {fileID: 11400000, guid: 6300787eb71fe4adca3d3cc7048dde55, type: 2}
+  CurrentRelationshipNumber: 0
 --- !u!1 &336804268
 GameObject:
   m_ObjectHideFlags: 0
@@ -1887,6 +1955,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DebugLogs: 0
+  MenuNavigation: 0
 --- !u!1 &885564759558394344
 GameObject:
   m_ObjectHideFlags: 0
@@ -2700,6 +2769,7 @@ Transform:
   - {fileID: 4085585268640532478}
   - {fileID: 7065955211592354820}
   - {fileID: 141166754}
+  - {fileID: 324996911}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &5072488686009425816

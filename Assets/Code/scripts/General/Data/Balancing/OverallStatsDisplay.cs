@@ -38,7 +38,11 @@ public class OverallStatsDisplay : MonoBehaviour
 
         // Theme and Characteristics are NOT synced from Clan —
         // edit them directly on this component.
-        UnitsInClan = Clan.all_stats_scripts;
+        UnitsInClan = new ScriptableStats[Clan.all_stats_scripts.Length];
+        for (int i = 0; i < Clan.all_stats_scripts.Length; i++)
+        {
+            UnitsInClan[i] = Clan.all_stats_scripts[i]?.scriptableStats;
+        }
 
         if (Clan.UnitValueDiscrepancies != null)
         {

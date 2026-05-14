@@ -124,7 +124,7 @@ public class UINavigationManager : MonoBehaviour
         if (screenDefaultButton == null)
             SelectBestKeyboardTarget();
 
-        Debug.Log("[UINavigationManager] Switched to keyboard mode.");
+        //Debug.Log("[UINavigationManager] Switched to keyboard mode.");
     }
 
     private void SwitchToMouseMode()
@@ -142,7 +142,7 @@ public class UINavigationManager : MonoBehaviour
         }
 
         eventSystem.SetSelectedGameObject(null);
-        Debug.Log("[UINavigationManager] Switched to mouse mode.");
+        //Debug.Log("[UINavigationManager] Switched to mouse mode.");
     }
 
     // ── Selection logic ───────────────────────────────────────────────────────

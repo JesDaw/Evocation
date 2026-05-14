@@ -46,9 +46,10 @@ public class ClanMatchupAnalyst : MonoBehaviour
 
         // 3. Simulate Clan A units against Clan B averages (Pass 1: Find Min)
         float rawPowerA = 0;
-        foreach(var s in ClanA.all_stats_scripts)
+        foreach(var cd in ClanA.all_stats_scripts)
         {
-            if (s == null) continue;
+            if (cd == null) continue;
+            var s = cd.scriptableStats;
             float p = CharacterStatBalancer.CalculatePowerRaw(
                 s._AttackDamage, s._ExtraEndlag, s._MoveSpeed, s._KnockBackDamage, s._MaxHealth, s._KnockBackMaxHealth, s._HorizontalRange,
                 grapher.Weight_AttackDamage, grapher.Weight_AttackEndlag, grapher.Weight_MoveSpeed, grapher.Weight_KnockBackDamage, 
@@ -62,9 +63,10 @@ public class ClanMatchupAnalyst : MonoBehaviour
 
         // 4. Simulate Clan B units against Clan A averages (Pass 1: Find Min)
         float rawPowerB = 0;
-        foreach(var s in ClanB.all_stats_scripts)
+        foreach(var cd in ClanB.all_stats_scripts)
         {
-            if (s == null) continue;
+            if (cd == null) continue;
+            var s = cd.scriptableStats;
             float p = CharacterStatBalancer.CalculatePowerRaw(
                 s._AttackDamage, s._ExtraEndlag, s._MoveSpeed, s._KnockBackDamage, s._MaxHealth, s._KnockBackMaxHealth, s._HorizontalRange,
                 grapher.Weight_AttackDamage, grapher.Weight_AttackEndlag, grapher.Weight_MoveSpeed, grapher.Weight_KnockBackDamage, 
