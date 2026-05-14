@@ -1,14 +1,18 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.Events;
 using System.Collections;
 
 public class Money : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI moneyText;
-    [SerializeField] AIMoneyManager aIMoneyManager;
+    //[SerializeField] AIMoneyManager aIMoneyManager;
+    [SerializeField] int MoneyPerPlayer;
     bool _money_is_active = false;
-    public float CurrentMoney = 0;
-    public float MoneyGainPerSec = 1; 
+    [SerializeField] int StartingMoney = 0;
+   [HideInInspector] public float CurrentMoney = 0;
+    float MoneyGainPerSec = 1; 
+    public UnityEvent MoneyUpdated;
     
     public bool MoneyIsActive
     {
@@ -32,10 +36,13 @@ public class Money : MonoBehaviour
             if (moneyTextObj == null) Debug.LogError("MoneyManager could not find the MoneyText game object");
             moneyText = moneyTextObj.GetComponent<TextMeshProUGUI>();
         }
+        CurrentMoney = StartingMoney;
     }
 
     void Start()
     {
+        
+        MoneyGainPerSec = MoneyPerPlayer;
         StartCoroutine(moneyCount());
     }
 
@@ -49,9 +56,15 @@ public class Money : MonoBehaviour
                 continue;
             }
             CurrentMoney += 1;
-            UpdateMoneyDesplay();
+            MoneyUpdate();
             yield return new WaitForSeconds(1/MoneyGainPerSec);
         }
+    }
+
+    void MoneyUpdate()
+    {
+        MoneyUpdated?.Invoke();
+        UpdateMoneyDesplay();
     }
 
     public void UpdateMoneyDesplay()
@@ -63,19 +76,19 @@ public class Money : MonoBehaviour
     public void spendMoney(int amount)
     {
         CurrentMoney -= amount;
-        UpdateMoneyDesplay();
+        MoneyUpdate();
     }
     
     public void DeactivateMoney() 
     { 
         _money_is_active = false; 
-        aIMoneyManager.DeactivateMoney();
+        //aIMoneyManager.DeactivateMoney();
     }
     public void ActivateMoney() 
     { 
         _money_is_active = true; 
-        aIMoneyManager.ActivateMoney();
+        //aIMoneyManager.ActivateMoney();
     }
     public void ResetMoney() => CurrentMoney = 0; 
-    public void IncreaseMoneyGen() => MoneyGainPerSec *= 2; 
+    public void UpdateMoneyGen() => MoneyGainPerSec = PlayerLivesManager.Instance.LifeCount * MoneyPerPlayer; 
 }

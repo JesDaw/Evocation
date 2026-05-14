@@ -27,14 +27,21 @@ MonoBehaviour:
       possibleActions:
       - rid: 5778630850789507072
       - rid: 5778630850789507074
-      showDebugLogs: 1
+      showDebugLogs: 0
     - enabled: 1
       loopName: Wolf party
       baseInterval: 12
       intervalVariance: 0
       possibleActions:
       - rid: 5778630850789507075
-      showDebugLogs: 1
+      showDebugLogs: 0
+    - enabled: 1
+      loopName: Wolf party
+      baseInterval: 12
+      intervalVariance: 0
+      possibleActions:
+      - rid: 5778630850789507075
+      showDebugLogs: 0
   startingMoodIndex: 0
   references:
     version: 2
@@ -56,18 +63,20 @@ MonoBehaviour:
           rid: 5778630850789507077
         spawnSequence:
         - unitToSpawn: {fileID: 11400000, guid: d4daadf164451854c8c5982cee62e5f9, type: 2}
-          delayAfter: 0
+          delayAfter: 3
     - rid: 5778630850789507075
       type: {class: SpawnSequenceAction, ns: , asm: CodeAssembly}
       data:
-        actionName: Spawn Party
+        actionName: Spawn pack
         rootConsideration:
-          rid: 5778630850789507158
+          rid: 5778631008273563834
         spawnSequence:
-        - unitToSpawn: {fileID: 11400000, guid: 1b58dbc454df5e14c89b0997be5b88b3, type: 2}
+        - unitToSpawn: {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
           delayAfter: 0.25
         - unitToSpawn: {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
-          delayAfter: 0
+          delayAfter: 0.25
+        - unitToSpawn: {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
+          delayAfter: 0.25
         - unitToSpawn: {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
           delayAfter: 0
     - rid: 5778630850789507076
@@ -126,8 +135,8 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-    - rid: 5778630850789507158
-      type: {class: PlayerUnitCountConsideration, ns: , asm: CodeAssembly}
+    - rid: 5778631008273563834
+      type: {class: ClosestEnemyDistanceConsideration, ns: , asm: CodeAssembly}
       data:
         considerationName: Player Unit count
         responseCurve:

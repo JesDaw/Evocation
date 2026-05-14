@@ -18,7 +18,7 @@ public class ScriptableStats : ScriptableObject
     public int _spawnCost;
     public float Level_Total;
     [HideInInspector] public float Level_Discrepancy;
-    [HideInInspector] public float _CalculatedPower; 
+    public float _CalculatedPower; 
     [HideInInspector] public float _ValueDiscrepancy;
     [Header("Level Breakdown")]
     [Tooltip("AttackDamage + KnockbackDamage")] public float Attack;

@@ -25,6 +25,22 @@ namespace ChristinaCreatesGames.UI
         private WaitForSeconds _waitTimeFadeDuration;
 
         private float _initialLabelFontSize = 70f;
+
+
+        // my new stuff
+        [HideInInspector]public int _characterPrice = 0;
+        public Image HeadshotImage;
+        void Update()
+        {
+            if (Money.Instance.CurrentMoney < _characterPrice)
+            {
+                HeadshotImage.color = new Color32(200, 200, 200, 128);
+            }
+            else
+            {
+                HeadshotImage.color = new Color32(255, 255, 225, 255);
+            }
+        }
         
         private void Reset()
         {
@@ -52,7 +68,7 @@ namespace ChristinaCreatesGames.UI
             assignedHotkeyButton.action.performed += HotkeyClicked;
             
             InputActionHandlerWithDeviceChange.OnUpdatedInputDevice.AddListener(SetLabelText);
-            SetLabelText(_lastDevice);
+//            SetLabelText(_lastDevice);
         }
         
         protected override void OnDestroy()
