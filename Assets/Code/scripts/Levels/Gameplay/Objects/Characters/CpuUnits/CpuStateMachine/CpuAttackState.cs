@@ -42,9 +42,6 @@ public class CpuAttackState : CpuBaseState
                 if (_context._AnimatorController.ShouldAttack())
                 {
                     AttackLogic.ExecuteAttack(_context);
-                    if (_context._Stats._IsProjectile) FModAudioManager.instance.PlaySoundByName("shootFireball");
-                    else FModAudioManager.instance.PlaySoundByName("attack");
-                    
                     _timer = 0f;
                     _phase = AttackPhase.Cooldown;
                 }

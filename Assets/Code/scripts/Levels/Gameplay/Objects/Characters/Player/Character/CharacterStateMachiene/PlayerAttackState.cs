@@ -31,7 +31,6 @@ public class PlayerAttackState : PlayerBaseState
                 if (Ctx.AnimatorController.ShouldAttack())
                 {
                     AttackLogic.ExecuteAttack(Ctx);
-                    FModAudioManager.instance.PlaySoundByName("attack");
                     _timer = 0f;
                     _phase = AttackPhase.Cooldown;
                 }
