@@ -19,7 +19,7 @@ public class CpuKnockBackState : CpuBaseState
         _context._Animator.SetBool("IsRunning", false);
         _context._Animator.Play("Knockback", 0, 0f);
         _context._Animator.SetBool("IsKnockback", true);
-        FModAudioManager.instance.PlaySoundByName("knockback");
+        //FModAudioManager.instance.PlaySoundByName("knockback");
         ApplyKnockback();
     }
 
@@ -33,7 +33,7 @@ public class CpuKnockBackState : CpuBaseState
         _context._Animator.SetBool("IsKnockback", false);
         if (_Stats._IsDead)
         {
-            FModAudioManager.instance.PlaySoundByName("die");
+            //FModAudioManager.instance.PlaySoundByName("die");
             Object.Destroy(_context.gameObject);
         }
         else
