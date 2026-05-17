@@ -1,6 +1,6 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using System;
+using UnityEngine.InputSystem;
 
 [Serializable]
 public class ScoutingState : LevelState

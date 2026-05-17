@@ -2077,6 +2077,7 @@ GameObject:
   - component: {fileID: 7592242119458481958}
   - component: {fileID: 5316221638223677608}
   - component: {fileID: 386938621351592546}
+  - component: {fileID: 4664362291271471239}
   m_Layer: 14
   m_Name: Rig
   m_TagString: Allies
@@ -2137,6 +2138,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ae0d9a0d53bb534398da044ca760a04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CharacterStats: {fileID: 319218597411901608}
+  attackSoundType: 0
+  StudioEventEmitter: {fileID: 4664362291271471239}
 --- !u!114 &386938621351592546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2149,6 +2153,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcaf83138e3d37245b74e814ce8c93a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AnimationDrivenVFXController
+--- !u!114 &4664362291271471239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3935600218738898496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 198277687
+      Data2: 1101601563
+      Data3: 1564439714
+      Data4: 1172320061
+    Path: event:/SFX/GamePlay/Footsteps/FootStep rock
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params:
+  - Name: volume
+    Value: 0.8
+  OverrideAttenuation: 1
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 15
 --- !u!1 &4159809229699050773
 GameObject:
   m_ObjectHideFlags: 0
@@ -2631,7 +2668,7 @@ MonoBehaviour:
   _Enemy: 0
   player: 0
   _AttackDamage: 0
-  _AttackEndlag: 0
+  _ExtraEndlag: 0
   _AttackRange: {x: 0, y: 0}
   _IsProjectile: 0
   _IsAOE: 0
@@ -2662,6 +2699,8 @@ MonoBehaviour:
   _CurrentHealth: 1
   _IsDead: 0
   _MoveSpeed: 0
+  _AnimationStartupTime: 0
+  _AnimationRecoveryTime: 0
   _KnockBackMaxHealth: 0
   _KnockBackHealth: 0
   _KnockBackDamage: 0.5
@@ -2694,11 +2733,16 @@ MonoBehaviour:
   OnStatsInitialized:
     m_PersistentCalls:
       m_Calls: []
+  DamageTrigger:
+    m_PersistentCalls:
+      m_Calls: []
+  DamageTriggerAmount: -100
   _Invincible: 0
   _DontDestroy: 0
   damageHandler: {fileID: 0}
   statusEffectManager: {fileID: 0}
   entityHealthbar: {fileID: 0}
+  animationEventsController: {fileID: 5316221638223677608}
 --- !u!114 &1117684528899802519
 MonoBehaviour:
   m_ObjectHideFlags: 0
