@@ -78,6 +78,8 @@ GameObject:
   - component: {fileID: 3859775499832756399}
   - component: {fileID: 5728620464432709427}
   - component: {fileID: 34912244015933255}
+  - component: {fileID: 3007979025459041137}
+  - component: {fileID: 331459894255208226}
   m_Layer: 14
   m_Name: Rig
   m_TagString: Enemy
@@ -140,7 +142,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterStats: {fileID: 5848340058514809631}
   attackSoundType: 0
-  StudioEventEmitter: {fileID: 34912244015933255}
+  stepStudioEventEmitter: {fileID: 34912244015933255}
+  swingStudioEventEmitter: {fileID: 3007979025459041137}
+  gettingHitEventEmitter: {fileID: 331459894255208226}
 --- !u!114 &5728620464432709427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,11 +172,44 @@ MonoBehaviour:
   CollisionTag: 
   EventReference:
     Guid:
-      Data1: 198277687
-      Data2: 1101601563
-      Data3: 1564439714
-      Data4: 1172320061
-    Path: event:/SFX/GamePlay/Footsteps/FootStep rock
+      Data1: -867720635
+      Data2: 1121477946
+      Data3: -1605929568
+      Data4: 1014911585
+    Path: event:/SFX/GamePlay/Footsteps/FootStep wood
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params:
+  - Name: volume
+    Value: 0.8
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
+--- !u!114 &3007979025459041137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 212470894599092082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 981391838
+      Data2: 1201122043
+      Data3: 2134317247
+      Data4: -435119960
+    Path: event:/SFX/GamePlay/Combat/Melee/Swing
   Event: 
   EventPlayTrigger: 0
   EventStopTrigger: 0
@@ -185,7 +222,40 @@ MonoBehaviour:
     Value: 0.8
   OverrideAttenuation: 1
   OverrideMinDistance: 1
-  OverrideMaxDistance: 15
+  OverrideMaxDistance: 20
+--- !u!114 &331459894255208226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 212470894599092082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 1418206704
+      Data2: 1177772398
+      Data3: 480952973
+      Data4: -148912483
+    Path: event:/SFX/GamePlay/Combat/Melee/hit
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params:
+  - Name: volume
+    Value: 0.8
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &359240073732573571
 GameObject:
   m_ObjectHideFlags: 0

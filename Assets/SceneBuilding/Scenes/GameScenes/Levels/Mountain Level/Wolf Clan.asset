@@ -35,12 +35,32 @@ MonoBehaviour:
       possibleActions:
       - rid: 5778631008273563843
       showDebugLogs: 0
+  - moodName: Phase 2
+    description: 'agression with wolves and hammers for defense
+
+'
+    decisionLoops:
     - enabled: 1
-      loopName: Wolf pack
-      baseInterval: 25
-      intervalVariance: 10
+      loopName: offense vs devense
+      baseInterval: 8
+      intervalVariance: 0
       possibleActions:
-      - rid: 5778630850789507075
+      - rid: 5778630850789507072
+      - rid: 5778630850789507074
+      showDebugLogs: 0
+    - enabled: 1
+      loopName: Wolf Party
+      baseInterval: 25
+      intervalVariance: 0
+      possibleActions:
+      - rid: 5778631008273563843
+      showDebugLogs: 0
+    - enabled: 1
+      loopName: Mages
+      baseInterval: 25
+      intervalVariance: 0
+      possibleActions:
+      - rid: 5778631085848002562
       showDebugLogs: 0
   startingMoodIndex: 0
   references:
@@ -64,21 +84,6 @@ MonoBehaviour:
         spawnSequence:
         - unitToSpawn: {fileID: 11400000, guid: d4daadf164451854c8c5982cee62e5f9, type: 2}
           delayAfter: 3
-    - rid: 5778630850789507075
-      type: {class: SpawnSequenceAction, ns: , asm: CodeAssembly}
-      data:
-        actionName: Spawn pack
-        rootConsideration:
-          rid: 5778631008273563834
-        spawnSequence:
-        - unitToSpawn: {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
-          delayAfter: 0.25
-        - unitToSpawn: {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
-          delayAfter: 0.25
-        - unitToSpawn: {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
-          delayAfter: 0.25
-        - unitToSpawn: {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
-          delayAfter: 0
     - rid: 5778630850789507076
       type: {class: ClosestEnemyDistanceConsideration, ns: , asm: CodeAssembly}
       data:
@@ -135,10 +140,23 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-    - rid: 5778631008273563834
-      type: {class: ClosestEnemyDistanceConsideration, ns: , asm: CodeAssembly}
+    - rid: 5778631008273563843
+      type: {class: SpawnSequenceAction, ns: , asm: CodeAssembly}
       data:
-        considerationName: Player Unit count
+        actionName: Wolf party
+        rootConsideration:
+          rid: 5778631085848002561
+        spawnSequence:
+        - unitToSpawn: {fileID: 11400000, guid: 1b58dbc454df5e14c89b0997be5b88b3, type: 2}
+          delayAfter: 0.25
+        - unitToSpawn: {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
+          delayAfter: 0
+        - unitToSpawn: {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
+          delayAfter: 0
+    - rid: 5778631085848002561
+      type: {class: PlayerUnitCountConsideration, ns: , asm: CodeAssembly}
+      data:
+        considerationName: New Consideration
         responseCurve:
           serializedVersion: 2
           m_Curve:
@@ -163,20 +181,18 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-    - rid: 5778631008273563843
+    - rid: 5778631085848002562
       type: {class: SpawnSequenceAction, ns: , asm: CodeAssembly}
       data:
-        actionName: New Action
+        actionName: Mages
         rootConsideration:
-          rid: 5778631008273563844
+          rid: 5778631085848002564
         spawnSequence:
-        - unitToSpawn: {fileID: 11400000, guid: 1b58dbc454df5e14c89b0997be5b88b3, type: 2}
-          delayAfter: 0.25
-        - unitToSpawn: {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
+        - unitToSpawn: {fileID: 11400000, guid: b6992adb71df9b441bc53d51187ea154, type: 2}
           delayAfter: 0
-        - unitToSpawn: {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
+        - unitToSpawn: {fileID: 11400000, guid: b6992adb71df9b441bc53d51187ea154, type: 2}
           delayAfter: 0
-    - rid: 5778631008273563844
+    - rid: 5778631085848002564
       type: {class: PlayerUnitCountConsideration, ns: , asm: CodeAssembly}
       data:
         considerationName: New Consideration

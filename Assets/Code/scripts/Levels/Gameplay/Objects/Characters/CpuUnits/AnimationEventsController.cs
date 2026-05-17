@@ -6,14 +6,16 @@ public class AnimationEventsController : MonoBehaviour
 {
     [SerializeField] Stats CharacterStats;
     [SerializeField] AttackSoundType attackSoundType;
-    [SerializeField] StudioEventEmitter StudioEventEmitter;
+    [SerializeField] StudioEventEmitter stepStudioEventEmitter;
+    [SerializeField] StudioEventEmitter swingStudioEventEmitter;
+    [SerializeField] StudioEventEmitter gettingHitEventEmitter;
     [Range(0f,1f)]    
     bool shouldAttack;
     void Start()
     {
-        if (StudioEventEmitter != null)
+        if (stepStudioEventEmitter != null)
         {
-            StudioEventEmitter.EventReference = FModEvents.instance.walkWood;
+            stepStudioEventEmitter.EventReference = FModEvents.instance.walkWood;
         }
         else
         {
@@ -33,25 +35,26 @@ public class AnimationEventsController : MonoBehaviour
             switch (attackSoundType)
             {
                 case AttackSoundType.Slash:
-                    StudioEventEmitter.EventReference = FModEvents.instance.attack;
+                    swingStudioEventEmitter.EventReference = FModEvents.instance.attack;
                     break;
                 case AttackSoundType.Stab:
-                    StudioEventEmitter.EventReference = FModEvents.instance.attack;   
+                    swingStudioEventEmitter.EventReference = FModEvents.instance.attack;   
                     break;
                 case AttackSoundType.Smash:
-                    StudioEventEmitter.EventReference = FModEvents.instance.attack; 
+                    swingStudioEventEmitter.EventReference = FModEvents.instance.attack; 
                     break;
             }
         }
-        StudioEventEmitter.Play();
+        Debug.Log("playing attacking");
+        swingStudioEventEmitter.Play();
         
         shouldAttack = false;
         return true;
     }
     public void DamageSound()
     {
-        StudioEventEmitter.EventReference = FModEvents.instance.takeDamage; 
-        StudioEventEmitter.Play();
+        gettingHitEventEmitter.EventReference = FModEvents.instance.takeDamage; 
+        gettingHitEventEmitter.Play();
     }
     void OnStep()
     {
@@ -68,22 +71,22 @@ public class AnimationEventsController : MonoBehaviour
             switch (hit.collider.tag)
             {
                 case "Ground/wood":
-                    StudioEventEmitter.EventReference = FModEvents.instance.walkWood;
+                    stepStudioEventEmitter.EventReference = FModEvents.instance.walkWood;
                     break;
                 case "Ground/stone":
-                    StudioEventEmitter.EventReference = FModEvents.instance.walkstone;
+                    stepStudioEventEmitter.EventReference = FModEvents.instance.walkstone;
                     break;
                 default:
-                    StudioEventEmitter.EventReference = FModEvents.instance.walkWood;
+                    stepStudioEventEmitter.EventReference = FModEvents.instance.walkWood;
                     break;
             }
         }
         else
         {
-            StudioEventEmitter.EventReference = FModEvents.instance.walkWood;
+            stepStudioEventEmitter.EventReference = FModEvents.instance.walkWood;
         }
-        Debug.Log("playing footstep");
-        StudioEventEmitter.Play();
+        
+        stepStudioEventEmitter.Play();
     }
 }
 
