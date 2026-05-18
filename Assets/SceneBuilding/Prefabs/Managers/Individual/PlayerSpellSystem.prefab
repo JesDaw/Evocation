@@ -125,7 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51b075c544c0c8740841b377a59c3a8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::MagicSelector
-  spellManager: {fileID: 0}
+  spellManager: {fileID: 4068080231543088761}
 --- !u!1 &2512346747509638594
 GameObject:
   m_ObjectHideFlags: 0
@@ -290,13 +290,13 @@ MonoBehaviour:
     OnHit:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 11400000, guid: bbb3cb2748da5fd4a843a2f8d59c930e, type: 2}
-          m_TargetAssemblyTypeName: 
-          m_MethodName: 
+        - m_Target: {fileID: 4051888827617240930}
+          m_TargetAssemblyTypeName: SpellsAffector, CodeAssembly
+          m_MethodName: FireballSpell
           m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: 
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
@@ -311,13 +311,13 @@ MonoBehaviour:
     OnHit:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 11400000, guid: bbb3cb2748da5fd4a843a2f8d59c930e, type: 2}
-          m_TargetAssemblyTypeName: 
-          m_MethodName: 
+        - m_Target: {fileID: 4051888827617240930}
+          m_TargetAssemblyTypeName: SpellsAffector, CodeAssembly
+          m_MethodName: BiggerFireballSpell
           m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: 
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
@@ -346,7 +346,6 @@ MonoBehaviour:
         m_CallState: 2
   currentSpellContext: 0
   detectionRadiusObject: {fileID: 3218463498466943359}
-  playerPos: {fileID: 0}
   DebugLogs: 0
 --- !u!114 &4051888827617240930
 MonoBehaviour:
