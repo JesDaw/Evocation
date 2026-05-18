@@ -1,3 +1,4 @@
+using UnityEngine.Events;
 using UnityEngine;
 
 /// <summary>
@@ -10,6 +11,7 @@ public class IterativeStatusEffect : StatusEffect
     public float tickInterval = 1f; 
     public float damagePerTick = 5f; 
     public bool canKill = true; // if we want to do minecraft poison maybe
+    //if we needed some special actions on tick
 
     [Header("Stacking")]
     [SerializeField] private bool allowStacking = false;
@@ -66,6 +68,7 @@ public class IterativeStatusEffect : StatusEffect
 [System.Serializable]
 public class ActiveIterativeEffect : ActiveStatusEffect
 {
+    public UnityEvent<Stats> specialOnTick;
     public IterativeStatusEffect IterativeData => effectData as IterativeStatusEffect;
 
     public ActiveIterativeEffect(IterativeStatusEffect effect) : base(effect)
