@@ -12,24 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 238e13654c5efff43b776bb1e518c913, type: 3}
   m_Name: PlayerStats
   m_EditorClassIdentifier: 
-  _spawnCost: 15
-  _CalculatedPower: 0
-  _ValueDiscrepancy: 0
   Theme: 
   ODS: 
   RPS_Type: 
-  OtherNotes: 
-  _MoveSpeed: 15
-  _KnockBackDamage: 0
-  _AttackDamage: 10
-  _AttackEndlag: 1
-  _MaxHealth: 100
-  _KnockBackMaxHealth: 1
-  _VerticalRange: 5
-  _HorizontalRange: 5
-  _AttackStyle: 1
   _IsAOE: 0
+  _AttackStyle: 1
+  OtherNotes: 
+  _spawnCost: 15
+  Level_Total: 0
+  Level_Discrepancy: 0
+  _CalculatedPower: 0
+  _ValueDiscrepancy: 0
+  Attack: 0
+  Defense: 0
+  SpaceControl: 0
+  AttackFrequency: 0
+  _AttackDamage: 10
+  _KnockBackDamage: 10
+  _MoveSpeed: 10
+  _MaxHealth: 20
+  _KnockBackMaxHealth: 15
+  _HorizontalRange: 8
+  _ExtraEndlag: 2
   _MaxAOETargets: 5
+  _VerticalRange: 5
   _KnockBackVelocity: 10
   _KnockBackAngle: 45
   _ProjectilePrefab: {fileID: 6072924362752908747, guid: e36c33467359d0a44aa4493b4d80e7d9, type: 3}
@@ -117,78 +123,14 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _EffectsToApply: []
-  vfx: []
-  vfxOffsets: []
   _Rotate: 0
   _animator: {fileID: 0}
   _Sprites: []
   _AnimationMoveSpeed: 1
-  Marginal_Utility:
-    AttackDamage:
-      PlusOne: 0
-      MinusOne: 0
-    AttackEndlag:
-      PlusOne: 0
-      MinusOne: 0
-    MoveSpeed:
-      PlusOne: 0
-      MinusOne: 0
-    KnockBackDamage:
-      PlusOne: 0
-      MinusOne: 0
-    MaxHealth:
-      PlusOne: 0
-      MinusOne: 0
-    KB_MaxHealth:
-      PlusOne: 0
-      MinusOne: 0
-    Range:
-      PlusOne: 0
-      MinusOne: 0
-  Power_Curves:
-    AttackDamage:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    AttackEndlag:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    MoveSpeed:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    KnockBackDamage:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    MaxHealth:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    KnockBackMaxHealth:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    HorizontalRange:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  Calculated_Totals:
-    PushingPower: 0
-    DPS: 0
-    Defense_TTK: 0
+  vfx: []
+  vfxOffsets: []
+  _AnimationStartupTime: 0
+  _AnimationRecoveryTime: 0
+  level: 1
+  xp_to_next_lvl: 100
+  ExpCostMultiplier: 0.5

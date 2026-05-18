@@ -4961,6 +4961,37 @@ Transform:
   - {fileID: 7994902007815491822}
   m_Father: {fileID: 3086484299085512435}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1901286858666743053
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6887572936639318945}
+  m_Layer: 0
+  m_Name: Audio Listener
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6887572936639318945
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901286858666743053}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 15}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8548001106857201292}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2256967398346246352
 GameObject:
   m_ObjectHideFlags: 0
@@ -5065,7 +5096,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 10
-  zoomSpeed: 1
+  zoomSpeed: 1.5
   maxZoomSpeedMultiplier: 2
   CameraConfiner: {fileID: 7746458323231678103}
   DebugLogs: 0
@@ -10414,11 +10445,12 @@ Transform:
   m_GameObject: {fileID: 8000625991148547943}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -94.14, y: 2.7398212, z: -15}
+  m_LocalPosition: {x: -93.298706, y: 3.212882, z: -15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 695776779131964785}
+  - {fileID: 6887572936639318945}
   m_Father: {fileID: 8760919493965971543}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &8754607563919414509
@@ -10453,10 +10485,10 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.1
-  far clip plane: 3050
+  far clip plane: 3100
   field of view: 40
   orthographic: 0
-  orthographic size: 7
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -10561,7 +10593,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioListener
   nonRigidbodyVelocity: 0
-  attenuationObject: {fileID: 7159327817168516471}
+  attenuationObject: {fileID: 1901286858666743053}
 --- !u!1 &8217277711519526785
 GameObject:
   m_ObjectHideFlags: 0

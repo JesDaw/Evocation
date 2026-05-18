@@ -1,5 +1,5 @@
 using UnityEngine;
-using System; // Required for [Serializable]
+using System;
 
 [Serializable]
 public class CountdownState : LevelState

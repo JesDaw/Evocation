@@ -1,155 +1,155 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
-/// Base class for AI actions with clean debug logging
+/// Base class for AI actions
 /// </summary>
 [System.Serializable]
 public abstract class AIAction
 {
-    public string actionName = "AI Action";
-    [SerializeReference, SubclassSelector]
-    public List<AIConsideration> considerations = new List<AIConsideration>();
-
-    /// <summary>
-    /// Calculate utility by multiplying all consideration outputs
-    /// Multiplication acts as a veto - if any consideration is 0, utility becomes 0
-    /// </summary>
-    public virtual float CalculateUtility(AIContext context, bool debug)
-    {
-        if (!CanExecute(context))
-        {
-            if (debug)
-                Debug.Log($"✗ {actionName}: CANNOT EXECUTE");
-            return 0f;
-        }
-        
-        if (debug)
-            Debug.Log($"\n▸ {actionName}:");
-        
-        if (considerations.Count == 0)
-        {
-            Debug.LogWarning($"[AI] {actionName} has NO considerations!");
-            return 0f;
-        }
-        
-        ScriptableStats unitStats = GetUnitStats();
-        
-        float totalUtility = 1f;
-        
-        foreach (AIConsideration consideration in considerations)
-        {
-            if (consideration == null)
-            {
-                Debug.LogWarning($"[AI] Null consideration in {actionName}");
-                continue;
-            }
-            
-            float value = consideration.Evaluate(context, debug, unitStats);
-            totalUtility *= value;
-            
-            if (totalUtility <= 0f)
-            {
-                if (debug)
-                    Debug.Log($"    ✗ VETOED by {consideration.considerationName}");
-                break;
-            }
-        }
-        
-        if (debug)
-            Debug.Log($"  TOTAL UTILITY: {totalUtility:F2}");
-        
-        return totalUtility;
-    }
-
-    /// <summary>
-    /// Override in derived classes to provide unit stats for CanAffordUnit considerations
-    /// </summary>
-    protected virtual ScriptableStats GetUnitStats()
-    {
-        return null;
-    }
-
-    public abstract void Execute(AIContext context);
-    public virtual bool CanExecute(AIContext context) => true;
+    public string actionName = "New Action";
     
-    public virtual void RecordExecution(AIContext context)
+    [Header("Utility Calculation")]
+    [SerializeReference, SubclassSelector]
+    public AIConsideration rootConsideration;
+    
+    /// <summary>
+    /// Calculate the utility score for this action
+    /// </summary>
+    public float CalculateUtility(AIContext context)
     {
-        context.RecordActionExecuted(actionName);
+        if (rootConsideration == null)
+        {
+            Debug.LogWarning($"[AI] {actionName} has no root consideration!");
+            return 0f;
+        }
+        
+        return rootConsideration.Evaluate(context);
+    }
+    
+    /// <summary>
+    /// Execute the action
+    /// </summary>
+    public abstract IEnumerator Execute(AIContext context, AILoop parentLoop);
+    
+    /// <summary>
+    /// Can this action currently be executed?
+    /// </summary>
+    public virtual bool CanExecute(AIContext context)
+    {
+        return true;
     }
 }
 
 /// <summary>
-/// Action for spawning a specific unit
+/// Spawn a sequence of units with delays between each
 /// </summary>
 [System.Serializable]
-[AddTypeMenu("Spawn Unit")]
-public class SpawnUnitAction : AIAction
+[AddTypeMenu("Spawn Sequence")]
+public class SpawnSequenceAction : AIAction
 {
-    public ScriptableStats unitToSpawn;
-
-    private float lastSpawnTime = -999f;
-
-    protected override ScriptableStats GetUnitStats()
-    {
-        return unitToSpawn;
-    }
-
+    [Header("Spawn Sequence")]
+    public List<SpawnStep> spawnSequence = new List<SpawnStep>();
+    
     public override bool CanExecute(AIContext context)
     {
-        if (unitToSpawn == null)
+        if (spawnSequence.Count == 0)
         {
-            Debug.LogWarning($"[AI] {actionName}: No unitToSpawn assigned!");
+            Debug.LogWarning($"[AI] {actionName}: No units in spawn sequence!");
             return false;
         }
         
-        if (context.spawner == null)
-        {
-            Debug.LogWarning($"[AI] {actionName}: No spawner!");
+        if (SpawnObjects.EnemyInstance == null)
             return false;
-        }
-        
-        if (!context.spawner.spawningEnabled)
-            return false;
-        
-        // Binary check: can we afford it?
-        if (context.GetCurrentMoney() < unitToSpawn._spawnCost)
+            
+        if (!SpawnObjects.EnemyInstance.spawningEnabled)
             return false;
         
         return true;
     }
-
-    public override void Execute(AIContext context)
+    
+    public override IEnumerator Execute(AIContext context, AILoop parentLoop)
     {
-        if (!CanExecute(context)) return;
-
-        GameObject spawnedUnit = context.spawner.SpawnFromSpawner(unitToSpawn);
-        
-        if (spawnedUnit != null && context.aiMoneyManager != null)
+        if (!CanExecute(context))
         {
-            context.aiMoneyManager.SpendMoney(unitToSpawn._spawnCost);
-            lastSpawnTime = Time.time;
-            
-            if (context.showDebugLogs)
-                Debug.Log($"[AI] ✓ Spawned {unitToSpawn.name} (Cost: {unitToSpawn._spawnCost})");
-            
-            RecordExecution(context);
+            if (parentLoop.showDebugLogs)
+                Debug.Log($"[AI] {actionName}: Cannot execute");
+            yield break;
         }
+        
+        parentLoop.isExecutingSequence = true;
+        
+        if (parentLoop.showDebugLogs)
+            Debug.Log($"[AI] ▶ Starting sequence: {actionName} ({spawnSequence.Count} units)");
+        
+        //Debug.Log($"[TIMING] Sequence '{actionName}' STARTED at Time={Time.time:F3}s, {spawnSequence.Count} steps");
+        
+        int stepIndex = 0;
+        foreach (SpawnStep step in spawnSequence)
+        {
+            stepIndex++;
+            //Debug.Log($"[TIMING] Step {stepIndex}/{spawnSequence.Count} attempting spawn: {(step.unitToSpawn ? step.unitToSpawn.name : "NULL")}");
+            
+            if (step.unitToSpawn == null)
+            {
+                Debug.LogWarning($"[AI] {actionName}: Null unit in sequence, skipping");
+                continue;
+            }
+            
+            GameObject spawned = SpawnObjects.EnemyInstance.SpawnFromAISpawner(step.unitToSpawn);
+            
+            //Debug.Log($"[TIMING] Step {stepIndex} result: {(spawned ? spawned.name : "NULL")} at Time={Time.time:F3}s");
+            
+            if (spawned != null && parentLoop.showDebugLogs)
+            {
+                Debug.Log($"[AI]   ✓ Spawned {step.unitToSpawn.name}");
+            }
+            
+            if (step.delayAfter > 0f)
+            {
+                if (parentLoop.showDebugLogs)
+                    Debug.Log($"[AI]   ⏱ Waiting {step.delayAfter}s...");
+                    
+                yield return new WaitForSeconds(step.delayAfter);
+                //Debug.Log($"[TIMING] Step {stepIndex} delay complete at Time={Time.time:F3}s");
+                if (parentLoop.showDebugLogs) Debug.Log($"[AI] actions in sequence {spawnSequence.Count}");
+            }
+        }
+        
+        //Debug.Log($"[TIMING] Sequence '{actionName}' COMPLETED at Time={Time.time:F3}s");
+        
+        if (parentLoop.showDebugLogs)
+            Debug.Log($"[AI] ✓ Sequence complete: {actionName}");
+        
+        parentLoop.isExecutingSequence = false;
     }
 }
 
 /// <summary>
-/// Action for waiting/saving money
+/// Do nothing action (useful for having the AI "wait")
 /// </summary>
 [System.Serializable]
 [AddTypeMenu("Do Nothing")]
 public class DoNothingAction : AIAction
 {
-    public override void Execute(AIContext context)
+    public override IEnumerator Execute(AIContext context, AILoop parentLoop)
     {
-        if (context.showDebugLogs)
-            Debug.Log($"[AI] Waiting... (Money: {context.GetCurrentMoney():F1})");
+        if (parentLoop.showDebugLogs)
+            Debug.Log($"[AI] {actionName}: Waiting...");
+        
+        yield break;
     }
+}
 
-    public override bool CanExecute(AIContext context) => true;
+/// <summary>
+/// Single step in a spawn sequence
+/// </summary>
+[System.Serializable]
+public class SpawnStep
+{
+    public ScriptableStats unitToSpawn;
+    
+    [Tooltip("Delay in seconds after spawning this unit")]
+    public float delayAfter = 0.5f;
 }

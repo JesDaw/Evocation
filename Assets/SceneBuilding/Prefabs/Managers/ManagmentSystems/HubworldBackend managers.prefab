@@ -35,8 +35,55 @@ Transform:
   - {fileID: 1584146999402771926}
   - {fileID: 5151869231685268059}
   - {fileID: 7374458535255589890}
+  - {fileID: 7931374619135599850}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5400177577972785884
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7931374619135599850}
+  - component: {fileID: 6085427464226690684}
+  m_Layer: 0
+  m_Name: CalenderManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7931374619135599850
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5400177577972785884}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4660001615594436856}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6085427464226690684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5400177577972785884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b2e6fb4376ba5c45ba04954e4cac900, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::CalenderManager
+  dayCycle: {fileID: 11400000, guid: 0b0f57f8a9fe84b599255bafced89bbc, type: 2}
+  events: []
 --- !u!1 &8324868271558566989
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,3 +1,5 @@
+#nullable disable
+
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -14,11 +16,8 @@ public class RebindControls : MonoBehaviour
     [System.Serializable]
     public class RebindEntry
     {
-        [Tooltip("The action map name, e.g. 'Player', 'MagicController'")]
-        public string actionMapName;
-
-        [Tooltip("The action name, e.g. 'Attack', 'CastSpell'")]
-        public string actionName;
+        [Tooltip("The InputAction to rebind (drag from Input System asset)")]
+        [SerializeField] private InputActionReference actionReference;
 
         [Tooltip("Which binding index to rebind (0 = first binding for that action)")]
         public int bindingIndex = 0;
@@ -28,14 +27,16 @@ public class RebindControls : MonoBehaviour
 
         [Tooltip("The label that shows the current key binding (the 'A' labels in your screenshot)")]
         public TextMeshProUGUI currentBindingLabel;
+
+        public InputAction Action => actionReference?.action;
     }
 
     [Header("Rebind Entries")]
     [SerializeField] private RebindEntry[] rebindEntries;
 
     [Header("UI Feedback")]
-    [SerializeField] private GameObject listeningOverlay;   // Optional: dim overlay while waiting for input
-    [SerializeField] private TextMeshProUGUI listeningLabel; // Optional: "Press a key..." text
+    [SerializeField] private GameObject listeningOverlay;   //dim overlay while waiting for input
+    [SerializeField] private TextMeshProUGUI listeningLabel; //"Press a key..." text
 
     private InputActionRebindingExtensions.RebindingOperation _rebindOperation;
     private RebindEntry _currentEntry;
@@ -52,7 +53,7 @@ public class RebindControls : MonoBehaviour
     void OnDisable()
     {
         UnregisterAllButtons();
-        CancelRebind(); // Safety: clean up if scene unloads mid-rebind
+        CancelRebind();
     }
 
     // ========================= Setup =========================
@@ -62,7 +63,7 @@ public class RebindControls : MonoBehaviour
         foreach (var entry in rebindEntries)
         {
             if (entry.rebindButton == null) continue;
-            var captured = entry; // Capture for lambda
+            var captured = entry; 
             entry.rebindButton.onClick.AddListener(() => StartRebind(captured));
         }
     }
@@ -111,7 +112,7 @@ public class RebindControls : MonoBehaviour
         var action = GetAction(entry);
         if (action == null)
         {
-            Debug.LogWarning($"RebindControls: Could not find action '{entry.actionName}' in map '{entry.actionMapName}'");
+            Debug.LogWarning("RebindControls: Could not find action from reference");
             return;
         }
 
@@ -212,20 +213,7 @@ public class RebindControls : MonoBehaviour
 
     InputAction GetAction(RebindEntry entry)
     {
-        var inputActions = GlobalInputManager.Instance.InputActions;
-        
-        InputActionMap? map = entry.actionMapName switch
-        {
-            "Player" => inputActions.Player,
-            "Camera" => inputActions.Camera,
-            "MagicController" => inputActions.MagicController,
-            "ControlManager" => inputActions.ControlManager,
-            "SpawnerController" => inputActions.SpawnerController,
-            "UI" => inputActions.UI,
-            _ => null
-        };
-        
-        return map?.FindAction(entry.actionName, throwIfNotFound: false);
+        return entry.Action;
     }
 
     void SaveRebinds()

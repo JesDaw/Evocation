@@ -7,6 +7,8 @@ public class GlobalInputManager : MonoBehaviour
     private InputSystem_Actions _inputActions;
     public InputSystem_Actions InputActions => _inputActions;
     [SerializeField] bool DebugLogs = false;
+    public bool MenuNavigation = false;
+    #region Start and stop
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -36,10 +38,8 @@ public class GlobalInputManager : MonoBehaviour
         _inputActions?.Disable();
         _inputActions?.Dispose();
     }
-
-    // ========================= Control Groups =========================
-    
-
+    #endregion
+    #region Control Groups
     public void EnableAllControls()
     {
         _inputActions.Enable();
@@ -55,6 +55,14 @@ public class GlobalInputManager : MonoBehaviour
     {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+    }
+    public void EnableMenuNavigation()
+    {
+        MenuNavigation = true;
+    }
+    public void DisableMenuNavigation()
+    {
+        MenuNavigation = false;
     }
 
     public void DisableCursor()
@@ -151,7 +159,8 @@ public class GlobalInputManager : MonoBehaviour
         _inputActions.UI.Disable();
     }
 
-    // ========================= Game State Presets =========================
+    #endregion
+    #region Game State Presets
     
     public void SetPlayerCharacterMode()
     {
@@ -162,7 +171,10 @@ public class GlobalInputManager : MonoBehaviour
         EnablePlayerSwitching();
         EnableSpawnerControls();  
         EnableMagicControls();
-        EnableUIControls();        
+        EnableUIControls();
+        DisableMenuNavigation();
+        DisableCursor(); 
+               
     }
     
     public void SetFreeCamMode()
@@ -174,6 +186,8 @@ public class GlobalInputManager : MonoBehaviour
         EnablePlayerSwitching();
         EnableSpawnerControls();
         EnableUIControls();
+        DisableMenuNavigation();
+        DisableCursor();
         
     }
 
@@ -183,6 +197,8 @@ public class GlobalInputManager : MonoBehaviour
         DisableAllControls();
         EnableCameraControls();
         EnableUIControls();
+        DisableMenuNavigation();
+        DisableCursor();
         
     }
     
@@ -191,6 +207,8 @@ public class GlobalInputManager : MonoBehaviour
         if(DebugLogs) Debug.Log("=========Input Mode: Cutscene=========");
         DisableAllControls();
         EnableUIControls();
+        DisableMenuNavigation();
+        DisableCursor();
         
     }
     
@@ -199,7 +217,7 @@ public class GlobalInputManager : MonoBehaviour
         if(DebugLogs) Debug.Log("=========Input Mode: Dialogue=========");
         DisableAllControls();
         EnableUIControls();
-        
+        EnableMenuNavigation();        
     }
 
     public void SetPauseMenuMode()
@@ -207,23 +225,31 @@ public class GlobalInputManager : MonoBehaviour
         if(DebugLogs) Debug.Log("=========Input Mode: Pause Menu=========");
         DisableAllControls();
         EnableUIControls();
-        EnableCursor();
-        
+        _inputActions.UI.StartEngaugment.Disable();
+        EnableMenuNavigation();
     }
+
+    public void SetEngaugeScreenMode()
+    {
+        if(DebugLogs) Debug.Log("=========Input Mode: Pause Menu=========");
+        DisableAllControls();
+        EnableUIControls();
+        _inputActions.UI.StartEngaugment.Enable();
+        EnableMenuNavigation();
+    }
+
+
     
     public void SetCharacterSelectingMode()
     {
         if(DebugLogs) Debug.Log("=========Input Mode: Spawning=========");
         DisableAllControls();
-        EnableUIControls();  
+        EnableUIControls();
+        _inputActions.UI.StartEngaugment.Disable();
+        EnableMenuNavigation();
         
     }
-
-    // ========================= Utilities =========================
-    
-    /// <summary>
-    /// Get the current state of all action maps (for debugging)
-    /// </summary>
+    #endregion
     public void LogInputState()
     {
         Debug.Log($"=== Input State ===\n" +

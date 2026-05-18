@@ -7,8 +7,15 @@ public class AnimationCpu : MonoBehaviour
 	public AnimationEventsController _AnimatorController;
 	public ScriptableStats _ScrStats;
     [SerializeField] Transform _rigTransform;
-
+    
 	public bool _flip;
+    public bool _quickEdit = false;
+
+    void OnValidate()
+    {
+        if(_quickEdit)
+            replaceAnimation();
+    }
 
 	[ContextMenu("Update Animation")]
 	void replaceAnimation()

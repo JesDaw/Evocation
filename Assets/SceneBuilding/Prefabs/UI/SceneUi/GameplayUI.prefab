@@ -105,7 +105,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7085703103290999261}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -83.96874, y: 0, z: 0.73635185}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -134,6 +134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SceneToLoad: 0
   DebugLogs: 0
+  sceneMgr: {fileID: 916677111330935152}
   PauseEvent:
     m_PersistentCalls:
       m_Calls:
@@ -632,6 +633,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: Settings Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 2175775292613915879, guid: 893284c8e0aac4104a5fa505d1374f40, type: 3}
+      propertyPath: eventSystem
+      value: 
+      objectReference: {fileID: 5016224013219742147}
+    - target: {fileID: 3098115978884999449, guid: 893284c8e0aac4104a5fa505d1374f40, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 916677111330935152}
+    - target: {fileID: 6525141957818370081, guid: 893284c8e0aac4104a5fa505d1374f40, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 916677111330935152}
+    - target: {fileID: 8544725720475725487, guid: 893284c8e0aac4104a5fa505d1374f40, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 916677111330935152}
+    - target: {fileID: 8753741359406831021, guid: 893284c8e0aac4104a5fa505d1374f40, type: 3}
+      propertyPath: eventSystem
+      value: 
+      objectReference: {fileID: 5016224013219742147}
+    - target: {fileID: 8753741359406831021, guid: 893284c8e0aac4104a5fa505d1374f40, type: 3}
+      propertyPath: elementToSelect
+      value: 
+      objectReference: {fileID: 5319368370691601582}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -652,6 +677,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 514867348480243628, guid: 893284c8e0aac4104a5fa505d1374f40, type: 3}
   m_PrefabInstance: {fileID: 2246510373342918039}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8401520489847487254 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7761117329849831041, guid: 893284c8e0aac4104a5fa505d1374f40, type: 3}
+  m_PrefabInstance: {fileID: 2246510373342918039}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4538591518100996021
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -960,6 +996,10 @@ PrefabInstance:
       propertyPath: 'partySlotsGameplayUI.Array.data[9]'
       value: 
       objectReference: {fileID: 4583503879718248188}
+    - target: {fileID: 2125327238000297361, guid: 3ee13b8aec9b04730aebaa8f114badac, type: 3}
+      propertyPath: m_text
+      value: Press <sprite name="button_prompts_enter"> to engage
+      objectReference: {fileID: 0}
     - target: {fileID: 2787684671880569653, guid: 3ee13b8aec9b04730aebaa8f114badac, type: 3}
       propertyPath: m_Name
       value: Scouting Canvas
@@ -1052,6 +1092,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 4229790203686502565}
+    - target: {fileID: 6660193547477404171, guid: 3ee13b8aec9b04730aebaa8f114badac, type: 3}
+      propertyPath: eventSystem
+      value: 
+      objectReference: {fileID: 5016224013219742147}
+    - target: {fileID: 7061512548437694247, guid: 3ee13b8aec9b04730aebaa8f114badac, type: 3}
+      propertyPath: m_text
+      value: Press <sprite name="button_prompts_c"> to open loadout
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1205,10 +1253,18 @@ PrefabInstance:
       propertyPath: eventSystem
       value: 
       objectReference: {fileID: 5016224013219742147}
+    - target: {fileID: 7697596849455244886, guid: c2a55b0dbfc854f5c946ed2f339dd809, type: 3}
+      propertyPath: ShowDebugLogs
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8016307845881864498, guid: c2a55b0dbfc854f5c946ed2f339dd809, type: 3}
       propertyPath: eventSystem
       value: 
       objectReference: {fileID: 5016224013219742147}
+    - target: {fileID: 8016307845881864498, guid: c2a55b0dbfc854f5c946ed2f339dd809, type: 3}
+      propertyPath: elementToSelect
+      value: 
+      objectReference: {fileID: 8401520489847487254}
     - target: {fileID: 9035355189813100407, guid: c2a55b0dbfc854f5c946ed2f339dd809, type: 3}
       propertyPath: eventSystem
       value: 
@@ -1227,6 +1283,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8623873035870474762, guid: c2a55b0dbfc854f5c946ed2f339dd809, type: 3}
   m_PrefabInstance: {fileID: 9149958347832010424}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5319368370691601582 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3974743305213760022, guid: c2a55b0dbfc854f5c946ed2f339dd809, type: 3}
+  m_PrefabInstance: {fileID: 9149958347832010424}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5744185070908443363 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3552318938257566811, guid: c2a55b0dbfc854f5c946ed2f339dd809, type: 3}

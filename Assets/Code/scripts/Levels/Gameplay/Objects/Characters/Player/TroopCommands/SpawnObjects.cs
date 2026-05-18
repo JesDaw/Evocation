@@ -38,6 +38,7 @@ public class SpawnObjects : MonoBehaviour
         set { spawningEnabled = value; }
     }
 
+    #region Setup
     void Awake()
     {
         if (enemySpawner)
@@ -58,8 +59,6 @@ public class SpawnObjects : MonoBehaviour
             }
             PlayerInstance = this;
         }
-
-
     }
 
     void Start()
@@ -74,10 +73,108 @@ public class SpawnObjects : MonoBehaviour
             Debug.LogError("No spawn location set!");
     }
 
-    /// <summary>
-    /// Spawn a CPU unit (called by AI or Player)
-    /// </summary>
-    public GameObject SpawnCPU(ScriptableStats stats)
+    public void SetSpawningEnabled(bool enabled)
+    {
+        spawningEnabled = enabled;
+    }
+    #endregion
+
+    public GameObject SpawnFromAISpawner(ScriptableStats stats, bool SpawnForFree = false)
+    {
+        if (stats == null)
+        {
+            Debug.LogWarning($"stats exists: {stats == null}");
+            return null;
+        }
+        return SpawnCPU(stats);
+    }
+    #region player
+    public GameObject SpawnFromPlayer(ScriptableStats stats, bool SpawnForFree = false)
+    {
+        if (!spawningEnabled)
+        {
+            Debug.Log("Spawning is disabled");
+            return null;
+        }
+
+        if (Money.Instance == null || stats == null)
+        {
+            Debug.LogWarning("Missing references for player spawn!");
+            return null;
+        }
+
+        if (Money.Instance.CurrentMoney < stats._spawnCost)
+        {
+            if (DebugLogs) Debug.Log($"Not enough money! Need {stats._spawnCost}, have {Money.Instance.CurrentMoney}");
+            return null;
+        }
+
+        if(!SpawnForFree) 
+        {
+            Money.Instance.spendMoney(stats._spawnCost);
+        }
+
+        GameObject spawnedUnit = SpawnCPU(stats);
+        
+        if(DebugLogs) Debug.Log($"Player spawned {stats.name} (Cost: {stats._spawnCost})");
+        
+        return spawnedUnit;
+    }
+    
+    public GameObject SpawnPlayer(GameObject playerPrefab, bool SpawnForFree = false)
+    {
+        if (!spawningEnabled)
+        {
+            Debug.Log("Spawning is disabled");
+            return null;
+        }
+
+        if (PlayerLivesManager.Instance != null && !PlayerLivesManager.Instance.canSpawnMore)
+        {
+            Debug.Log("Cannot spawn more players!");
+            return null;
+        }
+
+        Stats playerStats = playerPrefab.GetComponent<Stats>();
+        if (playerStats == null)
+        {
+            Debug.LogError("Player prefab has no Stats component!");
+            return null;
+        }
+
+        if (Money.Instance.CurrentMoney < playerStats._spawnCost)
+        {
+            Debug.Log($"Not enough money to spawn player! Need {playerStats._spawnCost}, have {Money.Instance.CurrentMoney}");
+            return null;
+        }
+
+        if(!SpawnForFree) Money.Instance.spendMoney(playerStats._spawnCost);
+
+        GameObject spawnedPlayer = Instantiate(
+            playerPrefab,
+            spawnLocation.position,
+            spawnLocation.rotation,
+            playerContainer
+        );
+
+        // Set player to Character/MidLane
+        SetCharacterLayer(spawnedPlayer);
+
+        if (PlayerSwitch.Instance != null)
+            PlayerSwitch.Instance.AddPlayer(spawnedPlayer);
+        else Debug.Log($"[SpawnObjects] playerSwitch = null");
+
+        if (PlayerLivesManager.Instance != null)
+            PlayerLivesManager.Instance.GainLife();
+        else Debug.Log($"[SpawnObjects] playerLivesManager = null");
+
+        if (DebugLogs) Debug.Log($"Player spawned (Cost: {playerStats._spawnCost}) on layer: {LayerMask.LayerToName(spawnedPlayer.layer)}");
+
+        return spawnedPlayer;
+    }
+    #endregion
+// Spawn a CPU unit (called by AI and Player)
+public GameObject SpawnCPU(ScriptableStats stats) 
     {
         if (!spawningEnabled)
         {
@@ -127,9 +224,8 @@ public class SpawnObjects : MonoBehaviour
         return spawnedUnit;
     }
 
-    /// <summary>
-    /// Sets the character's layer to Character/MidLane
-    /// </summary>
+
+    #region CPUconfig
     private void SetCharacterLayer(GameObject unit)
     {
         string layerName = CHARACTER_MID_LAYER; 
@@ -147,97 +243,6 @@ public class SpawnObjects : MonoBehaviour
         if (DebugLogs) Debug.Log($"Set {unit.name} to layer {layerName} (#{layer})");
     }
 
-    public GameObject SpawnFromSpawner(ScriptableStats stats)
-    {
-        return SpawnCPU(stats);
-    }
-
-    public GameObject SpawnFromPlayer(ScriptableStats stats)
-    {
-        if (!spawningEnabled)
-        {
-            Debug.Log("Spawning is disabled");
-            return null;
-        }
-
-        if (Money.Instance == null || stats == null)
-        {
-            Debug.LogWarning("Missing references for player spawn!");
-            return null;
-        }
-
-        if (Money.Instance.CurrentMoney < stats._spawnCost)
-        {
-            if (DebugLogs) Debug.Log($"Not enough money! Need {stats._spawnCost}, have {Money.Instance.CurrentMoney}");
-            return null;
-        }
-
-        Money.Instance.CurrentMoney -= stats._spawnCost;
-        
-        if (Money.Instance != null)
-            Money.Instance.UpdateMoneyDesplay();
-
-        GameObject spawnedUnit = SpawnCPU(stats);
-        
-        if(DebugLogs) Debug.Log($"Player spawned {stats.name} (Cost: {stats._spawnCost})");
-        
-        return spawnedUnit;
-    }
-
-    public GameObject SpawnPlayer(GameObject playerPrefab)
-    {
-        if (!spawningEnabled)
-        {
-            Debug.Log("Spawning is disabled");
-            return null;
-        }
-
-        if (PlayerLivesManager.Instance != null && !PlayerLivesManager.Instance.canSpawnMore)
-        {
-            Debug.Log("Cannot spawn more players!");
-            return null;
-        }
-
-        Stats playerStats = playerPrefab.GetComponent<Stats>();
-        if (playerStats == null)
-        {
-            Debug.LogError("Player prefab has no Stats component!");
-            return null;
-        }
-
-        int cost = playerStats._spawnCost;
-
-        if (Money.Instance.CurrentMoney < cost)
-        {
-            Debug.Log($"Not enough money to spawn player! Need {cost}, have {Money.Instance.CurrentMoney}");
-            return null;
-        }
-
-        Money.Instance.CurrentMoney -= cost;
-
-        GameObject spawnedPlayer = Instantiate(
-            playerPrefab,
-            spawnLocation.position,
-            spawnLocation.rotation,
-            playerContainer
-        );
-
-        // Set player to Character/MidLane
-        SetCharacterLayer(spawnedPlayer);
-
-        if (PlayerSwitch.Instance != null)
-            PlayerSwitch.Instance.AddPlayer(spawnedPlayer);
-        else Debug.Log($"[SpawnObjects] playerSwitch = null");
-
-        if (PlayerLivesManager.Instance != null)
-            PlayerLivesManager.Instance.GainLife();
-        else Debug.Log($"[SpawnObjects] playerLivesManager = null");
-
-        if (DebugLogs) Debug.Log($"Player spawned (Cost: {cost}) on layer: {LayerMask.LayerToName(spawnedPlayer.layer)}");
-
-        return spawnedPlayer;
-    }
-
     void RandomizeAppearancePosition(GameObject unit)
     {
         Transform appearance = unit.transform.Find("CpuAppearance");
@@ -253,9 +258,8 @@ public class SpawnObjects : MonoBehaviour
             appearance.position = pos;
         }
     }
+     #endregion
+    
 
-    public void SetSpawningEnabled(bool enabled)
-    {
-        spawningEnabled = enabled;
-    }
+    
 }

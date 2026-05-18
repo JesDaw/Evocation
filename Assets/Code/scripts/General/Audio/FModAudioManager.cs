@@ -5,14 +5,13 @@ using System.Collections.Generic;
 
 public class FModAudioManager : MonoBehaviour
 {
-    public static FModAudioManager instance { get; private set; }
     Dictionary<string, EventReference> soundDictionary = new Dictionary<string, EventReference>();
     [SerializeField] GameVolumeSO gameVolumeSO;
     Bus masterBuss;
     Bus MusicBuss;
     Bus sfxBuss;
 
-
+    public static FModAudioManager instance { get; private set; }
     void Awake()
     {
         if (instance != null && instance != this)
@@ -55,14 +54,24 @@ public class FModAudioManager : MonoBehaviour
         soundDictionary.Add("engageInBattle", FModEvents.instance.engageInBattle);
         soundDictionary.Add("backToScouting", FModEvents.instance.backToScouting);
 
-        
         // gameplay
         soundDictionary.Add("spawnTroop", FModEvents.instance.spawnTroop);
+        soundDictionary.Add("claimLocation", FModEvents.instance.claimLocation);
+
+        //footsteps
+        soundDictionary.Add("walkWood", FModEvents.instance.walkWood);
+        soundDictionary.Add("walkstone", FModEvents.instance.walkstone);
+
+        //melee combat
         soundDictionary.Add("attack", FModEvents.instance.attack);
         soundDictionary.Add("takeDamage", FModEvents.instance.takeDamage);
         soundDictionary.Add("knockback", FModEvents.instance.knockback);
         soundDictionary.Add("die", FModEvents.instance.die);
-        soundDictionary.Add("claimLocation", FModEvents.instance.claimLocation);
+
+        //Projectiles
+        soundDictionary.Add("shootFireball", FModEvents.instance.shootFireball);
+        soundDictionary.Add("fireballHit", FModEvents.instance.fireballHit);
+
     }
 
     public void PlayOneShot(EventReference sound, UnityEngine.Vector3 worldPosition)

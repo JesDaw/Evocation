@@ -3276,6 +3276,9 @@ GameObject:
   - component: {fileID: 2895281464286766294}
   - component: {fileID: 6176719569601122293}
   - component: {fileID: 6334473473768259439}
+  - component: {fileID: 1130543642831497999}
+  - component: {fileID: 1905249592007860713}
+  - component: {fileID: 4793955229716341130}
   m_Layer: 14
   m_Name: Rig
   m_TagString: Allies
@@ -3336,6 +3339,110 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ae0d9a0d53bb534398da044ca760a04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CharacterStats: {fileID: 6100003531216662107}
+  attackSoundType: 0
+  stepStudioEventEmitter: {fileID: 1130543642831497999}
+  swingStudioEventEmitter: {fileID: 1905249592007860713}
+  gettingHitEventEmitter: {fileID: 4793955229716341130}
+--- !u!114 &1130543642831497999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5849303881175653782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -867720635
+      Data2: 1121477946
+      Data3: -1605929568
+      Data4: 1014911585
+    Path: event:/SFX/GamePlay/Footsteps/FootStep wood
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params:
+  - Name: volume
+    Value: 1
+  OverrideAttenuation: 1
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 15
+--- !u!114 &1905249592007860713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5849303881175653782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 981391838
+      Data2: 1201122043
+      Data3: 2134317247
+      Data4: -435119960
+    Path: event:/SFX/GamePlay/Combat/Melee/Swing
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params:
+  - Name: volume
+    Value: 1
+  OverrideAttenuation: 1
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 15
+--- !u!114 &4793955229716341130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5849303881175653782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 1418206704
+      Data2: 1177772398
+      Data3: 480952973
+      Data4: -148912483
+    Path: event:/SFX/GamePlay/Combat/Melee/hit
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params:
+  - Name: volume
+    Value: 1
+  OverrideAttenuation: 1
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 15
 --- !u!1 &6174930307601095373
 GameObject:
   m_ObjectHideFlags: 0
@@ -3808,7 +3915,7 @@ MonoBehaviour:
   _Enemy: 0
   player: 1
   _AttackDamage: 0
-  _AttackEndlag: 0
+  _ExtraEndlag: 0
   _AttackRange: {x: 0, y: 0}
   _IsProjectile: 0
   _IsAOE: 0
@@ -3839,6 +3946,8 @@ MonoBehaviour:
   _CurrentHealth: 100
   _IsDead: 0
   _MoveSpeed: 10
+  _AnimationStartupTime: 0
+  _AnimationRecoveryTime: 0
   _KnockBackMaxHealth: 0
   _KnockBackHealth: 50
   _KnockBackDamage: 0.5
@@ -3868,6 +3977,7 @@ MonoBehaviour:
   damageHandler: {fileID: 0}
   statusEffectManager: {fileID: 0}
   entityHealthbar: {fileID: 0}
+  animationEventsController: {fileID: 6334473473768259439}
 --- !u!114 &4492581254548526527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3884,9 +3994,6 @@ MonoBehaviour:
   _rb: {fileID: 7170996237383625708}
   _animatorController: {fileID: 6334473473768259439}
   _animator: {fileID: 6176719569601122293}
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   DebugLogs: 0
   _AttackingStats: {fileID: 0}
   isFacingRight: 1

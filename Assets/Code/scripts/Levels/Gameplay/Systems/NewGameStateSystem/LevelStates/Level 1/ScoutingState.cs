@@ -1,6 +1,6 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using System;
+using UnityEngine.InputSystem;
 
 [Serializable]
 public class ScoutingState : LevelState
@@ -58,7 +58,7 @@ public class ScoutingState : LevelState
         if (!confirmationUIActive)
         {
             context.SceneManager.Activate(confirmationUIName, true);
-            GlobalInputManager.Instance.SetPauseMenuMode();
+            GlobalInputManager.Instance.SetEngaugeScreenMode();
             confirmationUIActive = true;
             FModAudioManager.instance.PlaySoundByName("pauseGame");
         }

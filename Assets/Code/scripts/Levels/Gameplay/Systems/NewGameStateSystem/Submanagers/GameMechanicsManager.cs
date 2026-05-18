@@ -21,7 +21,8 @@ public class GameMechanicsManager : MonoBehaviour
         }
         Instance = this;
         
-        AutoFindSystems();
+        if (Money.Instance == null) Debug.LogWarning("[GameMechanicsManager] Money system not found!");
+        if (Timer.Instance == null) Debug.LogWarning("[GameMechanicsManager] Timer system not found");
     }
     
     void Start()
@@ -40,12 +41,6 @@ public class GameMechanicsManager : MonoBehaviour
         {
             Instance = null;
         }
-    }
-    
-    private void AutoFindSystems()
-    {
-        if (Money.Instance == null && showDebugLogs) Debug.LogWarning("[GameMechanicsManager] Money system not found!");
-        if (Timer.Instance == null && showDebugLogs) Debug.LogWarning("[GameMechanicsManager] Timer system not found");
     }
     
     private void LogSystemReferences()
@@ -86,15 +81,6 @@ public class GameMechanicsManager : MonoBehaviour
         {
             Money.Instance.ResetMoney();
             if (showDebugLogs) Debug.Log("[GameMechanicsManager] Money reset");
-        }
-    }
-    
-    public void IncreaseMoneyGeneration()
-    {
-        if (Money.Instance != null)
-        {
-            Money.Instance.IncreaseMoneyGen();
-            if (showDebugLogs) Debug.Log("[GameMechanicsManager] Money generation increased");
         }
     }
     

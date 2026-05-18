@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 7047490244490411146}
   - component: {fileID: 7111127311561899635}
   - component: {fileID: 6330700587559209994}
-  - component: {fileID: 1673951440042315968}
   m_Layer: 5
   m_Name: SettingsButton
   m_TagString: Untagged
@@ -148,7 +147,7 @@ MonoBehaviour:
           m_StringArgument: Settings
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 1673951440042315968}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: AdamLenzini.UI.SetsUiElementOnSelect, CodeAssembly
         m_MethodName: JumptToElement
         m_Mode: 1
@@ -213,23 +212,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &1673951440042315968
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 830208443666379885}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40d26c9735894d447bbc56d8d3b5f6ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::AdamLenzini.UI.SetsUiElementOnSelect
-  eventSystem: {fileID: 0}
-  elementToSelect: {fileID: 0}
-  showVisualization: 0
-  navigationColour: {r: 0, g: 1, b: 1, a: 1}
-  ShowDebugLogs: 1
 --- !u!1 &1275983862852425337
 GameObject:
   m_ObjectHideFlags: 0
@@ -380,7 +362,6 @@ GameObject:
   - component: {fileID: 8551354247170436346}
   - component: {fileID: 2970270106302618327}
   - component: {fileID: 5804116035814429612}
-  - component: {fileID: 7735071401579464233}
   m_Layer: 5
   m_Name: LevelSelectButton
   m_TagString: Untagged
@@ -514,7 +495,7 @@ MonoBehaviour:
           m_StringArgument: LevelSelectMenu
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 7735071401579464233}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: AdamLenzini.UI.SetsUiElementOnSelect, CodeAssembly
         m_MethodName: JumptToElement
         m_Mode: 1
@@ -579,23 +560,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &7735071401579464233
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2331475812262767645}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40d26c9735894d447bbc56d8d3b5f6ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::AdamLenzini.UI.SetsUiElementOnSelect
-  eventSystem: {fileID: 0}
-  elementToSelect: {fileID: 0}
-  showVisualization: 0
-  navigationColour: {r: 0, g: 1, b: 1, a: 1}
-  ShowDebugLogs: 1
 --- !u!1 &2718376683495450847
 GameObject:
   m_ObjectHideFlags: 0
@@ -1356,7 +1320,6 @@ GameObject:
   - component: {fileID: 6347846360611777876}
   - component: {fileID: 7360441757617599086}
   - component: {fileID: 905807956086615223}
-  - component: {fileID: 4111598890559289685}
   m_Layer: 5
   m_Name: ControlsButton
   m_TagString: Untagged
@@ -1491,7 +1454,7 @@ MonoBehaviour:
           m_StringArgument: ControlsSettings
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 4111598890559289685}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: AdamLenzini.UI.SetsUiElementOnSelect, CodeAssembly
         m_MethodName: JumptToElement
         m_Mode: 1
@@ -1556,23 +1519,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &4111598890559289685
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6550793357371453255}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40d26c9735894d447bbc56d8d3b5f6ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::AdamLenzini.UI.SetsUiElementOnSelect
-  eventSystem: {fileID: 0}
-  elementToSelect: {fileID: 0}
-  showVisualization: 0
-  navigationColour: {r: 0, g: 1, b: 1, a: 1}
-  ShowDebugLogs: 1
 --- !u!1 &6834574054532578545
 GameObject:
   m_ObjectHideFlags: 0
@@ -1629,6 +1575,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   disableDefaultBehavior: 0
+  defaultSelectedButton: {fileID: 0}
   OnActivityStart:
     m_PersistentCalls:
       m_Calls: []
@@ -1682,7 +1629,6 @@ GameObject:
   - component: {fileID: 687644604671633290}
   - component: {fileID: 837313544158039356}
   - component: {fileID: 9101871367131964691}
-  - component: {fileID: 4393917330456138302}
   m_Layer: 5
   m_Name: CreditsButton
   m_TagString: Untagged
@@ -1816,7 +1762,7 @@ MonoBehaviour:
           m_StringArgument: Credits
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 4393917330456138302}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: AdamLenzini.UI.SetsUiElementOnSelect, CodeAssembly
         m_MethodName: JumptToElement
         m_Mode: 1
@@ -1881,23 +1827,6 @@ MonoBehaviour:
   originalColor: {r: 1, g: 1, b: 1, a: 1}
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
---- !u!114 &4393917330456138302
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7618530276722849134}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40d26c9735894d447bbc56d8d3b5f6ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::AdamLenzini.UI.SetsUiElementOnSelect
-  eventSystem: {fileID: 0}
-  elementToSelect: {fileID: 0}
-  showVisualization: 0
-  navigationColour: {r: 0, g: 1, b: 1, a: 1}
-  ShowDebugLogs: 1
 --- !u!1 &8021024932156350003
 GameObject:
   m_ObjectHideFlags: 0

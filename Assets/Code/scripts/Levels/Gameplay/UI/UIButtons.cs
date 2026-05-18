@@ -1,9 +1,17 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using System.Collections;
 using TMPro;
 
+/// <summary>
+/// Handles per-button visual animation and audio for hover, select, click states.
+///
+/// INSPECTOR NOTE: Set the Unity Button component's Transition to "None" on every
+/// GameObject that uses this script. The built-in Color Tint transition fights with
+/// the colour animations here and causes flickering / incorrect colours.
+/// </summary>
 public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, ISelectHandler, IDeselectHandler
 {
     [Header("Animation Settings")]
@@ -20,7 +28,6 @@ public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     [SerializeField] private Color clickTextColor = Color.white;
     [SerializeField] private Vector3 clickScale = Vector3.one * 0.9f;
     [SerializeField] private float clickDuration = 0.1f;
-
     [SerializeField] private Color postClickColor = Color.white;
     [SerializeField] private Color postClickTextColor = Color.white;
     [SerializeField] private Vector3 postClickScale = Vector3.one * 1.05f;
@@ -32,10 +39,13 @@ public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     [SerializeField] private Color originalColor = Color.white;
     [SerializeField] private Color originalTextColor = Color.white;
     [SerializeField] private Vector3 originalScale = Vector3.one;
+    [Header("Events")]
+    public UltEvents.UltEvent ButtonHighlighted;
 
     private Coroutine currentAnimation;
     private bool isHovered = false;
-    //private bool isKeyboardSelected = false; // for keyboard navigation
+
+    // ── Unity ─────────────────────────────────────────────────────────────────
 
     private void Awake()
     {
@@ -59,6 +69,8 @@ public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         isHovered = false;
     }
 
+    // ── State helpers ─────────────────────────────────────────────────────────
+
     public void ResetToOriginalState()
     {
         isHovered = false;
@@ -68,16 +80,22 @@ public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     private void OnCanvasGroupChanged()
     {
         if (!gameObject.activeInHierarchy)
-        {
             isHovered = false;
-        }
     }
-    
+
+    // ── Pointer events (mouse) ────────────────────────────────────────────────
+
     public void OnPointerEnter(PointerEventData eventData)
     {
+        // Tell the navigation manager which button the mouse is over so keyboard
+        // mode can resume from here if the player picks up the controller/keyboard.
+        UINavigationManager.Instance?.RegisterMouseHover(this);
+
         if (isHovered) return;
         isHovered = true;
+
         AnimateToState(hoverColor, hoverTextColor, hoverScale, animationDuration);
+        ButtonHighlighted?.Invoke();
         FModAudioManager.instance.PlaySoundByName("showCharacterInfo");
     }
     
@@ -88,30 +106,38 @@ public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         AnimateToState(originalColor, originalTextColor, originalScale, animationDuration);
     }
 
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        StartCoroutine(ClickAnimation());
+        ClickSound();
+    }
+
+    // ── Select events (keyboard / gamepad) ────────────────────────────────────
+
     public void OnSelect(BaseEventData eventData)
     {
-        //if (isKeyboardSelected) return;
-        //isKeyboardSelected = true;
+        // Tell the manager this is the last keyboard-reached button so it can
+        // resume here if the player briefly switches to mouse without hovering anything.
+        UINavigationManager.Instance?.RegisterKeyboardSelect(this);
+        ButtonHighlighted?.Invoke();
+
         AnimateToState(hoverColor, hoverTextColor, hoverScale, animationDuration);
+        FModAudioManager.instance.PlaySoundByName("showCharacterInfo");
     }
 
     public void OnDeselect(BaseEventData eventData)
     {
-        //if (isKeyboardSelected) return;
-        //isKeyboardSelected = true;
-        AnimateToState(originalColor, originalTextColor, originalScale, animationDuration);
+        // Only animate back to original when the mouse isn't still over this button.
+        if (!isHovered)
+            AnimateToState(originalColor, originalTextColor, originalScale, animationDuration);
     }
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-       // StartCoroutine(ClickAnimation());
-    }
+    // ── Animation ─────────────────────────────────────────────────────────────
 
     private IEnumerator ClickAnimation()
     {
         AnimateToState(clickColor, clickTextColor, clickScale, clickDuration);
         yield return new WaitForSeconds(clickDuration);
-
         AnimateToState(postClickColor, postClickTextColor, postClickScale, animationDuration);
     }
     
@@ -125,16 +151,16 @@ public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     private IEnumerator AnimateToStateCoroutine(Color targetColor, Color targetTextColor, Vector3 targetScale, float duration)
     {
-        Color startColor = targetImage != null ? targetImage.color : Color.white;
-        Color startTextColor = targetText != null ? targetText.color : Color.white;
-        Vector3 startScale = targetTransform.localScale;
+        Color startColor     = targetImage     != null ? targetImage.color  : Color.white;
+        Color startTextColor = targetText      != null ? targetText.color   : Color.white;
+        Vector3 startScale   = targetTransform != null ? targetTransform.localScale : Vector3.one;
 
         float elapsed = 0f;
 
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            float t = animationCurve.Evaluate(elapsed / duration);
+            float t = animationCurve.Evaluate(Mathf.Clamp01(elapsed / duration));
 
             if (targetImage != null)
                 targetImage.color = Color.Lerp(startColor, targetColor, t);
@@ -142,34 +168,36 @@ public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             if (targetText != null)
                 targetText.color = Color.Lerp(startTextColor, targetTextColor, t);
 
-            targetTransform.localScale = Vector3.Lerp(startScale, targetScale, t);
+            if (targetTransform != null)
+                targetTransform.localScale = Vector3.Lerp(startScale, targetScale, t);
 
             yield return null;
         }
 
-        if (targetImage != null)
-            targetImage.color = targetColor;
-
-        if (targetText != null)
-            targetText.color = targetTextColor;
-
-        targetTransform.localScale = targetScale;
+        // Snap to final values
+        if (targetImage != null)     targetImage.color          = targetColor;
+        if (targetText != null)      targetText.color           = targetTextColor;
+        if (targetTransform != null) targetTransform.localScale = targetScale;
     }
+
+    // ── Audio / misc public methods ───────────────────────────────────────────
 
     public void ClickSound()
     {
         FModAudioManager.instance.PlaySoundByName("addCharacterToParty");
     }
+
     public void BackSound()
     {
         FModAudioManager.instance.PlaySoundByName("removeCharacterFromParty");
     }
+
     public void QuitGame()
     {
-        #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-        #else
-            Application.Quit();
-        #endif
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 }

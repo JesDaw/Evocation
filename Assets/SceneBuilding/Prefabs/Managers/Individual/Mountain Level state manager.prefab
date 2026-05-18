@@ -89,6 +89,8 @@ MonoBehaviour:
         RippleEffectLocation: {fileID: 6957845902224937631}
         targetRenderer: {fileID: 0}
         boxCollider: {fileID: 110089299898841486}
+        BossStats: {fileID: 11400000, guid: 9bc80ac74d98ee645a559cbf527a224a, type: 2}
+        FreeMoney: 20
         brightnessStartValue: 0
         brightnessEndValue: -0.5
         hueShiftStartValue: 0
@@ -299,11 +301,11 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -1, y: 0}
+  m_Offset: {x: -15, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}

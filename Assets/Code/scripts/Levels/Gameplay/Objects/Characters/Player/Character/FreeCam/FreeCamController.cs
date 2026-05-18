@@ -20,6 +20,7 @@ public class FreeCamController : MonoBehaviour
     Bounds confineBounds;
     float minZPosition;
     float maxZPosition;
+    float zoomInput;
     public static FreeCamController Instance { get; private set; }
 
 
@@ -71,7 +72,8 @@ public class FreeCamController : MonoBehaviour
         
         cameraActions.Move.performed += OnMove;
         cameraActions.Move.canceled += OnMove;
-        cameraActions.Zoom.performed += HandleZoom;
+        cameraActions.Zoom.performed += OnZoom;
+        cameraActions.Zoom.canceled += OnZoom;
     }
 
     void UnsubscribeFromInputs()
@@ -82,13 +84,11 @@ public class FreeCamController : MonoBehaviour
         
         cameraActions.Move.performed -= OnMove;
         cameraActions.Move.canceled -= OnMove;
-        cameraActions.Zoom.performed -= HandleZoom;
+        cameraActions.Zoom.performed -= OnZoom;
+        cameraActions.Zoom.canceled += OnZoom;
     }
 
-    void OnMove(InputAction.CallbackContext context)
-    {
-        moveInput = context.ReadValue<Vector2>();
-    }
+    
 
     void CalculateBounds()
     {
@@ -131,8 +131,18 @@ public class FreeCamController : MonoBehaviour
         {
             HandleMovement();
         }
+
+        if (Mathf.Abs(zoomInput) > 0)
+        {
+            HandleZoom();
+        }
         
         UpdateZoomSpeedMultiplier();
+    }
+
+    void OnMove(InputAction.CallbackContext context)
+    {
+        moveInput = context.ReadValue<Vector2>();
     }
 
     public void HandleMovement()
@@ -149,22 +159,21 @@ public class FreeCamController : MonoBehaviour
         transform.position = newPosition;
     }
 
-    public void HandleZoom(InputAction.CallbackContext context)
+    void OnZoom(InputAction.CallbackContext context)
     {
-        float scrollDelta = Mouse.current.scroll.ReadValue().y;
-
-        if (Mathf.Abs(scrollDelta) > 0)
-        {
-            float zoomAmount = scrollDelta * zoomSpeed * 0.1f;
-            Vector3 newPosition = transform.position + new Vector3(0, 0, zoomAmount);
-            
-            // Clamp to bounds
-            newPosition.x = Mathf.Clamp(newPosition.x, confineBounds.min.x, confineBounds.max.x);
-            newPosition.y = Mathf.Clamp(newPosition.y, confineBounds.min.y, confineBounds.max.y);
-            newPosition.z = Mathf.Clamp(newPosition.z, confineBounds.min.z, confineBounds.max.z);
-            
-            transform.position = newPosition;
-        }
+        zoomInput = context.ReadValue<float>();
+    }
+    public void HandleZoom()
+    {
+        float zoomAmount = zoomInput * zoomSpeed * 0.1f;
+        Vector3 newPosition = transform.position + new Vector3(0, 0, zoomAmount);
+        
+        // Clamp to bounds
+        newPosition.x = Mathf.Clamp(newPosition.x, confineBounds.min.x, confineBounds.max.x);
+        newPosition.y = Mathf.Clamp(newPosition.y, confineBounds.min.y, confineBounds.max.y);
+        newPosition.z = Mathf.Clamp(newPosition.z, confineBounds.min.z, confineBounds.max.z);
+        
+        transform.position = newPosition;   
     }
 
     void UpdateZoomSpeedMultiplier()

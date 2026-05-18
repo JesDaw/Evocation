@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
+using ChristinaCreatesGames.UI;
 
 
 public class CharacterSelect : MonoBehaviour
@@ -12,30 +13,75 @@ public class CharacterSelect : MonoBehaviour
     [SerializeField] TMP_Text characterNameText;
     [SerializeField] TMP_Text characterDescriptionText;
     [SerializeField] Image characterImage;
+    
 
     public List<CharacterData> party = new List<CharacterData>();
     public int partySize = 5;
-
+    [Header("Loadlout screen")]
+    [SerializeField] PlayerRelationshipSO playerRelationshipSO;
+    [SerializeField] CharacterButton[] LoadoutSlotsUI;
     [Header("Party size limitations")]
     [SerializeField] TMP_Text partyCountText;
     [SerializeField] GameObject maxMessage;
     [SerializeField] Image[] partySlots;
-    [SerializeField] Image[] partySlotsGameplayUI;
+    [SerializeField] GameObject[] partySlotsGameplayUI;
+    [SerializeField] TMP_Text[] characterPrice;
 
     CharacterData lastClicked = null;
+
+    public static CharacterSelect Instance { get; private set; }
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
 
     void Start()
     {
         maxMessage.SetActive(false);
+        UpdateSelactableUI();
         UpdatePartyUI();
         if (SpawnController.Instance == null) Debug.LogError($"spawnController not found in {gameObject.name}");
     }
 
-    public void ShowCharacterInfo(CharacterData character)
+    void UpdateSelactableUI()
     {
-        characterImage.sprite = character.portrait;
-        characterNameText.text = character.characterName;
-        characterDescriptionText.text = character.description;
+        var relationshipStats = playerRelationshipSO.RelationStats;
+        
+        int currentClanIndex = 0;
+        int currentMemberIndex = 0;
+
+        foreach (CharacterButton frame in LoadoutSlotsUI)
+        {
+            bool frameAssigned = false;
+            for (; currentClanIndex < relationshipStats.Length; currentClanIndex++)
+            {
+                var clan = relationshipStats[currentClanIndex];
+                var members = clan.clanStats.all_stats_scripts;
+
+                for (; currentMemberIndex < members.Length; currentMemberIndex++)
+                {
+                    var member = members[currentMemberIndex]; 
+
+                    if (member.RelationshipLevelRequironment <= clan.Depth_Level)
+                    {
+                        frame.character = member;
+                        frame.UpdateFrame();
+                        currentMemberIndex++; 
+                        frameAssigned = true;
+                        break;
+                    }
+                }
+
+                if (frameAssigned) break;
+                currentMemberIndex = 0;
+            }
+            if (!frameAssigned) break;
+        }
     }
 
     public void OnCharacterClicked(CharacterData character)
@@ -43,8 +89,6 @@ public class CharacterSelect : MonoBehaviour
         //first click shows the character info only
         if (lastClicked != character)
         {
-            lastClicked = character;
-            FModAudioManager.instance.PlaySoundByName("showCharacterInfo");
             ShowCharacterInfo(character);
             return;
         }
@@ -60,7 +104,32 @@ public class CharacterSelect : MonoBehaviour
         }
         else
         {
-            if (party.Count < partySize)
+            AddCharacterToParty(character);
+        }
+
+        UpdatePartyUI();
+    }
+
+    public void UpdateCurrentDesplayedCharacter(CharacterData character)
+    {
+        ShowCharacterInfo(character);
+    }
+
+    public void ShowCharacterInfo(CharacterData character)
+    {
+        if (character == null) return;
+        lastClicked = character;
+        //Debug.Log($"last clicked = {character.characterName}");
+        //FModAudioManager.instance.PlaySoundByName("showCharacterInfo");
+        characterImage.enabled = true;
+        characterImage.sprite = character.portrait;
+        characterNameText.text = character.characterName;
+        characterDescriptionText.text = character.description;
+    }
+
+    public void AddCharacterToParty(CharacterData character)
+    {
+        if (party.Count < partySize)
             {
                 FModAudioManager.instance.PlaySoundByName("addCharacterToParty");
                 if (character.SoundName != "") FModAudioManager.instance.PlaySoundByName(character.SoundName);
@@ -73,10 +142,8 @@ public class CharacterSelect : MonoBehaviour
                 StartCoroutine(MaxMessageRoutine());
                 return;
             }
-        }
-
-        UpdatePartyUI();
     }
+
 
     IEnumerator MaxMessageRoutine()
     {
@@ -93,16 +160,22 @@ public class CharacterSelect : MonoBehaviour
         {
             partySlots[i].enabled = false;
             partySlots[i].sprite = null;
-            partySlotsGameplayUI[i].enabled = false;
-            partySlotsGameplayUI[i].sprite = null;
+            partySlotsGameplayUI[i].transform.Find("CharacterHeadshot").gameObject.GetComponent<Image>().enabled = false;
+            partySlotsGameplayUI[i].transform.Find("CharacterHeadshot").gameObject.GetComponent<Image>().sprite = null;
+            characterPrice[i].enabled = false;
+
         }
 
         for (int i = 0; i < party.Count; i++)
         {
             partySlots[i].enabled = true;
             partySlots[i].sprite = party[i].headshot;
-            partySlotsGameplayUI[i].enabled = true;
-            partySlotsGameplayUI[i].sprite = party[i].headshot;
+            partySlotsGameplayUI[i].transform.Find("CharacterHeadshot").gameObject.GetComponent<Image>().enabled = true;
+            partySlotsGameplayUI[i].transform.Find("CharacterHeadshot").gameObject.GetComponent<Image>().sprite = party[i].headshot;
+            characterPrice[i].enabled = true;
+            partySlotsGameplayUI[i].GetComponent<HotkeyButton>()._characterPrice = party[i].scriptableStats._spawnCost;
+            characterPrice[i].text = party[i].scriptableStats._spawnCost.ToString();
+
         }
     }
 }

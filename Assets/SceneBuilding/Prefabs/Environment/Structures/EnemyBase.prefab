@@ -600,7 +600,7 @@ MonoBehaviour:
   _Enemy: 1
   player: 0
   _AttackDamage: 0
-  _AttackEndlag: 0
+  _ExtraEndlag: 0
   _AttackRange: {x: 0, y: 0}
   _IsProjectile: 0
   _IsAOE: 0
@@ -631,6 +631,8 @@ MonoBehaviour:
   _CurrentHealth: 1
   _IsDead: 0
   _MoveSpeed: 0
+  _AnimationStartupTime: 0
+  _AnimationRecoveryTime: 0
   _KnockBackMaxHealth: 0
   _KnockBackHealth: 0
   _KnockBackDamage: 0.5
@@ -775,7 +777,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7729f604020c24ba39eefd22ad8327db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::AISpawnerController
-  moods: []
+  moods:
+  - moodName: Phase 1
+    description: High agressive wolfs with wolf hammer as defense
+    availableActions:
+    - rid: 7210656986243792896
+    - rid: 7210656986243792899
+    - rid: 7210656986243792902
   startingMoodIndex: 0
   decisionInterval: 2
   aiMoneyManager: {fileID: 3948372016706591346}
@@ -785,14 +793,245 @@ MonoBehaviour:
   lowerZone: {fileID: 0}
   aiBase: {fileID: 49987513823387449}
   playerBase: {fileID: 0}
-  maxMoney: 100
+  maxMoney: 50
   maxUnits: 20
   maxEnemyPower: 50
   maxActionWaitTime: 15
   showDebugLogs: 0
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 7210656986243792896
+      type: {class: SpawnUnitAction, ns: , asm: CodeAssembly}
+      data:
+        actionName: WolfRunner
+        considerations:
+        - rid: 7210656986243792897
+        - rid: 7210656986243792898
+        unitToSpawn: {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
+    - rid: 7210656986243792897
+      type: {class: ClosestEnemyDistanceConsideration, ns: , asm: CodeAssembly}
+      data:
+        considerationName: Closest enemy distance
+        responseCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0.75
+            outSlope: 0.75
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 1
+            value: 0.75
+            inSlope: 0.75
+            outSlope: 0.75
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+    - rid: 7210656986243792898
+      type: {class: ActionsSinceLastPickedConsideration, ns: , asm: CodeAssembly}
+      data:
+        considerationName: New Consideration
+        responseCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 0.1
+            value: 1
+            inSlope: 0.34388348
+            outSlope: 0.34388348
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.11807529
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 0.23532224
+            outSlope: 0.23532224
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.15985098
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        actionNameToTrack: Spawn Hammer
+        maxLoopsForNormalization: 10
+    - rid: 7210656986243792899
+      type: {class: SpawnUnitAction, ns: , asm: CodeAssembly}
+      data:
+        actionName: Spawn Hammer
+        considerations:
+        - rid: 7210656986243792900
+        - rid: 7210656986243792901
+        unitToSpawn: {fileID: 11400000, guid: d4daadf164451854c8c5982cee62e5f9, type: 2}
+    - rid: 7210656986243792900
+      type: {class: ClosestEnemyDistanceConsideration, ns: , asm: CodeAssembly}
+      data:
+        considerationName: Closest enemy distance
+        responseCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0.99
+            inSlope: -2.8914292
+            outSlope: -2.8914292
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.0375
+          - serializedVersion: 3
+            time: 1
+            value: 0
+            inSlope: 0.041904762
+            outSlope: 0.041904762
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33749998
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+    - rid: 7210656986243792901
+      type: {class: ActionsSinceLastPickedConsideration, ns: , asm: CodeAssembly}
+      data:
+        considerationName: New Consideration
+        responseCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 0.1
+            value: 1
+            inSlope: 0.15730032
+            outSlope: 0.15730032
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.19166663
+            outWeight: 1
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 0.36781347
+            outSlope: 0.36781347
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.1626669
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        actionNameToTrack: WolfRunner
+        maxLoopsForNormalization: 10
+    - rid: 7210656986243792902
+      type: {class: DoNothingAction, ns: , asm: CodeAssembly}
+      data:
+        actionName: DO nothing
+        considerations:
+        - rid: 7210656986243792903
+        - rid: 7210656986243792904
+    - rid: 7210656986243792903
+      type: {class: MoneyConsideration, ns: , asm: CodeAssembly}
+      data:
+        considerationName: Money
+        responseCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 1
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 0.15
+            value: 1
+            inSlope: -0.009045633
+            outSlope: -0.009045633
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 1
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 0.16
+            value: 0
+            inSlope: -0.010339599
+            outSlope: -0.010339599
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.3041926
+          - serializedVersion: 3
+            time: 1
+            value: 0
+            inSlope: 0.010802757
+            outSlope: 0.010802757
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.29115066
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+    - rid: 7210656986243792904
+      type: {class: ClosestEnemyDistanceConsideration, ns: , asm: CodeAssembly}
+      data:
+        considerationName: Closest Enemy Distance
+        responseCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 1.0023804
+            inSlope: -3.499982
+            outSlope: -3.499982
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.033333335
+          - serializedVersion: 3
+            time: 1
+            value: 0
+            inSlope: -0.21904762
+            outSlope: -0.21904762
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.25
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
 --- !u!1 &7538470120974499551
 GameObject:
   m_ObjectHideFlags: 0

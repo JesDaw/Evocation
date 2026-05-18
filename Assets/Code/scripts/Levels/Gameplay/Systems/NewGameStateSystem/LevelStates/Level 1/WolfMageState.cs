@@ -7,6 +7,8 @@ public class WolfMageState : LevelState
     [SerializeField] GameObject RippleEffectLocation;
     [SerializeField] Renderer targetRenderer;
     [SerializeField] BoxCollider2D boxCollider;
+    [SerializeField] ScriptableStats BossStats; 
+    [SerializeField] int FreeMoney;
     
     [Header("Brightness Tween")]
     [SerializeField] float brightnessStartValue = 0f;
@@ -19,11 +21,12 @@ public class WolfMageState : LevelState
     [Header("Saturation Tween")]
     [SerializeField] float saturationStartValue = 1f;
     [SerializeField] float saturationEndValue = 1.5f;
-    
     [SerializeField] float tweenDuration = 5.0f;
+    
 
     protected override void OnEnterState()
     {
+        //Debug.Log("Entering boss state");
         VisualEffectsManager.Instance.SpawnShockwave(RippleEffectLocation.transform.position); 
         
         if (targetRenderer != null)
@@ -32,6 +35,8 @@ public class WolfMageState : LevelState
             VisualEffectsManager.Instance.TweenShaderFloat(targetRenderer, "_HueShiftAmount", hueShiftEndValue, tweenDuration, hueShiftStartValue);
             VisualEffectsManager.Instance.TweenShaderFloat(targetRenderer, "_SaturationAmount", saturationEndValue, tweenDuration, saturationStartValue);
         }
+
+
         if (boxCollider != null)
         {
             Collider2D[] hitColliders = Physics2D.OverlapBoxAll(RippleEffectLocation.transform.position, boxCollider.size, 0f);
@@ -52,5 +57,10 @@ public class WolfMageState : LevelState
                 }
             }
         }
+
+        AISpawnerController.Instance.SetMoodByName("Phase 2");
+        //Debug.Log("Spawning boss");
+        SpawnObjects.EnemyInstance.SpawnFromAISpawner(BossStats, true);
+        AIMoneyManager.Instance.GiveMoney(FreeMoney);
     }
 }

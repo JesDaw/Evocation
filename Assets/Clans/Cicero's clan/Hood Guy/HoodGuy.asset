@@ -12,29 +12,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 238e13654c5efff43b776bb1e518c913, type: 3}
   m_Name: HoodGuy
   m_EditorClassIdentifier: 
-  _spawnCost: 5
-  _CalculatedPower: -2.8933878
-  _ValueDiscrepancy: -7.893388
-  _Calc_PushingPower: 0.75640726
-  _Calc_DPS: 0.6666667
-  _Calc_Defense: 13.75
   Theme: 
   ODS: 
   RPS_Type: 
-  OtherNotes: 
-  _MoveSpeed: 1
-  _KnockBackDamage: 1
-  _AttackDamage: 1
-  _AttackEndlag: 1
-  _MaxHealth: 10
-  _KnockBackMaxHealth: 1
-  _HorizontalRange: 1
-  _AttackStyle: 1
   _IsAOE: 0
+  _AttackStyle: 1
+  OtherNotes: 
+  _spawnCost: 45
+  Level_Total: 44.327118
+  Level_Discrepancy: 39.327118
+  _CalculatedPower: -3.865077
+  _ValueDiscrepancy: -8.865077
+  Attack: 10
+  Defense: 25
+  SpaceControl: 9
+  AttackFrequency: 0.3271181
+  _AttackDamage: 10
+  _KnockBackDamage: 5
+  _MoveSpeed: 4
+  _MaxHealth: 15
+  _KnockBackMaxHealth: 10
+  _HorizontalRange: 7
+  _ExtraEndlag: 3
   _MaxAOETargets: 5
-  _KnockBackVelocity: 5
-  _KnockBackAngle: 45
   _VerticalRange: 5
+  _KnockBackVelocity: 7
+  _KnockBackAngle: 45
   _ProjectilePrefab: {fileID: 603826966979394658, guid: f7b010f898d3193499b2c1ad0f0882cd, type: 3}
   _ProjectileSpeed: 10
   _ProjectileMaxHeight: 2
@@ -120,9 +123,14 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _EffectsToApply: []
-  vfx: []
-  vfxOffsets: []
   _Rotate: 0
   _animator: {fileID: 0}
   _Sprites: []
   _AnimationMoveSpeed: 1
+  vfx: []
+  vfxOffsets: []
+  _AnimationStartupTime: 27
+  _AnimationRecoveryTime: 30
+  level: 1
+  xp_to_next_lvl: 100
+  ExpCostMultiplier: 0.5

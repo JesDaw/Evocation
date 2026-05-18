@@ -9,6 +9,9 @@ public class DialogueManager : MonoBehaviour
     public List<CharacterDialogueInfo> characterList; // whats this for?
     [Header("Text box referances")]
     [SerializeField] GameObject DialogueBox;
+    [SerializeField] GameObject ChoiceBox;
+    [SerializeField] GameObject Choice;
+    bool ChoiceBoxIsOpen = false;
     public TMP_Text nameText;
     public TMP_Text dialogueText;
     [Header("Text box customisation")]
@@ -16,9 +19,6 @@ public class DialogueManager : MonoBehaviour
     public Color defaultNameColor = new Color(0f,0f,0f,1f);
     [Header("Debug")]
     [SerializeField] bool ShowDebugLogs = false;
-
-
-
     List<Dialogue> dialogueSlides = new List<Dialogue>();
     Coroutine _typeLineCoroutine;
     string _currentLine;
@@ -86,7 +86,7 @@ public class DialogueManager : MonoBehaviour
 
     public void OnConfirmDialoguePressed(InputAction.CallbackContext context)
     {
-        if (!context.performed || !DialogueActive || UILogic.GameIsPaused) return;
+        if (!context.performed || !DialogueActive || UILogic.GameIsPaused || ChoiceBoxIsOpen) return;
         
         if(ShowDebugLogs) UnityEngine.Debug.Log("Dialogue confirm button pressed");
         OnConfirmDialoguePressedLogic();
@@ -134,6 +134,12 @@ public class DialogueManager : MonoBehaviour
             dialogueText.color = defaultTextColor;
         }
 
+        if (InteractionMinigameManager.Instance != null)
+        {
+            InteractionMinigameManager.Instance.SetCharacterBody(dialogueSlides[slideCount].CharacterBody);
+            InteractionMinigameManager.Instance.SetCharacterFace(dialogueSlides[slideCount].CharacterFace);
+        }
+
         foreach (char c in line)
         {
             while (UILogic.GameIsPaused)
@@ -145,7 +151,7 @@ public class DialogueManager : MonoBehaviour
             yield return new WaitForSecondsRealtime(speed);
         }
         _typeLineCoroutine = null;
-        if (_dailogueTrigger.EndOfLines.Length > 1) OpenChoiceBox();
+        if (_dailogueTrigger.EndOfLines.Length > 0 && slideCount >= dialogueSlides.Count - 1) OpenChoiceBox();
 
     }
 
@@ -154,24 +160,41 @@ public class DialogueManager : MonoBehaviour
         StopCoroutine(_typeLineCoroutine);
         _typeLineCoroutine = null;
         dialogueText.text = _currentLine;
-        if (_dailogueTrigger.EndOfLines.Length > 1) OpenChoiceBox();
+        if (_dailogueTrigger.EndOfLines.Length > 0 && slideCount >= dialogueSlides.Count - 1) OpenChoiceBox();
     }
 
     public void OpenChoiceBox()
     {
-        UnityEngine.Debug.Log("idk how the choice bax is going to work yet");
+        ChoiceBox.SetActive(true);
+        ChoiceBoxIsOpen = true;
+        int ChoiceIndex = 0;
+        foreach (DialogueChoice choice in _dailogueTrigger.EndOfLines)
+        {
+            GameObject choiceInstance = Instantiate(Choice, ChoiceBox.transform);
+            TextMeshProUGUI tmpText = choiceInstance.GetComponentInChildren<TextMeshProUGUI>();
+            if (tmpText != null)
+            {
+                tmpText.text = choice.Text; 
+            }
+            DiologueChoiceWrapper ChoiceNumber = choiceInstance.GetComponentInChildren<DiologueChoiceWrapper>();
+            if (ChoiceNumber != null)
+            {
+                ChoiceNumber.ChoiceIndex = ChoiceIndex; 
+                ChoiceIndex++;
+            }
+        }
+        GlobalInputManager.Instance.EnableCursor();
     }
 
-    public void EndDialogue()
+    public void EndDialogue(int CurrentChoiceIndex = 0)
     {
-        if(DialogueActive == false) return;
-        DialogueActive = false;
-        slideCount = 0;
-        _typeLineCoroutine = null;
+        if(DialogueActive == false) return;   
         DeactivateDialogueBox();
-        dialogueText.text = "";
-        nameText.text = "";
-        _dailogueTrigger.EndDialogue(0);
+        if (_dailogueTrigger.EndOfLines.Length > 0)
+        {
+            _dailogueTrigger.EndDialogue(CurrentChoiceIndex);
+        }
+        _dailogueTrigger.EndDialogueDefultEvent();
         
         if (CameraControlSwitcher.Instance != null && CameraControlSwitcher.Instance.FreeCamIsActive)
         {
@@ -186,6 +209,18 @@ public class DialogueManager : MonoBehaviour
     public void DeactivateDialogueBox()
     {
         DialogueBox.SetActive(false);
+        DialogueActive = false;
+        slideCount = 0;
+        _typeLineCoroutine = null;
+        dialogueText.text = "";
+        nameText.text = "";
+
+        ChoiceBox.SetActive(false);
+        ChoiceBoxIsOpen = false;
+        foreach (Transform child in ChoiceBox.transform) 
+        {
+            GameObject.Destroy(child.gameObject);
+        }
     }
 
     private CharacterDialogueInfo FindCharacter(string name)

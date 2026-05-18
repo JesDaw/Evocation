@@ -438,7 +438,7 @@ GameObject:
   - component: {fileID: 17469385326869240}
   - component: {fileID: 6939964905676187681}
   - component: {fileID: 2075483718044839402}
-  - component: {fileID: 7697596849455244886}
+  - component: {fileID: 340835958513612647}
   m_Layer: 5
   m_Name: ResumeButton
   m_TagString: Untagged
@@ -523,7 +523,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 3974743305213760022}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -572,7 +572,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 7697596849455244886}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: AdamLenzini.UI.SetsUiElementOnSelect, CodeAssembly
         m_MethodName: JumptToElement
         m_Mode: 1
@@ -584,7 +584,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &7697596849455244886
+--- !u!114 &340835958513612647
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -593,13 +593,52 @@ MonoBehaviour:
   m_GameObject: {fileID: 3552318938257566811}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40d26c9735894d447bbc56d8d3b5f6ab, type: 3}
+  m_Script: {fileID: 11500000, guid: 7ac7cf1042ab8af4f9335af05aff8d69, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::AdamLenzini.UI.SetsUiElementOnSelect
-  eventSystem: {fileID: 0}
-  elementToSelect: {fileID: 0}
-  showVisualization: 0
-  navigationColour: {r: 0, g: 1, b: 1, a: 1}
+  m_EditorClassIdentifier: CodeAssembly::UIButtons
+  animationDuration: 0.2
+  animationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverTextColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverScale: {x: 1.15, y: 1.15, z: 1.15}
+  clickColor: {r: 1, g: 1, b: 1, a: 1}
+  clickTextColor: {r: 1, g: 1, b: 1, a: 1}
+  clickScale: {x: 0.9, y: 0.9, z: 0.9}
+  clickDuration: 0.1
+  postClickColor: {r: 1, g: 1, b: 1, a: 1}
+  postClickTextColor: {r: 1, g: 1, b: 1, a: 1}
+  postClickScale: {x: 1.05, y: 1.05, z: 1.05}
+  targetImage: {fileID: 6939964905676187681}
+  targetText: {fileID: 7985364136042702025}
+  targetTransform: {fileID: 5346370528348992308}
+  originalColor: {r: 1, g: 1, b: 1, a: 1}
+  originalTextColor: {r: 1, g: 1, b: 1, a: 1}
+  originalScale: {x: 1, y: 1, z: 1}
+  ButtonHighlighted:
+    _PersistentCalls: []
 --- !u!1 &5861347221252183415
 GameObject:
   m_ObjectHideFlags: 0
@@ -613,7 +652,7 @@ GameObject:
   - component: {fileID: 8664829200151864747}
   - component: {fileID: 4683308344476754159}
   - component: {fileID: 4851439224572355897}
-  - component: {fileID: 9035355189813100407}
+  - component: {fileID: 2569128791565017882}
   m_Layer: 5
   m_Name: ReturnToMenuButton
   m_TagString: Untagged
@@ -698,7 +737,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 2075483718044839402}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -747,7 +786,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 9035355189813100407}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: AdamLenzini.UI.SetsUiElementOnSelect, CodeAssembly
         m_MethodName: JumptToElement
         m_Mode: 1
@@ -778,7 +817,8 @@ MonoBehaviour:
   slider: {fileID: 0}
   progressText: {fileID: 0}
   NextSceneName: Main Menu
---- !u!114 &9035355189813100407
+  DebugLogs: 0
+--- !u!114 &2569128791565017882
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -787,13 +827,52 @@ MonoBehaviour:
   m_GameObject: {fileID: 5861347221252183415}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40d26c9735894d447bbc56d8d3b5f6ab, type: 3}
+  m_Script: {fileID: 11500000, guid: 7ac7cf1042ab8af4f9335af05aff8d69, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::AdamLenzini.UI.SetsUiElementOnSelect
-  eventSystem: {fileID: 0}
-  elementToSelect: {fileID: 0}
-  showVisualization: 0
-  navigationColour: {r: 0, g: 1, b: 1, a: 1}
+  m_EditorClassIdentifier: CodeAssembly::UIButtons
+  animationDuration: 0.2
+  animationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverTextColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverScale: {x: 1.05, y: 1.05, z: 1.05}
+  clickColor: {r: 1, g: 1, b: 1, a: 1}
+  clickTextColor: {r: 1, g: 1, b: 1, a: 1}
+  clickScale: {x: 0.9, y: 0.9, z: 0.9}
+  clickDuration: 0.1
+  postClickColor: {r: 1, g: 1, b: 1, a: 1}
+  postClickTextColor: {r: 1, g: 1, b: 1, a: 1}
+  postClickScale: {x: 1.05, y: 1.05, z: 1.05}
+  targetImage: {fileID: 8664829200151864747}
+  targetText: {fileID: 3924920766316948875}
+  targetTransform: {fileID: 5851662616472798383}
+  originalColor: {r: 1, g: 1, b: 1, a: 1}
+  originalTextColor: {r: 1, g: 1, b: 1, a: 1}
+  originalScale: {x: 1, y: 1, z: 1}
+  ButtonHighlighted:
+    _PersistentCalls: []
 --- !u!1 &6320962272258255779
 GameObject:
   m_ObjectHideFlags: 0
@@ -806,7 +885,7 @@ GameObject:
   - component: {fileID: 8627419448982727008}
   - component: {fileID: 1579866375473618323}
   - component: {fileID: 3974743305213760022}
-  - component: {fileID: 8016307845881864498}
+  - component: {fileID: 1479193608428845672}
   m_Layer: 5
   m_Name: SettingsButton
   m_TagString: Untagged
@@ -891,7 +970,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 4683308344476754159}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -940,7 +1019,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 8016307845881864498}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: AdamLenzini.UI.SetsUiElementOnSelect, CodeAssembly
         m_MethodName: JumptToElement
         m_Mode: 1
@@ -952,7 +1031,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &8016307845881864498
+--- !u!114 &1479193608428845672
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -961,13 +1040,52 @@ MonoBehaviour:
   m_GameObject: {fileID: 6320962272258255779}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40d26c9735894d447bbc56d8d3b5f6ab, type: 3}
+  m_Script: {fileID: 11500000, guid: 7ac7cf1042ab8af4f9335af05aff8d69, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::AdamLenzini.UI.SetsUiElementOnSelect
-  eventSystem: {fileID: 0}
-  elementToSelect: {fileID: 0}
-  showVisualization: 0
-  navigationColour: {r: 0, g: 1, b: 1, a: 1}
+  m_EditorClassIdentifier: CodeAssembly::UIButtons
+  animationDuration: 0.2
+  animationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverTextColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverScale: {x: 1.05, y: 1.05, z: 1.05}
+  clickColor: {r: 1, g: 1, b: 1, a: 1}
+  clickTextColor: {r: 1, g: 1, b: 1, a: 1}
+  clickScale: {x: 0.9, y: 0.9, z: 0.9}
+  clickDuration: 0.1
+  postClickColor: {r: 1, g: 1, b: 1, a: 1}
+  postClickTextColor: {r: 1, g: 1, b: 1, a: 1}
+  postClickScale: {x: 1.05, y: 1.05, z: 1.05}
+  targetImage: {fileID: 1579866375473618323}
+  targetText: {fileID: 2605562550234968565}
+  targetTransform: {fileID: 4582778901635070071}
+  originalColor: {r: 1, g: 1, b: 1, a: 1}
+  originalTextColor: {r: 1, g: 1, b: 1, a: 1}
+  originalScale: {x: 1, y: 1, z: 1}
+  ButtonHighlighted:
+    _PersistentCalls: []
 --- !u!1 &7256609500358599468
 GameObject:
   m_ObjectHideFlags: 0
@@ -1201,9 +1319,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   disableDefaultBehavior: 0
+  defaultSelectedButton: {fileID: 2075483718044839402}
   OnActivityStart:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: AdamLenzini.UI.SetsUiElementOnSelect, CodeAssembly
+        m_MethodName: JumptToElement
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnActivityStop:
     m_PersistentCalls:
       m_Calls: []

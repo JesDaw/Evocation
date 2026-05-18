@@ -12,16 +12,16 @@ public class SpellsManager : MonoBehaviour
     public UnityEvent<PlayerSpells> OnSwapSpells;
     [SerializeField] uint currentSpellContext = 0;
     [SerializeField] Transform detectionRadiusObject;
-    [SerializeField] Transform playerPos;
     [SerializeField] bool DebugLogs = false;
     //this means spell is ready and primed (can't be switched)
     bool charged = false;
+    Vector2 magicRadiusHoverInput;
 
-    void Awake() =>
-        manaSystem = GetComponent<ManaSystem>();
+    void Awake() => manaSystem = GetComponent<ManaSystem>();
 
     void InvokeSpell()
     {
+        if(PlayerSpells.Count == 0) return;
         if(charged)
         {
             UseSpell();
@@ -32,7 +32,7 @@ public class SpellsManager : MonoBehaviour
         charged = true;
 
         GlobalInputManager.Instance.DisableCursor();
-        detectionRadiusObject.position = playerPos.position;
+        detectionRadiusObject.position = ActivePlayer.Instance.CurrentPlayer.transform.position;
         detectionRadiusObject.gameObject.SetActive(true);
 
         float radius = PlayerSpells[(int)currentSpellContext].Radius;
@@ -42,11 +42,11 @@ public class SpellsManager : MonoBehaviour
 
     void UseSpell()
     {
+        if(PlayerSpells.Count == 0) return;
         PlayerSpells[(int)currentSpellContext].OnHit.Invoke(CurrentlySelected.ToArray());
         PlayerSpells[(int)currentSpellContext].OnHitPosition.Invoke(detectionRadiusObject);
         if(DebugLogs) Debug.Log("Spells Used");
         detectionRadiusObject.gameObject.SetActive(false);
-        GlobalInputManager.Instance.EnableCursor();
         charged = false;
     }
 
@@ -60,13 +60,12 @@ public class SpellsManager : MonoBehaviour
 
     void Start()
     {
+        if(PlayerSpells.Count == 0) return;
         detectionRadiusObject.gameObject.SetActive(false);
         SubscribeToSpells();
 
         OnSwapSpells.Invoke(PlayerSpells[(int)currentSpellContext]); // index error here
     }
-
-    Vector2 magicRadiusHoverInput;
 
     void Update()
     {

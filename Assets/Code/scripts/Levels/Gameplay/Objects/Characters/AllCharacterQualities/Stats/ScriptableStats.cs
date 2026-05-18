@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
-
+using static System.MathF;
 [CreateAssetMenu(fileName = "CpuStats", menuName = "CPU/Stats", order = 0)]
 public class ScriptableStats : ScriptableObject
 {
+    
+
     [Header("Personality & Role")]
     public string Theme;
     public string ODS;
@@ -16,7 +18,7 @@ public class ScriptableStats : ScriptableObject
     public int _spawnCost;
     public float Level_Total;
     [HideInInspector] public float Level_Discrepancy;
-    [HideInInspector] public float _CalculatedPower; 
+    public float _CalculatedPower; 
     [HideInInspector] public float _ValueDiscrepancy;
     [Header("Level Breakdown")]
     [Tooltip("AttackDamage + KnockbackDamage")] public float Attack;
@@ -62,8 +64,31 @@ public class ScriptableStats : ScriptableObject
     [Tooltip("in ms")] public float _AnimationStartupTime;
     [Tooltip("in ms")] public float _AnimationRecoveryTime; 
 
-    
+    [Header("Level")]
+    public int level = 1;
+    [SerializeField] float xp_to_next_lvl = 100;
+    [SerializeField] float ExpCostMultiplier = .5f;
+
+    public float TryLevelUp(float xp)
+    {
+        if (xp <= xp_to_next_lvl)
+        {
+            ChangeLevel();
+            return xp - xp_to_next_lvl;
+        }
+        else
+        {
+            Debug.Log($"need {xp_to_next_lvl - xp} mroe exp");
+            return xp;
+        }
+    }
+    void ChangeLevel()
+    {
+        level += 1;
+        xp_to_next_lvl *= Mathf.Pow((1+ExpCostMultiplier), level);
+    }
 }
+
 
 public enum AttackStyle { Melee, Projectile }
 

@@ -4,17 +4,29 @@ using UnityEngine.UI;
 
 public class CharacterButton : MonoBehaviour
 {
-    public CharacterData character;
-    public CharacterSelect selector;
+    [HideInInspector] public CharacterData character;
     [SerializeField] Image headshotFrame;
     
     void Start ()
     {
-        headshotFrame.sprite = character.headshot;
+        UpdateFrame();
+    }
+
+    public void UpdateCharacterDesplay()
+    {
+        CharacterSelect.Instance.UpdateCurrentDesplayedCharacter(character);
+    }
+
+    public void UpdateFrame()
+    {
+        headshotFrame.enabled = true;
+        if (character != null) headshotFrame.sprite = character.headshot;
+        else headshotFrame.enabled = false;
     }
 
     public void OnClick()
     {
-        selector.OnCharacterClicked(character);
+        if (character == null) return;
+        CharacterSelect.Instance.OnCharacterClicked(character);
     }
 }

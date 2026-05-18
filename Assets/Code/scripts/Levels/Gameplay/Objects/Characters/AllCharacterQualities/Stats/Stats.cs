@@ -6,6 +6,7 @@ public class Stats : MonoBehaviour, IDamageable
 {
     [Header("Configuration")]
     public ScriptableStats scriptableStats;
+    
 
     [Header("Clan & Targeting")]
     public List<string> targetTags = new List<string>();
@@ -54,11 +55,14 @@ public class Stats : MonoBehaviour, IDamageable
     [HideInInspector] public DamageHandler damageHandler;
     [HideInInspector] public StatusEffectManager statusEffectManager;
     [HideInInspector] public EntityHealthbar entityHealthbar;
+    public AnimationEventsController animationEventsController;
 
     public DamageSource LastHitBy { get; set; }
 
     void Awake()
     {
+        if (animationEventsController == null) animationEventsController = GetComponentInChildren<AnimationEventsController>();
+        if (animationEventsController == null) Debug.Log("cant find the animationEventsController componet whyyyyy");
         damageHandler = GetComponent<DamageHandler>();
         if (damageHandler == null)
         {
@@ -183,6 +187,7 @@ public class Stats : MonoBehaviour, IDamageable
         {
             damageHandler.TakeDamage(damage, knockback_damage, attackedBy);
         }
+        animationEventsController.DamageSound();
     }
 
     public void TakeDamage(float damage, DamageSource attackedBy = null)

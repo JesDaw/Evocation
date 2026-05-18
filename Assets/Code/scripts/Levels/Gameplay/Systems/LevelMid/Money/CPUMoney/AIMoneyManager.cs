@@ -4,9 +4,7 @@ using System.Collections;
 public class AIMoneyManager : MonoBehaviour
 {
     [Header("Resources")]
-    [HideInInspector] public float moneyAmount;
     [HideInInspector] public int genPerSec = 1;
-    
     [Header("Settings")]
     [SerializeField] float maxMoney = 9999f;
     bool isActive = false;
@@ -25,7 +23,7 @@ public class AIMoneyManager : MonoBehaviour
         }
 
         Instance = this;
-        CurrentMoney = moneyAmount;
+        CurrentMoney = 0f;
     }
 
     void Start()
@@ -37,24 +35,27 @@ public class AIMoneyManager : MonoBehaviour
     {
         while (true)
         {
-            if (!isActive || moneyAmount >= maxMoney)
+            if (!isActive || CurrentMoney >= maxMoney)
             {
                 yield return null;
                 continue;
             }
 
-            moneyAmount += 1;
-            CurrentMoney = moneyAmount;
-            if (DebugLogs) Debug.Log("AI money amount: " + moneyAmount);
+            CurrentMoney += 1;
+            if (DebugLogs) Debug.Log("AI money amount: " + CurrentMoney);
             
             yield return new WaitForSeconds(1 / genPerSec);
         }
     }
 
+    public void GiveMoney(float amount)
+    {
+        CurrentMoney += amount;
+    }
+
     public void SpendMoney(float amount)
     {
-        moneyAmount -= amount;
-        CurrentMoney = moneyAmount;
+        CurrentMoney -= amount;
     }
 
     public void ActivateMoney()
@@ -77,6 +78,6 @@ public class AIMoneyManager : MonoBehaviour
 
     public float GetMoney()
     {
-        return moneyAmount;
+        return CurrentMoney;
     }
 }

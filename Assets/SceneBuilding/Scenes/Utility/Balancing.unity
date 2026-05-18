@@ -280,18 +280,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::MasterBalancingScript
   all_clan_stats:
-  - {fileID: 11400000, guid: 91174aa3f0daa6541b05663053eafc64, type: 2}
   - {fileID: 11400000, guid: 3c7ffc57a42390842b5fced0833dfeb9, type: 2}
-  Global_AvgPower: -0.67198324
+  Global_AvgPower: 371.28757
   MinPowerOffset: 1
-  Global_TotalUnitCount: 8
-  Global_AvgHP: 11.25
-  Global_AvgKB_MaxHealth: 3.25
-  Global_AvgMoveSpeed: 2.25
-  Global_AvgKB_Dmg: 2.125
-  Global_AvgAtk_Dmg: 2.875
-  Global_AvgEndlag: 1.75
-  Global_AvgRange: 1.5
+  Global_TotalUnitCount: 5
+  Global_AvgHP: 27
+  Global_AvgKB_MaxHealth: 25
+  Global_AvgMoveSpeed: 5
+  Global_AvgKB_Dmg: 5.4
+  Global_AvgAtk_Dmg: 4
+  Global_AvgEndlag: 1.5
+  Global_AvgRange: 3.4
   all_balancers: []
 --- !u!4 &357468018
 Transform:
@@ -320,33 +319,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f18dda4b948d1b14e8530c94669948dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::OverallStatsDisplay
-  Clan: {fileID: 11400000, guid: 3c7ffc57a42390842b5fced0833dfeb9, type: 2}
+  Clan: {fileID: 11400000, guid: 91174aa3f0daa6541b05663053eafc64, type: 2}
   Theme: 
   Characteristics: 
   UnitsInClan:
-  - {fileID: 11400000, guid: d4daadf164451854c8c5982cee62e5f9, type: 2}
-  - {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
-  - {fileID: 11400000, guid: 9bc80ac74d98ee645a559cbf527a224a, type: 2}
-  - {fileID: 11400000, guid: b6992adb71df9b441bc53d51187ea154, type: 2}
-  - {fileID: 11400000, guid: 58e597be392f6de4b990a16d2b0be8fa, type: 2}
+  - {fileID: 11400000, guid: f65c42c7eaba14248803a93e9ba7b28c, type: 2}
+  - {fileID: 11400000, guid: 7e6e8cc8682e1aa4dae224a642ea078f, type: 2}
+  - {fileID: 11400000, guid: fab9813b2d37c634a97bf0c26b640b1c, type: 2}
   UnitValueDiscrepancies:
-  - -3.987392
-  - 1.8836417
-  - -8.594954
-  - -8.594954
-  - -8.594954
-  TotalPower: 0.42227784
-  AverageValueDiscrepancy: -5.577722
-  TotalPushingPower: 4.6
-  TotalDPS: 0
-  TotalDefense: 12
-  MoveSpeed: 3
-  KnockbackDmg: 2.8
-  AttackDmg: 3.6
-  AttackEndlag: 2.2
-  MaxHP: 12
-  KnockbackHP: 4.6
-  HorizontalRange: 1.8
+  - -6.3163633
+  - -3.13668
+  - -5.3163633
+  TotalLevel: Infinity
+  SumAttack: 8
+  SumDefense: 33
+  SumSpaceControl: 6
+  AvgAttackFrequency: Infinity
+  MoveSpeed: 1
+  KnockbackDmg: 1
+  AttackDmg: 1.6666666
+  AttackEndlag: 0
+  MaxHP: 10
+  KnockbackHP: 1
+  HorizontalRange: 1
 --- !u!114 &357468020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -359,29 +354,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f18dda4b948d1b14e8530c94669948dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::OverallStatsDisplay
-  Clan: {fileID: 11400000, guid: 91174aa3f0daa6541b05663053eafc64, type: 2}
+  Clan: {fileID: 11400000, guid: 3c7ffc57a42390842b5fced0833dfeb9, type: 2}
   Theme: 
   Characteristics: 
   UnitsInClan:
-  - {fileID: 11400000, guid: f65c42c7eaba14248803a93e9ba7b28c, type: 2}
-  - {fileID: 11400000, guid: 7e6e8cc8682e1aa4dae224a642ea078f, type: 2}
-  - {fileID: 11400000, guid: fab9813b2d37c634a97bf0c26b640b1c, type: 2}
+  - {fileID: 11400000, guid: d4daadf164451854c8c5982cee62e5f9, type: 2}
+  - {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
+  - {fileID: 11400000, guid: 9bc80ac74d98ee645a559cbf527a224a, type: 2}
+  - {fileID: 11400000, guid: b6992adb71df9b441bc53d51187ea154, type: 2}
+  - {fileID: 11400000, guid: 1b58dbc454df5e14c89b0997be5b88b3, type: 2}
   UnitValueDiscrepancies:
-  - -4.5949535
-  - -3.108826
-  - -3.5949535
-  TotalPower: -1.7662443
-  AverageValueDiscrepancy: -3.7662442
-  TotalPushingPower: 1
-  TotalDPS: 0
-  TotalDefense: 10
-  MoveSpeed: 1
-  KnockbackDmg: 1
-  AttackDmg: 1.6666666
-  AttackEndlag: 1
-  MaxHP: 10
-  KnockbackHP: 1
-  HorizontalRange: 1
+  - -13.001556
+  - 5.654147
+  - -5.8308725
+  - -8.829252
+  - 3.8909798
+  TotalLevel: 371.28757
+  SumAttack: 47
+  SumDefense: 260
+  SumSpaceControl: 42
+  AvgAttackFrequency: 4.457511
+  MoveSpeed: 5
+  KnockbackDmg: 5.4
+  AttackDmg: 4
+  AttackEndlag: 1.5
+  MaxHP: 27
+  KnockbackHP: 25
+  HorizontalRange: 3.4
 --- !u!114 &357468021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -410,6 +409,13 @@ MonoBehaviour:
   Weight_MaxHealth: 1
   Weight_KnockBackHealth: 1
   Weight_HorizontalRange: 1
+  K_MoveSpeed: 1
+  K_Range: 1
+  K_AttackRate: 1
+  W_Attack: 1
+  W_Health: 1
+  W_KB_Damage: 1
+  W_KB_Health: 1
 --- !u!1001 &724452377
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -702,11 +708,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: CodeAssembly::ClanMatchupAnalyst
   ClanA: {fileID: 11400000, guid: 3c7ffc57a42390842b5fced0833dfeb9, type: 2}
   ClanB: {fileID: 11400000, guid: 91174aa3f0daa6541b05663053eafc64, type: 2}
-  ClanA_Advantage: 8.79933
-  Analysis_A: ' vs  local power: 8.80 (Offset: +6.6)'
-  ClanB_Advantage: 3.1605122
-  Analysis_B: ' vs  local power: 3.16 (Offset: +6.6)'
-  LocalMinOffset: 6.6323137
+  ClanA_Advantage: 20.487284
+  Analysis_A: ' vs  local power: 20.49 (Offset: +11.1)'
+  ClanB_Advantage: 4.6792746
+  Analysis_B: ' vs  local power: 4.68 (Offset: +11.1)'
+  LocalMinOffset: 11.127688
   grapher: {fileID: 357468021}
 --- !u!4 &1929949893
 Transform:
