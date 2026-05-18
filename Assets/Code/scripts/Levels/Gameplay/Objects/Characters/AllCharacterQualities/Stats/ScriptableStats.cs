@@ -4,21 +4,17 @@ using static System.MathF;
 [CreateAssetMenu(fileName = "CpuStats", menuName = "CPU/Stats", order = 0)]
 public class ScriptableStats : ScriptableObject
 {
-    
-
     [Header("Personality & Role")]
     public string Theme;
     public string ODS;
     public string RPS_Type;
-    public bool _IsAOE;
-    public AttackStyle _AttackStyle;
     [TextArea(2, 5)] public string OtherNotes;
 
     [Header("Value")]
     public int _spawnCost;
     public float Level_Total;
     [HideInInspector] public float Level_Discrepancy;
-    public float _CalculatedPower; 
+    public float _CalculatedPower;
     [HideInInspector] public float _ValueDiscrepancy;
     [Header("Level Breakdown")]
     [Tooltip("AttackDamage + KnockbackDamage")] public float Attack;
@@ -34,25 +30,15 @@ public class ScriptableStats : ScriptableObject
     [Range(0, 1000)]public int _MaxHealth = 1;
     [Range(0, 1000)]public float _KnockBackMaxHealth = 1;
     [Range(0, 30)] public float _HorizontalRange = 3f;
+    public float _VerticalRange = 2f;
     [Header("Sttack frequency")]
     [Tooltip("Extra endlag in seconds (animation recovery time is added on top)")] [Range(0, 30)]public float _ExtraEndlag = 0f;
-    [Header("Combat Configuration")]
-     public int _MaxAOETargets = 5;
-    public float _VerticalRange = 2f;
+    [Header("Knockback Physics")]
     public float _KnockBackVelocity = 10f;
     public float _KnockBackAngle = 45f;
-    
 
-    [Header("Projectile Settings")]
-    public GameObject _ProjectilePrefab;
-    [Range(0, 100)] public float _ProjectileSpeed = 15f;
-    [Range(0, 100)] public float _ProjectileMaxHeight = 2f;
-    public AnimationCurve _TrajectoryCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
-    public AnimationCurve _AxisCorrectionCurve = AnimationCurve.Linear(0, 0, 1, 1);
-    public AnimationCurve _SpeedCurve = AnimationCurve.Constant(0, 1, 1);
-
-    [Header("Status Effects")]
-    public List<StatusEffect> _EffectsToApply = new List<StatusEffect>();
+    [Header("Combat Actions")]
+    public List<CombatAction> combatActions = new List<CombatAction>();
 
     [Header("Visuals & Animation")]
     public bool _Rotate;
@@ -60,9 +46,9 @@ public class ScriptableStats : ScriptableObject
     public animationRigs[] _Sprites;
     [Range(0, 10)] public float _AnimationMoveSpeed = 1f;
     public List<GameObject> vfx = new();
-    public List<Vector2> vfxOffsets = new();   
+    public List<Vector2> vfxOffsets = new();
     [Tooltip("in ms")] public float _AnimationStartupTime;
-    [Tooltip("in ms")] public float _AnimationRecoveryTime; 
+    [Tooltip("in ms")] public float _AnimationRecoveryTime;
 
     [Header("Level")]
     public int level = 1;
@@ -88,9 +74,6 @@ public class ScriptableStats : ScriptableObject
         xp_to_next_lvl *= Mathf.Pow((1+ExpCostMultiplier), level);
     }
 }
-
-
-public enum AttackStyle { Melee, Projectile }
 
 [System.Serializable]
 public class animationRigs
