@@ -18,18 +18,20 @@ public class CpuMoveState : CpuBaseState
     public override void EnterState()
     {
         bool facingLeft = _Transform.right.x < 0;
+        int candidateIdx = GetBestCandidate(false, facingLeft);
 
-        bool hasTargetInRange = false;
-        for (int i = 0; i < _Stats._CombatActions.Count; i++)
+        if (candidateIdx >= 0)
         {
-            if (_Stats._ActionCooldownTimers[i] > 0f) continue;
-            List<Stats> targets = GetTargetsForAction(_Stats._CombatActions[i], facingLeft);
-            if (targets.Count > 0) { hasTargetInRange = true; break; }
+            List<Stats> targets = GetTargetsForAction(_Stats._CombatActions[candidateIdx], facingLeft);
+            targets.RemoveAll(t => t == null || t._IsDead);
+            _context._Animator.SetBool("IsRunning", targets.Count > 0);
+        }
+        else
+        {
+            _context._Animator.SetBool("IsRunning", false);
         }
 
-        _context._Animator.SetBool("IsRunning", hasTargetInRange);
         _context._Animator.SetFloat("RunningSpeed", _context._ScrStats._AnimationMoveSpeed);
-        Debug.Log($"[CPU] {_context.gameObject.name}: Entered Move state, hasTarget={hasTargetInRange}");
     }
 
     public override void UpdateState() => Moving();
@@ -41,30 +43,96 @@ public class CpuMoveState : CpuBaseState
         Debug.Log($"[CPU] {_context.gameObject.name}: Exiting Move state");
     }
 
+    int GetBestCandidate(bool onlyIfReady, bool facingLeft)
+    {
+        int bestIdx = -1;
+        int bestTier = int.MaxValue;
+        int bestPriority = int.MinValue;
+
+        for (int i = 0; i < _Stats._CombatActions.Count; i++)
+        {
+            if (onlyIfReady && _Stats._ActionCooldownTimers[i] > 0f) continue;
+
+            List<Stats> targets = GetTargetsForAction(_Stats._CombatActions[i], facingLeft);
+            targets.RemoveAll(t => t == null || t._IsDead);
+
+            if (_Stats._CombatActions[i].targetCondition == ActionTargetCondition.NotAlreadyAffected)
+                targets = FilterAlreadyEffected(targets, _Stats._CombatActions[i]);
+
+            bool hasTargets = targets.Count > 0;
+
+            int tier;
+            if (_Stats._ActionCooldownTimers[i] <= 0f)
+                tier = 0;
+            else if (hasTargets)
+                tier = 1;
+            else
+                tier = 2;
+
+            int priority = _Stats._CombatActions[i].priority;
+
+            if (bestIdx < 0 || tier < bestTier || (tier == bestTier && priority > bestPriority))
+            {
+                bestIdx = i;
+                bestTier = tier;
+                bestPriority = priority;
+            }
+        }
+
+        return bestIdx;
+    }
+
+    int GetBestExecutableAction(bool facingLeft)
+    {
+        int bestIdx = -1;
+        int bestPriority = int.MinValue;
+        float closestDist = float.MaxValue;
+
+        for (int i = 0; i < _Stats._CombatActions.Count; i++)
+        {
+            if (_Stats._ActionCooldownTimers[i] > 0f) continue;
+
+            List<Stats> targets = GetTargetsForAction(_Stats._CombatActions[i], facingLeft);
+            targets.RemoveAll(t => t == null || t._IsDead);
+
+            if (_Stats._CombatActions[i].targetCondition == ActionTargetCondition.NotAlreadyAffected)
+                targets = FilterAlreadyEffected(targets, _Stats._CombatActions[i]);
+
+            if (targets.Count == 0) continue;
+
+            int priority = _Stats._CombatActions[i].priority;
+            float dist = Vector2.Distance(_Transform.position, targets[0].transform.position);
+
+            if (bestIdx < 0 || priority > bestPriority)
+            {
+                bestIdx = i;
+                bestPriority = priority;
+                closestDist = dist;
+            }
+            else if (priority == bestPriority && dist < closestDist)
+            {
+                bestIdx = i;
+                closestDist = dist;
+            }
+        }
+
+        return bestIdx;
+    }
+
     void Moving()
     {
         _Stats.TickActionCooldowns(Time.deltaTime);
         bool facingLeft = _Transform.right.x < 0;
 
-        for (int i = 0; i < _Stats._CombatActions.Count; i++)
+        int execIdx = GetBestExecutableAction(facingLeft);
+        if (execIdx >= 0)
         {
-            CombatAction action = _Stats._CombatActions[i];
-
-            if (_Stats._ActionCooldownTimers[i] > 0f) continue;
-
+            CombatAction action = _Stats._CombatActions[execIdx];
             List<Stats> targets = GetTargetsForAction(action, facingLeft);
-            if (targets.Count == 0) continue;
-
-            Stats primary = targets[0];
-            if (primary == null || primary._IsDead) continue;
-
-            if (action.targetCondition == ActionTargetCondition.NotAlreadyAffected)
-                targets = FilterAlreadyEffected(targets, action);
-
-            if (targets.Count == 0) continue;
+            targets.RemoveAll(t => t == null || t._IsDead);
 
             _context._CurrentAction = action;
-            _context._CurrentActionIndex = i;
+            _context._CurrentActionIndex = execIdx;
             _context._ActionTarget = targets[0];
             _Body.linearVelocity = Vector2.zero;
             _context._Animator.SetBool("IsRunning", false);
@@ -72,23 +140,27 @@ public class CpuMoveState : CpuBaseState
             return;
         }
 
-        for (int i = 0; i < _Stats._CombatActions.Count; i++)
+        int detectionIdx = GetBestCandidate(false, facingLeft);
+        CombatAction detectionAction = detectionIdx >= 0 ? _Stats._CombatActions[detectionIdx] : null;
+        List<Stats> detectionTargets = detectionIdx >= 0 ? GetTargetsForAction(detectionAction, facingLeft) : new List<Stats>();
+        detectionTargets.RemoveAll(t => t == null || t._IsDead);
+
+        if (detectionAction != null)
         {
-            CombatAction action = _Stats._CombatActions[i];
-            List<Stats> targets = GetTargetsForAction(action, facingLeft);
-            targets.RemoveAll(t => t == null || t._IsDead);
-            if (targets.Count > 0)
-            {
-                _Body.linearVelocity = Vector2.zero;
-                _context._Animator.SetBool("IsRunning", false);
-                HandleIdle();
-                return;
-            }
+            string cd1 = _Stats._ActionCooldownTimers[0].ToString("F1");
+            string cd2 = _Stats._ActionCooldownTimers.Count > 1 ? _Stats._ActionCooldownTimers[1].ToString("F1") : "N/A";
+            //Debug.Log($"[CPU] {_context.gameObject.name}: detection={detectionIdx}({detectionAction.actionName}) pri={detectionAction.priority}, targets={detectionTargets.Count}, cooldowns=[{cd1},{cd2}]");
+        }
+
+        if (detectionTargets.Count > 0)
+        {
+            _Body.linearVelocity = Vector2.zero;
+            _context._Animator.SetBool("IsRunning", false);
+            return;
         }
 
         _Body.linearVelocity = new Vector2(_Stats._MoveSpeed * _Transform.right.x, _Body.linearVelocity.y);
         _context._Animator.SetBool("IsRunning", true);
-        HandleIdle();
     }
 
     List<Stats> GetTargetsForAction(CombatAction action, bool facingLeft)
@@ -110,8 +182,6 @@ public class CpuMoveState : CpuBaseState
             Vector2.Distance(_Transform.position, a.transform.position)
                 .CompareTo(Vector2.Distance(_Transform.position, b.transform.position)));
 
-        //Debug.Log($"[CPU] {_context.gameObject.name}: GetTargetsForAction '{action.actionName}' tags={string.Join(",", targetTags)}, range={effectiveRange}, found={targets.Count}");
-
         return targets;
     }
 
@@ -131,43 +201,5 @@ public class CpuMoveState : CpuBaseState
             if (!hasAny) filtered.Add(t);
         }
         return filtered;
-    }
-
-    void HandleIdle()
-    {
-        if (_Stats._ActionCooldownTimers.Count == 0) return;
-
-        int minIndex = 0;
-        float minCooldown = _Stats._ActionCooldownTimers[0];
-        for (int i = 1; i < _Stats._ActionCooldownTimers.Count; i++)
-        {
-            if (_Stats._ActionCooldownTimers[i] < minCooldown)
-            {
-                minCooldown = _Stats._ActionCooldownTimers[i];
-                minIndex = i;
-            }
-        }
-
-        bool facingLeft = _Transform.right.x < 0;
-        List<Stats> nearby = GetTargetsForAction(_Stats._CombatActions[minIndex], facingLeft);
-        nearby.RemoveAll(t => t == null || t._IsDead);
-
-        if (nearby.Count > 0 && _Stats._ActionCooldownTimers[minIndex] > 0f)
-        {
-            _context._Animator.SetBool("IsRunning", false);
-            Debug.Log($"[CPU] {_context.gameObject.name}: HandleIdle - cooldown active ({minCooldown:F1}s), in range of target");
-        }
-    }
-
-    void ApplyMinStoppingDistance()
-    {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(_Transform.position, 1f);
-        foreach (var hit in hits)
-        {
-            Stats other = hit.GetComponent<Stats>();
-            if (other == null || other == _Stats) continue;
-            if (other._Enemy == _Stats._Enemy) continue;
-            Debug.Log($"[CPU] {_context.gameObject.name}: ApplyMinStoppingDistance hit {other.gameObject.name}");
-        }
     }
 }

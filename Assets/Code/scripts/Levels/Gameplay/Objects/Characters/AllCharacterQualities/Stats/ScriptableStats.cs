@@ -33,6 +33,7 @@ public class ScriptableStats : ScriptableObject
     public float _VerticalRange = 2f;
     [Header("Sttack frequency")]
     [Tooltip("Extra endlag in seconds (animation recovery time is added on top)")] [Range(0, 30)]public float _ExtraEndlag = 0f;
+    [Tooltip("Base multiplier for action cooldowns (1.0 = normal speed)")] [Range(1, 30)] public float _ActionCooldown = 1f;
     [Header("Knockback Physics")]
     public float _KnockBackVelocity = 10f;
     public float _KnockBackAngle = 45f;

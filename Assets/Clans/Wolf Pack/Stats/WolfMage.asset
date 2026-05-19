@@ -33,18 +33,20 @@ MonoBehaviour:
   _HorizontalRange: 1
   _VerticalRange: 2
   _ExtraEndlag: 0
+  _ActionCooldown: 1
   _KnockBackVelocity: 7
   _KnockBackAngle: 45
   combatActions:
   - actionName: Magic ball
-    rangePercent: 1
+    priority: 1
+    rangePercent: 8
     extendsForward: 1
     targetFriendly: 0
     targetCondition: 0
     maxTargets: 1
     castCooldown: 1
     healthChangePercent: -1
-    knockbackPercent: 1
+    knockbackPercent: -1
     zoneSpawnPosition: 2
     projectileSettings:
       prefab: {fileID: 6072924362752908747, guid: e36c33467359d0a44aa4493b4d80e7d9, type: 3}
@@ -128,12 +130,13 @@ MonoBehaviour:
     excludeCasterFromZone: 0
     applicationMode: 0
   - actionName: Speed Buff
-    rangePercent: 0.5
+    priority: 0
+    rangePercent: 2
     extendsForward: 0
     targetFriendly: 1
     targetCondition: 1
     maxTargets: 5
-    castCooldown: 5
+    castCooldown: 10
     healthChangePercent: 0
     knockbackPercent: 0
     zoneSpawnPosition: 0

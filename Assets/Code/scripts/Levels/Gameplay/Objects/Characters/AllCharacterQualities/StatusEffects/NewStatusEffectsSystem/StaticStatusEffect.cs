@@ -17,6 +17,8 @@ public class StaticStatusEffect : StatusEffect
 
     public float animationSpeedMultiplier = 1f;
 
+    public float castSpeedMultiplier = 1f;
+
     [Header("Stacking")]
     [SerializeField] private bool allowStacking = false;
 
@@ -31,6 +33,7 @@ public class StaticStatusEffect : StatusEffect
                 knockbackDamage = target._KnockBackDamage,
                 horizontalRange = target._AttackRange.x,
                 animationSpeed = target.animator != null ? target.animator.speed : 1f,
+                castSpeedMultiplier = target._CastSpeedMultiplier,
                 stackCount = 0
             };
             target._EffectSnapshots[this] = snap;
@@ -39,7 +42,7 @@ public class StaticStatusEffect : StatusEffect
         snap.stackCount++;
         ApplyAllModifiers(target, snap);
 
-        Debug.Log($"{effectName} applied to {target.gameObject.name} (stacks: {snap.stackCount})");
+//        Debug.Log($"{effectName} applied to {target.gameObject.name} (stacks: {snap.stackCount})");
     }
 
     public override void OnTick(Stats target, float deltaTime)
@@ -63,6 +66,7 @@ public class StaticStatusEffect : StatusEffect
             target._AttackRange = new Vector2(snap.horizontalRange, target._AttackRange.y);
             if (target.animator != null)
                 target.animator.speed = snap.animationSpeed;
+            target._CastSpeedMultiplier = snap.castSpeedMultiplier;
             target._EffectSnapshots.Remove(this);
         }
 
@@ -80,6 +84,8 @@ public class StaticStatusEffect : StatusEffect
 
         if (target.animator != null)
             target.animator.speed = snap.animationSpeed * animationSpeedMultiplier;
+
+        target._CastSpeedMultiplier = snap.castSpeedMultiplier * castSpeedMultiplier;
     }
 
     public override bool CanStack()

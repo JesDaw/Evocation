@@ -15,6 +15,7 @@ public class Stats : MonoBehaviour, IDamageable
     [Header("Runtime Combat")]
     [HideInInspector] public int _AttackDamage;
     [HideInInspector] public float _ExtraEndlag;
+    [HideInInspector] public float _ActionCooldown;
     [HideInInspector] public Vector2 _AttackRange;
     [HideInInspector] public float _HorizontalRange;
 
@@ -41,6 +42,7 @@ public class Stats : MonoBehaviour, IDamageable
     [HideInInspector] public float _CurrentHealth = 1;
     [HideInInspector] public bool _IsDead = false;
     [HideInInspector] public float _MoveSpeed;
+    [HideInInspector] public float _CastSpeedMultiplier = 1f;
     [HideInInspector] public float _AnimationStartupTime;
     [HideInInspector] public float _AnimationRecoveryTime;
     public float _KnockBackMaxHealth;
@@ -142,13 +144,18 @@ public class Stats : MonoBehaviour, IDamageable
         if (_AttackDamage < 0) Debug.LogWarning($"{gameObject.name}: AttackDamage is {_AttackDamage}, should be non-negative.");
 
         _ExtraEndlag = scriptableStats._ExtraEndlag;
+        _ActionCooldown = scriptableStats._ActionCooldown;
         _AnimationStartupTime = scriptableStats._AnimationStartupTime;
         _AnimationRecoveryTime = scriptableStats._AnimationRecoveryTime;
+
+        //Debug.Log($"[Stats] {gameObject.name} initialized: tag={tag}, targetTags=[{string.Join(",", targetTags)}], _Enemy={_Enemy}, _CastSpeedMultiplier={_CastSpeedMultiplier}");
+
         _HorizontalRange = scriptableStats._HorizontalRange;
         _AttackRange = new Vector2(scriptableStats._HorizontalRange, scriptableStats._VerticalRange);
 
         _CombatActions = new List<CombatAction>(scriptableStats.combatActions);
         _ActionCooldownTimers = new List<float>(new float[_CombatActions.Count]);
+        _CastSpeedMultiplier = 1f;
 
         _IsAOE = false;
         _MaxAOETargets = 5;
@@ -214,7 +221,7 @@ public class Stats : MonoBehaviour, IDamageable
 
     public void AlterKnockback(float amount, bool isEnemySource)
     {
-        _KnockBackHealth -= amount;
+        _KnockBackHealth += amount;
 
         if (_KnockBackHealth <= 0f)
         {
@@ -279,10 +286,11 @@ public class Stats : MonoBehaviour, IDamageable
 
     public void TickActionCooldowns(float deltaTime)
     {
+        float effectiveDelta = deltaTime * _CastSpeedMultiplier;
         for (int i = 0; i < _ActionCooldownTimers.Count; i++)
         {
             if (_ActionCooldownTimers[i] > 0f)
-                _ActionCooldownTimers[i] -= deltaTime;
+                _ActionCooldownTimers[i] -= effectiveDelta;
         }
     }
 }
@@ -295,5 +303,6 @@ public class StaticEffectSnapshot
     public float knockbackDamage;
     public float horizontalRange;
     public float animationSpeed;
+    public float castSpeedMultiplier;
     public int stackCount;
 }

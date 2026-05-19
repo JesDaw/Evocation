@@ -10,7 +10,6 @@ public class AreaEffectData : ScriptableObject
     public float circleRadius = 3f;
 
     [Header("Targeting")]
-    public List<string> targetTags = new List<string> { "Enemy" };
     public int maxTargets = -1;
 
     [Header("Duration")]

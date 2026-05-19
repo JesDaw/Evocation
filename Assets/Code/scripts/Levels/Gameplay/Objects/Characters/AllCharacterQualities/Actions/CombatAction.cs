@@ -7,6 +7,10 @@ public class CombatAction
     [Header("Identity")]
     public string actionName = "Action";
 
+    [Header("Priority")]
+    [Tooltip("Higher = preferred when multiple actions are candidates. Must be unique per character.")]
+    public int priority = 0;
+
     [Header("Detection")]
     [Tooltip("Multiplier on character horizontal range stat. 1.0 = same as base range, 2.0 = double")]
     public float rangePercent = 1f;
