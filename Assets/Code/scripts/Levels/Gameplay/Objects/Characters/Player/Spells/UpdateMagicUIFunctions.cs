@@ -5,12 +5,10 @@ using TMPro;
 public class UpdateMagicUIFunctions : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI totalMana;
-    [SerializeField] TextMeshProUGUI spellName;
     [SerializeField] TextMeshProUGUI cost;
 
     public void UpdateSpellGUI(PlayerSpells _playerSpell)
     {
-        spellName.text = _playerSpell.SpellName;
         cost.text = _playerSpell.Cost.ToString();
     }
 
