@@ -108,7 +108,7 @@ public class MasterBalancingScript : MonoBehaviour
                 if (cd == null || cd.scriptableStats == null) continue;
                 var s = cd.scriptableStats;
                 tHP += s._MaxHealth; tKBH += s._KnockBackMaxHealth; tMove += s._MoveSpeed;
-                tKBD += s._KnockBackDamage; tAD += s._AttackDamage; tEnd += s._ExtraEndlag;
+                tKBD += s._KnockBackDamage; tAD += s._AttackDamage; tEnd += s._ActionCooldown;
                 tRange += s._HorizontalRange;
                 count++;
             }
@@ -121,7 +121,7 @@ public class MasterBalancingScript : MonoBehaviour
                 if (bal?.Stats == null) continue;
                 var s = bal.Stats;
                 tHP += s._MaxHealth; tKBH += s._KnockBackMaxHealth; tMove += s._MoveSpeed;
-                tKBD += s._KnockBackDamage; tAD += s._AttackDamage; tEnd += s._ExtraEndlag;
+                tKBD += s._KnockBackDamage; tAD += s._AttackDamage; tEnd += s._ActionCooldown;
                 tRange += s._HorizontalRange;
                 count++;
             }

@@ -43,14 +43,14 @@ public class CharacterStatBalancer : MonoBehaviour
         if (Stats == null) return;
 
         float rawPower = SimulatePower(
-            Stats._AttackDamage, Stats._ExtraEndlag, Stats._MoveSpeed, Stats._KnockBackDamage, Stats._MaxHealth, Stats._KnockBackMaxHealth, Stats._HorizontalRange,
+            Stats._AttackDamage, Stats._ActionCooldown, Stats._MoveSpeed, Stats._KnockBackDamage, Stats._MaxHealth, Stats._KnockBackMaxHealth, Stats._HorizontalRange,
             wAtk, wEnd, wMove, wKB_Dmg, wHP, wKB_HP, wRange,
             avgHP, avgKB_HP, avgMove, avgKB_Dmg, avgAtk, avgEndlag, avgRange, baseVelocity, simDist);
             
         Stats._CalculatedPower = rawPower + powerOffset;
         Stats._ValueDiscrepancy = Stats._CalculatedPower - Stats._spawnCost;
 
-        float myFreq = 1f / (Mathf.Max(Stats._ExtraEndlag * wEnd, 0.01f) + 0.5f);
+        float myFreq = 1f / (Mathf.Max(Stats._ActionCooldown * wEnd, 0.01f) + 0.5f);
         float avgFreq = 1f / (Mathf.Max(avgEndlag, 0.01f) + 0.5f);
         float avgEnemyDPS = (avgAtk * wAtk) * avgFreq;
 
@@ -83,13 +83,13 @@ public class CharacterStatBalancer : MonoBehaviour
         for (int i = 0; i <= res; i++)
         {
             float t = i / (float)res;
-            Power_Curves.MoveSpeed.AddKey(t * mMove, SimulatePower(Stats._AttackDamage, Stats._ExtraEndlag, t * mMove, Stats._KnockBackDamage, Stats._MaxHealth, Stats._KnockBackMaxHealth, Stats._HorizontalRange, wAtk, wEnd, wMove, wKB_Dmg, wHP, wKB_HP, wRange, avgHP, avgKB_HP, avgMove, avgKB_Dmg, avgAtk, avgEndlag, avgRange, baseVelocity, simDist));
+            Power_Curves.MoveSpeed.AddKey(t * mMove, SimulatePower(Stats._AttackDamage, Stats._ActionCooldown, t * mMove, Stats._KnockBackDamage, Stats._MaxHealth, Stats._KnockBackMaxHealth, Stats._HorizontalRange, wAtk, wEnd, wMove, wKB_Dmg, wHP, wKB_HP, wRange, avgHP, avgKB_HP, avgMove, avgKB_Dmg, avgAtk, avgEndlag, avgRange, baseVelocity, simDist));
             Power_Curves.AttackEndlag.AddKey(t * mEnd, SimulatePower(Stats._AttackDamage, t * mEnd, Stats._MoveSpeed, Stats._KnockBackDamage, Stats._MaxHealth, Stats._KnockBackMaxHealth, Stats._HorizontalRange, wAtk, wEnd, wMove, wKB_Dmg, wHP, wKB_HP, wRange, avgHP, avgKB_HP, avgMove, avgKB_Dmg, avgAtk, avgEndlag, avgRange, baseVelocity, simDist));
-            Power_Curves.HorizontalRange.AddKey(t * mRange, SimulatePower(Stats._AttackDamage, Stats._ExtraEndlag, Stats._MoveSpeed, Stats._KnockBackDamage, Stats._MaxHealth, Stats._KnockBackMaxHealth, t * mRange, wAtk, wEnd, wMove, wKB_Dmg, wHP, wKB_HP, wRange, avgHP, avgKB_HP, avgMove, avgKB_Dmg, avgAtk, avgEndlag, avgRange, baseVelocity, simDist));
-            Power_Curves.MaxHealth.AddKey(t * mHP, SimulatePower(Stats._AttackDamage, Stats._ExtraEndlag, Stats._MoveSpeed, Stats._KnockBackDamage, t * mHP, Stats._KnockBackMaxHealth, Stats._HorizontalRange, wAtk, wEnd, wMove, wKB_Dmg, wHP, wKB_HP, wRange, avgHP, avgKB_HP, avgMove, avgKB_Dmg, avgAtk, avgEndlag, avgRange, baseVelocity, simDist));
-            Power_Curves.AttackDamage.AddKey(t * mAtk, SimulatePower(t * mAtk, Stats._ExtraEndlag, Stats._MoveSpeed, Stats._KnockBackDamage, Stats._MaxHealth, Stats._KnockBackMaxHealth, Stats._HorizontalRange, wAtk, wEnd, wMove, wKB_Dmg, wHP, wKB_HP, wRange, avgHP, avgKB_HP, avgMove, avgKB_Dmg, avgAtk, avgEndlag, avgRange, baseVelocity, simDist));
-            Power_Curves.KnockBackDamage.AddKey(t * mKBD, SimulatePower(Stats._AttackDamage, Stats._ExtraEndlag, Stats._MoveSpeed, t * mKBD, Stats._MaxHealth, Stats._KnockBackMaxHealth, Stats._HorizontalRange, wAtk, wEnd, wMove, wKB_Dmg, wHP, wKB_HP, wRange, avgHP, avgKB_HP, avgMove, avgKB_Dmg, avgAtk, avgEndlag, avgRange, baseVelocity, simDist));
-            Power_Curves.KnockBackMaxHealth.AddKey(t * mKBH, SimulatePower(Stats._AttackDamage, Stats._ExtraEndlag, Stats._MoveSpeed, Stats._KnockBackDamage, Stats._MaxHealth, t * mKBH, Stats._HorizontalRange, wAtk, wEnd, wMove, wKB_Dmg, wHP, wKB_HP, wRange, avgHP, avgKB_HP, avgMove, avgKB_Dmg, avgAtk, avgEndlag, avgRange, baseVelocity, simDist));
+            Power_Curves.HorizontalRange.AddKey(t * mRange, SimulatePower(Stats._AttackDamage, Stats._ActionCooldown, Stats._MoveSpeed, Stats._KnockBackDamage, Stats._MaxHealth, Stats._KnockBackMaxHealth, t * mRange, wAtk, wEnd, wMove, wKB_Dmg, wHP, wKB_HP, wRange, avgHP, avgKB_HP, avgMove, avgKB_Dmg, avgAtk, avgEndlag, avgRange, baseVelocity, simDist));
+            Power_Curves.MaxHealth.AddKey(t * mHP, SimulatePower(Stats._AttackDamage, Stats._ActionCooldown, Stats._MoveSpeed, Stats._KnockBackDamage, t * mHP, Stats._KnockBackMaxHealth, Stats._HorizontalRange, wAtk, wEnd, wMove, wKB_Dmg, wHP, wKB_HP, wRange, avgHP, avgKB_HP, avgMove, avgKB_Dmg, avgAtk, avgEndlag, avgRange, baseVelocity, simDist));
+            Power_Curves.AttackDamage.AddKey(t * mAtk, SimulatePower(t * mAtk, Stats._ActionCooldown, Stats._MoveSpeed, Stats._KnockBackDamage, Stats._MaxHealth, Stats._KnockBackMaxHealth, Stats._HorizontalRange, wAtk, wEnd, wMove, wKB_Dmg, wHP, wKB_HP, wRange, avgHP, avgKB_HP, avgMove, avgKB_Dmg, avgAtk, avgEndlag, avgRange, baseVelocity, simDist));
+            Power_Curves.KnockBackDamage.AddKey(t * mKBD, SimulatePower(Stats._AttackDamage, Stats._ActionCooldown, Stats._MoveSpeed, t * mKBD, Stats._MaxHealth, Stats._KnockBackMaxHealth, Stats._HorizontalRange, wAtk, wEnd, wMove, wKB_Dmg, wHP, wKB_HP, wRange, avgHP, avgKB_HP, avgMove, avgKB_Dmg, avgAtk, avgEndlag, avgRange, baseVelocity, simDist));
+            Power_Curves.KnockBackMaxHealth.AddKey(t * mKBH, SimulatePower(Stats._AttackDamage, Stats._ActionCooldown, Stats._MoveSpeed, Stats._KnockBackDamage, Stats._MaxHealth, t * mKBH, Stats._HorizontalRange, wAtk, wEnd, wMove, wKB_Dmg, wHP, wKB_HP, wRange, avgHP, avgKB_HP, avgMove, avgKB_Dmg, avgAtk, avgEndlag, avgRange, baseVelocity, simDist));
         }
     }
 
@@ -136,7 +136,7 @@ public class CharacterStatBalancer : MonoBehaviour
         if (s == null) return 0f;
         
         float rawPower = CalculatePowerRaw(
-            s._AttackDamage, s._ExtraEndlag, s._MoveSpeed, s._KnockBackDamage, s._MaxHealth, s._KnockBackMaxHealth, s._HorizontalRange,
+            s._AttackDamage, s._ActionCooldown, s._MoveSpeed, s._KnockBackDamage, s._MaxHealth, s._KnockBackMaxHealth, s._HorizontalRange,
             wAtk, wEnd, wMove, wKB_Dmg, wHP, wKB_HP, wRange,
             avgHP, avgKB_HP, avgMove, avgKB_Dmg, avgAtk, avgEndlag, avgRange, baseVelocity, simDist);
             

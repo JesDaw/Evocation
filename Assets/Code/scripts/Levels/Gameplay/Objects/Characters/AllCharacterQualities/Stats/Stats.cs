@@ -6,7 +6,6 @@ public class Stats : MonoBehaviour, IDamageable
 {
     [Header("Configuration")]
     public ScriptableStats scriptableStats;
-    
 
     [Header("Clan & Targeting")]
     public List<string> targetTags = new List<string>();
@@ -16,11 +15,12 @@ public class Stats : MonoBehaviour, IDamageable
     [Header("Runtime Combat")]
     [HideInInspector] public int _AttackDamage;
     [HideInInspector] public float _ExtraEndlag;
+    [HideInInspector] public float _ActionCooldown;
     [HideInInspector] public Vector2 _AttackRange;
-    [HideInInspector] public bool _IsProjectile; 
+    [HideInInspector] public float _HorizontalRange;
+
     [HideInInspector] public bool _IsAOE;
     [HideInInspector] public int _MaxAOETargets;
-    
     [HideInInspector] public GameObject _ProjectilePrefab;
     [HideInInspector] public float _ProjectileSpeed;
     [HideInInspector] public float _ProjectileMaxHeight;
@@ -29,11 +29,20 @@ public class Stats : MonoBehaviour, IDamageable
     [HideInInspector] public AnimationCurve _SpeedCurve;
     [HideInInspector] public List<StatusEffect> _EffectsToApply;
 
+    [HideInInspector] public bool _IsProjectile;
+
+    [HideInInspector] public List<CombatAction> _CombatActions;
+    [HideInInspector] public List<float> _ActionCooldownTimers;
+
+    [HideInInspector] public Dictionary<StatusEffect, StaticEffectSnapshot> _EffectSnapshots
+        = new Dictionary<StatusEffect, StaticEffectSnapshot>();
+
     [Header("Health & Movement")]
     [HideInInspector] public int _MaxHealth = 1;
     [HideInInspector] public float _CurrentHealth = 1;
     [HideInInspector] public bool _IsDead = false;
     [HideInInspector] public float _MoveSpeed;
+    [HideInInspector] public float _CastSpeedMultiplier = 1f;
     [HideInInspector] public float _AnimationStartupTime;
     [HideInInspector] public float _AnimationRecoveryTime;
     public float _KnockBackMaxHealth;
@@ -55,6 +64,7 @@ public class Stats : MonoBehaviour, IDamageable
     [HideInInspector] public DamageHandler damageHandler;
     [HideInInspector] public StatusEffectManager statusEffectManager;
     [HideInInspector] public EntityHealthbar entityHealthbar;
+    [HideInInspector] public Animator animator;
     public AnimationEventsController animationEventsController;
 
     public DamageSource LastHitBy { get; set; }
@@ -97,7 +107,8 @@ public class Stats : MonoBehaviour, IDamageable
         {
             entityHealthbar.Initialize(this);
         }
-        
+
+        animator = GetComponentInChildren<Animator>();
     }
 
     public void InitializeStats()
@@ -133,31 +144,30 @@ public class Stats : MonoBehaviour, IDamageable
         if (_AttackDamage < 0) Debug.LogWarning($"{gameObject.name}: AttackDamage is {_AttackDamage}, should be non-negative.");
 
         _ExtraEndlag = scriptableStats._ExtraEndlag;
+        _ActionCooldown = scriptableStats._ActionCooldown;
         _AnimationStartupTime = scriptableStats._AnimationStartupTime;
         _AnimationRecoveryTime = scriptableStats._AnimationRecoveryTime;
+
+        //Debug.Log($"[Stats] {gameObject.name} initialized: tag={tag}, targetTags=[{string.Join(",", targetTags)}], _Enemy={_Enemy}, _CastSpeedMultiplier={_CastSpeedMultiplier}");
+
+        _HorizontalRange = scriptableStats._HorizontalRange;
         _AttackRange = new Vector2(scriptableStats._HorizontalRange, scriptableStats._VerticalRange);
 
-        _IsProjectile = scriptableStats._AttackStyle == AttackStyle.Projectile;
-        _IsAOE = scriptableStats._IsAOE;
-        _MaxAOETargets = scriptableStats._MaxAOETargets;
-        _EffectsToApply = scriptableStats._EffectsToApply;
+        _CombatActions = new List<CombatAction>(scriptableStats.combatActions);
+        _ActionCooldownTimers = new List<float>(new float[_CombatActions.Count]);
+        _CastSpeedMultiplier = 1f;
 
-        if (_IsProjectile)
-        {
-            _ProjectilePrefab = scriptableStats._ProjectilePrefab;
-            if (_ProjectilePrefab == null) Debug.LogWarning($"{gameObject.name}: Projectile prefab is null.");
+        _IsAOE = false;
+        _MaxAOETargets = 5;
+        _EffectsToApply = new List<StatusEffect>();
+        _IsProjectile = false;
 
-            _ProjectileSpeed = scriptableStats._ProjectileSpeed;
-            _ProjectileMaxHeight = scriptableStats._ProjectileMaxHeight;
-            _TrajectoryCurve = scriptableStats._TrajectoryCurve;
-            if (_TrajectoryCurve == null) Debug.LogWarning($"{gameObject.name}: Trajectory curve is null.");
-
-            _AxisCorrectionCurve = scriptableStats._AxisCorrectionCurve;
-            if (_AxisCorrectionCurve == null) Debug.LogWarning($"{gameObject.name}: Axis correction curve is null.");
-
-            _SpeedCurve = scriptableStats._SpeedCurve;
-            if (_SpeedCurve == null) Debug.LogWarning($"{gameObject.name}: Speed curve is null.");
-        }
+        _ProjectilePrefab = null;
+        _ProjectileSpeed = 15f;
+        _ProjectileMaxHeight = 2f;
+        _TrajectoryCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+        _AxisCorrectionCurve = AnimationCurve.Linear(0, 0, 1, 1);
+        _SpeedCurve = AnimationCurve.Constant(0, 1, 1);
     }
 
     public void SetTag(string tag)
@@ -198,28 +208,49 @@ public class Stats : MonoBehaviour, IDamageable
         }
     }
 
+    public void AlterHealth(float amount, DamageSource source = null)
+    {
+        if (damageHandler != null)
+        {
+            if (amount < 0f)
+                damageHandler.TakeDamage(-amount, 0f, source ?? new DamageSource(DamageSource.DamageType.Melee));
+            else if (amount > 0f)
+                damageHandler.Heal(amount);
+        }
+    }
+
+    public void AlterKnockback(float amount, bool isEnemySource)
+    {
+        _KnockBackHealth += amount;
+
+        if (_KnockBackHealth <= 0f)
+        {
+            OnKnocked?.Invoke();
+            _KnockBackHealth = _KnockBackMaxHealth;
+        }
+    }
+
     void IDamageable.TakeDamage(float damage, float knockback_damage, DamageSource source)
     {
         TakeDamage(damage, knockback_damage, source);
     }
-    
+
     void IDamageable.TakeDamage(float damage, DamageSource source)
     {
         TakeDamage(damage, source);
     }
 
-
     GameObject IDamageable.gameObject => gameObject;
     Transform IDamageable.transform => transform;
 
-    public void ToggleInvincibility() 
-    { 
-        _Invincible = !_Invincible; 
+    public void ToggleInvincibility()
+    {
+        _Invincible = !_Invincible;
     }
 
-    public bool IsInvincible() 
-    { 
-        return _Invincible; 
+    public bool IsInvincible()
+    {
+        return _Invincible;
     }
 
     public void SetHealth(float amount)
@@ -235,7 +266,7 @@ public class Stats : MonoBehaviour, IDamageable
     void SetupTag()
     {
         if (_Enemy) gameObject.tag = "Enemy";
-        else if(player) gameObject.tag = "Player"; 
+        else if(player) gameObject.tag = "Player";
         else gameObject.tag = "Allies";
     }
 
@@ -252,4 +283,26 @@ public class Stats : MonoBehaviour, IDamageable
             targetTags.Add("Enemy");
         }
     }
+
+    public void TickActionCooldowns(float deltaTime)
+    {
+        float effectiveDelta = deltaTime * _CastSpeedMultiplier;
+        for (int i = 0; i < _ActionCooldownTimers.Count; i++)
+        {
+            if (_ActionCooldownTimers[i] > 0f)
+                _ActionCooldownTimers[i] -= effectiveDelta;
+        }
+    }
+}
+
+[System.Serializable]
+public class StaticEffectSnapshot
+{
+    public float moveSpeed;
+    public int attackDamage;
+    public float knockbackDamage;
+    public float horizontalRange;
+    public float animationSpeed;
+    public float castSpeedMultiplier;
+    public int stackCount;
 }

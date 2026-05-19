@@ -8,7 +8,7 @@ public class CpuStateManager : MonoBehaviour
     public enum State
     {
         Move,
-        Attack,
+        CombatAction,
         KnockBack,
     }
 
@@ -27,13 +27,17 @@ public class CpuStateManager : MonoBehaviour
     public ScriptableStats _ScrStats => _Stats.scriptableStats;
     public Action<State> OnCPUStateChange = delegate { };
 
+    [HideInInspector] public CombatAction _CurrentAction;
+    [HideInInspector] public int _CurrentActionIndex;
+    [HideInInspector] public Stats _ActionTarget;
+
     void Start()
     {
         toggleEverything(false);
        // _Stats.InitializeStats();
 
         _State[State.Move] = new CpuMoveState(this);
-        _State[State.Attack] = new CpuAttackState(this);
+        _State[State.CombatAction] = new CpuCombatActionState(this);
         _State[State.KnockBack] = new CpuKnockBackState(this);
 
         StartCoroutine(Startup());
