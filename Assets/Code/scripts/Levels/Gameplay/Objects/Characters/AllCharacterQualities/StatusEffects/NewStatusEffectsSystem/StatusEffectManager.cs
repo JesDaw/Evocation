@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 public class StatusEffectManager : MonoBehaviour
 {
-    Stats stats;
+    public Stats stats { get; private set; }
     List<ActiveStatusEffect> activeEffects = new List<ActiveStatusEffect>();
 
     [Header("Events")]
@@ -77,6 +77,35 @@ public class StatusEffectManager : MonoBehaviour
     public bool HasEffect(StatusEffect effect)
     {
         return activeEffects.Exists(e => e.effectData == effect);
+    }
+
+    public void ApplyEffect(StatusEffect effect, float durationOverride)
+    {
+        if (effect == null) return;
+
+        for (int i = 0; i < activeEffects.Count; i++)
+        {
+            if (activeEffects[i].effectData == effect)
+            {
+                var refreshed = activeEffects[i];
+                refreshed.timeRemaining = durationOverride;
+                activeEffects[i] = refreshed;
+
+                if (effect is IterativeStatusEffect iterativeData && activeEffects[i] is ActiveIterativeEffect iterInstance)
+                {
+                    iterInstance.nextTickTime = iterativeData.tickInterval;
+                    activeEffects[i] = iterInstance;
+                }
+
+                return;
+            }
+        }
+
+        effect.OnApply(stats);
+        ActiveStatusEffect instance = effect.CreateInstance();
+        instance.timeRemaining = durationOverride;
+        activeEffects.Add(instance);
+        onEffectApplied?.Invoke(effect);
     }
 
     public List<ActiveStatusEffect> GetActiveEffects()

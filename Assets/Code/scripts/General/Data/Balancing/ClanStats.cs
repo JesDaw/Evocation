@@ -68,7 +68,7 @@ public class ClanStats : ScriptableObject
             tMove += s._MoveSpeed;
             tKBD  += s._KnockBackDamage;
             tAD   += s._AttackDamage;
-            tEnd  += s._ExtraEndlag;
+            tEnd  += s._ActionCooldown;
             tHP   += s._MaxHealth;
             tKBH  += s._KnockBackMaxHealth;
             tRng  += s._HorizontalRange;

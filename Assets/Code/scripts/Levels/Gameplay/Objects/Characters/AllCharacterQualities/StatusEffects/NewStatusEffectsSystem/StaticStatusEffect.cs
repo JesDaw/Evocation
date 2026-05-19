@@ -1,54 +1,91 @@
 using UnityEngine;
 
-/// <summary>
-/// Status effects that modify stats for their duration
-/// </summary>
 [CreateAssetMenu(fileName = "New Static Effect", menuName = "Status Effects/Static Effect")]
 public class StaticStatusEffect : StatusEffect
 {
-    [Header("Stat Modifications")]
-    public float moveSpeedMultiplier = 1f; 
-    public float moveSpeedFlat = 0f; // this is for if we want to add of subtract instead
-    
-    public float attackSpeedMultiplier = 1f;
+    [Header("Stat Modifiers")]
+    public float moveSpeedMultiplier = 1f;
+    public float moveSpeedFlat = 0f;
+
     public float attackDamageMultiplier = 1f;
-    public float attackDamageFlat = 0f; // same for this
+    public float attackDamageFlat = 0f;
+
+    public float knockbackDamageMultiplier = 1f;
+    public float knockbackDamageFlat = 0f;
+
+    public float horizontalRangeMultiplier = 1f;
+
+    public float animationSpeedMultiplier = 1f;
+
+    public float castSpeedMultiplier = 1f;
 
     [Header("Stacking")]
     [SerializeField] private bool allowStacking = false;
 
-    private float originalMoveSpeed;
-
     public override void OnApply(Stats target)
     {
-        originalMoveSpeed = target._MoveSpeed;
+        if (!target._EffectSnapshots.TryGetValue(this, out var snap))
+        {
+            snap = new StaticEffectSnapshot
+            {
+                moveSpeed = target._MoveSpeed,
+                attackDamage = target._AttackDamage,
+                knockbackDamage = target._KnockBackDamage,
+                horizontalRange = target._AttackRange.x,
+                animationSpeed = target.animator != null ? target.animator.speed : 1f,
+                castSpeedMultiplier = target._CastSpeedMultiplier,
+                stackCount = 0
+            };
+            target._EffectSnapshots[this] = snap;
+        }
 
-        ApplyModifications(target);
-        
-        Debug.Log($"{effectName} applied to {target.gameObject.name}");
+        snap.stackCount++;
+        ApplyAllModifiers(target, snap);
+
+//        Debug.Log($"{effectName} applied to {target.gameObject.name} (stacks: {snap.stackCount})");
     }
 
     public override void OnTick(Stats target, float deltaTime)
     {
-        //  we can use this for visual effects if we do that
     }
 
     public override void OnRemove(Stats target)
     {
-        RemoveModifications(target);
-        
+        if (!target._EffectSnapshots.TryGetValue(this, out var snap)) return;
+
+        snap.stackCount--;
+        if (snap.stackCount > 0)
+        {
+            ApplyAllModifiers(target, snap);
+        }
+        else
+        {
+            target._MoveSpeed = snap.moveSpeed;
+            target._AttackDamage = snap.attackDamage;
+            target._KnockBackDamage = snap.knockbackDamage;
+            target._AttackRange = new Vector2(snap.horizontalRange, target._AttackRange.y);
+            if (target.animator != null)
+                target.animator.speed = snap.animationSpeed;
+            target._CastSpeedMultiplier = snap.castSpeedMultiplier;
+            target._EffectSnapshots.Remove(this);
+        }
+
         Debug.Log($"{effectName} removed from {target.gameObject.name}");
     }
 
-    private void ApplyModifications(Stats target)
+    void ApplyAllModifiers(Stats target, StaticEffectSnapshot snap)
     {
-        target._MoveSpeed = (target._MoveSpeed * moveSpeedMultiplier) + moveSpeedFlat;
-    }
+        target._MoveSpeed = (snap.moveSpeed * moveSpeedMultiplier) + moveSpeedFlat;
+        target._AttackDamage = Mathf.RoundToInt((snap.attackDamage * attackDamageMultiplier) + attackDamageFlat);
+        target._KnockBackDamage = (snap.knockbackDamage * knockbackDamageMultiplier) + knockbackDamageFlat;
+        target._AttackRange = new Vector2(
+            snap.horizontalRange * horizontalRangeMultiplier,
+            target._AttackRange.y);
 
-    private void RemoveModifications(Stats target)
-    {
-        // this doesnt work for stacking yet
-        target._MoveSpeed = originalMoveSpeed;
+        if (target.animator != null)
+            target.animator.speed = snap.animationSpeed * animationSpeedMultiplier;
+
+        target._CastSpeedMultiplier = snap.castSpeedMultiplier * castSpeedMultiplier;
     }
 
     public override bool CanStack()

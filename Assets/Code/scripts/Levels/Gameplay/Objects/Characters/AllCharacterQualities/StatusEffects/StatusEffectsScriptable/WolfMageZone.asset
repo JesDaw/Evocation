@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdf7a7fe2f8c041c3997208fcffd859c, type: 3}
+  m_Name: WolfMageZone
+  m_EditorClassIdentifier: CodeAssembly::AreaEffectData
+  shape: 1
+  boxSize: {x: 3, y: 2}
+  circleRadius: 3
+  maxTargets: -1
+  zoneLifespan: 5
+  sticky: 0
+  effects:
+  - {fileID: 11400000, guid: 9a5e13beea36c7b46bc1dabad8ebbdeb, type: 2}
+  refreshInterval: 0.5
+  applicationMode: 0
+  zoneVisualPrefab: {fileID: 1136439477295664831, guid: d411d091a8c2d4158b952acce107825b, type: 3}
+  gizmoColor: {r: 0.2, g: 1, b: 0.2, a: 0.25}
