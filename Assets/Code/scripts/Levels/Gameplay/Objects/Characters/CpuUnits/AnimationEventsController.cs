@@ -45,7 +45,7 @@ public class AnimationEventsController : MonoBehaviour
                     break;
             }
         }
-        Debug.Log("playing attacking");
+//        Debug.Log("playing attacking");
         swingStudioEventEmitter.Play();
         
         shouldAttack = false;
