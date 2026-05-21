@@ -1371,6 +1371,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Ground/wood
       objectReference: {fileID: 0}
+    - target: {fileID: 3974113663115681932, guid: d74e4d4c92be74049839512a3c86ec2f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4223886526577239230, guid: d74e4d4c92be74049839512a3c86ec2f, type: 3}
       propertyPath: m_LocalPosition.y
       value: -0.93
@@ -1517,6 +1521,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8896152418568668972, guid: d74e4d4c92be74049839512a3c86ec2f, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133231628242041682, guid: d74e4d4c92be74049839512a3c86ec2f, type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9157359552664093204, guid: d74e4d4c92be74049839512a3c86ec2f, type: 3}
@@ -1689,6 +1697,10 @@ PrefabInstance:
       propertyPath: timelines.Array.data[3].director
       value: 
       objectReference: {fileID: 364516751645834730}
+    - target: {fileID: 6541941511694258048, guid: 9752977288b084cefa2ff3ae7d12a56a, type: 3}
+      propertyPath: m_text
+      value: Press <sprite name="button_prompts_q"> to skip
+      objectReference: {fileID: 0}
     - target: {fileID: 7840882143070554404, guid: 9752977288b084cefa2ff3ae7d12a56a, type: 3}
       propertyPath: m_ReverseArrangement
       value: 0
@@ -1925,6 +1937,10 @@ PrefabInstance:
       propertyPath: ButtonHighlighted._PersistentCalls.Array.data[0]._PersistentArguments.Array.size
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1936846924564951260, guid: 05c83b941abef4b0f97930f10a0d5250, type: 3}
+      propertyPath: m_text
+      value: Press <sprite name="button_prompts_e"> to open loadout
+      objectReference: {fileID: 0}
     - target: {fileID: 2180417438056775479, guid: 05c83b941abef4b0f97930f10a0d5250, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -2088,6 +2104,10 @@ PrefabInstance:
     - target: {fileID: 7085703103290999261, guid: 05c83b941abef4b0f97930f10a0d5250, type: 3}
       propertyPath: m_Name
       value: LevelUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 7376955455986180714, guid: 05c83b941abef4b0f97930f10a0d5250, type: 3}
+      propertyPath: m_text
+      value: Press <sprite="button_prompts" name="button_prompts_0"> to engage
       objectReference: {fileID: 0}
     - target: {fileID: 7393208707139809996, guid: 05c83b941abef4b0f97930f10a0d5250, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2439,6 +2459,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 800f539ab62be48df9913dba643da5bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::UINavigationManager
+  lastHighlightedButton: {fileID: 0}
 --- !u!114 &4588510943503715491 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7169762845754937235, guid: 05c83b941abef4b0f97930f10a0d5250, type: 3}
