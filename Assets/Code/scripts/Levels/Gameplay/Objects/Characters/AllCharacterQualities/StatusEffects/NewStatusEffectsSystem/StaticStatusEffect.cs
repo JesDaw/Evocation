@@ -70,7 +70,7 @@ public class StaticStatusEffect : StatusEffect
             target._EffectSnapshots.Remove(this);
         }
 
-        Debug.Log($"{effectName} removed from {target.gameObject.name}");
+        //Debug.Log($"{effectName} removed from {target.gameObject.name}");
     }
 
     void ApplyAllModifiers(Stats target, StaticEffectSnapshot snap)

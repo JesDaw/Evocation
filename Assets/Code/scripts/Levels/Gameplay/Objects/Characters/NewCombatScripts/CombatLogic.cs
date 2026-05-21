@@ -13,7 +13,7 @@ public static class CombatLogic
 
             if (inRange.Count == 0)
             {
-                Debug.Log($"[Combat] {attacker.gameObject.name}: ExecuteAction '{action.actionName}' aborted - no targets in range");
+                //Debug.Log($"[Combat] {attacker.gameObject.name}: ExecuteAction '{action.actionName}' aborted - no targets in range");
                 return false;
             }
 
@@ -21,7 +21,7 @@ public static class CombatLogic
             targetToHit = originalInRange ? primaryTarget : inRange[0];
 
             if (!originalInRange)
-                Debug.Log($"[Combat] {attacker.gameObject.name}: Primary target '{primaryTarget.gameObject.name}' left range, retargeting to '{targetToHit.gameObject.name}'");
+                //Debug.Log($"[Combat] {attacker.gameObject.name}: Primary target '{primaryTarget.gameObject.name}' left range, retargeting to '{targetToHit.gameObject.name}'");
 
             if (action.maxTargets > 1)
             {

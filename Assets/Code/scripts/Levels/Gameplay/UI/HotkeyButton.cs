@@ -42,7 +42,7 @@ namespace ChristinaCreatesGames.UI
             }
         }
         
-        private void Reset()
+        private new void Reset()
         {
             var imageComponent = GetComponent<Image>();
             if (imageComponent == null)
