@@ -6,21 +6,15 @@ public class AnimationEventsController : MonoBehaviour
 {
     [SerializeField] Stats CharacterStats;
     [SerializeField] AttackSoundType attackSoundType;
-    [SerializeField] StudioEventEmitter stepStudioEventEmitter;
+    [SerializeField] StudioEventEmitter stepWoodStudioEventEmitter;
+    [SerializeField] StudioEventEmitter stepStoneStudioEventEmitter;
     [SerializeField] StudioEventEmitter swingStudioEventEmitter;
     [SerializeField] StudioEventEmitter gettingHitEventEmitter;
     [Range(0f,1f)]    
     bool shouldAttack;
     void Start()
     {
-        if (stepStudioEventEmitter != null)
-        {
-            stepStudioEventEmitter.EventReference = FModEvents.instance.walkWood;
-        }
-        else
-        {
-            
-        }
+ 
     }
     public void attackAnimationEnd()
     {
@@ -45,7 +39,7 @@ public class AnimationEventsController : MonoBehaviour
                     break;
             }
         }
-        Debug.Log("playing attacking");
+//        Debug.Log("playing attacking");
         swingStudioEventEmitter.Play();
         
         shouldAttack = false;
@@ -64,29 +58,26 @@ public class AnimationEventsController : MonoBehaviour
             return;
         }
 
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.5f, LayerMask.GetMask("Ground/TopLane", "Ground/MidLane", "Ground/BotLane"));
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1f, LayerMask.GetMask("Ground/TopLane", "Ground/MidLane", "Ground/BotLane"));
 
         if (hit.collider != null)
         {
             switch (hit.collider.tag)
             {
                 case "Ground/wood":
-                    stepStudioEventEmitter.EventReference = FModEvents.instance.walkWood;
+                    stepWoodStudioEventEmitter.Play();
                     break;
                 case "Ground/stone":
-                    stepStudioEventEmitter.EventReference = FModEvents.instance.walkstone;
+                    stepStoneStudioEventEmitter.Play();
                     break;
                 default:
-                    stepStudioEventEmitter.EventReference = FModEvents.instance.walkWood;
+                    stepStoneStudioEventEmitter.Play();
                     break;
             }
         }
         else
         {
-            stepStudioEventEmitter.EventReference = FModEvents.instance.walkWood;
         }
-        
-        stepStudioEventEmitter.Play();
     }
 }
 

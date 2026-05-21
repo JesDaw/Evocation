@@ -40,7 +40,7 @@ public class CpuMoveState : CpuBaseState
     {
         _context._Animator.SetBool("IsRunning", false);
         _context.UpdateCurrentState(CpuStateManager.State.CombatAction);
-        Debug.Log($"[CPU] {_context.gameObject.name}: Exiting Move state");
+//        Debug.Log($"[CPU] {_context.gameObject.name}: Exiting Move state");
     }
 
     int GetBestCandidate(bool onlyIfReady, bool facingLeft)

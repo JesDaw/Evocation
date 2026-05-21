@@ -54,7 +54,6 @@ public class ScoutingState : LevelState
     void OnEngagePressed(InputAction.CallbackContext ctx)
     {
         if (context.CurrentState != this) return;
-        
         if (!confirmationUIActive)
         {
             context.SceneManager.Activate(confirmationUIName, true);
@@ -62,13 +61,9 @@ public class ScoutingState : LevelState
             confirmationUIActive = true;
             FModAudioManager.instance.PlaySoundByName("pauseGame");
         }
-        else
-        {
-            StartBattle();
-        }
     }
 
-    public void StartBattle()
+    public override void StartBattle()
     {
         FModAudioManager.instance.PlaySoundByName("engageInBattle");
         context.TransitionToNextState();
@@ -76,9 +71,7 @@ public class ScoutingState : LevelState
     
     void OnReturnPressed(InputAction.CallbackContext ctx)
     {
-        if (context.CurrentState != this || !confirmationUIActive) return;
-        FModAudioManager.instance.PlaySoundByName("backToScouting");
-        BackToScouting();
+        if (context.CurrentState != this || !confirmationUIActive) return;        
     }
 
     void OnToggleCharacterSelect(InputAction.CallbackContext ctx)
@@ -105,10 +98,15 @@ public class ScoutingState : LevelState
         }
     }
 
-    public void BackToScouting()
+    public override void Wait()
     {
+        Debug.Log($"wait called confirmationUIActive = {confirmationUIActive}");
+        if (!confirmationUIActive) return;
+        FModAudioManager.instance.PlaySoundByName("backToScouting");
         context.SceneManager.Activate(sceneActivityName, true);
         GlobalInputManager.Instance.SetScoutingMode();
         confirmationUIActive = false;
+        Debug.Log($"back to scouting confirmationUIActive = {confirmationUIActive}");
+
     }
 }
