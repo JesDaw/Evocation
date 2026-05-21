@@ -35,7 +35,7 @@ public class UINavigationManager : MonoBehaviour
     /// by mouse hover or keyboard navigation. Written by both RegisterMouseHover()
     /// and RegisterKeyboardSelect() so the last-touched button always wins.
     /// </summary>
-    private UIButtons lastHighlightedButton;
+    public UIButtons lastHighlightedButton;
 
     /// <summary>Stored by RegisterScreenDefault(); consumed by SelectBestKeyboardTarget().</summary>
     private UIButtons screenDefaultButton;
@@ -70,10 +70,6 @@ public class UINavigationManager : MonoBehaviour
         {
             if (isKeyboardMode)
             {
-                // Already in keyboard mode. The EventSystem moves selection automatically
-                // via the navigation graph. We only need to intervene when nothing is
-                // selected — but we defer by one frame so any OnClick chain triggered
-                // by this same keypress (e.g. opening a new screen) can run first.
                 if (eventSystem.currentSelectedGameObject == null && !recoveryPending)
                     StartCoroutine(DeferredRecover());
             }

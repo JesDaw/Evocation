@@ -63,6 +63,7 @@ public class GlobalInputManager : MonoBehaviour
     public void DisableMenuNavigation()
     {
         MenuNavigation = false;
+        UINavigationManager.Instance.lastHighlightedButton = null;
     }
 
     public void DisableCursor()
@@ -224,8 +225,7 @@ public class GlobalInputManager : MonoBehaviour
     {
         if(DebugLogs) Debug.Log("=========Input Mode: Pause Menu=========");
         DisableAllControls();
-        EnableUIControls();
-        _inputActions.UI.StartEngaugment.Disable();
+        _inputActions.UI.TogglePause.Enable();
         EnableMenuNavigation();
     }
 
@@ -233,8 +233,7 @@ public class GlobalInputManager : MonoBehaviour
     {
         if(DebugLogs) Debug.Log("=========Input Mode: Pause Menu=========");
         DisableAllControls();
-        EnableUIControls();
-        _inputActions.UI.StartEngaugment.Enable();
+        _inputActions.UI.TogglePause.Enable();
         EnableMenuNavigation();
     }
 
@@ -244,8 +243,8 @@ public class GlobalInputManager : MonoBehaviour
     {
         if(DebugLogs) Debug.Log("=========Input Mode: Spawning=========");
         DisableAllControls();
-        EnableUIControls();
-        _inputActions.UI.StartEngaugment.Disable();
+        _inputActions.UI.ToggleCharacterSelect.Enable();
+        _inputActions.UI.TogglePause.Enable();
         EnableMenuNavigation();
         
     }

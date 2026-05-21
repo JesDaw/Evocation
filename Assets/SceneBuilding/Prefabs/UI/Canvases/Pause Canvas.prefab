@@ -621,16 +621,16 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverColor: {r: 0.9245283, g: 0.14391243, b: 0.14391243, a: 1}
   hoverTextColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverScale: {x: 1.15, y: 1.15, z: 1.15}
+  hoverScale: {x: 2, y: 2, z: 1}
   clickColor: {r: 1, g: 1, b: 1, a: 1}
   clickTextColor: {r: 1, g: 1, b: 1, a: 1}
-  clickScale: {x: 0.9, y: 0.9, z: 0.9}
+  clickScale: {x: 0.9, y: 0.9, z: 1}
   clickDuration: 0.1
   postClickColor: {r: 1, g: 1, b: 1, a: 1}
   postClickTextColor: {r: 1, g: 1, b: 1, a: 1}
-  postClickScale: {x: 1.05, y: 1.05, z: 1.05}
+  postClickScale: {x: 1.05, y: 1.05, z: 1}
   targetImage: {fileID: 6939964905676187681}
   targetText: {fileID: 7985364136042702025}
   targetTransform: {fileID: 5346370528348992308}
@@ -638,6 +638,11 @@ MonoBehaviour:
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
   ButtonHighlighted:
+    _PersistentCalls:
+    - _Target: {fileID: 340835958513612647}
+      _MemberName: HighlightSound
+      _PersistentArguments: []
+  ButtonClicked:
     _PersistentCalls: []
 --- !u!1 &5861347221252183415
 GameObject:
@@ -872,6 +877,11 @@ MonoBehaviour:
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
   ButtonHighlighted:
+    _PersistentCalls:
+    - _Target: {fileID: 2569128791565017882}
+      _MemberName: HighlightSound
+      _PersistentArguments: []
+  ButtonClicked:
     _PersistentCalls: []
 --- !u!1 &6320962272258255779
 GameObject:
@@ -1085,6 +1095,11 @@ MonoBehaviour:
   originalTextColor: {r: 1, g: 1, b: 1, a: 1}
   originalScale: {x: 1, y: 1, z: 1}
   ButtonHighlighted:
+    _PersistentCalls:
+    - _Target: {fileID: 2569128791565017882}
+      _MemberName: HighlightSound
+      _PersistentArguments: []
+  ButtonClicked:
     _PersistentCalls: []
 --- !u!1 &7256609500358599468
 GameObject:

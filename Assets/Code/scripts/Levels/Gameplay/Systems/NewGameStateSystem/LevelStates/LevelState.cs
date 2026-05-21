@@ -125,4 +125,8 @@ public abstract class LevelState
         if (audio == null) return;
         if (playMusic && !string.IsNullOrEmpty(musicStateName)) audio.SetMusicState(musicStateName);
     }
+
+
+    public virtual void StartBattle(){throw new NotImplementedException();}
+    public virtual void Wait(){throw new NotImplementedException();}
 }
