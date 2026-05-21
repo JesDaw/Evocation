@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3007334772570645653}
   - component: {fileID: 5472936815424625996}
+  - component: {fileID: 4093316153942397501}
   m_Layer: 0
   m_Name: ManaOrbsSpawner
   m_TagString: Untagged
@@ -29,7 +30,8 @@ Transform:
   m_LocalPosition: {x: -12.23, y: 0.23, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 4954315526338882650}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5472936815424625996
@@ -44,6 +46,116 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9cae05cc1d516f44b83d7c3e55457d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::ManaObjectSpawn
-  LinkedManaObject: {fileID: 0}
-  manaObject: {fileID: 4062154334710391259, guid: 049a5b6cc29c1de429597dcbd5ddd334, type: 3}
+  manaObjectVisual: {fileID: 8311946602091972267}
+  collectEffect: {fileID: 9171758864978430981}
   repeatDuration: 3
+  minManaAmount: 10
+  maxManaAmount: 11
+--- !u!58 &4093316153942397501
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5231077068637786227}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 0.5
+--- !u!1001 &658425906865629327
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3007334772570645653}
+    m_Modifications:
+    - target: {fileID: 4062154334710391259, guid: 049a5b6cc29c1de429597dcbd5ddd334, type: 3}
+      propertyPath: m_Name
+      value: ManaOrbs
+      objectReference: {fileID: 0}
+    - target: {fileID: 5612172774681494741, guid: 049a5b6cc29c1de429597dcbd5ddd334, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5612172774681494741, guid: 049a5b6cc29c1de429597dcbd5ddd334, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5612172774681494741, guid: 049a5b6cc29c1de429597dcbd5ddd334, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5612172774681494741, guid: 049a5b6cc29c1de429597dcbd5ddd334, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5612172774681494741, guid: 049a5b6cc29c1de429597dcbd5ddd334, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5612172774681494741, guid: 049a5b6cc29c1de429597dcbd5ddd334, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5612172774681494741, guid: 049a5b6cc29c1de429597dcbd5ddd334, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5612172774681494741, guid: 049a5b6cc29c1de429597dcbd5ddd334, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5612172774681494741, guid: 049a5b6cc29c1de429597dcbd5ddd334, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5612172774681494741, guid: 049a5b6cc29c1de429597dcbd5ddd334, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 049a5b6cc29c1de429597dcbd5ddd334, type: 3}
+--- !u!4 &4954315526338882650 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5612172774681494741, guid: 049a5b6cc29c1de429597dcbd5ddd334, type: 3}
+  m_PrefabInstance: {fileID: 658425906865629327}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8311946602091972267 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8825583825931660836, guid: 049a5b6cc29c1de429597dcbd5ddd334, type: 3}
+  m_PrefabInstance: {fileID: 658425906865629327}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &9171758864978430981 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 8533073108879778954, guid: 049a5b6cc29c1de429597dcbd5ddd334, type: 3}
+  m_PrefabInstance: {fileID: 658425906865629327}
+  m_PrefabAsset: {fileID: 0}
