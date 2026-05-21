@@ -100,13 +100,13 @@ public class ScoutingState : LevelState
 
     public override void Wait()
     {
-        Debug.Log($"wait called confirmationUIActive = {confirmationUIActive}");
+     //   Debug.Log($"wait called confirmationUIActive = {confirmationUIActive}");
         if (!confirmationUIActive) return;
         FModAudioManager.instance.PlaySoundByName("backToScouting");
         context.SceneManager.Activate(sceneActivityName, true);
         GlobalInputManager.Instance.SetScoutingMode();
         confirmationUIActive = false;
-        Debug.Log($"back to scouting confirmationUIActive = {confirmationUIActive}");
+        //Debug.Log($"back to scouting confirmationUIActive = {confirmationUIActive}");
 
     }
 }

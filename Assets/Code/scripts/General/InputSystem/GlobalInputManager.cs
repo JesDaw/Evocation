@@ -251,7 +251,9 @@ public class GlobalInputManager : MonoBehaviour
     {
         if(DebugLogs) Debug.Log("=========Input Mode: Cutscene=========");
         DisableAllControls();
-        EnableUIControls();
+        _inputActions.UI.SkipCutscene.Enable();
+        _inputActions.UI.ConfirmDialogue.Enable();
+        _inputActions.UI.TogglePause.Enable();
         DisableMenuNavigation();
         DisableCursor();
         

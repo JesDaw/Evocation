@@ -69,7 +69,7 @@ public class CameraControlSwitcher : MonoBehaviour
         }
         else 
         {
-            SwitchToCameraControl();
+            SwitchToCameraControl(true);
         }
     }
 
@@ -102,7 +102,7 @@ public class CameraControlSwitcher : MonoBehaviour
         }
     }
 
-    public void SwitchToCameraControl()
+    public void SwitchToCameraControl(bool swapControls = false)
     {
         if (DebugLogs) UnityEngine.Debug.Log($"[CameraControlSwitcher] Switching to camera control. FreeCamIsActive was: {FreeCamIsActive}");
         if (FreeCamIsActive)
@@ -118,9 +118,8 @@ public class CameraControlSwitcher : MonoBehaviour
             currentPlayer.SetActive(false); 
         }
 
-        if (PlayerLivesManager.Instance.LifeCount > 0) 
+        if (swapControls) 
         {
-            UnityEngine.Debug.Log("Here");
             GlobalInputManager.Instance.SetFreeCamMode();
         }
         if (DebugLogs) UnityEngine.Debug.Log($"[CameraControlSwitcher] Switched to camera control. FreeCam now active, player disabled.");
