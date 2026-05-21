@@ -78,7 +78,7 @@ public class UILogic : MonoBehaviour
             GameIsPaused = false;
             
             // Return to appropriate mode when unpausing
-            if (CameraControlSwitcher.Instance != null && CameraControlSwitcher.Instance.FreeCamIsActive)
+            if (CameraControlSwitcher.Instance != null && CameraControlSwitcher.Instance.FreeCamIsActive) //this function is wrong it should store whatever the previous input setings were
             {
                 GlobalInputManager.Instance.SetFreeCamMode();
             }

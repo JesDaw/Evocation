@@ -97,7 +97,7 @@ public class TimelineManager : MonoBehaviour
                 
                 if (GlobalInputManager.Instance != null)
                 {
-                    GlobalInputManager.Instance.SetCutsceneMode();
+                    //GlobalInputManager.Instance.SetCutsceneMode();
                 }
                 
                 onCutsceneStart?.Invoke();

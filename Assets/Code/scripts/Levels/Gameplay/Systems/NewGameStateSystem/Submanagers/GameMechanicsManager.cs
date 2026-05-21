@@ -171,6 +171,15 @@ public class GameMechanicsManager : MonoBehaviour
     
     #endregion
     
+    public void DisableManaOrbs()
+    {
+        
+    }
+    public void EnableManaOrbs()
+    {
+        
+    }
+
     #region Utility
     
     /// <summary>
@@ -195,7 +204,7 @@ public class GameMechanicsManager : MonoBehaviour
         SetTimerActive(true);
         SetPlayerSpawningActive(true);
         SetEnemySpawningActive(true);
-        
+        //enable mana
         if (showDebugLogs) Debug.Log("[GameMechanicsManager] All gameplay systems enabled");
     }
     

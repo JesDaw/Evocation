@@ -48,7 +48,12 @@ public class GlobalInputManager : MonoBehaviour
 
     public void DisableAllControls()
     {
-        _inputActions.Disable();
+        DisablePlayerControls();
+        DisableMagicControls();
+        DisableCameraControls();
+        DisableControlSwapping();
+        DisablePlayerSwitching();
+        DisableSpawnerControls();
     }
 
     public void EnableCursor()
@@ -75,89 +80,128 @@ public class GlobalInputManager : MonoBehaviour
     // --------- Player Controls ---------
     public void EnablePlayerControls()
     {
-        _inputActions.Player.Enable();
+        _inputActions.Player.Move.Enable();
+        _inputActions.Player.Attack.Enable();
+        _inputActions.Player.Interact.Enable();
         if(DebugLogs) Debug.Log("Player controls enabled");
     }
     
     public void DisablePlayerControls()
     {
-        _inputActions.Player.Disable();
+        _inputActions.Player.Move.Disable();
+        _inputActions.Player.Attack.Disable();
+        _inputActions.Player.Interact.Disable();
         if(DebugLogs) Debug.Log("Player controls disabled");
     }
 
     // --------- Magic Controls ---------
     public void EnableMagicControls()
     {
-        _inputActions.MagicController.Enable();
+        _inputActions.MagicController.CastSpell.Enable();
+        _inputActions.MagicController.Look.Enable();
+        _inputActions.MagicController.SwapSpell1.Enable();
+        _inputActions.MagicController.SwapSpell2.Enable();
         if(DebugLogs) Debug.Log("Magic controls enabled");
     }
     
     public void DisableMagicControls()
     {
-        _inputActions.MagicController.Disable();
+        _inputActions.MagicController.CastSpell.Disable();
+        _inputActions.MagicController.Look.Disable();
+        _inputActions.MagicController.SwapSpell1.Disable();
+        _inputActions.MagicController.SwapSpell2.Disable();
         if(DebugLogs) Debug.Log("Magic controls disabled");
     }
 
     // --------- Camera Controls ---------
     public void EnableCameraControls()
     {
-        _inputActions.Camera.Enable();
+        _inputActions.Camera.Move.Enable();
+        _inputActions.Camera.Move.Enable();
         if(DebugLogs) Debug.Log($"Camera controls enabled from: {System.Environment.StackTrace}");
     }
     
     public void DisableCameraControls()
     {
-        _inputActions.Camera.Disable();
+        _inputActions.Camera.Move.Disable();
+        _inputActions.Camera.Zoom.Disable();
         if(DebugLogs) Debug.Log("Camera controls disabled");
     }
 
     // --------- Control Manager (switching between player/camera) ---------
     public void EnableControlSwapping()
     {
-        _inputActions.ControlManager.Enable();
+        _inputActions.ControlManager.ToggleCameraControl.Enable();
+
     }
     
     public void DisableControlSwapping()
     {
-        _inputActions.ControlManager.Disable();
+        _inputActions.ControlManager.ToggleCameraControl.Disable();
     }
 
     // --------- Player Switching (NextPlayer/PreviousPlayer) ---------
     public void EnablePlayerSwitching()
     {
-
-        _inputActions.ControlManager.Enable();
+        _inputActions.ControlManager.NextPlayer.Enable();
+        _inputActions.ControlManager.PreviousPlayer.Enable();
     }
     
     public void DisablePlayerSwitching()
     {
-        _inputActions.ControlManager.Disable();
+        _inputActions.ControlManager.NextPlayer.Disable();
+        _inputActions.ControlManager.PreviousPlayer.Disable();
     }
 
     // --------- Spawner Controls ---------
     public void EnableSpawnerControls()
     {
-        _inputActions.SpawnerController.Enable();
+        _inputActions.SpawnerController.Spawn1.Enable();
+        _inputActions.SpawnerController.Spawn2.Enable();
+        _inputActions.SpawnerController.Spawn3.Enable();
+        _inputActions.SpawnerController.Spawn4.Enable();
+        _inputActions.SpawnerController.Spawn5.Enable();
+        _inputActions.SpawnerController.Spawn6.Enable();
+        _inputActions.SpawnerController.Spawn7.Enable();
+        _inputActions.SpawnerController.Spawn8.Enable();
+        _inputActions.SpawnerController.Spawn9.Enable();
+        _inputActions.SpawnerController.SpawnPlayer.Enable();
     }
     
     public void DisableSpawnerControls()
     {
-        _inputActions.SpawnerController.Disable();
+        _inputActions.SpawnerController.Spawn1.Disable();
+        _inputActions.SpawnerController.Spawn2.Disable();
+        _inputActions.SpawnerController.Spawn3.Disable();
+        _inputActions.SpawnerController.Spawn4.Disable();
+        _inputActions.SpawnerController.Spawn5.Disable();
+        _inputActions.SpawnerController.Spawn6.Disable();
+        _inputActions.SpawnerController.Spawn7.Disable();
+        _inputActions.SpawnerController.Spawn8.Disable();
+        _inputActions.SpawnerController.Spawn9.Disable();
+        _inputActions.SpawnerController.SpawnPlayer.Disable();
     }
-    
-    public void EnableCharacterSpawnControls() => EnableSpawnerControls();
-    public void DisableCharacterSpawnControls() => DisableSpawnerControls();
 
     // --------- UI Controls ---------
     public void EnableUIControls()
     {
-        _inputActions.UI.Enable();
+        _inputActions.UI.TogglePause.Enable();
+        _inputActions.UI.StartEngaugment.Enable();
+        _inputActions.UI.ToggleCharacterSelect.Enable();
+        _inputActions.UI.SkipCutscene.Enable();
+        _inputActions.UI.ConfirmDialogue.Enable();
+        _inputActions.UI.Return.Enable();
         if(DebugLogs) Debug.Log($"UI controls enabled");
     }
     
     public void DisableUIControls()
     {
-        _inputActions.UI.Disable();
+        _inputActions.UI.TogglePause.Disable();
+        _inputActions.UI.StartEngaugment.Disable();
+        _inputActions.UI.ToggleCharacterSelect.Disable();
+        _inputActions.UI.SkipCutscene.Disable();
+        _inputActions.UI.ConfirmDialogue.Disable();
+        _inputActions.UI.Return.Disable();
     }
 
     #endregion
@@ -207,7 +251,9 @@ public class GlobalInputManager : MonoBehaviour
     {
         if(DebugLogs) Debug.Log("=========Input Mode: Cutscene=========");
         DisableAllControls();
-        EnableUIControls();
+        _inputActions.UI.SkipCutscene.Enable();
+        _inputActions.UI.ConfirmDialogue.Enable();
+        _inputActions.UI.TogglePause.Enable();
         DisableMenuNavigation();
         DisableCursor();
         
@@ -217,7 +263,10 @@ public class GlobalInputManager : MonoBehaviour
     {
         if(DebugLogs) Debug.Log("=========Input Mode: Dialogue=========");
         DisableAllControls();
-        EnableUIControls();
+        _inputActions.UI.SkipCutscene.Enable();
+        _inputActions.UI.ConfirmDialogue.Enable();
+        _inputActions.UI.TogglePause.Enable();
+        
         EnableMenuNavigation();        
     }
 
@@ -237,8 +286,6 @@ public class GlobalInputManager : MonoBehaviour
         EnableMenuNavigation();
     }
 
-
-    
     public void SetCharacterSelectingMode()
     {
         if(DebugLogs) Debug.Log("=========Input Mode: Spawning=========");
@@ -246,7 +293,13 @@ public class GlobalInputManager : MonoBehaviour
         _inputActions.UI.ToggleCharacterSelect.Enable();
         _inputActions.UI.TogglePause.Enable();
         EnableMenuNavigation();
-        
+    }
+
+    public void SetLevelOverScreenMode()
+    {
+        if(DebugLogs) Debug.Log("=========Input Mode: LevelOver=========");
+        DisableAllControls();
+        EnableMenuNavigation();
     }
     #endregion
     public void LogInputState()
