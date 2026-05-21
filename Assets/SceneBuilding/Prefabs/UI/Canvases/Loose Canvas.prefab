@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 211}
+  m_AnchoredPosition: {x: 0, y: 250}
   m_SizeDelta: {x: 85, y: 22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3577542634298350753
@@ -772,6 +772,7 @@ GameObject:
   - component: {fileID: 8668340532229080124}
   - component: {fileID: 5448499740415674935}
   - component: {fileID: 1987197798675846644}
+  - component: {fileID: 6862613404600625971}
   m_Layer: 5
   m_Name: MenuButton
   m_TagString: Untagged
@@ -788,7 +789,7 @@ RectTransform:
   m_GameObject: {fileID: 7182455864778789847}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7267270059048174151}
@@ -796,8 +797,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 6.7}
-  m_SizeDelta: {x: 2020, y: 703}
+  m_AnchoredPosition: {x: 0, y: -130}
+  m_SizeDelta: {x: 436.54, y: 176}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8668340532229080124
 CanvasRenderer:
@@ -905,6 +906,63 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6862613404600625971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7182455864778789847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ac7cf1042ab8af4f9335af05aff8d69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::UIButtons
+  animationDuration: 0.2
+  animationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverTextColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverScale: {x: 1.05, y: 1.05, z: 1.05}
+  clickColor: {r: 1, g: 1, b: 1, a: 1}
+  clickTextColor: {r: 1, g: 1, b: 1, a: 1}
+  clickScale: {x: 0.9, y: 0.9, z: 0.9}
+  clickDuration: 0.1
+  postClickColor: {r: 1, g: 1, b: 1, a: 1}
+  postClickTextColor: {r: 1, g: 1, b: 1, a: 1}
+  postClickScale: {x: 1.05, y: 1.05, z: 1.05}
+  targetImage: {fileID: 5448499740415674935}
+  targetText: {fileID: 7763192764577883578}
+  targetTransform: {fileID: 245977786899458906}
+  originalColor: {r: 1, g: 1, b: 1, a: 1}
+  originalTextColor: {r: 1, g: 1, b: 1, a: 1}
+  originalScale: {x: 1, y: 1, z: 1}
+  ButtonHighlighted:
+    _PersistentCalls: []
+  ButtonClicked:
+    _PersistentCalls: []
 --- !u!1 &8271439064860240883
 GameObject:
   m_ObjectHideFlags: 0
@@ -1019,6 +1077,7 @@ GameObject:
   - component: {fileID: 740390740036676454}
   - component: {fileID: 703754205874421281}
   - component: {fileID: 252273985611701783}
+  - component: {fileID: 6638281960568889538}
   m_Layer: 5
   m_Name: QuitButton
   m_TagString: Untagged
@@ -1035,7 +1094,7 @@ RectTransform:
   m_GameObject: {fileID: 8559120995436184152}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5065285376966699342}
@@ -1043,8 +1102,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -57.5}
-  m_SizeDelta: {x: 2020, y: 703}
+  m_AnchoredPosition: {x: 0, y: -350}
+  m_SizeDelta: {x: 436.54, y: 176}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &740390740036676454
 CanvasRenderer:
@@ -1152,6 +1211,63 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6638281960568889538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8559120995436184152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ac7cf1042ab8af4f9335af05aff8d69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::UIButtons
+  animationDuration: 0.2
+  animationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverTextColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverScale: {x: 1.05, y: 1.05, z: 1.05}
+  clickColor: {r: 1, g: 1, b: 1, a: 1}
+  clickTextColor: {r: 1, g: 1, b: 1, a: 1}
+  clickScale: {x: 0.9, y: 0.9, z: 0.9}
+  clickDuration: 0.1
+  postClickColor: {r: 1, g: 1, b: 1, a: 1}
+  postClickTextColor: {r: 1, g: 1, b: 1, a: 1}
+  postClickScale: {x: 1.05, y: 1.05, z: 1.05}
+  targetImage: {fileID: 703754205874421281}
+  targetText: {fileID: 6482714687767098880}
+  targetTransform: {fileID: 8254713699082823745}
+  originalColor: {r: 1, g: 1, b: 1, a: 1}
+  originalTextColor: {r: 1, g: 1, b: 1, a: 1}
+  originalScale: {x: 1, y: 1, z: 1}
+  ButtonHighlighted:
+    _PersistentCalls: []
+  ButtonClicked:
+    _PersistentCalls: []
 --- !u!1 &8941951671101088925
 GameObject:
   m_ObjectHideFlags: 0
@@ -1164,6 +1280,7 @@ GameObject:
   - component: {fileID: 3878890761485093043}
   - component: {fileID: 5888089268302892766}
   - component: {fileID: 3101572012121973261}
+  - component: {fileID: 6496927441098221834}
   m_Layer: 5
   m_Name: RestartButton
   m_TagString: Untagged
@@ -1180,7 +1297,7 @@ RectTransform:
   m_GameObject: {fileID: 8941951671101088925}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1687265933968807175}
@@ -1188,8 +1305,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 68.8}
-  m_SizeDelta: {x: 2020, y: 703}
+  m_AnchoredPosition: {x: 0, y: 80}
+  m_SizeDelta: {x: 436.54, y: 178}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3878890761485093043
 CanvasRenderer:
@@ -1297,3 +1414,60 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6496927441098221834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8941951671101088925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ac7cf1042ab8af4f9335af05aff8d69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::UIButtons
+  animationDuration: 0.2
+  animationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverTextColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverScale: {x: 1.05, y: 1.05, z: 1.05}
+  clickColor: {r: 1, g: 1, b: 1, a: 1}
+  clickTextColor: {r: 1, g: 1, b: 1, a: 1}
+  clickScale: {x: 0.9, y: 0.9, z: 0.9}
+  clickDuration: 0.1
+  postClickColor: {r: 1, g: 1, b: 1, a: 1}
+  postClickTextColor: {r: 1, g: 1, b: 1, a: 1}
+  postClickScale: {x: 1.05, y: 1.05, z: 1.05}
+  targetImage: {fileID: 5888089268302892766}
+  targetText: {fileID: 527174998849726238}
+  targetTransform: {fileID: 8242007780504664901}
+  originalColor: {r: 1, g: 1, b: 1, a: 1}
+  originalTextColor: {r: 1, g: 1, b: 1, a: 1}
+  originalScale: {x: 1, y: 1, z: 1}
+  ButtonHighlighted:
+    _PersistentCalls: []
+  ButtonClicked:
+    _PersistentCalls: []

@@ -42,7 +42,7 @@ public abstract class LevelState
     
     public enum InputMode
     {
-        Disabled, Cutscene, Scouting, Gameplay, CharacterSelecting, PauseMenu, FreeCam
+        Disabled, Cutscene, Scouting, Gameplay, CharacterSelecting, PauseMenu, FreeCam, Levelover
     }
     
     public string StateName => stateName;
@@ -87,7 +87,11 @@ public abstract class LevelState
     
     protected virtual void ConfigureInput()
     {
-        if (GlobalInputManager.Instance == null) return;
+        if (GlobalInputManager.Instance == null) 
+        {
+            Debug.LogWarning("Level state cant find GlobalInputManager");
+            return;
+        }
         switch (inputMode)
         {
             case InputMode.Disabled: GlobalInputManager.Instance.DisableAllControls(); break;
@@ -97,6 +101,7 @@ public abstract class LevelState
             case InputMode.CharacterSelecting: GlobalInputManager.Instance.SetCharacterSelectingMode(); break;
             case InputMode.PauseMenu: GlobalInputManager.Instance.SetPauseMenuMode(); break;
             case InputMode.FreeCam: GlobalInputManager.Instance.SetFreeCamMode(); break;
+            case InputMode.Levelover: GlobalInputManager.Instance.SetLevelOverScreenMode(); break;
         }
     }
 
