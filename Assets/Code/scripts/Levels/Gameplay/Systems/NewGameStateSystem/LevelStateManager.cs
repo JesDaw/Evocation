@@ -83,6 +83,16 @@ public class LevelStateManager : MonoBehaviour
         onStateChanged?.Invoke();
     }
 
+    public void StartEngaugment()
+    {
+        currentState.StartBattle();
+    }
+
+    public void BackToScouting()
+    {
+        currentState.Wait(); 
+    }
+
     public void TransitionToState(string stateName)
     {
         if (statesByName.TryGetValue(stateName, out LevelState state))
