@@ -3277,6 +3277,7 @@ GameObject:
   - component: {fileID: 6176719569601122293}
   - component: {fileID: 6334473473768259439}
   - component: {fileID: 1130543642831497999}
+  - component: {fileID: 1982585525464021527}
   - component: {fileID: 1905249592007860713}
   - component: {fileID: 4793955229716341130}
   m_Layer: 14
@@ -3341,7 +3342,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterStats: {fileID: 6100003531216662107}
   attackSoundType: 0
-  stepStudioEventEmitter: {fileID: 1130543642831497999}
+  stepWoodStudioEventEmitter: {fileID: 1130543642831497999}
+  stepStoneStudioEventEmitter: {fileID: 1982585525464021527}
   swingStudioEventEmitter: {fileID: 1905249592007860713}
   gettingHitEventEmitter: {fileID: 4793955229716341130}
 --- !u!114 &1130543642831497999
@@ -3364,6 +3366,39 @@ MonoBehaviour:
       Data3: -1605929568
       Data4: 1014911585
     Path: event:/SFX/GamePlay/Footsteps/FootStep wood
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params:
+  - Name: volume
+    Value: 1
+  OverrideAttenuation: 1
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 15
+--- !u!114 &1982585525464021527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5849303881175653782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 198277687
+      Data2: 1101601563
+      Data3: 1564439714
+      Data4: 1172320061
+    Path: event:/SFX/GamePlay/Footsteps/FootStep rock
   Event: 
   EventPlayTrigger: 0
   EventStopTrigger: 0
@@ -3916,8 +3951,9 @@ MonoBehaviour:
   player: 1
   _AttackDamage: 0
   _ExtraEndlag: 0
+  _ActionCooldown: 0
   _AttackRange: {x: 0, y: 0}
-  _IsProjectile: 0
+  _HorizontalRange: 0
   _IsAOE: 0
   _MaxAOETargets: 0
   _ProjectilePrefab: {fileID: 0}
@@ -3942,10 +3978,14 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _EffectsToApply: []
+  _IsProjectile: 0
+  _CombatActions: []
+  _ActionCooldownTimers: []
   _MaxHealth: 100
   _CurrentHealth: 100
   _IsDead: 0
   _MoveSpeed: 10
+  _CastSpeedMultiplier: 1
   _AnimationStartupTime: 0
   _AnimationRecoveryTime: 0
   _KnockBackMaxHealth: 0
@@ -3977,6 +4017,7 @@ MonoBehaviour:
   damageHandler: {fileID: 0}
   statusEffectManager: {fileID: 0}
   entityHealthbar: {fileID: 0}
+  animator: {fileID: 0}
   animationEventsController: {fileID: 6334473473768259439}
 --- !u!114 &4492581254548526527
 MonoBehaviour:

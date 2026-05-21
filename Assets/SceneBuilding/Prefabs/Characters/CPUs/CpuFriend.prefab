@@ -2078,6 +2078,7 @@ GameObject:
   - component: {fileID: 5316221638223677608}
   - component: {fileID: 386938621351592546}
   - component: {fileID: 4664362291271471239}
+  - component: {fileID: 1796673750923002793}
   - component: {fileID: 6324597048949182225}
   - component: {fileID: 6358898530367339153}
   m_Layer: 14
@@ -2142,7 +2143,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterStats: {fileID: 319218597411901608}
   attackSoundType: 0
-  stepStudioEventEmitter: {fileID: 4664362291271471239}
+  stepWoodStudioEventEmitter: {fileID: 4664362291271471239}
+  stepStoneStudioEventEmitter: {fileID: 1796673750923002793}
   swingStudioEventEmitter: {fileID: 6324597048949182225}
   gettingHitEventEmitter: {fileID: 6358898530367339153}
 --- !u!114 &386938621351592546
@@ -2177,6 +2179,39 @@ MonoBehaviour:
       Data3: -1605929568
       Data4: 1014911585
     Path: event:/SFX/GamePlay/Footsteps/FootStep wood
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params:
+  - Name: volume
+    Value: 0.8
+  OverrideAttenuation: 1
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 15
+--- !u!114 &1796673750923002793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3935600218738898496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 198277687
+      Data2: 1101601563
+      Data3: 1564439714
+      Data4: 1172320061
+    Path: event:/SFX/GamePlay/Footsteps/FootStep rock
   Event: 
   EventPlayTrigger: 0
   EventStopTrigger: 0
@@ -2739,8 +2774,9 @@ MonoBehaviour:
   player: 0
   _AttackDamage: 0
   _ExtraEndlag: 0
+  _ActionCooldown: 0
   _AttackRange: {x: 0, y: 0}
-  _IsProjectile: 0
+  _HorizontalRange: 0
   _IsAOE: 0
   _MaxAOETargets: 0
   _ProjectilePrefab: {fileID: 0}
@@ -2765,10 +2801,14 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _EffectsToApply: []
+  _IsProjectile: 0
+  _CombatActions: []
+  _ActionCooldownTimers: []
   _MaxHealth: 1
   _CurrentHealth: 1
   _IsDead: 0
   _MoveSpeed: 0
+  _CastSpeedMultiplier: 1
   _AnimationStartupTime: 0
   _AnimationRecoveryTime: 0
   _KnockBackMaxHealth: 0
@@ -2812,6 +2852,7 @@ MonoBehaviour:
   damageHandler: {fileID: 0}
   statusEffectManager: {fileID: 0}
   entityHealthbar: {fileID: 0}
+  animator: {fileID: 0}
   animationEventsController: {fileID: 5316221638223677608}
 --- !u!114 &1117684528899802519
 MonoBehaviour:
@@ -2830,6 +2871,110 @@ MonoBehaviour:
   _Animator: {fileID: 7592242119458481958}
   _AnimatorController: {fileID: 5316221638223677608}
   _AttackingStats: {fileID: 0}
+  _CurrentAction:
+    actionName: Action
+    priority: 0
+    rangePercent: 1
+    extendsForward: 0
+    targetFriendly: 0
+    targetCondition: 0
+    maxTargets: 1
+    castCooldown: 2
+    healthChangePercent: 0
+    knockbackPercent: 0
+    zoneSpawnPosition: 0
+    projectileSettings:
+      prefab: {fileID: 0}
+      speed: 15
+      maxHeight: 2
+      trajectoryCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.5
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      axisCorrectionCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 1
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 1
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      speedCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    effectsOnHit: []
+    zoneData: {fileID: 0}
+    zoneSticky: 0
+    excludeCasterFromZone: 1
+    applicationMode: 0
+  _CurrentActionIndex: 0
+  _ActionTarget: {fileID: 0}
 --- !u!114 &6919732210290999509
 MonoBehaviour:
   m_ObjectHideFlags: 0

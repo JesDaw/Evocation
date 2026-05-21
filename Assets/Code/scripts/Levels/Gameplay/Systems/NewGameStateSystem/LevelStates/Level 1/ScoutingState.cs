@@ -54,7 +54,6 @@ public class ScoutingState : LevelState
     void OnEngagePressed(InputAction.CallbackContext ctx)
     {
         if (context.CurrentState != this) return;
-        Debug.Log($"confirmationUIActive = {confirmationUIActive}");
         if (!confirmationUIActive)
         {
             context.SceneManager.Activate(confirmationUIName, true);
