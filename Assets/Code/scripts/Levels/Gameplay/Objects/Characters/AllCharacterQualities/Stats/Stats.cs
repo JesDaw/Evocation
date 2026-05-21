@@ -72,7 +72,7 @@ public class Stats : MonoBehaviour, IDamageable
     void Awake()
     {
         if (animationEventsController == null) animationEventsController = GetComponentInChildren<AnimationEventsController>();
-        if (animationEventsController == null) Debug.Log("cant find the animationEventsController componet whyyyyy");
+        //if (animationEventsController == null) Debug.Log("cant find the animationEventsController componet whyyyyy");
         damageHandler = GetComponent<DamageHandler>();
         if (damageHandler == null)
         {
@@ -123,7 +123,7 @@ public class Stats : MonoBehaviour, IDamageable
     {
         if (scriptableStats == null)
         {
-            Debug.LogWarning($"{gameObject.name}: scriptableStats is null, cannot initialize.");
+            //Debug.LogWarning($"{gameObject.name}: scriptableStats is null, cannot initialize.");
             return;
         }
 
