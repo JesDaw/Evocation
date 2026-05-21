@@ -18,7 +18,7 @@ public class IgnoreFriendsCollision : MonoBehaviour
                 collision.collider
             );
         }
-        else if(collision.gameObject.CompareTag("Enemy"))
+        else if(collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Player"))
         {
             Physics2D.IgnoreCollision(
                 GetComponent<Collider2D>(),

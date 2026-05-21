@@ -730,6 +730,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ae0d9a0d53bb534398da044ca760a04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CharacterStats: {fileID: 0}
+  attackSoundType: 0
+  stepStudioEventEmitter: {fileID: 0}
+  swingStudioEventEmitter: {fileID: 0}
+  gettingHitEventEmitter: {fileID: 0}
 --- !u!1 &1521566621391802078
 GameObject:
   m_ObjectHideFlags: 0
@@ -2079,6 +2084,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
+  - {fileID: 4544057276231479200}
   - {fileID: 9063072493043568826}
   - {fileID: 7010236975575626099}
   - {fileID: 2611294700559129373}
@@ -2147,9 +2153,10 @@ MonoBehaviour:
   _Enemy: 0
   player: 0
   _AttackDamage: 0
-  _AttackEndlag: 0
+  _ExtraEndlag: 0
+  _ActionCooldown: 0
   _AttackRange: {x: 0, y: 0}
-  _IsProjectile: 0
+  _HorizontalRange: 0
   _IsAOE: 0
   _MaxAOETargets: 0
   _ProjectilePrefab: {fileID: 0}
@@ -2174,10 +2181,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _EffectsToApply: []
+  _IsProjectile: 0
+  _CombatActions: []
+  _ActionCooldownTimers: []
   _MaxHealth: 10000
   _CurrentHealth: 1
   _IsDead: 0
   _MoveSpeed: 0
+  _CastSpeedMultiplier: 1
+  _AnimationStartupTime: 0
+  _AnimationRecoveryTime: 0
   _KnockBackMaxHealth: 0
   _KnockBackHealth: 0
   _KnockBackDamage: 0.5
@@ -2198,11 +2211,17 @@ MonoBehaviour:
   OnStatsInitialized:
     m_PersistentCalls:
       m_Calls: []
+  DamageTrigger:
+    m_PersistentCalls:
+      m_Calls: []
+  DamageTriggerAmount: -100
   _Invincible: 0
   _DontDestroy: 0
   damageHandler: {fileID: 0}
   statusEffectManager: {fileID: 0}
   entityHealthbar: {fileID: 0}
+  animator: {fileID: 0}
+  animationEventsController: {fileID: 0}
 --- !u!114 &472764413557070475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2418,6 +2437,84 @@ MonoBehaviour:
     m_Extent: {x: 0.19883978, y: 0.38652337, z: 0}
   m_AlwaysUpdate: 1
   m_AutoRebind: 0
+--- !u!1 &3828728706696672757
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4544057276231479200}
+  - component: {fileID: 5389097813378919961}
+  m_Layer: 9
+  m_Name: HomebaseCollision
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4544057276231479200
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3828728706696672757}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 902208221624048043}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &5389097813378919961
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3828728706696672757}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &3901499006193717486
 GameObject:
   m_ObjectHideFlags: 0
@@ -3129,9 +3226,10 @@ MonoBehaviour:
   _Enemy: 0
   player: 1
   _AttackDamage: 0
-  _AttackEndlag: 0
+  _ExtraEndlag: 0
+  _ActionCooldown: 0
   _AttackRange: {x: 0, y: 0}
-  _IsProjectile: 0
+  _HorizontalRange: 0
   _IsAOE: 0
   _MaxAOETargets: 0
   _ProjectilePrefab: {fileID: 0}
@@ -3156,10 +3254,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _EffectsToApply: []
+  _IsProjectile: 0
+  _CombatActions: []
+  _ActionCooldownTimers: []
   _MaxHealth: 100
   _CurrentHealth: 100
   _IsDead: 0
   _MoveSpeed: 10
+  _CastSpeedMultiplier: 1
+  _AnimationStartupTime: 0
+  _AnimationRecoveryTime: 0
   _KnockBackMaxHealth: 0
   _KnockBackHealth: 50
   _KnockBackDamage: 0.5
@@ -3180,11 +3284,17 @@ MonoBehaviour:
   OnStatsInitialized:
     m_PersistentCalls:
       m_Calls: []
+  DamageTrigger:
+    m_PersistentCalls:
+      m_Calls: []
+  DamageTriggerAmount: -100
   _Invincible: 0
   _DontDestroy: 0
   damageHandler: {fileID: 0}
   statusEffectManager: {fileID: 0}
   entityHealthbar: {fileID: 0}
+  animator: {fileID: 0}
+  animationEventsController: {fileID: 0}
 --- !u!114 &7153472084429720684
 MonoBehaviour:
   m_ObjectHideFlags: 0

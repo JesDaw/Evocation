@@ -119,18 +119,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &800395443 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3700577013078011880, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
-  m_PrefabInstance: {fileID: 9083601090002705357}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e223edbc526df54489dc2411fcaa86d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::SpellsAffector
---- !u!1001 &9083601090002705357
+--- !u!1001 &1578873011
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -138,25 +127,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3680739620018482931, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
-      propertyPath: PlayerSpells.Array.data[0].OnHit.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+    - target: {fileID: 117943563488598618, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: m_Creator
       value: 
-      objectReference: {fileID: 800395443}
-    - target: {fileID: 3680739620018482931, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
-      propertyPath: PlayerSpells.Array.data[0].OnHit.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3680739620018482931, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
-      propertyPath: PlayerSpells.Array.data[0].OnHit.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: TempBuff
-      objectReference: {fileID: 0}
-    - target: {fileID: 3680739620018482931, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
-      propertyPath: PlayerSpells.Array.data[0].OnHit.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: SpellsAffector, CodeAssembly
-      objectReference: {fileID: 0}
-    - target: {fileID: 3680739620018482931, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
-      propertyPath: PlayerSpells.Array.data[0].OnHit.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 4406063075839468471, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
       propertyPath: m_Name
@@ -211,4 +184,4 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 9083601090002705357}
+  - {fileID: 1578873011}
