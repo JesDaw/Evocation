@@ -65,14 +65,12 @@ public class Stats : MonoBehaviour, IDamageable
     [HideInInspector] public StatusEffectManager statusEffectManager;
     [HideInInspector] public EntityHealthbar entityHealthbar;
     [HideInInspector] public Animator animator;
-    public AnimationEventsController animationEventsController;
+    
 
     public DamageSource LastHitBy { get; set; }
 
     void Awake()
     {
-        if (animationEventsController == null) animationEventsController = GetComponentInChildren<AnimationEventsController>();
-        //if (animationEventsController == null) Debug.Log("cant find the animationEventsController componet whyyyyy");
         damageHandler = GetComponent<DamageHandler>();
         if (damageHandler == null)
         {
@@ -191,29 +189,14 @@ public class Stats : MonoBehaviour, IDamageable
         }
     }
 
-    public void TakeDamage(float damage, float knockback_damage, DamageSource attackedBy = null)
-    {
-        if (damageHandler != null)
-        {
-            damageHandler.TakeDamage(damage, knockback_damage, attackedBy);
-        }
-        animationEventsController.DamageSound();
-    }
-
-    public void TakeDamage(float damage, DamageSource attackedBy = null)
-    {
-        if (damageHandler != null)
-        {
-            damageHandler.TakeDamage(damage, attackedBy);
-        }
-    }
-
     public void AlterHealth(float amount, DamageSource source = null)
     {
         if (damageHandler != null)
         {
             if (amount < 0f)
+            {
                 damageHandler.TakeDamage(-amount, 0f, source ?? new DamageSource(DamageSource.DamageType.Melee));
+            }
             else if (amount > 0f)
                 damageHandler.Heal(amount);
         }
@@ -230,6 +213,25 @@ public class Stats : MonoBehaviour, IDamageable
         }
     }
 
+    //What is this stuff even for??==========
+    public void TakeDamage(float damage, float knockback_damage, DamageSource attackedBy = null)
+    {
+        
+        if (damageHandler != null)
+        {
+            damageHandler.TakeDamage(damage, knockback_damage, attackedBy);
+        }
+        
+    }
+
+    public void TakeDamage(float damage, DamageSource attackedBy = null)
+    {
+        if (damageHandler != null)
+        {
+            damageHandler.TakeDamage(damage, attackedBy);
+        }
+    }
+
     void IDamageable.TakeDamage(float damage, float knockback_damage, DamageSource source)
     {
         TakeDamage(damage, knockback_damage, source);
@@ -242,6 +244,8 @@ public class Stats : MonoBehaviour, IDamageable
 
     GameObject IDamageable.gameObject => gameObject;
     Transform IDamageable.transform => transform;
+
+    //What is this stuff even for??==========
 
     public void ToggleInvincibility()
     {

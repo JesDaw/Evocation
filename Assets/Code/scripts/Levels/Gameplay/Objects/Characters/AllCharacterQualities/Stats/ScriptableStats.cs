@@ -9,6 +9,7 @@ public class ScriptableStats : ScriptableObject
     public string ODS;
     public string RPS_Type;
     [TextArea(2, 5)] public string OtherNotes;
+    public string SpawnSoundName = "";
 
     [Header("Value")]
     public int _spawnCost;

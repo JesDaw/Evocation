@@ -16,6 +16,7 @@ public class FModEvents : MonoBehaviour
     [field: SerializeField] public EventReference closeCharacterSelect { get; private set; }
     [field: Header("Characters")]
     [field: SerializeField] public EventReference HoodedGuy { get; private set; }
+    [field: SerializeField] public EventReference WolfRider { get; private set; }
     [field: SerializeField] public EventReference WolfRunner { get; private set; }
     [field: SerializeField] public EventReference WolfHammer { get; private set; }
     [field: SerializeField] public EventReference WolfMage { get; private set; }

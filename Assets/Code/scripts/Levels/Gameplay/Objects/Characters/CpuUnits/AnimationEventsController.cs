@@ -9,7 +9,6 @@ public class AnimationEventsController : MonoBehaviour
     [SerializeField] StudioEventEmitter stepWoodStudioEventEmitter;
     [SerializeField] StudioEventEmitter stepStoneStudioEventEmitter;
     [SerializeField] StudioEventEmitter swingStudioEventEmitter;
-    [SerializeField] StudioEventEmitter gettingHitEventEmitter;
     [Range(0f,1f)]    
     bool shouldAttack;
     void Start()
@@ -29,27 +28,20 @@ public class AnimationEventsController : MonoBehaviour
             switch (attackSoundType)
             {
                 case AttackSoundType.Slash:
-                    swingStudioEventEmitter.EventReference = FModEvents.instance.attack;
+                    swingStudioEventEmitter.Play();
                     break;
                 case AttackSoundType.Stab:
-                    swingStudioEventEmitter.EventReference = FModEvents.instance.attack;   
+                    swingStudioEventEmitter.Play();  
                     break;
                 case AttackSoundType.Smash:
-                    swingStudioEventEmitter.EventReference = FModEvents.instance.attack; 
+                    swingStudioEventEmitter.Play();
                     break;
             }
-        }
-//        Debug.Log("playing attacking");
-        swingStudioEventEmitter.Play();
-        
+        }        
         shouldAttack = false;
         return true;
     }
-    public void DamageSound()
-    {
-        gettingHitEventEmitter.EventReference = FModEvents.instance.takeDamage; 
-        gettingHitEventEmitter.Play();
-    }
+    
     void OnStep()
     {
         if (FModAudioManager.instance == null)

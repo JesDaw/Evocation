@@ -43,6 +43,7 @@ public class FModAudioManager : MonoBehaviour
         // Characters
         soundDictionary.Add("WolfRunner", FModEvents.instance.WolfRunner);
         soundDictionary.Add("WolfHammer",FModEvents.instance.WolfHammer);
+        soundDictionary.Add("WolfRider",FModEvents.instance.WolfRider);
         soundDictionary.Add("HoodedGuy",FModEvents.instance.HoodedGuy);
         soundDictionary.Add("WolfMage",FModEvents.instance.WolfMage);
         // navigating menus
@@ -77,6 +78,7 @@ public class FModAudioManager : MonoBehaviour
     public void PlayOneShot(EventReference sound, UnityEngine.Vector3 worldPosition)
     {
         RuntimeManager.PlayOneShot(sound, worldPosition);
+        
     }
 
     public void PlayOneShot(EventReference sound)
