@@ -12,9 +12,11 @@ public class LevelAudioManager : MonoBehaviour
     
     [Header("Music Configuration")]
     [SerializeField] string musicParameterName = "MountainLevelPhases";
+    [SerializeField] string ambianceParameterName = "";
     
     [Header("Music State Mapping")]
     [SerializeField] List<MusicStateMapping> musicStates = new List<MusicStateMapping>();
+    [SerializeField] List<AmbianceStateMapping> ambianceStates = new List<AmbianceStateMapping>();
     [SerializeField] bool StartMusicOnAwake = false;
     [Header("Ambiance State Mapping")]
     [SerializeField] bool StartAmbianceOnAwake = false;
@@ -24,12 +26,21 @@ public class LevelAudioManager : MonoBehaviour
     
     EventInstance musicInstance;
     EventInstance ambienceInstance;
-    Dictionary<string, float> stateValues = new Dictionary<string, float>();
+    Dictionary<string, float> musicStateValues = new Dictionary<string, float>();
+    Dictionary<string, float> ambianceStateValues = new Dictionary<string, float>();
     bool musicIsPlaying = false;
+    bool ambianceIsPlaying = false;
     string currentMusicState = "";
+    string currentAmbianceState = "";
     
     [System.Serializable]
     public class MusicStateMapping
+    {
+        public string stateName;
+        public float parameterValue;
+    }
+    [System.Serializable]
+    public class AmbianceStateMapping
     {
         public string stateName;
         public float parameterValue;
@@ -69,15 +80,21 @@ public class LevelAudioManager : MonoBehaviour
     
     private void BuildStateLookup()
     {
-        stateValues.Clear();
+        musicStateValues.Clear();
         foreach (var mapping in musicStates)
         {
-            stateValues[mapping.stateName] = mapping.parameterValue;
+            musicStateValues[mapping.stateName] = mapping.parameterValue;
+        }
+
+        ambianceStateValues.Clear();
+        foreach (var mapping in ambianceStates)
+        {
+            ambianceStateValues[mapping.stateName] = mapping.parameterValue;
         }
         
         if (showDebugLogs)
         {
-            Debug.Log($"[LevelAudioManager] Registered {musicStates.Count} music states");
+            Debug.Log($"[LevelAudioManager] Registered {musicStates.Count} music states and {ambianceStates.Count} ambiance states");
         }
     }
     
@@ -137,7 +154,7 @@ public class LevelAudioManager : MonoBehaviour
             return;
         }
         
-        if (stateValues.TryGetValue(stateName, out float value))
+        if (musicStateValues.TryGetValue(stateName, out float value))
         {
             currentMusicState = stateName;
             musicInstance.setParameterByName(musicParameterName, value);
@@ -152,9 +169,11 @@ public class LevelAudioManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"[LevelAudioManager] Music state '{stateName}' not found in mappings! Available states: {string.Join(", ", stateValues.Keys)}");
+            Debug.LogWarning($"[LevelAudioManager] Music state '{stateName}' not found in mappings! Available states: {string.Join(", ", musicStateValues.Keys)}");
         }
     }
+
+
     
     public void SetMusicParameter(float value)
     {
@@ -227,6 +246,52 @@ public class LevelAudioManager : MonoBehaviour
     
     #region Ambience Control
 
+    public void SetAmbianceState(string stateName)
+    {   
+        if (!ambienceInstance.isValid())
+        {
+            Debug.LogWarning("[LevelAudioManager] Ambience Instance instance is not valid!");
+            return;
+        }
+        
+        if (ambianceStateValues.TryGetValue(stateName, out float value))
+        {
+            currentAmbianceState = stateName;
+            ambienceInstance.setParameterByName(ambianceParameterName, value);
+            
+            if (showDebugLogs)
+                Debug.Log($"[LevelAudioManager] Ambiance state set to: {stateName} (value: {value})");
+            
+            if (!ambianceIsPlaying)
+            {
+                StartAmbience();
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"[LevelAudioManager] Music state '{stateName}' not found in mappings! Available states: {string.Join(", ", ambianceStateValues.Keys)}");
+        }
+    }
+
+    public void SetAmbianceParameter(float value)
+    {
+        if (!ambienceInstance.isValid())
+        {
+            Debug.LogWarning("[LevelAudioManager] Music instance is not valid!");
+            return;
+        }
+        
+        ambienceInstance.setParameterByName(ambianceParameterName, value);
+        
+        if (showDebugLogs)
+            Debug.Log($"[LevelAudioManager] Music parameter set to: {value}");
+        
+        if (!musicIsPlaying)
+        {
+            StartAmbience();
+        }
+    }
+
     public void StartAmbience()
     {
         if (ambienceInstance.isValid())
@@ -282,12 +347,12 @@ public class LevelAudioManager : MonoBehaviour
     
     public List<string> GetAvailableMusicStates()
     {
-        return new List<string>(stateValues.Keys);
+        return new List<string>(musicStateValues.Keys);
     }
 
     public bool HasMusicState(string stateName)
     {
-        return stateValues.ContainsKey(stateName);
+        return musicStateValues.ContainsKey(stateName);
     }
     
     #endregion

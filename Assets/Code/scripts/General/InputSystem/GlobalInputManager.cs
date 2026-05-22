@@ -63,10 +63,14 @@ public class GlobalInputManager : MonoBehaviour
     }
     public void EnableMenuNavigation()
     {
+        _inputActions.UI.Navigate.Enable();
+        _inputActions.UI.ConfirmDialogue.Enable();
         MenuNavigation = true;
     }
     public void DisableMenuNavigation()
     {
+        _inputActions.UI.Navigate.Disable();
+        _inputActions.UI.ConfirmDialogue.Disable();
         MenuNavigation = false;
         UINavigationManager.Instance.lastHighlightedButton = null;
     }
@@ -117,7 +121,7 @@ public class GlobalInputManager : MonoBehaviour
     public void EnableCameraControls()
     {
         _inputActions.Camera.Move.Enable();
-        _inputActions.Camera.Move.Enable();
+        _inputActions.Camera.Zoom.Enable();
         if(DebugLogs) Debug.Log($"Camera controls enabled from: {System.Environment.StackTrace}");
     }
     
@@ -282,7 +286,7 @@ public class GlobalInputManager : MonoBehaviour
     {
         if(DebugLogs) Debug.Log("=========Input Mode: Pause Menu=========");
         DisableAllControls();
-        _inputActions.UI.TogglePause.Enable();
+        _inputActions.UI.TogglePause.Disable();
         EnableMenuNavigation();
     }
 

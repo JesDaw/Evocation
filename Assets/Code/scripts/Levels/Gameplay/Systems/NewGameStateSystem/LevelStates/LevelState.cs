@@ -30,6 +30,8 @@ public abstract class LevelState
     [Header("Audio")]
     [SerializeField] protected bool playMusic = false;
     [SerializeField] protected string musicStateName = "";
+    [SerializeField] protected bool playAmbiance = false;
+    [SerializeField] protected string ambianceStateName = "";
     
     [Header("Events")]
     public UltEvent onStateEnter;
@@ -67,6 +69,7 @@ public abstract class LevelState
         ConfigureCameraControl();
         ConfigureGameMechanics();
         ConfigureAudio();
+        ConfigureAmbiance();
         
         onStateEnter?.Invoke();
         OnEnterState();
@@ -129,6 +132,13 @@ public abstract class LevelState
         var audio = LevelAudioManager.Instance;
         if (audio == null) return;
         if (playMusic && !string.IsNullOrEmpty(musicStateName)) audio.SetMusicState(musicStateName);
+    }
+
+    protected virtual void ConfigureAmbiance()
+    {
+        var audio = LevelAudioManager.Instance;
+        if (audio == null) return;
+        if (playAmbiance && !string.IsNullOrEmpty(ambianceStateName)) audio.SetAmbianceState(ambianceStateName);
     }
 
 

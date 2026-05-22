@@ -16,6 +16,7 @@ MonoBehaviour:
   ODS: 
   RPS_Type: 
   OtherNotes: 
+  SpawnSoundName: WolfRunner
   _spawnCost: 30
   Level_Total: 72.34568
   Level_Discrepancy: 69.34568
@@ -33,10 +34,12 @@ MonoBehaviour:
   _HorizontalRange: 2
   _VerticalRange: 1
   _ExtraEndlag: 0
-  _KnockBackVelocity: 7
-  _KnockBackAngle: 45
+  _ActionCooldown: 1
+  _KnockBackVelocity: 10
+  _KnockBackAngle: 20
   combatActions:
   - actionName: Bite
+    priority: 0
     rangePercent: 1
     extendsForward: 1
     targetFriendly: 0

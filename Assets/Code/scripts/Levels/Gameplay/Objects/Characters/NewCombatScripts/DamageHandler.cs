@@ -1,8 +1,12 @@
 using UnityEngine;
 using UnityEngine.Events;
+using FMODUnity;
+using FMOD.Studio;
 
 public class DamageHandler : MonoBehaviour
 {
+    [SerializeField] StudioEventEmitter gettingHitEventEmitter;
+
     Stats stats;
     bool DamageTriggerInvoked = false;
     public void Initialize(Stats statsComponent)
@@ -13,11 +17,13 @@ public class DamageHandler : MonoBehaviour
 
     public void TakeDamage(float damage, float knockback_damage, DamageSource attackedBy = null)
     {
+        Debug.Log("Takedamage called");
         if (stats == null) return;
         if (stats.IsInvincible()) return;
 
         stats._CurrentHealth -= damage;
-        FModAudioManager.instance.PlaySoundByName("takeDamage");
+
+        gettingHitEventEmitter.Play();
 
         stats.OnDamage?.Invoke();
         if (stats.DamageTriggerAmount >= stats._CurrentHealth && !DamageTriggerInvoked) 
@@ -60,8 +66,9 @@ public class DamageHandler : MonoBehaviour
         }
     }
 
-    public void TakeDamage(float damage, DamageSource attackedBy = null)
+    public void TakeDamage(float damage, DamageSource attackedBy = null) // why is there 2 referances to this?
     {
+        Debug.Log("Takedamage called");
         if (stats == null) return;
         if (stats.IsInvincible()) return;
 

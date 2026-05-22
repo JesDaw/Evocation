@@ -44,7 +44,7 @@ public class UINavigationManager : MonoBehaviour
     private bool recoveryPending = false;
 
     // Axis edge-detection
-    private bool wasAxisNavigating = false;
+    //private bool wasAxisNavigating = false;
     private const float AxisThreshold = 0.5f;
 
     // ── Unity ─────────────────────────────────────────────────────────────────
@@ -88,21 +88,22 @@ public class UINavigationManager : MonoBehaviour
 
     private bool DetectKeyboardNavigation()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow)    ||
-            Input.GetKeyDown(KeyCode.DownArrow)  ||
-            Input.GetKeyDown(KeyCode.LeftArrow)  ||
-            Input.GetKeyDown(KeyCode.RightArrow) ||
-            Input.GetKeyDown(KeyCode.Return)     ||
-            Input.GetKeyDown(KeyCode.Space))
+        if (GlobalInputManager.Instance.InputActions.UI.Navigate.WasPerformedThisFrame() || 
+        GlobalInputManager.Instance.InputActions.UI.ConfirmDialogue.WasPerformedThisFrame())
+        {
             return true;
+        }
+        return false;
 
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-        bool axisActive = Mathf.Abs(h) > AxisThreshold || Mathf.Abs(v) > AxisThreshold;
-        bool justPressed = axisActive && !wasAxisNavigating;
-        wasAxisNavigating = axisActive;
-
-        return justPressed;
+        // 2. Read the current 2D Vector from your Navigate action (Replaces GetAxisRaw)
+        // Vector2 navInput = InputSystem_Actions.InputActions.Player.Navigate.ReadValue<Vector2>();
+        
+        // 3. Check if the keys are currently being held past your threshold
+        // bool axisActive = Mathf.Abs(navInput.x) > AxisThreshold || Mathf.Abs(navInput.y) > AxisThreshold;
+        
+        // 4. Determine if it was just pressed this frame
+        // bool justPressed = axisActive && !wasAxisNavigating;
+        // wasAxisNavigating = axisActive;
     }
 
     private bool DetectMouseMovement()
@@ -180,7 +181,7 @@ public class UINavigationManager : MonoBehaviour
             eventSystem.SetSelectedGameObject(target.gameObject);
         else
             Debug.LogWarning("[UINavigationManager] No valid button found to select. " +
-                             "Set defaultSelectedButton on the SceneActivity for this screen.");
+                                $"Set defaultSelectedButton on the SceneActivity.");
     }
 
     // ── Public API ────────────────────────────────────────────────────────────

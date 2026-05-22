@@ -113,6 +113,7 @@ public class SpawnController : MonoBehaviour
         if (spawned != null)
         {
             FModAudioManager.instance.PlaySoundByName("spawnTroop");
+            //FModAudioManager.instance.PlaySoundByName(stats.SpawnSoundName);
             if (showDebugLogs)Debug.Log($"Player spawned: {stats.name}");
         }
     }
