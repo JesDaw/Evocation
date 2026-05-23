@@ -33,13 +33,14 @@ MonoBehaviour:
   _KnockBackMaxHealth: 30
   _HorizontalRange: 3
   _VerticalRange: 3
-  _ExtraEndlag: 3
+  _ExtraEndlag: 0
   _ActionCooldown: 1
   _KnockBackVelocity: 10
   _KnockBackAngle: 20
   combatActions:
   - actionName: Stab
     priority: 0
+    definesStoppingRange: 0
     rangePercent: 1
     extendsForward: 1
     targetFriendly: 0

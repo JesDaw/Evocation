@@ -12,17 +12,15 @@ public static class CombatLogic
             List<Stats> inRange = GetTargetsInRange(attacker, action);
 
             if (inRange.Count == 0)
-            {
-                //Debug.Log($"[Combat] {attacker.gameObject.name}: ExecuteAction '{action.actionName}' aborted - no targets in range");
                 return false;
-            }
 
             bool originalInRange = inRange.Exists(t => t == primaryTarget);
             targetToHit = originalInRange ? primaryTarget : inRange[0];
 
             if (!originalInRange)
-                //Debug.Log($"[Combat] {attacker.gameObject.name}: Primary target '{primaryTarget.gameObject.name}' left range, retargeting to '{targetToHit.gameObject.name}'");
-
+            {
+                Debug.Log($"[Combat] {attacker.gameObject.name}: Primary target '{primaryTarget.gameObject.name}' left range, retargeting to '{targetToHit.gameObject.name}'");
+            }
             if (action.maxTargets > 1)
             {
                 ExecuteAOEFromList(attacker, action, inRange);
