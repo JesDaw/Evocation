@@ -39,13 +39,15 @@ public static class CombatLogic
         float healthChange = attacker._AttackDamage * action.healthChangePercent;
         float knockbackChange = attacker._KnockBackDamage * action.knockbackPercent;
 
-        ExecuteSingle(attacker, action, targetToHit, healthChange, knockbackChange);
+        if (action.zoneSpawnPosition != ZoneSpawnPosition.Projectile)
+        {
+            ExecuteSingle(attacker, action, targetToHit, healthChange, knockbackChange);
+        }
 
         if (action.zoneSpawnPosition == ZoneSpawnPosition.Self && action.zoneData != null)
         {
             Transform sticky = action.zoneSticky ? attacker.transform : null;
             List<string> tags = GetTargetTags(attacker, action);
-            Debug.Log($"[Combat] {attacker.gameObject.name} spawning Self zone '{action.zoneData.name}', targetFriendly={action.targetFriendly}, tags=[{string.Join(",", tags)}]");
             AreaEffectLogic.SpawnZone(
                 action.zoneData,
                 attacker.transform.position,

@@ -23,7 +23,8 @@ public class DamageHandler : MonoBehaviour
 
         stats._CurrentHealth -= damage;
 
-        gettingHitEventEmitter.Play();
+         if (gettingHitEventEmitter != null) gettingHitEventEmitter.Play();
+         else Debug.LogWarning($"No gettingHitEventEmitter for audio assigned on {gameObject.name}");
 
         stats.OnDamage?.Invoke();
         if (stats.DamageTriggerAmount >= stats._CurrentHealth && !DamageTriggerInvoked) 
