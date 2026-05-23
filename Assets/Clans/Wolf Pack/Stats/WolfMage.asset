@@ -26,7 +26,7 @@ MonoBehaviour:
   Defense: 140
   SpaceControl: 3
   AttackFrequency: 7.6923075
-  _AttackDamage: 0
+  _AttackDamage: 5
   _KnockBackDamage: 1
   _MoveSpeed: 4
   _MaxHealth: 70
@@ -40,39 +40,67 @@ MonoBehaviour:
   combatActions:
   - actionName: Magic ball
     priority: 1
-    rangePercent: 8
+    definesStoppingRange: 1
+    rangePercent: 20
     extendsForward: 1
     targetFriendly: 0
     targetCondition: 0
     maxTargets: 1
-    castCooldown: 1
+    castCooldown: 2
     healthChangePercent: -1
     knockbackPercent: -1
     zoneSpawnPosition: 2
     projectileSettings:
       prefab: {fileID: 6072924362752908747, guid: e36c33467359d0a44aa4493b4d80e7d9, type: 3}
-      speed: 1
-      maxHeight: 1
+      speed: 5
+      maxHeight: 0.3
       trajectoryCurve:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 1
-          inSlope: 0
-          outSlope: 0
+          value: 0
+          inSlope: 3.448276
+          outSlope: 3.448276
           tangentMode: 34
           weightedMode: 0
           inWeight: 0
-          outWeight: 0
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.29
+          value: 1
+          inSlope: -0
+          outSlope: -0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.61206895
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.3
+          value: 1
+          inSlope: 0.00047918464
+          outSlope: 0.00047918464
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.4581019
+        - serializedVersion: 3
+          time: 0.5
+          value: 1
+          inSlope: -0.011904837
+          outSlope: -0.011904837
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.39999998
         - serializedVersion: 3
           time: 1
-          value: 1
-          inSlope: 0
-          outSlope: 0
+          value: 0
+          inSlope: -2
+          outSlope: -2
           tangentMode: 34
           weightedMode: 0
-          inWeight: 0
+          inWeight: 0.33333334
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -82,9 +110,9 @@ MonoBehaviour:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 1
-          inSlope: 0
-          outSlope: 0
+          value: 0
+          inSlope: 1
+          outSlope: 1
           tangentMode: 34
           weightedMode: 0
           inWeight: 0
@@ -92,8 +120,8 @@ MonoBehaviour:
         - serializedVersion: 3
           time: 1
           value: 1
-          inSlope: 0
-          outSlope: 0
+          inSlope: 1
+          outSlope: 1
           tangentMode: 34
           weightedMode: 0
           inWeight: 0
@@ -132,6 +160,7 @@ MonoBehaviour:
     applicationMode: 0
   - actionName: Speed Buff
     priority: 0
+    definesStoppingRange: 0
     rangePercent: 2
     extendsForward: 0
     targetFriendly: 1

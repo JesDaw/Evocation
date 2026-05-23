@@ -1,11 +1,14 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class CpuMoveState : CpuBaseState
 {
     Rigidbody2D _Body;
     Stats _Stats;
     Transform _Transform;
+
+    const float BlockingCheckDistance = 0.5f;
+    const float BlockingCheckRadius = 0.3f;
 
     public CpuMoveState(CpuStateManager context) : base(context)
     {
@@ -18,19 +21,8 @@ public class CpuMoveState : CpuBaseState
     public override void EnterState()
     {
         bool facingLeft = _Transform.right.x < 0;
-        int candidateIdx = GetBestCandidate(false, facingLeft);
-
-        if (candidateIdx >= 0)
-        {
-            List<Stats> targets = GetTargetsForAction(_Stats._CombatActions[candidateIdx], facingLeft);
-            targets.RemoveAll(t => t == null || t._IsDead);
-            _context._Animator.SetBool("IsRunning", targets.Count > 0);
-        }
-        else
-        {
-            _context._Animator.SetBool("IsRunning", false);
-        }
-
+        bool shouldStop = IsBlockedByUnit(facingLeft) || HasStoppingRangeTarget(facingLeft);
+        _context._Animator.SetBool("IsRunning", !shouldStop);
         _context._Animator.SetFloat("RunningSpeed", _context._ScrStats._AnimationMoveSpeed);
     }
 
@@ -40,53 +32,131 @@ public class CpuMoveState : CpuBaseState
     {
         _context._Animator.SetBool("IsRunning", false);
         _context.UpdateCurrentState(CpuStateManager.State.CombatAction);
-//        Debug.Log($"[CPU] {_context.gameObject.name}: Exiting Move state");
     }
 
-    int GetBestCandidate(bool onlyIfReady, bool facingLeft)
+    void Moving()
     {
-        int bestIdx = -1;
-        int bestTier = int.MaxValue;
-        int bestPriority = int.MinValue;
+        _Stats.TickActionCooldowns(Time.deltaTime);
+        bool facingLeft = _Transform.right.x < 0;
 
-        for (int i = 0; i < _Stats._CombatActions.Count; i++)
+        // ── Step 1: Physical blocking ─────────────────────────────────────
+        // Any unit directly ahead acts as an impassable wall regardless of abilities.
+        if (IsBlockedByUnit(facingLeft))
         {
-            if (onlyIfReady && _Stats._ActionCooldownTimers[i] > 0f) continue;
+            _Body.linearVelocity = Vector2.zero;
+            _context._Animator.SetBool("IsRunning", false);
+            TryExecuteReadyAction(facingLeft);
+            return;
+        }
 
-            List<Stats> targets = GetTargetsForAction(_Stats._CombatActions[i], facingLeft);
+        // ── Step 2: Stopping range check ──────────────────────────────────
+        // Defined by definesStoppingRange actions, or falls back to highest
+        // priority action if none have that bool set. Cooldown is ignored here —
+        // the CPU stops regardless of whether it can currently fire.
+        if (HasStoppingRangeTarget(facingLeft))
+        {
+            _Body.linearVelocity = Vector2.zero;
+            _context._Animator.SetBool("IsRunning", false);
+            TryExecuteReadyAction(facingLeft);
+            return;
+        }
+
+        // ── Step 3: Non-stopping action ready while moving ────────────────
+        // If an action that doesn't define stopping range has targets and is
+        // off cooldown, pause to execute it then resume moving afterward.
+        int execIdx = GetBestExecutableAction(facingLeft);
+        if (execIdx >= 0)
+        {
+            _Body.linearVelocity = Vector2.zero;
+            _context._Animator.SetBool("IsRunning", false);
+            CombatAction action = _Stats._CombatActions[execIdx];
+            List<Stats> targets = GetTargetsForAction(action, facingLeft);
             targets.RemoveAll(t => t == null || t._IsDead);
 
-            if (_Stats._CombatActions[i].targetCondition == ActionTargetCondition.NotAlreadyAffected)
-                targets = FilterAlreadyEffected(targets, _Stats._CombatActions[i]);
-
-            bool hasTargets = targets.Count > 0;
-
-            int tier;
-            if (_Stats._ActionCooldownTimers[i] <= 0f)
-                tier = 0;
-            else if (hasTargets)
-                tier = 1;
-            else
-                tier = 2;
-
-            int priority = _Stats._CombatActions[i].priority;
-
-            if (bestIdx < 0 || tier < bestTier || (tier == bestTier && priority > bestPriority))
+            if (targets.Count > 0)
             {
-                bestIdx = i;
-                bestTier = tier;
-                bestPriority = priority;
+                _context._CurrentAction = action;
+                _context._CurrentActionIndex = execIdx;
+                _context._ActionTarget = targets[0];
+                ExitState();
+                return;
             }
         }
 
+        // ── Step 4: Nothing to do — move forward ──────────────────────────
+        _Body.linearVelocity = new Vector2(_Stats._MoveSpeed * _Transform.right.x, _Body.linearVelocity.y);
+        _context._Animator.SetBool("IsRunning", true);
+    }
+
+    // Fires the highest-priority ready action if one exists. Used while stopped.
+    void TryExecuteReadyAction(bool facingLeft)
+    {
+        int execIdx = GetBestExecutableAction(facingLeft);
+        if (execIdx < 0) return;
+
+        CombatAction action = _Stats._CombatActions[execIdx];
+        List<Stats> targets = GetTargetsForAction(action, facingLeft);
+        targets.RemoveAll(t => t == null || t._IsDead);
+        if (targets.Count == 0) return;
+
+        _context._CurrentAction = action;
+        _context._CurrentActionIndex = execIdx;
+        _context._ActionTarget = targets[0];
+        ExitState();
+    }
+
+    // Checks whether targets exist within the designated stopping range.
+    // If any action has definesStoppingRange = true, only those define stopping.
+    // If none do, the highest priority action is used as the fallback.
+    bool HasStoppingRangeTarget(bool facingLeft)
+    {
+        bool anyDefined = false;
+        foreach (var a in _Stats._CombatActions)
+            if (a.definesStoppingRange) { anyDefined = true; break; }
+
+        if (anyDefined)
+        {
+            for (int i = 0; i < _Stats._CombatActions.Count; i++)
+            {
+                if (!_Stats._CombatActions[i].definesStoppingRange) continue;
+                List<Stats> targets = GetTargetsForAction(_Stats._CombatActions[i], facingLeft);
+                targets.RemoveAll(t => t == null || t._IsDead);
+                if (targets.Count > 0) return true;
+            }
+            return false;
+        }
+        else
+        {
+            // Fallback: use the highest priority action's range
+            int idx = GetHighestPriorityActionIndex();
+            if (idx < 0) return false;
+            List<Stats> targets = GetTargetsForAction(_Stats._CombatActions[idx], facingLeft);
+            targets.RemoveAll(t => t == null || t._IsDead);
+            return targets.Count > 0;
+        }
+    }
+
+    // Returns the index of the action with the highest priority value.
+    int GetHighestPriorityActionIndex()
+    {
+        int bestIdx = -1;
+        int bestPriority = int.MinValue;
+        for (int i = 0; i < _Stats._CombatActions.Count; i++)
+        {
+            if (_Stats._CombatActions[i].priority > bestPriority)
+            {
+                bestPriority = _Stats._CombatActions[i].priority;
+                bestIdx = i;
+            }
+        }
         return bestIdx;
     }
 
+    // Among off-cooldown actions with live targets, returns the highest priority one.
     int GetBestExecutableAction(bool facingLeft)
     {
         int bestIdx = -1;
         int bestPriority = int.MinValue;
-        float closestDist = float.MaxValue;
 
         for (int i = 0; i < _Stats._CombatActions.Count; i++)
         {
@@ -101,66 +171,44 @@ public class CpuMoveState : CpuBaseState
             if (targets.Count == 0) continue;
 
             int priority = _Stats._CombatActions[i].priority;
-            float dist = Vector2.Distance(_Transform.position, targets[0].transform.position);
-
             if (bestIdx < 0 || priority > bestPriority)
             {
                 bestIdx = i;
                 bestPriority = priority;
-                closestDist = dist;
-            }
-            else if (priority == bestPriority && dist < closestDist)
-            {
-                bestIdx = i;
-                closestDist = dist;
             }
         }
 
         return bestIdx;
     }
 
-    void Moving()
+    // Stops movement if any unit with a Stats component (ally or enemy) is
+    // within a small radius directly ahead, treating them as a solid wall.
+    bool IsBlockedByUnit(bool facingLeft)
     {
-        _Stats.TickActionCooldowns(Time.deltaTime);
-        bool facingLeft = _Transform.right.x < 0;
+        Vector2 dir = facingLeft ? Vector2.left : Vector2.right;
+        Vector2 checkPos = (Vector2)_Transform.position + dir * BlockingCheckDistance;
 
-        int execIdx = GetBestExecutableAction(facingLeft);
-        if (execIdx >= 0)
+        // Build the set of tags that should block this CPU
+        string ownTag = _context.gameObject.tag;
+        List<string> blockingTags;
+
+        if (ownTag == "Enemy")
         {
-            CombatAction action = _Stats._CombatActions[execIdx];
-            List<Stats> targets = GetTargetsForAction(action, facingLeft);
-            targets.RemoveAll(t => t == null || t._IsDead);
-
-            _context._CurrentAction = action;
-            _context._CurrentActionIndex = execIdx;
-            _context._ActionTarget = targets[0];
-            _Body.linearVelocity = Vector2.zero;
-            _context._Animator.SetBool("IsRunning", false);
-            ExitState();
-            return;
+            blockingTags = new List<string> { "Player", "Allies" };
+        }
+        else // Player or Allies
+        {
+            blockingTags = new List<string> { "Enemy" };
         }
 
-        int detectionIdx = GetBestCandidate(false, facingLeft);
-        CombatAction detectionAction = detectionIdx >= 0 ? _Stats._CombatActions[detectionIdx] : null;
-        List<Stats> detectionTargets = detectionIdx >= 0 ? GetTargetsForAction(detectionAction, facingLeft) : new List<Stats>();
-        detectionTargets.RemoveAll(t => t == null || t._IsDead);
-
-        if (detectionAction != null)
+        Collider2D[] hits = Physics2D.OverlapCircleAll(checkPos, BlockingCheckRadius);
+        foreach (Collider2D hit in hits)
         {
-            string cd1 = _Stats._ActionCooldownTimers[0].ToString("F1");
-            string cd2 = _Stats._ActionCooldownTimers.Count > 1 ? _Stats._ActionCooldownTimers[1].ToString("F1") : "N/A";
-            //Debug.Log($"[CPU] {_context.gameObject.name}: detection={detectionIdx}({detectionAction.actionName}) pri={detectionAction.priority}, targets={detectionTargets.Count}, cooldowns=[{cd1},{cd2}]");
+            if (hit.gameObject == _context.gameObject) continue;
+            if (!hit.TryGetComponent(out Stats s) || s._IsDead) continue;
+            if (blockingTags.Contains(hit.gameObject.tag)) return true;
         }
-
-        if (detectionTargets.Count > 0)
-        {
-            _Body.linearVelocity = Vector2.zero;
-            _context._Animator.SetBool("IsRunning", false);
-            return;
-        }
-
-        _Body.linearVelocity = new Vector2(_Stats._MoveSpeed * _Transform.right.x, _Body.linearVelocity.y);
-        _context._Animator.SetBool("IsRunning", true);
+        return false;
     }
 
     List<Stats> GetTargetsForAction(CombatAction action, bool facingLeft)

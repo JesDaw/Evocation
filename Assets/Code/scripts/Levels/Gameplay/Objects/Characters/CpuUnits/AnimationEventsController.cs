@@ -19,6 +19,10 @@ public class AnimationEventsController : MonoBehaviour
     {
         shouldAttack = true;
     }
+    public void ResetAttackSignal()
+    {
+        shouldAttack = false;
+    }
     public bool ShouldAttack()
     {
         if(!shouldAttack) return false;
@@ -38,7 +42,7 @@ public class AnimationEventsController : MonoBehaviour
                     break;
             }
         }        
-        shouldAttack = false;
+        ResetAttackSignal();
         return true;
     }
     
