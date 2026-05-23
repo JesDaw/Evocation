@@ -287,6 +287,7 @@ public class GlobalInputManager : MonoBehaviour
         if(DebugLogs) Debug.Log("=========Input Mode: Pause Menu=========");
         DisableAllControls();
         _inputActions.UI.TogglePause.Disable();
+        _inputActions.UI.ToggleCharacterSelect.Disable();
         EnableMenuNavigation();
     }
 

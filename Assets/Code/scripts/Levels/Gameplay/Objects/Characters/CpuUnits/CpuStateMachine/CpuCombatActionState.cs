@@ -22,6 +22,7 @@ public class CpuCombatActionState : CpuBaseState
     {
         _action = _context._CurrentAction;
         _actionIndex = _context._CurrentActionIndex;
+        _context._AnimatorController.ResetAttackSignal();
 
         _context._Animator.SetBool("IsAttacking", true);
         _context._Animator.SetBool("IsRunning", false);

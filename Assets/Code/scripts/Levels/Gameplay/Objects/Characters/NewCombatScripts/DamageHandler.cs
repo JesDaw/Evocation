@@ -17,7 +17,6 @@ public class DamageHandler : MonoBehaviour
 
     public void TakeDamage(float damage, float knockback_damage, DamageSource attackedBy = null)
     {
-        Debug.Log("Takedamage called");
         if (stats == null) return;
         if (stats.IsInvincible()) return;
 
