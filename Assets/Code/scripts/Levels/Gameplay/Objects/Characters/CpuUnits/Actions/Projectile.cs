@@ -8,9 +8,9 @@ public class Projectile : MonoBehaviour
     float moveSpeed;
     float maxMoveSpeed;
     float trajectoryMaxRelativeHeight;
-    AnimationCurve heightCurve;
-    AnimationCurve axisCurve;
-    AnimationCurve speedCurve;
+    AnimationCurve heightCurve; // determins the arc of the projectile
+    AnimationCurve axisCurve; // helps for instances when the target is above or below the shooter
+    AnimationCurve speedCurve; // speed of the projectile over time
     Action<IDamageable> onHitAction;
     
     Vector3 startPoint;
@@ -35,59 +35,61 @@ public class Projectile : MonoBehaviour
     }
 
 	IEnumerator ProjectileCycle()
-	{
-		Vector3 endPosition = new Vector3();
-		CpuStateManager targetState = target.GetComponent<CpuStateManager>();
+    {
+        Vector3 endPosition = target.position;
+        CpuStateManager targetState = target.GetComponent<CpuStateManager>(); // may be null for player
 
-		if(targetState.CurrentState == CpuStateManager.State.KnockBack)
+        // Only bail early on knockback if the component actually exists
+        if (targetState != null && targetState.CurrentState == CpuStateManager.State.KnockBack)
         {
             Destroy(gameObject);
+            yield break; // need yield break here too, was missing before
         }
-			
 
-		while (true)
-		{
-			aliveTimer += Time.deltaTime;
-			
-			if (!(target == null || aliveTimer > 10f) && targetState.CurrentState != CpuStateManager.State.KnockBack)
-			{
-				endPosition = target.position;
+        while (true)
+        {
+            aliveTimer += Time.deltaTime;
 
-				//magic number for how far before it gives up tracking
-				if(Vector3.Distance(target.position, endPosition) > 10f)
-				{
-					UpdateProjectilePosition(endPosition);
-				}
-				else
-				{
-					UpdateProjectilePosition(target.position);
+            bool targetInKnockback = targetState != null && 
+                                    targetState.CurrentState == CpuStateManager.State.KnockBack;
 
-					if (Vector3.Distance(transform.position, target.position) < distanceToDestroy)
-					{
-						if (target.TryGetComponent(out Stats s))
-						{
-							onHitAction?.Invoke(s);
-						}
-						Destroy(gameObject);
-					}
-				}
-			}
-			else
-			{
-				UpdateProjectilePosition(endPosition);
-				if (Vector3.Distance(transform.position, endPosition) < distanceToDestroy)
+            if (target != null && aliveTimer <= 10f && !targetInKnockback)
+            {
+                endPosition = target.position;
+
+                UpdateProjectilePosition(target.position);
+
+                if (Vector3.Distance(transform.position, target.position) < distanceToDestroy)
                 {
-                    //visual effect
+                    if (target.TryGetComponent(out Stats s))
+                    {
+                        try
+                        {
+                            onHitAction?.Invoke(s);
+                        }
+                        catch (System.Exception e)
+                        {
+                            Debug.LogError($"[Projectile] onHitAction threw on target '{s.gameObject.name}': {e}");
+                        }
+                    }
+                    Destroy(gameObject);
+                    yield break;
+                }
+            }
+            else
+            {
+                UpdateProjectilePosition(endPosition);
+                if (Vector3.Distance(transform.position, endPosition) < distanceToDestroy)
+                {
                     FModAudioManager.instance.PlaySoundByName("fireballHit");
                     Destroy(gameObject);
-                    
+                    yield break;
                 }
-					
-			}
+            }
 
-			yield return null;
-		}
-	}
+            yield return null;
+        }
+    }
 
     private void UpdateProjectilePosition(Vector3 _targetPoint)
     {
@@ -95,7 +97,7 @@ public class Projectile : MonoBehaviour
 
         if (Mathf.Abs(trajectoryRange.normalized.x) >= Mathf.Abs(trajectoryRange.normalized.y))
         {
-            if (trajectoryRange.x < 0)
+            if (trajectoryRange.x < 0) // for when the target is on the left side
             {
                 moveSpeed = -maxMoveSpeed;
             }

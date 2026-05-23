@@ -131,7 +131,7 @@ public class SpawnObjects : MonoBehaviour
 
         if (PlayerLivesManager.Instance != null && !PlayerLivesManager.Instance.canSpawnMore)
         {
-            Debug.Log("Cannot spawn more players!");
+            //Debug.Log("Cannot spawn more players!");
             return null;
         }
 
