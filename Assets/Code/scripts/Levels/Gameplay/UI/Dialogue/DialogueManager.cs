@@ -193,7 +193,6 @@ public class DialogueManager : MonoBehaviour
         if (_dailogueTrigger.EndOfLines.Length > 0)
         {
             _dailogueTrigger.EndDialogue(CurrentChoiceIndex);
-            return;
         }
         else
         {
