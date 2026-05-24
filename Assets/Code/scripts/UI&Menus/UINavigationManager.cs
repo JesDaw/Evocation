@@ -26,6 +26,7 @@ public class UINavigationManager : MonoBehaviour
     public static UINavigationManager Instance { get; private set; }
 
     // ── State ─────────────────────────────────────────────────────────────────
+    [SerializeField] bool StartInMousMode = false;
 
     private bool isKeyboardMode = false;
     private EventSystem eventSystem;
@@ -57,20 +58,25 @@ public class UINavigationManager : MonoBehaviour
         eventSystem = EventSystem.current;
         if (eventSystem == null)
             Debug.LogWarning("[UINavigationManager] No EventSystem found in scene.", this);
+        if (StartInMousMode)
+        {
+            SwitchToMouseMode();
+        }
+        
     }
 
     private void Update()
     {
         if (GlobalInputManager.Instance.MenuNavigation == false) 
         {
-            //Debug.Log("here");
             return;
         }
         if (DetectKeyboardNavigation())
         {
+            
             if (isKeyboardMode)
             {
-                if (eventSystem.currentSelectedGameObject == null && !recoveryPending)
+                if (!recoveryPending)
                     StartCoroutine(DeferredRecover());
             }
             else
@@ -88,8 +94,11 @@ public class UINavigationManager : MonoBehaviour
 
     private bool DetectKeyboardNavigation()
     {
-        if (GlobalInputManager.Instance.InputActions.UI.Navigate.WasPerformedThisFrame() || 
-        GlobalInputManager.Instance.InputActions.UI.ConfirmDialogue.WasPerformedThisFrame())
+        if (GlobalInputManager.Instance.InputActions.UI.Navigate.WasPerformedThisFrame())
+        {
+            return true;
+        }
+        if (GlobalInputManager.Instance.InputActions.UI.ConfirmDialogue.WasPerformedThisFrame())
         {
             return true;
         }
@@ -117,9 +126,8 @@ public class UINavigationManager : MonoBehaviour
     {
         isKeyboardMode = true;
         GlobalInputManager.Instance.DisableCursor();
+        SelectBestKeyboardTarget();
 
-        if (screenDefaultButton == null)
-            SelectBestKeyboardTarget();
 
         //Debug.Log("[UINavigationManager] Switched to keyboard mode.");
     }
@@ -153,10 +161,11 @@ public class UINavigationManager : MonoBehaviour
         recoveryPending = true;
         yield return null;
 
-        recoveryPending = false;
-
-        if (isKeyboardMode && eventSystem.currentSelectedGameObject == null)
+        if (isKeyboardMode && eventSystem.currentSelectedGameObject == null) 
+        {
             SelectBestKeyboardTarget();
+        }
+        recoveryPending = false;
     }
 
     /// <summary>
@@ -170,7 +179,7 @@ public class UINavigationManager : MonoBehaviour
         if (screenDefaultButton != null && screenDefaultButton.gameObject.activeInHierarchy)
         {
             target = screenDefaultButton;
-            screenDefaultButton = null; // consume
+            screenDefaultButton = null; 
         }
         else if (lastHighlightedButton != null && lastHighlightedButton.gameObject.activeInHierarchy)
         {
@@ -178,7 +187,9 @@ public class UINavigationManager : MonoBehaviour
         }
 
         if (target != null)
+        {
             eventSystem.SetSelectedGameObject(target.gameObject);
+        }
         else
             Debug.LogWarning("[UINavigationManager] No valid button found to select. " +
                                 $"Set defaultSelectedButton on the SceneActivity.");
