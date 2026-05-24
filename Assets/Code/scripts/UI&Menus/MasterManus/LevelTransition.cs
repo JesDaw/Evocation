@@ -31,13 +31,13 @@ public class LevelTransition : MonoBehaviour
             TransitionAnimationClip.SetTrigger("Start");
             yield return new WaitForSeconds(transitionTime); 
         }
-        else if (TimelineManager.Instance != null && timelineCutsceneName != null)
+        else if (TimelineManager.Instance != null && !string.IsNullOrEmpty(timelineCutsceneName))
         {
             TimelineManager.Instance.PlayCutscene(timelineCutsceneName);
             yield return new WaitForSeconds(TimelineManager.Instance.GetCurrentCutsceneDuration());
         }
-        StartCoroutine(LoadAsynchronously(nextSceneName));
         if (DebugLogs) Debug.Log($"Loading scene: " + nextSceneName);
+        StartCoroutine(LoadAsynchronously(nextSceneName));
     }
     
 
