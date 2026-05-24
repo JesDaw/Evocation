@@ -16,6 +16,7 @@ public class RelationshipManager : MonoBehaviour
 
         Instance = this;
     }
+    public void ResetAllRelationships() => playerRelationshipSO.ResetAllRelationships();
     public void StartInteraction(int RelationshipNumber) => CurrentRelationshipNumber = RelationshipNumber;
     public void AlterRelationshipStatus(int amount)
     {
