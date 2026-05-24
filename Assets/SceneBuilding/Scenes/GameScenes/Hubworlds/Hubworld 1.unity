@@ -119,6 +119,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &367922932 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2815192832047678320, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
+  m_PrefabInstance: {fileID: 5172583268979930948}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d394a073577441c8b617df70a0da601, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &591350918 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7634296687730657288, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
@@ -705,7 +716,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1134637839774871080, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
       propertyPath: managedReferences[7479562236099821763].ambianceStateName
-      value: gameplay
+      value: Gameplay
       objectReference: {fileID: 0}
     - target: {fileID: 1167424010692836250, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
       propertyPath: EndOfLines.Array.size
@@ -886,6 +897,10 @@ PrefabInstance:
     - target: {fileID: 4268098882891700407, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
       propertyPath: m_Creator
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4456164562291901138, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
+      propertyPath: m_text
+      value: Press <sprite name="button_prompts_q"> to skip
       objectReference: {fileID: 0}
     - target: {fileID: 5741622011223021888, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
       propertyPath: Slides.Array.size
@@ -1500,6 +1515,10 @@ PrefabInstance:
       propertyPath: m_Events.m_Events.Array.data[5].m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 8224208839263678964, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8440692001515677877, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
       propertyPath: m_Creator
       value: 
@@ -1521,13 +1540,25 @@ PrefabInstance:
       value: Yes
       objectReference: {fileID: 0}
     - target: {fileID: 8727571587270366037, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
+      propertyPath: EndOfLines.Array.data[0].ultEvent._PersistentCalls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8727571587270366037, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
       propertyPath: EndOfLines.Array.data[1].ultEvent._PersistentCalls.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8727571587270366037, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
+      propertyPath: EndOfLines.Array.data[0].ultEvent._PersistentCalls.Array.data[0]._Target
+      value: 
+      objectReference: {fileID: 367922932}
+    - target: {fileID: 8727571587270366037, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
       propertyPath: EndOfLines.Array.data[1].ultEvent._PersistentCalls.Array.data[0]._Target
       value: 
       objectReference: {fileID: 1180335163}
+    - target: {fileID: 8727571587270366037, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
+      propertyPath: EndOfLines.Array.data[0].ultEvent._PersistentCalls.Array.data[0]._MemberName
+      value: EnablePlayerControls
+      objectReference: {fileID: 0}
     - target: {fileID: 8727571587270366037, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
       propertyPath: EndOfLines.Array.data[1].ultEvent._PersistentCalls.Array.data[0]._MemberName
       value: StartTransition
