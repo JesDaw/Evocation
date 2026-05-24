@@ -27,7 +27,7 @@ public class SceneActivity : MonoBehaviour
             if (uiButton != null && UINavigationManager.Instance != null)
                 UINavigationManager.Instance.RegisterScreenDefault(uiButton);
         }
-
+        UINavigationManager.Instance.lastHighlightedButton = defaultSelectedButton.gameObject.GetComponent<UIButtons>();
         OnActivityStart.Invoke();
     }
 

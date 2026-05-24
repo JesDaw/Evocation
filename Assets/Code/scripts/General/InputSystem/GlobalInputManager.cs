@@ -6,8 +6,10 @@ public class GlobalInputManager : MonoBehaviour
     public static GlobalInputManager Instance { get; private set; }
     private InputSystem_Actions _inputActions;
     public InputSystem_Actions InputActions => _inputActions;
-    [SerializeField] bool DebugLogs = false;
+    [SerializeField] bool StartWithUIEnabled = false;
     public bool MenuNavigation = false;
+    [SerializeField] bool DebugLogs = false;
+    
     #region Start and stop
     void Awake()
     {
@@ -31,6 +33,11 @@ public class GlobalInputManager : MonoBehaviour
     void Start()
     {
         DisableAllControls();
+        if(StartWithUIEnabled) 
+        {
+            EnableMenuNavigation();
+            EnableUIControls();
+        }
     }
     
     void OnDestroy()

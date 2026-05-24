@@ -8,7 +8,9 @@ public class TimelineController : MonoBehaviour
     PlayableDirector timeline;
     
     [SerializeField] bool _skipable = false;
+    [SerializeField] bool PlayerPlaysTimeline = false;
     public UnityEvent SkipedTimeline;
+    public UnityEvent ContinuedTimeline;
     bool gameIsPaused; // if the game is pause stop the timeline
     double heldTime;
     bool isHolding = false; // the timeline can be stopped independantly of if the game is paused though
@@ -31,7 +33,6 @@ public class TimelineController : MonoBehaviour
 
     void OnDisable()
     {
-        // Unsubscribe when disabled
         UnsubscribeFromInputs();
     }
 
@@ -41,6 +42,11 @@ public class TimelineController : MonoBehaviour
 
         var uiActions = GlobalInputManager.Instance.InputActions.UI;
         uiActions.SkipCutscene.performed += SkipTimeline;
+        if (PlayerPlaysTimeline) 
+        {   
+            uiActions.ConfirmDialogue.performed += PlayTimeline;
+            Debug.Log("Play timline initialised");
+        }
     }
 
     void UnsubscribeFromInputs()
@@ -49,6 +55,15 @@ public class TimelineController : MonoBehaviour
 
         var uiActions = GlobalInputManager.Instance.InputActions.UI;
         uiActions.SkipCutscene.performed -= SkipTimeline;
+        uiActions.ConfirmDialogue.performed -= PlayTimeline;
+    }
+    public void PlayTimeline(InputAction.CallbackContext context)
+    {
+        Debug.Log($"{!context.performed} {timeline == null } {isHolding}");
+        if (!context.performed || timeline == null || !isHolding) return;
+        PlayTimeline();
+        Debug.Log($"Here");
+        ContinuedTimeline?.Invoke();
     }
 
     public void PlayTimeline()
