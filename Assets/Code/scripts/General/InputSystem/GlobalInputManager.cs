@@ -79,7 +79,8 @@ public class GlobalInputManager : MonoBehaviour
         _inputActions.UI.Navigate.Disable();
         _inputActions.UI.ConfirmDialogue.Disable();
         MenuNavigation = false;
-        UINavigationManager.Instance.lastHighlightedButton = null;
+        if (UINavigationManager.Instance != null) UINavigationManager.Instance.lastHighlightedButton = null;
+        else {Debug.Log($"Global input manager cant find UINavigationManager.Instance");}
     }
 
     public void DisableCursor()

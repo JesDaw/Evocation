@@ -193,8 +193,12 @@ public class DialogueManager : MonoBehaviour
         if (_dailogueTrigger.EndOfLines.Length > 0)
         {
             _dailogueTrigger.EndDialogue(CurrentChoiceIndex);
+            return;
         }
-        _dailogueTrigger.EndDialogueDefultEvent();
+        else
+        {
+            _dailogueTrigger.EndDialogueDefultEvent();
+        }        
         
         if (CameraControlSwitcher.Instance != null && CameraControlSwitcher.Instance.FreeCamIsActive)
         {
