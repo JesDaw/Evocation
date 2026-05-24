@@ -45,7 +45,6 @@ public class TimelineController : MonoBehaviour
         if (PlayerPlaysTimeline) 
         {   
             uiActions.ConfirmDialogue.performed += PlayTimeline;
-            Debug.Log("Play timline initialised");
         }
     }
 
@@ -59,10 +58,8 @@ public class TimelineController : MonoBehaviour
     }
     public void PlayTimeline(InputAction.CallbackContext context)
     {
-        Debug.Log($"{!context.performed} {timeline == null } {isHolding}");
         if (!context.performed || timeline == null || !isHolding) return;
         PlayTimeline();
-        Debug.Log($"Here");
         ContinuedTimeline?.Invoke();
     }
 
