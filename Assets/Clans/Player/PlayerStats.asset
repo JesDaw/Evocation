@@ -34,21 +34,21 @@ MonoBehaviour:
   _HorizontalRange: 8
   _VerticalRange: 5
   _ExtraEndlag: 0
-  _ActionCooldown: 1
+  _ActionCooldown: 5
   _KnockBackVelocity: 10
   _KnockBackAngle: 45
   combatActions:
   - actionName: Sword Stab
-    priority: 0
+    priority: 1
     definesStoppingRange: 0
-    rangePercent: 0
-    extendsForward: 0
+    rangePercent: 1
+    extendsForward: 1
     targetFriendly: 0
     targetCondition: 0
     maxTargets: 1
     castCooldown: 1
-    healthChangePercent: -5
-    knockbackPercent: 5
+    healthChangePercent: -1
+    knockbackPercent: 1
     zoneSpawnPosition: 1
     projectileSettings:
       prefab: {fileID: 0}
@@ -83,8 +83,8 @@ MonoBehaviour:
   _AnimationMoveSpeed: 1
   vfx: []
   vfxOffsets: []
-  _AnimationStartupTime: 0
-  _AnimationRecoveryTime: 0
+  _AnimationStartupTime: 25
+  _AnimationRecoveryTime: 45
   level: 1
   xp_to_next_lvl: 100
   ExpCostMultiplier: 0.5

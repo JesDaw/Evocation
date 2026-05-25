@@ -4,11 +4,11 @@ using UnityEngine.InputSystem;
 
 public class PlayerStateMachine : MonoBehaviour
 {
-    [SerializeField] Stats _playerStats;
+    [SerializeField] public Stats _playerStats;
     [SerializeField] Rigidbody2D _rb;
     [Header("Animation")]
     [SerializeField] AnimationEventsController _animatorController;
-    [SerializeField] Animator _animator;
+    [SerializeField] public Animator _animator;
     [Header("Debug")]
     public bool DebugLogs = false;
 
