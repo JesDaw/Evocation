@@ -15,9 +15,8 @@ MonoBehaviour:
   Theme: 
   ODS: 
   RPS_Type: 
-  _IsAOE: 0
-  _AttackStyle: 1
   OtherNotes: 
+  SpawnSoundName: 
   _spawnCost: 15
   Level_Total: 0
   Level_Discrepancy: 0
@@ -33,96 +32,51 @@ MonoBehaviour:
   _MaxHealth: 20
   _KnockBackMaxHealth: 15
   _HorizontalRange: 8
-  _ExtraEndlag: 2
-  _MaxAOETargets: 5
   _VerticalRange: 5
+  _ExtraEndlag: 0
+  _ActionCooldown: 1
   _KnockBackVelocity: 10
   _KnockBackAngle: 45
-  _ProjectilePrefab: {fileID: 6072924362752908747, guid: e36c33467359d0a44aa4493b4d80e7d9, type: 3}
-  _ProjectileSpeed: 15
-  _ProjectileMaxHeight: 2
-  _TrajectoryCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.0625
-      value: 0.111904144
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  _AxisCorrectionCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 1
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  _SpeedCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  _EffectsToApply: []
+  combatActions:
+  - actionName: Sword Stab
+    priority: 0
+    definesStoppingRange: 0
+    rangePercent: 0
+    extendsForward: 0
+    targetFriendly: 0
+    targetCondition: 0
+    maxTargets: 1
+    castCooldown: 1
+    healthChangePercent: -5
+    knockbackPercent: 5
+    zoneSpawnPosition: 1
+    projectileSettings:
+      prefab: {fileID: 0}
+      speed: 0
+      maxHeight: 0
+      trajectoryCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      axisCorrectionCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      speedCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+    effectsOnHit: []
+    zoneData: {fileID: 0}
+    zoneSticky: 0
+    excludeCasterFromZone: 0
+    applicationMode: 0
   _Rotate: 0
   _animator: {fileID: 0}
   _Sprites: []
