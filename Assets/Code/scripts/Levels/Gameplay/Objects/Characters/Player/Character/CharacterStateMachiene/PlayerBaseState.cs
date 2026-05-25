@@ -15,9 +15,7 @@ public abstract class PlayerBaseState
     protected void Flip()
     {
         Ctx.isFacingRight = !Ctx.isFacingRight;
-        Vector3 localScale = Ctx.transform.localScale;
-        localScale.x *= -1f;
-        Ctx.transform.localScale = localScale;
+        Ctx.Animator.SetBool("FaceLeft", !Ctx.isFacingRight);
     }
 
 
