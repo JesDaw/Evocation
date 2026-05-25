@@ -17,7 +17,7 @@ public class DamageHandler : MonoBehaviour
         if (stats.IsInvincible()) return;
 
         stats._CurrentHealth -= damage;
-        Debug.Log($"{gameObject.name} Health = {stats._CurrentHealth}");
+//        Debug.Log($"{gameObject.name} Health = {stats._CurrentHealth}");
         FModAudioManager.instance.PlaySoundByName("takeDamage", transform.position, 1, 15, "Volume", 1f);
 
         stats.OnDamage?.Invoke();
