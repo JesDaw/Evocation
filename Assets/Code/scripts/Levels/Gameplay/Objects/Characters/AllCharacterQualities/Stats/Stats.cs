@@ -109,6 +109,11 @@ public class Stats : MonoBehaviour, IDamageable
         animator = GetComponentInChildren<Animator>();
     }
 
+    void OnDestroy()
+    {
+        gameObject.SetActive(false);
+    }
+
     public void InitializeStats()
     {
         SetupTag();

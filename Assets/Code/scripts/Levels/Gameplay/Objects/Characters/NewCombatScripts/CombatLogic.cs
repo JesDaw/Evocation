@@ -18,9 +18,8 @@ public static class CombatLogic
             targetToHit = originalInRange ? primaryTarget : inRange[0];
 
             if (!originalInRange)
-            {
                 Debug.Log($"[Combat] {attacker.gameObject.name}: Primary target '{primaryTarget.gameObject.name}' left range, retargeting to '{targetToHit.gameObject.name}'");
-            }
+
             if (action.maxTargets > 1)
             {
                 ExecuteAOEFromList(attacker, action, inRange);
@@ -34,13 +33,11 @@ public static class CombatLogic
             }
         }
 
-        float healthChange = attacker._AttackDamage * action.healthChangePercent;
+        float healthChange  = attacker._AttackDamage * action.healthChangePercent;
         float knockbackChange = attacker._KnockBackDamage * action.knockbackPercent;
 
         if (action.zoneSpawnPosition != ZoneSpawnPosition.Projectile)
-        {
             ExecuteSingle(attacker, action, targetToHit, healthChange, knockbackChange);
-        }
 
         if (action.zoneSpawnPosition == ZoneSpawnPosition.Self && action.zoneData != null)
         {
@@ -57,12 +54,14 @@ public static class CombatLogic
         }
 
         if (action.zoneSpawnPosition == ZoneSpawnPosition.Projectile)
-        {
             SpawnProjectile(attacker, action, targetToHit, healthChange, knockbackChange);
-        }
 
         return true;
     }
+
+    // -------------------------------------------------------------------------
+    // Internal helpers
+    // -------------------------------------------------------------------------
 
     static List<Stats> GetTargetsInRange(Stats attacker, CombatAction action)
     {
@@ -70,9 +69,7 @@ public static class CombatLogic
         float effectiveRange = attacker._HorizontalRange * action.rangePercent;
         List<string> targetTags = GetTargetTags(attacker, action);
 
-        List<Stats> targets = AttackDetection.FindTargetsInCircle(
-            center, effectiveRange, targetTags, attacker);
-
+        List<Stats> targets = AttackDetection.FindTargetsInCircle(center, effectiveRange, targetTags, attacker);
         targets.RemoveAll(t => t == null || t._IsDead);
         targets.Sort((a, b) =>
             Vector2.Distance(attacker.transform.position, a.transform.position)
@@ -84,7 +81,11 @@ public static class CombatLogic
     static void ExecuteSingle(Stats attacker, CombatAction action, Stats target, float healthChange, float knockbackChange)
     {
         if (healthChange != 0f)
-            target.AlterHealth(healthChange, new DamageSource(DamageSource.DamageType.Melee) { IsEnemy = attacker._Enemy });
+        {
+            target.AlterHealth(healthChange,
+                new DamageSource(DamageSource.DamageType.Melee, attacker.transform.position)
+                    { IsEnemy = attacker._Enemy });
+        }
 
         if (knockbackChange != 0f)
             target.AlterKnockback(knockbackChange, attacker._Enemy);
@@ -94,7 +95,7 @@ public static class CombatLogic
 
     static void ExecuteAOEFromList(Stats attacker, CombatAction action, List<Stats> targets)
     {
-        float healthChange = attacker._AttackDamage * action.healthChangePercent;
+        float healthChange    = attacker._AttackDamage  * action.healthChangePercent;
         float knockbackChange = attacker._KnockBackDamage * action.knockbackPercent;
 
         int count = 0;
@@ -104,7 +105,11 @@ public static class CombatLogic
             count++;
 
             if (healthChange != 0f)
-                t.AlterHealth(healthChange, new DamageSource(DamageSource.DamageType.AOE) { IsEnemy = attacker._Enemy });
+            {
+                t.AlterHealth(healthChange,
+                    new DamageSource(DamageSource.DamageType.AOE, attacker.transform.position)
+                        { IsEnemy = attacker._Enemy });
+            }
 
             if (knockbackChange != 0f)
                 t.AlterKnockback(knockbackChange, attacker._Enemy);
@@ -113,6 +118,7 @@ public static class CombatLogic
         }
     }
 
+    // Kept for internal AOE re-detection path
     static void ExecuteAOE(Stats attacker, CombatAction action, Stats primaryTarget, float healthChange, float knockbackChange)
     {
         List<Stats> targets = GetTargetsInRange(attacker, action);
@@ -124,7 +130,11 @@ public static class CombatLogic
             count++;
 
             if (healthChange != 0f)
-                t.AlterHealth(healthChange, new DamageSource(DamageSource.DamageType.AOE) { IsEnemy = attacker._Enemy });
+            {
+                t.AlterHealth(healthChange,
+                    new DamageSource(DamageSource.DamageType.AOE, attacker.transform.position)
+                        { IsEnemy = attacker._Enemy });
+            }
 
             if (knockbackChange != 0f)
                 t.AlterKnockback(knockbackChange, attacker._Enemy);
@@ -163,6 +173,10 @@ public static class CombatLogic
             return;
         }
 
+        // Capture attacker position for the async callback — the attacker may have moved by hit time
+        Vector3 attackerPos = attacker.transform.position;
+        bool isEnemy        = attacker._Enemy;
+
         GameObject projGO = UnityEngine.Object.Instantiate(ps.prefab, attacker.transform.position, Quaternion.identity);
 
         if (projGO.TryGetComponent(out Projectile p))
@@ -179,10 +193,14 @@ public static class CombatLogic
                     if (hit is Stats hitStats)
                     {
                         if (healthChange != 0f)
-                            hitStats.AlterHealth(healthChange, new DamageSource(DamageSource.DamageType.Ranged) { IsEnemy = attacker._Enemy });
+                        {
+                            hitStats.AlterHealth(healthChange,
+                                new DamageSource(DamageSource.DamageType.Ranged, attackerPos)
+                                    { IsEnemy = isEnemy });
+                        }
 
                         if (knockbackChange != 0f)
-                            hitStats.AlterKnockback(knockbackChange, attacker._Enemy);
+                            hitStats.AlterKnockback(knockbackChange, isEnemy);
 
                         ApplyEffectsToTarget(attacker, action, hitStats);
                     }
@@ -211,16 +229,8 @@ public static class CombatLogic
         List<string> tags = new List<string>();
         if (action.targetFriendly)
         {
-            if (attacker._Enemy)
-            {
-                tags.Add("Allies");
-                tags.Add("Player");
-            }
-            else
-            {
-                tags.Add("Allies");
-                tags.Add("Player");
-            }
+            tags.Add("Allies");
+            tags.Add("Player");
         }
         else
         {

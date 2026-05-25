@@ -1,19 +1,15 @@
 using UnityEngine;
 using UnityEngine.Events;
-using FMODUnity;
-using FMOD.Studio;
 
 public class DamageHandler : MonoBehaviour
 {
-    [SerializeField] StudioEventEmitter gettingHitEventEmitter;
-
     Stats stats;
     bool DamageTriggerInvoked = false;
+
     public void Initialize(Stats statsComponent)
     {
         stats = statsComponent;
     }
-
 
     public void TakeDamage(float damage, float knockback_damage, DamageSource attackedBy = null)
     {
@@ -21,38 +17,27 @@ public class DamageHandler : MonoBehaviour
         if (stats.IsInvincible()) return;
 
         stats._CurrentHealth -= damage;
-
-         if (gettingHitEventEmitter != null) gettingHitEventEmitter.Play();
-         else Debug.LogWarning($"No gettingHitEventEmitter for audio assigned on {gameObject.name}");
+        FModAudioManager.instance.PlaySoundByName("takeDamage", transform.position, 1, 15, "Volume", 1f);
 
         stats.OnDamage?.Invoke();
-        if (stats.DamageTriggerAmount >= stats._CurrentHealth && !DamageTriggerInvoked) 
+        if (stats.DamageTriggerAmount >= stats._CurrentHealth && !DamageTriggerInvoked)
         {
-            //Debug.Log("Activating damage trigger event");
             stats.DamageTrigger?.Invoke();
             DamageTriggerInvoked = true;
         }
 
         stats.LastHitBy = attackedBy;
 
-        // if (attackedBy != null && attackedBy.damageType == DamageSource.DamageType.StatusEffect)
-        // {
-             // stats._KnockBackHealth -= knockback_damage;
-        // }
-
         if (attackedBy != null)
         {
             stats.OnWitFlagDamage?.Invoke(attackedBy.IsEnemy);
-            stats._KnockBackHealth -= knockback_damage; 
+            stats._KnockBackHealth -= knockback_damage;
 
             GameObject parent_obj = transform.parent.gameObject;
-            //Debug.Log(knockback_damage + " knockback damage taken by: " + parent_obj);
         }
 
         if (stats.entityHealthbar != null)
-        {
             stats.entityHealthbar.UpdateHealth();
-        }
 
         if (stats._CurrentHealth <= 0)
         {
@@ -61,38 +46,30 @@ public class DamageHandler : MonoBehaviour
         }
 
         if (stats._KnockBackHealth <= 0)
-        {
             TriggerKnockback();
-        }
     }
 
-    public void TakeDamage(float damage, DamageSource attackedBy = null) // why is there 2 referances to this?
+    public void TakeDamage(float damage, DamageSource attackedBy = null)
     {
-        Debug.Log("Takedamage called");
         if (stats == null) return;
         if (stats.IsInvincible()) return;
 
         stats._CurrentHealth -= damage;
-        FModAudioManager.instance.PlaySoundByName("takeDamage");
+        FModAudioManager.instance.PlaySoundByName("takeDamage", transform.position, 1, 15, "Volume", 1f);
+
 
         stats.OnDamage?.Invoke();
 
         stats.LastHitBy = attackedBy;
 
         if (attackedBy != null && attackedBy.damageType == DamageSource.DamageType.StatusEffect)
-        {
-            stats._KnockBackHealth-- ; 
-        }
+            stats._KnockBackHealth--;
 
         if (attackedBy != null)
-        {
             stats.OnWitFlagDamage?.Invoke(attackedBy.IsEnemy);
-        }
 
         if (stats.entityHealthbar != null)
-        {
             stats.entityHealthbar.UpdateHealth();
-        }
 
         if (stats._CurrentHealth <= 0)
         {
@@ -101,11 +78,8 @@ public class DamageHandler : MonoBehaviour
         }
 
         if (stats._KnockBackHealth <= 0)
-        {
             TriggerKnockback();
-        }
     }
-
 
     public void Die()
     {
@@ -113,22 +87,18 @@ public class DamageHandler : MonoBehaviour
 
         stats._CurrentHealth = 0;
         stats._IsDead = true;
-        
 
         if (stats.LastHitBy != null)
-        {
             stats.OnWitFlagDeath?.Invoke(stats.LastHitBy.IsEnemy);
-        }
+
         TriggerKnockback();
         stats.OnDeath?.Invoke();
-
     }
 
     private void TriggerKnockback()
     {
         stats.OnKnocked?.Invoke();
         stats._KnockBackHealth = stats._KnockBackMaxHealth;
-
     }
 
     public void Heal(float amount)
@@ -136,9 +106,7 @@ public class DamageHandler : MonoBehaviour
         if (stats == null) return;
         stats._CurrentHealth = Mathf.Min(stats._CurrentHealth + amount, stats._MaxHealth);
         if (stats.entityHealthbar != null)
-        {
             stats.entityHealthbar.UpdateHealth();
-        }
     }
 
     public void ResetHealth()
@@ -146,9 +114,7 @@ public class DamageHandler : MonoBehaviour
         if (stats == null) return;
         stats._CurrentHealth = stats._MaxHealth;
         if (stats.entityHealthbar != null)
-        {
             stats.entityHealthbar.UpdateHealth();
-        }
     }
 
     public bool IsDead()
@@ -162,17 +128,22 @@ public class DamageSource
     public bool IsEnemy;
     public DamageType damageType;
 
-    public enum DamageType 
-    { 
-        StatusEffect, 
-        Melee, 
-        Ranged, 
-        AOE 
+    /// <summary>
+    /// World-space position of the attacker at the moment damage was dealt.
+    /// Used by PlayerKnockedBackState to determine the correct knockback direction.
+    /// Remains Vector3.zero when the source has no meaningful position (e.g. status effects).
+    /// </summary>
+    public Vector3 sourcePosition;
+
+    public enum DamageType
+    {
+        StatusEffect,
+        Melee,
+        Ranged,
+        AOE
     }
 
     public DamageSource() { }
-    public DamageSource(DamageType type) 
-    { 
-        damageType = type; 
-    }
+    public DamageSource(DamageType type) { damageType = type; }
+    public DamageSource(DamageType type, Vector3 position) { damageType = type; sourcePosition = position; }
 }
