@@ -34,6 +34,7 @@ public class CpuKnockBackState : CpuBaseState
         if (_Stats._IsDead)
         {
             //FModAudioManager.instance.PlaySoundByName("die");
+            _context.gameObject.SetActive(false);
             Object.Destroy(_context.gameObject);
         }
         else
