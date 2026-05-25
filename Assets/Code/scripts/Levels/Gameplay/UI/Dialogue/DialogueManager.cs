@@ -190,15 +190,14 @@ public class DialogueManager : MonoBehaviour
     {
         if(DialogueActive == false) return;   
         DeactivateDialogueBox();
+        _dailogueTrigger.EndDialogueDefultEvent();
         if (_dailogueTrigger.EndOfLines.Length > 0)
         {
             _dailogueTrigger.EndDialogue(CurrentChoiceIndex);
         }
-        else
-        {
-            _dailogueTrigger.EndDialogueDefultEvent();
-        }        
         
+      
+        /*
         if (CameraControlSwitcher.Instance != null && CameraControlSwitcher.Instance.FreeCamIsActive)
         {
             GlobalInputManager.Instance.SetFreeCamMode();
@@ -206,7 +205,7 @@ public class DialogueManager : MonoBehaviour
         else
         {
             GlobalInputManager.Instance.SetPlayerCharacterMode();
-        }
+        }*/
     }
 
     public void DeactivateDialogueBox()
