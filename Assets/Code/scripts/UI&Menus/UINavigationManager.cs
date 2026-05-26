@@ -26,7 +26,7 @@ public class UINavigationManager : MonoBehaviour
     public static UINavigationManager Instance { get; private set; }
 
     // ── State ─────────────────────────────────────────────────────────────────
-    [SerializeField] bool StartInMousMode = false;
+    [SerializeField] bool StartInMouseMode = false;
 
     private bool isKeyboardMode = false;
     private EventSystem eventSystem;
@@ -58,7 +58,7 @@ public class UINavigationManager : MonoBehaviour
         eventSystem = EventSystem.current;
         if (eventSystem == null)
             Debug.LogWarning("[UINavigationManager] No EventSystem found in scene.", this);
-        if (StartInMousMode)
+        if (StartInMouseMode)
         {
             SwitchToMouseMode();
         }
