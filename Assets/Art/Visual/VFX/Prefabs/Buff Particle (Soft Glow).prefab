@@ -4906,6 +4906,7 @@ GameObject:
   - component: {fileID: 7253844554280151707}
   - component: {fileID: 6827729807660931605}
   - component: {fileID: 1615048317758295377}
+  - component: {fileID: 1963044423696774864}
   m_Layer: 0
   m_Name: Buff Particle (Soft Glow)
   m_TagString: Untagged
@@ -9750,6 +9751,23 @@ MonoBehaviour:
   softGlowPersistent: {fileID: 7253844554280151707}
   alphaSparklePersistent: {fileID: 4383515939597239633}
   additiveSparklePersistent: {fileID: 8756107589855078561}
+--- !u!114 &1963044423696774864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6526757126256724303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a12e5f2a8ac046548c3a5b345a255f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::StatusEffectVisual
+  buffApplicationTemplate: {fileID: 2409273468788304269, guid: bb4fde2482cc3e6448f7cb40bc5d34bc, type: 3}
+  persistentParticles:
+  - {fileID: 7253844554280151707}
+  - {fileID: 4383515939597239633}
+  - {fileID: 8756107589855078561}
 --- !u!1 &8828873528788969982
 GameObject:
   m_ObjectHideFlags: 0

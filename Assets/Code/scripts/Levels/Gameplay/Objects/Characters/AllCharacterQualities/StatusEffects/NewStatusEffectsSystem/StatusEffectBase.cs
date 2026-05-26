@@ -9,15 +9,16 @@ public abstract class StatusEffect : ScriptableObject
     [Header("Duration")]
     public float duration = 5f;
     
-    [Header("Visual")]
-    public Color effectColor = Color.white;
-    public GameObject particleEffectPrefab;
+    [Header("Visuals")]
+    public GameObject particleEffectPrefab; // The prefab containing StatusEffectVisual
+    public Color primaryColor = new Color(192f/255f, 4f/255f, 0f);
+    public Color secondaryColor = new Color(1f, 56f/255f, 52f/255f);
 
     public virtual void OnApply(Stats target) { }
-
     public virtual void OnTick(Stats target, float deltaTime) { }
     public virtual void OnRemove(Stats target) { }
     public virtual bool CanStack() { return false; }
+    
     public virtual ActiveStatusEffect CreateInstance()
     {
         return new ActiveStatusEffect(this);
@@ -31,6 +32,7 @@ public class ActiveStatusEffect
     public float timeRemaining;
     public float nextTickTime;
     public int stackCount = 1;
+    public StatusEffectVisual visualInstance; 
 
     public ActiveStatusEffect(StatusEffect effect)
     {
