@@ -141,84 +141,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b7438103eb48234d8bc043ee526b762, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::TimelineController
---- !u!1 &691233110
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 691233112}
-  - component: {fileID: 691233111}
-  m_Layer: 9
-  m_Name: Wall
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!61 &691233111
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 691233110}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
---- !u!4 &691233112
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 691233110}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25.6, y: 5.5, z: 0}
-  m_LocalScale: {x: 1, y: 29.44, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &754816618 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 2949446804985895924, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
@@ -286,7 +208,7 @@ GameObject:
   - component: {fileID: 929246103}
   - component: {fileID: 929246104}
   m_Layer: 0
-  m_Name: Diologue 1 (2)
+  m_Name: Dialogue 1 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -347,7 +269,7 @@ GameObject:
   - component: {fileID: 1115004193}
   - component: {fileID: 1115004194}
   m_Layer: 0
-  m_Name: Diologue 1 (1)
+  m_Name: Dialogue 1 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -605,7 +527,7 @@ GameObject:
   - component: {fileID: 1788905302}
   - component: {fileID: 1788905303}
   m_Layer: 0
-  m_Name: Diologue 1 (3)
+  m_Name: Dialogue 1 (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -649,9 +571,6 @@ MonoBehaviour:
     _PersistentCalls:
     - _Target: {fileID: 591350918}
       _MemberName: PlayTimeline
-      _PersistentArguments: []
-    - _Target: {fileID: 367922932}
-      _MemberName: SetPlayerCharacterMode
       _PersistentArguments: []
 --- !u!114 &1842582191 stripped
 MonoBehaviour:
@@ -1031,6 +950,10 @@ PrefabInstance:
     - target: {fileID: 5741622011223021888, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
       propertyPath: DefultEvent._PersistentCalls.Array.data[0]._MemberName
       value: PlayTimeline
+      objectReference: {fileID: 0}
+    - target: {fileID: 5786000304714697136, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
+      propertyPath: m_Name
+      value: Dialogue 1
       objectReference: {fileID: 0}
     - target: {fileID: 6284928246806241645, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
       propertyPath: m_Creator
@@ -1738,4 +1661,3 @@ SceneRoots:
   - {fileID: 5172583268979930948}
   - {fileID: 1180335164}
   - {fileID: 1718076077}
-  - {fileID: 691233112}
