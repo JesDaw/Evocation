@@ -224,9 +224,6 @@ GameObject:
   - component: {fileID: 2629901134353411500}
   - component: {fileID: 8477098209678785662}
   - component: {fileID: 2623527630025459734}
-  - component: {fileID: 7997504322686563682}
-  - component: {fileID: 8234840716687829479}
-  - component: {fileID: 8994543897348209113}
   m_Layer: 14
   m_Name: Rig
   m_TagString: Allies
@@ -289,108 +286,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterStats: {fileID: 6100003531216662107}
   attackSoundType: 0
-  stepWoodStudioEventEmitter: {fileID: 7997504322686563682}
-  stepStoneStudioEventEmitter: {fileID: 7997504322686563682}
-  swingStudioEventEmitter: {fileID: 8234840716687829479}
---- !u!114 &7997504322686563682
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6250740862208817752}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -867720635
-      Data2: 1121477946
-      Data3: -1605929568
-      Data4: 1014911585
-    Path: event:/SFX/GamePlay/Footsteps/FootStep wood
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params:
-  - Name: volume
-    Value: 1
-  OverrideAttenuation: 1
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 15
---- !u!114 &8234840716687829479
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6250740862208817752}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: 981391838
-      Data2: 1201122043
-      Data3: 2134317247
-      Data4: -435119960
-    Path: event:/SFX/GamePlay/Combat/Melee/Swing
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params:
-  - Name: volume
-    Value: 1
-  OverrideAttenuation: 1
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 15
---- !u!114 &8994543897348209113
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6250740862208817752}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: 1418206704
-      Data2: 1177772398
-      Data3: 480952973
-      Data4: -148912483
-    Path: event:/SFX/GamePlay/Combat/Melee/hit
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params:
-  - Name: volume
-    Value: 1
-  OverrideAttenuation: 1
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 15
+  minDistance: 1
+  maxDistance: 15
+  parameterName: Volume
+  parameterValue: 1
 --- !u!1 &7051032630218217497
 GameObject:
   m_ObjectHideFlags: 0
@@ -569,7 +468,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8497bdc4168874ba99c8180ca3dbd99e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::DamageHandler
-  gettingHitEventEmitter: {fileID: 7997504322686563682}
 --- !u!50 &7170996237383625708
 Rigidbody2D:
   serializedVersion: 5

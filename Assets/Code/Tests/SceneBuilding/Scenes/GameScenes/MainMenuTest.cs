@@ -66,6 +66,7 @@ public class MainMenuTest
             {
                 "New Background Image",
                 CONTROLS_LABEL,
+                "Logo",
                 "CrossFade"
             }
         },
