@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerAttackState : PlayerBaseState
@@ -7,7 +8,12 @@ public class PlayerAttackState : PlayerBaseState
     enum AttackPhase { Startup, Cooldown, AnimationFinished, Done }
     AttackPhase _phase = AttackPhase.Startup;
 
-    public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
+    // Resolved once in EnterState — can't shift mid-execution
+    CombatAction _action;
+    Stats _target;
+
+    public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory)
+        : base(currentContext, playerStateFactory)
     {
         IsRootState = true;
     }
@@ -19,6 +25,9 @@ public class PlayerAttackState : PlayerBaseState
         Ctx.Animator.SetBool("IsAttacking", true);
         _phase = AttackPhase.Startup;
         _timer = 0f;
+
+        _action = ResolveAction();
+        _target = _action != null ? FindClosestTarget(_action) : null;
     }
 
     public override void UpdateState()
@@ -64,9 +73,10 @@ public class PlayerAttackState : PlayerBaseState
                 _attackOver = true;
                 break;
         }
+
         CheckSwitchStates();
     }
-    
+
     public override void CheckSwitchStates()
     {
         if (Ctx.IsKnockedBack) SwitchState(Factory.KnockedBack());
@@ -80,4 +90,45 @@ public class PlayerAttackState : PlayerBaseState
     }
 
     public override void InitializeSubState() { }
+
+    // -------------------------------------------------------------------------
+    // Helpers
+    // -------------------------------------------------------------------------
+
+    CombatAction ResolveAction()
+    {
+        var actions = Ctx.PlayerStats._CombatActions;
+        if (actions == null || actions.Count == 0)
+        {
+            Debug.LogWarning($"[PlayerAttackState] {Ctx.gameObject.name}: No CombatActions configured in ScriptableStats.");
+            return null;
+        }
+        return actions[0];
+    }
+
+    Stats FindClosestTarget(CombatAction action)
+    {
+        bool facingLeft = !Ctx.isFacingRight;
+        float effectiveRange = Ctx.PlayerStats._HorizontalRange * action.rangePercent;
+
+        Vector2 center = action.extendsForward
+            ? AttackLogic.CalculateAttackCenter(
+                Ctx.transform.position,
+                facingLeft,
+                new Vector2(effectiveRange, 0f))
+            : (Vector2)Ctx.transform.position;
+
+        List<string> targetTags = CombatLogic.GetTargetTags(Ctx.PlayerStats, action);
+        List<Stats> candidates  = AttackDetection.FindTargetsInCircle(
+            center, effectiveRange, targetTags, Ctx.PlayerStats);
+
+        candidates.RemoveAll(t => t == null || t._IsDead);
+        if (candidates.Count == 0) return null;
+
+        candidates.Sort((a, b) =>
+            Vector2.Distance(Ctx.transform.position, a.transform.position)
+                .CompareTo(Vector2.Distance(Ctx.transform.position, b.transform.position)));
+
+        return candidates[0];
+    }
 }
