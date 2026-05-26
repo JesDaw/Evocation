@@ -32,7 +32,7 @@ public class AnimationEventsController : MonoBehaviour
     public bool ShouldAttack() 
     {
         if(!shouldAttack) return false;
-        
+        Debug.Log("Here");
         if (CharacterStats._IsProjectile) 
         {
             Debug.Log("Playing projectile sound");

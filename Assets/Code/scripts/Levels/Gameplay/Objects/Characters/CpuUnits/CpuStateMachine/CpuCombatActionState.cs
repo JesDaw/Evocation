@@ -52,7 +52,6 @@ public class CpuCombatActionState : CpuBaseState
         switch (_phase)
         {
             case Phase.Startup:
-                Debug.Log($"Startup {StateManager.gameObject.name}");
                 if (_context._ActionTarget == null || _context._ActionTarget._IsDead)
                 {
                     _timer = 0f;
@@ -63,7 +62,6 @@ public class CpuCombatActionState : CpuBaseState
 
                 if (!_hasTriggeredAttack && _context._AnimatorController.ShouldAttack())
                 {
-                    Debug.Log($"attacking {StateManager.gameObject.name}");
                     _hasTriggeredAttack = true;
                     Stats target = _context._ActionTarget;
 
@@ -93,14 +91,12 @@ public class CpuCombatActionState : CpuBaseState
                 AnimatorStateInfo stateInfo = _context._Animator.GetCurrentAnimatorStateInfo(0);
                 bool animDone = stateInfo.normalizedTime >= 1f && !_context._Animator.IsInTransition(0);
                 if (animDone) _phase = Phase.AnimationFinished;
-                Debug.Log($"Cooldown {StateManager.gameObject.name}");
                 break;
 
             case Phase.AnimationFinished:
                 _context._Animator.SetBool("IsAttacking", false);
                 float endlagMs = (_context._Stats._ExtraEndlag * 1000f) + _context._Stats._AnimationRecoveryTime;
                 if (_timer >= endlagMs) _phase = Phase.Done;
-                Debug.Log($"AnimationFinished {StateManager.gameObject.name}");
                 break;
 
             case Phase.Done:
