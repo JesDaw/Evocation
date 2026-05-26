@@ -29,19 +29,15 @@ public class AnimationEventsController : MonoBehaviour
         if (CharacterStats._IsProjectile) FModAudioManager.instance.PlaySoundByName("shootFireball");
         else
         {
-            switch (attackSoundType)
-            {
-                case AttackSoundType.Slash:
-                    swingStudioEventEmitter.Play();
-                    break;
-                case AttackSoundType.Stab:
-                    swingStudioEventEmitter.Play();  
-                    break;
-                case AttackSoundType.Smash:
-                    swingStudioEventEmitter.Play();
-                    break;
-            }
-        }        
+            Debug.Log("Playing projectile sound");
+            FModAudioManager.instance.PlaySoundByName("shootFireball", transform.position, minDistance, maxDistance, parameterName, parameterValue);
+        }
+        else 
+        {
+            Debug.Log("Attack sound");
+            FModAudioManager.instance.PlaySoundByName("attack", transform.position, minDistance, maxDistance, parameterName, parameterValue);
+        }
+        
         ResetAttackSignal();
         return true;
     }

@@ -21,9 +21,8 @@ public class DamageHandler : MonoBehaviour
         if (stats.IsInvincible()) return;
 
         stats._CurrentHealth -= damage;
-
-         if (gettingHitEventEmitter != null) gettingHitEventEmitter.Play();
-         else Debug.LogWarning($"No gettingHitEventEmitter for audio assigned on {gameObject.name}");
+//        Debug.Log($"{gameObject.name} Health = {stats._CurrentHealth}");
+        FModAudioManager.instance.PlaySoundByName("takeDamage", transform.position, 1, 15, "Volume", 1f);
 
         stats.OnDamage?.Invoke();
         if (stats.DamageTriggerAmount >= stats._CurrentHealth && !DamageTriggerInvoked) 
@@ -45,8 +44,7 @@ public class DamageHandler : MonoBehaviour
             stats.OnWitFlagDamage?.Invoke(attackedBy.IsEnemy);
             stats._KnockBackHealth -= knockback_damage; 
 
-            GameObject parent_obj = transform.parent.gameObject;
-            //Debug.Log(knockback_damage + " knockback damage taken by: " + parent_obj);
+            //GameObject parent_obj = transform.parent.gameObject;
         }
 
         if (stats.entityHealthbar != null)

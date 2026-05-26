@@ -48,6 +48,7 @@ public class StatusEffectManager : MonoBehaviour
 
         ActiveStatusEffect newEffect = effect.CreateInstance();
         activeEffects.Add(newEffect);
+        SpawnVisualForEffect(newEffect);
         
         effect.OnApply(stats);
         onEffectApplied?.Invoke(effect);
@@ -58,6 +59,7 @@ public class StatusEffectManager : MonoBehaviour
         ActiveStatusEffect active = activeEffects.Find(e => e.effectData == effect);
         if (active != null)
         {
+            RemoveVisualForEffect(active);
             effect.OnRemove(stats);
             activeEffects.Remove(active);
             onEffectRemoved?.Invoke(effect);
@@ -68,6 +70,7 @@ public class StatusEffectManager : MonoBehaviour
     {
         foreach (var effect in activeEffects)
         {
+            RemoveVisualForEffect(effect);
             effect.effectData.OnRemove(stats);
             onEffectRemoved?.Invoke(effect.effectData);
         }
@@ -105,6 +108,7 @@ public class StatusEffectManager : MonoBehaviour
         ActiveStatusEffect instance = effect.CreateInstance();
         instance.timeRemaining = durationOverride;
         activeEffects.Add(instance);
+        SpawnVisualForEffect(instance);
         onEffectApplied?.Invoke(effect);
     }
 
@@ -144,10 +148,35 @@ public class StatusEffectManager : MonoBehaviour
 
             if (effect.IsExpired())
             {
+                RemoveVisualForEffect(effect);
                 effect.effectData.OnRemove(stats);
                 onEffectRemoved?.Invoke(effect.effectData);
                 activeEffects.RemoveAt(i);
             }
+        }
+    }
+
+    private void SpawnVisualForEffect(ActiveStatusEffect activeEffect)
+    {
+        if (activeEffect.effectData.particleEffectPrefab != null)
+        {
+            GameObject visualObj = Instantiate(activeEffect.effectData.particleEffectPrefab, transform.position, Quaternion.identity, transform);
+            
+            StatusEffectVisual visualComp = visualObj.GetComponent<StatusEffectVisual>();
+            if (visualComp != null)
+            {
+                visualComp.Initialize(activeEffect.effectData.primaryColor, activeEffect.effectData.secondaryColor);
+                activeEffect.visualInstance = visualComp; 
+
+            }
+        }
+    }
+    private void RemoveVisualForEffect(ActiveStatusEffect activeEffect)
+    {
+        if (activeEffect.visualInstance != null)
+        {
+            activeEffect.visualInstance.StopVisuals();
+            activeEffect.visualInstance = null;
         }
     }
 }
