@@ -32,6 +32,8 @@ public class PlayerAttackState : PlayerBaseState
 
     public override void UpdateState()
     {
+        _timer += Time.deltaTime * 1000f;
+
         switch (_phase)
         {
             case AttackPhase.Startup:
@@ -48,6 +50,8 @@ public class PlayerAttackState : PlayerBaseState
                                 Ctx.PlayerStats._ActionCooldown * _action.castCooldown;
                         }
                     }
+
+                    _timer = 0f;
                     _phase = AttackPhase.Cooldown;
                 }
                 break;
@@ -55,18 +59,14 @@ public class PlayerAttackState : PlayerBaseState
             case AttackPhase.Cooldown:
                 AnimatorStateInfo stateInfo = Ctx._animator.GetCurrentAnimatorStateInfo(0);
                 bool animDone = stateInfo.normalizedTime >= 1f && !Ctx._animator.IsInTransition(0);
-                if (animDone) 
-                {
-                    _timer = 0f;
-                    _phase = AttackPhase.AnimationFinished;
-                }
+                if (animDone) _phase = AttackPhase.AnimationFinished;
                 break;
 
             case AttackPhase.AnimationFinished:
-                _timer += Time.deltaTime * 1000f;
                 Ctx._animator.SetBool("IsAttacking", false);
-                float endlagMs = Ctx._playerStats._ExtraEndlag * 1000f;
-                if (_timer >= endlagMs) _phase = AttackPhase.Done;
+                float endlagMs = (Ctx._playerStats._ExtraEndlag * 1000f);
+                if (_timer >= endlagMs)
+                    _phase = AttackPhase.Done;
                 break;
 
             case AttackPhase.Done:
