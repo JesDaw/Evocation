@@ -35,10 +35,12 @@ public class AnimationEventsController : MonoBehaviour
         
         if (CharacterStats._IsProjectile) 
         {
+            Debug.Log("Playing projectile sound");
             FModAudioManager.instance.PlaySoundByName("shootFireball", transform.position, minDistance, maxDistance, parameterName, parameterValue);
         }
         else 
         {
+            Debug.Log("Attack sound");
             FModAudioManager.instance.PlaySoundByName("attack", transform.position, minDistance, maxDistance, parameterName, parameterValue);
         }
         

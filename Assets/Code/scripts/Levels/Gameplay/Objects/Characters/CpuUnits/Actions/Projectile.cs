@@ -17,6 +17,7 @@ public class Projectile : MonoBehaviour
     Vector3 moveDir;
     float aliveTimer = 0f;
     float distanceToDestroy = 0.5f;
+    [SerializeField] GameObject ProjectileImpact;
 
     public void InitializeProjectile(Transform target, float speed, float maxHeight, AnimationCurve h, AnimationCurve a, AnimationCurve s,
                                      Action<IDamageable> onHit)
@@ -43,7 +44,7 @@ public class Projectile : MonoBehaviour
         if (targetState != null && targetState.CurrentState == CpuStateManager.State.KnockBack)
         {
             Destroy(gameObject);
-            yield break; // need yield break here too, was missing before
+            yield break;
         }
 
         while (true)
@@ -72,6 +73,9 @@ public class Projectile : MonoBehaviour
                             Debug.LogError($"[Projectile] onHitAction threw on target '{s.gameObject.name}': {e}");
                         }
                     }
+                    FModAudioManager.instance.PlaySoundByName("fireballHit", transform.position, 1, 15, "Volume", 1f);
+                    GameObject Explosion = Instantiate(ProjectileImpact, target.position, Quaternion.identity);
+                    Destroy(Explosion, 3f);
                     Destroy(gameObject);
                     yield break;
                 }
@@ -81,7 +85,6 @@ public class Projectile : MonoBehaviour
                 UpdateProjectilePosition(endPosition);
                 if (Vector3.Distance(transform.position, endPosition) < distanceToDestroy)
                 {
-                    FModAudioManager.instance.PlaySoundByName("fireballHit");
                     Destroy(gameObject);
                     yield break;
                 }
