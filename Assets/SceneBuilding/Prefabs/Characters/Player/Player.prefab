@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3878648322206263563}
   - component: {fileID: 4241337842374618214}
   - component: {fileID: 7170368770621601186}
-  m_Layer: 14
+  m_Layer: 21
   m_Name: CMCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -224,7 +224,7 @@ GameObject:
   - component: {fileID: 2629901134353411500}
   - component: {fileID: 8477098209678785662}
   - component: {fileID: 2623527630025459734}
-  m_Layer: 14
+  m_Layer: 21
   m_Name: Rig
   m_TagString: Allies
   m_Icon: {fileID: 0}
@@ -305,8 +305,7 @@ GameObject:
   - component: {fileID: 6429683390218926787}
   - component: {fileID: 7170996237383625708}
   - component: {fileID: 6451609478207083695}
-  - component: {fileID: 8881020696762642754}
-  m_Layer: 14
+  m_Layer: 21
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -515,10 +514,10 @@ CapsuleCollider2D:
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 8191
   m_ForceReceiveLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 466943
   m_ContactCaptureLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -532,18 +531,6 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2}
   m_Direction: 0
---- !u!114 &8881020696762642754
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7051032630218217497}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6c5045a1791b904e8f24a261783c2b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::IgnoreFriendsCollision
 --- !u!1 &7284129347549434492
 GameObject:
   m_ObjectHideFlags: 0
@@ -553,7 +540,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2991714978689668883}
-  m_Layer: 14
+  m_Layer: 21
   m_Name: Appearance
   m_TagString: Player
   m_Icon: {fileID: 0}

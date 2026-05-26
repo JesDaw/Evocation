@@ -30,7 +30,9 @@ public class SpawnObjects : MonoBehaviour
     public static SpawnObjects EnemyInstance { get; private set; }
     public static SpawnObjects PlayerInstance { get; private set; }
 
-    const string CHARACTER_MID_LAYER = "Character/MidLane";
+    const string ALLIES_MID_LAYER = "Allies/MidLane";
+    const string ENEMY_MID_LAYER = "Enemy/MidLane";
+    const string PLAYER_MID_LAYER = "Player/MidLane";
 
     public bool SpawningIsActive
     {
@@ -158,7 +160,7 @@ public class SpawnObjects : MonoBehaviour
         );
 
         // Set player to Character/MidLane
-        SetCharacterLayer(spawnedPlayer);
+        SetCharacterLayer(spawnedPlayer, true);
 
         if (PlayerSwitch.Instance != null)
             PlayerSwitch.Instance.AddPlayer(spawnedPlayer);
@@ -226,9 +228,12 @@ public GameObject SpawnCPU(ScriptableStats stats)
 
 
     #region CPUconfig
-    private void SetCharacterLayer(GameObject unit)
+    private void SetCharacterLayer(GameObject unit, bool isPlayer = false)
     {
-        string layerName = CHARACTER_MID_LAYER; 
+        string layerName = "";
+        if(enemySpawner) layerName = ENEMY_MID_LAYER;
+        else if(!enemySpawner) layerName = ALLIES_MID_LAYER;
+        if(isPlayer) layerName = PLAYER_MID_LAYER;
         
         int layer = LayerMask.NameToLayer(layerName);
         
