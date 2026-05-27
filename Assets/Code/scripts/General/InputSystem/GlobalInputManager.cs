@@ -265,7 +265,7 @@ public class GlobalInputManager : MonoBehaviour
         DisableAllControls();
         _inputActions.UI.SkipCutscene.Enable();
         _inputActions.UI.ConfirmDialogue.Enable();
-        _inputActions.UI.TogglePause.Enable();
+        _inputActions.UI.TogglePause.Disable();
         DisableMenuNavigation();
         DisableCursor();
         
@@ -277,7 +277,7 @@ public class GlobalInputManager : MonoBehaviour
         DisableAllControls();
         _inputActions.UI.SkipCutscene.Enable();
         _inputActions.UI.ConfirmDialogue.Enable();
-        _inputActions.UI.TogglePause.Enable();
+        _inputActions.UI.TogglePause.Disable();
         
         EnableMenuNavigation();        
     }
