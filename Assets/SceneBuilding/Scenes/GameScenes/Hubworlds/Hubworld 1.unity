@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &193093007 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7248874976086778393, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
+  m_PrefabInstance: {fileID: 5172583268979930948}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &367922932 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2815192832047678320, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
@@ -336,6 +341,11 @@ MonoBehaviour:
     - _Target: {fileID: 591350918}
       _MemberName: PlayTimeline
       _PersistentArguments: []
+--- !u!1 &1018860106 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9051106849684392387, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
+  m_PrefabInstance: {fileID: 5172583268979930948}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1115004192
 GameObject:
   m_ObjectHideFlags: 0
@@ -404,6 +414,52 @@ MonoBehaviour:
     - _Target: {fileID: 591350918}
       _MemberName: PlayTimeline
       _PersistentArguments: []
+--- !u!1 &1155521775
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1155521777}
+  - component: {fileID: 1155521776}
+  m_Layer: 0
+  m_Name: UINavigationManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1155521776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1155521775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 800f539ab62be48df9913dba643da5bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::UINavigationManager
+  StartInMousMode: 0
+  lastHighlightedButton: {fileID: 0}
+--- !u!4 &1155521777
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1155521775}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -17.7305, y: 2.17896, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1180335162
 GameObject:
   m_ObjectHideFlags: 0
@@ -863,6 +919,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 2.9828432
       objectReference: {fileID: 0}
+    - target: {fileID: 2286082325261067920, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
+      propertyPath: m_IncludeLayers.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2929196120189454517, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
       propertyPath: m_SceneBindings.Array.data[17].value
       value: 
@@ -983,6 +1043,18 @@ PrefabInstance:
       propertyPath: m_text
       value: Press <sprite name="button_prompts_q"> to skip
       objectReference: {fileID: 0}
+    - target: {fileID: 5325181984202626947, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
+      propertyPath: SceneActivities.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5325181984202626947, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
+      propertyPath: 'SceneActivities.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1018860106}
+    - target: {fileID: 5325181984202626947, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
+      propertyPath: 'SceneActivities.Array.data[4]'
+      value: 
+      objectReference: {fileID: 193093007}
     - target: {fileID: 5741622011223021888, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
       propertyPath: Slides.Array.size
       value: 4
@@ -1409,6 +1481,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
     - target: {fileID: 7638276925346943937, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
+      propertyPath: DebugLog
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7638276925346943937, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
       propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -1649,7 +1725,8 @@ PrefabInstance:
       value: StartTransition
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 7354232219686286156, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 5540721941663171671, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
       insertIndex: -1
@@ -1743,3 +1820,4 @@ SceneRoots:
   - {fileID: 1180335164}
   - {fileID: 1718076077}
   - {fileID: 691233112}
+  - {fileID: 1155521777}

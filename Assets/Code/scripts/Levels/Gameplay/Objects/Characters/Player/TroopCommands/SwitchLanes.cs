@@ -16,9 +16,18 @@ public class SwitchLanes : MonoBehaviour
     // Layer names for each lane (CHARACTER layers, not ground)
     private string[] laneLayerNames = new string[] 
     {
-        "Character/TopLane",   // currentLayer 0
-        "Character/MidLane",   // currentLayer 1
-        "Character/BotLane"    // currentLayer 2
+        "Allies/TopLane",   // currentLayer 0
+        "Allies/MidLane",   // currentLayer 1
+        "Allies/BotLane",    // currentLayer 2
+
+        "Enemy/Toplane",    // currentLayer 0
+        "Enemy/Minlane",    // currentLayer 1
+        "Enemy/Botlane",    // currentLayer 2
+
+        "Player/TopLane",   // currentLayer 0
+        "Player/MidLane",   // currentLayer 1
+        "Player/BotLane",   // currentLayer 2
+
     };
 
     void Awake()
@@ -68,58 +77,63 @@ public class SwitchLanes : MonoBehaviour
 
     private void UpdateAllCharacterLayers()
     {
-        // Update layer for all characters in range
         for (int i = charactersInRange.Count - 1; i >= 0; i--)
         {
             GameObject character = charactersInRange[i];
-            
-            // Clean up null references (destroyed objects)
             if (character == null)
             {
                 charactersInRange.RemoveAt(i);
                 continue;
             }
             
-            SetCharacterLayer(character);
+            SetCharacterLayer(character, IsCharacter(character));
         }
     }
 
-    private bool IsCharacter(GameObject obj)
+    private int IsCharacter(GameObject obj)
     {
-        return obj.CompareTag("Allies") || obj.CompareTag("Enemy") || obj.CompareTag("Player");
+        if(obj.CompareTag("Allies")) return 0;
+        if(obj.CompareTag("Player")) return 1;
+        if(obj.CompareTag("Enemy")) return 2;
+        return -1;
     }
 
-    private void SetCharacterLayer(GameObject character)
+    private void SetCharacterLayer(GameObject character, int tagType)
     {
-        string newLayerName = laneLayerNames[currentLayer];
+
+        int offset = 0;
+        if (tagType == 0) offset = 0;
+        else if (tagType == 2) offset = 3;
+        else if (tagType == 1) offset = 6;
+
+        int targetIndex = offset + currentLayer;
+        string newLayerName = laneLayerNames[targetIndex];
         int newLayer = LayerMask.NameToLayer(newLayerName);
 
         if (newLayer != -1)
         {
-            if(DebugLogs) Debug.Log($"Setting {character.name} to layer {newLayerName} (layer #{newLayer})");
+            if(DebugLogs) Debug.Log($"Setting {character.name} to {newLayerName}");
             character.layer = newLayer;
         }
         else
         {
-            Debug.LogError($"Layer '{newLayerName}' not found! Make sure it exists in your project settings.");
+            Debug.LogError($"Layer '{newLayerName}' not found!");
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (IsCharacter(collision.gameObject))
+        if (IsCharacter(collision.gameObject) >= 0)
         {
             if(DebugLogs) Debug.Log($"{collision.gameObject.name} entered lane switch. Previous layer: {LayerMask.LayerToName(collision.gameObject.layer)}");
 
-            // Add to list if not already present
             if (!charactersInRange.Contains(collision.gameObject))
             {
                 if(DebugLogs) Debug.Log($"Adding {collision.gameObject.name} to characters in range list");
                 charactersInRange.Add(collision.gameObject);
             }
 
-            // Set the character to the current lane
-            SetCharacterLayer(collision.gameObject);
+            SetCharacterLayer(collision.gameObject, IsCharacter(collision.gameObject));
 
             if(DebugLogs) Debug.Log($"{collision.gameObject.name} layer is now: {LayerMask.LayerToName(collision.gameObject.layer)}");
         }
@@ -127,11 +141,10 @@ public class SwitchLanes : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (IsCharacter(collision.gameObject))
+        if (IsCharacter(collision.gameObject) >= 0)
         {
             if(DebugLogs) Debug.Log($"{collision.gameObject.name} left lane switch");
 
-            // Remove from list
             if (charactersInRange.Contains(collision.gameObject))
             {
                 charactersInRange.Remove(collision.gameObject);
