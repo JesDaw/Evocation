@@ -172,6 +172,9 @@ public class AreaEffectZone : MonoBehaviour
         string tagStr = debugTags != null && debugTags.Count > 0 ? string.Join(",", debugTags) : "NONE";
 
         Vector3 labelPos = transform.position + Vector3.up * (data.shape == ZoneShape.Circle ? data.circleRadius : data.boxSize.y * 0.5f) + Vector3.up * 0.5f;
+
+#if UNITY_EDITOR
         UnityEditor.Handles.Label(labelPos, $"[{data.name}]\nTags: {tagStr}\nExcludeCaster: {_excludeCaster}\nSticky: {_isSticky}\nRefresh: {data.refreshInterval}s");
+#endif
     }
 }
