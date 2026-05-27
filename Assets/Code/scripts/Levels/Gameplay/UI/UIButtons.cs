@@ -108,7 +108,7 @@ public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        ClickSound();
+        //ClickSound();
         StartCoroutine(ClickAnimation());
         
     }
