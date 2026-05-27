@@ -14,6 +14,6 @@ public class UpdateMagicUIFunctions : MonoBehaviour
 
     public void UpdateTotalMana(int _totalMana, int _changedMana)
     {
-        totalMana.text = "Total Mana: " + _totalMana;
+        totalMana.text = _totalMana.ToString();
     }
 }
