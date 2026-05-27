@@ -119,6 +119,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &59187544 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8343116837977473370, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
+  m_PrefabInstance: {fileID: 5172583268979930948}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51f580323b3a2405abbeddb1fc9776b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &193093007 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7248874976086778393, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
@@ -631,6 +642,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 665598a9eb8e04bcb88ba2e53a683727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1564450725 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1134637839774871080, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
+  m_PrefabInstance: {fileID: 5172583268979930948}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14f04683766854c069ff6948886c8d18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::LevelStateManager
 --- !u!1 &1718076075
 GameObject:
   m_ObjectHideFlags: 0
@@ -1016,11 +1038,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2211814937010810049, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 23.023567
+      value: -20.18943
       objectReference: {fileID: 0}
     - target: {fileID: 2211814937010810049, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.982843
+      value: 2.9828432
       objectReference: {fileID: 0}
     - target: {fileID: 2286082325261067920, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
       propertyPath: m_IncludeLayers.m_Bits
@@ -1695,6 +1717,42 @@ PrefabInstance:
       propertyPath: _ScrStats
       value: 
       objectReference: {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
+    - target: {fileID: 7634296687730657288, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
+      propertyPath: SkipedTimeline.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7634296687730657288, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
+      propertyPath: SkipedTimeline.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7634296687730657288, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
+      propertyPath: SkipedTimeline.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7634296687730657288, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
+      propertyPath: SkipedTimeline.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 59187544}
+    - target: {fileID: 7634296687730657288, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
+      propertyPath: SkipedTimeline.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1564450725}
+    - target: {fileID: 7634296687730657288, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
+      propertyPath: SkipedTimeline.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: EndDialogue
+      objectReference: {fileID: 0}
+    - target: {fileID: 7634296687730657288, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
+      propertyPath: SkipedTimeline.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: TransitionToNextState
+      objectReference: {fileID: 0}
+    - target: {fileID: 7634296687730657288, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
+      propertyPath: SkipedTimeline.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: LevelStateManager, CodeAssembly
+      objectReference: {fileID: 0}
+    - target: {fileID: 7634296687730657288, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
+      propertyPath: SkipedTimeline.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_StringArgument
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7638276925346943937, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
       propertyPath: DebugLog
       value: 0
