@@ -76,6 +76,9 @@ public class FModAudioManager : MonoBehaviour
         // Projectiles
         soundDictionary.Add("shootFireball", FModEvents.instance.shootFireball);
         soundDictionary.Add("fireballHit", FModEvents.instance.fireballHit);
+
+        // Spells
+        soundDictionary.Add("explosion", FModEvents.instance.explosion);
     }
 
     // NEW OVERLOAD: Allows calling dictionary strings with custom parameters

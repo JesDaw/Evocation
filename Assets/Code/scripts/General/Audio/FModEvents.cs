@@ -37,6 +37,9 @@ public class FModEvents : MonoBehaviour
     [field: SerializeField] public EventReference walkWood { get; private set; }
     [field: SerializeField] public EventReference walkstone { get; private set; }
 
+    // Spells
+    [field: SerializeField] public EventReference explosion { get; private set; }
+
 
     [field: Header("Melee Combat SFX")]    
     [field: SerializeField] public EventReference attack { get; private set; }
