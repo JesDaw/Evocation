@@ -76,7 +76,8 @@ public class DialogueManager : MonoBehaviour
         _dailogueTrigger = trigger;
         slideCount = 0;
         DialogueActive = true;
-        if (ShowDebugLogs) Debug.Log($"DialogueBox = {DialogueBox}, DialogueBox == null: {DialogueBox == null}");
+        if (ShowDebugLogs) Debug.Log($"DialogueBox = {DialogueBox.gameObject.name}, DialogueBox == null: {DialogueBox == null}");
+        if (ShowDebugLogs) Debug.Log($"slides = {slides.Count}, trigger = null: {trigger.gameObject.name}");
         DialogueBox.SetActive(true);
         
         GlobalInputManager.Instance.SetDialogueMode();
@@ -142,8 +143,10 @@ public class DialogueManager : MonoBehaviour
 
         foreach (char c in line)
         {
+            if(ShowDebugLogs) UnityEngine.Debug.Log("Typing");
             while (UILogic.GameIsPaused)
             {
+                if(ShowDebugLogs) UnityEngine.Debug.Log("Paused");
                 yield return null; 
             } 
             dialogueText.text += c;

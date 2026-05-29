@@ -23,6 +23,7 @@ public class UILogic : MonoBehaviour
 
     void OnDisable()
     {
+        GameIsPaused = false;
         UnsubscribeFromInputs();
     }
 
