@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -12,6 +13,16 @@ public class UILogic : MonoBehaviour
     public static bool GameIsPaused = false;
     public UnityEvent PauseEvent, ResumeEvent;
     //[SerializeField] bool DebugLogs = false;
+    
+    [Flags]
+    public enum PauseState
+    {
+        Unpaused = 0,
+        MenuPaused = 1,
+        SpellPaused = 2,
+    }
+
+    public static PauseState pauseState = PauseState.Unpaused;
 
     void OnEnable()
     {
@@ -75,7 +86,8 @@ public class UILogic : MonoBehaviour
         {
             FModAudioManager.instance.PlaySoundByName("resumeGame");
             sceneMgr.ActivateAnchorSA();
-            Time.timeScale = 1;
+            // Time.timeScale = 1;
+            toggleMenuPaused();
             GameIsPaused = false;
             
             // Return to appropriate mode when unpausing
@@ -98,7 +110,8 @@ public class UILogic : MonoBehaviour
         
         FModAudioManager.instance.PlaySoundByName("pauseGame");
         sceneMgr.Activate("Pause", false);
-        Time.timeScale = 0;
+        // Time.timeScale = 0;
+        toggleMenuPaused();
         GameIsPaused = true;
         GlobalInputManager.Instance.SetPauseMenuMode();
         
@@ -137,5 +150,18 @@ public class UILogic : MonoBehaviour
         #else
             Application.Quit();
         #endif
+    }
+    
+    private void toggleMenuPaused()
+    {
+        pauseState ^= PauseState.MenuPaused;
+        if (pauseState == PauseState.Unpaused)
+        {
+            Time.timeScale = 1;
+        }
+        else
+        {
+            Time.timeScale = 0;
+        }
     }
 }
