@@ -1,7 +1,12 @@
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
 using System.Collections.Generic;
+using Unity.Cinemachine;
+using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(ManaSystem))]
 public class SpellsManager : MonoBehaviour
@@ -16,6 +21,7 @@ public class SpellsManager : MonoBehaviour
     //this means spell is ready and primed (can't be switched)
     bool charged = false;
     Vector2 magicRadiusHoverInput;
+    private Color _startVignetteColor = Color.black, _flashVignetteColor = new Color(215/255f, 75/255f, 100/255f).linear;
 
     void Awake() => manaSystem = GetComponent<ManaSystem>();
 
@@ -24,7 +30,9 @@ public class SpellsManager : MonoBehaviour
         if(PlayerSpells.Count == 0) return;
         if(charged)
         {
-            UseSpell();
+            // UseSpell();
+            // Debug.Log("Starting Coroutine spellCoroutine");
+            StartCoroutine(SpellCoroutine(PlayerSpells[(int)currentSpellContext]));
             return;
         }
 
@@ -47,7 +55,6 @@ public class SpellsManager : MonoBehaviour
         PlayerSpells[(int)currentSpellContext].OnHitPosition.Invoke(detectionRadiusObject);
         if(DebugLogs) Debug.Log("Spells Used");
         detectionRadiusObject.gameObject.SetActive(false);
-        charged = false;
     }
 
     void SwitchSpells(bool _forward)
@@ -103,6 +110,83 @@ public class SpellsManager : MonoBehaviour
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(_screenPos.x, _screenPos.y, Camera.main.nearClipPlane));
         worldPos.z = 0;
         return worldPos;
+    }
+    
+    public IEnumerator SpellCoroutine(PlayerSpells spell)
+    {
+        FModAudioManager.instance.PlaySoundByName("explosion");
+        // FModAudioManager.instance.
+        charged = false;
+        detectionRadiusObject.GetComponentInChildren<Image>().enabled = false;
+        int vignetteStrengthID = Shader.PropertyToID("_VignetteStrength");
+        int vignetteColorID = Shader.PropertyToID("_VignetteColor");
+        Shader.SetGlobalColor(vignetteColorID, _startVignetteColor);
+        UILogic.pauseState ^= UILogic.PauseState.SpellPaused;
+        Time.timeScale = 0;
+        float elapsed = 0f;
+        var spellVFX = Instantiate(spell.spellVFX, detectionRadiusObject.transform.position, Quaternion.identity);
+        var v = GlobalInputManager.Instance.InputActions.UI;
+        Action<InputAction.CallbackContext> pauseAction = context => TogglePauseSpellParticleSystem(spellVFX);
+        v.TogglePause.performed += pauseAction;
+        while (elapsed < spell.hitboxDelay)
+        {
+            if(!UILogic.GameIsPaused)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                Shader.SetGlobalFloat(vignetteStrengthID, Mathf.Sqrt(elapsed / spell.hitboxDelay));
+            }
+            yield return null;
+        }
+        
+        // spellVFX.GetComponent<CinemachineImpulseSource>().GenerateImpulse();
+        UseSpell();
+        // StartCoroutine(CameraShake(spell.animationDuration - spell.hitboxDelay, 0.30f, 2f, 10f));
+        while (elapsed < spell.animationDuration)
+        {
+            if (!UILogic.GameIsPaused)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                Shader.SetGlobalFloat(vignetteStrengthID, 1 - Mathf.Sqrt(Mathf.InverseLerp(spell.hitboxDelay, spell.animationDuration, elapsed)));
+                Shader.SetGlobalColor(vignetteColorID, Color.Lerp(_flashVignetteColor, _startVignetteColor, Mathf.Pow(Mathf.InverseLerp(spell.hitboxDelay, spell.animationDuration, elapsed), 3)));
+            }
+            yield return null;
+        }
+        Shader.SetGlobalColor(vignetteColorID, _startVignetteColor);
+        v.TogglePause.performed -= pauseAction;
+        detectionRadiusObject.GetComponentInChildren<Image>().enabled = true;
+        Shader.SetGlobalFloat(vignetteStrengthID, 0);
+        Destroy(spellVFX);
+        UILogic.pauseState ^= UILogic.PauseState.SpellPaused;
+        Time.timeScale = UILogic.pauseState == UILogic.PauseState.Unpaused ? 1 : 0;
+        yield return null;
+    }
+    
+    private void TogglePauseSpellParticleSystem(GameObject particleObj)
+    {
+        foreach (ParticleSystem ps in particleObj.GetComponentsInChildren<ParticleSystem>())
+        {
+            var x = ps.main;
+            x.useUnscaledTime = !x.useUnscaledTime;
+        }
+    }
+    
+    public IEnumerator CameraShake(float duration, float dampingMin, float maxOffset, float noiseRate)
+    {
+        float elapsed = 0f;
+        Vector3 initialPos = transform.position;
+        float sinOscillator, dampMultiplier, x, y;
+        
+        while (elapsed < duration)
+        {
+            sinOscillator = Mathf.Sin(elapsed / duration * Mathf.PI);
+            dampMultiplier = (elapsed / duration > 0.5f) ? dampingMin * (1 - sinOscillator) + sinOscillator : sinOscillator;
+            x = dampMultiplier * maxOffset * ((Mathf.PerlinNoise1D(Random.value*10000f + elapsed * noiseRate)) - 0.5f);
+            y = dampMultiplier * maxOffset * ((Mathf.PerlinNoise1D(Random.value*10000f - elapsed * noiseRate)) - 0.5f)/2;
+
+            Camera.main.transform.position = new Vector3(initialPos.x + x, initialPos.y + y, initialPos.z);
+            elapsed += Time.unscaledDeltaTime;
+            yield return null;
+        }
     }
 
     void OnDestroy()

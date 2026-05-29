@@ -67,7 +67,15 @@ public class DamageHandler : MonoBehaviour
             stats._KnockBackHealth--;
 
         if (attackedBy != null)
+        {
             stats.OnWitFlagDamage?.Invoke(attackedBy.IsEnemy);
+            // if (attackedBy.damageType == DamageSource.DamageType.Spell)
+            // {
+            //
+            // }
+            Transform target = GetComponentInChildren<AnimationDrivenVFXController>().transform;
+            ImpactParticleSpawner.Instance.PlayLargeImpactParticle(target.position, transform.localScale, target.localRotation);
+        }
 
         if (stats.entityHealthbar != null)
             stats.entityHealthbar.UpdateHealth();
@@ -141,7 +149,8 @@ public class DamageSource
         StatusEffect,
         Melee,
         Ranged,
-        AOE
+        AOE,
+        Spell
     }
 
     public DamageSource() { }
