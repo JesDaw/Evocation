@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,7 +15,7 @@ public class SpellsAffector : MonoBehaviour
             if(_enemiesHit[I].CompareTag("Allies")) continue;
             if(_enemiesHit[I].CompareTag("Player")) continue;
             if(currentDamager == null) continue;
-            currentDamager.TakeDamage(5);
+            currentDamager.TakeDamage(5, new DamageSource(DamageSource.DamageType.Spell));
         }
     }
 
@@ -27,7 +28,7 @@ public class SpellsAffector : MonoBehaviour
             if(_enemiesHit[I].CompareTag("Allies")) continue;
             if(_enemiesHit[I].CompareTag("Player")) continue;
             if(currentDamager == null) continue;
-            currentDamager.TakeDamage(999);
+            currentDamager.TakeDamage(999, new DamageSource(DamageSource.DamageType.Spell));
         }
     }
     

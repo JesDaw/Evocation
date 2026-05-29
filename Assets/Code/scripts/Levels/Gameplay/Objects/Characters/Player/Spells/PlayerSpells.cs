@@ -12,4 +12,6 @@ public class PlayerSpells
     public uint Cost;
     [Tooltip("Size of selection")]
     public float Radius = 2;
+    public GameObject spellVFX;
+    public float animationDuration, hitboxDelay;
 }

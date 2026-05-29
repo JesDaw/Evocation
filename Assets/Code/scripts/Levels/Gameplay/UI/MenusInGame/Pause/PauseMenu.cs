@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using System;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] UnityEvent ToggleMenu;
     [SerializeField] UnityEvent _ResetValues;
     [SerializeField] GameObject _settingsMenu;
-
+    
 
 
     InputAction pauseAction;
