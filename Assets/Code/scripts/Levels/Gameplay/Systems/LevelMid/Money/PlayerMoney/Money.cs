@@ -90,5 +90,6 @@ public class Money : MonoBehaviour
         //aIMoneyManager.ActivateMoney();
     }
     public void ResetMoney() => CurrentMoney = 0; 
+    public void MoneybuildingGen() => MoneyGainPerSec += 3;
     public void UpdateMoneyGen() => MoneyGainPerSec = PlayerLivesManager.Instance.LifeCount * MoneyPerPlayer; 
 }

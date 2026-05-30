@@ -137,7 +137,7 @@ public class SpawnObjects : MonoBehaviour
             return null;
         }
 
-        Stats playerStats = playerPrefab.GetComponent<Stats>();
+        ScriptableStats playerStats = playerPrefab.GetComponent<Stats>().scriptableStats;
         if (playerStats == null)
         {
             Debug.LogError("Player prefab has no Stats component!");

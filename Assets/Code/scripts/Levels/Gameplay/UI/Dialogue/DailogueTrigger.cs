@@ -20,7 +20,6 @@ public class DailogueTrigger : MonoBehaviour
     
     public void TriggerDailogue()
     {
-        Debug.Log("Triggering dialogue");
         DialogueManager.Instance.StartDialogue(Slides, this);
     }
     public void EndDialogueDefultEvent() 

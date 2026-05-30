@@ -21,8 +21,7 @@ public class GameMechanicsManager : MonoBehaviour
         }
         Instance = this;
         
-        if (Money.Instance == null) Debug.LogWarning("[GameMechanicsManager] Money system not found!");
-        if (Timer.Instance == null) Debug.LogWarning("[GameMechanicsManager] Timer system not found");
+        
     }
     
     void Start()
@@ -33,6 +32,8 @@ public class GameMechanicsManager : MonoBehaviour
         {
             LogSystemReferences();
         }
+        if (Money.Instance == null) Debug.LogWarning("[GameMechanicsManager] Money system not found!");
+        if (Timer.Instance == null) Debug.LogWarning("[GameMechanicsManager] Timer system not found");
     }
     
     void OnDestroy()

@@ -31,7 +31,7 @@ MonoBehaviour:
   _MoveSpeed: 5.5
   _MaxHealth: 5
   _KnockBackMaxHealth: 10
-  _HorizontalRange: 2
+  _HorizontalRange: 1
   _VerticalRange: 1
   _ExtraEndlag: 0
   _ActionCooldown: 1
@@ -40,7 +40,8 @@ MonoBehaviour:
   combatActions:
   - actionName: Bite
     priority: 0
-    rangePercent: 1
+    definesStoppingRange: 0
+    rangePercent: 1.5
     extendsForward: 1
     targetFriendly: 0
     targetCondition: 0

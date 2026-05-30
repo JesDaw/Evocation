@@ -73,9 +73,13 @@ public class Projectile : MonoBehaviour
                     {
                         if (target.TryGetComponent(out Stats s)) 
                         {
-                            GameObject Explosion = Instantiate(ProjectileImpact, target.position, Quaternion.identity);
+                            if (ProjectileImpact != null) 
+                            {
+                                GameObject Explosion = Instantiate(ProjectileImpact, target.position, Quaternion.identity);
+                                Destroy(Explosion, 3f);
+                            }
                             FModAudioManager.instance.PlaySoundByName("fireballHit", transform.position, 1, 15, "Volume", 1f);
-                            Destroy(Explosion, 3f);
+                            
                             onHitAction?.Invoke(s);
                         }
                         Destroy(gameObject);
