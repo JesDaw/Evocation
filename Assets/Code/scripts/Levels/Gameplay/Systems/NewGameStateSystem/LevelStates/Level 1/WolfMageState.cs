@@ -10,6 +10,7 @@ public class WolfMageState : LevelState
     [SerializeField] ScriptableStats BossStats; 
     [SerializeField] ScriptableStats HoodStats; 
     [SerializeField] ScriptableStats DawgStats; 
+    [SerializeField] ScriptableStats RunnerStats; 
     [SerializeField] int FreeMoney;
     
     [Header("Brightness Tween")]
@@ -70,7 +71,8 @@ public class WolfMageState : LevelState
         SpawnObjects.EnemyInstance.SpawnFromAISpawner(DawgStats, true);
         SpawnObjects.EnemyInstance.SpawnFromAISpawner(DawgStats, true);
         SpawnObjects.EnemyInstance.SpawnFromAISpawner(DawgStats, true);
-        SpawnObjects.EnemyInstance.SpawnFromAISpawner(DawgStats, true);
+        SpawnObjects.EnemyInstance.SpawnFromAISpawner(RunnerStats, true);
+        SpawnObjects.EnemyInstance.SpawnFromAISpawner(RunnerStats, true);
         
         //AIMoneyManager.Instance.GiveMoney(FreeMoney);
     }
