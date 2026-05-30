@@ -8,6 +8,8 @@ public class WolfMageState : LevelState
     [SerializeField] Renderer targetRenderer;
     [SerializeField] BoxCollider2D boxCollider;
     [SerializeField] ScriptableStats BossStats; 
+    [SerializeField] ScriptableStats HoodStats; 
+    [SerializeField] ScriptableStats DawgStats; 
     [SerializeField] int FreeMoney;
     
     [Header("Brightness Tween")]
@@ -61,6 +63,15 @@ public class WolfMageState : LevelState
         AISpawnerController.Instance.SetMoodByName("Phase 2");
         //Debug.Log("Spawning boss");
         SpawnObjects.EnemyInstance.SpawnFromAISpawner(BossStats, true);
+        
+        SpawnObjects.EnemyInstance.SpawnFromAISpawner(HoodStats, true);
+        SpawnObjects.EnemyInstance.SpawnFromAISpawner(HoodStats, true);
+
+        SpawnObjects.EnemyInstance.SpawnFromAISpawner(DawgStats, true);
+        SpawnObjects.EnemyInstance.SpawnFromAISpawner(DawgStats, true);
+        SpawnObjects.EnemyInstance.SpawnFromAISpawner(DawgStats, true);
+        SpawnObjects.EnemyInstance.SpawnFromAISpawner(DawgStats, true);
+        
         //AIMoneyManager.Instance.GiveMoney(FreeMoney);
     }
 }
