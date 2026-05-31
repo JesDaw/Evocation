@@ -22,7 +22,6 @@ public class CpuCombatActionState : CpuBaseState
 
     public override void EnterState()
     {
-        Debug.Log($"State Entered {StateManager.gameObject.name}");
 
         _action = _context._CurrentAction;
         _actionIndex = _context._CurrentActionIndex;
