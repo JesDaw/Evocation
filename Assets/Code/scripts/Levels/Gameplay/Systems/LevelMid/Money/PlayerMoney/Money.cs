@@ -50,7 +50,6 @@ public class Money : MonoBehaviour
     {
         while(true)
         {
-            UpdateMoneyGen();
             if (!_money_is_active && CurrentMoney < 9999)
             {
                 yield return null;
@@ -93,7 +92,7 @@ public class Money : MonoBehaviour
     public void ResetMoney() => CurrentMoney = 0; 
     public void MoneybuildingGen()
     {
-        MoneyGainPerSec += 20;
+        MoneyGainPerSec += 10;
     }
     public void UpdateMoneyGen() => MoneyGainPerSec = PlayerLivesManager.Instance.LifeCount * MoneyPerPlayer; 
 }
