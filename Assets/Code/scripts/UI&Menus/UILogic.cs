@@ -11,7 +11,7 @@ public class UILogic : MonoBehaviour
     [SerializeField] SceneActivityManager sceneMgr;
 
     public static bool GameIsPaused = false;
-    public UnityEvent PauseEvent, ResumeEvent;
+    public static UnityEvent PauseEvent, ResumeEvent;
     //[SerializeField] bool DebugLogs = false;
     
     [Flags]
@@ -59,6 +59,8 @@ public class UILogic : MonoBehaviour
 
     void Start()
     {
+        PauseEvent = new();
+        ResumeEvent = new();
         if (sceneMgr == null)sceneMgr = FindFirstObjectByType<SceneActivityManager>();
         Debug.Assert(sceneMgr != null);
         if (GlobalInputManager.Instance != null)

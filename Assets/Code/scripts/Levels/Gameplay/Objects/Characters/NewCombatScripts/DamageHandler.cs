@@ -34,6 +34,9 @@ public class DamageHandler : MonoBehaviour
             stats.OnWitFlagDamage?.Invoke(attackedBy.IsEnemy);
             stats._KnockBackHealth -= knockback_damage;
 
+            Transform target = GetComponentInChildren<AnimationDrivenVFXController>()?.transform;
+            if(target is not null)
+                ImpactParticleSpawner.Instance.PlaySmallImpactParticle(target.position, Vector3.one, Quaternion.identity);
             //GameObject parent_obj = transform.parent.gameObject;
         }
 
@@ -69,12 +72,12 @@ public class DamageHandler : MonoBehaviour
         if (attackedBy != null)
         {
             stats.OnWitFlagDamage?.Invoke(attackedBy.IsEnemy);
-            // if (attackedBy.damageType == DamageSource.DamageType.Spell)
-            // {
-            //
-            // }
-            Transform target = GetComponentInChildren<AnimationDrivenVFXController>().transform;
-            ImpactParticleSpawner.Instance.PlayLargeImpactParticle(target.position, transform.localScale, target.localRotation);
+            if (attackedBy.damageType == DamageSource.DamageType.Spell)
+            {
+                Transform target = GetComponentInChildren<AnimationDrivenVFXController>()?.transform;
+                if(target is not null)
+                    ImpactParticleSpawner.Instance.PlayLargeImpactParticle(target.position, Vector3.one, Quaternion.identity);
+            }
         }
 
         if (stats.entityHealthbar != null)
