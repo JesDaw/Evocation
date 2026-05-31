@@ -115,10 +115,10 @@ public class SpellsManager : MonoBehaviour
     public IEnumerator SpellCoroutine(PlayerSpells spell)
     {
         FModAudioManager.instance.PlaySoundByName("explosion");
-        // FModAudioManager.instance.
         charged = false;
         detectionRadiusObject.GetComponentInChildren<Image>().enabled = false;
         int vignetteStrengthID = Shader.PropertyToID("_VignetteStrength");
+        int crackStrengthID = Shader.PropertyToID("_ScreenCrackOpacity");
         int vignetteColorID = Shader.PropertyToID("_VignetteColor");
         Shader.SetGlobalColor(vignetteColorID, _startVignetteColor);
         UILogic.pauseState ^= UILogic.PauseState.SpellPaused;
@@ -128,6 +128,7 @@ public class SpellsManager : MonoBehaviour
         var v = GlobalInputManager.Instance.InputActions.UI;
         Action<InputAction.CallbackContext> pauseAction = context => TogglePauseSpellParticleSystem(spellVFX);
         v.TogglePause.performed += pauseAction;
+        // UILogic.PauseEvent.AddListener(() => TogglePauseSpellParticleSystem(spellVFX));
         while (elapsed < spell.hitboxDelay)
         {
             if(!UILogic.GameIsPaused)
@@ -138,26 +139,33 @@ public class SpellsManager : MonoBehaviour
             yield return null;
         }
         
-        // spellVFX.GetComponent<CinemachineImpulseSource>().GenerateImpulse();
         UseSpell();
+        UILogic.pauseState ^= UILogic.PauseState.SpellPaused;
+        Time.timeScale = UILogic.pauseState == UILogic.PauseState.Unpaused ? 1 : 0;
+        v.TogglePause.performed -= pauseAction;
+        detectionRadiusObject.GetComponentInChildren<Image>().enabled = true;
         // StartCoroutine(CameraShake(spell.animationDuration - spell.hitboxDelay, 0.30f, 2f, 10f));
         while (elapsed < spell.animationDuration)
         {
             if (!UILogic.GameIsPaused)
             {
                 elapsed += Time.unscaledDeltaTime;
-                Shader.SetGlobalFloat(vignetteStrengthID, 1 - Mathf.Sqrt(Mathf.InverseLerp(spell.hitboxDelay, spell.animationDuration, elapsed)));
-                Shader.SetGlobalColor(vignetteColorID, Color.Lerp(_flashVignetteColor, _startVignetteColor, Mathf.Pow(Mathf.InverseLerp(spell.hitboxDelay, spell.animationDuration, elapsed), 3)));
+                float vignette_crack_strength =
+                    1 - Mathf.Sqrt(Mathf.InverseLerp(spell.hitboxDelay, spell.animationDuration, elapsed));
+                Shader.SetGlobalFloat(vignetteStrengthID, vignette_crack_strength);
+                Shader.SetGlobalFloat(crackStrengthID, vignette_crack_strength);
+                // Shader.SetGlobalColor(vignetteColorID, Color.Lerp(_flashVignetteColor, _startVignetteColor, Mathf.Pow(Mathf.InverseLerp(spell.hitboxDelay, spell.animationDuration, elapsed), 3)));
             }
             yield return null;
         }
         Shader.SetGlobalColor(vignetteColorID, _startVignetteColor);
-        v.TogglePause.performed -= pauseAction;
-        detectionRadiusObject.GetComponentInChildren<Image>().enabled = true;
+        // UILogic.PauseEvent.RemoveListener(() => TogglePauseSpellParticleSystem(spellVFX));
+        // v.TogglePause.performed -= pauseAction;
+        // detectionRadiusObject.GetComponentInChildren<Image>().enabled = true;
         Shader.SetGlobalFloat(vignetteStrengthID, 0);
         Destroy(spellVFX);
-        UILogic.pauseState ^= UILogic.PauseState.SpellPaused;
-        Time.timeScale = UILogic.pauseState == UILogic.PauseState.Unpaused ? 1 : 0;
+        // UILogic.pauseState ^= UILogic.PauseState.SpellPaused;
+        // Time.timeScale = UILogic.pauseState == UILogic.PauseState.Unpaused ? 1 : 0;
         yield return null;
     }
     
