@@ -43,6 +43,11 @@ public class CpuStateManager : MonoBehaviour
         StartCoroutine(Startup());
     }
 
+    void OnDisable()
+    {
+        gameObject.SetActive(false);
+    }
+
     bool MatchHierarchy(Transform a, Transform b)
     {
         if (a.childCount != b.childCount)
