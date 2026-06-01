@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 108649553}
   - component: {fileID: 108649554}
   m_Layer: 0
-  m_Name: Idk
+  m_Name: Just wanted to check in with you.
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -148,7 +148,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1670618085}
+  - {fileID: 1768316033}
   m_Father: {fileID: 315996493}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &108649554
@@ -165,36 +167,168 @@ MonoBehaviour:
   m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
   Slides:
   - CharacterName: Archer
-    Line: wym ydk?
-    DialogueDelaySeconds: 0.1
-    CharacterBody: 1
+    Line: 'Checking on me? '
+    DialogueDelaySeconds: 0.05
+    CharacterBody: 0
     CharacterFace: 1
   - CharacterName: Archer
-    Line: Thats weird
-    DialogueDelaySeconds: 0.1
-    CharacterBody: 1
+    Line: "I've never been better! A scuffle like that ain\u2019t enough to knock
+      me out!"
+    DialogueDelaySeconds: 0.05
+    CharacterBody: 0
     CharacterFace: 1
   - CharacterName: Archer
-    Line: 'More talking ...
-
-'
-    DialogueDelaySeconds: 0.1
-    CharacterBody: 1
-    CharacterFace: 0
+    Line: Thanks for asking though.
+    DialogueDelaySeconds: 0.05
+    CharacterBody: 0
+    CharacterFace: 1
   - CharacterName: Archer
-    Line: 'Look new body
-
-'
+    Line: "Say, I don\u2019t think I caught your name.\n"
     DialogueDelaySeconds: 0.1
     CharacterBody: 0
     CharacterFace: 0
   EndOfLines:
-  - Text: idk
+  - Text: "That\u2019s not important."
     ultEvent:
       _PersistentCalls:
-      - _Target: {fileID: 141166755}
-        _MemberName: StartTransition
+      - _Target: {fileID: 1670618086}
+        _MemberName: TriggerDailogue
         _PersistentArguments: []
+      - _Target: {fileID: 324996912}
+        _MemberName: AlterRelationshipStatus
+        _PersistentArguments:
+        - _Type: 3
+          _Int: -10
+          _String: 
+          _X: 0
+          _Y: 0
+          _Z: 0
+          _W: 0
+          _Object: {fileID: 0}
+  - Text: I'm Theo
+    ultEvent:
+      _PersistentCalls:
+      - _Target: {fileID: 1768316032}
+        _MemberName: TriggerDailogue
+        _PersistentArguments: []
+  DefultEvent:
+    _PersistentCalls: []
+--- !u!1 &113437165
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 113437166}
+  - component: {fileID: 113437167}
+  m_Layer: 0
+  m_Name: Dont insult me.
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &113437166
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 113437165}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1147954488}
+  m_Father: {fileID: 1768316033}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &113437167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 113437165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 874faff9495a840e69fda1f250e7cfcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
+  Slides:
+  - CharacterName: Darius
+    Line: "Woah, easy there..you don\u2019t gotta get all fussy on me, I\u2019ll
+      back off big guy\u2026"
+    DialogueDelaySeconds: 0.05
+    CharacterBody: 1
+    CharacterFace: 4
+  EndOfLines: []
+  DefultEvent:
+    _PersistentCalls:
+    - _Target: {fileID: 1147954489}
+      _MemberName: TriggerDailogue
+      _PersistentArguments: []
+--- !u!1 &122271930
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 122271931}
+  - component: {fileID: 122271932}
+  m_Layer: 0
+  m_Name: End (> 100 points)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &122271931
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122271930}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1180439140}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &122271932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122271930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 874faff9495a840e69fda1f250e7cfcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
+  Slides:
+  - CharacterName: Darius
+    Line: "I\u2019m not gonna lie, I thought you\u2019d be the more silent brooding
+      type but you\u2019re actually pretty chill!"
+    DialogueDelaySeconds: 0.05
+    CharacterBody: 0
+    CharacterFace: 1
+  - CharacterName: Darius
+    Line: "I should be getting back to training right around now...those clean shots
+      didn\u2019t come from nowhere! Catch you later!"
+    DialogueDelaySeconds: 0.05
+    CharacterBody: 0
+    CharacterFace: 1
+  EndOfLines: []
   DefultEvent:
     _PersistentCalls:
     - _Target: {fileID: 141166755}
@@ -233,9 +367,12 @@ MonoBehaviour:
   StartingEvent:
     _PersistentCalls: []
   Bondies:
-  - {fileID: 569652437197627795}
+  - {fileID: 1563737695}
   - {fileID: 702948001}
   faces:
+  - {fileID: 1563737694}
+  - {fileID: 1563737693}
+  - {fileID: 1563737692}
   - {fileID: 1258559174}
   - {fileID: 1819229276}
 --- !u!4 &141166754
@@ -469,6 +606,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ARCH_POSE_2_Sketch
       objectReference: {fileID: 0}
+    - target: {fileID: -8653719598885068355, guid: d2ba0aee282b14a49a063a103308638b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -8465301747542172504, guid: d2ba0aee282b14a49a063a103308638b, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -531,6 +672,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7221020487405985688, guid: d2ba0aee282b14a49a063a103308638b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2643444367684867239, guid: d2ba0aee282b14a49a063a103308638b, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -2542654188389717700, guid: d2ba0aee282b14a49a063a103308638b, type: 3}
@@ -684,27 +829,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
   Slides:
   - CharacterName: Archer
-    Line: Hey, its nice to finally meet you.
-    DialogueDelaySeconds: 0.1
-    CharacterBody: 1
+    Line: Oh?
+    DialogueDelaySeconds: 0.05
+    CharacterBody: 0
     CharacterFace: 0
   - CharacterName: Archer
-    Line: My name is...
-    DialogueDelaySeconds: 0.1
-    CharacterBody: 1
-    CharacterFace: 0
-  - CharacterName: Archer
-    Line: Idk yet
-    DialogueDelaySeconds: 0.1
-    CharacterBody: 1
-    CharacterFace: 0
-  - CharacterName: Archer
-    Line: Whats yours?
-    DialogueDelaySeconds: 0.1
-    CharacterBody: 1
+    Line: Hey, what's up?
+    DialogueDelaySeconds: 0.05
+    CharacterBody: 0
     CharacterFace: 0
   EndOfLines:
-  - Text: My name is Theo
+  - Text: ...
     ultEvent:
       _PersistentCalls:
       - _Target: {fileID: 955234561}
@@ -714,14 +849,14 @@ MonoBehaviour:
         _MemberName: AlterRelationshipStatus
         _PersistentArguments:
         - _Type: 3
-          _Int: 10
+          _Int: 0
           _String: 
           _X: 0
           _Y: 0
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - Text: Idk
+  - Text: Just wanted to check in
     ultEvent:
       _PersistentCalls:
       - _Target: {fileID: 108649554}
@@ -731,7 +866,7 @@ MonoBehaviour:
         _MemberName: AlterRelationshipStatus
         _PersistentArguments:
         - _Type: 3
-          _Int: -10
+          _Int: 10
           _String: 
           _X: 0
           _Y: 0
@@ -1061,6 +1196,63 @@ MonoBehaviour:
   m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioListener
   nonRigidbodyVelocity: 0
   attenuationObject: {fileID: 519565947}
+--- !u!1 &539698261
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 539698262}
+  - component: {fileID: 539698263}
+  m_Layer: 0
+  m_Name: I'm ok
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &539698262
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 539698261}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1960779943}
+  m_Father: {fileID: 2029670158}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &539698263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 539698261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 874faff9495a840e69fda1f250e7cfcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
+  Slides:
+  - CharacterName: Darius
+    Line: Eh, to each their own...
+    DialogueDelaySeconds: 0.05
+    CharacterBody: 0
+    CharacterFace: 0
+  EndOfLines: []
+  DefultEvent:
+    _PersistentCalls:
+    - _Target: {fileID: 1960779944}
+      _MemberName: TriggerDailogue
+      _PersistentArguments: []
 --- !u!1 &657874206
 GameObject:
   m_ObjectHideFlags: 0
@@ -1258,6 +1450,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1387743196}
   - {fileID: 1291886209}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1272,7 +1465,7 @@ GameObject:
   - component: {fileID: 955234560}
   - component: {fileID: 955234561}
   m_Layer: 0
-  m_Name: My Name is theo
+  m_Name: ...
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1307,22 +1500,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
   Slides:
   - CharacterName: Archer
-    Line: Theo huh?
-    DialogueDelaySeconds: 0.1
-    CharacterBody: 1
-    CharacterFace: 0
-  - CharacterName: Archer
-    Line: Chimpmunk ahh name
-    DialogueDelaySeconds: 0.1
+    Line: ...
+    DialogueDelaySeconds: 0.05
     CharacterBody: 0
     CharacterFace: 0
-  EndOfLines:
-  - Text: Bruh
-    ultEvent:
-      _PersistentCalls:
-      - _Target: {fileID: 141166755}
-        _MemberName: StartTransition
-        _PersistentArguments: []
+  - CharacterName: Archer
+    Line: ...?
+    DialogueDelaySeconds: 0.05
+    CharacterBody: 0
+    CharacterFace: 2
+  - CharacterName: Archer
+    Line: "\u2026uh..ok?"
+    DialogueDelaySeconds: 0.05
+    CharacterBody: 0
+    CharacterFace: 2
+  EndOfLines: []
   DefultEvent:
     _PersistentCalls:
     - _Target: {fileID: 141166755}
@@ -1373,6 +1565,151 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1147954487
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1147954488}
+  - component: {fileID: 1147954489}
+  m_Layer: 0
+  m_Name: End (0 poins)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1147954488
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147954487}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 113437166}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1147954489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147954487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 874faff9495a840e69fda1f250e7cfcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
+  Slides:
+  - CharacterName: Archer
+    Line: "\u2026Im gonna head to bed\u2026long day tomorrow.."
+    DialogueDelaySeconds: 0.05
+    CharacterBody: 0
+    CharacterFace: 2
+  EndOfLines: []
+  DefultEvent:
+    _PersistentCalls:
+    - _Target: {fileID: 141166755}
+      _MemberName: StartTransition
+      _PersistentArguments: []
+--- !u!1 &1180439138
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1180439140}
+  - component: {fileID: 1180439139}
+  m_Layer: 0
+  m_Name: "Maybe one of these days\u2026"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1180439139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180439138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 874faff9495a840e69fda1f250e7cfcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
+  Slides:
+  - CharacterName: Darius
+    Line: '!!!'
+    DialogueDelaySeconds: 0.05
+    CharacterBody: 1
+    CharacterFace: 3
+  - CharacterName: Darius
+    Line: Oh, actually?
+    DialogueDelaySeconds: 0.05
+    CharacterBody: 1
+    CharacterFace: 3
+  - CharacterName: Darius
+    Line: "I\u2019m game, just pop in or call me over in my downtime whenever!"
+    DialogueDelaySeconds: 0.05
+    CharacterBody: 0
+    CharacterFace: 1
+  - CharacterName: Darius
+    Line: "I\u2019ve been wanting a partner to train with but none of the guys were
+      interested!"
+    DialogueDelaySeconds: 0.1
+    CharacterBody: 0
+    CharacterFace: 1
+  - CharacterName: Darius
+    Line: Said I talked their heads off, almost turned me into the next target dummy!
+    DialogueDelaySeconds: 0.1
+    CharacterBody: 0
+    CharacterFace: 1
+  EndOfLines: []
+  DefultEvent:
+    _PersistentCalls:
+    - _Target: {fileID: 324996912}
+      _MemberName: AlterRelationshipStatus
+      _PersistentArguments:
+      - _Type: 3
+        _Int: 150
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
+    - _Target: {fileID: 122271932}
+      _MemberName: TriggerDailogue
+      _PersistentArguments: []
+--- !u!4 &1180439140
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180439138}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 122271931}
+  m_Father: {fileID: 2029670158}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1234873235
 GameObject:
@@ -1591,16 +1928,413 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1369874582}
   m_CullTransparentMesh: 1
+--- !u!1 &1387743195
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1387743196}
+  m_Layer: 0
+  m_Name: Pose 1 timeline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1387743196
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1387743195}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1563737691}
+  m_Father: {fileID: 858500035}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1559374294 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2102030561909137481, guid: 66a987b593cfb45f2b2314ebe7f4a648, type: 3}
   m_PrefabInstance: {fileID: 363608983753034799}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1563737690
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1387743196}
+    m_Modifications:
+    - target: {fileID: -8653719598885068355, guid: bf980020d86fe43978d5f3763590bd30, type: 3}
+      propertyPath: m_Name
+      value: Archer_Pose_1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7913376409910958764, guid: bf980020d86fe43978d5f3763590bd30, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: bf980020d86fe43978d5f3763590bd30, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: bf980020d86fe43978d5f3763590bd30, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: bf980020d86fe43978d5f3763590bd30, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: bf980020d86fe43978d5f3763590bd30, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: bf980020d86fe43978d5f3763590bd30, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: bf980020d86fe43978d5f3763590bd30, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: bf980020d86fe43978d5f3763590bd30, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: bf980020d86fe43978d5f3763590bd30, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: bf980020d86fe43978d5f3763590bd30, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: bf980020d86fe43978d5f3763590bd30, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -685067413275371180, guid: bf980020d86fe43978d5f3763590bd30, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 4843985084834002234, guid: bf980020d86fe43978d5f3763590bd30, type: 3}
+--- !u!4 &1563737691 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -7552582706839291426, guid: bf980020d86fe43978d5f3763590bd30, type: 3}
+  m_PrefabInstance: {fileID: 1563737690}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1563737692 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -685067413275371180, guid: bf980020d86fe43978d5f3763590bd30, type: 3}
+  m_PrefabInstance: {fileID: 1563737690}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1563737693 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -7913376409910958764, guid: bf980020d86fe43978d5f3763590bd30, type: 3}
+  m_PrefabInstance: {fileID: 1563737690}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1563737694 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1228038446504226177, guid: bf980020d86fe43978d5f3763590bd30, type: 3}
+  m_PrefabInstance: {fileID: 1563737690}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1563737695 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -8653719598885068355, guid: bf980020d86fe43978d5f3763590bd30, type: 3}
+  m_PrefabInstance: {fileID: 1563737690}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1670618084
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1670618085}
+  - component: {fileID: 1670618086}
+  m_Layer: 0
+  m_Name: "That\u2019s not important."
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1670618085
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1670618084}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 108649553}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1670618086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1670618084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 874faff9495a840e69fda1f250e7cfcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
+  Slides:
+  - CharacterName: Archer
+    Line: ??
+    DialogueDelaySeconds: 0.05
+    CharacterBody: 1
+    CharacterFace: 4
+  - CharacterName: Archer
+    Line: "\u2026.sorry?"
+    DialogueDelaySeconds: 0.05
+    CharacterBody: 1
+    CharacterFace: 4
+  - CharacterName: Archer
+    Line: ...
+    DialogueDelaySeconds: 0.5
+    CharacterBody: 0
+    CharacterFace: 2
+  - CharacterName: Archer
+    Line: ...Yeah, maybe its not...
+    DialogueDelaySeconds: 0.1
+    CharacterBody: 0
+    CharacterFace: 2
+  EndOfLines: []
+  DefultEvent:
+    _PersistentCalls:
+    - _Target: {fileID: 141166755}
+      _MemberName: StartTransition
+      _PersistentArguments: []
+--- !u!1 &1768316031
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1768316033}
+  - component: {fileID: 1768316032}
+  m_Layer: 0
+  m_Name: I'm Theo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1768316032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1768316031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 874faff9495a840e69fda1f250e7cfcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
+  Slides:
+  - CharacterName: Archer
+    Line: Theo?
+    DialogueDelaySeconds: 0.05
+    CharacterBody: 0
+    CharacterFace: 0
+  - CharacterName: Darius
+    Line: "I\u2019m Darius! Nice to finally put a name to the suit of armor!"
+    DialogueDelaySeconds: 0.05
+    CharacterBody: 0
+    CharacterFace: 1
+  - CharacterName: Darius
+    Line: "How about you? You holding up good? I noticed you were pretty worn after
+      the battle\u2026you been outta the ring for a bit?"
+    DialogueDelaySeconds: 0.05
+    CharacterBody: 0
+    CharacterFace: 0
+  EndOfLines:
+  - Text: Dont insult me.
+    ultEvent:
+      _PersistentCalls:
+      - _Target: {fileID: 113437167}
+        _MemberName: TriggerDailogue
+        _PersistentArguments: []
+  - Text: "I\u2019m just a bit rusty, that\u2019s all."
+    ultEvent:
+      _PersistentCalls:
+      - _Target: {fileID: 2029670157}
+        _MemberName: TriggerDailogue
+        _PersistentArguments: []
+  DefultEvent:
+    _PersistentCalls: []
+--- !u!4 &1768316033
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1768316031}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 113437166}
+  - {fileID: 2029670158}
+  m_Father: {fileID: 108649553}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1819229276 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -2643444367684867239, guid: d2ba0aee282b14a49a063a103308638b, type: 3}
   m_PrefabInstance: {fileID: 283378164}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1960779942
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1960779943}
+  - component: {fileID: 1960779944}
+  m_Layer: 0
+  m_Name: End (< 100 points)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1960779943
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1960779942}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 539698262}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1960779944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1960779942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 874faff9495a840e69fda1f250e7cfcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
+  Slides:
+  - CharacterName: Darius
+    Line: "I should be getting back to training right around now...those clean shots
+      didn\u2019t come from nowhere! Catch you later!"
+    DialogueDelaySeconds: 0.05
+    CharacterBody: 0
+    CharacterFace: 1
+  EndOfLines: []
+  DefultEvent:
+    _PersistentCalls:
+    - _Target: {fileID: 141166755}
+      _MemberName: StartTransition
+      _PersistentArguments: []
+--- !u!1 &2029670156
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2029670158}
+  - component: {fileID: 2029670157}
+  m_Layer: 0
+  m_Name: "I\u2019m just a bit rusty, that\u2019s all."
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2029670157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2029670156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 874faff9495a840e69fda1f250e7cfcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
+  Slides:
+  - CharacterName: Darius
+    Line: I thought so, you should join me during one of my training sessions if
+      you got the time! I could give you some pointers to get you back to your prime,
+      aye?
+    DialogueDelaySeconds: 0.05
+    CharacterBody: 0
+    CharacterFace: 1
+  EndOfLines:
+  - Text: "I\u2019m ok."
+    ultEvent:
+      _PersistentCalls:
+      - _Target: {fileID: 539698263}
+        _MemberName: TriggerDailogue
+        _PersistentArguments: []
+  - Text: "Maybe one of these days\u2026"
+    ultEvent:
+      _PersistentCalls:
+      - _Target: {fileID: 1180439139}
+        _MemberName: TriggerDailogue
+        _PersistentArguments: []
+  DefultEvent:
+    _PersistentCalls: []
+--- !u!4 &2029670158
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2029670156}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 539698262}
+  - {fileID: 1180439140}
+  m_Father: {fileID: 1768316033}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2033005450
 GameObject:
   m_ObjectHideFlags: 0
@@ -1677,8 +2411,8 @@ MonoBehaviour:
   SceneActivities:
   - {fileID: 1559374294}
   - {fileID: 5842973596353864466}
-  - {fileID: 3442451893255198203}
-  - {fileID: 3442451893255198201}
+  - {fileID: 0}
+  - {fileID: 0}
   ActivityChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -2294,7 +3028,7 @@ Transform:
   m_Children:
   - {fileID: 1560249522092811896}
   - {fileID: 5842973596353864467}
-  - {fileID: 3442451893255198202}
+  - {fileID: 3442451893255198201}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2925595810022506472
@@ -2672,19 +3406,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 893284c8e0aac4104a5fa505d1374f40, type: 3}
---- !u!1 &3442451893255198201 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 514867348480243628, guid: 893284c8e0aac4104a5fa505d1374f40, type: 3}
-  m_PrefabInstance: {fileID: 3442451893255198200}
-  m_PrefabAsset: {fileID: 0}
---- !u!224 &3442451893255198202 stripped
+--- !u!224 &3442451893255198201 stripped
 RectTransform:
-  m_CorrespondingSourceObject: {fileID: 1161321032741223233, guid: 893284c8e0aac4104a5fa505d1374f40, type: 3}
-  m_PrefabInstance: {fileID: 3442451893255198200}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &3442451893255198203 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2172984602959371382, guid: 893284c8e0aac4104a5fa505d1374f40, type: 3}
+  m_CorrespondingSourceObject: {fileID: 1562051884732084662, guid: 893284c8e0aac4104a5fa505d1374f40, type: 3}
   m_PrefabInstance: {fileID: 3442451893255198200}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &4085585268640532478
@@ -3084,12 +3808,6 @@ MonoBehaviour:
   SceneToLoad: 0
   DebugLogs: 0
   sceneMgr: {fileID: 0}
-  PauseEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  ResumeEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

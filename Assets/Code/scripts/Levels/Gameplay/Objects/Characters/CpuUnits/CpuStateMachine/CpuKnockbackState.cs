@@ -35,7 +35,7 @@ public class CpuKnockBackState : CpuBaseState
         {
             //FModAudioManager.instance.PlaySoundByName("die");
             _context.gameObject.SetActive(false);
-            _context.StartCoroutine(ExecuteAfterOneFrame());
+            Object.Destroy(_context.gameObject);
             
         }
         else
@@ -43,14 +43,6 @@ public class CpuKnockBackState : CpuBaseState
             //reset _KnockBackHealth
             _context.UpdateCurrentState(CpuStateManager.State.Move);
         }
-    }
-
-    IEnumerator ExecuteAfterOneFrame()
-    {
-        _context._Animator.WriteDefaultValues();
-        yield return null; 
-
-        Object.Destroy(_context.gameObject);
     }
 
     void ApplyKnockback()
