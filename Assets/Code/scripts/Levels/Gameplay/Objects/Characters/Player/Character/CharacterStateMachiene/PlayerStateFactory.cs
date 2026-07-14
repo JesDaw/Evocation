@@ -39,32 +39,6 @@ public class PlayerStateFactory
         return _state[State.KnockBack];
     }
 
-    public PlayerBaseState Climb()
-    {
-        if (!_state.ContainsKey(State.Climb))
-        {
-            _state[State.Climb] = new PlayerClimbState(_context, this);
-        }
-        return _state[State.Climb];
-
-    }
-    public PlayerBaseState Control()
-    {
-        if (!_state.ContainsKey(State.Control))
-        {
-            _state[State.Control] = new PlayerControlState(_context, this);
-        }
-        return _state[State.Control];
-    }
-    public PlayerBaseState Auto()
-    {
-        if (!_state.ContainsKey(State.Auto))
-        {
-            _state[State.Auto] = new PlayerControlState(_context, this);
-        }
-        return _state[State.Auto];
-    }
-
     public PlayerBaseState GetNextState(PlayerCommander commander)
     {
         if (commander.IsCmdPending(DiscretePlayerCommand.KnockBack))
@@ -74,10 +48,6 @@ public class PlayerStateFactory
         else if (commander.IsCmdPending(DiscretePlayerCommand.Attack))
         {
             return Attack();
-        }
-        else if (commander.IsCmdActive(ContinuousPlayerCommand.Climb))
-        {
-            return Climb();
         }
         else if (commander.IsCmdActive(ContinuousPlayerCommand.Move))
         {
