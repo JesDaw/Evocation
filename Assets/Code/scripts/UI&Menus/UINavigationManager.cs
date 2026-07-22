@@ -13,51 +13,38 @@ using UnityEngine.EventSystems;
 ///   1. screenDefaultButton   — set by SceneActivity.StartActivity() via defaultSelectedButton
 ///   2. lastHighlightedButton — whichever button was most recently highlighted by either
 ///                              mouse hover OR keyboard navigation, in chronological order
-///
-/// Screen-change timing
-/// ────────────────────
-/// ActivateWithFade activates the destination screen inside a fade callback — many frames
-/// after the source button's OnClick fires. SceneActivity.StartActivity() calls
-/// RegisterScreenDefault() after SetActive(true), so the button is always active by
-/// the time we try to select it. No polling or frame-deferral is needed.
 /// </summary>
 public class UINavigationManager : MonoBehaviour
 {
-    public static UINavigationManager Instance { get; private set; }
-
-    // ── State ─────────────────────────────────────────────────────────────────
+    public static UINavigationManager Instance;
     [SerializeField] bool StartInMousMode = false;
+    [SerializeField] bool DebugLogs;
 
     private bool isKeyboardMode = false;
     private EventSystem eventSystem;
-
-    /// <summary>
-    /// The most recently highlighted button, regardless of whether it was reached
-    /// by mouse hover or keyboard navigation. Written by both RegisterMouseHover()
-    /// and RegisterKeyboardSelect() so the last-touched button always wins.
-    /// </summary>
     public UIButtons lastHighlightedButton;
-
-    /// <summary>Stored by RegisterScreenDefault(); consumed by SelectBestKeyboardTarget().</summary>
     private UIButtons screenDefaultButton;
-
-    // Prevents stacking multiple deferred-recovery coroutines in one burst
     private bool recoveryPending = false;
-
-    // Axis edge-detection
-    //private bool wasAxisNavigating = false;
     private const float AxisThreshold = 0.5f;
 
-    // ── Unity ─────────────────────────────────────────────────────────────────
+    void LogDebug(string message)
+    {
+        if (DebugLogs) this.Log("");
+    }
 
     private void Awake()
     {
-        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
-        Instance = this;
-
+         if (!SingletonManager.Initialize(this, ref Instance))
+        {
+            return;
+        }
         eventSystem = EventSystem.current;
-        if (eventSystem == null)
-            Debug.LogWarning("[UINavigationManager] No EventSystem found in scene.", this);
+    }
+
+    void Start()
+    {
+        ValidationUtilities.CheckMonoBehaviours(this, GlobalInputManager.Instance, eventSystem);
+        if (DebugLogs) this.Log($"Awake — starting in {(StartInMousMode ? "mouse" : "keyboard")} mode.");
         if (StartInMousMode)
         {
             SwitchToMouseMode();
@@ -66,7 +53,6 @@ public class UINavigationManager : MonoBehaviour
         {
             SwitchToKeyboardMode();
         }
-        
     }
 
     private void Update()
@@ -85,7 +71,7 @@ public class UINavigationManager : MonoBehaviour
         {
             if (isKeyboardMode)
             {
-                if (!recoveryPending) StartCoroutine(DeferredRecover()); // what is this for?
+                if (!recoveryPending) StartCoroutine(DeferredRecover());
             }
             else
             {
@@ -103,10 +89,12 @@ public class UINavigationManager : MonoBehaviour
     {
         if (GlobalInputManager.Instance.InputActions.UI.Navigate.WasPerformedThisFrame())
         {
+            if (DebugLogs) this.Log("DetectKeyboardNavigation: Navigate action performed this frame.");
             return true;
         }
         if (GlobalInputManager.Instance.InputActions.UI.ConfirmDialogue.WasPerformedThisFrame())
         {
+            if (DebugLogs) this.Log("DetectKeyboardNavigation: ConfirmDialogue action performed this frame.");
             return true;
         }
         return false;
@@ -114,12 +102,14 @@ public class UINavigationManager : MonoBehaviour
 
     private bool DetectMouseMovement()
     {
-        return Input.GetAxis("Mouse X") != 0f || Input.GetAxis("Mouse Y") != 0f;
+        bool moved = Input.GetAxis("Mouse X") != 0f || Input.GetAxis("Mouse Y") != 0f;
+        return moved;
     }
 
 
     private void SwitchToKeyboardMode()
     {
+        if (DebugLogs) this.Log("SwitchToKeyboardMode: entering keyboard mode.");
         isKeyboardMode = true;
         GlobalInputManager.Instance.DisableCursor();
         SelectBestKeyboardTarget();
@@ -127,11 +117,9 @@ public class UINavigationManager : MonoBehaviour
 
     private void SwitchToMouseMode()
     {
+        if (DebugLogs) this.Log("SwitchToMouseMode: entering mouse mode.");
         isKeyboardMode = false;
         GlobalInputManager.Instance.EnableCursor();
-
-        // Manually reset visuals on the outgoing button because SetSelectedGameObject(null)
-        // does NOT fire OnDeselect on UIButtons.
         if (eventSystem.currentSelectedGameObject != null)
         {
             var btn = eventSystem.currentSelectedGameObject.GetComponent<UIButtons>();
@@ -141,36 +129,27 @@ public class UINavigationManager : MonoBehaviour
 
         eventSystem.SetSelectedGameObject(null);
     }
-
-
-    /// <summary>
-    /// Waits one frame after a keypress so this frame's OnClick chain can finish,
-    /// then recovers a lost selection. screenDefaultButton (if any) takes priority.
-    /// </summary>
     private IEnumerator DeferredRecover()
     {
         recoveryPending = true;
+        if (DebugLogs) this.Log("DeferredRecover: waiting one frame to check for lost selection.");
         yield return null;
 
         if (isKeyboardMode && eventSystem.currentSelectedGameObject == null) 
         {
+            if (DebugLogs) this.Log("DeferredRecover: selection was lost, re-selecting.");
             SelectBestKeyboardTarget();
         }
         recoveryPending = false;
     }
 
-    /// <summary>
-    /// Selects the best available button.
-    /// Priority: screenDefaultButton → lastHighlightedButton.
-    /// </summary>
     private void SelectBestKeyboardTarget()
     {
         UIButtons target = null;
 
         if (screenDefaultButton != null && screenDefaultButton.gameObject.activeInHierarchy)
         {
-            target = screenDefaultButton;
-            screenDefaultButton = null; 
+            target = ConsumeScreenDefault();
         }
         else if (lastHighlightedButton != null && lastHighlightedButton.gameObject.activeInHierarchy)
         {
@@ -179,41 +158,35 @@ public class UINavigationManager : MonoBehaviour
 
         if (target != null)
         {
+            if (DebugLogs) this.Log($"SelectBestKeyboardTarget: selecting '{target.name}'.");
             eventSystem.SetSelectedGameObject(target.gameObject);
         }
         else
-            Debug.LogWarning("[UINavigationManager] No valid button found to select. " +
-                                $"Set defaultSelectedButton on the SceneActivity.");
+            this.LogWarning($"No valid button found to select. Set defaultSelectedButton on the SceneActivity.");
     }
 
-// feel as though RegisterMouseHover and RegisterKeyboardSelect can just be one RegisterAsLastHighlightedButton function and juts hvae that be call when the button is highlighted so it doesnt atter in which way its being highlighted
-    /// <summary>
-    /// Called by UIButtons.OnPointerEnter.
-    /// Updates lastHighlightedButton so keyboard mode can resume from here.
-    /// </summary>
-    public void RegisterMouseHover(UIButtons button)
+    private UIButtons ConsumeScreenDefault()
     {
+        var button = screenDefaultButton;
+        if (DebugLogs) this.Log($"ConsumeScreenDefault: consuming '{(button != null ? button.name : "null")}'.");
+        screenDefaultButton = null;
+        return button;
+    }
+
+    public void RegisterHighlighted(UIButtons button)
+    {
+        if (DebugLogs) this.Log($"RegisterHighlighted: '{(button != null ? button.name : "null")}'.");
         lastHighlightedButton = button;
     }
-
-    /// <summary>
-    /// Called by UIButtons.OnSelect.
-    /// Updates lastHighlightedButton so mouse mode can resume from here.
-    /// </summary>
-    public void RegisterKeyboardSelect(UIButtons button)
+    public void ClearHighlightedButtonIfBelongsTo(Transform owner)
     {
-        lastHighlightedButton = button;
+        if (lastHighlightedButton != null && lastHighlightedButton.transform.IsChildOf(owner))
+        {
+            if (DebugLogs) this.Log($"ClearHighlightedButtonIfBelongsTo: clearing '{lastHighlightedButton.name}' (owned by '{owner.name}').");
+            lastHighlightedButton = null;
+        }
     }
-
-    /// <summary>
-    /// Called by SceneActivity.StartActivity() via defaultSelectedButton.
-    /// Because StartActivity() calls SetActive(true) first, the button is always
-    /// active by the time this runs — no polling required.
-    ///
-    /// • Keyboard mode → select the button immediately.
-    /// • Mouse mode    → store it; selected the next time a nav key is pressed.
-    /// </summary>
-    public void RegisterScreenDefault(UIButtons button) // I feel like this is scene activity spasific logic why is thos on the geneneral manager script?
+    public void RegisterScreenDefault(UIButtons button)
     {
         if (button == null)
         {
@@ -221,13 +194,14 @@ public class UINavigationManager : MonoBehaviour
             return;
         }
 
+        if (DebugLogs) this.Log($"RegisterScreenDefault: '{button.name}' (isKeyboardMode: {isKeyboardMode}).");
         lastHighlightedButton = null;
         screenDefaultButton = button;
 
         if (isKeyboardMode)
         {
-            eventSystem.SetSelectedGameObject(button.gameObject);
-            screenDefaultButton = null; // why is it being consumed here?
+            var target = ConsumeScreenDefault();
+            eventSystem.SetSelectedGameObject(target.gameObject);
         }
     }
 }

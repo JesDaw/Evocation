@@ -31,6 +31,11 @@ public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     [SerializeField] private Color postClickColor = Color.white;
     [SerializeField] private Color postClickTextColor = Color.white;
     [SerializeField] private Vector3 postClickScale = Vector3.one * 1.05f;
+
+    [Header("Audio")]
+    [SerializeField] private string highlightSoundName = "showCharacterInfo";
+    [SerializeField] private string clickSoundName = "addCharacterToParty";
+    [SerializeField] private string backSoundName = "removeCharacterFromParty";
     
     [Header("Button Components")]
     [SerializeField] private Image targetImage;
@@ -44,7 +49,6 @@ public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public UltEvents.UltEvent ButtonClicked;
     private Coroutine currentAnimation;
     private bool isHovered = false;
-    // ── Unity ─────────────────────────────────────────────────────────────────
 
     private void Awake()
     {
@@ -79,32 +83,37 @@ public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             isHovered = false;
     }
 
-    // OnSelect and OnPointerEnter are like the same function they should just be merged into one OnbuttonHighlight function
     public void OnSelect(BaseEventData eventData)
     {
-        UINavigationManager.Instance?.RegisterKeyboardSelect(this);
-        ActivateHighlightEffects();
-        ButtonHighlighted?.Invoke();
+        UINavigationManager.Instance?.RegisterHighlighted(this);
+        OnButtonHighlighted();
     }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
-        UINavigationManager.Instance?.RegisterMouseHover(this);
+        UINavigationManager.Instance?.RegisterHighlighted(this);
         if (isHovered) return;
-        isHovered = true;        
-        
+        isHovered = true;
+        OnButtonHighlighted();
+    }
+
+    void OnButtonHighlighted()
+    {
+        ActivateHighlightEffects();
         ButtonHighlighted?.Invoke();
     }
 
     void ActivateHighlightEffects()
     {
         AnimateToState(hoverColor, hoverTextColor, hoverScale, animationDuration);
-        FModAudioManager.instance.PlaySoundByName("showCharacterInfo");
+        FModAudioManager.instance.PlaySoundByName(highlightSoundName);
     }
     
     public void OnPointerExit(PointerEventData eventData)
     {
         if (!isHovered) return;
         isHovered = false;
+        DeactivateHighlightEffects();
     }
      public void OnDeselect(BaseEventData eventData)
     {
@@ -160,34 +169,29 @@ public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             yield return null;
         }
 
-        // Snap to final values
         if (targetImage != null)     targetImage.color          = targetColor;
         if (targetText != null)      targetText.color           = targetTextColor;
         if (targetTransform != null) targetTransform.localScale = targetScale;
 
     }
 
-    public void HighlightSound() //these should be public variables set in the inspector I dont think they should be super hard coded like this
+    public void HighlightSound()
     {
-        FModAudioManager.instance.PlaySoundByName("showCharacterInfo");
+        FModAudioManager.instance.PlaySoundByName(highlightSoundName);
     }
 
     public void ClickSound()
     {
-        FModAudioManager.instance.PlaySoundByName("addCharacterToParty");
+        FModAudioManager.instance.PlaySoundByName(clickSoundName);
     }
 
     public void BackSound()
     {
-        FModAudioManager.instance.PlaySoundByName("removeCharacterFromParty");
+        FModAudioManager.instance.PlaySoundByName(backSoundName);
     }
 
-    public void QuitGame() //I want to make a general game logic script with this logic in it quitting the game is not what this script is for its purly for button visuals
+    public void QuitGame()
     {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
+        ApplicationManager.QuitGame();
     }
 }
