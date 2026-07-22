@@ -62,6 +62,10 @@ public class UINavigationManager : MonoBehaviour
         {
             SwitchToMouseMode();
         }
+        else
+        {
+            SwitchToKeyboardMode();
+        }
         
     }
 
@@ -71,13 +75,17 @@ public class UINavigationManager : MonoBehaviour
         {
             return;
         }
+        CheckForNavigationModeSwitch();
+        
+    }
+
+    void CheckForNavigationModeSwitch()
+    {
         if (DetectKeyboardNavigation())
         {
-            
             if (isKeyboardMode)
             {
-                if (!recoveryPending)
-                    StartCoroutine(DeferredRecover());
+                if (!recoveryPending) StartCoroutine(DeferredRecover()); // what is this for?
             }
             else
             {
@@ -90,7 +98,6 @@ public class UINavigationManager : MonoBehaviour
         }
     }
 
-    // ── Detection ─────────────────────────────────────────────────────────────
 
     private bool DetectKeyboardNavigation()
     {
@@ -103,16 +110,6 @@ public class UINavigationManager : MonoBehaviour
             return true;
         }
         return false;
-
-        // 2. Read the current 2D Vector from your Navigate action (Replaces GetAxisRaw)
-        // Vector2 navInput = InputSystem_Actions.InputActions.Player.Navigate.ReadValue<Vector2>();
-        
-        // 3. Check if the keys are currently being held past your threshold
-        // bool axisActive = Mathf.Abs(navInput.x) > AxisThreshold || Mathf.Abs(navInput.y) > AxisThreshold;
-        
-        // 4. Determine if it was just pressed this frame
-        // bool justPressed = axisActive && !wasAxisNavigating;
-        // wasAxisNavigating = axisActive;
     }
 
     private bool DetectMouseMovement()
@@ -120,16 +117,12 @@ public class UINavigationManager : MonoBehaviour
         return Input.GetAxis("Mouse X") != 0f || Input.GetAxis("Mouse Y") != 0f;
     }
 
-    // ── Mode switching ────────────────────────────────────────────────────────
 
     private void SwitchToKeyboardMode()
     {
         isKeyboardMode = true;
         GlobalInputManager.Instance.DisableCursor();
         SelectBestKeyboardTarget();
-
-
-        //Debug.Log("[UINavigationManager] Switched to keyboard mode.");
     }
 
     private void SwitchToMouseMode()
@@ -147,10 +140,8 @@ public class UINavigationManager : MonoBehaviour
         }
 
         eventSystem.SetSelectedGameObject(null);
-        //Debug.Log("[UINavigationManager] Switched to mouse mode.");
     }
 
-    // ── Selection logic ───────────────────────────────────────────────────────
 
     /// <summary>
     /// Waits one frame after a keypress so this frame's OnClick chain can finish,
@@ -195,8 +186,7 @@ public class UINavigationManager : MonoBehaviour
                                 $"Set defaultSelectedButton on the SceneActivity.");
     }
 
-    // ── Public API ────────────────────────────────────────────────────────────
-
+// feel as though RegisterMouseHover and RegisterKeyboardSelect can just be one RegisterAsLastHighlightedButton function and juts hvae that be call when the button is highlighted so it doesnt atter in which way its being highlighted
     /// <summary>
     /// Called by UIButtons.OnPointerEnter.
     /// Updates lastHighlightedButton so keyboard mode can resume from here.
@@ -223,7 +213,7 @@ public class UINavigationManager : MonoBehaviour
     /// • Keyboard mode → select the button immediately.
     /// • Mouse mode    → store it; selected the next time a nav key is pressed.
     /// </summary>
-    public void RegisterScreenDefault(UIButtons button)
+    public void RegisterScreenDefault(UIButtons button) // I feel like this is scene activity spasific logic why is thos on the geneneral manager script?
     {
         if (button == null)
         {
@@ -231,15 +221,13 @@ public class UINavigationManager : MonoBehaviour
             return;
         }
 
-        // Clear last-highlighted so it can't win over the new screen's default.
         lastHighlightedButton = null;
         screenDefaultButton = button;
 
         if (isKeyboardMode)
         {
             eventSystem.SetSelectedGameObject(button.gameObject);
-            screenDefaultButton = null; // consumed
+            screenDefaultButton = null; // why is it being consumed here?
         }
-        // Otherwise consumed by SelectBestKeyboardTarget on the next nav keypress.
     }
 }

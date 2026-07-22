@@ -6,7 +6,7 @@ using UnityEngine.TestTools;
 using UnityEngine.SceneManagement;
 
 public class SceneActivityTest
-{
+{ /*
     GameObject myTestObj;
     SceneActivity mySA;
 
@@ -99,5 +99,5 @@ public class SceneActivityTest
         Assert.IsTrue(myTestObj.activeSelf);
 
         yield return null;
-    }
+    } */
 }

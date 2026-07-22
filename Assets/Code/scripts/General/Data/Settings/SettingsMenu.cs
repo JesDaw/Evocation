@@ -13,22 +13,21 @@ public class SettingsMenu : MonoBehaviour
 
     Resolution[] resolutions;
 
-    void Awake()
+    // These Variable and function names are not following our naming conventions
+    //also what the heck is PlayerPrefs? I dont see that object anywhere
+    void Awake() 
     {
         load_settings();
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         load_settings();
     }
 
-    //load the settings from player prefs
-    void load_settings()
+    void load_settings() // this function is pretty long can it be split into smaller functions?
     {
-        //using player pref to save the all setting changes acorss diff scenes
-        //volume//////
+
         float master_volume = PlayerPrefs.GetFloat("MasterVolume", 0.75f);
         float music_volume = PlayerPrefs.GetFloat("MusicVolume", 0.75f);
         float sfx_volume = PlayerPrefs.GetFloat("SFXVolume", 0.75f);
@@ -42,22 +41,17 @@ public class SettingsMenu : MonoBehaviour
         sfx_slider.value = sfx_volume;
 
 
-        //quality/////
         int saved_quality = PlayerPrefs.GetInt("GraphicsQuality", QualitySettings.GetQualityLevel());
         set_quality(saved_quality);
 
-        //fullscreen//////
         bool saved_fullscreen = PlayerPrefs.GetInt("Fullscreen", 1) == 1;
         set_fullscreen(saved_fullscreen);
 
-        //resolutions////////
         if (resolution_dropdown != null)
         {
             resolutions = Screen.resolutions;
             resolution_dropdown.ClearOptions();
-            //turn array of resolutions into formatetd strings
             List<string> options = new List<string>();
-            //save
             int saved_resolutionIndex = PlayerPrefs.GetInt("Resolution", 0);
             set_resolution(saved_resolutionIndex);
 

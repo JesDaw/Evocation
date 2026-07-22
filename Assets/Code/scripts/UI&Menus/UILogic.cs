@@ -12,8 +12,8 @@ public class UILogic : MonoBehaviour
 
     public static bool GameIsPaused = false;
     public static UnityEvent PauseEvent, ResumeEvent;
-    //[SerializeField] bool DebugLogs = false;
-    
+
+    // this script is too general It needs to be split into different scripts    
     [Flags]
     public enum PauseState
     {
@@ -70,7 +70,7 @@ public class UILogic : MonoBehaviour
         
     }
 
-    public void TogglePause(InputAction.CallbackContext context)
+    public void TogglePause(InputAction.CallbackContext context) // pause menu should be its own script
     {
         if(DebugLogs) Debug.Log($"[UILogic] TogglePause called. performed: {context.performed}, GameIsPaused: {GameIsPaused}");
         if (!context.performed) return;
@@ -122,7 +122,7 @@ public class UILogic : MonoBehaviour
         if(DebugLogs) Debug.Log($"Game is paused was {GameIsPaused} when trying to pause");
     }
 
-    public void ReloadCurrentScene()
+    public void ReloadCurrentScene() // loading scenes should be handles by the scene transition scripts and SceneManager
     {
         Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -145,7 +145,7 @@ public class UILogic : MonoBehaviour
         FModAudioManager.instance.PlaySoundByName("menuClick");
     }
 
-    public void QuitGame() 
+    public void QuitGame() // this should be in its own script as well as time scale logic
     { 
         #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;

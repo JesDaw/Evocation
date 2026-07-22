@@ -6,6 +6,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
+// I got this script from the internet litterly just for the same for having hot key animations on spacifit buttons in the gameplay Ui but its cluddered with some extra logic I dont know if we will use
+// this also may have redundant logic when we already have UIButtons, Also UIButtons is not a descriptive name at all it should be called UIButtonEffects or something
+
 namespace ChristinaCreatesGames.UI
 {
     public class HotkeyButton : Selectable, IPointerClickHandler, ISubmitHandler

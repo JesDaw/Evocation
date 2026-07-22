@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Diagnostics;
 
+// I think the logic on this script can be similar to the dialogue choice logic
 public class PlayerLivesDisplay : MonoBehaviour
 {
     [SerializeField] PlayerLivesManager livesManager;

@@ -62,18 +62,15 @@ public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         ResetToOriginalState();
     }
-
-    private void OnDisable()
-    {
-        isHovered = false;
-    }
-
-    // ── State helpers ─────────────────────────────────────────────────────────
-
     public void ResetToOriginalState()
     {
         isHovered = false;
         AnimateToState(originalColor, originalTextColor, originalScale, animationDuration);
+    }
+
+    private void OnDisable()
+    {
+        isHovered = false;
     }
 
     private void OnCanvasGroupChanged()
@@ -82,72 +79,59 @@ public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             isHovered = false;
     }
 
-    // ── Pointer events (mouse) ────────────────────────────────────────────────
-
+    // OnSelect and OnPointerEnter are like the same function they should just be merged into one OnbuttonHighlight function
+    public void OnSelect(BaseEventData eventData)
+    {
+        UINavigationManager.Instance?.RegisterKeyboardSelect(this);
+        ActivateHighlightEffects();
+        ButtonHighlighted?.Invoke();
+    }
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // Tell the navigation manager which button the mouse is over so keyboard
-        // mode can resume from here if the player picks up the controller/keyboard.
         UINavigationManager.Instance?.RegisterMouseHover(this);
         if (isHovered) return;
-        isHovered = true;
+        isHovered = true;        
+        
+        ButtonHighlighted?.Invoke();
+    }
 
-
+    void ActivateHighlightEffects()
+    {
         AnimateToState(hoverColor, hoverTextColor, hoverScale, animationDuration);
         FModAudioManager.instance.PlaySoundByName("showCharacterInfo");
-
-        ButtonHighlighted?.Invoke();
     }
     
     public void OnPointerExit(PointerEventData eventData)
     {
         if (!isHovered) return;
         isHovered = false;
+    }
+     public void OnDeselect(BaseEventData eventData)
+    {
+        if (!isHovered) DeactivateHighlightEffects();
+    }
+
+    void DeactivateHighlightEffects()
+    {
         AnimateToState(originalColor, originalTextColor, originalScale, animationDuration);
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        //ClickSound();
         StartCoroutine(ClickAnimation());
-        
     }
-
-    // ── Select events (keyboard / gamepad) ────────────────────────────────────
-
-    public void OnSelect(BaseEventData eventData)
-    {
-        // Tell the manager this is the last keyboard-reached button so it can
-        // resume here if the player briefly switches to mouse without hovering anything.
-        UINavigationManager.Instance?.RegisterKeyboardSelect(this);
-        FModAudioManager.instance.PlaySoundByName("showCharacterInfo");
-        ButtonHighlighted?.Invoke();
-
-        AnimateToState(hoverColor, hoverTextColor, hoverScale, animationDuration);
-    }
-
-    public void OnDeselect(BaseEventData eventData)
-    {
-        // Only animate back to original when the mouse isn't still over this button.
-        if (!isHovered)
-            AnimateToState(originalColor, originalTextColor, originalScale, animationDuration);
-    }
-
-    // ── Animation ─────────────────────────────────────────────────────────────
 
     private IEnumerator ClickAnimation()
     {
-        AnimateToState(clickColor, clickTextColor, clickScale, clickDuration);
+        AnimateToState(clickColor, clickTextColor, clickScale, clickDuration); 
         yield return new WaitForSeconds(clickDuration);
-        AnimateToState(postClickColor, postClickTextColor, postClickScale, animationDuration);
+        AnimateToState(postClickColor, postClickTextColor, postClickScale, animationDuration); // usually what happens is the sceneactifity will switch scenes before this animation is done so it can be weird, or works with a scnee transition animation I think
         ButtonClicked?.Invoke();
     }
     
     private void AnimateToState(Color targetColor, Color targetTextColor, Vector3 targetScale, float duration)
     {
-        if (currentAnimation != null)
-            StopCoroutine(currentAnimation);
-
+        if (currentAnimation != null) StopCoroutine(currentAnimation);
         currentAnimation = StartCoroutine(AnimateToStateCoroutine(targetColor, targetTextColor, targetScale, duration));
     }
 
@@ -183,8 +167,7 @@ public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     }
 
-    // ── Audio / misc public methods ───────────────────────────────────────────
-    public void HighlightSound()
+    public void HighlightSound() //these should be public variables set in the inspector I dont think they should be super hard coded like this
     {
         FModAudioManager.instance.PlaySoundByName("showCharacterInfo");
     }
@@ -199,7 +182,7 @@ public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         FModAudioManager.instance.PlaySoundByName("removeCharacterFromParty");
     }
 
-    public void QuitGame()
+    public void QuitGame() //I want to make a general game logic script with this logic in it quitting the game is not what this script is for its purly for button visuals
     {
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;

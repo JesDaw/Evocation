@@ -32,7 +32,6 @@ public class SceneActivityManager : MonoBehaviour
     /// <summary>
     /// Maps an ID to a SceneActivity GameObject
     /// </summary>
-    /// 
     public GameObject[] SceneActivities;
     internal Dictionary<string, GameObject> objNamed = new Dictionary<string, GameObject>();
 
@@ -64,26 +63,23 @@ public class SceneActivityManager : MonoBehaviour
 
     internal void Start()
     {
-        //Debug.Log("SceneActivityManager.Start", gameObject);
-
-        
         anchorActivity = initialActivity;
-
-        // Activate the 'Initial' SceneActivity and disable all others
         Activate(initialActivity, true);
-    }
-
-    void ClearCache()
-    {
-        objNamed.Clear();
-        initialActivity = null;
-        //currentActivity = null;
     }
 
     void CacheAllSAObjects()
     {
         ClearCache();
+        CheckForInitialSA();
+    }
+    void ClearCache()
+    {
+        objNamed.Clear();
+        initialActivity = null;
+    }
 
+    void CheckForInitialSA()
+    {
         foreach (var obj in SceneActivities)
         {
             SceneActivity sa = obj.GetComponent<SceneActivity>();
@@ -109,7 +105,6 @@ public class SceneActivityManager : MonoBehaviour
     {
         if (!objNamed.ContainsKey(obj.name))
         {
-            //Debug.Log($"Found SceneActivity \"{obj.name}\"", gameObject);
             objNamed.Add(obj.name, obj);
         }
         else
@@ -120,7 +115,7 @@ public class SceneActivityManager : MonoBehaviour
 
     void OnDestroy()
     {
-        //Debug.Log("SceneActivityManager.OnDestroy", gameObject);
+        
     }
 
     public void ActivateInitialSA() { Activate(initialActivity); }
@@ -142,13 +137,13 @@ public class SceneActivityManager : MonoBehaviour
         }
     }
 
-    public void ActivatePreviousSAWithFade()
+    public void ActivatePreviousSAWithFade() //animation logic should not be handled here it should be handles on the scene activity itself
     {
         if (changeHistory.Count > 0)
         {
             string targetName = changeHistory.Pop();
             isNavigatingBack = true; 
-            FadeOutThenIn(FindActivity(targetName), .3f);
+            FadeOutThenIn(FindActivityByName(targetName), .3f);
             isNavigatingBack = false; 
         }
         else
@@ -160,7 +155,7 @@ public class SceneActivityManager : MonoBehaviour
     public void ActivateSettings() { Activate("Settings"); }
     public void ActivateSettingsWithFade() 
     { 
-        FadeOutThenIn(FindActivity("Settings"), .3f);
+        FadeOutThenIn(FindActivityByName("Settings"), .3f);
     }
 
 
@@ -176,19 +171,15 @@ public class SceneActivityManager : MonoBehaviour
         if (currObj == null)
         {
             nextObj.GetComponent<SceneActivity>().StartActivity();
-            //    Debug.Log($"SceneActivityManager: -> {name}", nextObj);
         }
         else if (!currObj.Equals(nextObj))
         {
             nextObj.GetComponent<SceneActivity>().StartActivity();
             currObj.GetComponent<SceneActivity>().StopActivity();
-
-            // Only push to history if we're NOT navigating back
             if (!isNavigatingBack)
             {
                 changeHistory.Push(currObj.name);
             }
-            //Debug.Log($"SceneActivityManager: {currObj.name} -> {nextObj.name}", nextObj);
         }
         else
         {
@@ -197,13 +188,11 @@ public class SceneActivityManager : MonoBehaviour
 
         currentActivity = nextObj;
 
-        if (makeAnchor) anchorActivity = nextObj;
+        if (makeAnchor) anchorActivity = currentActivity;
 
-        // Notify all interested parties that an SceneActivity
-        // change has occurred.
         ActivityChanged.Invoke();
 
-        if (disableAllOthers)
+        if (disableAllOthers) // I think this logic can help up make little popups or scene activities on top of scene activities
         {
             var alreadyHandled = new HashSet<GameObject>();
             foreach (var obj in objNamed.Values)
@@ -217,9 +206,9 @@ public class SceneActivityManager : MonoBehaviour
         }
     }
 
-    public void Activate(string name, bool makeAnchor)
+    public void Activate(string name, bool makeAnchor = false)
     {
-        GameObject activity = FindActivity(name);
+        GameObject activity = FindActivityByName(name);
         if (activity != null)
         {
             Activate(activity, makeAnchor: makeAnchor);
@@ -230,12 +219,12 @@ public class SceneActivityManager : MonoBehaviour
         }
     }
 
-    public void Activate(string name)
+    public void ActivateAndMakeAnchor(string name)
     {
-        Activate(FindActivity(name), makeAnchor: false);
+        Activate(FindActivityByName(name), makeAnchor: true);
     }
 
-    public void ActivateWithFade(string name)
+    public void ActivateWithFade(string name) // again all fade logic should be handles by the senceactivity scripts
     {
         if (currentActivity == null)
         {
@@ -243,7 +232,7 @@ public class SceneActivityManager : MonoBehaviour
             return;
         }
 
-        GameObject nextActivity = FindActivity(name);
+        GameObject nextActivity = FindActivityByName(name);
         if (nextActivity == null)
         {
             Debug.LogError($"[SceneActivityManager] Failed to find/activate '{name}'");
@@ -252,7 +241,7 @@ public class SceneActivityManager : MonoBehaviour
         FadeOutThenIn(nextActivity.gameObject, .3f);
     }
 
-    void FadeOutThenIn(GameObject toObj, float duration)
+    void FadeOutThenIn(GameObject toObj, float duration) // ya this would be much easier within the scene activities, also It would be cool of we could point to different animations so what animation a screen has isnt hard coaded
     {
         if (currentActivity.gameObject == null || toObj == null) return;
         VisualEffectsManager.Instance.FadeOut(currentActivity.gameObject, duration, () =>
@@ -269,40 +258,22 @@ public class SceneActivityManager : MonoBehaviour
 
     // Unity seems to have a problem with optional arguments so this is a
     // convenience method capable of being referenced within the Unity GUI.
-    public void ActivateAndMakeAnchor(string name)
-    {
-        Activate(FindActivity(name), makeAnchor: true);
-    }
+   
 
     public GameObject GetCurrentActivity()
     {
         return currentActivity;
     }
-
-    /// <summary>
-    /// Indicates if 'SA_0...' is currently active
-    /// </summary>
-    /// <returns>true if active, false if not</returns>
-    public bool InInitialSA()
+    public bool InitialSAIsActive()
     {
         return initialActivity.Equals(currentActivity);
     }
-
-    /// <summary>
-    /// Indicates if the anchor activity is currently active
-    /// </summary>
-    /// <returns>true if active, false if not</returns>
-    public bool InAnchorSA()
+    public bool InAnchorSAIsActive()
     {
         return anchorActivity.Equals(currentActivity);
     }
 
-    /// <summary>
-    /// Returns the SceneActivity/GameObject with a specified name
-    /// </summary>
-    /// <param name="activityName">Either the int id as a string OR the detailed name</param>
-    /// <returns>GameObject associated with the specified name</returns>
-    public GameObject FindActivity(string activityName)
+    public GameObject FindActivityByName(string activityName)
     {
         GameObject result = null;
 

@@ -29,8 +29,6 @@ namespace AdamLenzini.UI
         [SerializeField] private Color navigationColour = Color.cyan;
         [SerializeField] private bool ShowDebugLogs = true;
 
-        // ── Gizmos ────────────────────────────────────────────────────────────
-
         private void OnDrawGizmos()
         {
             if (!showVisualization || elementToSelect == null) return;
@@ -38,16 +36,12 @@ namespace AdamLenzini.UI
             Gizmos.DrawLine(transform.position, elementToSelect.transform.position);
         }
 
-        // ── Init ──────────────────────────────────────────────────────────────
-
         private void Reset()
         {
             eventSystem = Object.FindFirstObjectByType<EventSystem>();
             if (eventSystem == null && ShowDebugLogs)
                 Debug.Log("[SetsUiElementOnSelect] No EventSystem found in scene.", this);
         }
-
-        // ── Public API ────────────────────────────────────────────────────────
 
         /// <summary>
         /// Wire this to SceneActivity.OnActivityStart on this screen's root GameObject.
@@ -66,8 +60,6 @@ namespace AdamLenzini.UI
 
             if (uiButton != null && UINavigationManager.Instance != null)
             {
-                // The screen is already active here (OnActivityStart fires after SetActive(true)),
-                // so the manager can select the button immediately if in keyboard mode.
                 UINavigationManager.Instance.RegisterScreenDefault(uiButton);
             }
             else

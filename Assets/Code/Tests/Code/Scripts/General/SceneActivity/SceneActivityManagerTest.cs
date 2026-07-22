@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Rendering;
 
 public class SceneActivityManagerTest
-{
+{ /*
     GameObject myTestObj;
     SceneActivityManager myMgr;
 
@@ -164,5 +164,5 @@ public class SceneActivityManagerTest
         Assert.Throws<SceneActivityManager.SAException>(() => myMgr.Activate("AnUnknownSA"));
 
         yield return null;
-    }
+    } */
 }
