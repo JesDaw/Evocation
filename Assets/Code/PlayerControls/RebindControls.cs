@@ -179,7 +179,7 @@ public class RebindControls : MonoBehaviour
         ShowListeningOverlay(false);
 
         // Now restore your actual intended input mode
-        GlobalInputManager.Instance.SetPauseMenuMode();
+        GlobalInputManager.Instance.SetMode(InputMode.PauseMenu);
     }
 
     // ========================= Reset =========================

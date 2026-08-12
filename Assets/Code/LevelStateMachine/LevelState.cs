@@ -13,7 +13,7 @@ public abstract class LevelState
     [SerializeField] protected bool makeUIAnchor = false;
     
     [Header("Input Mode")]
-    [SerializeField] protected InputMode inputMode = InputMode.Disabled;
+    [SerializeField] protected InputMode inputMode = InputMode.Cutscene;
     
     [Header("Game Mechanics")]
     [SerializeField] protected bool enableMoney = false;
@@ -41,11 +41,6 @@ public abstract class LevelState
     [SerializeField] protected bool DebugLogs = false;
     
     protected LevelStateManager context;
-    
-    public enum InputMode
-    {
-        Disabled, Cutscene, Scouting, Gameplay, CharacterSelecting, PauseMenu, FreeCam, Levelover
-    }
     
     public string StateName => stateName;
     
@@ -95,18 +90,10 @@ public abstract class LevelState
             Debug.LogWarning("Level state cant find GlobalInputManager");
             return;
         }
-        switch (inputMode)
-        {
-            case InputMode.Disabled: GlobalInputManager.Instance.DisableAllControls(); break;
-            case InputMode.Cutscene: GlobalInputManager.Instance.SetCutsceneMode(); break;
-            case InputMode.Scouting: GlobalInputManager.Instance.SetScoutingMode(); break;
-            case InputMode.Gameplay: GlobalInputManager.Instance.SetPlayerCharacterMode(); break;
-            case InputMode.CharacterSelecting: GlobalInputManager.Instance.SetCharacterSelectingMode(); break;
-            case InputMode.PauseMenu: GlobalInputManager.Instance.SetPauseMenuMode(); break;
-            case InputMode.FreeCam: GlobalInputManager.Instance.SetFreeCamMode(); break;
-            case InputMode.Levelover: GlobalInputManager.Instance.SetLevelOverScreenMode(); break;
-        }
+        GlobalInputManager.Instance.SetMode(inputMode);
+
     }
+
 
     protected virtual void ConfigureCameraControl()
     {

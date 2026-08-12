@@ -20,7 +20,7 @@ public class LossState : LevelState
     public void ShowDefeatScreen()
     {
         Time.timeScale = 0;
-        GlobalInputManager.Instance.SetPauseMenuMode();
+        GlobalInputManager.Instance.SetMode(InputMode.PauseMenu);
         context.SceneManager.Activate(defeatUIName);
     }
 }

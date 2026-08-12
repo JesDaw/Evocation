@@ -65,7 +65,7 @@ public class CameraControlSwitcher : MonoBehaviour
         if (FreeCamIsActive)
         {
             SwitchToPlayerControl();
-            GlobalInputManager.Instance.SetPlayerCharacterMode();
+            GlobalInputManager.Instance.SetMode(InputMode.PlayerCharacter);
         }
         else 
         {
@@ -77,7 +77,7 @@ public class CameraControlSwitcher : MonoBehaviour
     {
         FreeCamIsActive = false;
         
-        GlobalInputManager.Instance.SetPlayerCharacterMode();
+        GlobalInputManager.Instance.SetMode(InputMode.PlayerCharacter);
 
         var currentPlayer = ActivePlayer.Instance.CurrentPlayer?.GetComponent<PlayerStateMachine>();
         if (currentPlayer != null)
@@ -120,7 +120,7 @@ public class CameraControlSwitcher : MonoBehaviour
 
         if (swapControls) 
         {
-            GlobalInputManager.Instance.SetFreeCamMode();
+            GlobalInputManager.Instance.SetMode(InputMode.FreeCam);
         }
         if (DebugLogs) UnityEngine.Debug.Log($"[CameraControlSwitcher] Switched to camera control. FreeCam now active, player disabled.");
 

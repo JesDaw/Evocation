@@ -11,7 +11,7 @@ public class UILogic : MonoBehaviour
     [SerializeField] SceneActivityManager sceneMgr;
 
     public static bool GameIsPaused = false;
-    public static UnityEvent PauseEvent, ResumeEvent;
+    //public static UnityEvent PauseEvent, ResumeEvent;
     //[SerializeField] bool DebugLogs = false;
     
     [Flags]
@@ -59,8 +59,6 @@ public class UILogic : MonoBehaviour
 
     void Start()
     {
-        PauseEvent = new();
-        ResumeEvent = new();
         if (sceneMgr == null)sceneMgr = FindFirstObjectByType<SceneActivityManager>();
         Debug.Assert(sceneMgr != null);
         if (GlobalInputManager.Instance != null)
@@ -91,19 +89,8 @@ public class UILogic : MonoBehaviour
             // Time.timeScale = 1;
             toggleMenuPaused();
             GameIsPaused = false;
-            
-            // Return to appropriate mode when unpausing
-            if (CameraControlSwitcher.Instance != null && CameraControlSwitcher.Instance.FreeCamIsActive) //this function is wrong it should store whatever the previous input setings were
-            {
-                GlobalInputManager.Instance.SetFreeCamMode();
-            }
-            else
-            {
-                GlobalInputManager.Instance.SetPlayerCharacterMode();
-            }
-            
+            GlobalInputManager.Instance.PopMode();
             GlobalInputManager.Instance.DisableCursor();
-            ResumeEvent?.Invoke();
         }
     }
 
@@ -115,10 +102,10 @@ public class UILogic : MonoBehaviour
         // Time.timeScale = 0;
         toggleMenuPaused();
         GameIsPaused = true;
-        GlobalInputManager.Instance.SetPauseMenuMode();
+        GlobalInputManager.Instance.PushCurrentMode();
+        GlobalInputManager.Instance.SetMode(InputMode.PauseMenu);
         
         GlobalInputManager.Instance.EnableCursor();
-        PauseEvent?.Invoke();
         if(DebugLogs) Debug.Log($"Game is paused was {GameIsPaused} when trying to pause");
     }
 

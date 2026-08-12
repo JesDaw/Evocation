@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
 
 public class GlobalInputManager : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class GlobalInputManager : MonoBehaviour
     [SerializeField] bool StartWithUIEnabled = false;
     public bool MenuNavigation = false;
     [SerializeField] bool DebugLogs = false;
+    Stack<InputMode> _modeHistory = new Stack<InputMode>();
+    public InputMode CurrentMode { get; private set; }
+
     
     #region Start and stop
     void Awake()
@@ -46,6 +50,50 @@ public class GlobalInputManager : MonoBehaviour
         _inputActions?.Dispose();
     }
     #endregion
+
+    public void PushCurrentMode()
+    {
+        _modeHistory.Push(CurrentMode);
+    }
+    public void SetMode(InputMode mode, bool storInHistory = false)
+    {
+        if (storInHistory)
+        {
+            if(DebugLogs) Debug.Log($"putting {CurrentMode} into history ");
+            PushCurrentMode();
+        }
+        CurrentMode = mode;
+        ApplyMode(mode);
+    }
+
+    void ApplyMode(InputMode mode)
+    {
+        switch (mode)
+        {
+            case InputMode.PlayerCharacter: ApplyPlayerCharacterMode(); break;
+            case InputMode.FreeCam:  ApplyFreeCamMode(); break;
+            case InputMode.Scouting:  ApplyScoutingMode(); break;
+            case InputMode.Cutscene:  ApplyCutsceneMode(); break;
+            case InputMode.Dialogue:  ApplyDialogueMode(); break;
+            case InputMode.PauseMenu:  ApplyPauseMenuMode(); break;
+            case InputMode.EngaugeScreen:  ApplyEngaugeScreenMode(); break;
+            case InputMode.CharacterSelecting:  ApplyCharacterSelectingMode(); break;
+            case InputMode.LevelOverScreen:  ApplyLevelOverScreenMode(); break;
+        }
+    }
+
+    public void PopMode()
+    {
+        if (_modeHistory.Count == 0)
+        {
+            if (DebugLogs) Debug.LogWarning("Input mode history is empty, nothing to pop.");
+            return;
+        }
+        InputMode previous = _modeHistory.Pop();
+        SetMode(previous);
+    }
+
+
     #region Control Groups
     public void EnableAllControls()
     {
@@ -219,7 +267,7 @@ public class GlobalInputManager : MonoBehaviour
     #endregion
     #region Game State Presets
     
-    public void SetPlayerCharacterMode()
+    public void ApplyPlayerCharacterMode()
     {
         if(DebugLogs) Debug.Log("=========Input Mode: Gameplay=========");
         DisableAllControls();
@@ -234,7 +282,7 @@ public class GlobalInputManager : MonoBehaviour
                
     }
     
-    public void SetFreeCamMode()
+    public void ApplyFreeCamMode()
     {
         if(DebugLogs) Debug.Log("=========Input Mode: FreeCam=========");
         DisableAllControls();
@@ -248,7 +296,7 @@ public class GlobalInputManager : MonoBehaviour
         
     }
 
-    public void SetScoutingMode()
+    public void ApplyScoutingMode()
     {
         if(DebugLogs) Debug.Log("=========Input Mode: scouting=========");
         DisableAllControls();
@@ -259,30 +307,30 @@ public class GlobalInputManager : MonoBehaviour
         
     }
     
-    public void SetCutsceneMode()
+    public void ApplyCutsceneMode()
     {
         if(DebugLogs) Debug.Log("=========Input Mode: Cutscene=========");
         DisableAllControls();
         _inputActions.UI.SkipCutscene.Enable();
         _inputActions.UI.ConfirmDialogue.Enable();
-        _inputActions.UI.TogglePause.Disable();
+        _inputActions.UI.TogglePause.Enable();
         DisableMenuNavigation();
         DisableCursor();
         
     }
     
-    public void SetDialogueMode()
+    public void ApplyDialogueMode()
     {
         if(DebugLogs) Debug.Log("=========Input Mode: Dialogue=========");
         DisableAllControls();
         _inputActions.UI.SkipCutscene.Enable();
         _inputActions.UI.ConfirmDialogue.Enable();
-        _inputActions.UI.TogglePause.Disable();
+        _inputActions.UI.TogglePause.Enable();
         
         EnableMenuNavigation();        
     }
 
-    public void SetPauseMenuMode()
+    public void ApplyPauseMenuMode()
     {
         if(DebugLogs) Debug.Log("=========Input Mode: Pause Menu=========");
         DisableAllControls();
@@ -290,7 +338,7 @@ public class GlobalInputManager : MonoBehaviour
         EnableMenuNavigation();
     }
 
-    public void SetEngaugeScreenMode()
+    public void ApplyEngaugeScreenMode()
     {
         if(DebugLogs) Debug.Log("=========Input Mode: Pause Menu=========");
         DisableAllControls();
@@ -299,7 +347,7 @@ public class GlobalInputManager : MonoBehaviour
         EnableMenuNavigation();
     }
 
-    public void SetCharacterSelectingMode()
+    public void ApplyCharacterSelectingMode()
     {
         if(DebugLogs) Debug.Log("=========Input Mode: Spawning=========");
         DisableAllControls();
@@ -308,7 +356,7 @@ public class GlobalInputManager : MonoBehaviour
         EnableMenuNavigation();
     }
 
-    public void SetLevelOverScreenMode()
+    public void ApplyLevelOverScreenMode()
     {
         if(DebugLogs) Debug.Log("=========Input Mode: LevelOver=========");
         DisableAllControls();
@@ -324,4 +372,17 @@ public class GlobalInputManager : MonoBehaviour
                   $"SpawnerController: {_inputActions.SpawnerController.enabled}\n" +
                   $"UI: {_inputActions.UI.enabled}");
     }
+}
+
+public enum InputMode
+{
+    PlayerCharacter,
+    FreeCam,
+    Scouting,
+    Cutscene,
+    Dialogue,
+    PauseMenu,
+    EngaugeScreen,
+    CharacterSelecting,
+    LevelOverScreen
 }

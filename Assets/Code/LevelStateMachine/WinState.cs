@@ -22,7 +22,7 @@ public class WinState : LevelState
     public void ShowVictoryScreen()
     {
         Time.timeScale = 0;
-        GlobalInputManager.Instance.SetPauseMenuMode();
+        GlobalInputManager.Instance.SetMode(InputMode.PauseMenu);
         context.SceneManager.Activate(victoryUIName);
     }
 }

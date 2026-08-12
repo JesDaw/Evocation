@@ -80,7 +80,7 @@ public class DialogueManager : MonoBehaviour
         if (ShowDebugLogs) Debug.Log($"slides = {slides.Count}, trigger = null: {trigger.gameObject.name}");
         DialogueBox.SetActive(true);
         
-        GlobalInputManager.Instance.SetDialogueMode();
+        GlobalInputManager.Instance.SetMode(InputMode.Dialogue);
         
         DisplayNextSlide(); 
     }
@@ -198,21 +198,11 @@ public class DialogueManager : MonoBehaviour
         {
             _dailogueTrigger.EndDialogue(CurrentChoiceIndex);
         }
-        
-      
-        /*
-        if (CameraControlSwitcher.Instance != null && CameraControlSwitcher.Instance.FreeCamIsActive)
-        {
-            GlobalInputManager.Instance.SetFreeCamMode();
-        }
-        else
-        {
-            GlobalInputManager.Instance.SetPlayerCharacterMode();
-        }*/
     }
 
     public void DeactivateDialogueBox()
     {
+        if (ShowDebugLogs)Debug.Log($"disabling game dialogue box");
         DialogueBox.SetActive(false);
         DialogueActive = false;
         slideCount = 0;
@@ -239,5 +229,4 @@ public class DialogueManager : MonoBehaviour
         }
         return null;
     }
-
 }
