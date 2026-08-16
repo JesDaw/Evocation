@@ -13,6 +13,7 @@ public abstract class LevelState
     [SerializeField] protected bool makeUIAnchor = false;
     
     [Header("Input Mode")]
+    [SerializeField] protected bool changeInputMode = true;
     [SerializeField] protected InputMode inputMode = InputMode.Cutscene;
     
     [Header("Game Mechanics")]
@@ -60,7 +61,7 @@ public abstract class LevelState
             if (DebugLogs) Debug.Log($"[LevelState] activating scene: {sceneActivityName}");
         }
         
-        ConfigureInput();
+        if (changeInputMode) ConfigureInput();
         ConfigureCameraControl();
         ConfigureGameMechanics();
         ConfigureAudio();

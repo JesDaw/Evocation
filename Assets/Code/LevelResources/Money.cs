@@ -10,8 +10,10 @@ public class Money : MonoBehaviour
     [SerializeField] int MoneyPerPlayer;
     bool _money_is_active = false;
     [SerializeField] int StartingMoney = 0;
-   [HideInInspector] public float CurrentMoney = 0;
+    [HideInInspector] public float CurrentMoney = 0;
     float MoneyGainPerSec = 1; 
+    [HideInInspector] public int CurrentMaxMoneyIndex = 0;
+    [SerializeField] int[] MaxMoney = {200, 400, 600, 800, 1000};
     public UnityEvent MoneyUpdated;
     
     public bool MoneyIsActive
@@ -50,7 +52,7 @@ public class Money : MonoBehaviour
     {
         while(true)
         {
-            if (!_money_is_active && CurrentMoney < 9999)
+            if (!_money_is_active || CurrentMoney >= MaxMoney[CurrentMaxMoneyIndex])
             {
                 yield return null;
                 continue;
@@ -69,7 +71,7 @@ public class Money : MonoBehaviour
 
     public void UpdateMoneyDesplay()
     {
-        moneyText.text = CurrentMoney.ToString("0");
+        moneyText.text = $"{CurrentMoney.ToString("0")}/{MaxMoney[CurrentMaxMoneyIndex]}";
         //Debug.Log("UpdateMoneyDesplay updated");
     }
 
@@ -90,6 +92,14 @@ public class Money : MonoBehaviour
         //aIMoneyManager.ActivateMoney();
     }
     public void ResetMoney() => CurrentMoney = 0; 
+    public void UpgradeMaxMoney()
+    {
+        if(MaxMoney.Length - 1 > CurrentMaxMoneyIndex)
+        {
+            CurrentMaxMoneyIndex += 1;
+            //effects;
+        }
+    }
     public void MoneybuildingGen()
     {
         MoneyGainPerSec += 10;

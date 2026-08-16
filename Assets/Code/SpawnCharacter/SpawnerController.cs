@@ -9,6 +9,7 @@ public class SpawnController : MonoBehaviour
 {
     [Header("Spawn Settings")]
     [SerializeField] List<ScriptableStats> spawnableCPUs = new List<ScriptableStats>();
+     List<float> nextAvailableActionTimes = new List<float>();
 
     [Header("Player Spawning")]
     [SerializeField] GameObject playerPrefab;
@@ -86,7 +87,6 @@ public class SpawnController : MonoBehaviour
 
     void TrySpawnCPU(int index)
     {
-        // Validation
         if (SpawnObjects.PlayerInstance == null)
         {
             if (showDebugLogs)Debug.LogError("No spawner assigned on player spawner!");
@@ -107,7 +107,6 @@ public class SpawnController : MonoBehaviour
             return;
         }
 
-        // Spawn through the spawner (handles money deduction)
         GameObject spawned = SpawnObjects.PlayerInstance.SpawnFromPlayer(stats);
 
         if (spawned != null)
@@ -141,9 +140,12 @@ public class SpawnController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Add a CPU to the spawn list (for unlocking units)
-    /// </summary>
+    bool CheckSpawnCooldown(int characterIndex)
+    {
+        if (Time.time >= nextAvailableActionTimes[characterIndex]) return false;
+        return true;
+    }
+
     public void EquipCPU(ScriptableStats stats)
     {
         if (stats == null) return;
@@ -154,9 +156,6 @@ public class SpawnController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Remove a CPU from the spawn list
-    /// </summary>
     public void UnequipCPU(ScriptableStats stats)
     {
         if (stats == null) return;
