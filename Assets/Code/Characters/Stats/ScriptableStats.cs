@@ -13,6 +13,7 @@ public class ScriptableStats : ScriptableObject
 
     [Header("Value")]
     public int _spawnCost;
+    public int _spawnCooldown;
     public float Level_Total;
     [HideInInspector] public float Level_Discrepancy;
     public float _CalculatedPower;
@@ -32,7 +33,7 @@ public class ScriptableStats : ScriptableObject
     [Range(0, 1000)]public float _KnockBackMaxHealth = 1;
     [Range(0, 30)] public float _HorizontalRange = 3f;
     public float _VerticalRange = 2f;
-    [Header("Sttack frequency")]
+    [Header("Attack frequency")]
     [Tooltip("Extra endlag in seconds (animation recovery time is added on top)")] [Range(0, 30)]public float _ExtraEndlag = 0f;
     [Tooltip("Base multiplier for action cooldowns (1.0 = normal speed)")] [Range(1, 30)] public float _ActionCooldown = 1f;
     [Header("Knockback Physics")]
