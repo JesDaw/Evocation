@@ -4,8 +4,6 @@ using TMPro;
 using System.Collections;
 using System.Collections.Generic;
 using ChristinaCreatesGames.UI;
-
-
 public class CharacterSelect : MonoBehaviour
 {
 
@@ -26,6 +24,8 @@ public class CharacterSelect : MonoBehaviour
     [SerializeField] Image[] partySlots;
     [SerializeField] GameObject[] partySlotsGameplayUI;
     [SerializeField] TMP_Text[] characterPrice;
+    [Header("Gameplay UI Party Bar")]
+    [SerializeField] CharacterSlot[] characterSlots;
 
     CharacterData lastClicked = null;
 
@@ -45,7 +45,6 @@ public class CharacterSelect : MonoBehaviour
         maxMessage.SetActive(false);
         UpdateSelactableUI();
         UpdatePartyUI();
-        if (SpawnController.Instance == null) Debug.LogError($"spawnController not found in {gameObject.name}");
     }
 
     void UpdateSelactableUI()
@@ -100,7 +99,6 @@ public class CharacterSelect : MonoBehaviour
         {
             FModAudioManager.instance.PlaySoundByName("removeCharacterFromParty");
             party.Remove(character);
-            SpawnController.Instance.UnequipCPU(character.scriptableStats);
         }
         else
         {
@@ -135,7 +133,6 @@ public class CharacterSelect : MonoBehaviour
                 if (character.SoundName != "") FModAudioManager.instance.PlaySoundByName(character.SoundName);
 
                 party.Add(character);
-                SpawnController.Instance.EquipCPU(character.scriptableStats);
             }
             else
             {
@@ -144,6 +141,19 @@ public class CharacterSelect : MonoBehaviour
             }
     }
 
+    public void CommitParty()
+    {
+        for (int i = 0; i < characterSlots.Length - 1; i++)
+        {
+            if (i > characterSlots.Length)
+            {
+                Debug.LogWarning($"no character slot at index {i}");
+                continue;
+            }
+            if (i < characterSlots.Length && i > party.Count) characterSlots[i].UnequipCPU();
+            if (i < characterSlots.Length && i < party.Count) characterSlots[i].EquipCPU(party[i].scriptableStats);
+        }
+    }
 
     IEnumerator MaxMessageRoutine()
     {

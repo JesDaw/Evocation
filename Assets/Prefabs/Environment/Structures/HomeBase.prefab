@@ -732,9 +732,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterStats: {fileID: 0}
   attackSoundType: 0
-  stepStudioEventEmitter: {fileID: 0}
-  swingStudioEventEmitter: {fileID: 0}
-  gettingHitEventEmitter: {fileID: 0}
+  minDistance: 1
+  maxDistance: 15
+  parameterName: Volume
+  parameterValue: 1
 --- !u!1 &1521566621391802078
 GameObject:
   m_ObjectHideFlags: 0
@@ -745,7 +746,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7010236975575626099}
   - component: {fileID: 5196419715943994192}
-  - component: {fileID: 262459349393374605}
   m_Layer: 22
   m_Name: FriendSpawner
   m_TagString: Untagged
@@ -792,21 +792,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   DebugLogs: 0
---- !u!114 &262459349393374605
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1521566621391802078}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13a34e828a570a44ba70a1a92777db10, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnableCPUs: []
-  playerPrefab: {fileID: 7051032630218217497, guid: 8cbd9205f9bdd4a8e807b6d7b18cb3b2, type: 3}
-  showDebugLogs: 0
 --- !u!1 &1810028747549424974
 GameObject:
   m_ObjectHideFlags: 0
@@ -2221,7 +2206,6 @@ MonoBehaviour:
   statusEffectManager: {fileID: 0}
   entityHealthbar: {fileID: 0}
   animator: {fileID: 0}
-  animationEventsController: {fileID: 0}
 --- !u!114 &472764413557070475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3183,7 +3167,6 @@ GameObject:
   - component: {fileID: 6856140328898963689}
   - component: {fileID: 6477111174957822098}
   - component: {fileID: 1368386282119338308}
-  - component: {fileID: 1625791366840454273}
   m_Layer: 14
   m_Name: Player
   m_TagString: Player
@@ -3294,7 +3277,6 @@ MonoBehaviour:
   statusEffectManager: {fileID: 0}
   entityHealthbar: {fileID: 0}
   animator: {fileID: 0}
-  animationEventsController: {fileID: 0}
 --- !u!114 &7153472084429720684
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3411,18 +3393,6 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2}
   m_Direction: 0
---- !u!114 &1625791366840454273
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5052973119749344629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6c5045a1791b904e8f24a261783c2b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::IgnoreFriendsCollision
 --- !u!1 &5055233253400172190
 GameObject:
   m_ObjectHideFlags: 0
