@@ -7,7 +7,6 @@ public class DailogueTrigger : MonoBehaviour
     public List<Dialogue> Slides = new List<Dialogue>(); 
     [SerializeField] public DialogueChoice[] EndOfLines;
     public UltEvents.UltEvent DefultEvent;
-
     void Start()
     {
         //if (EndOfLines.Length <= 0) Debug.LogWarning($"[DailogueTrigger] No end of line events declared on {gameObject.name}");
