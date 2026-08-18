@@ -2,7 +2,10 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-//scripts for the actual functions on hit on the specific spells
+/// <summary>
+/// scripts for the actual functions on hit on the specific spells
+/// this should tie into the other systems attack logic idk if its all ready following the correct patters
+/// </summary>
 public class SpellsAffector : MonoBehaviour
 {
     [SerializeField] bool DebugLogs = false;
