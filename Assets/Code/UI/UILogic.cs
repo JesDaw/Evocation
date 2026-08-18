@@ -13,6 +13,7 @@ public class UILogic : MonoBehaviour
     public static bool GameIsPaused = false;
     //public static UnityEvent PauseEvent, ResumeEvent;
     //[SerializeField] bool DebugLogs = false;
+    public static float SpellTimeScaleRequest = 1f;
     
     [Flags]
     public enum PauseState
@@ -108,6 +109,25 @@ public class UILogic : MonoBehaviour
         GlobalInputManager.Instance.EnableCursor();
         if(DebugLogs) Debug.Log($"Game is paused was {GameIsPaused} when trying to pause");
     }
+    
+    public static void RequestSpellTimeScale(float scale)
+    {
+        SpellTimeScaleRequest = Mathf.Max(scale, 0f);
+        ApplyEffectiveTimeScale();
+    }
+
+    public static void ClearSpellTimeScale()
+    {
+        SpellTimeScaleRequest = 1f;
+        ApplyEffectiveTimeScale();
+    }
+
+    static void ApplyEffectiveTimeScale()
+    {
+        float scale = (pauseState & PauseState.MenuPaused) != 0 ? 0f : SpellTimeScaleRequest;
+        Time.timeScale = scale;
+        Time.fixedDeltaTime = 0.02f * Mathf.Max(scale, 0.0001f);
+    }
 
     public void ReloadCurrentScene()
     {
@@ -141,16 +161,9 @@ public class UILogic : MonoBehaviour
         #endif
     }
     
-    private void toggleMenuPaused()
+    void toggleMenuPaused()
     {
         pauseState ^= PauseState.MenuPaused;
-        if (pauseState == PauseState.Unpaused)
-        {
-            Time.timeScale = 1;
-        }
-        else
-        {
-            Time.timeScale = 0;
-        }
+        ApplyEffectiveTimeScale();
     }
 }

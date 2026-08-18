@@ -3,15 +3,14 @@ using UnityEngine;
 
 public static class AttackDetection
 {
-
     public static List<IDamageable> FindTargetsInBox(
         Vector2 center,
         Vector2 size,
         List<string> targetTags,
-        Stats attacker = null)
+        Stats attacker = null,
+        bool allowSelf = false)
     {
         List<IDamageable> targets = new List<IDamageable>();
-
         Collider2D[] hits = Physics2D.OverlapBoxAll(center, size, 0f);
 
         foreach (string targetTag in targetTags)
@@ -21,15 +20,15 @@ public static class AttackDetection
                 if (hit.CompareTag(targetTag))
                 {
                     IDamageable targetDamageable = hit.GetComponent<IDamageable>();
+                    bool isAttacker = (targetDamageable == (IDamageable)attacker);
 
-                    if (targetDamageable != null && targetDamageable != (IDamageable)attacker && !targets.Contains(targetDamageable))
+                    if (targetDamageable != null && (!isAttacker || allowSelf) && !targets.Contains(targetDamageable))
                     {
                         targets.Add(targetDamageable);
                     }
                 }
             }
         }
-
         return targets;
     }
 
@@ -37,10 +36,10 @@ public static class AttackDetection
         Vector2 center, 
         float radius, 
         List<string> targetTags,
-        Stats attacker = null)
+        Stats attacker = null,
+        bool allowSelf = false)
     {
         List<Stats> targets = new List<Stats>();
-        
         Collider2D[] hits = Physics2D.OverlapCircleAll(center, radius);
         
         foreach (string targetTag in targetTags)
@@ -50,21 +49,19 @@ public static class AttackDetection
                 if (hit.CompareTag(targetTag))
                 {
                     Stats targetStats = hit.GetComponent<Stats>();
+                    bool isAttacker = (targetStats == attacker);
                     
-                    if (targetStats != null && targetStats != attacker && !targets.Contains(targetStats))
+                    if (targetStats != null && (!isAttacker || allowSelf) && !targets.Contains(targetStats))
                     {
                         targets.Add(targetStats);
                     }
                 }
             }
         }
-        
         return targets;
     }
 
-    public static IDamageable FindClosestTarget(
-        Vector2 position,
-        List<IDamageable> targets)
+    public static IDamageable FindClosestTarget(Vector2 position, List<IDamageable> targets)
     {
         if (targets == null || targets.Count == 0) return null;
 
@@ -80,14 +77,12 @@ public static class AttackDetection
                 closest = target;
             }
         }
-
         return closest;
     }
 
     public static void DrawDebugBox(Vector2 center, Vector2 size, Color color, float duration = 0.1f)
     {
         Vector2 halfSize = size * 0.5f;
-        
         Vector2 topLeft = center + new Vector2(-halfSize.x, halfSize.y);
         Vector2 topRight = center + new Vector2(halfSize.x, halfSize.y);
         Vector2 bottomLeft = center + new Vector2(-halfSize.x, -halfSize.y);
@@ -102,15 +97,12 @@ public static class AttackDetection
     public static void DrawDebugCircle(Vector2 center, float radius, Color color, int segments = 32, float duration = 0.1f)
     {
         float angleStep = 360f / segments;
-        
         for (int i = 0; i < segments; i++)
         {
             float angle1 = i * angleStep * Mathf.Deg2Rad;
             float angle2 = (i + 1) * angleStep * Mathf.Deg2Rad;
-            
             Vector2 point1 = center + new Vector2(Mathf.Cos(angle1) * radius, Mathf.Sin(angle1) * radius);
             Vector2 point2 = center + new Vector2(Mathf.Cos(angle2) * radius, Mathf.Sin(angle2) * radius);
-            
             Debug.DrawLine(point1, point2, color, duration);
         }
     }

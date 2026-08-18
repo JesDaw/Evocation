@@ -7,6 +7,7 @@ public static class AttackLogic
     public static void ExecuteAttack(PlayerStateMachine context) => PerformAttack(context.transform.position, context.PlayerStats, !context.isFacingRight, context);
     private static void PerformAttack(Vector3 origin, Stats attackerStats, bool facingLeft, object contextObj)
     {
+        Debug.Log("Attack Logic used");
         Vector2 range = attackerStats._AttackRange;
         Vector2 center = CalculateAttackCenter(origin, facingLeft, range);
         
@@ -51,6 +52,7 @@ public static class AttackLogic
 
     private static void SpawnProjectile(Vector3 start, IDamageable target, Stats attackerStats)
     {
+        Debug.Log("Attack Logic used");
         if (attackerStats._ProjectilePrefab == null) return;
         GameObject projGO = Object.Instantiate(attackerStats._ProjectilePrefab, start, Quaternion.identity);
         if (projGO.TryGetComponent(out Projectile p))
@@ -63,6 +65,7 @@ public static class AttackLogic
 
     private static void ApplyDamage(Stats attacker, IDamageable target)
     {
+        Debug.Log("Attack Logic used");
         DamageSource.DamageType type = attacker._IsProjectile ? DamageSource.DamageType.Ranged : DamageSource.DamageType.Melee;
         if (attacker._IsAOE) type = DamageSource.DamageType.AOE;
 
@@ -76,9 +79,11 @@ public static class AttackLogic
     }
 
     public static Vector2 CalculateAttackCenter(Vector2 pos, bool left, Vector2 range) => pos + new Vector2(left ? -range.x / 2f : range.x / 2f, 0f);
+    
 
     private static void SetAttackingStatRef(object context, IDamageable target)
     {
+        Debug.Log("Attack Logic used");
         Stats statsTarget = target as Stats;
         if (context is CpuStateManager cpu) cpu._AttackingStats = statsTarget;
         else if (context is PlayerStateMachine player) player._AttackingStats = statsTarget;
