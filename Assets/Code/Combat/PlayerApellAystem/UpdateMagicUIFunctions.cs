@@ -6,6 +6,7 @@ public class UpdateMagicUIFunctions : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI totalMana;
     [SerializeField] TextMeshProUGUI cost;
+    [SerializeField] Slider ManaBarImage;
 
     public void UpdateSpellGUI(PlayerSpells _playerSpell)
     {
@@ -15,5 +16,8 @@ public class UpdateMagicUIFunctions : MonoBehaviour
     public void UpdateTotalMana(int _totalMana, int _changedMana)
     {
         totalMana.text = _totalMana.ToString();
+        ManaBarImage.value = _totalMana/100;
+        Debug.Log("here" + _totalMana);
+        
     }
 }

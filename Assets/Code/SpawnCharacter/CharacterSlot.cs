@@ -1,14 +1,21 @@
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 public class CharacterSlot : MonoBehaviour
 {
     [SerializeField] InputActionReference SpawnButton;
     ScriptableStats characterStats;
     [SerializeField] GameObject playerPrefab;
+    [SerializeField] Slider cooldownImage;
     bool cooldownFinished = false;
     float nextSpawnableTime;
     float CooldownRemaining;
     [SerializeField] bool showDebugLogs = false;
+    void Awake()
+    {
+        
+    }
 
     void Start()
     {
@@ -93,9 +100,21 @@ public class CharacterSlot : MonoBehaviour
     {
         if (Time.time >= nextSpawnableTime) 
         {
+            
             CooldownRemaining = 0f;
             cooldownFinished = true;
+            cooldownImage.value = 0;
         }
-        else CooldownRemaining = nextSpawnableTime - Time.time;
+        else 
+        {
+            CooldownRemaining = nextSpawnableTime - Time.time;
+            UpdateCooldownImage();
+        }
+    }
+
+    void UpdateCooldownImage()
+    {
+        if (characterStats == null) return;
+        cooldownImage.value = CooldownRemaining/characterStats._spawnCooldown;
     }
 }
