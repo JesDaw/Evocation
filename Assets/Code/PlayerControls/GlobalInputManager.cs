@@ -72,6 +72,7 @@ public class GlobalInputManager : MonoBehaviour
         {
             case InputMode.PlayerCharacter: ApplyPlayerCharacterMode(); break;
             case InputMode.FreeCam:  ApplyFreeCamMode(); break;
+            case InputMode.SpellAim: ApplySpellAimMode(); break;
             case InputMode.Scouting:  ApplyScoutingMode(); break;
             case InputMode.Cutscene:  ApplyCutsceneMode(); break;
             case InputMode.Dialogue:  ApplyDialogueMode(); break;
@@ -296,6 +297,18 @@ public class GlobalInputManager : MonoBehaviour
         
     }
 
+    public void ApplySpellAimMode()
+    {
+        if(DebugLogs) Debug.Log("=========Input Mode: SpellAim=========");
+        DisableAllControls();
+        EnableCameraControls();               
+        _inputActions.MagicController.CastSpell.Enable();
+        _inputActions.MagicController.Look.Enable();  
+        EnableUIControls(); 
+        DisableMenuNavigation();
+        DisableCursor();
+    }
+
     public void ApplyScoutingMode()
     {
         if(DebugLogs) Debug.Log("=========Input Mode: scouting=========");
@@ -378,6 +391,7 @@ public enum InputMode
 {
     PlayerCharacter,
     FreeCam,
+    SpellAim,
     Scouting,
     Cutscene,
     Dialogue,
