@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3878648322206263563}
   - component: {fileID: 4241337842374618214}
   - component: {fileID: 7170368770621601186}
+  - component: {fileID: 421042998386645154}
   m_Layer: 21
   m_Name: CMCamera
   m_TagString: Untagged
@@ -122,6 +123,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BoundingVolume: {fileID: 0}
   SlowingDistance: 0
+--- !u!114 &421042998386645154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 199393496772852354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00b2d199b96b516448144ab30fb26aed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseListener
+  ApplyAfter: 2
+  ChannelMask: 1
+  Gain: 1
+  Use2DDistance: 0
+  UseCameraSpace: 1
+  SignalCombinationMode: 0
+  ReactionSettings:
+    m_SecondaryNoise: {fileID: 0}
+    AmplitudeGain: 1
+    FrequencyGain: 1
+    Duration: 1
+    m_NoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1 &4711507231389707403
 GameObject:
   m_ObjectHideFlags: 0
@@ -794,7 +819,7 @@ PrefabInstance:
     - target: {fileID: 4282131838556284900, guid: 2690d2b99c9064a1f89304b64226ee0e, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: a8dbae7f4dfdd459ab64305c21782f37, type: 2}
+      objectReference: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
