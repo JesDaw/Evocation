@@ -109,5 +109,9 @@ public class SpellDefinition : ScriptableObject
 
         if (DebugLogs)
             Debug.Log($"{SpellName} resolved at {castPosition}");
+
+        OtherEffects();
     }
+
+    protected virtual void OtherEffects() {}
 }
