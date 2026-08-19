@@ -301,10 +301,9 @@ public class GlobalInputManager : MonoBehaviour
     {
         if(DebugLogs) Debug.Log("=========Input Mode: SpellAim=========");
         DisableAllControls();
-        EnableCameraControls();               
+        EnableCameraControls();
         _inputActions.MagicController.CastSpell.Enable();
-        _inputActions.MagicController.Look.Enable();  
-        EnableUIControls(); 
+        EnableUIControls();
         DisableMenuNavigation();
         DisableCursor();
     }

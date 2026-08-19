@@ -12,9 +12,8 @@ GameObject:
   - component: {fileID: 5991983189651631630}
   - component: {fileID: 8340520491679727397}
   - component: {fileID: 1279739322845690954}
-  - component: {fileID: 3980749383622291756}
   m_Layer: 0
-  m_Name: Circle
+  m_Name: Rectical
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -113,19 +112,6 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
---- !u!114 &3980749383622291756
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1331225986964854547}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 51b075c544c0c8740841b377a59c3a8e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::MagicSelector
-  spellManager: {fileID: 4068080231543088761}
 --- !u!1 &2512346747509638594
 GameObject:
   m_ObjectHideFlags: 0
@@ -220,8 +206,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8230985490981484557}
   - component: {fileID: 6519951784583356446}
-  - component: {fileID: 4068080231543088761}
-  - component: {fileID: 4051888827617240930}
+  - component: {fileID: 7209620588292609037}
+  - component: {fileID: 4759932978000870348}
   m_Layer: 0
   m_Name: PlayerSpellSystem
   m_TagString: Untagged
@@ -273,7 +259,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &4068080231543088761
+--- !u!114 &7209620588292609037
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -282,78 +268,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2609679188312779999}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ffa0dfbf142048f449b28e92ce0584e6, type: 3}
+  m_Script: {fileID: 11500000, guid: ad378daff1cd544378fc87740a19999b, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::SpellsManager
-  PlayerSpells:
-  - SpellName: Fireball
-    OnHit:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 4051888827617240930}
-          m_TargetAssemblyTypeName: SpellsAffector, CodeAssembly
-          m_MethodName: FireballSpell
-          m_Mode: 0
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    OnHitPosition:
-      m_PersistentCalls:
-        m_Calls: []
-    Cost: 2
-    Radius: 5
-    spellVFX: {fileID: 3105354740991630867, guid: ed09d713b37a894489efe4e0bd1e585c, type: 3}
-    animationDuration: 2
-    hitboxDelay: 1
-  - SpellName: Not Fireball
-    OnHit:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 4051888827617240930}
-          m_TargetAssemblyTypeName: SpellsAffector, CodeAssembly
-          m_MethodName: BiggerFireballSpell
-          m_Mode: 0
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    OnHitPosition:
-      m_PersistentCalls:
-        m_Calls: []
-    Cost: 4
-    Radius: 5
-    spellVFX: {fileID: 3105354740991630867, guid: ed09d713b37a894489efe4e0bd1e585c, type: 3}
-    animationDuration: 2
-    hitboxDelay: 1
-  CurrentlySelected: []
+  m_EditorClassIdentifier: CodeAssembly::SpellSwapper
+  spells: []
   OnSwapSpells:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UpdateMagicUIFunctions, CodeAssembly
-        m_MethodName: UpdateSpellGUI
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  currentSpellContext: 0
-  detectionRadiusObject: {fileID: 3218463498466943359}
-  DebugLogs: 0
---- !u!114 &4051888827617240930
+      m_Calls: []
+  currentIndex: 0
+--- !u!114 &4759932978000870348
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -362,7 +285,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2609679188312779999}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e223edbc526df54489dc2411fcaa86d3, type: 3}
+  m_Script: {fileID: 11500000, guid: 53d938cd278b84eceabebf0e6adb6a44, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::SpellsAffector
+  m_EditorClassIdentifier: CodeAssembly::SpellCaster
+  detectionRadiusObject: {fileID: 0}
+  aimVisual: {fileID: 0}
   DebugLogs: 0

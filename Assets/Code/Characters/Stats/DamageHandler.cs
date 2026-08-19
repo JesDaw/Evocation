@@ -116,7 +116,14 @@ public class DamageHandler : MonoBehaviour
     public void Heal(float amount)
     {
         if (stats == null) return;
-        stats._CurrentHealth = Mathf.Min(stats._CurrentHealth + amount, stats._MaxHealth);
+
+        stats._CurrentHealth = Mathf.Min(
+            stats._CurrentHealth + amount,
+            stats._MaxHealth
+        );
+
+        stats.OnDamage?.Invoke();
+
         if (stats.entityHealthbar != null)
             stats.entityHealthbar.UpdateHealth();
     }

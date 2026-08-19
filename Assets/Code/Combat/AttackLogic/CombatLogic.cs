@@ -3,7 +3,11 @@ using UnityEngine;
 
 public static class CombatLogic
 {
-    public static bool ExecuteAction(Stats attacker, CombatAction action, Stats primaryTarget, bool recheckTargets = false)
+    public static bool ExecuteAction(
+        Stats attacker,
+        CombatAction action,
+        Stats primaryTarget,
+        bool recheckTargets = false)
     {
         Stats targetToHit = primaryTarget;
 
@@ -14,38 +18,83 @@ public static class CombatLogic
             if (inRange.Count == 0)
                 return false;
 
-            bool originalInRange = inRange.Exists(t => t == primaryTarget);
-            targetToHit = originalInRange ? primaryTarget : inRange[0];
+            bool originalInRange =
+                inRange.Exists(t => t == primaryTarget);
+
+            targetToHit = originalInRange
+                ? primaryTarget
+                : inRange[0];
 
             if (!originalInRange)
             {
-                Debug.Log($"[Combat] {attacker.gameObject.name}: Primary target '{primaryTarget.gameObject.name}' left range, retargeting to '{targetToHit.gameObject.name}'");
+                Debug.Log(
+                    $"[Combat] {attacker.gameObject.name}: " +
+                    $"Primary target '{primaryTarget.gameObject.name}' " +
+                    $"left range, retargeting to " +
+                    $"'{targetToHit.gameObject.name}'"
+                );
             }
+
             if (action.maxTargets > 1)
             {
                 ExecuteAOEFromList(attacker, action, inRange);
-                if (action.zoneSpawnPosition == ZoneSpawnPosition.Self && action.zoneData != null)
+
+                if (action.zoneSpawnPosition == ZoneSpawnPosition.Self &&
+                    action.zoneData != null)
                 {
-                    Transform sticky = action.zoneSticky ? attacker.transform : null;
-                    List<string> tags = GetTargetTags(attacker, action);
-                    AreaEffectLogic.SpawnZone(action.zoneData, attacker.transform.position, attacker, sticky, action.excludeCasterFromZone, action.zoneSticky, tags);
+                    Transform sticky =
+                        action.zoneSticky
+                            ? attacker.transform
+                            : null;
+
+                    List<string> tags =
+                        GetTargetTags(attacker, action);
+
+                    AreaEffectLogic.SpawnZone(
+                        action.zoneData,
+                        attacker.transform.position,
+                        attacker,
+                        sticky,
+                        action.excludeCasterFromZone,
+                        action.zoneSticky,
+                        tags
+                    );
                 }
+
                 return true;
             }
         }
 
-        float healthChange = attacker._AttackDamage * action.healthChangePercent;
-        float knockbackChange = attacker._KnockBackDamage * action.knockbackPercent;
+        float healthChange =
+            attacker._AttackDamage *
+            action.healthChangePercent;
+
+        float knockbackChange =
+            attacker._KnockBackDamage *
+            action.knockbackPercent;
 
         if (action.zoneSpawnPosition != ZoneSpawnPosition.Projectile)
         {
-            ExecuteSingle(attacker, action, targetToHit, healthChange, knockbackChange);
+            ExecuteSingle(
+                attacker,
+                action,
+                targetToHit,
+                healthChange,
+                knockbackChange
+            );
         }
 
-        if (action.zoneSpawnPosition == ZoneSpawnPosition.Self && action.zoneData != null)
+        if (action.zoneSpawnPosition == ZoneSpawnPosition.Self &&
+            action.zoneData != null)
         {
-            Transform sticky = action.zoneSticky ? attacker.transform : null;
-            List<string> tags = GetTargetTags(attacker, action);
+            Transform sticky =
+                action.zoneSticky
+                    ? attacker.transform
+                    : null;
+
+            List<string> tags =
+                GetTargetTags(attacker, action);
+
             AreaEffectLogic.SpawnZone(
                 action.zoneData,
                 attacker.transform.position,
@@ -53,96 +102,273 @@ public static class CombatLogic
                 sticky,
                 action.excludeCasterFromZone,
                 action.zoneSticky,
-                tags);
+                tags
+            );
         }
 
         if (action.zoneSpawnPosition == ZoneSpawnPosition.Projectile)
         {
-            SpawnProjectile(attacker, action, targetToHit, healthChange, knockbackChange);
+            SpawnProjectile(
+                attacker,
+                action,
+                targetToHit,
+                healthChange,
+                knockbackChange
+            );
         }
 
         return true;
     }
 
-    static List<Stats> GetTargetsInRange(Stats attacker, CombatAction action)
+    public static bool ExecuteActionAtPosition(
+        Stats attacker,
+        CombatAction action,
+        Vector2 position,
+        float radius,
+        List<string> targetTagsOverride = null)
     {
-        Vector2 center = GetDetectionCenter(attacker, action);
-        float effectiveRange = attacker._HorizontalRange * action.rangePercent;
-        List<string> targetTags = GetTargetTags(attacker, action);
+        List<string> tags =
+            targetTagsOverride ??
+            GetTargetTags(attacker, action);
 
-        List<Stats> targets = AttackDetection.FindTargetsInCircle(
-            center, effectiveRange, targetTags, attacker);
+        List<Stats> targets =
+            AttackDetection.FindTargetsInCircle(
+                position,
+                radius,
+                tags,
+                attacker,
+                allowSelf: action.targetFriendly
+            );
 
         targets.RemoveAll(t => t == null || t._IsDead);
-        targets.Sort((a, b) =>
-            Vector2.Distance(attacker.transform.position, a.transform.position)
-                .CompareTo(Vector2.Distance(attacker.transform.position, b.transform.position)));
+
+        float healthChange =
+            attacker._AttackDamage *
+            action.healthChangePercent;
+
+        float knockbackChange =
+            attacker._KnockBackDamage *
+            action.knockbackPercent;
+
+        int count = 0;
+
+        foreach (Stats t in targets)
+        {
+            if (action.maxTargets >= 0 &&
+                count >= action.maxTargets)
+            {
+                break;
+            }
+
+            count++;
+
+            if (healthChange != 0f)
+            {
+                t.AlterHealth(
+                    healthChange,
+                    new DamageSource(DamageSource.DamageType.Spell)
+                    {
+                        IsEnemy = attacker._Enemy
+                    }
+                );
+            }
+
+            if (knockbackChange != 0f)
+            {
+                t.AlterKnockback(
+                    knockbackChange,
+                    attacker._Enemy
+                );
+            }
+
+            ApplyEffectsToTarget(attacker, action, t);
+        }
+
+        if (action.zoneSpawnPosition == ZoneSpawnPosition.Self &&
+            action.zoneData != null)
+        {
+            Transform sticky =
+                action.zoneSticky
+                    ? attacker.transform
+                    : null;
+
+            AreaEffectLogic.SpawnZone(
+                action.zoneData,
+                position,
+                attacker,
+                sticky,
+                action.excludeCasterFromZone,
+                action.zoneSticky,
+                tags
+            );
+        }
+
+        return targets.Count > 0;
+    }
+
+    public static void ExecuteActionOnTarget(
+        Stats attacker,
+        CombatAction action,
+        Stats target)
+    {
+        float healthChange =
+            attacker._AttackDamage *
+            action.healthChangePercent;
+
+        float knockbackChange =
+            attacker._KnockBackDamage *
+            action.knockbackPercent;
+
+        ExecuteSingle(
+            attacker,
+            action,
+            target,
+            healthChange,
+            knockbackChange
+        );
+    }
+
+    static List<Stats> GetTargetsInRange(
+        Stats attacker,
+        CombatAction action)
+    {
+        Vector2 center =
+            GetDetectionCenter(attacker, action);
+
+        float effectiveRange =
+            attacker._HorizontalRange *
+            action.rangePercent;
+
+        List<string> targetTags =
+            GetTargetTags(attacker, action);
+
+        List<Stats> targets =
+            AttackDetection.FindTargetsInCircle(
+                center,
+                effectiveRange,
+                targetTags,
+                attacker
+            );
+
+        targets.RemoveAll(t => t == null || t._IsDead);
+
+        targets.Sort(
+            (a, b) =>
+                Vector2.Distance(
+                    attacker.transform.position,
+                    a.transform.position
+                ).CompareTo(
+                    Vector2.Distance(
+                        attacker.transform.position,
+                        b.transform.position
+                    )
+                )
+        );
 
         return targets;
     }
 
-    static void ExecuteSingle(Stats attacker, CombatAction action, Stats target, float healthChange, float knockbackChange)
+    static void ExecuteSingle(
+        Stats attacker,
+        CombatAction action,
+        Stats target,
+        float healthChange,
+        float knockbackChange)
     {
         if (healthChange != 0f)
-            target.AlterHealth(healthChange, new DamageSource(DamageSource.DamageType.Melee) { IsEnemy = attacker._Enemy });
+        {
+            target.AlterHealth(
+                healthChange,
+                new DamageSource(DamageSource.DamageType.Melee)
+                {
+                    IsEnemy = attacker._Enemy
+                }
+            );
+        }
 
         if (knockbackChange != 0f)
-            target.AlterKnockback(knockbackChange, attacker._Enemy);
+        {
+            target.AlterKnockback(
+                knockbackChange,
+                attacker._Enemy
+            );
+        }
 
         ApplyEffectsToTarget(attacker, action, target);
     }
 
-    static void ExecuteAOEFromList(Stats attacker, CombatAction action, List<Stats> targets)
+    static void ExecuteAOEFromList(
+        Stats attacker,
+        CombatAction action,
+        List<Stats> targets)
     {
-        float healthChange = attacker._AttackDamage * action.healthChangePercent;
-        float knockbackChange = attacker._KnockBackDamage * action.knockbackPercent;
+        float healthChange =
+            attacker._AttackDamage *
+            action.healthChangePercent;
+
+        float knockbackChange =
+            attacker._KnockBackDamage *
+            action.knockbackPercent;
 
         int count = 0;
+
         foreach (Stats t in targets)
         {
-            if (action.maxTargets >= 0 && count >= action.maxTargets) break;
+            if (action.maxTargets >= 0 &&
+                count >= action.maxTargets)
+            {
+                break;
+            }
+
             count++;
 
             if (healthChange != 0f)
-                t.AlterHealth(healthChange, new DamageSource(DamageSource.DamageType.AOE) { IsEnemy = attacker._Enemy });
+            {
+                t.AlterHealth(
+                    healthChange,
+                    new DamageSource(DamageSource.DamageType.AOE)
+                    {
+                        IsEnemy = attacker._Enemy
+                    }
+                );
+            }
 
             if (knockbackChange != 0f)
-                t.AlterKnockback(knockbackChange, attacker._Enemy);
+            {
+                t.AlterKnockback(
+                    knockbackChange,
+                    attacker._Enemy
+                );
+            }
 
             ApplyEffectsToTarget(attacker, action, t);
         }
     }
 
-    static void ExecuteAOE(Stats attacker, CombatAction action, Stats primaryTarget, float healthChange, float knockbackChange)
-    {
-        List<Stats> targets = GetTargetsInRange(attacker, action);
-
-        int count = 0;
-        foreach (Stats t in targets)
-        {
-            if (action.maxTargets >= 0 && count >= action.maxTargets) break;
-            count++;
-
-            if (healthChange != 0f)
-                t.AlterHealth(healthChange, new DamageSource(DamageSource.DamageType.AOE) { IsEnemy = attacker._Enemy });
-
-            if (knockbackChange != 0f)
-                t.AlterKnockback(knockbackChange, attacker._Enemy);
-
-            ApplyEffectsToTarget(attacker, action, t);
-        }
-    }
-
-    static void ApplyEffectsToTarget(Stats attacker, CombatAction action, Stats target)
+    static void ApplyEffectsToTarget(
+        Stats attacker,
+        CombatAction action,
+        Stats target)
     {
         foreach (var effect in action.effectsOnHit)
-            target.statusEffectManager.ApplyEffect(effect, effect.duration);
-
-        if (action.zoneData != null && action.zoneSpawnPosition == ZoneSpawnPosition.Touch)
         {
-            Transform sticky = action.zoneSticky ? target.transform : null;
-            List<string> tags = GetTargetTags(attacker, action);
-            Debug.Log($"[Combat] {attacker.gameObject.name} spawning Touch zone '{action.zoneData.name}' at {target.gameObject.name}, tags=[{string.Join(",", tags)}]");
+            target.statusEffectManager.ApplyEffect(
+                effect,
+                effect.duration
+            );
+        }
+
+        if (action.zoneData != null &&
+            action.zoneSpawnPosition == ZoneSpawnPosition.Touch)
+        {
+            Transform sticky =
+                action.zoneSticky
+                    ? target.transform
+                    : null;
+
+            List<string> tags =
+                GetTargetTags(attacker, action);
+
             AreaEffectLogic.SpawnZone(
                 action.zoneData,
                 target.transform.position,
@@ -150,20 +376,37 @@ public static class CombatLogic
                 sticky,
                 action.excludeCasterFromZone,
                 action.zoneSticky,
-                tags);
+                tags
+            );
         }
     }
 
-    static void SpawnProjectile(Stats attacker, CombatAction action, Stats target, float healthChange, float knockbackChange)
+    static void SpawnProjectile(
+        Stats attacker,
+        CombatAction action,
+        Stats target,
+        float healthChange,
+        float knockbackChange)
     {
         var ps = action.projectileSettings;
+
         if (ps == null || ps.prefab == null)
         {
-            Debug.LogWarning($"{attacker.gameObject.name}: Action '{action.actionName}' has Projectile delivery but no ProjectileSettings or prefab set.");
+            Debug.LogWarning(
+                $"{attacker.gameObject.name}: Action " +
+                $"'{action.actionName}' has Projectile delivery " +
+                $"but no ProjectileSettings or prefab set."
+            );
+
             return;
         }
 
-        GameObject projGO = UnityEngine.Object.Instantiate(ps.prefab, attacker.transform.position, Quaternion.identity);
+        GameObject projGO =
+            UnityEngine.Object.Instantiate(
+                ps.prefab,
+                attacker.transform.position,
+                Quaternion.identity
+            );
 
         if (projGO.TryGetComponent(out Projectile p))
         {
@@ -179,40 +422,75 @@ public static class CombatLogic
                     if (hit is Stats hitStats)
                     {
                         if (healthChange != 0f)
-                            hitStats.AlterHealth(healthChange, new DamageSource(DamageSource.DamageType.Ranged) { IsEnemy = attacker._Enemy });
+                        {
+                            hitStats.AlterHealth(
+                                healthChange,
+                                new DamageSource(
+                                    DamageSource.DamageType.Ranged)
+                                {
+                                    IsEnemy = attacker._Enemy
+                                }
+                            );
+                        }
 
                         if (knockbackChange != 0f)
-                            hitStats.AlterKnockback(knockbackChange, attacker._Enemy);
+                        {
+                            hitStats.AlterKnockback(
+                                knockbackChange,
+                                attacker._Enemy
+                            );
+                        }
 
-                        ApplyEffectsToTarget(attacker, action, hitStats);
+                        ApplyEffectsToTarget(
+                            attacker,
+                            action,
+                            hitStats
+                        );
                     }
-                });
+                }
+            );
         }
         else
         {
-            Debug.LogWarning($"{attacker.gameObject.name}: Projectile prefab is missing a Projectile component.");
+            Debug.LogWarning(
+                $"{attacker.gameObject.name}: Projectile prefab " +
+                $"is missing a Projectile component."
+            );
         }
     }
 
-    static Vector2 GetDetectionCenter(Stats attacker, CombatAction action)
+    static Vector2 GetDetectionCenter(
+        Stats attacker,
+        CombatAction action)
     {
-        bool facingLeft = attacker.transform.right.x < 0;
-        float effectiveRange = attacker._HorizontalRange * action.rangePercent;
+        bool facingLeft =
+            attacker.transform.right.x < 0;
+
+        float effectiveRange =
+            attacker._HorizontalRange *
+            action.rangePercent;
+
         return action.extendsForward
             ? AttackLogic.CalculateAttackCenter(
                 attacker.transform.position,
                 facingLeft,
-                new Vector2(effectiveRange, 0f))
+                new Vector2(effectiveRange, 0f)
+            )
             : (Vector2)attacker.transform.position;
     }
 
-    public static List<string> GetTargetTags(Stats attacker, CombatAction action)
+    public static List<string> GetTargetTags(
+        Stats attacker,
+        CombatAction action)
     {
         List<string> tags = new List<string>();
+
         if (action.targetFriendly)
         {
             if (attacker._Enemy)
+            {
                 tags.Add("Enemy");
+            }
             else
             {
                 tags.Add("Allies");
@@ -231,6 +509,7 @@ public static class CombatLogic
                 tags.Add("Enemy");
             }
         }
+
         return tags;
     }
 }

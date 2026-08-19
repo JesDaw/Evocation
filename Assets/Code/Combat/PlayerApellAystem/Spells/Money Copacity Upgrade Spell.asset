@@ -1,0 +1,128 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7469bdb5e9ff7435f8c8680d69b59b22, type: 3}
+  m_Name: Money Copacity Upgrade Spell
+  m_EditorClassIdentifier: CodeAssembly::UpgradeMoneyCopacitySpell
+  SpellName: Money Copacity
+  Icon: {fileID: 8741200022194658665, guid: b0c800fb44ac92b42a6a4edf1300c2c0, type: 3}
+  Description: 
+  castMode: 1
+  Cost: 0
+  Radius: 2
+  action:
+    actionName: Action
+    priority: 0
+    definesStoppingRange: 0
+    rangePercent: 1
+    extendsForward: 0
+    targetFriendly: 0
+    targetCondition: 0
+    maxTargets: 1
+    castCooldown: 2
+    healthChangePercent: 0
+    knockbackPercent: 0
+    zoneSpawnPosition: 0
+    projectileSettings:
+      prefab: {fileID: 0}
+      speed: 15
+      maxHeight: 2
+      trajectoryCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.5
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      axisCorrectionCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 1
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 1
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      speedCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    effectsOnHit: []
+    zoneData: {fileID: 0}
+    zoneSticky: 0
+    excludeCasterFromZone: 1
+    applicationMode: 0
+  hitboxDelay: 0.5
+  animationDuration: 1
+  spellVFX: {fileID: 0}
+  castSoundName: explosion
+  DebugLogs: 0
