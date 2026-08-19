@@ -25,16 +25,6 @@ public static class CombatLogic
                 ? primaryTarget
                 : inRange[0];
 
-            if (!originalInRange)
-            {
-                Debug.Log(
-                    $"[Combat] {attacker.gameObject.name}: " +
-                    $"Primary target '{primaryTarget.gameObject.name}' " +
-                    $"left range, retargeting to " +
-                    $"'{targetToHit.gameObject.name}'"
-                );
-            }
-
             if (action.maxTargets > 1)
             {
                 ExecuteAOEFromList(attacker, action, inRange);
