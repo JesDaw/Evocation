@@ -85,7 +85,7 @@ public class SpawnObjects : MonoBehaviour
     {
         if (stats == null)
         {
-            Debug.LogWarning($"stats exists: {stats == null}");
+            Debug.LogWarning($"stats does not exist on AI spawner");
             return null;
         }
         return SpawnCPU(stats);

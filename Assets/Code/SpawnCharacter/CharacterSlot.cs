@@ -5,16 +5,22 @@ using UnityEngine.UI;
 public class CharacterSlot : MonoBehaviour
 {
     [SerializeField] InputActionReference SpawnButton;
-    ScriptableStats characterStats;
-    [SerializeField] GameObject playerPrefab;
+    
     [SerializeField] Slider cooldownImage;
+    [Header("Player Only Stuff")]
+    [SerializeField] GameObject playerPrefab;
+    [SerializeField] ScriptableStats PlayerStats;
+    ScriptableStats characterStats;
     bool cooldownFinished = false;
     float nextSpawnableTime;
     float CooldownRemaining;
     [SerializeField] bool showDebugLogs = false;
     void Awake()
     {
-        
+        if (PlayerStats != null)
+        {
+            characterStats = PlayerStats;
+        }
     }
 
     void Start()
@@ -56,23 +62,24 @@ public class CharacterSlot : MonoBehaviour
     }
     void SpawnCharacter(InputAction.CallbackContext context)
     {
-        if (playerPrefab != null) 
-        {
-            SpawnPlayer();
-            return;
-        }
-        if (characterStats == null) return;
-        if (!cooldownFinished)
-        {
-            return;
-        }
         if (SpawnObjects.PlayerInstance == null)
         {
             if (showDebugLogs)Debug.LogError("No spawner assigned on player spawner!");
             return;
         }
+        if (characterStats == null) return;
+        if (!cooldownFinished) return;
 
-        GameObject spawned = SpawnObjects.PlayerInstance.SpawnFromPlayer(characterStats);
+        GameObject spawned;
+        
+        if (playerPrefab != null) 
+        {
+            spawned = SpawnObjects.PlayerInstance.SpawnPlayer(playerPrefab);
+        }
+        else
+        {
+            spawned = SpawnObjects.PlayerInstance.SpawnFromPlayer(characterStats);
+        }     
 
         if (spawned != null)
         {
@@ -81,19 +88,7 @@ public class CharacterSlot : MonoBehaviour
             FModAudioManager.instance.PlaySoundByName("spawnTroop");
             //FModAudioManager.instance.PlaySoundByName(characterStats.SpawnSoundName);
             if (showDebugLogs)Debug.Log($"Player spawned: {characterStats.name}");
-        }
-        if (playerPrefab != null) SpawnPlayer();
-    }
-
-    void SpawnPlayer()
-    {
-        GameObject spawned = SpawnObjects.PlayerInstance.SpawnPlayer(playerPrefab);
-
-        if (spawned != null)
-        {
-            FModAudioManager.instance.PlaySoundByName("spawnTroop");
-            if (showDebugLogs)Debug.Log("Player character spawned");
-        }
+        }   
     }
 
     void Update()

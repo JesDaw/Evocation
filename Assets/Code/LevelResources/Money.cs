@@ -7,14 +7,15 @@ public class Money : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI moneyText;
     //[SerializeField] AIMoneyManager aIMoneyManager;
-    [SerializeField] int MoneyPerPlayer;
+    [SerializeField] float InitialMoneyGainPerSec = 1;
+    float MoneyGainPerSec = 1;
     bool _money_is_active = false;
-    [SerializeField] int StartingMoney = 0;
+    [SerializeField] float StartingMoney = 0;
     [HideInInspector] public float CurrentMoney = 0;
-    float MoneyGainPerSec = 1; 
     [HideInInspector] public int CurrentMaxMoneyIndex = 0;
-    [SerializeField] int[] MaxMoney = {200, 400, 600, 800, 1000};
+    [SerializeField] float[] MaxMoney = {200, 400, 600, 800, 1000};
     public UnityEvent MoneyUpdated;
+    [SerializeField] bool DebugLogs = false;
     
     public bool MoneyIsActive
     {
@@ -38,14 +39,15 @@ public class Money : MonoBehaviour
             if (moneyTextObj == null) Debug.LogError("MoneyManager could not find the MoneyText game object");
             moneyText = moneyTextObj.GetComponent<TextMeshProUGUI>();
         }
+        if (StartingMoney > MaxMoney[0]) StartingMoney = MaxMoney[0];
         CurrentMoney = StartingMoney;
+        MoneyGainPerSec = InitialMoneyGainPerSec;
     }
 
     void Start()
     {
-        
-        MoneyGainPerSec = MoneyPerPlayer;
         StartCoroutine(moneyCount());
+        UpdateMoneyDesplay();
     }
 
     IEnumerator moneyCount()
@@ -97,6 +99,7 @@ public class Money : MonoBehaviour
         if(MaxMoney.Length - 1 > CurrentMaxMoneyIndex)
         {
             CurrentMaxMoneyIndex += 1;
+            UpdateMoneyGen();
             //effects;
         }
     }
@@ -104,5 +107,10 @@ public class Money : MonoBehaviour
     {
         MoneyGainPerSec += 10;
     }
-    public void UpdateMoneyGen() => MoneyGainPerSec = PlayerLivesManager.Instance.LifeCount * MoneyPerPlayer; 
+    public void UpdateMoneyGen() 
+    { 
+        MoneyGainPerSec = InitialMoneyGainPerSec * (MaxMoney[CurrentMaxMoneyIndex]/MaxMoney[0]);
+        if (DebugLogs) Debug.Log($"money gen per sec = {InitialMoneyGainPerSec} * {MaxMoney[CurrentMaxMoneyIndex]} / {MaxMoney[0]} = {MoneyGainPerSec}");
+
+    }
 }

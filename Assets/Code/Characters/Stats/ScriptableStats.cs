@@ -13,7 +13,7 @@ public class ScriptableStats : ScriptableObject
 
     [Header("Value")]
     public int _spawnCost;
-    public int _spawnCooldown;
+    public float _spawnCooldown;
     public float Level_Total;
     [HideInInspector] public float Level_Discrepancy;
     public float _CalculatedPower;
