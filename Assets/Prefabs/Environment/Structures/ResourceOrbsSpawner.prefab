@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5472936815424625996}
   - component: {fileID: 4093316153942397501}
   m_Layer: 0
-  m_Name: ManaOrbsSpawner
+  m_Name: ResourceOrbsSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,11 +46,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9cae05cc1d516f44b83d7c3e55457d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::ManaObjectSpawn
-  manaObjectVisual: {fileID: 8311946602091972267}
+  resourceObjectVisual: {fileID: 8311946602091972267}
   collectEffect: {fileID: 9171758864978430981}
-  repeatDuration: 3
-  minManaAmount: 10
-  maxManaAmount: 11
+  minRepeatDuration: 1
+  maxRepeatDuration: 2
+  minResourceAmount: 10
+  maxResourceAmount: 11
+  resourceType: 1
+  collectionSound: spawnTroop
 --- !u!58 &4093316153942397501
 CircleCollider2D:
   m_ObjectHideFlags: 0

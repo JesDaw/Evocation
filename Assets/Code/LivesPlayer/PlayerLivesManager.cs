@@ -7,10 +7,12 @@ using System.Data.SqlTypes;
 public class PlayerLivesManager : MonoBehaviour
 {
     [SerializeField] public int MaxLives;
-    [SerializeField] UnityEvent _loose_game;
+    [SerializeField] UnityEvent OutOfLives;
     public bool canSpawnMore = true;
     public int LifeCount = 1;
     public static PlayerLivesManager Instance { get; private set; }
+    [SerializeField] bool DebugLogs;
+
 
     void Awake()
     {
@@ -20,20 +22,6 @@ public class PlayerLivesManager : MonoBehaviour
             return;
         }
         Instance = this;
-    }
-
-    void SubscribeToPlayerDeath(GameObject player)
-    {
-        Stats stats = player.GetComponent<Stats>();
-        if (stats != null)
-        {
-            stats.OnDeath.DynamicCalls += () => LooseLife(player);
-        }
-    }
-
-    public void OnPlayerAdded(GameObject player)
-    {
-        SubscribeToPlayerDeath(player);
     }
 
     void Start()
@@ -50,6 +38,7 @@ public class PlayerLivesManager : MonoBehaviour
 
     public void GainLife()
     {
+        if (DebugLogs) Debug.Log($"Here");
         if (canSpawnMore)
         {
             LifeCount++;
@@ -65,31 +54,33 @@ public class PlayerLivesManager : MonoBehaviour
         }
     }
 
-    public void LooseLife(GameObject deadPlayer)
+    public void OnPlayerAdded(GameObject player)
     {
-        LifeCount--;
-        canSpawnMore = true;
-        PlayerLivesDisplay.Instance.UpdateTorchDisplay();
-
-        if (LifeCount <= 0)
+        if (DebugLogs) Debug.Log($"Here");
+        SubscribeToPlayerDeath(player);
+    }
+    void SubscribeToPlayerDeath(GameObject player)
+    {
+        if (DebugLogs) Debug.Log($"Here");
+        Stats stats = player.GetComponent<Stats>();
+        if (stats != null)
         {
-            HandleGameOver(deadPlayer);
-        }
-        else
-        {
-            HandlePlayerDeath(deadPlayer);
+            stats.OnDeath.DynamicCalls += () => LooseLife(player);
         }
     }
 
+    
+
     public void LooseLife()
     {
+        if (DebugLogs) Debug.Log($"Here");
         var currentPlayer = ActivePlayer.Instance.GetCurrentPlayerController();
         
         if (currentPlayer != null)
         {
             LooseLife(currentPlayer.gameObject);
         }
-        else
+        else // this gets called if the current player is null idk if this path exicutes or the other one but its probably always the same when the player is out of lives
         {
             LifeCount--;
             canSpawnMore = true;
@@ -97,13 +88,30 @@ public class PlayerLivesManager : MonoBehaviour
 
             if (LifeCount <= 0)
             {
-                _loose_game.Invoke();
+                OutOfLives.Invoke();
             }
+        }
+    }
+    public void LooseLife(GameObject deadPlayer)
+    {
+        if (DebugLogs) Debug.Log($"Here");
+        LifeCount--;
+        canSpawnMore = true;
+        PlayerLivesDisplay.Instance.UpdateTorchDisplay();
+
+        if (LifeCount <= 0)
+        {
+            HandleOutOfLives(deadPlayer);
+        }
+        else
+        {
+            HandlePlayerDeath(deadPlayer);
         }
     }
 
     void HandlePlayerDeath(GameObject deadPlayer)
     {
+        if (DebugLogs) Debug.Log($"Here");
         bool isActivePlayer = deadPlayer == ActivePlayer.Instance.CurrentPlayer;
         bool isInFreeCam = CameraControlSwitcher.Instance != null && 
                           CameraControlSwitcher.Instance.FreeCamIsActive;
@@ -139,8 +147,9 @@ public class PlayerLivesManager : MonoBehaviour
         }
     }
 
-    void HandleGameOver(GameObject deadPlayer)
+    void HandleOutOfLives(GameObject deadPlayer) 
     {
+        if (DebugLogs) Debug.Log($"Here");
         CinemachineCamera deadPlayerCam = deadPlayer?.GetComponentInChildren<CinemachineCamera>();
         Vector3 deathCameraPosition = Vector3.zero;
         float deathCameraFOV = 60f;
@@ -151,7 +160,7 @@ public class PlayerLivesManager : MonoBehaviour
             deathCameraFOV = deadPlayerCam.Lens.FieldOfView;
         }
 
-        _loose_game.Invoke();
+        OutOfLives.Invoke();
 
         if (CameraControlSwitcher.Instance != null)
         {
