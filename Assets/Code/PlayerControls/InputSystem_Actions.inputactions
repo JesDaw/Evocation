@@ -712,15 +712,6 @@
             "id": "83da7366-c971-4413-89eb-b3c4d874caff",
             "actions": [
                 {
-                    "name": "CastSpell",
-                    "type": "Button",
-                    "id": "1e37d2a0-4c96-44d5-94b3-42670c9b114e",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Look",
                     "type": "Value",
                     "id": "6e2167b7-6a63-4b5b-bd5c-2f01b12b4e0d",
@@ -746,13 +737,31 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "AimSpell",
+                    "type": "Button",
+                    "id": "57812ecd-5970-4f5f-bbd7-ebb4617ff1ed",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "CastSpell",
+                    "type": "Button",
+                    "id": "1e37d2a0-4c96-44d5-94b3-42670c9b114e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
                 {
                     "name": "",
                     "id": "ee106646-4bf2-426f-a4cb-02eb09526ded",
-                    "path": "<Keyboard>/r",
+                    "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -867,6 +876,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "SwapSpell2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d79782a0-6611-40de-b1f0-984abcd7f0a4",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AimSpell",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -16,6 +16,7 @@ public class SpellSwapper : MonoBehaviour
     public UnityEvent OnSwapSpells;
 
     [SerializeField] int currentIndex = 0;
+    [SerializeField] bool DebugLogs;
 
     public SpellDefinition CurrentSpell;
 
@@ -27,7 +28,7 @@ public class SpellSwapper : MonoBehaviour
     void Start()
     {
         SubscribeToInputs();
-
+        if (DebugLogs) Debug.Log($"spells.Count = {spells.Count}");
         if (spells.Count == 0)
             return;
 
@@ -59,21 +60,27 @@ public class SpellSwapper : MonoBehaviour
 
     void SwapForward(InputAction.CallbackContext context)
     {
+        if (DebugLogs) Debug.Log($"Swap forward");
         Switch(true);
     }
 
     void SwapBackward(InputAction.CallbackContext context)
     {
+        if (DebugLogs) Debug.Log($"Swap Back");
         Switch(false);
     }
 
     void Switch(bool forward)
     {
-        if (spells.Count == 0)
-            return;
+        if (DebugLogs) Debug.Log($"spells.Count = {spells.Count}");
+        if (spells.Count == 0) return;
 
-        if (SpellCaster.Instance != null && SpellCaster.Instance.IsBusy)
+
+        if (SpellCaster.Instance == null) 
+        {
+            Debug.LogWarning($"SpellCaster.Instance != null)");
             return;
+        }
 
         int len = spells.Count;
 
@@ -83,6 +90,7 @@ public class SpellSwapper : MonoBehaviour
 
         UpdateMagicUIFunctions.Instance.UpdateSpellGUI(CurrentSpell);
         OnSwapSpells.Invoke();
+        if (DebugLogs) Debug.Log($"Event invoked");
     }
 
     void OnDestroy()

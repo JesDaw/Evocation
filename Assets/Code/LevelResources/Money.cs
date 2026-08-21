@@ -13,7 +13,8 @@ public class Money : MonoBehaviour
     [HideInInspector] public int CurrentMoney = 0;
     [HideInInspector] public int CurrentMaxMoneyIndex = 0;
     [SerializeField] int[] MaxMoney = {200, 400, 600, 800, 1000};
-    [SerializeField] float[] CostToUpgradeMaxMoneyPercent = {.75f, .75f, .75f, .75f, .75f};
+    [SerializeField] float[] CostToUpgradeMaxMoneyPercent = {.75f, .7428571429f, .76f, .861f, .75f};
+    [SerializeField] TextMeshProUGUI PriceToUbgradeUGUI;
     public UnityEvent MoneyUpdated;
     [SerializeField] bool DebugLogs = false;
     
@@ -49,6 +50,9 @@ public class Money : MonoBehaviour
     {
         StartCoroutine(moneyCount());
         UpdateMoneyDesplay();
+        PriceToUbgradeUGUI.text = (MaxMoney[CurrentMaxMoneyIndex]*CostToUpgradeMaxMoneyPercent[CurrentMaxMoneyIndex]).ToString("0");
+        if (DebugLogs) Debug.Log($"desplaying {(MaxMoney[CurrentMaxMoneyIndex]*CostToUpgradeMaxMoneyPercent[CurrentMaxMoneyIndex]).ToString("0")} as upgrade price");
+
     }
 
     IEnumerator moneyCount()
@@ -96,6 +100,7 @@ public class Money : MonoBehaviour
         {
             spendMoney(Mathf.FloorToInt(MaxMoney[CurrentMaxMoneyIndex] * CostToUpgradeMaxMoneyPercent[CurrentMaxMoneyIndex]));
             CurrentMaxMoneyIndex += 1;
+            PriceToUbgradeUGUI.text = (MaxMoney[CurrentMaxMoneyIndex]*CostToUpgradeMaxMoneyPercent[CurrentMaxMoneyIndex]).ToString("0");
             UpdateMoneyGen();
             //effects;
         }

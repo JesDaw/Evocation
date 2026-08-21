@@ -57,7 +57,7 @@ public class ActivePlayer : MonoBehaviour
         
         if (_currentPlayer == null)
         {
-            Debug.LogError("Current player isnt set");
+            if (DebugLogs) Debug.Log("Current player isnt set");
             return null;
         }
          if (DebugLogs) Debug.Log("Getting current player camera");

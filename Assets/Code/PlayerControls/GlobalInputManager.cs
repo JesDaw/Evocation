@@ -162,6 +162,7 @@ public class GlobalInputManager : MonoBehaviour
         _inputActions.MagicController.Look.Enable();
         _inputActions.MagicController.SwapSpell1.Enable();
         _inputActions.MagicController.SwapSpell2.Enable();
+        _inputActions.MagicController.AimSpell.Enable();
         if(DebugLogs) Debug.Log("Magic controls enabled");
     }
     
@@ -171,6 +172,7 @@ public class GlobalInputManager : MonoBehaviour
         _inputActions.MagicController.Look.Disable();
         _inputActions.MagicController.SwapSpell1.Disable();
         _inputActions.MagicController.SwapSpell2.Disable();
+        _inputActions.MagicController.AimSpell.Disable();
         if(DebugLogs) Debug.Log("Magic controls disabled");
     }
 
@@ -292,6 +294,7 @@ public class GlobalInputManager : MonoBehaviour
         EnablePlayerSwitching();
         EnableSpawnerControls();
         EnableUIControls();
+        EnableMagicControls();
         DisableMenuNavigation();
         DisableCursor();
         
@@ -302,7 +305,7 @@ public class GlobalInputManager : MonoBehaviour
         if(DebugLogs) Debug.Log("=========Input Mode: SpellAim=========");
         DisableAllControls();
         EnableCameraControls();
-        _inputActions.MagicController.CastSpell.Enable();
+        EnableMagicControls();
         EnableUIControls();
         DisableMenuNavigation();
         DisableCursor();
