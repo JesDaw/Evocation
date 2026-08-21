@@ -216,7 +216,7 @@ public class CpuMoveState : CpuBaseState
         float effectiveRange = _Stats._HorizontalRange * action.rangePercent;
 
         Vector2 center = action.extendsForward
-            ? AttackLogic.CalculateAttackCenter(
+            ? CombatLogic.CalculateAttackCenter(
                 _Transform.position,
                 facingLeft,
                 new Vector2(effectiveRange, 0f))

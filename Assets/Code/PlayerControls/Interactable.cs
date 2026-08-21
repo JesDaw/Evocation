@@ -105,6 +105,7 @@ public class Interactable : MonoBehaviour
     }
     void Update()
     {
+        CheckActivePlayerIsInRange();
         if (isHolding)
         {
             currentHoldTime += Time.deltaTime;
@@ -125,18 +126,10 @@ public class Interactable : MonoBehaviour
         }
     }
 
-    // Helper to clean up state
-    void StopHolding()
-    {
-        isHolding = false;
-        currentHoldTime = 0f;
-        if (ProgressBarContainer != null) ProgressBarContainer.SetActive(false);
-    }
-
     public void ActionPressed(InputAction.CallbackContext context)
     {
         if (LocationClaimed) return;
-        if (!CheckActivePlayerIsInRange()) return;
+        if (!ActivePlayerIsInRange) return;
 
         if (context.started)
         {
@@ -160,6 +153,12 @@ public class Interactable : MonoBehaviour
             if (DebugLog) Debug.Log("Interact canceled");
         }
     }
+    void StopHolding()
+    {
+        isHolding = false;
+        currentHoldTime = 0f;
+        if (ProgressBarContainer != null) ProgressBarContainer.SetActive(false);
+    }
 
     bool CheckActivePlayerIsInRange()
     {
@@ -167,48 +166,36 @@ public class Interactable : MonoBehaviour
             return false;
 
         if (_playersInRange.Contains(ActivePlayer.Instance.CurrentPlayer))
+        {
+            ToggleIconOn();
+            ActivePlayerIsInRange = true;
+            if (DebugLog) Debug.Log($"Player In range");
             return true;
-        
+        }
+        ActivePlayerIsInRange = false;
+        ToggleIconOff();
         return false;
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
         if(DebugLog) Debug.Log($"{collision.gameObject.name} entered interaction range");
-        bool playerEntered = false;
-        if (collision.gameObject.CompareTag("Player")) playerEntered = true;
-        if (collision.gameObject.CompareTag("FreeCam") && FreeCamActsAsActivePlayer) playerEntered = true;
-        if (DebugLog) Debug.Log($"[Interactable] playerEntered: {playerEntered}");
-
+        if (CheckIfPlayer(collision)) _playersInRange.Add(collision.gameObject);
         
-        if (playerEntered)
-        {
-            _playersInRange.Add(collision.gameObject);
-           
-            if(CheckActivePlayerIsInRange())
-            {
-                if (DebugLog) Debug.Log($"CheckActivePlayerIsInRange(): {CheckActivePlayerIsInRange()}");
-                ToggleIconOn();
-            }
-        }
     }
 
     void OnTriggerExit2D(Collider2D collision)
     {
         if(DebugLog) Debug.Log($"{collision.gameObject.name} left interaction range");
-        bool playerEntered = false;
-        if (collision.gameObject.CompareTag("Player")) playerEntered = true;
-        if (collision.gameObject.CompareTag("FreeCam") && FreeCamActsAsActivePlayer) playerEntered = true;
-        
-        if (playerEntered)
-        {
-            _playersInRange.Remove(collision.gameObject);
+        if (CheckIfPlayer(collision)) _playersInRange.Remove(collision.gameObject);
 
-            if (!CheckActivePlayerIsInRange())
-            {
-                
-                ToggleIconOff();
-            }
-        }
+    }
+
+    bool CheckIfPlayer(Collider2D collision)
+    {
+        bool player = false;
+        if (collision.gameObject.CompareTag("Player")) player = true;
+        if (collision.gameObject.CompareTag("FreeCam") && FreeCamActsAsActivePlayer) player = true;
+        return player;
     }
 }

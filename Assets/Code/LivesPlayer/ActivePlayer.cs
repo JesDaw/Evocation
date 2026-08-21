@@ -19,7 +19,7 @@ public class ActivePlayer : MonoBehaviour
     [SerializeField] GameObject _currentPlayer;
     public static ActivePlayer Instance { get; private set; }
     GameObject _currentCamera;
-
+    [SerializeField] bool DebugLogs;
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -36,11 +36,15 @@ public class ActivePlayer : MonoBehaviour
 
     public GameObject CurrentPlayer
     {
-        get { return _currentPlayer; }
+        get 
+        { 
+            return _currentPlayer; 
+        }
         set
         {
             if (_currentPlayer != value)
             {
+                if (DebugLogs) Debug.Log("Setting current player");
                 PlayerDeactivating?.Invoke(_currentPlayer);
                 _currentPlayer = value;
                 PlayerActivating?.Invoke(_currentPlayer);
@@ -50,12 +54,13 @@ public class ActivePlayer : MonoBehaviour
 
     public CinemachineCamera GetCurrentPlayerCamera()
     {
+        
         if (_currentPlayer == null)
         {
             Debug.LogError("Current player isnt set");
             return null;
         }
-
+         if (DebugLogs) Debug.Log("Getting current player camera");
         return _currentPlayer.GetComponentInChildren<CinemachineCamera>();
     }
     
@@ -66,7 +71,7 @@ public class ActivePlayer : MonoBehaviour
             Debug.LogError("Current player isnt set");
             return null; 
         }
-
+        if (DebugLogs) Debug.Log("Getting current player State Machine");
         return _currentPlayer?.GetComponent<PlayerStateMachine>();
     }
 }

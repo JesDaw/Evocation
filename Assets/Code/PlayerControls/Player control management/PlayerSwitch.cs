@@ -2,7 +2,10 @@ using UnityEngine;
 using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine.InputSystem;
-
+/// <summary>
+/// This script tracks what player characters an in pay, lets the player switch between controlling them and 
+/// also maintains the active player script
+/// </summary>
 public class PlayerSwitch : MonoBehaviour
 {
     [SerializeField] List<GameObject> players = new List<GameObject>();
