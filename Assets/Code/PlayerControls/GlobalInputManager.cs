@@ -142,6 +142,7 @@ public class GlobalInputManager : MonoBehaviour
     public void EnablePlayerControls()
     {
         _inputActions.Player.Move.Enable();
+        _inputActions.Player.AutoMove.Enable();
         _inputActions.Player.Attack.Enable();
         _inputActions.Player.Interact.Enable();
         if(DebugLogs) Debug.Log("Player controls enabled");
@@ -150,6 +151,7 @@ public class GlobalInputManager : MonoBehaviour
     public void DisablePlayerControls()
     {
         _inputActions.Player.Move.Disable();
+        _inputActions.Player.AutoMove.Disable();
         _inputActions.Player.Attack.Disable();
         _inputActions.Player.Interact.Disable();
         if(DebugLogs) Debug.Log("Player controls disabled");
