@@ -17,6 +17,7 @@ public class SpellCaster : MonoBehaviour
     [SerializeField] RectTransform screenReticleUI;
     [SerializeField] float lookSensitivity = 8f;
     [SerializeField] bool DebugLogs = false;
+    bool returnToFreeCam;
 
     Vector2 _screenReticlePos;
     Action<InputAction.CallbackContext> _castHandler;
@@ -25,6 +26,7 @@ public class SpellCaster : MonoBehaviour
         ? ActivePlayer.Instance.CurrentPlayer.GetComponent<Stats>()
         : null;
 
+    #region startup
     void Awake() => Instance = this;
 
     void Start()
@@ -35,21 +37,62 @@ public class SpellCaster : MonoBehaviour
 
     void SubscribeToInputs()
     {
-        var input = GlobalInputManager.Instance.InputActions.MagicController;
-        _castHandler = _ => TryInvoke();
-        input.CastSpell.performed += _castHandler;
+        GlobalInputManager.Instance.InputActions.MagicController.AimSpell.performed += ToggleAimSpell;
+        GlobalInputManager.Instance.InputActions.MagicController.CastSpell.performed += CommitCast;
     }
 
+    void OnDestroy() => UnsubscribeFromInputs();
     void UnsubscribeFromInputs()
     {
-        if (GlobalInputManager.Instance == null) return;
-        GlobalInputManager.Instance.InputActions.MagicController.CastSpell.performed -= _castHandler;
+        GlobalInputManager.Instance.InputActions.MagicController.AimSpell.performed -= ToggleAimSpell;
+        GlobalInputManager.Instance.InputActions.MagicController.CastSpell.performed -= CommitCast;
+    }
+    #endregion
+    #region aiming
+    void ToggleAimSpell(InputAction.CallbackContext context)
+    {
+        if (CurrentState == State.Idle)
+        {
+            if (SpellSwapper.Instance.CurrentSpell.castMode == SpellCastMode.Aimed) // means we use the aiming logic not that we are already aiming
+            {
+                EnterAimCamera();
+            }
+        }
+        else
+        {
+            ExitAimCamera();
+        }
     }
 
+    void EnterAimCamera()
+    {
+        CurrentState = State.Aiming;
+
+        _screenReticlePos = new Vector2(Screen.width, Screen.height) * 0.5f;
+        detectionRadiusObject.position = ScreenPointToWorldOnGamePlane(_screenReticlePos);
+        detectionRadiusObject.gameObject.SetActive(true);
+        detectionRadiusObject.localScale = new Vector3(SpellSwapper.Instance.CurrentSpell.Radius, SpellSwapper.Instance.CurrentSpell.Radius, 0f);
+
+        if (aimVisual != null) aimVisual.enabled = true;
+        if (CameraControlSwitcher.Instance != null) 
+        {
+            if (CameraControlSwitcher.Instance.FreeCamIsActive) returnToFreeCam = true;
+            else returnToFreeCam = false;
+            CameraControlSwitcher.Instance.SwitchToCameraControl(true);
+        }
+        GlobalInputManager.Instance.SetMode(InputMode.SpellAim);
+
+        if (DebugLogs) Debug.Log($"Aiming {SpellSwapper.Instance.CurrentSpell.SpellName}");
+    }
+    
     void Update()
     {
         if (CurrentState != State.Aiming) return;
+        SpellAimMovement();
+    }
 
+    void SpellAimMovement()
+    {
         Vector2 delta = Mouse.current != null ? Mouse.current.delta.ReadValue() : Vector2.zero;
         _screenReticlePos += delta * lookSensitivity;
         _screenReticlePos.x = Mathf.Clamp(_screenReticlePos.x, 0, Screen.width);
@@ -69,57 +112,26 @@ public class SpellCaster : MonoBehaviour
 
         return detectionRadiusObject.position;
     }
-
-    void TryInvoke()
-    {
-        var spell = SpellSwapper.Instance != null ? SpellSwapper.Instance.CurrentSpell : null;
-        if (spell == null) return;
-
-        if (CurrentState == State.Idle) AimSpell(spell);
-        else if (CurrentState == State.Aiming) CommitCast(spell);
-    }
-
-    void AimSpell(SpellDefinition spell)
-    {
-        if (spell.castMode == SpellCastMode.Aimed)
-        {
-            CurrentState = State.Aiming;
-
-            _screenReticlePos = new Vector2(Screen.width, Screen.height) * 0.5f;
-            detectionRadiusObject.position = ScreenPointToWorldOnGamePlane(_screenReticlePos);
-            detectionRadiusObject.gameObject.SetActive(true);
-            detectionRadiusObject.localScale = new Vector3(spell.Radius, spell.Radius, 0f);
-
-            if (aimVisual != null) aimVisual.enabled = true; 
-
-            EnterAimCamera();
-            GlobalInputManager.Instance.SetMode(InputMode.SpellAim);
-
-            if (DebugLogs) Debug.Log($"Aiming {spell.SpellName}");
-        }
-        else
-        {
-            Vector3 castPos = ActivePlayer.Instance.CurrentPlayer.transform.position;
-            StartCoroutine(RunCastSequence(spell, castPos));
-        }
-    }
-
-    void EnterAimCamera()
-    {
-        var playerCam = ActivePlayer.Instance.GetCurrentPlayerCamera();
-        if (playerCam != null && CameraControlSwitcher.Instance != null)
-            CameraControlSwitcher.Instance.SwitchToFreeCamAtPosition(playerCam.transform.position, playerCam.Lens.FieldOfView);
-    }
-
     void ExitAimCamera()
-    {
-        if (CameraControlSwitcher.Instance != null)
-            CameraControlSwitcher.Instance.SwitchToPlayerControl();
-    }
+    {  
+        Debug.Log("exiting.");
+        CurrentState = State.Idle;
+        detectionRadiusObject.gameObject.SetActive(false);
+        if (aimVisual != null) aimVisual.enabled = false;
 
-    void CommitCast(SpellDefinition spell) 
+        if (!returnToFreeCam) CameraControlSwitcher.Instance.SwitchToPlayerControl();
+        else CameraControlSwitcher.Instance.SwitchToCameraControl(true);
+    }
+    #endregion
+    #region Casting
+    void CommitCast(InputAction.CallbackContext context) 
     {
-        StartCoroutine(RunCastSequence(spell, detectionRadiusObject.position));
+        if (SpellSwapper.Instance.CurrentSpell == null) return;
+        if (CurrentState == State.Aiming && SpellSwapper.Instance.CurrentSpell.castMode == SpellCastMode.Aimed)
+        {
+            StartCoroutine(RunCastSequence(SpellSwapper.Instance.CurrentSpell, detectionRadiusObject.position));
+        }
+        StartCoroutine(RunCastSequence(SpellSwapper.Instance.CurrentSpell, ActivePlayer.Instance.CurrentPlayer.transform.position));
     }
 
     IEnumerator RunCastSequence(SpellDefinition spell, Vector3 castPosition)
@@ -141,19 +153,15 @@ public class SpellCaster : MonoBehaviour
 
         if (wasAimed)
         {
-            if (aimVisual != null)
-                aimVisual.enabled = false;
-
+            if (aimVisual != null) aimVisual.enabled = false;
             GlobalInputManager.Instance.SetMode(InputMode.FreeCam);
         }
 
         yield return StartCoroutine(spell.RunCastSequence(this, castPosition));
 
-        if (wasAimed)
-            detectionRadiusObject.gameObject.SetActive(false);
+        if (wasAimed) detectionRadiusObject.gameObject.SetActive(false);
 
         CurrentState = State.Idle;
     }
-
-    void OnDestroy() => UnsubscribeFromInputs();
+    #endregion
 }
