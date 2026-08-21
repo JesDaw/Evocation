@@ -29,16 +29,11 @@ public static class CombatLogic
             {
                 ExecuteAOEFromList(attacker, action, inRange);
 
-                if (action.zoneSpawnPosition == ZoneSpawnPosition.Self &&
-                    action.zoneData != null)
+                if (action.zoneSpawnPosition == ZoneSpawnPosition.Self && action.zoneData != null)
                 {
-                    Transform sticky =
-                        action.zoneSticky
-                            ? attacker.transform
-                            : null;
+                    Transform sticky = action.zoneSticky ? attacker.transform : null;
 
-                    List<string> tags =
-                        GetTargetTags(attacker, action);
+                    List<string> tags = GetTargetTags(attacker, action);
 
                     AreaEffectLogic.SpawnZone(
                         action.zoneData,
@@ -156,7 +151,7 @@ public static class CombatLogic
             {
                 t.AlterHealth(
                     healthChange,
-                    new DamageSource(DamageSource.DamageType.Spell)
+                    new DamageSource(attacker._Enemy, DamageSource.DamageType.Spell, attacker.gameObject.transform.position)
                     {
                         IsEnemy = attacker._Enemy
                     }
@@ -269,7 +264,7 @@ public static class CombatLogic
         {
             target.AlterHealth(
                 healthChange,
-                new DamageSource(DamageSource.DamageType.Melee)
+                new DamageSource(attacker._Enemy, DamageSource.DamageType.Melee, attacker.gameObject.transform.position)
                 {
                     IsEnemy = attacker._Enemy
                 }
@@ -292,72 +287,43 @@ public static class CombatLogic
         CombatAction action,
         List<Stats> targets)
     {
-        float healthChange =
-            attacker._AttackDamage *
-            action.healthChangePercent;
+        float healthChange = attacker._AttackDamage * action.healthChangePercent;
 
-        float knockbackChange =
-            attacker._KnockBackDamage *
-            action.knockbackPercent;
+        float knockbackChange = attacker._KnockBackDamage * action.knockbackPercent;
 
         int count = 0;
-
         foreach (Stats t in targets)
         {
-            if (action.maxTargets >= 0 &&
-                count >= action.maxTargets)
-            {
-                break;
-            }
+            if (action.maxTargets >= 0 && count >= action.maxTargets) break;
 
             count++;
 
             if (healthChange != 0f)
-            {
-                t.AlterHealth(
-                    healthChange,
-                    new DamageSource(DamageSource.DamageType.AOE)
-                    {
-                        IsEnemy = attacker._Enemy
-                    }
-                );
+            {   
+                t.AlterHealth( healthChange, new DamageSource(attacker._Enemy, DamageSource.DamageType.AOE, attacker.gameObject.transform.position));
             }
 
             if (knockbackChange != 0f)
             {
-                t.AlterKnockback(
-                    knockbackChange,
-                    attacker._Enemy
-                );
+                t.AlterKnockback( knockbackChange, attacker._Enemy );
             }
 
             ApplyEffectsToTarget(attacker, action, t);
         }
     }
 
-    static void ApplyEffectsToTarget(
-        Stats attacker,
-        CombatAction action,
-        Stats target)
+    static void ApplyEffectsToTarget(Stats attacker, CombatAction action, Stats target)
     {
         foreach (var effect in action.effectsOnHit)
         {
-            target.statusEffectManager.ApplyEffect(
-                effect,
-                effect.duration
-            );
+            target.statusEffectManager.ApplyEffect( effect, effect.duration );
         }
 
-        if (action.zoneData != null &&
-            action.zoneSpawnPosition == ZoneSpawnPosition.Touch)
+        if (action.zoneData != null && action.zoneSpawnPosition == ZoneSpawnPosition.Touch)
         {
-            Transform sticky =
-                action.zoneSticky
-                    ? target.transform
-                    : null;
+            Transform sticky = action.zoneSticky ? target.transform : null;
 
-            List<string> tags =
-                GetTargetTags(attacker, action);
+            List<string> tags = GetTargetTags(attacker, action);
 
             AreaEffectLogic.SpawnZone(
                 action.zoneData,
@@ -382,21 +348,14 @@ public static class CombatLogic
 
         if (ps == null || ps.prefab == null)
         {
-            Debug.LogWarning(
-                $"{attacker.gameObject.name}: Action " +
-                $"'{action.actionName}' has Projectile delivery " +
+            Debug.LogWarning($"{attacker.gameObject.name}: Action {action.actionName} has Projectile delivery " +
                 $"but no ProjectileSettings or prefab set."
             );
 
             return;
         }
 
-        GameObject projGO =
-            UnityEngine.Object.Instantiate(
-                ps.prefab,
-                attacker.transform.position,
-                Quaternion.identity
-            );
+        GameObject projGO = UnityEngine.Object.Instantiate(ps.prefab, attacker.transform.position, Quaternion.identity);
 
         if (projGO.TryGetComponent(out Projectile p))
         {
@@ -415,11 +374,7 @@ public static class CombatLogic
                         {
                             hitStats.AlterHealth(
                                 healthChange,
-                                new DamageSource(
-                                    DamageSource.DamageType.Ranged)
-                                {
-                                    IsEnemy = attacker._Enemy
-                                }
+                                new DamageSource(attacker._Enemy, DamageSource.DamageType.Ranged, attacker.gameObject.transform.position)
                             );
                         }
 
@@ -461,7 +416,7 @@ public static class CombatLogic
             action.rangePercent;
 
         return action.extendsForward
-            ? AttackLogic.CalculateAttackCenter(
+            ? CalculateAttackCenter(
                 attacker.transform.position,
                 facingLeft,
                 new Vector2(effectiveRange, 0f)
@@ -502,4 +457,7 @@ public static class CombatLogic
 
         return tags;
     }
+
+    public static Vector2 CalculateAttackCenter(Vector2 pos, bool left, Vector2 range) => pos + new Vector2(left ? -range.x / 2f : range.x / 2f, 0f);
+    
 }

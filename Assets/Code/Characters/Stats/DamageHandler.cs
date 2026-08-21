@@ -5,6 +5,7 @@ public class DamageHandler : MonoBehaviour
 {
     Stats stats;
     bool DamageTriggerInvoked = false;
+    [SerializeField] bool DebugLogs;
 
     public void Initialize(Stats statsComponent)
     {
@@ -13,6 +14,7 @@ public class DamageHandler : MonoBehaviour
 
     public void TakeDamage(float damage, float knockback_damage, DamageSource attackedBy = null)
     {
+        if (DebugLogs) Debug.Log($"{gameObject.name}: Taking {damage} damage");
         if (stats == null) return;
         if (stats.IsInvincible()) return;
 
@@ -55,6 +57,7 @@ public class DamageHandler : MonoBehaviour
 
     public void TakeDamage(float damage, DamageSource attackedBy = null)
     {
+        if (DebugLogs) Debug.Log($"{gameObject.name}: Taking {damage} damage");
         if (stats == null) return;
         if (stats.IsInvincible()) return;
 
@@ -89,12 +92,12 @@ public class DamageHandler : MonoBehaviour
             return;
         }
 
-        if (stats._KnockBackHealth <= 0)
-            TriggerKnockback();
+        if (stats._KnockBackHealth <= 0) TriggerKnockback();
     }
 
     public void Die()
     {
+        if (DebugLogs) Debug.Log($"{gameObject.name}: Dying");
         if (stats == null) return;
 
         stats._CurrentHealth = 0;
@@ -142,28 +145,3 @@ public class DamageHandler : MonoBehaviour
     }
 }
 
-public class DamageSource
-{
-    public bool IsEnemy;
-    public DamageType damageType;
-
-    /// <summary>
-    /// World-space position of the attacker at the moment damage was dealt.
-    /// Used by PlayerKnockedBackState to determine the correct knockback direction.
-    /// Remains Vector3.zero when the source has no meaningful position (e.g. status effects).
-    /// </summary>
-    public Vector3 sourcePosition;
-
-    public enum DamageType
-    {
-        StatusEffect,
-        Melee,
-        Ranged,
-        AOE,
-        Spell
-    }
-
-    public DamageSource() { }
-    public DamageSource(DamageType type) { damageType = type; }
-    public DamageSource(DamageType type, Vector3 position) { damageType = type; sourcePosition = position; }
-}

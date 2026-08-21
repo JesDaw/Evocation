@@ -30,15 +30,14 @@ public class PlayerLivesManager : MonoBehaviour
         {
             foreach (GameObject player in PlayerSwitch.Instance.Players)
             {
-                if (player != null)
-                    SubscribeToPlayerDeath(player);
+                if (player != null) SubscribeToPlayerDeath(player); 
             }
         }
     }
 
     public void GainLife()
     {
-        if (DebugLogs) Debug.Log($"Here");
+        if (DebugLogs) Debug.Log($"HeGain life");
         if (canSpawnMore)
         {
             LifeCount++;
@@ -56,115 +55,65 @@ public class PlayerLivesManager : MonoBehaviour
 
     public void OnPlayerAdded(GameObject player)
     {
-        if (DebugLogs) Debug.Log($"Here");
+        if (DebugLogs) Debug.Log($"On player added");
         SubscribeToPlayerDeath(player);
     }
     void SubscribeToPlayerDeath(GameObject player)
     {
-        if (DebugLogs) Debug.Log($"Here");
+        if (DebugLogs) Debug.Log($"Subscribe to player death");
         Stats stats = player.GetComponent<Stats>();
         if (stats != null)
         {
             stats.OnDeath.DynamicCalls += () => LooseLife(player);
         }
     }
-
-    
-
-    public void LooseLife()
-    {
-        if (DebugLogs) Debug.Log($"Here");
-        var currentPlayer = ActivePlayer.Instance.GetCurrentPlayerController();
-        
-        if (currentPlayer != null)
-        {
-            LooseLife(currentPlayer.gameObject);
-        }
-        else // this gets called if the current player is null idk if this path exicutes or the other one but its probably always the same when the player is out of lives
-        {
-            LifeCount--;
-            canSpawnMore = true;
-            PlayerLivesDisplay.Instance.UpdateTorchDisplay();
-
-            if (LifeCount <= 0)
-            {
-                OutOfLives.Invoke();
-            }
-        }
-    }
     public void LooseLife(GameObject deadPlayer)
     {
-        if (DebugLogs) Debug.Log($"Here");
+        if (DebugLogs) Debug.Log($"handling loose life");
         LifeCount--;
         canSpawnMore = true;
         PlayerLivesDisplay.Instance.UpdateTorchDisplay();
 
+        
+
         if (LifeCount <= 0)
         {
-            HandleOutOfLives(deadPlayer);
+            HandlePlayerDeath(deadPlayer);   
         }
         else
         {
-            HandlePlayerDeath(deadPlayer);
+            HandleLastPlayerDeath(deadPlayer);
         }
+        
     }
 
     void HandlePlayerDeath(GameObject deadPlayer)
     {
-        if (DebugLogs) Debug.Log($"Here");
-        bool isActivePlayer = deadPlayer == ActivePlayer.Instance.CurrentPlayer;
-        bool isInFreeCam = CameraControlSwitcher.Instance != null && 
-                          CameraControlSwitcher.Instance.FreeCamIsActive;
+        CheckActivePlayerDeathCam(deadPlayer, true);
+        if (deadPlayer != null) PlayerSwitch.Instance.RemovePlayer(deadPlayer);
 
-        CinemachineCamera deadPlayerCam = deadPlayer.GetComponentInChildren<CinemachineCamera>();
-        Vector3 deathCameraPosition = Vector3.zero;
-        float deathCameraFOV = 60f;
-        
-        if (deadPlayerCam != null)
-        {
-            deathCameraPosition = deadPlayerCam.transform.position;
-            deathCameraFOV = deadPlayerCam.Lens.FieldOfView;
-        }
+    }
 
-        if (deadPlayer != null)
-        {
-            PlayerSwitch.Instance.RemovePlayer(deadPlayer);
-        }
+    void HandleLastPlayerDeath(GameObject deadPlayer) 
+    {
+        CheckActivePlayerDeathCam(deadPlayer, false);
+        if (deadPlayer != null) PlayerSwitch.Instance.RemovePlayer(deadPlayer);
+        OutOfLives.Invoke();
+    }
 
-        if (isActivePlayer)
+    void CheckActivePlayerDeathCam(GameObject deadPlayer, bool switchControls)
+    {
+        if (deadPlayer == ActivePlayer.Instance.CurrentPlayer)
         {
-            if (CameraControlSwitcher.Instance != null)
+            if (CameraControlSwitcher.Instance != null && !CameraControlSwitcher.Instance.FreeCamIsActive)
             {
-                if (!isInFreeCam)
-                {
-                    CameraControlSwitcher.Instance.SwitchToFreeCamAtPosition(deathCameraPosition, deathCameraFOV);
-                }
+                    //CameraControlSwitcher.Instance.SwitchToFreeCamAtPosition(deathCameraPosition, deathCameraFOV);
+                    CameraControlSwitcher.Instance.SwitchToCameraControl(switchControls);
             }
             else
             {
-                Debug.LogError("CameraControlSwitcher not assigned!");
+                // the active player died but the player is in free cam
             }
-        }
-    }
-
-    void HandleOutOfLives(GameObject deadPlayer) 
-    {
-        if (DebugLogs) Debug.Log($"Here");
-        CinemachineCamera deadPlayerCam = deadPlayer?.GetComponentInChildren<CinemachineCamera>();
-        Vector3 deathCameraPosition = Vector3.zero;
-        float deathCameraFOV = 60f;
-        
-        if (deadPlayerCam != null)
-        {
-            deathCameraPosition = deadPlayerCam.transform.position;
-            deathCameraFOV = deadPlayerCam.Lens.FieldOfView;
-        }
-
-        OutOfLives.Invoke();
-
-        if (CameraControlSwitcher.Instance != null)
-        {
-            CameraControlSwitcher.Instance.SwitchToFreeCamAtPosition(deathCameraPosition, deathCameraFOV);
         }
     }
 }

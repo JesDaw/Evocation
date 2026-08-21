@@ -118,12 +118,7 @@ public class CameraControlSwitcher : MonoBehaviour
             currentPlayer.SetActive(false); 
         }
 
-        if (swapControls) 
-        {
-            GlobalInputManager.Instance.SetMode(InputMode.FreeCam);
-        }
-        if (DebugLogs) UnityEngine.Debug.Log($"[CameraControlSwitcher] Switched to camera control. FreeCam now active, player disabled.");
-
+        
         var playerCam = ActivePlayer.Instance.GetCurrentPlayerCamera();
         if (playerCam != null && freeCam != null)
         {
@@ -132,6 +127,13 @@ public class CameraControlSwitcher : MonoBehaviour
             freeCam.Priority = 2;
             playerCam.Priority = 0;
         }
+
+        if (swapControls) 
+        {
+            GlobalInputManager.Instance.SetMode(InputMode.FreeCam);
+        }
+        if (DebugLogs) UnityEngine.Debug.Log($"[CameraControlSwitcher] Switched to camera control. FreeCam now active, player disabled.");
+
     }
 
     public void SwitchToFreeCamAtPosition(Vector3 position, float fieldOfView) 

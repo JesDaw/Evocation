@@ -112,7 +112,7 @@ public class PlayerAttackState : PlayerBaseState
         float effectiveRange = Ctx.PlayerStats._HorizontalRange * action.rangePercent;
 
         Vector2 center = action.extendsForward
-            ? AttackLogic.CalculateAttackCenter(
+            ? CombatLogic.CalculateAttackCenter(
                 Ctx.transform.position,
                 facingLeft,
                 new Vector2(effectiveRange, 0f))

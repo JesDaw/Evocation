@@ -32,35 +32,30 @@ public class PlayerKnockedBackState : PlayerBaseState
     void ApplyKnockback()
     {
         if (Ctx.Rb == null) return;
-
-        // ── Direction: always away from whoever hit us ─────────────────────
-        // sourcePosition is populated by CombatLogic on every damaging action.
-        // If it's zero (e.g. a status-effect tick with no positional source)
-        // we fall back to the facing-based heuristic that was here before.
         DamageSource lastHit = Ctx.PlayerStats.LastHitBy;
-        float knockbackDir;
-
+        
+        bool knockedToTheLeft = false;
         if (lastHit != null && lastHit.sourcePosition != Vector3.zero)
         {
-            // Positive delta → player is to the RIGHT of the attacker → knock right (+1)
-            // Negative delta → player is to the LEFT  of the attacker → knock left  (-1)
             float delta = Ctx.transform.position.x - lastHit.sourcePosition.x;
-            knockbackDir = delta >= 0f ? 1f : -1f;
+            knockedToTheLeft = delta >= 0f ? false : true;
         }
         else
         {
-            // Fallback: knocked opposite to current facing (original behaviour)
-            knockbackDir = Ctx.isFacingRight ? -1f : 1f;
+            knockedToTheLeft = Ctx.isFacingRight ? true : false;
         }
+        bool shouldFaceRight = knockedToTheLeft;
+        if (Ctx.isFacingRight != shouldFaceRight) Flip();
 
-        // ── Flip to face away before the impulse ──────────────────────────
-        // shouldFaceRight = true  → knocked right → player looks right (away from left-side attacker)
-        // shouldFaceRight = false → knocked left  → player looks left  (away from right-side attacker)
-        bool shouldFaceRight = knockbackDir > 0f;
-        if (Ctx.isFacingRight != shouldFaceRight)
-            Flip();
-
-        // ── Apply impulse using the same angle-based math as CpuKnockBackState ─
+        float knockbackDir;
+        if (knockedToTheLeft)
+        { 
+            knockbackDir = -1f;
+        }
+        else
+        { 
+            knockbackDir = 1f;
+        }
         float angleRad = Ctx.ScrStats._KnockBackAngle * Mathf.Deg2Rad;
         float force    = Ctx.ScrStats._KnockBackVelocity;
         float forceX   = Mathf.Cos(angleRad) * force * knockbackDir;
