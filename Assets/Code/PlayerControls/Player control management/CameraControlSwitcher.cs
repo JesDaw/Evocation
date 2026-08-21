@@ -51,9 +51,9 @@ public class CameraControlSwitcher : MonoBehaviour
         if (!_camModeIsTogglable) return;
         if (!context.performed) return;
 
-        if (PlayerLivesManager.Instance.LifeCount <= 0 && !FreeCamIsActive)
+        if (PlayerLivesManager.Instance.LifeCount <= 0)
         {
-            SwitchToCameraControl();
+            SwitchToCameraControl(true);
             return;
         }
 
@@ -80,15 +80,14 @@ public class CameraControlSwitcher : MonoBehaviour
         GlobalInputManager.Instance.SetMode(InputMode.PlayerCharacter);
 
         var currentPlayer = ActivePlayer.Instance.CurrentPlayer?.GetComponent<PlayerStateMachine>();
-        if (currentPlayer != null)
+        if (currentPlayer == null)
         {
-            currentPlayer.SetActive(true);
-            if(DebugLogs) Debug.Log($"SwitchToPlayerControl. Enabled: {currentPlayer.gameObject.name}");
+            if(DebugLogs) Debug.Log("SwitchToPlayerControl: No current player found!");
+            return;         
         }
-        else
-        {
-            Debug.LogError("SwitchToPlayerControl: No current player found!");
-        }
+
+        currentPlayer.SetActive(true);
+        if(DebugLogs) Debug.Log($"SwitchToPlayerControl. Enabled: {currentPlayer.gameObject.name}");
 
         var playerCam = ActivePlayer.Instance.GetCurrentPlayerCamera();
         if (playerCam != null && playerCam.Priority != 2)

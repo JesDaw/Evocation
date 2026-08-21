@@ -74,45 +74,27 @@ public class PlayerLivesManager : MonoBehaviour
         canSpawnMore = true;
         PlayerLivesDisplay.Instance.UpdateTorchDisplay();
 
-        
-
+        HandlePlayerDeath(deadPlayer); 
         if (LifeCount <= 0)
-        {
-            HandlePlayerDeath(deadPlayer);   
+        { 
+            OutOfLives.Invoke();
         }
-        else
-        {
-            HandleLastPlayerDeath(deadPlayer);
-        }
-        
     }
 
     void HandlePlayerDeath(GameObject deadPlayer)
     {
-        CheckActivePlayerDeathCam(deadPlayer, true);
+        CheckActivePlayerDeathCam(deadPlayer);
         if (deadPlayer != null) PlayerSwitch.Instance.RemovePlayer(deadPlayer);
 
     }
 
-    void HandleLastPlayerDeath(GameObject deadPlayer) 
-    {
-        CheckActivePlayerDeathCam(deadPlayer, false);
-        if (deadPlayer != null) PlayerSwitch.Instance.RemovePlayer(deadPlayer);
-        OutOfLives.Invoke();
-    }
-
-    void CheckActivePlayerDeathCam(GameObject deadPlayer, bool switchControls)
+    void CheckActivePlayerDeathCam(GameObject deadPlayer)
     {
         if (deadPlayer == ActivePlayer.Instance.CurrentPlayer)
         {
             if (CameraControlSwitcher.Instance != null && !CameraControlSwitcher.Instance.FreeCamIsActive)
             {
-                    //CameraControlSwitcher.Instance.SwitchToFreeCamAtPosition(deathCameraPosition, deathCameraFOV);
-                    CameraControlSwitcher.Instance.SwitchToCameraControl(switchControls);
-            }
-            else
-            {
-                // the active player died but the player is in free cam
+                    CameraControlSwitcher.Instance.SwitchToCameraControl(true);
             }
         }
     }

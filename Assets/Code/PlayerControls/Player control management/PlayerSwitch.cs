@@ -118,8 +118,14 @@ public class PlayerSwitch : MonoBehaviour
 
     public void SwitchPlayerRight(InputAction.CallbackContext context)
     {
-        if (!context.performed || players.Count == 0)
+         if (!context.performed || players.Count == 0)
             return;
+        SwitchPlayerRight();
+    }
+
+    void SwitchPlayerRight()
+    {
+       
 
         RemoveNullPlayers();
 
@@ -264,9 +270,9 @@ public class PlayerSwitch : MonoBehaviour
         {
             Debug.LogError($"No CinemachineCamera found in {newPlayer.name}");
         }
+        if (players.Count == 1) SwitchPlayerRight();
 
-        if (PlayerLivesManager.Instance != null)
-            PlayerLivesManager.Instance.OnPlayerAdded(newPlayer);
+        if (PlayerLivesManager.Instance != null) PlayerLivesManager.Instance.OnPlayerAdded(newPlayer);
     }
 
     public void RemovePlayer(GameObject playerToRemove)
