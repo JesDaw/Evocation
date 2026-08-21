@@ -6,14 +6,13 @@ using System.Collections;
 public class Money : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI moneyText;
-    //[SerializeField] AIMoneyManager aIMoneyManager;
     [SerializeField] float InitialMoneyGainPerSec = 1;
     float MoneyGainPerSec = 1;
     bool _money_is_active = false;
     [SerializeField] [Range(0,1)]float StartingMoneyPercentOfMax = 0;
-    [HideInInspector] public float CurrentMoney = 0;
+    [HideInInspector] public int CurrentMoney = 0;
     [HideInInspector] public int CurrentMaxMoneyIndex = 0;
-    [SerializeField] float[] MaxMoney = {200, 400, 600, 800, 1000};
+    [SerializeField] int[] MaxMoney = {200, 400, 600, 800, 1000};
     [SerializeField] float[] CostToUpgradeMaxMoneyPercent = {.75f, .75f, .75f, .75f, .75f};
     public UnityEvent MoneyUpdated;
     [SerializeField] bool DebugLogs = false;
@@ -42,7 +41,7 @@ public class Money : MonoBehaviour
         }
         if(StartingMoneyPercentOfMax > 1) StartingMoneyPercentOfMax = 1;
         if(StartingMoneyPercentOfMax < 0) StartingMoneyPercentOfMax = 0;
-        CurrentMoney = StartingMoneyPercentOfMax*MaxMoney[0];
+        CurrentMoney = Mathf.FloorToInt(StartingMoneyPercentOfMax * MaxMoney[0]);
         MoneyGainPerSec = InitialMoneyGainPerSec;
     }
 
@@ -76,17 +75,16 @@ public class Money : MonoBehaviour
     public void UpdateMoneyDesplay()
     {
         moneyText.text = $"{CurrentMoney.ToString("0")}/{MaxMoney[CurrentMaxMoneyIndex]}";
-        //Debug.Log("UpdateMoneyDesplay updated");
     }
 
-    public void AddMoney(float amount)
+    public void AddMoney(int amount)
     {
         CurrentMoney += amount;
         if (CurrentMoney > MaxMoney[CurrentMaxMoneyIndex]) CurrentMoney = MaxMoney[CurrentMaxMoneyIndex];
         MoneyUpdate();
     }
 
-    public void spendMoney(float amount)
+    public void spendMoney(int amount)
     {
         CurrentMoney -= amount;
         MoneyUpdate();
@@ -96,7 +94,7 @@ public class Money : MonoBehaviour
     {
         if(MaxMoney.Length - 1 > CurrentMaxMoneyIndex && CurrentMoney >= MaxMoney[CurrentMaxMoneyIndex] * CostToUpgradeMaxMoneyPercent[CurrentMaxMoneyIndex])
         {
-            spendMoney(MaxMoney[CurrentMaxMoneyIndex] * CostToUpgradeMaxMoneyPercent[CurrentMaxMoneyIndex]);
+            spendMoney(Mathf.FloorToInt(MaxMoney[CurrentMaxMoneyIndex] * CostToUpgradeMaxMoneyPercent[CurrentMaxMoneyIndex]));
             CurrentMaxMoneyIndex += 1;
             UpdateMoneyGen();
             //effects;
@@ -112,12 +110,10 @@ public class Money : MonoBehaviour
     public void DeactivateMoney() 
     { 
         _money_is_active = false; 
-        //aIMoneyManager.DeactivateMoney();
     }
     public void ActivateMoney() 
     { 
         _money_is_active = true; 
-        //aIMoneyManager.ActivateMoney();
     }
     public void ResetMoney() => CurrentMoney = 0; 
     
