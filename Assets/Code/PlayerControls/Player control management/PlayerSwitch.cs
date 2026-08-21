@@ -288,7 +288,6 @@ public class PlayerSwitch : MonoBehaviour
 
         players.RemoveAt(index);
         playerCameras.RemoveAt(index);
-        Debug.Log($"Removed player at index {index}. Total players: {players.Count}");
 
         if (wasActive)
         {

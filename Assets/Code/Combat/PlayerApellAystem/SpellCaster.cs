@@ -51,11 +51,11 @@ public class SpellCaster : MonoBehaviour
     #region aiming
     void ToggleAimSpell(InputAction.CallbackContext context)
     {
-        if (ActivePlayer.Instance.CurrentPlayer == null)
+        /*if (ActivePlayer.Instance.CurrentPlayer == null)
         {
             ExitAimCamera();
             return;
-        }
+        }*/
         if (CurrentState == State.Idle)
         {
             if (SpellSwapper.Instance.CurrentSpell.castMode == SpellCastMode.Aimed) // means we use the aiming logic not that we are already aiming
@@ -94,10 +94,11 @@ public class SpellCaster : MonoBehaviour
     {
         if (CurrentState != State.Aiming) return;
         SpellAimMovement();
-        if (ActivePlayer.Instance.CurrentPlayer == null)
+        /*if (ActivePlayer.Instance.CurrentPlayer == null)
         {
             ExitAimCamera();
-        }
+            return;
+        }*/
     }
 
     void SpellAimMovement()
