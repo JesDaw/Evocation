@@ -120,39 +120,7 @@ public class PlayerSwitch : MonoBehaviour
     {
          if (!context.performed || players.Count == 0)
             return;
-        SwitchPlayerRight();
-    }
-
-    void SwitchPlayerRight()
-    {
-       
-
-        RemoveNullPlayers();
-
-        if (players.Count == 0 || playerCameras.Count == 0)
-        {
-            Debug.Log("No players available to switch to.");
-            return;
-        }
-
-        if (activePlayerIndex >= 0 && activePlayerIndex < players.Count && players[activePlayerIndex] != null)
-        {
-            var playerSM = players[activePlayerIndex].GetComponent<PlayerStateMachine>();
-            if (playerSM != null && playerSM.PlayerCommander != null)
-            {
-                playerSM.PlayerCommander.ClearAllCommands();
-            }
-            playerCameras[activePlayerIndex].Priority = 0;
-        }
-
-        int startIndex = activePlayerIndex;
-        do
-        {
-            activePlayerIndex = (activePlayerIndex + 1) % players.Count;
-        }
-        while (players[activePlayerIndex] == null && activePlayerIndex != startIndex);
-
-        ActivatePlayer(activePlayerIndex);
+        SwitchPlayer(true);
     }
 
     public void SwitchPlayerLeft(InputAction.CallbackContext context)
@@ -160,6 +128,11 @@ public class PlayerSwitch : MonoBehaviour
         if (!context.performed || players.Count == 0)
             return;
         
+        SwitchPlayer(false);
+    }
+
+    void SwitchPlayer(bool right = true)
+    {
         RemoveNullPlayers();
 
         if (players.Count == 0 || playerCameras.Count == 0)
@@ -179,13 +152,16 @@ public class PlayerSwitch : MonoBehaviour
         }
 
         int startIndex = activePlayerIndex;
+        int switchCount = (right) ? 1 : -1;
+
         do
         {
-            activePlayerIndex = (activePlayerIndex - 1 + players.Count) % players.Count;
+            activePlayerIndex = (activePlayerIndex + switchCount + players.Count) % players.Count;
         }
         while (players[activePlayerIndex] == null && activePlayerIndex != startIndex);
 
         ActivatePlayer(activePlayerIndex);
+        CameraControlSwitcher.Instance.SwitchToPlayerControl();
     }
 
     void RemoveNullPlayers()
@@ -270,7 +246,7 @@ public class PlayerSwitch : MonoBehaviour
         {
             Debug.LogError($"No CinemachineCamera found in {newPlayer.name}");
         }
-        if (players.Count == 1) SwitchPlayerRight();
+        if (players.Count == 1) SwitchPlayer(true);
 
         if (PlayerLivesManager.Instance != null) PlayerLivesManager.Instance.OnPlayerAdded(newPlayer);
     }
@@ -300,7 +276,6 @@ public class PlayerSwitch : MonoBehaviour
             {
                 activePlayerIndex = -1;
                 ActivePlayer.Instance.CurrentPlayer = null;
-                Debug.Log("No players left to control.");
             }
         }
         else if (activePlayerIndex > index)

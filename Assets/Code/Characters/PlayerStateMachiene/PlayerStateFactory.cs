@@ -9,6 +9,7 @@ public class PlayerStateFactory
         AutoMove,
         Attack,
         KnockBack,
+        Animating,
     }
 
     PlayerStateMachine _context;
@@ -22,6 +23,7 @@ public class PlayerStateFactory
         _state[State.Move] = new PlayerMoveState(_context, this);
         _state[State.AutoMove] = new PlayerAutoMoveState(_context, this);
         _state[State.Attack] = new PlayerAttackState(_context, this);
+        _state[State.Animating] = new PlayerAnimatingState(_context, this);
         
     }
 
@@ -29,6 +31,7 @@ public class PlayerStateFactory
     public PlayerBaseState Move() { return _state[State.Move]; }
     public PlayerBaseState AutoMove() { return _state[State.AutoMove]; }
     public PlayerBaseState Attack() { return _state[State.Attack]; }
+    public PlayerBaseState Animating() { return _state[State.Animating]; }
     
 
 

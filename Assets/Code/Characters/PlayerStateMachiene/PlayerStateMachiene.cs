@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,7 +7,7 @@ public class PlayerStateMachine : MonoBehaviour
 {
     [SerializeField] public Stats _playerStats;
     [SerializeField] Rigidbody2D _rb;
-    [Header("Animation")]
+    [Header("Animations")]
     [SerializeField] AnimationEventsController _animatorController;
     [SerializeField] public Animator _animator;
     [Header("Debug")]
@@ -15,7 +16,7 @@ public class PlayerStateMachine : MonoBehaviour
     [HideInInspector] public Stats _AttackingStats;
 
     private bool _isActive = false; //this is what determins which character is controlable 
-    PlayerBaseState _currentState;
+    public PlayerBaseState _currentState;
     PlayerBaseState _pendingResumeState;
     PlayerStateFactory _states;
     PlayerCommander _commander;
@@ -241,5 +242,25 @@ public class PlayerStateMachine : MonoBehaviour
         if (timers != null && timers.Count > 0 && timers[0] > 0f) return;
 
         _commander.OnAttack(context);
+    }
+
+    public void PlayAnimationState(PlayerAnimationDefinition animationDefinition)
+    {
+        if (animationDefinition == null)
+        {
+            Debug.LogWarning($"[PlayerStateMachine] No animation definition found");
+            return;
+        }
+
+        var animState = (PlayerAnimatingState)_states.Animating();
+        animState.QueueAnimation(animationDefinition);
+
+        _currentState = animState;
+        _currentState.EnterState();
+    }
+
+    public void EndCurrentAnimation()
+    {
+        if (_currentState is PlayerAnimatingState animState) animState.RequestEnd();
     }
 }
