@@ -96,10 +96,17 @@ public class PlayerKnockedBackState : PlayerBaseState
         {
             FModAudioManager.instance.PlaySoundByName("die");
             Object.Destroy(Ctx.gameObject);
+            return;
         }
-        else
-        {
-            SwitchState(Factory.Idle());
-        }
+
+        var resumeState = Ctx.ConsumePendingResumeState();
+        var next = Factory.GetNextState(Ctx.PlayerCommander);
+
+        // Only fall back to resuming auto-move if nothing more urgent
+        // (a fresh KnockBack/Attack/AutoMove/Move) came in while airborne
+        if (next == Factory.Idle() && resumeState != null)
+            next = resumeState;
+
+        SwitchState(next);
     }
 }

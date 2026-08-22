@@ -43,15 +43,7 @@ public class AnimationCpu : MonoBehaviour
 
 			var existing = _cpuRig.Find(rigName);
 			if (existing != null)
-				DestroyImmediate(existing, true);
-            //extra unity stuff because sometimes it would save it and not destory
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.delayCall += () =>
-            {
-                if (existing != null)
-                    DestroyImmediate(existing.gameObject);
-            };
-#endif
+				DestroyImmediate(existing.gameObject, true);
 
 			spriteData.Rig.transform.position = new Vector3(
 				spriteData.Offset.x,

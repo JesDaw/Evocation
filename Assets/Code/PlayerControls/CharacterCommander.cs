@@ -263,6 +263,7 @@ public enum DiscretePlayerCommand
 {
     Attack,
     KnockBack,
+    AutoMove,
 }
 
 /// <summary>
@@ -325,6 +326,16 @@ public class PlayerCommander :
         }
     }
 
+    public void OnAutoMove(InputAction.CallbackContext context)
+    {
+        if (context.performed && context.ReadValueAsButton())
+        {
+            if (!IsCmdPending(DiscretePlayerCommand.AutoMove))
+            {
+                SendCmd(DiscretePlayerCommand.AutoMove, null);
+            }
+        }
+    }
 
     public void OnAttack(InputAction.CallbackContext context)
     {        

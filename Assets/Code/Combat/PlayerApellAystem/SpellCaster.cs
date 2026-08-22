@@ -16,6 +16,7 @@ public class SpellCaster : MonoBehaviour
     [SerializeField] Image aimVisual;
     [SerializeField] RectTransform screenReticleUI;
     [SerializeField] float lookSensitivity = 8f;
+    [SerializeField] PlayerAnimationDefinition playerAnimationDefinition;
     [SerializeField] bool DebugLogs = false;
     bool returnToFreeCam;
 
@@ -56,7 +57,7 @@ public class SpellCaster : MonoBehaviour
             ExitAimCamera();
             return;
         }*/
-        if (CurrentState == State.Idle)
+        if (CurrentState == State.Idle && !(ActivePlayer.Instance.GetCurrentPlayerController()._currentState is PlayerKnockedBackState))
         {
             if (SpellSwapper.Instance.CurrentSpell.castMode == SpellCastMode.Aimed) // means we use the aiming logic not that we are already aiming
             {
@@ -72,6 +73,7 @@ public class SpellCaster : MonoBehaviour
     void EnterAimCamera()
     {
         CurrentState = State.Aiming;
+        PlaySpellAnimation(true);
 
         _screenReticlePos = new Vector2(Screen.width, Screen.height) * 0.5f;
         detectionRadiusObject.position = ScreenPointToWorldOnGamePlane(_screenReticlePos);
@@ -86,8 +88,23 @@ public class SpellCaster : MonoBehaviour
             CameraControlSwitcher.Instance.SwitchToCameraControl(true);
         }
         GlobalInputManager.Instance.SetMode(InputMode.SpellAim);
+        
+        
 
         if (DebugLogs) Debug.Log($"Aiming {SpellSwapper.Instance.CurrentSpell.SpellName}");
+    }
+
+    void PlaySpellAnimation(bool Play = false)
+    {
+        if(!Play)
+        {
+            ActivePlayer.Instance.GetCurrentPlayerController().EndCurrentAnimation();
+            return;
+        }
+        else
+        {
+            ActivePlayer.Instance.GetCurrentPlayerController().PlayAnimationState(playerAnimationDefinition);
+        }
     }
     
     void Update()
@@ -125,13 +142,14 @@ public class SpellCaster : MonoBehaviour
     void ExitAimCamera()
     {  
         if (CurrentState == State.Idle) return;
-        Debug.Log("exiting.");
         CurrentState = State.Idle;
         detectionRadiusObject.gameObject.SetActive(false);
         if (aimVisual != null) aimVisual.enabled = false;
+        PlaySpellAnimation(false);
 
         if (!returnToFreeCam) CameraControlSwitcher.Instance.SwitchToPlayerControl();
         else CameraControlSwitcher.Instance.SwitchToCameraControl(true);
+        
     }
     #endregion
     #region Casting
@@ -142,6 +160,7 @@ public class SpellCaster : MonoBehaviour
         {
             StartCoroutine(RunCastSequence(SpellSwapper.Instance.CurrentSpell, detectionRadiusObject.position));
         }
+        PlaySpellAnimation(false);
         StartCoroutine(RunCastSequence(SpellSwapper.Instance.CurrentSpell, ActivePlayer.Instance.CurrentPlayer.transform.position));
     }
 
@@ -155,7 +174,6 @@ public class SpellCaster : MonoBehaviour
 
         if (!ManaSystem.Instance.SpendMana(spell.Cost))
         {
-            Debug.Log($"Not enough mana to cast {spell.SpellName}.");
             yield break;
         }
 

@@ -13,9 +13,15 @@ public class Interactable : MonoBehaviour
     [Header("UI Progress")]
     [SerializeField] GameObject ProgressBarContainer;
     [SerializeField] UnityEngine.UI.Slider ProgressSlider;
-    [Header("Ripple Effect stuff")]
+    [Header("Claim effects")]
     [SerializeField] bool rippleEffect = false;
-
+    [SerializeField] string ClaimLocationSound = "claimLocation";
+    [Header("Player animation stuff")]
+    [SerializeField] bool HoldPlayer;
+    bool playerIsHeald = false;
+    PlayerStateMachine HeldPlayer;
+    [SerializeField] PlayerAnimationDefinition playerAnimationDefinition;
+    public UnityEvent endInteractAction;
     bool _iconIsActive = false;
     bool isHolding = false;
     bool ActivePlayerIsInRange;
@@ -76,10 +82,19 @@ public class Interactable : MonoBehaviour
     {
         LocationClaimed = true;
         ToggleIconOff();
+        FModAudioManager.instance.PlaySoundByName(ClaimLocationSound);
+        HeldPlayer = ActivePlayer.Instance.GetCurrentPlayerController();
 
         if(rippleEffect) 
         {
             VisualEffectsManager.Instance.SpawnShockwave(transform.position); 
+        }
+
+        if (HoldPlayer)
+        {
+            CameraControlSwitcher.Instance.SwitchToCameraControl(true);
+            ActivePlayer.Instance.GetCurrentPlayerController().PlayAnimationState(playerAnimationDefinition);
+            playerIsHeald = true;
         }
 
         if (DebugLog) Debug.Log($"{gameObject.name} claimed");
@@ -89,6 +104,10 @@ public class Interactable : MonoBehaviour
     {
         LocationClaimed = false;
         if (DebugLog) Debug.Log($"{gameObject.name} unclaimed");
+       if (playerIsHeald) ActivePlayer.Instance.GetCurrentPlayerController().EndCurrentAnimation();
+       playerIsHeald = false;
+       HeldPlayer = null;
+       
     }
 
     void ToggleIconOn()
@@ -118,25 +137,37 @@ public class Interactable : MonoBehaviour
             if (currentHoldTime >= ActivationDuration)
             {
                 interactAction?.Invoke();
-                FModAudioManager.instance.PlaySoundByName("claimLocation");
+                
                 if (DebugLog) Debug.Log($"Interaction action triggered on {gameObject.name}");
                 
                 StopHolding();
             }
         }
+        if (HeldPlayer != null && HeldPlayer._currentState is PlayerKnockedBackState)
+        {
+            endInteractAction?.Invoke();
+        } 
     }
 
     public void ActionPressed(InputAction.CallbackContext context)
     {
-        if (LocationClaimed) return;
         if (!ActivePlayerIsInRange) return;
 
         if (context.started)
         {
             if (ActivationDuration == 0f)
             {
-                interactAction?.Invoke();
-                if (DebugLog) Debug.Log($"ActivationDuration = 0 so Interaction action triggered on {gameObject.name}");
+                if (playerIsHeald)
+                {
+                    endInteractAction?.Invoke();
+                    if (DebugLog) Debug.Log($"ActivationDuration = 0 so Interaction endInteraction triggered on {gameObject.name}");
+                    
+                }
+                else
+                {
+                    interactAction?.Invoke();
+                    if (DebugLog) Debug.Log($"ActivationDuration = 0 so Interaction action triggered on {gameObject.name}");
+                }
                 return;
             }
             isHolding = true;

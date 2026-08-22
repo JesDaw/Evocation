@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,7 +7,7 @@ public class PlayerStateMachine : MonoBehaviour
 {
     [SerializeField] public Stats _playerStats;
     [SerializeField] Rigidbody2D _rb;
-    [Header("Animation")]
+    [Header("Animations")]
     [SerializeField] AnimationEventsController _animatorController;
     [SerializeField] public Animator _animator;
     [Header("Debug")]
@@ -14,10 +15,12 @@ public class PlayerStateMachine : MonoBehaviour
 
     [HideInInspector] public Stats _AttackingStats;
 
-    private bool _isActive = false;
-    PlayerBaseState _currentState;
+    private bool _isActive = false; //this is what determins which character is controlable 
+    public PlayerBaseState _currentState;
+    PlayerBaseState _pendingResumeState;
     PlayerStateFactory _states;
     PlayerCommander _commander;
+    
     int playerId;
 
     //==========================================getters and setters=================================================
@@ -58,8 +61,7 @@ public class PlayerStateMachine : MonoBehaviour
         FindFreeCam();
         InitializePlayerStats();
 
-        if (GlobalInputManager.Instance != null)
-            SubscribeToInputs();
+        if (GlobalInputManager.Instance != null) SubscribeToInputs();
     }
 
     void InitializePlayerStats()
@@ -98,6 +100,7 @@ public class PlayerStateMachine : MonoBehaviour
         playerActions.Move.performed   += OnMove;
         playerActions.Move.canceled    += OnMove;
         playerActions.Attack.performed += OnAttack;
+        playerActions.AutoMove.performed += StartAutoMoveToLocation;
 
         if (DebugLogs) Debug.Log("[PlayerStateMachine] Player subscribed to inputs");
     }
@@ -110,6 +113,7 @@ public class PlayerStateMachine : MonoBehaviour
         playerActions.Move.performed   -= OnMove;
         playerActions.Move.canceled    -= OnMove;
         playerActions.Attack.performed -= OnAttack;
+        playerActions.AutoMove.performed -= StartAutoMoveToLocation;
     }
 
     public void FindFreeCam()
@@ -127,15 +131,15 @@ public class PlayerStateMachine : MonoBehaviour
 
     void Update()
     {
-        // Drain action cooldowns every frame regardless of which state is active.
-        // CastSpeedMultiplier is already applied inside TickActionCooldowns.
-        _playerStats.TickActionCooldowns(Time.deltaTime);
 
+        _playerStats.TickActionCooldowns(Time.deltaTime);
         _currentState.UpdateStates();
     }
 
     public void UpdateCurrentStateToKnockback()
     {
+        _pendingResumeState = (_currentState is PlayerAutoMoveState) ? _states.AutoMove() : null;
+
         _currentState = _states.KnockedBack();
         _currentState.EnterState();
     }
@@ -205,6 +209,24 @@ public class PlayerStateMachine : MonoBehaviour
         Animator.runtimeAnimatorController = ScrStats._animator;
     }
 
+    public void StartAutoMoveToLocation(InputAction.CallbackContext context)
+    {
+        if (DebugLogs) Debug.Log($"[PlayerStateMachine] AutoMove received — active:{_isActive}, freecam:{CameraControlSwitcher.Instance.FreeCamIsActive}");
+        if (!_isActive || CameraControlSwitcher.Instance.FreeCamIsActive) return;
+
+        _commander.OnAutoMove(context);
+    }
+
+    public PlayerBaseState ConsumePendingResumeState()
+    {
+        var s = _pendingResumeState;
+        _pendingResumeState = null;
+        return s;
+    }
+
+    
+
+
     public void OnMove(InputAction.CallbackContext context)
     {
         if (DebugLogs) Debug.Log($"[PlayerStateMachine] Move received — active:{_isActive}, freecam:{CameraControlSwitcher.Instance.FreeCamIsActive}");
@@ -216,11 +238,29 @@ public class PlayerStateMachine : MonoBehaviour
     {
         if (!_isActive || CameraControlSwitcher.Instance.FreeCamIsActive) return;
 
-        // Gate the input at the source: if the action cooldown hasn't expired,
-        // the press is silently discarded — nothing queues, nothing buffers.
         var timers = _playerStats._ActionCooldownTimers;
         if (timers != null && timers.Count > 0 && timers[0] > 0f) return;
 
         _commander.OnAttack(context);
+    }
+
+    public void PlayAnimationState(PlayerAnimationDefinition animationDefinition)
+    {
+        if (animationDefinition == null)
+        {
+            Debug.LogWarning($"[PlayerStateMachine] No animation definition found");
+            return;
+        }
+
+        var animState = (PlayerAnimatingState)_states.Animating();
+        animState.QueueAnimation(animationDefinition);
+
+        _currentState = animState;
+        _currentState.EnterState();
+    }
+
+    public void EndCurrentAnimation()
+    {
+        if (_currentState is PlayerAnimatingState animState) animState.RequestEnd();
     }
 }
