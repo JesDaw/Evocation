@@ -41,7 +41,7 @@ public class MapZoneMaster : MonoBehaviour
             }
         }
         
-        Debug.Log(_player_score + " " + _total_zones);
+        //Debug.Log(_player_score + " " + _total_zones);
 
         if (_player_score >= 1){ _win_game.Invoke(); }
         else{ _loose_game.Invoke(); }

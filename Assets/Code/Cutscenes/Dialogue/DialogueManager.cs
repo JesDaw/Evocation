@@ -267,7 +267,7 @@ public class DialogueManager : MonoBehaviour
         if (!string.IsNullOrEmpty(_currentPrefix)) _currentPrefix += " ";
 
         float delay = character != null ? character.TextSpeed : defaultTextSpeed;
-        string typingSound = character != null ? character.Voice : defaultTypingSound;
+        string typingSound = character != null ? character.Voice : "";
 
         if (InteractionMinigameManager.Instance != null)
         {
@@ -288,7 +288,7 @@ public class DialogueManager : MonoBehaviour
             }
             typedSoFar += c;
             _currentTargetBox.text = _currentPrefix + typedSoFar;
-            FModAudioManager.instance.PlaySoundByName(typingSound);
+            if (!string.IsNullOrEmpty(typingSound)) FModAudioManager.instance.PlaySoundByName(typingSound);
             yield return new WaitForSecondsRealtime(delay);
         }
 

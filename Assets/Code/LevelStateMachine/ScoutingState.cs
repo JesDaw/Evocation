@@ -54,12 +54,15 @@ public class ScoutingState : LevelState
     void OnEngagePressed(InputAction.CallbackContext ctx)
     {
         if (context.CurrentState != this) return;
+        if (!characterSelectIsOpen) return;
         if (!confirmationUIActive)
         {
             context.SceneManager.Activate(confirmationUIName, true);
             GlobalInputManager.Instance.SetMode(InputMode.EngaugeScreen);
             confirmationUIActive = true;
+            characterSelectIsOpen = false;
             FModAudioManager.instance.PlaySoundByName("pauseGame");
+            
         }
     }
 
@@ -100,13 +103,12 @@ public class ScoutingState : LevelState
 
     public override void Wait()
     {
-     //   Debug.Log($"wait called confirmationUIActive = {confirmationUIActive}");
         if (!confirmationUIActive) return;
         FModAudioManager.instance.PlaySoundByName("backToScouting");
-        context.SceneManager.Activate(sceneActivityName, true);
-        GlobalInputManager.Instance.SetMode(InputMode.Scouting);
+        context.SceneManager.Activate("LoadoutSelectUI", true);
+        GlobalInputManager.Instance.SetMode(InputMode.CharacterSelecting);
         confirmationUIActive = false;
-        //Debug.Log($"back to scouting confirmationUIActive = {confirmationUIActive}");
+        characterSelectIsOpen = true;
 
     }
 }
