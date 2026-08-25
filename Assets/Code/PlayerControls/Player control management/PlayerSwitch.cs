@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class PlayerSwitch : MonoBehaviour
 {
-    [SerializeField] List<GameObject> players = new List<GameObject>();
+    public List<GameObject> players = new List<GameObject>();
     public List<GameObject> Players => players;
     [SerializeField] GameObject cameraBounds;
     [SerializeField] bool AutoStartAsPlayerControls = false;
