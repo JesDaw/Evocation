@@ -2,14 +2,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class DailogueTrigger : MonoBehaviour
+public class DailogueTrigger : MonoBehaviour // multiple pages
 {
     public List<Dialogue> Slides = new List<Dialogue>(); 
     [SerializeField] public DialogueChoice[] EndOfLines;
     public UltEvents.UltEvent DefultEvent;
+
     void Start()
     {
-        //if (EndOfLines.Length <= 0) Debug.LogWarning($"[DailogueTrigger] No end of line events declared on {gameObject.name}");
+        /*foreach (var slide in Slides)
+        {
+            foreach (var line in slide.Lines) 
+            {
+                if (line.alternitiveTextBox == null) continue;
+                if (!string.IsNullOrEmpty(line.alternitiveTextBox.text)) line.Line = line.alternitiveTextBox.text; // breaks if there are multiple lines with same text box
+                line.alternitiveTextBox.text = "";
+            }
+        } */ 
     }
     public void TriggerDailogue(InputAction.CallbackContext context)
     {
