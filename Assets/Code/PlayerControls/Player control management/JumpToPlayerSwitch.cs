@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using System.Collections.Generic;
 public class JumpToPlayerSwitch : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
+    [SerializeField] GameObject playerRootObject;
     [SerializeField] GameObject[] playerModles;
     [SerializeField] Vector3 highlightSize = new Vector3(1.5f, 1.5f, 1.5f );
     [SerializeField] float highlightTransitionTime = .3f;
@@ -48,7 +49,7 @@ public class JumpToPlayerSwitch : MonoBehaviour, IPointerEnterHandler, IPointerE
     public void OnPointerClick(PointerEventData eventData)
     {
         HighlightPleyer(false);
-        PlayerSwitch.Instance.SwitchToPlayer(gameObject);
+        PlayerSwitch.Instance.SwitchToPlayer(playerRootObject);
 
     }
 }
