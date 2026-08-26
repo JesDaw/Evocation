@@ -121,25 +121,24 @@ public class UnitTracker : MonoBehaviour
     }
 
     /// <summary>
-    /// Moves a unit into a new lane: updates its actual Unity layer AND keeps the
-    /// lane cache in sync. This is the method SwitchLanes should call instead of
-    /// setting character.layer directly.
+    /// Pure storage update: moves a unit from whatever lane list it's currently
+    /// cached under into the list at newLaneIndex. Does NOT touch unit.layer —
+    /// UnitTracker only stores unit/lane membership; SwitchLanes owns actually
+    /// changing a unit's Unity layer.
+    ///
+    /// IMPORTANT: call this BEFORE changing unit.layer. This method finds the
+    /// unit's current lane list by reading its (still old) unit.layer, so if the
+    /// layer's already been changed by the time this runs, it won't find the old
+    /// entry to remove.
     /// </summary>
     /// <param name="unit">The unit changing lanes.</param>
     /// <param name="newLaneIndex">Index into LaneLayerNames for the target lane.</param>
-    public void SetUnitLane(GameObject unit, int newLaneIndex)
+    public void UpdateUnitLane(GameObject unit, int newLaneIndex)
     {
         if (unit == null) return;
         if (newLaneIndex < 0 || newLaneIndex >= LaneLayerNames.Length)
         {
-            Debug.LogError($"SetUnitLane: index {newLaneIndex} is out of range for LaneLayerNames.");
-            return;
-        }
-
-        int newLayer = LayerMask.NameToLayer(LaneLayerNames[newLaneIndex]);
-        if (newLayer == -1)
-        {
-            Debug.LogError($"Layer '{LaneLayerNames[newLaneIndex]}' not found! Check Project Settings > Tags and Layers.");
+            Debug.LogError($"UpdateUnitLane: index {newLaneIndex} is out of range for LaneLayerNames.");
             return;
         }
 
@@ -147,8 +146,6 @@ public class UnitTracker : MonoBehaviour
         int oldLaneIndex = LaneIndexForLayer(unit.layer);
         if (oldLaneIndex >= 0)
             RemoveUnordered(laneUnits[oldLaneIndex], unit);
-
-        unit.layer = newLayer;
 
         if (!laneUnits[newLaneIndex].Contains(unit))
             laneUnits[newLaneIndex].Add(unit);

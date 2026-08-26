@@ -1286,6 +1286,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: c5357c323f0c44a7ba1a740aca27af92, type: 2}
     - {fileID: 11400000, guid: 519ee8ffa06ef47cf944a5b5721e3318, type: 2}
     - {fileID: 11400000, guid: c046abb00a7984fa688765396eca5c6a, type: 2}
+    - {fileID: 11400000, guid: b6bcc158bd78a47429fa87013bca23d6, type: 2}
     m_Events:
     - m_PersistentCalls:
         m_Calls:
@@ -1320,6 +1321,20 @@ MonoBehaviour:
         - m_Target: {fileID: 1704892453}
           m_TargetAssemblyTypeName: LevelTransition, CodeAssembly
           m_MethodName: StartTransition
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 830621551}
+          m_TargetAssemblyTypeName: TimelineController, CodeAssembly
+          m_MethodName: PauseTimeline
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -1946,7 +1961,10 @@ MonoBehaviour:
       CharacterBody: 0
       CharacterFace: 0
       LineStartEvent:
-        _PersistentCalls: []
+        _PersistentCalls:
+        - _Target: {fileID: 830621551}
+          _MemberName: PlayTimeline
+          _PersistentArguments: []
       LineEndEvent:
         _PersistentCalls: []
     - Line: Arms frail, speech slurred and slow, and eyes glued to the ceiling above

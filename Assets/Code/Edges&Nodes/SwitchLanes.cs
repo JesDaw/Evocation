@@ -95,17 +95,28 @@ public class SwitchLanes : MonoBehaviour
 
         int targetIndex = offset + currentLayer;
 
-        if (UnitTracker.Instance == null)
+        int newLayer = LayerMask.NameToLayer(UnitTracker.LaneLayerNames[targetIndex]);
+        if (newLayer == -1)
         {
-            Debug.LogError("SwitchLanes: UnitTracker.Instance is null, can't update lane cache or layer.");
+            Debug.LogError($"Layer '{UnitTracker.LaneLayerNames[targetIndex]}' not found! Check Project Settings > Tags and Layers.");
             return;
         }
 
         if (DebugLogs) Debug.Log($"Setting {character.name} to {UnitTracker.LaneLayerNames[targetIndex]}");
 
-        // Routes through UnitTracker so its per-lane cache stays correct, instead of
-        // setting character.layer directly here.
-        UnitTracker.Instance.SetUnitLane(character, targetIndex);
+        // Tell UnitTracker to update its cache BEFORE changing the actual layer —
+        // it reads character.layer to find the old lane list to remove from.
+        if (UnitTracker.Instance != null)
+        {
+            UnitTracker.Instance.UpdateUnitLane(character, targetIndex);
+        }
+        else
+        {
+            if (DebugLogs) Debug.Log("SwitchLanes: UnitTracker.Instance is null, lane cache will not be updated.");
+        }
+
+        // SwitchLanes owns the actual Unity layer assignment; UnitTracker is pure storage.
+        character.layer = newLayer;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
