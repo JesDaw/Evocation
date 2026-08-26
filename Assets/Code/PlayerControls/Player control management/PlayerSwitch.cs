@@ -16,7 +16,6 @@ public class PlayerSwitch : MonoBehaviour
     List<CinemachineCamera> playerCameras = new List<CinemachineCamera>();
 
     int activePlayerIndex = 0;
-    int PlayerIDNumber;
     public static PlayerSwitch Instance { get; private set; }
 
     void Awake()
@@ -61,8 +60,6 @@ public class PlayerSwitch : MonoBehaviour
     void Start()
     {
         if (GlobalInputManager.Instance == null) Debug.LogWarning("playerCameras switch cant find GlobalInputManager.Instance");
-
-        PlayerIDNumber = 1;
         var controlManager = GlobalInputManager.Instance.InputActions.ControlManager;
         
         controlManager.NextPlayer.performed += SwitchPlayerRight;
@@ -141,15 +138,7 @@ public class PlayerSwitch : MonoBehaviour
             return;
         }
 
-        if (activePlayerIndex >= 0 && activePlayerIndex < players.Count && players[activePlayerIndex] != null)
-        {
-            var playerSM = players[activePlayerIndex].GetComponent<PlayerStateMachine>();
-            if (playerSM != null && playerSM.PlayerCommander != null)
-            {
-                playerSM.PlayerCommander.ClearAllCommands();
-            }
-            playerCameras[activePlayerIndex].Priority = 0;
-        }
+        DeactivateCurrentPlayer();
 
         int startIndex = activePlayerIndex;
         int switchCount = (right) ? 1 : -1;
@@ -179,6 +168,48 @@ public class PlayerSwitch : MonoBehaviour
             }
         }
         activePlayerIndex = Mathf.Clamp(activePlayerIndex, 0, players.Count - 1);
+    }
+
+    public void SwitchToPlayer(GameObject targetPlayer)
+    {
+        RemoveNullPlayers();
+
+        if (players.Count == 0 || playerCameras.Count == 0)
+        {
+            Debug.Log("No players available to switch to.");
+            return;
+        }
+
+        int index = players.IndexOf(targetPlayer);
+        if (index == -1)
+        {
+            Debug.LogWarning($"SwitchToPlayer: {targetPlayer.name} is not in the players list.");
+            return;
+        }
+
+        if (index == activePlayerIndex)
+        {
+            CameraControlSwitcher.Instance.SwitchToPlayerControl();
+            return;
+        }
+
+        DeactivateCurrentPlayer();
+        activePlayerIndex = index;
+        ActivatePlayer(activePlayerIndex);
+        CameraControlSwitcher.Instance.SwitchToPlayerControl();
+    }
+
+    void DeactivateCurrentPlayer()
+    {
+        if (activePlayerIndex >= 0 && activePlayerIndex < players.Count && players[activePlayerIndex] != null)
+        {
+            var playerSM = players[activePlayerIndex].GetComponent<PlayerStateMachine>();
+            if (playerSM != null && playerSM.PlayerCommander != null)
+            {
+                playerSM.PlayerCommander.ClearAllCommands();
+            }
+            playerCameras[activePlayerIndex].Priority = 0;
+        }
     }
 
     void ActivatePlayer(int index)
@@ -232,7 +263,6 @@ public class PlayerSwitch : MonoBehaviour
     public void AddPlayer(GameObject newPlayer)
     {
         var managePlayer = newPlayer.GetComponent<PlayerStateMachine>();
-        managePlayer.PlayerID = PlayerIDNumber++;
         players.Add(newPlayer);
 
         var newCam = newPlayer.GetComponentInChildren<CinemachineCamera>();
@@ -281,18 +311,6 @@ public class PlayerSwitch : MonoBehaviour
         else if (activePlayerIndex > index)
         {
             activePlayerIndex--;
-        }
-
-        for (int i = 0; i < players.Count; i++)
-        {
-            if (players[i] != null)
-            {
-                var playerSM = players[i].GetComponent<PlayerStateMachine>();
-                if (playerSM != null)
-                {
-                    playerSM.PlayerID = i;
-                }
-            }
         }
     }
 }

@@ -145,6 +145,7 @@ public class GlobalInputManager : MonoBehaviour
         _inputActions.Player.AutoMove.Enable();
         _inputActions.Player.Attack.Enable();
         _inputActions.Player.Interact.Enable();
+        
         if(DebugLogs) Debug.Log("Player controls enabled");
     }
     
@@ -298,7 +299,7 @@ public class GlobalInputManager : MonoBehaviour
         EnableUIControls();
         EnableMagicControls();
         DisableMenuNavigation();
-        DisableCursor();
+        EnableCursor();
         
     }
 

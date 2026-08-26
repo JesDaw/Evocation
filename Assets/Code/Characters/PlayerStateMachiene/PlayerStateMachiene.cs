@@ -30,7 +30,7 @@ public class PlayerStateMachine : MonoBehaviour
     public AnimationEventsController AnimatorController { get { return _animatorController; } }
     public PlayerCommander PlayerCommander { get { return _commander; } }
     public Rigidbody2D Rb { get { return _rb; } }
-    public int PlayerID { get; set; }
+   // public int PlayerID { get; set; }
 
     public bool IsMovementPressed { get { return _commander.IsCmdActive(ContinuousPlayerCommand.Move); } }
     public float MovementContext
