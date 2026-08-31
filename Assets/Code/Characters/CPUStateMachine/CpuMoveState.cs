@@ -39,6 +39,8 @@ public class CpuMoveState : CpuBaseState
         _Stats.TickActionCooldowns(Time.deltaTime);
         bool facingLeft = _Transform.right.x < 0;
 
+        UpdatePlayerDangerSignal(facingLeft);
+
         // ── Step 1: Physical blocking ─────────────────────────────────────
         // Any unit directly ahead acts as an impassable wall regardless of abilities.
         if (IsBlockedByUnit(facingLeft))
@@ -86,6 +88,50 @@ public class CpuMoveState : CpuBaseState
         // ── Step 4: Nothing to do — move forward ──────────────────────────
         _Body.linearVelocity = new Vector2(_Stats._MoveSpeed * _Transform.right.x, _Body.linearVelocity.y);
         _context._Animator.SetBool("IsRunning", true);
+    }
+
+    // Checks every combat action's effective range (_HorizontalRange * rangePercent)
+    // for a live Player-tagged target, and syncs that player's danger UI accordingly.
+    // Cooldowns are ignored here — "in range" should light up the warning regardless
+    // of whether the CPU can currently fire.
+    void UpdatePlayerDangerSignal(bool facingLeft)
+    {
+        Stats playerInRange = null;
+
+        foreach (var action in _Stats._CombatActions)
+        {
+            List<Stats> targets = GetTargetsForAction(action, facingLeft);
+            foreach (Stats t in targets)
+            {
+                if (t == null || t._IsDead) continue;
+                if (!t.CompareTag("Player")) continue;
+                playerInRange = t;
+                break;
+            }
+            if (playerInRange != null) break;
+        }
+
+        PlayerDangerDetector detector = null;
+        if (playerInRange != null) 
+        {
+            playerInRange.gameObject.TryGetComponent(out detector);
+        }
+        
+        if (detector != null) UpdateDangerSignal(detector);
+        else if (_context._CurrentDangerSignal != null)
+        {
+            _context._CurrentDangerSignal?.SetTargeted(false);
+            _context._CurrentDangerSignal = null;
+        }
+    }
+
+    void UpdateDangerSignal(PlayerDangerDetector current)
+    {
+        if (current == _context._CurrentDangerSignal) return;
+
+        _context._CurrentDangerSignal?.SetTargeted(false);
+        current?.SetTargeted(true);
+        _context._CurrentDangerSignal = current;
     }
 
     // Fires the highest-priority ready action if one exists. Used while stopped.
@@ -188,25 +234,18 @@ public class CpuMoveState : CpuBaseState
         Vector2 dir = facingLeft ? Vector2.left : Vector2.right;
         Vector2 checkPos = (Vector2)_Transform.position + dir * BlockingCheckDistance;
 
-        // Build the set of tags that should block this CPU
         string ownTag = _context.gameObject.tag;
-        List<string> blockingTags;
-
-        if (ownTag == "Enemy")
-        {
-            blockingTags = new List<string> { "Player", "Allies" };
-        }
-        else // Player or Allies
-        {
-            blockingTags = new List<string> { "Enemy" };
-        }
+        List<string> blockingTags = ownTag == "Enemy"
+            ? new List<string> { "Player", "Allies" }
+            : new List<string> { "Enemy" };
 
         Collider2D[] hits = Physics2D.OverlapCircleAll(checkPos, BlockingCheckRadius);
         foreach (Collider2D hit in hits)
         {
             if (hit.gameObject == _context.gameObject) continue;
+            if (!blockingTags.Contains(hit.gameObject.tag)) continue;
             if (!hit.TryGetComponent(out Stats s) || s._IsDead) continue;
-            if (blockingTags.Contains(hit.gameObject.tag)) return true;
+            return true;
         }
         return false;
     }

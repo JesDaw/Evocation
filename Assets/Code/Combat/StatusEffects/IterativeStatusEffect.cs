@@ -31,7 +31,7 @@ public class IterativeStatusEffect : StatusEffect
             // Damage
             DamageSource source = new DamageSource(DamageSource.DamageType.StatusEffect);
             source.IsEnemy = target._Enemy; // This should be set by whoever applied it
-            target.damageHandler.TakeDamage(damagePerTick, source);
+            target.damageHandler.TakeDamage(damagePerTick, 0, source);
         }
         else if (damagePerTick < 0)
         {

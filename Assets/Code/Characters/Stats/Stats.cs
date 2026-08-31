@@ -218,7 +218,6 @@ public class Stats : MonoBehaviour, IDamageable
         }
     }
 
-    //What is this stuff even for??==========
     public void TakeDamage(float damage, float knockback_damage, DamageSource attackedBy = null)
     {
         
@@ -229,22 +228,10 @@ public class Stats : MonoBehaviour, IDamageable
         
     }
 
-    public void TakeDamage(float damage, DamageSource attackedBy = null)
-    {
-        if (damageHandler != null)
-        {
-            damageHandler.TakeDamage(damage, attackedBy);
-        }
-    }
 
     void IDamageable.TakeDamage(float damage, float knockback_damage, DamageSource source)
     {
         TakeDamage(damage, knockback_damage, source);
-    }
-
-    void IDamageable.TakeDamage(float damage, DamageSource source)
-    {
-        TakeDamage(damage, source);
     }
 
     GameObject IDamageable.gameObject => gameObject;

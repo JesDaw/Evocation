@@ -302,7 +302,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""positive"",
                     ""id"": ""7c06d7d2-f841-43f3-a0e3-b6db25a76582"",
-                    ""path"": ""<Keyboard>/leftShift"",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -567,6 +567,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PingedPlayer"",
+                    ""type"": ""Button"",
+                    ""id"": ""d3ffbce0-42a4-4620-8cd8-52af71cfa958"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -600,6 +609,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ToggleCameraControl"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c4d85c2c-2b3d-4e7d-8acb-aea3ea4c9af0"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""PingedPlayer"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -867,7 +887,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""ee106646-4bf2-426f-a4cb-02eb09526ded"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1134,6 +1154,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_ControlManager_NextPlayer = m_ControlManager.FindAction("NextPlayer", throwIfNotFound: true);
         m_ControlManager_PreviousPlayer = m_ControlManager.FindAction("PreviousPlayer", throwIfNotFound: true);
         m_ControlManager_ToggleCameraControl = m_ControlManager.FindAction("ToggleCameraControl", throwIfNotFound: true);
+        m_ControlManager_PingedPlayer = m_ControlManager.FindAction("PingedPlayer", throwIfNotFound: true);
         // SpawnerController
         m_SpawnerController = asset.FindActionMap("SpawnerController", throwIfNotFound: true);
         m_SpawnerController_Spawn1 = m_SpawnerController.FindAction("Spawn1", throwIfNotFound: true);
@@ -1644,6 +1665,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_ControlManager_NextPlayer;
     private readonly InputAction m_ControlManager_PreviousPlayer;
     private readonly InputAction m_ControlManager_ToggleCameraControl;
+    private readonly InputAction m_ControlManager_PingedPlayer;
     /// <summary>
     /// Provides access to input actions defined in input action map "ControlManager".
     /// </summary>
@@ -1667,6 +1689,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "ControlManager/ToggleCameraControl".
         /// </summary>
         public InputAction @ToggleCameraControl => m_Wrapper.m_ControlManager_ToggleCameraControl;
+        /// <summary>
+        /// Provides access to the underlying input action "ControlManager/PingedPlayer".
+        /// </summary>
+        public InputAction @PingedPlayer => m_Wrapper.m_ControlManager_PingedPlayer;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1702,6 +1728,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ToggleCameraControl.started += instance.OnToggleCameraControl;
             @ToggleCameraControl.performed += instance.OnToggleCameraControl;
             @ToggleCameraControl.canceled += instance.OnToggleCameraControl;
+            @PingedPlayer.started += instance.OnPingedPlayer;
+            @PingedPlayer.performed += instance.OnPingedPlayer;
+            @PingedPlayer.canceled += instance.OnPingedPlayer;
         }
 
         /// <summary>
@@ -1722,6 +1751,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ToggleCameraControl.started -= instance.OnToggleCameraControl;
             @ToggleCameraControl.performed -= instance.OnToggleCameraControl;
             @ToggleCameraControl.canceled -= instance.OnToggleCameraControl;
+            @PingedPlayer.started -= instance.OnPingedPlayer;
+            @PingedPlayer.performed -= instance.OnPingedPlayer;
+            @PingedPlayer.canceled -= instance.OnPingedPlayer;
         }
 
         /// <summary>
@@ -2405,6 +2437,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnToggleCameraControl(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PingedPlayer" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPingedPlayer(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "SpawnerController" which allows adding and removing callbacks.

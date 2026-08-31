@@ -30,6 +30,7 @@ public class CpuStateManager : MonoBehaviour
     [HideInInspector] public CombatAction _CurrentAction;
     [HideInInspector] public int _CurrentActionIndex;
     [HideInInspector] public Stats _ActionTarget;
+    [HideInInspector] public PlayerDangerDetector _CurrentDangerSignal;
 
     void Start()
     {

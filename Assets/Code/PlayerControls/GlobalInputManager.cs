@@ -211,12 +211,14 @@ public class GlobalInputManager : MonoBehaviour
     {
         _inputActions.ControlManager.NextPlayer.Enable();
         _inputActions.ControlManager.PreviousPlayer.Enable();
+        _inputActions.ControlManager.PingedPlayer.Enable();
     }
     
     public void DisablePlayerSwitching()
     {
         _inputActions.ControlManager.NextPlayer.Disable();
         _inputActions.ControlManager.PreviousPlayer.Disable();
+        _inputActions.ControlManager.PingedPlayer.Disable();
     }
 
     // --------- Spawner Controls ---------

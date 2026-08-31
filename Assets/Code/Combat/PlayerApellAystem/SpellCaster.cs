@@ -111,11 +111,6 @@ public class SpellCaster : MonoBehaviour
     {
         if (CurrentState != State.Aiming) return;
         SpellAimMovement();
-        /*if (ActivePlayer.Instance.CurrentPlayer == null)
-        {
-            ExitAimCamera();
-            return;
-        }*/
     }
 
     void SpellAimMovement()
@@ -159,8 +154,15 @@ public class SpellCaster : MonoBehaviour
         if (CurrentState == State.Aiming && SpellSwapper.Instance.CurrentSpell.castMode == SpellCastMode.Aimed)
         {
             StartCoroutine(RunCastSequence(SpellSwapper.Instance.CurrentSpell, detectionRadiusObject.position));
+            if (aimVisual != null) aimVisual.enabled = false;
+            detectionRadiusObject.gameObject.SetActive(false);
+            GlobalInputManager.Instance.SetMode(InputMode.FreeCam);
         }
-        PlaySpellAnimation(false);
+        if (CurrentState != State.Aiming && SpellSwapper.Instance.CurrentSpell.castMode == SpellCastMode.Aimed)
+        {
+            return;
+        }
+        
         StartCoroutine(RunCastSequence(SpellSwapper.Instance.CurrentSpell, ActivePlayer.Instance.CurrentPlayer.transform.position));
     }
 
@@ -172,24 +174,11 @@ public class SpellCaster : MonoBehaviour
             yield break;
         }
 
-        if (!ManaSystem.Instance.SpendMana(spell.Cost))
-        {
-            yield break;
-        }
+        if (!ManaSystem.Instance.SpendMana(spell.Cost)) yield break;
 
         CurrentState = State.Casting;
-        bool wasAimed = spell.castMode == SpellCastMode.Aimed;
-
-        if (wasAimed)
-        {
-            if (aimVisual != null) aimVisual.enabled = false;
-            GlobalInputManager.Instance.SetMode(InputMode.FreeCam);
-        }
-
+        PlaySpellAnimation(false);
         yield return StartCoroutine(spell.RunCastSequence(this, castPosition));
-
-        if (wasAimed) detectionRadiusObject.gameObject.SetActive(false);
-
         CurrentState = State.Idle;
     }
     #endregion

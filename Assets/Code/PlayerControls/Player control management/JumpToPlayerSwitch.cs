@@ -27,7 +27,11 @@ public class JumpToPlayerSwitch : MonoBehaviour, IPointerEnterHandler, IPointerE
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
-        HighlightPleyer(true);
+        if (playerRootObject.TryGetComponent<Stats>(out var stats))
+        {
+            if (!stats._IsDead)HighlightPleyer(true);
+        }
+        
     }
     public void OnPointerExit(PointerEventData eventData)
     {
@@ -50,6 +54,5 @@ public class JumpToPlayerSwitch : MonoBehaviour, IPointerEnterHandler, IPointerE
     {
         HighlightPleyer(false);
         PlayerSwitch.Instance.SwitchToPlayer(playerRootObject);
-
     }
 }
