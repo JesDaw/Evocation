@@ -16,11 +16,6 @@ public class AISpawnerController : MonoBehaviour
     [Header("Game Systems")]
     [SerializeField] private Timer gameTimer;
     
-    [Header("Map Zones")]
-    [SerializeField] private MapZonesManager upperZone;
-    [SerializeField] private MapZonesManager middleZone;
-    [SerializeField] private MapZonesManager lowerZone;
-    
     [Header("Spatial")]
     [SerializeField] private Transform aiBase;
     [SerializeField] private Transform playerBase;
@@ -80,9 +75,6 @@ public class AISpawnerController : MonoBehaviour
         context = new AIContext
         {
             timer = gameTimer,
-            upperZone = upperZone,
-            middleZone = middleZone,
-            lowerZone = lowerZone,
             aiBase = aiBase,
             playerBase = playerBase,
             maxDistance = calculatedMaxDistance,

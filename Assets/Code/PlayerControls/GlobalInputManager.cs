@@ -145,6 +145,7 @@ public class GlobalInputManager : MonoBehaviour
         _inputActions.Player.AutoMove.Enable();
         _inputActions.Player.Attack.Enable();
         _inputActions.Player.Interact.Enable();
+        
         if(DebugLogs) Debug.Log("Player controls enabled");
     }
     
@@ -210,12 +211,14 @@ public class GlobalInputManager : MonoBehaviour
     {
         _inputActions.ControlManager.NextPlayer.Enable();
         _inputActions.ControlManager.PreviousPlayer.Enable();
+        _inputActions.ControlManager.PingedPlayer.Enable();
     }
     
     public void DisablePlayerSwitching()
     {
         _inputActions.ControlManager.NextPlayer.Disable();
         _inputActions.ControlManager.PreviousPlayer.Disable();
+        _inputActions.ControlManager.PingedPlayer.Disable();
     }
 
     // --------- Spawner Controls ---------
@@ -298,7 +301,7 @@ public class GlobalInputManager : MonoBehaviour
         EnableUIControls();
         EnableMagicControls();
         DisableMenuNavigation();
-        DisableCursor();
+        EnableCursor();
         
     }
 

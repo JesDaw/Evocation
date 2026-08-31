@@ -1285,6 +1285,8 @@ MonoBehaviour:
     m_Signals:
     - {fileID: 11400000, guid: c5357c323f0c44a7ba1a740aca27af92, type: 2}
     - {fileID: 11400000, guid: 519ee8ffa06ef47cf944a5b5721e3318, type: 2}
+    - {fileID: 11400000, guid: c046abb00a7984fa688765396eca5c6a, type: 2}
+    - {fileID: 11400000, guid: b6bcc158bd78a47429fa87013bca23d6, type: 2}
     m_Events:
     - m_PersistentCalls:
         m_Calls:
@@ -1314,6 +1316,34 @@ MonoBehaviour:
           m_CallState: 2
     - m_PersistentCalls:
         m_Calls: []
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1704892453}
+          m_TargetAssemblyTypeName: LevelTransition, CodeAssembly
+          m_MethodName: StartTransition
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 830621551}
+          m_TargetAssemblyTypeName: TimelineController, CodeAssembly
+          m_MethodName: PauseTimeline
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &866587503
 GameObject:
   m_ObjectHideFlags: 0
@@ -1931,7 +1961,10 @@ MonoBehaviour:
       CharacterBody: 0
       CharacterFace: 0
       LineStartEvent:
-        _PersistentCalls: []
+        _PersistentCalls:
+        - _Target: {fileID: 830621551}
+          _MemberName: PlayTimeline
+          _PersistentArguments: []
       LineEndEvent:
         _PersistentCalls: []
     - Line: Arms frail, speech slurred and slow, and eyes glued to the ceiling above
@@ -2716,6 +2749,58 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &1704892452
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1704892454}
+  - component: {fileID: 1704892453}
+  m_Layer: 0
+  m_Name: scene transition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1704892453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1704892452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48fe2b40806e4cf45b8dd871304a1a2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TransitionAnimationClip: {fileID: 1869896543}
+  transitionTime: 1
+  timelineCutsceneName: 
+  loadingScreen: {fileID: 1869896545}
+  slider: {fileID: 1869896544}
+  progressText: {fileID: 0}
+  NextSceneName: Hubworld 1
+  DebugLogs: 0
+--- !u!4 &1704892454
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1704892452}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 126.16635, y: 137.12596, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1724938981
 GameObject:
   m_ObjectHideFlags: 0
@@ -2959,6 +3044,22 @@ RectTransform:
 --- !u!95 &1869896543 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 8395780252143974200, guid: 571e3e2e8e496436e902442e6d401f55, type: 3}
+  m_PrefabInstance: {fileID: 1869896541}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1869896544 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3805077335594635384, guid: 571e3e2e8e496436e902442e6d401f55, type: 3}
+  m_PrefabInstance: {fileID: 1869896541}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &1869896545 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1434762943336638880, guid: 571e3e2e8e496436e902442e6d401f55, type: 3}
   m_PrefabInstance: {fileID: 1869896541}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1905079285
@@ -3693,3 +3794,4 @@ SceneRoots:
   - {fileID: 1453295543}
   - {fileID: 811606786}
   - {fileID: 1724938983}
+  - {fileID: 1704892454}

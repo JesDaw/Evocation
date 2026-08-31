@@ -166,27 +166,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
   Slides:
-  - CharacterName: Archer
-    Line: 'Checking on me? '
-    DialogueDelaySeconds: 0.05
-    CharacterBody: 0
-    CharacterFace: 1
-  - CharacterName: Archer
-    Line: "I've never been better! A scuffle like that ain\u2019t enough to knock
-      me out!"
-    DialogueDelaySeconds: 0.05
-    CharacterBody: 0
-    CharacterFace: 1
-  - CharacterName: Archer
-    Line: Thanks for asking though.
-    DialogueDelaySeconds: 0.05
-    CharacterBody: 0
-    CharacterFace: 1
-  - CharacterName: Archer
-    Line: "Say, I don\u2019t think I caught your name.\n"
-    DialogueDelaySeconds: 0.1
-    CharacterBody: 0
-    CharacterFace: 0
+  - Character: {fileID: 0}
+    Lines:
+    - Line: 'I mean you can probably just guess what the correct answers on there
+        are we really didnt put a lot of effort into writing this originally. '
+      alternitiveTextBox: {fileID: 0}
+      CharacterOverride: {fileID: 0}
+      CharacterBody: 1
+      CharacterFace: 3
+      LineStartEvent:
+        _PersistentCalls: []
+      LineEndEvent:
+        _PersistentCalls: []
+    - Line: Its just a proof of concept.
+      alternitiveTextBox: {fileID: 0}
+      CharacterOverride: {fileID: 0}
+      CharacterBody: 1
+      CharacterFace: 4
+      LineStartEvent:
+        _PersistentCalls: []
+      LineEndEvent:
+        _PersistentCalls: []
+    alternitiveCanvasGroup: {fileID: 0}
   EndOfLines:
   - Text: "That\u2019s not important."
     ultEvent:
@@ -259,12 +260,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
   Slides:
-  - CharacterName: Darius
-    Line: "Woah, easy there..you don\u2019t gotta get all fussy on me, I\u2019ll
-      back off big guy\u2026"
-    DialogueDelaySeconds: 0.05
-    CharacterBody: 1
-    CharacterFace: 4
+  - Character: {fileID: 0}
+    Lines:
+    - Line: ok well that would be minus points but im just going to end the game
+        here bc I dont want to think of more branches rn
+      alternitiveTextBox: {fileID: 0}
+      CharacterOverride: {fileID: 0}
+      CharacterBody: 1
+      CharacterFace: 4
+      LineStartEvent:
+        _PersistentCalls: []
+      LineEndEvent:
+        _PersistentCalls: []
+    alternitiveCanvasGroup: {fileID: 0}
   EndOfLines: []
   DefultEvent:
     _PersistentCalls:
@@ -316,18 +324,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
   Slides:
-  - CharacterName: Darius
-    Line: "I\u2019m not gonna lie, I thought you\u2019d be the more silent brooding
-      type but you\u2019re actually pretty chill!"
-    DialogueDelaySeconds: 0.05
-    CharacterBody: 0
-    CharacterFace: 1
-  - CharacterName: Darius
-    Line: "I should be getting back to training right around now...those clean shots
-      didn\u2019t come from nowhere! Catch you later!"
-    DialogueDelaySeconds: 0.05
-    CharacterBody: 0
-    CharacterFace: 1
+  - Character: {fileID: 0}
+    Lines: []
+    alternitiveCanvasGroup: {fileID: 0}
+  - Character: {fileID: 0}
+    Lines: []
+    alternitiveCanvasGroup: {fileID: 0}
   EndOfLines: []
   DefultEvent:
     _PersistentCalls:
@@ -408,7 +410,7 @@ MonoBehaviour:
   loadingScreen: {fileID: 1560249522092811898}
   slider: {fileID: 1560249522092811897}
   progressText: {fileID: 1560249522092811895}
-  NextSceneName: Jesse - The Spine 2
+  NextSceneName: Test Cutscene
   DebugLogs: 0
 --- !u!1 &234116869
 GameObject:
@@ -828,16 +830,54 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
   Slides:
-  - CharacterName: Archer
-    Line: Oh?
-    DialogueDelaySeconds: 0.05
-    CharacterBody: 0
-    CharacterFace: 0
-  - CharacterName: Archer
-    Line: Hey, what's up?
-    DialogueDelaySeconds: 0.05
-    CharacterBody: 0
-    CharacterFace: 0
+  - Character: {fileID: 0}
+    Lines:
+    - Line: Ok so like I change the way the dialogue syetem worked and that basically
+        removed all the text we had in here.
+      alternitiveTextBox: {fileID: 0}
+      CharacterOverride: {fileID: 0}
+      CharacterBody: 0
+      CharacterFace: 0
+      LineStartEvent:
+        _PersistentCalls: []
+      LineEndEvent:
+        _PersistentCalls: []
+    alternitiveCanvasGroup: {fileID: 0}
+  - Character: {fileID: 0}
+    Lines:
+    - Line: I should probably just make it so we store all our text in seperate files
+        so that doenst happen.
+      alternitiveTextBox: {fileID: 0}
+      CharacterOverride: {fileID: 0}
+      CharacterBody: 0
+      CharacterFace: 0
+      LineStartEvent:
+        _PersistentCalls: []
+      LineEndEvent:
+        _PersistentCalls: []
+    - Line: I didnt think that would be a problem
+      alternitiveTextBox: {fileID: 0}
+      CharacterOverride: {fileID: 0}
+      CharacterBody: 0
+      CharacterFace: 0
+      LineStartEvent:
+        _PersistentCalls: []
+      LineEndEvent:
+        _PersistentCalls: []
+    alternitiveCanvasGroup: {fileID: 0}
+  - Character: {fileID: 0}
+    Lines:
+    - Line: But hey our dialogue choised still stayed so the correct answer here
+        is "Just wanted to check in"
+      alternitiveTextBox: {fileID: 0}
+      CharacterOverride: {fileID: 0}
+      CharacterBody: 0
+      CharacterFace: 0
+      LineStartEvent:
+        _PersistentCalls: []
+      LineEndEvent:
+        _PersistentCalls: []
+    alternitiveCanvasGroup: {fileID: 0}
   EndOfLines:
   - Text: ...
     ultEvent:
@@ -1242,11 +1282,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
   Slides:
-  - CharacterName: Darius
-    Line: Eh, to each their own...
-    DialogueDelaySeconds: 0.05
-    CharacterBody: 0
-    CharacterFace: 0
+  - Character: {fileID: 0}
+    Lines: []
+    alternitiveCanvasGroup: {fileID: 0}
   EndOfLines: []
   DefultEvent:
     _PersistentCalls:
@@ -1499,21 +1537,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
   Slides:
-  - CharacterName: Archer
-    Line: ...
-    DialogueDelaySeconds: 0.05
-    CharacterBody: 0
-    CharacterFace: 0
-  - CharacterName: Archer
-    Line: ...?
-    DialogueDelaySeconds: 0.05
-    CharacterBody: 0
-    CharacterFace: 2
-  - CharacterName: Archer
-    Line: "\u2026uh..ok?"
-    DialogueDelaySeconds: 0.05
-    CharacterBody: 0
-    CharacterFace: 2
+  - Character: {fileID: 0}
+    Lines:
+    - Line: ok well that would be minus points but im just going to end the game
+        here bc I dont want to think of more branches rn
+      alternitiveTextBox: {fileID: 0}
+      CharacterOverride: {fileID: 0}
+      CharacterBody: 0
+      CharacterFace: 0
+      LineStartEvent:
+        _PersistentCalls: []
+      LineEndEvent:
+        _PersistentCalls: []
+    alternitiveCanvasGroup: {fileID: 0}
   EndOfLines: []
   DefultEvent:
     _PersistentCalls:
@@ -1611,11 +1647,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
   Slides:
-  - CharacterName: Archer
-    Line: "\u2026Im gonna head to bed\u2026long day tomorrow.."
-    DialogueDelaySeconds: 0.05
-    CharacterBody: 0
-    CharacterFace: 2
+  - Character: {fileID: 0}
+    Lines: []
+    alternitiveCanvasGroup: {fileID: 0}
   EndOfLines: []
   DefultEvent:
     _PersistentCalls:
@@ -1652,32 +1686,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
   Slides:
-  - CharacterName: Darius
-    Line: '!!!'
-    DialogueDelaySeconds: 0.05
-    CharacterBody: 1
-    CharacterFace: 3
-  - CharacterName: Darius
-    Line: Oh, actually?
-    DialogueDelaySeconds: 0.05
-    CharacterBody: 1
-    CharacterFace: 3
-  - CharacterName: Darius
-    Line: "I\u2019m game, just pop in or call me over in my downtime whenever!"
-    DialogueDelaySeconds: 0.05
-    CharacterBody: 0
-    CharacterFace: 1
-  - CharacterName: Darius
-    Line: "I\u2019ve been wanting a partner to train with but none of the guys were
-      interested!"
-    DialogueDelaySeconds: 0.1
-    CharacterBody: 0
-    CharacterFace: 1
-  - CharacterName: Darius
-    Line: Said I talked their heads off, almost turned me into the next target dummy!
-    DialogueDelaySeconds: 0.1
-    CharacterBody: 0
-    CharacterFace: 1
+  - Character: {fileID: 0}
+    Lines: []
+    alternitiveCanvasGroup: {fileID: 0}
+  - Character: {fileID: 0}
+    Lines: []
+    alternitiveCanvasGroup: {fileID: 0}
+  - Character: {fileID: 0}
+    Lines: []
+    alternitiveCanvasGroup: {fileID: 0}
+  - Character: {fileID: 0}
+    Lines: []
+    alternitiveCanvasGroup: {fileID: 0}
+  - Character: {fileID: 0}
+    Lines: []
+    alternitiveCanvasGroup: {fileID: 0}
   EndOfLines: []
   DefultEvent:
     _PersistentCalls:
@@ -2100,26 +2123,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
   Slides:
-  - CharacterName: Archer
-    Line: ??
-    DialogueDelaySeconds: 0.05
-    CharacterBody: 1
-    CharacterFace: 4
-  - CharacterName: Archer
-    Line: "\u2026.sorry?"
-    DialogueDelaySeconds: 0.05
-    CharacterBody: 1
-    CharacterFace: 4
-  - CharacterName: Archer
-    Line: ...
-    DialogueDelaySeconds: 0.5
-    CharacterBody: 0
-    CharacterFace: 2
-  - CharacterName: Archer
-    Line: ...Yeah, maybe its not...
-    DialogueDelaySeconds: 0.1
-    CharacterBody: 0
-    CharacterFace: 2
+  - Character: {fileID: 0}
+    Lines:
+    - Line: ok well that would be minus points but im just going to end the game
+        here bc I dont want to think of more branches rn
+      alternitiveTextBox: {fileID: 0}
+      CharacterOverride: {fileID: 0}
+      CharacterBody: 1
+      CharacterFace: 2
+      LineStartEvent:
+        _PersistentCalls: []
+      LineEndEvent:
+        _PersistentCalls: []
+    alternitiveCanvasGroup: {fileID: 0}
   EndOfLines: []
   DefultEvent:
     _PersistentCalls:
@@ -2156,22 +2172,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
   Slides:
-  - CharacterName: Archer
-    Line: Theo?
-    DialogueDelaySeconds: 0.05
-    CharacterBody: 0
-    CharacterFace: 0
-  - CharacterName: Darius
-    Line: "I\u2019m Darius! Nice to finally put a name to the suit of armor!"
-    DialogueDelaySeconds: 0.05
-    CharacterBody: 0
-    CharacterFace: 1
-  - CharacterName: Darius
-    Line: "How about you? You holding up good? I noticed you were pretty worn after
-      the battle\u2026you been outta the ring for a bit?"
-    DialogueDelaySeconds: 0.05
-    CharacterBody: 0
-    CharacterFace: 0
+  - Character: {fileID: 0}
+    Lines:
+    - Line: I have no clue what we originally wrote here.
+      alternitiveTextBox: {fileID: 0}
+      CharacterOverride: {fileID: 0}
+      CharacterBody: 0
+      CharacterFace: 0
+      LineStartEvent:
+        _PersistentCalls: []
+      LineEndEvent:
+        _PersistentCalls: []
+    - Line: I need to find some dedicated writers.
+      alternitiveTextBox: {fileID: 0}
+      CharacterOverride: {fileID: 0}
+      CharacterBody: 0
+      CharacterFace: 1
+      LineStartEvent:
+        _PersistentCalls: []
+      LineEndEvent:
+        _PersistentCalls: []
+    alternitiveCanvasGroup: {fileID: 0}
   EndOfLines:
   - Text: Dont insult me.
     ultEvent:
@@ -2254,12 +2275,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
   Slides:
-  - CharacterName: Darius
-    Line: "I should be getting back to training right around now...those clean shots
-      didn\u2019t come from nowhere! Catch you later!"
-    DialogueDelaySeconds: 0.05
-    CharacterBody: 0
-    CharacterFace: 1
+  - Character: {fileID: 0}
+    Lines: []
+    alternitiveCanvasGroup: {fileID: 0}
   EndOfLines: []
   DefultEvent:
     _PersistentCalls:
@@ -2296,13 +2314,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::DailogueTrigger
   Slides:
-  - CharacterName: Darius
-    Line: I thought so, you should join me during one of my training sessions if
-      you got the time! I could give you some pointers to get you back to your prime,
-      aye?
-    DialogueDelaySeconds: 0.05
-    CharacterBody: 0
-    CharacterFace: 1
+  - Character: {fileID: 0}
+    Lines:
+    - Line: This system need a reword this is so hard to work with I wrote it in
+        a crunch.
+      alternitiveTextBox: {fileID: 0}
+      CharacterOverride: {fileID: 0}
+      CharacterBody: 1
+      CharacterFace: 3
+      LineStartEvent:
+        _PersistentCalls: []
+      LineEndEvent:
+        _PersistentCalls: []
+    - Line: 'oh well games over '
+      alternitiveTextBox: {fileID: 0}
+      CharacterOverride: {fileID: 0}
+      CharacterBody: 0
+      CharacterFace: 0
+      LineStartEvent:
+        _PersistentCalls: []
+      LineEndEvent:
+        _PersistentCalls: []
+    - Line: byeeeeeeeeeeeeeeeeee
+      alternitiveTextBox: {fileID: 0}
+      CharacterOverride: {fileID: 0}
+      CharacterBody: 0
+      CharacterFace: 1
+      LineStartEvent:
+        _PersistentCalls: []
+      LineEndEvent:
+        _PersistentCalls: []
+    alternitiveCanvasGroup: {fileID: 0}
   EndOfLines:
   - Text: "I\u2019m ok."
     ultEvent:
@@ -2395,6 +2437,37 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &2050937744
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2050937745}
+  m_Layer: 0
+  m_Name: Transition to level
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2050937745
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2050937744}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 126.16635, y: 137.12596, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &12527795149872441
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3822,3 +3895,4 @@ SceneRoots:
   - {fileID: 2209303479771992684}
   - {fileID: 2033005451}
   - {fileID: 1090432566}
+  - {fileID: 2050937745}

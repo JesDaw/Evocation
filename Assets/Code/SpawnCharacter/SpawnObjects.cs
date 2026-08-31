@@ -176,7 +176,7 @@ public class SpawnObjects : MonoBehaviour
     }
     #endregion
 // Spawn a CPU unit (called by AI and Player)
-public GameObject SpawnCPU(ScriptableStats stats) 
+    public GameObject SpawnCPU(ScriptableStats stats) 
     {
         if (!spawningEnabled)
         {
@@ -222,6 +222,7 @@ public GameObject SpawnCPU(ScriptableStats stats)
         onSpawn?.Invoke(spawnedUnit);
 
         if (DebugLogs) Debug.Log($"Spawned {unitTag} on layer: {LayerMask.LayerToName(spawnedUnit.layer)}");
+        UnitTracker.Instance.AddUnit(spawnedUnit);
 
         return spawnedUnit;
     }

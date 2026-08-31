@@ -46,8 +46,10 @@ public class ActivePlayer : MonoBehaviour
             {
                 if (DebugLogs) Debug.Log("Setting current player");
                 PlayerDeactivating?.Invoke(_currentPlayer);
+
                 _currentPlayer = value;
                 PlayerActivating?.Invoke(_currentPlayer);
+                
             }
         }
     }

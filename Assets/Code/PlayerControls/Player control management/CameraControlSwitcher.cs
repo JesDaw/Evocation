@@ -65,7 +65,6 @@ public class CameraControlSwitcher : MonoBehaviour
         if (FreeCamIsActive)
         {
             SwitchToPlayerControl();
-            GlobalInputManager.Instance.SetMode(InputMode.PlayerCharacter);
         }
         else 
         {

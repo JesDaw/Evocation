@@ -216,7 +216,7 @@
                 {
                     "name": "positive",
                     "id": "7c06d7d2-f841-43f3-a0e3-b6db25a76582",
-                    "path": "<Keyboard>/leftShift",
+                    "path": "<Keyboard>/shift",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -481,6 +481,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "PingedPlayer",
+                    "type": "Button",
+                    "id": "d3ffbce0-42a4-4620-8cd8-52af71cfa958",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -514,6 +523,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "ToggleCameraControl",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c4d85c2c-2b3d-4e7d-8acb-aea3ea4c9af0",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "PingedPlayer",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -781,7 +801,7 @@
                 {
                     "name": "",
                     "id": "ee106646-4bf2-426f-a4cb-02eb09526ded",
-                    "path": "<Keyboard>/q",
+                    "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

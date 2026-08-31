@@ -37,54 +37,10 @@ public class DamageHandler : MonoBehaviour
             stats._KnockBackHealth -= knockback_damage;
 
             Transform target = GetComponentInChildren<AnimationDrivenVFXController>()?.transform;
-            if(target is not null)
-                ImpactParticleSpawner.Instance.PlaySmallImpactParticle(target.position, Vector3.one, Quaternion.identity);
-            //GameObject parent_obj = transform.parent.gameObject;
+            if(target is not null) ImpactParticleSpawner.Instance.PlaySmallImpactParticle(target.position, Vector3.one, Quaternion.identity);
         }
 
-        if (stats.entityHealthbar != null)
-            stats.entityHealthbar.UpdateHealth();
-
-        if (stats._CurrentHealth <= 0)
-        {
-            Die();
-            return;
-        }
-
-        if (stats._KnockBackHealth <= 0)
-            TriggerKnockback();
-    }
-
-    public void TakeDamage(float damage, DamageSource attackedBy = null)
-    {
-        if (DebugLogs) Debug.Log($"{gameObject.name}: Taking {damage} damage");
-        if (stats == null) return;
-        if (stats.IsInvincible()) return;
-
-        stats._CurrentHealth -= damage;
-        FModAudioManager.instance.PlaySoundByName("takeDamage", transform.position, 1, 15, "Volume", 1f);
-
-
-        stats.OnDamage?.Invoke();
-
-        stats.LastHitBy = attackedBy;
-
-        if (attackedBy != null && attackedBy.damageType == DamageSource.DamageType.StatusEffect)
-            stats._KnockBackHealth--;
-
-        if (attackedBy != null)
-        {
-            stats.OnWitFlagDamage?.Invoke(attackedBy.IsEnemy);
-            if (attackedBy.damageType == DamageSource.DamageType.Spell)
-            {
-                Transform target = GetComponentInChildren<AnimationDrivenVFXController>()?.transform;
-                if(target is not null)
-                    ImpactParticleSpawner.Instance.PlayLargeImpactParticle(target.position, Vector3.one, Quaternion.identity);
-            }
-        }
-
-        if (stats.entityHealthbar != null)
-            stats.entityHealthbar.UpdateHealth();
+        if (stats.entityHealthbar != null) stats.entityHealthbar.UpdateHealth();
 
         if (stats._CurrentHealth <= 0)
         {
@@ -93,6 +49,8 @@ public class DamageHandler : MonoBehaviour
         }
 
         if (stats._KnockBackHealth <= 0) TriggerKnockback();
+
+        if (gameObject.tag == "Player" && ActivePlayer.Instance.CurrentPlayer != gameObject && CameraControlSwitcher.Instance.FreeCamIsActive) StartCoroutine(PlayerDangerNotification.Instance.ActivateForTime(3f));
     }
 
     public void Die()
@@ -107,6 +65,7 @@ public class DamageHandler : MonoBehaviour
             stats.OnWitFlagDeath?.Invoke(stats.LastHitBy.IsEnemy);
 
         TriggerKnockback();
+        UnitTracker.Instance.RemoveUnit(this.gameObject);
         stats.OnDeath?.Invoke();
     }
 
