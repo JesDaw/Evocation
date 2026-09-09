@@ -10,8 +10,9 @@ using TMPro;
 /// </summary>
 public class Timer : MonoBehaviour
 {
-    [SerializeField] public float maxTimeRemaining = 1f;
+    public float maxTimeRemaining = 1f;
     [HideInInspector] public float RemainingTimeSeconds;
+    [HideInInspector] public float ElapsedTimeSeconds;
     [SerializeField] TextMeshProUGUI timerText;
     [SerializeField] UnityEvent _TimeHitZero;
     [SerializeField] UnityEvent _TimeStarted;
@@ -34,6 +35,7 @@ public class Timer : MonoBehaviour
         Instance = this;
         
         RemainingTimeSeconds = maxTimeRemaining;
+        ElapsedTimeSeconds = 0f;
         if (timerText == null)
         {
             GameObject timerTextObj = GameObject.Find("TimerText");
@@ -57,10 +59,12 @@ public class Timer : MonoBehaviour
         if (RemainingTimeSeconds > 0)
         {
             RemainingTimeSeconds -= Time.deltaTime;
+            ElapsedTimeSeconds += Time.deltaTime;
         }
         else
         {
             RemainingTimeSeconds = 0;
+            ElapsedTimeSeconds = maxTimeRemaining;
             _TimeHitZero?.Invoke();
             DeactivateTimer();   
         }
@@ -73,7 +77,6 @@ public class Timer : MonoBehaviour
         _TimeStarted?.Invoke();
     }
 
-    // conversion from seconds to minutes and seconds and displays it in UI
     void DesplayTime()
     {
         int minutes = Mathf.FloorToInt(RemainingTimeSeconds / 60);
@@ -81,8 +84,22 @@ public class Timer : MonoBehaviour
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
+    public float GetNormalizedElapsed()
+    {
+        if (!TimeIsActive) return 0f;
+        return Mathf.Clamp01(ElapsedTimeSeconds / maxTimeRemaining);
+    }
+
+    public float GetNormalizedRemaining()
+    {
+        if (!TimeIsActive) return 1f;
+        return Mathf.Clamp01(RemainingTimeSeconds / maxTimeRemaining);
+    }
+
     public void ResetTimer()
     {
         RemainingTimeSeconds = maxTimeRemaining;
+        ElapsedTimeSeconds = 0f;
     }
+
 }

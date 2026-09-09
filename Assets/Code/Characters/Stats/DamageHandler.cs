@@ -5,6 +5,8 @@ public class DamageHandler : MonoBehaviour
 {
     Stats stats;
     bool DamageTriggerInvoked = false;
+    [SerializeField] DamageInterval damageInterval;
+    public UltEvents.UltEvent OnThreashholdPassed;
     [SerializeField] bool DebugLogs;
 
     public void Initialize(Stats statsComponent)
@@ -49,8 +51,14 @@ public class DamageHandler : MonoBehaviour
         }
 
         if (stats._KnockBackHealth <= 0) TriggerKnockback();
+        
 
         if (gameObject.tag == "Player" && ActivePlayer.Instance.CurrentPlayer != gameObject && CameraControlSwitcher.Instance.FreeCamIsActive) StartCoroutine(PlayerDangerNotification.Instance.ActivateForTime(3f));
+
+        if (damageInterval.UpdateStatTracker(damage))
+        {
+            OnThreashholdPassed?.Invoke();
+        }
     }
 
     public void Die()
@@ -104,3 +112,22 @@ public class DamageHandler : MonoBehaviour
     }
 }
 
+[System.Serializable]
+public class DamageInterval
+{
+    public float damageInterval = 0f;
+    float statTracker = 0;
+    
+    public bool UpdateStatTracker(float amount)
+    {
+        if (damageInterval == 0f) return false;
+        statTracker += amount;
+        if (statTracker >= damageInterval) 
+        {
+            statTracker -= damageInterval;
+            return true;
+        }
+        return false;
+
+    }
+}

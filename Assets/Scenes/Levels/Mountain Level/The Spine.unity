@@ -139,6 +139,34 @@ PrefabInstance:
       propertyPath: m_Name
       value: The Spine
       objectReference: {fileID: 0}
+    - target: {fileID: 6635146756807698879, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: damageInterval.damageInterval
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6635146756807698879, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: OnThreashholdPassed._PersistentCalls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6635146756807698879, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: OnThreashholdPassed._PersistentCalls.Array.data[0]._Target
+      value: 
+      objectReference: {fileID: 9083601090002705358}
+    - target: {fileID: 6635146756807698879, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: OnThreashholdPassed._PersistentCalls.Array.data[0]._MemberName
+      value: IncreaseMana
+      objectReference: {fileID: 0}
+    - target: {fileID: 6635146756807698879, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: OnThreashholdPassed._PersistentCalls.Array.data[0]._PersistentArguments.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6635146756807698879, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: OnThreashholdPassed._PersistentCalls.Array.data[0]._PersistentArguments.Array.data[0]._Int
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6635146756807698879, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: OnThreashholdPassed._PersistentCalls.Array.data[0]._PersistentArguments.Array.data[0]._Type
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7535338996163080200, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -179,11 +207,38 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9088657057911931762, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: 'CostToUpgradeMaxMoneyPercent.Array.data[1]'
+      value: 0.742857
+      objectReference: {fileID: 0}
+    - target: {fileID: 9088657057911931762, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: 'CostToUpgradeMaxMoneyPercent.Array.data[2]'
+      value: 0.86
+      objectReference: {fileID: 0}
+    - target: {fileID: 9088657057911931762, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: 'CostToUpgradeMaxMoneyPercent.Array.data[3]'
+      value: 0.738
+      objectReference: {fileID: 0}
+    - target: {fileID: 9088657057911931762, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: 'CostToUpgradeMaxMoneyPercent.Array.data[4]'
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+--- !u!114 &9083601090002705358 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5844442920589043860, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+  m_PrefabInstance: {fileID: 9083601090002705357}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a59e5568c52ec41b07e6682e671d09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::ManaSystem
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

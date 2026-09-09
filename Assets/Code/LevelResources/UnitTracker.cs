@@ -17,11 +17,6 @@ using UnityEngine.Events;
 /// </summary>
 public class UnitTracker : MonoBehaviour
 {
-    /// <summary>
-    /// Canonical team/lane layer names, in a fixed order. This is the single source of
-    /// truth for lane layer strings — SwitchLanes indexes into this same array instead of
-    /// keeping its own copy, so the two scripts can't drift out of sync on naming/casing.
-    /// </summary>
     public static readonly string[] LaneLayerNames = new string[]
     {
         "Allies/TopLane", // 0
@@ -37,9 +32,9 @@ public class UnitTracker : MonoBehaviour
         "Player/BotLane", // 8
     };
 
-    [SerializeField] Transform PlayerBase;
+    public Transform PlayerBase;
     Vector3 PlayerBaseLocation;
-    [SerializeField] Transform EnemyBase;
+    public Transform EnemyBase;
     Vector3 EnemyBaseLocation;
     [HideInInspector] public List<GameObject> allyUnits = new List<GameObject>();
     [HideInInspector] public List<GameObject> enemyUnits = new List<GameObject>();
@@ -49,8 +44,13 @@ public class UnitTracker : MonoBehaviour
     [SerializeField] bool DebugLogs = false;
     public static UnitTracker Instance { get; private set; }
 
-    // One list per entry in LaneLayerNames. Index i here always corresponds to LaneLayerNames[i].
-    private List<GameObject>[] laneUnits;
+    List<GameObject>[] laneUnits;
+    public float GetBaseDistance(float fallback = 100f)
+    {
+        return (PlayerBase != null && EnemyBase != null)
+            ? Vector3.Distance(PlayerBase.position, EnemyBase.position)
+            : fallback;
+    }
 
     void Awake()
     {
@@ -74,7 +74,6 @@ public class UnitTracker : MonoBehaviour
         if (unit.CompareTag("Allies")) allyUnits.Add(unit);
         else if (unit.CompareTag("Enemy")) enemyUnits.Add(unit);
 
-        // Register into whichever lane list matches its layer at spawn time.
         int laneIndex = LaneIndexForLayer(unit.layer);
         if (laneIndex >= 0 && !laneUnits[laneIndex].Contains(unit))
             laneUnits[laneIndex].Add(unit);
@@ -85,9 +84,6 @@ public class UnitTracker : MonoBehaviour
         if (unit.CompareTag("Allies")) allyUnits.Remove(unit);
         else if (unit.CompareTag("Enemy")) enemyUnits.Remove(unit);
 
-        // A unit's current layer always matches the one lane list it's cached in
-        // (SetUnitLane keeps that invariant), so we can go straight to that single
-        // list instead of scanning all 9 — important at ~20 units/sec of churn.
         int laneIndex = LaneIndexForLayer(unit.layer);
         if (laneIndex >= 0)
         {
@@ -95,8 +91,6 @@ public class UnitTracker : MonoBehaviour
         }
         else
         {
-            // Layer didn't resolve to a known lane (shouldn't normally happen) —
-            // fall back to scrubbing every list so we never leak a stale reference.
             for (int i = 0; i < laneUnits.Length; i++)
             {
                 RemoveUnordered(laneUnits[i], unit);
@@ -120,19 +114,6 @@ public class UnitTracker : MonoBehaviour
         list.RemoveAt(lastIndex);
     }
 
-    /// <summary>
-    /// Pure storage update: moves a unit from whatever lane list it's currently
-    /// cached under into the list at newLaneIndex. Does NOT touch unit.layer —
-    /// UnitTracker only stores unit/lane membership; SwitchLanes owns actually
-    /// changing a unit's Unity layer.
-    ///
-    /// IMPORTANT: call this BEFORE changing unit.layer. This method finds the
-    /// unit's current lane list by reading its (still old) unit.layer, so if the
-    /// layer's already been changed by the time this runs, it won't find the old
-    /// entry to remove.
-    /// </summary>
-    /// <param name="unit">The unit changing lanes.</param>
-    /// <param name="newLaneIndex">Index into LaneLayerNames for the target lane.</param>
     public void UpdateUnitLane(GameObject unit, int newLaneIndex)
     {
         if (unit == null) return;
@@ -175,15 +156,6 @@ public class UnitTracker : MonoBehaviour
         return 0;
     }
 
-    /// <summary>
-    /// Returns the cached list of units on a given lane layer (e.g. "Player/MidLane").
-    /// O(1) lookup, no per-call allocation — the returned list is the live cache, so
-    /// treat it as read-only; don't Add/Remove from it directly.
-    ///
-    /// Falls back to scanning PlayerSwitch.Instance.players for Player/* layers, to
-    /// cover player characters that haven't passed through a SwitchLanes trigger yet
-    /// (and so were never registered into the cache).
-    /// </summary>
     public List<GameObject> FindAllUnitsWithLayer(string layer)
     {
         int laneIndex = Array.IndexOf(LaneLayerNames, layer);
@@ -193,7 +165,6 @@ public class UnitTracker : MonoBehaviour
             return new List<GameObject>();
         }
 
-        // Clean up anything destroyed since the last query.
         laneUnits[laneIndex].RemoveAll(unit => unit == null);
 
         if (layer.StartsWith("Player/") && PlayerSwitch.Instance != null)
@@ -262,5 +233,66 @@ public class UnitTracker : MonoBehaviour
             }
         }
         return closest;
+    }
+
+    public int GetTeamUnitCount(string team) // "Player" or "Enemy"
+    {
+        int count = 0;
+        count += FindAllUnitsWithLayer($"{team}/TopLane").Count;
+        count += FindAllUnitsWithLayer($"{team}/MidLane").Count;
+        count += FindAllUnitsWithLayer($"{team}/BotLane").Count;
+        return count;
+    }
+
+    public float GetZoneDominance(ZoneType zone)
+    {
+        string lane = LaneNameFor(zone);
+        int enemyCount = FindAllUnitsWithLayer($"Enemy/{lane}").Count;
+        int playerCount = FindAllUnitsWithLayer($"Player/{lane}").Count;
+        int total = enemyCount + playerCount;
+
+        if (total == 0) return 0.5f;
+        return (float)enemyCount / total;
+    }
+
+    /// <summary>
+    /// Finds the player unit closest to fromPosition across all lanes.
+    /// Returns float.MaxValue if none found; power is the closest unit's power (0 if none).
+    /// </summary>
+    public float GetClosestPlayerUnitDistance(Vector3 fromPosition, out float power)
+    {
+        power = 0f;
+        float closestDistance = float.MaxValue;
+
+        foreach (string lane in new[] { "TopLane", "MidLane", "BotLane" })
+        {
+            foreach (GameObject unit in FindAllUnitsWithLayer($"Player/{lane}"))
+            {
+                if (unit == null) continue;
+
+                float distance = Vector3.Distance(unit.transform.position, fromPosition);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+
+                    Stats stats = unit.GetComponent<Stats>();
+                    if (stats != null && stats.scriptableStats != null)
+                        power = stats.scriptableStats._CalculatedPower;
+                }
+            }
+        }
+
+        return closestDistance;
+    }
+
+    string LaneNameFor(ZoneType zone)
+    {
+        switch (zone)
+        {
+            case ZoneType.Upper: return "TopLane";
+            case ZoneType.Middle: return "MidLane";
+            case ZoneType.Lower: return "BotLane";
+            default: return "MidLane";
+        }
     }
 }

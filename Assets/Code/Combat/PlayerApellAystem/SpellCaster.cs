@@ -57,7 +57,7 @@ public class SpellCaster : MonoBehaviour
             ExitAimCamera();
             return;
         }*/
-        if (CurrentState == State.Idle && !(ActivePlayer.Instance.GetCurrentPlayerController()._currentState is PlayerKnockedBackState))
+        if (CurrentState == State.Idle)
         {
             if (SpellSwapper.Instance.CurrentSpell.castMode == SpellCastMode.Aimed) // means we use the aiming logic not that we are already aiming
             {
@@ -96,6 +96,7 @@ public class SpellCaster : MonoBehaviour
 
     void PlaySpellAnimation(bool Play = false)
     {
+        if (ActivePlayer.Instance.CurrentPlayer == null) return;
         if(!Play)
         {
             ActivePlayer.Instance.GetCurrentPlayerController().EndCurrentAnimation();
