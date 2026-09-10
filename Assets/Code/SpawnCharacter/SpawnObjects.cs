@@ -212,7 +212,7 @@ public class SpawnObjects : MonoBehaviour
         onSpawn?.Invoke(spawnedUnit);
 
         if (DebugLogs) Debug.Log($"Spawned {unitTag} on layer: {LayerMask.LayerToName(spawnedUnit.layer)}");
-        UnitTracker.Instance.AddUnit(spawnedUnit);
+        if (UnitTracker.Instance != null) UnitTracker.Instance.AddUnit(spawnedUnit);
 
         return spawnedUnit;
     }

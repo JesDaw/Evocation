@@ -31,7 +31,7 @@ public class AnimationEventsController : MonoBehaviour
     public bool ShouldAttack()
     {
         if (!shouldAttack) return false;
-        FModAudioManager.instance.PlaySoundByName("attack", transform.position, minDistance, maxDistance, parameterName, parameterValue);
+        if (FModAudioManager.instance != null) FModAudioManager.instance.PlaySoundByName("attack", transform.position, minDistance, maxDistance, parameterName, parameterValue);
 
         ResetAttackSignal();
         return true;

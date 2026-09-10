@@ -22,7 +22,7 @@ public class DamageHandler : MonoBehaviour
 
         stats._CurrentHealth -= damage;
 //        Debug.Log($"{gameObject.name} Health = {stats._CurrentHealth}");
-        FModAudioManager.instance.PlaySoundByName("takeDamage", transform.position, 1, 15, "Volume", 1f);
+        if (FModAudioManager.instance != null)FModAudioManager.instance.PlaySoundByName("takeDamage", transform.position, 1, 15, "Volume", 1f);
 
         stats.OnDamage?.Invoke();
         if (stats.DamageTriggerAmount >= stats._CurrentHealth && !DamageTriggerInvoked)
@@ -39,7 +39,7 @@ public class DamageHandler : MonoBehaviour
             stats._KnockBackHealth -= knockback_damage;
 
             Transform target = GetComponentInChildren<AnimationDrivenVFXController>()?.transform;
-            if(target is not null) ImpactParticleSpawner.Instance.PlaySmallImpactParticle(target.position, Vector3.one, Quaternion.identity);
+            if(target is not null &&ImpactParticleSpawner.Instance != null) ImpactParticleSpawner.Instance.PlaySmallImpactParticle(target.position, Vector3.one, Quaternion.identity);
         }
 
         if (stats.entityHealthbar != null) stats.entityHealthbar.UpdateHealth();

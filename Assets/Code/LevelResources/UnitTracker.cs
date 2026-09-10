@@ -202,6 +202,7 @@ public class UnitTracker : MonoBehaviour
     {
         float allyPush = 0f;
         GameObject closestAlly = FindClosestUnit($"Player/{lane}", EnemyBaseLocation);
+        //if (FindClosestUnit($"Allies/{lane}"))
         if (closestAlly != null)
             allyPush = Vector3.Distance(closestAlly.transform.position, EnemyBaseLocation);
 
@@ -248,6 +249,7 @@ public class UnitTracker : MonoBehaviour
     {
         string lane = LaneNameFor(zone);
         int enemyCount = FindAllUnitsWithLayer($"Enemy/{lane}").Count;
+        int allyCount = FindAllUnitsWithLayer($"Allies/{lane}").Count;
         int playerCount = FindAllUnitsWithLayer($"Player/{lane}").Count;
         int total = enemyCount + playerCount;
 

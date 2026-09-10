@@ -36,8 +36,20 @@ public class SpawnSequenceAction : AIAction
 {
     [Header("Spawn Sequence")]
     public List<SpawnStep> spawnSequence = new List<SpawnStep>();
+    public override bool CanExecute(AIClanSO clanConfig)
+    {
+        if (spawnSequence.Count == 0)
+        {
+            Debug.LogWarning($"[AI] {actionName}: No units in spawn sequence!");
+            return false;
+        }
+        if (SpawnObjects.EnemyInstance == null) return false;
+        if (!SpawnObjects.EnemyInstance.spawningEnabled) return false;
 
-    public override IEnumerator Execute(AIClanSO clanConfig, AILoop parentLoop)
+        return true;
+    }
+
+    public override IEnumerator Execute(AIClanSO clanConfig, AILoop parentLoop) //neather of these inputs are needed
     {
         if (!CanExecute(clanConfig))
         {
@@ -69,19 +81,6 @@ public class SpawnSequenceAction : AIAction
 
         if (parentLoop.showDebugLogs) Debug.Log($"[AI] ✓ Sequence complete: {actionName}");
         parentLoop.isExecutingSequence = false;
-    }
-
-    public override bool CanExecute(AIClanSO clanConfig)
-    {
-        if (spawnSequence.Count == 0)
-        {
-            Debug.LogWarning($"[AI] {actionName}: No units in spawn sequence!");
-            return false;
-        }
-        if (SpawnObjects.EnemyInstance == null) return false;
-        if (!SpawnObjects.EnemyInstance.spawningEnabled) return false;
-
-        return true;
     }
 }
 

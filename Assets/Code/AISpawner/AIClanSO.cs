@@ -10,9 +10,9 @@ using System.Collections.Generic;
 public class AIClanSO : ScriptableObject
 {
     [Header("Clan Info")]
-    public string clanName = "New Clan";
+    public string clanName = "";
     [TextArea(3, 5)]
-    public string description = "Description of this AI's behavior";
+    public string description = "";
     
     [Header("AI Personalities")]
     public AIPersonality[] moods;
@@ -48,7 +48,7 @@ public class AIPersonality
 }
 
 /// <summary>
-/// Timer logic, 
+/// Timer logic, for when actions should be taken 
 /// </summary>
 [System.Serializable]
 public class AILoop
@@ -72,9 +72,7 @@ public class AILoop
     
     [Header("Debug")]
     [Tooltip("Toggle debug logs for this specific loop")]
-    [SerializeField] public bool showDebugLogs = false;
-    
-    // Runtime state (not serialized)
+    [SerializeField] public bool showDebugLogs = false;    
     [System.NonSerialized] public float currentTimer = 0f;
     [System.NonSerialized] public float currentInterval = 0f;
     [System.NonSerialized] public bool isExecutingSequence = false;
