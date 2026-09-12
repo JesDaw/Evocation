@@ -3,16 +3,36 @@ using UnityEngine;
 public class TestingSpawner : MonoBehaviour
 {
     [SerializeField] SpawnObjects alliedSpawnObject;
+    [SerializeField] TestSpawn[] AllyUnitsToSpawn;
     [SerializeField] SpawnObjects enemySpawnObject;
+    [SerializeField] TestSpawn[] EnemyUnitsToSpawn;
 
-    // Update is called once per frame
-    public void SpawnEnemy(ScriptableStats _spawnEnemy)
+    public void SpawnEnemy()
     {
-        enemySpawnObject.SpawnCPU(_spawnEnemy);
+        foreach (var Character in EnemyUnitsToSpawn)
+        {
+            for (int i = 0; i < Character.number; i++)
+            {
+                enemySpawnObject.SpawnCPU(Character.character);
+            }
+        }
     }
 
-    public void SpawnAlly(ScriptableStats _spawnAlly)
+    public void SpawnAlly()
     {
-        alliedSpawnObject.SpawnCPU(_spawnAlly);
+        foreach (var Character in AllyUnitsToSpawn)
+        {
+            for (int i = 0; i < Character.number; i++)
+            {
+                alliedSpawnObject.SpawnCPU(Character.character);
+            }
+        }
     }
+}
+
+[System.Serializable]
+public class TestSpawn
+{
+    public int number = 1;
+    public ScriptableStats character;
 }

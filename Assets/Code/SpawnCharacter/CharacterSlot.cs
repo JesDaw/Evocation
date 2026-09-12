@@ -78,7 +78,7 @@ public class CharacterSlot : MonoBehaviour
         }
         else
         {
-            spawned = SpawnObjects.PlayerInstance.SpawnFromPlayer(characterStats);
+            spawned = SpawnObjects.PlayerInstance.Spawn(characterStats);
         }     
 
         if (spawned != null)

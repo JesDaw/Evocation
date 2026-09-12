@@ -281,16 +281,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: CodeAssembly::MasterBalancingScript
   all_clan_stats:
   - {fileID: 11400000, guid: 3c7ffc57a42390842b5fced0833dfeb9, type: 2}
-  Global_AvgPower: 371.28757
+  Global_AvgPower: 429.2444
   MinPowerOffset: 1
   Global_TotalUnitCount: 5
-  Global_AvgHP: 27
-  Global_AvgKB_MaxHealth: 25
-  Global_AvgMoveSpeed: 5
-  Global_AvgKB_Dmg: 5.4
-  Global_AvgAtk_Dmg: 4
-  Global_AvgEndlag: 1.5
-  Global_AvgRange: 3.4
+  Global_AvgHP: 28
+  Global_AvgKB_MaxHealth: 27
+  Global_AvgMoveSpeed: 4.4
+  Global_AvgKB_Dmg: 7.2
+  Global_AvgAtk_Dmg: 9
+  Global_AvgEndlag: 1
+  Global_AvgRange: 2.6
   all_balancers: []
 --- !u!4 &357468018
 Transform:
@@ -358,29 +358,29 @@ MonoBehaviour:
   Theme: 
   Characteristics: 
   UnitsInClan:
-  - {fileID: 11400000, guid: d4daadf164451854c8c5982cee62e5f9, type: 2}
   - {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
-  - {fileID: 11400000, guid: 9bc80ac74d98ee645a559cbf527a224a, type: 2}
-  - {fileID: 11400000, guid: b6992adb71df9b441bc53d51187ea154, type: 2}
+  - {fileID: 11400000, guid: d4daadf164451854c8c5982cee62e5f9, type: 2}
   - {fileID: 11400000, guid: 1b58dbc454df5e14c89b0997be5b88b3, type: 2}
+  - {fileID: 11400000, guid: b6992adb71df9b441bc53d51187ea154, type: 2}
+  - {fileID: 11400000, guid: 9bc80ac74d98ee645a559cbf527a224a, type: 2}
   UnitValueDiscrepancies:
-  - -13.001556
-  - 5.654147
-  - -5.8308725
-  - -8.829252
-  - 3.8909798
-  TotalLevel: 371.28757
-  SumAttack: 47
-  SumDefense: 260
-  SumSpaceControl: 42
-  AvgAttackFrequency: 4.457511
-  MoveSpeed: 5
-  KnockbackDmg: 5.4
-  AttackDmg: 4
-  AttackEndlag: 1.5
-  MaxHP: 27
-  KnockbackHP: 25
-  HorizontalRange: 3.4
+  - -35.10114
+  - -68.85691
+  - -62.605366
+  - -49.807613
+  - -145.37149
+  TotalLevel: 429.2444
+  SumAttack: 81
+  SumDefense: 275
+  SumSpaceControl: 35
+  AvgAttackFrequency: 7.6488724
+  MoveSpeed: 4.4
+  KnockbackDmg: 7.2
+  AttackDmg: 9
+  AttackEndlag: 1
+  MaxHP: 28
+  KnockbackHP: 27
+  HorizontalRange: 2.6
 --- !u!114 &357468021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -416,6 +416,60 @@ MonoBehaviour:
   W_Health: 1
   W_KB_Damage: 1
   W_KB_Health: 1
+--- !u!1 &427189086
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 427189087}
+  - component: {fileID: 427189088}
+  m_Layer: 0
+  m_Name: EnemySpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &427189087
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427189086}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
+  m_LocalPosition: {x: 14.31, y: 1.89, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
+--- !u!114 &427189088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427189086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 033ab950ea0b47949abd31a423bb7536, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::SpawnObjects
+  enemySpawner: 1
+  spawningEnabled: 1
+  cpuPrefab: {fileID: 8081379975795946816, guid: b5e3e16a45b071d4dbb72c954c0807f2, type: 3}
+  cpuContainer: {fileID: 427189087}
+  playerContainer: {fileID: 427189087}
+  spawnLocation: {fileID: 427189087}
+  onSpawn:
+    m_PersistentCalls:
+      m_Calls: []
+  DebugLogs: 0
 --- !u!1001 &724452377
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -471,6 +525,10 @@ PrefabInstance:
     - target: {fileID: 8081379975795946816, guid: b5e3e16a45b071d4dbb72c954c0807f2, type: 3}
       propertyPath: m_Name
       value: CpuEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8081379975795946816, guid: b5e3e16a45b071d4dbb72c954c0807f2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -533,11 +591,67 @@ PrefabInstance:
       propertyPath: m_Name
       value: CpuFriend
       objectReference: {fileID: 0}
+    - target: {fileID: 5332745155659718807, guid: 52135a68ff4a24ac4b84ed8d10b9c691, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 52135a68ff4a24ac4b84ed8d10b9c691, type: 3}
+--- !u!1 &1193397776
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1193397778}
+  - component: {fileID: 1193397777}
+  m_Layer: 0
+  m_Name: Spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1193397777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1193397776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dff25efc02701e43bf6d9cb716f823a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::TestingSpawner
+  alliedSpawnObject: {fileID: 1568352514}
+  AllyUnitsToSpawn:
+  - number: 1
+    character: {fileID: 11400000, guid: 1b58dbc454df5e14c89b0997be5b88b3, type: 2}
+  enemySpawnObject: {fileID: 427189088}
+  EnemyUnitsToSpawn:
+  - number: 3
+    character: {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
+--- !u!4 &1193397778
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1193397776}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1265728525
 GameObject:
   m_ObjectHideFlags: 0
@@ -676,6 +790,60 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1 &1568352513
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1568352515}
+  - component: {fileID: 1568352514}
+  m_Layer: 0
+  m_Name: AllySpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1568352514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1568352513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 033ab950ea0b47949abd31a423bb7536, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::SpawnObjects
+  enemySpawner: 0
+  spawningEnabled: 1
+  cpuPrefab: {fileID: 5332745155659718807, guid: 52135a68ff4a24ac4b84ed8d10b9c691, type: 3}
+  cpuContainer: {fileID: 1568352515}
+  playerContainer: {fileID: 1568352515}
+  spawnLocation: {fileID: 1568352515}
+  onSpawn:
+    m_PersistentCalls:
+      m_Calls: []
+  DebugLogs: 0
+--- !u!4 &1568352515
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1568352513}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -14.93, y: 1.83, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1929949891
 GameObject:
   m_ObjectHideFlags: 0
@@ -708,11 +876,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: CodeAssembly::ClanMatchupAnalyst
   ClanA: {fileID: 11400000, guid: 3c7ffc57a42390842b5fced0833dfeb9, type: 2}
   ClanB: {fileID: 11400000, guid: 91174aa3f0daa6541b05663053eafc64, type: 2}
-  ClanA_Advantage: 20.487284
-  Analysis_A: ' vs  local power: 20.49 (Offset: +11.1)'
-  ClanB_Advantage: 4.6792746
-  Analysis_B: ' vs  local power: 4.68 (Offset: +11.1)'
-  LocalMinOffset: 11.127688
+  ClanA_Advantage: 22.316772
+  Analysis_A: ' vs  local power: 22.32 (Offset: +1.0)'
+  ClanB_Advantage: 1
+  Analysis_B: ' vs  local power: 1.00 (Offset: +1.0)'
+  LocalMinOffset: 1
   grapher: {fileID: 357468021}
 --- !u!4 &1929949893
 Transform:
@@ -823,3 +991,6 @@ SceneRoots:
   - {fileID: 1135827879}
   - {fileID: 357468018}
   - {fileID: 1929949893}
+  - {fileID: 1193397778}
+  - {fileID: 427189087}
+  - {fileID: 1568352515}

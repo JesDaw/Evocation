@@ -63,16 +63,16 @@ public class WolfMageState : LevelState
 
         AISpawnerController.Instance.SetMoodByName("Phase 2");
         //Debug.Log("Spawning boss");
-        SpawnObjects.EnemyInstance.SpawnFromAISpawner(BossStats, true);
+        SpawnObjects.EnemyInstance.Spawn(BossStats, true);
         
-        SpawnObjects.EnemyInstance.SpawnFromAISpawner(HoodStats, true);
-        SpawnObjects.EnemyInstance.SpawnFromAISpawner(HoodStats, true);
+        SpawnObjects.EnemyInstance.Spawn(HoodStats, true);
+        SpawnObjects.EnemyInstance.Spawn(HoodStats, true);
 
-        SpawnObjects.EnemyInstance.SpawnFromAISpawner(DawgStats, true);
-        SpawnObjects.EnemyInstance.SpawnFromAISpawner(DawgStats, true);
-        SpawnObjects.EnemyInstance.SpawnFromAISpawner(DawgStats, true);
-        SpawnObjects.EnemyInstance.SpawnFromAISpawner(RunnerStats, true);
-        SpawnObjects.EnemyInstance.SpawnFromAISpawner(RunnerStats, true);
+        SpawnObjects.EnemyInstance.Spawn(DawgStats, true);
+        SpawnObjects.EnemyInstance.Spawn(DawgStats, true);
+        SpawnObjects.EnemyInstance.Spawn(DawgStats, true);
+        SpawnObjects.EnemyInstance.Spawn(RunnerStats, true);
+        SpawnObjects.EnemyInstance.Spawn(RunnerStats, true);
         
         //AIMoneyManager.Instance.GiveMoney(FreeMoney);
     }

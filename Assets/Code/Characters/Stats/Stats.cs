@@ -302,3 +302,4 @@ public class StaticEffectSnapshot
     public float castSpeedMultiplier;
     public int stackCount;
 }
+

@@ -81,17 +81,7 @@ public class SpawnObjects : MonoBehaviour
     }
     #endregion
 
-    public GameObject SpawnFromAISpawner(ScriptableStats stats, bool SpawnForFree = false)
-    {
-        if (stats == null)
-        {
-            Debug.LogWarning($"stats does not exist on AI spawner");
-            return null;
-        }
-        return SpawnCPU(stats);
-    }
-    #region player
-    public GameObject SpawnFromPlayer(ScriptableStats stats, bool SpawnForFree = false)
+    public GameObject Spawn(ScriptableStats stats, bool SpawnForFree = false)
     {
         if (!spawningEnabled)
         {
@@ -99,26 +89,26 @@ public class SpawnObjects : MonoBehaviour
             return null;
         }
 
-        if (Money.Instance == null || stats == null)
+        if (!SpawnForFree)
         {
-            Debug.LogWarning("Missing references for player spawn!");
-            return null;
-        }
+            if (Money.Instance == null || stats == null)
+            {
+                Debug.LogWarning("Missing references for player spawn!");
+                return null;
+            }
 
-        if (Money.Instance.CurrentMoney < stats._spawnCost)
-        {
-            if (DebugLogs) Debug.Log($"Not enough money! Need {stats._spawnCost}, have {Money.Instance.CurrentMoney}");
-            return null;
-        }
+            if (Money.Instance.CurrentMoney < stats._spawnCost)
+            {
+                if (DebugLogs) Debug.Log($"Not enough money! Need {stats._spawnCost}, have {Money.Instance.CurrentMoney}");
+                return null;
+            }
 
-        if(!SpawnForFree) 
-        {
             Money.Instance.spendMoney(stats._spawnCost);
         }
 
         GameObject spawnedUnit = SpawnCPU(stats);
         
-        if(DebugLogs) Debug.Log($"Player spawned {stats.name} (Cost: {stats._spawnCost})");
+        if(DebugLogs) Debug.Log($"Spawned {stats.name})");
         
         return spawnedUnit;
     }
@@ -174,8 +164,8 @@ public class SpawnObjects : MonoBehaviour
 
         return spawnedPlayer;
     }
-    #endregion
-// Spawn a CPU unit (called by AI and Player)
+
+    // Spawn a CPU unit (called by AI and Player)
     public GameObject SpawnCPU(ScriptableStats stats) 
     {
         if (!spawningEnabled)
@@ -222,7 +212,7 @@ public class SpawnObjects : MonoBehaviour
         onSpawn?.Invoke(spawnedUnit);
 
         if (DebugLogs) Debug.Log($"Spawned {unitTag} on layer: {LayerMask.LayerToName(spawnedUnit.layer)}");
-        UnitTracker.Instance.AddUnit(spawnedUnit);
+        if (UnitTracker.Instance != null) UnitTracker.Instance.AddUnit(spawnedUnit);
 
         return spawnedUnit;
     }
