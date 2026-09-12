@@ -67,7 +67,7 @@ public class SpawnSequenceAction : AIAction
                 continue;
             }
 
-            GameObject spawned = SpawnObjects.EnemyInstance.Spawn(step.unitToSpawn);
+            GameObject spawned = SpawnObjects.EnemyInstance.Spawn(step.unitToSpawn, true);
 
             if (spawned != null && parentLoop.showDebugLogs)
                 Debug.Log($"[AI]   ✓ Spawned {step.unitToSpawn.name}");
