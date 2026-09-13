@@ -13,10 +13,12 @@ public class SwitchLanes : MonoBehaviour
     // List to track characters in the collider
     private List<GameObject> charactersInRange = new List<GameObject>();
 
-    // Lane layer names now live in UnitTracker (UnitTracker.LaneLayerNames) so this
-    // script and UnitTracker's lane cache can never drift out of sync on naming/casing.
-    // Order: Allies/Top, Allies/Mid, Allies/Bot, Enemy/Top, Enemy/Mid, Enemy/Bot,
-    //        Player/Top, Player/Mid, Player/Bot  (offsets 0, 3, 6 below)
+    static readonly string[] LaneLayerNames = new string[]
+    {
+        "Allies/TopLane", "Allies/MidLane", "Allies/BotLane",
+        "Enemy/TopLane",  "Enemy/MidLane",  "Enemy/BotLane",
+        "Player/TopLane", "Player/MidLane", "Player/BotLane",
+    };
 
     void Awake()
     {
@@ -37,7 +39,6 @@ public class SwitchLanes : MonoBehaviour
             return;
         }
 
-        // Cycle through lanes
         if (currentLayer >= Groundlevels.Length - 1)
         {
             currentLayer = 0;
@@ -49,13 +50,11 @@ public class SwitchLanes : MonoBehaviour
 
         if (DebugLogs) Debug.Log($"Lane switched to: {currentLayer}");
 
-        // Update arrow sprites
         for (int i = 0; i < ArrowSprites.Length; i++)
         {
             ArrowSprites[i].SetActive(i == currentLayer);
         }
 
-        // Update all characters currently in the collider
         UpdateAllCharacterLayers();
 
         if (DebugLogs) Debug.Log($"currentLayer: {currentLayer}, Characters in range: {charactersInRange.Count}");
@@ -95,27 +94,15 @@ public class SwitchLanes : MonoBehaviour
 
         int targetIndex = offset + currentLayer;
 
-        int newLayer = LayerMask.NameToLayer(UnitTracker.LaneLayerNames[targetIndex]);
+        int newLayer = LayerMask.NameToLayer(LaneLayerNames[targetIndex]);
         if (newLayer == -1)
         {
-            Debug.LogError($"Layer '{UnitTracker.LaneLayerNames[targetIndex]}' not found! Check Project Settings > Tags and Layers.");
+            Debug.LogError($"Layer '{LaneLayerNames[targetIndex]}' not found! Check Project Settings > Tags and Layers.");
             return;
         }
 
-        if (DebugLogs) Debug.Log($"Setting {character.name} to {UnitTracker.LaneLayerNames[targetIndex]}");
+        if (DebugLogs) Debug.Log($"Setting {character.name} to {LaneLayerNames[targetIndex]}");
 
-        // Tell UnitTracker to update its cache BEFORE changing the actual layer —
-        // it reads character.layer to find the old lane list to remove from.
-        if (UnitTracker.Instance != null)
-        {
-            UnitTracker.Instance.UpdateUnitLane(character, targetIndex);
-        }
-        else
-        {
-            if (DebugLogs) Debug.Log("SwitchLanes: UnitTracker.Instance is null, lane cache will not be updated.");
-        }
-
-        // SwitchLanes owns the actual Unity layer assignment; UnitTracker is pure storage.
         character.layer = newLayer;
     }
 

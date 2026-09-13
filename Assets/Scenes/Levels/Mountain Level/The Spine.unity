@@ -119,6 +119,33 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &458917773 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5902827270910108642, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+  m_PrefabInstance: {fileID: 9083601090002705357}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!1 &1885368790 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1531360414695026343, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+  m_PrefabInstance: {fileID: 9083601090002705357}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1973639464 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2690052203594713251, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+  m_PrefabInstance: {fileID: 9083601090002705357}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &9083601090002705357
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -131,10 +158,34 @@ PrefabInstance:
       propertyPath: m_Creator
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 161310575124180555, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: showDebugLogs
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 327894813355667236, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
       propertyPath: m_Creator
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 820801512746583568, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 230
+      objectReference: {fileID: 0}
+    - target: {fileID: 820801512746583568, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1828248988946488465, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: DebugLogs
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4011345926460603467, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: moneyText
+      value: 
+      objectReference: {fileID: 1973639464}
+    - target: {fileID: 4011345926460603467, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: PriceToUbgradeUGUI
+      value: 
+      objectReference: {fileID: 458917773}
     - target: {fileID: 4406063075839468471, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
       propertyPath: m_Name
       value: The Spine
@@ -207,6 +258,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7815572636353194439, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: DebugLogs
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7815572636353194439, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: startingPlayer
+      value: 
+      objectReference: {fileID: 1885368790}
     - target: {fileID: 9088657057911931762, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
       propertyPath: 'CostToUpgradeMaxMoneyPercent.Array.data[1]'
       value: 0.742857

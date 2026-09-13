@@ -73,7 +73,6 @@ public class DamageHandler : MonoBehaviour
             stats.OnWitFlagDeath?.Invoke(stats.LastHitBy.IsEnemy);
 
         TriggerKnockback();
-        UnitTracker.Instance.RemoveUnit(this.gameObject);
         stats.OnDeath?.Invoke();
     }
 

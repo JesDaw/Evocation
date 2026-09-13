@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxTimeRemaining: 600
   RemainingTimeSeconds: 0
+  ElapsedTimeSeconds: 0
   timerText: {fileID: 0}
   _TimeHitZero:
     m_PersistentCalls:
@@ -99,6 +100,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8626528532055534513}
   - component: {fileID: 4143522342670515030}
+  - component: {fileID: 8073532683693704303}
   m_Layer: 0
   m_Name: MoneyManager
   m_TagString: Untagged
@@ -134,9 +136,53 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moneyText: {fileID: 0}
-  aIMoneyManager: {fileID: 0}
+  InitialMoneyGainPerSec: 1
+  StartingMoneyPercentOfMax: 0
   CurrentMoney: 0
-  MoneyGainPerSec: 1
+  CurrentMaxMoneyIndex: 0
+  MaxMoney: c8000000900100005802000020030000e8030000
+  CostToUpgradeMaxMoneyPercent:
+  - 0.75
+  - 0.74285716
+  - 0.76
+  - 0.861
+  - 0.75
+  PriceToUbgradeUGUI: {fileID: 0}
+  MoneyUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+  IsAI: 0
+  DebugLogs: 0
+--- !u!114 &8073532683693704303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1875690162093135518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58afb52a71763d340a488dd99b4f557a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moneyText: {fileID: 0}
+  InitialMoneyGainPerSec: 4
+  StartingMoneyPercentOfMax: 0.5
+  CurrentMoney: 0
+  CurrentMaxMoneyIndex: 0
+  MaxMoney: 64000000af000000fa0000004501000090010000
+  CostToUpgradeMaxMoneyPercent:
+  - 0.75
+  - 0.742857
+  - 0.86
+  - 0.738
+  - 0
+  PriceToUbgradeUGUI: {fileID: 0}
+  MoneyUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+  IsAI: 1
+  DebugLogs: 0
 --- !u!1 &7882854399823812923
 GameObject:
   m_ObjectHideFlags: 0

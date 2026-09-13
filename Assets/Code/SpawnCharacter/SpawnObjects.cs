@@ -102,8 +102,15 @@ public class SpawnObjects : MonoBehaviour
                 if (DebugLogs) Debug.Log($"Not enough money! Need {stats._spawnCost}, have {Money.Instance.CurrentMoney}");
                 return null;
             }
+            if (this == EnemyInstance)
+            {
+                Money.AIInstance.spendMoney(stats._spawnCost);
+            }
+            else 
+            {
+                Money.Instance.spendMoney(stats._spawnCost);
+            }
 
-            Money.Instance.spendMoney(stats._spawnCost);
         }
 
         GameObject spawnedUnit = SpawnCPU(stats);
@@ -212,7 +219,6 @@ public class SpawnObjects : MonoBehaviour
         onSpawn?.Invoke(spawnedUnit);
 
         if (DebugLogs) Debug.Log($"Spawned {unitTag} on layer: {LayerMask.LayerToName(spawnedUnit.layer)}");
-        if (UnitTracker.Instance != null) UnitTracker.Instance.AddUnit(spawnedUnit);
 
         return spawnedUnit;
     }
