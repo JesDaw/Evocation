@@ -91,23 +91,25 @@ public class SpawnObjects : MonoBehaviour
 
         if (!SpawnForFree)
         {
-            if (Money.Instance == null || stats == null)
+            if (Money.Instance == null || Money.AIInstance == null|| stats == null)
             {
                 Debug.LogWarning("Missing references for player spawn!");
                 return null;
             }
+           
 
-            if (Money.Instance.CurrentMoney < stats._spawnCost)
-            {
-                if (DebugLogs) Debug.Log($"Not enough money! Need {stats._spawnCost}, have {Money.Instance.CurrentMoney}");
-                return null;
-            }
             if (this == EnemyInstance)
             {
+                if (Money.AIInstance.CurrentMoney < stats._spawnCost) return null;
                 Money.AIInstance.spendMoney(stats._spawnCost);
             }
             else 
             {
+                if (Money.Instance.CurrentMoney < stats._spawnCost)
+                {
+                    if (DebugLogs) Debug.Log($"Not enough money! Need {stats._spawnCost}, have {Money.Instance.CurrentMoney}");
+                    return null;
+                }
                 Money.Instance.spendMoney(stats._spawnCost);
             }
 

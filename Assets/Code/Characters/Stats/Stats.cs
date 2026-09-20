@@ -160,8 +160,16 @@ public class Stats : MonoBehaviour, IDamageable
         _ActionCooldownTimers = new List<float>(new float[_CombatActions.Count]);
         _CastSpeedMultiplier = 1f;
 
-        _IsAOE = false;
-        _MaxAOETargets = 5;
+        // FIX: these were hardcoded (_IsAOE always false, _MaxAOETargets always 5)
+        // regardless of what the character's combatActions actually say — meaning
+        // ExpectedOutcomeCalculator's AOE-vs-normal bucketing was silently broken
+        // for every unit. Now derived from the actual primary offensive action.
+        var primaryAction = PowerMath.GetPrimaryOffensiveAction(_CombatActions);
+        _IsAOE = PowerMath.IsAOE(_CombatActions);
+        _MaxAOETargets = (primaryAction != null && primaryAction.maxTargets > 0)
+            ? primaryAction.maxTargets
+            : int.MaxValue; // unlimited, per the maxTargets <= 0 convention in CombatLogic
+
         _EffectsToApply = new List<StatusEffect>();
         _IsProjectile = false;
 
@@ -302,4 +310,3 @@ public class StaticEffectSnapshot
     public float castSpeedMultiplier;
     public int stackCount;
 }
-

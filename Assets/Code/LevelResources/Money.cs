@@ -7,13 +7,14 @@ public class Money : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI moneyText;
     [SerializeField] float InitialMoneyGainPerSec = 1;
-    float MoneyGainPerSec = 1;
+    [HideInInspector] public float MoneyGainPerSec = 1;
     bool _money_is_active = false;
     [SerializeField] [Range(0,1)]float StartingMoneyPercentOfMax = 0;
     [HideInInspector] public int CurrentMoney = 0;
     [HideInInspector] public int CurrentMaxMoneyIndex = 0;
     [SerializeField] int[] MaxMoney = {200, 400, 600, 800, 1000};
     [SerializeField] float[] CostToUpgradeMaxMoneyPercent = {.75f, .7428571429f, .76f, .861f, .75f};
+    [HideInInspector] public float NextMoneyUpgradePrice;
     [SerializeField] TextMeshProUGUI PriceToUbgradeUGUI;
     public UnityEvent MoneyUpdated;
     [SerializeField] bool IsAI;
@@ -66,8 +67,9 @@ public class Money : MonoBehaviour
     {
         StartCoroutine(moneyCount());
         if (!IsAI) UpdateMoneyDesplay();
-        if (!IsAI) PriceToUbgradeUGUI.text = (MaxMoney[CurrentMaxMoneyIndex]*CostToUpgradeMaxMoneyPercent[CurrentMaxMoneyIndex]).ToString("0");
-        if (DebugLogs) Debug.Log($"desplaying {(MaxMoney[CurrentMaxMoneyIndex]*CostToUpgradeMaxMoneyPercent[CurrentMaxMoneyIndex]).ToString("0")} as upgrade price");
+        NextMoneyUpgradePrice = MaxMoney[CurrentMaxMoneyIndex] * CostToUpgradeMaxMoneyPercent[CurrentMaxMoneyIndex];
+        if (!IsAI) PriceToUbgradeUGUI.text = NextMoneyUpgradePrice.ToString("0");
+        if (DebugLogs) Debug.Log($"desplaying {NextMoneyUpgradePrice.ToString("0")} as upgrade price");
 
     }
 
@@ -108,18 +110,25 @@ public class Money : MonoBehaviour
     {
         CurrentMoney -= amount;
         MoneyUpdate();
+        if(DebugLogs) Debug.Log($"Money spent. Current money = {CurrentMoney}");
     }
 
     public void UpgradeMaxMoney()
     {
-        if(MaxMoney.Length - 1 > CurrentMaxMoneyIndex && CurrentMoney >= MaxMoney[CurrentMaxMoneyIndex] * CostToUpgradeMaxMoneyPercent[CurrentMaxMoneyIndex])
+        if(CanUpGradeMoney())
         {
-            spendMoney(Mathf.FloorToInt(MaxMoney[CurrentMaxMoneyIndex] * CostToUpgradeMaxMoneyPercent[CurrentMaxMoneyIndex]));
+            spendMoney(Mathf.FloorToInt(NextMoneyUpgradePrice));
             CurrentMaxMoneyIndex += 1;
-            if (!IsAI) PriceToUbgradeUGUI.text = (MaxMoney[CurrentMaxMoneyIndex]*CostToUpgradeMaxMoneyPercent[CurrentMaxMoneyIndex]).ToString("0");
+            NextMoneyUpgradePrice = MaxMoney[CurrentMaxMoneyIndex] * CostToUpgradeMaxMoneyPercent[CurrentMaxMoneyIndex];
+            if (!IsAI) PriceToUbgradeUGUI.text = NextMoneyUpgradePrice.ToString("0");
             UpdateMoneyGen();
             //effects;
         }
+    }
+
+    public bool CanUpGradeMoney()
+    {
+        return MaxMoney.Length - 1 > CurrentMaxMoneyIndex && CurrentMoney >= NextMoneyUpgradePrice;
     }
 
     public void UpdateMoneyGen() 

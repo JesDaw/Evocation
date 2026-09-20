@@ -703,7 +703,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 149075801568224723}
-  - component: {fileID: 2763773276187486593}
+  - component: {fileID: 7511290908803611165}
+  - component: {fileID: 7897544504558418868}
   m_Layer: 9
   m_Name: AISystemControler
   m_TagString: Untagged
@@ -727,7 +728,7 @@ Transform:
   - {fileID: 5212793435667542896}
   m_Father: {fileID: 49987513823387449}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2763773276187486593
+--- !u!114 &7511290908803611165
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -739,9 +740,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97b0b79e7de1348e4b04a5cb15412e72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::AILevelHarness
-  aiClan: {fileID: 11400000, guid: d3689fd21870d4ffab7bf3bf43ff7b47, type: 2}
+  aiClan: {fileID: 0}
   tickInterval: 0.5
+  maxThreatLevel: 100
+  aiSpawnZone: {fileID: 0}
   showDebugLogs: 0
+--- !u!114 &7897544504558418868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7271000749930557400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58afb52a71763d340a488dd99b4f557a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moneyText: {fileID: 0}
+  InitialMoneyGainPerSec: 6
+  MoneyGainPerSec: 1
+  StartingMoneyPercentOfMax: 0.5
+  CurrentMoney: 0
+  CurrentMaxMoneyIndex: 0
+  MaxMoney: 64000000af000000fa0000004501000090010000
+  CostToUpgradeMaxMoneyPercent:
+  - 0.75
+  - 0.742857
+  - 0.86
+  - 0.738
+  - 0
+  NextMoneyUpgradePrice: 0
+  PriceToUbgradeUGUI: {fileID: 0}
+  MoneyUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+  IsAI: 1
+  DebugLogs: 1
 --- !u!1 &7538470120974499551
 GameObject:
   m_ObjectHideFlags: 0

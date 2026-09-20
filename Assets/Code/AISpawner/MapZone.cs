@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MapZone : MonoBehaviour
@@ -8,10 +9,11 @@ public class MapZone : MonoBehaviour
     [HideInInspector] public List<GameObject> EnemyUnits = new List<GameObject>();
     [HideInInspector] public List<GameObject> PlayerUnits = new List<GameObject>();
     [HideInInspector] public List<GameObject> AllyUnits = new List<GameObject>();
-
     float enemyPower = 0f;
     float allyPower = 0f; 
     Dictionary<GameObject, float> unitPower = new Dictionary<GameObject, float>();
+    [SerializeField] ResourceSpawner[] resourceSpawners;
+    [HideInInspector] public float totalAIIncentive = 0; 
 
     Collider2D zoneCollider;
     Vector3 Center => zoneCollider != null ? zoneCollider.bounds.center : transform.position;
@@ -27,11 +29,12 @@ public class MapZone : MonoBehaviour
         {
             AddCharacterToList(startingPlayer);
         }
+        foreach (var spawner in resourceSpawners) totalAIIncentive += spawner.AIWeight;
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!collision.CompareTag("Allies") || !collision.CompareTag("Player") || !collision.CompareTag("Enemy")) return;
+        if (!collision.CompareTag("Allies") && !collision.CompareTag("Player") && !collision.CompareTag("Enemy")) return;
         AddCharacterToList(collision.gameObject);
     }
 
@@ -59,6 +62,7 @@ public class MapZone : MonoBehaviour
             enemyPower += power;
             if (DebugLogs) Debug.Log($"Adding player to enemy list. EnemyPower = {enemyPower}");
         }
+        if (DebugLogs) Debug.Log($"Ally power - Enemy power = {allyPower - enemyPower}");
     }
 
     void OnTriggerExit2D(Collider2D collision)
@@ -81,9 +85,16 @@ public class MapZone : MonoBehaviour
         }
     }
 
-    public float ExpectedOutcome()
+    public float ExpectedOutcome(ScriptableStats extraCharacter = null, bool useLaneSwitchingIncentives = false)
     {
-        return enemyPower - allyPower;
+        List<Stats> enemyTeam = EnemyUnits.Select(u => u.GetComponent<Stats>()).ToList();
+        List<Stats> playerTeam = PlayerUnits.Select(u => u.GetComponent<Stats>()).ToList();
+        playerTeam.AddRange(AllyUnits.Select(u => u.GetComponent<Stats>()));
+        
+        float result = ExpectedOutcomeCalculator.CalculateExpectedOutcome(enemyTeam, playerTeam, extraCharacter);
+        if (useLaneSwitchingIncentives) result *= totalAIIncentive;
+        return result;
+        
     }
 
     public float CenterOfPower()

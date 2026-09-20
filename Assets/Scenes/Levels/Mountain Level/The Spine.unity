@@ -130,6 +130,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!114 &1375454440 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7815572636353194439, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+  m_PrefabInstance: {fileID: 9083601090002705357}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01388d80dde6442ac99d1ff509c5e2cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::MapZone
 --- !u!1 &1885368790 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1531360414695026343, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
@@ -179,6 +190,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4011345926460603467, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: DebugLogs
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4011345926460603467, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
       propertyPath: moneyText
       value: 
       objectReference: {fileID: 1973639464}
@@ -186,9 +201,41 @@ PrefabInstance:
       propertyPath: PriceToUbgradeUGUI
       value: 
       objectReference: {fileID: 458917773}
+    - target: {fileID: 4011345926460603467, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: InitialMoneyGainPerSec
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4011345926460603467, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: StartingMoneyPercentOfMax
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 4406063075839468471, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
       propertyPath: m_Name
       value: The Spine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5331774710036298878, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: DebugLogs
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5501856624589487575, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: aiClan
+      value: 
+      objectReference: {fileID: 11400000, guid: 1ff72ea3d4c3d4a41a68ddba0ef4adf9, type: 2}
+    - target: {fileID: 5501856624589487575, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: aiSpawnZone
+      value: 
+      objectReference: {fileID: 1375454440}
+    - target: {fileID: 5501856624589487575, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: tickInterval
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5501856624589487575, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: showDebugLogs
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5501856624589487575, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: maxThreatLevel
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 6635146756807698879, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
       propertyPath: damageInterval.damageInterval
@@ -260,12 +307,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7815572636353194439, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
       propertyPath: DebugLogs
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7815572636353194439, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
       propertyPath: startingPlayer
       value: 
       objectReference: {fileID: 1885368790}
+    - target: {fileID: 9088657057911931762, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: InitialMoneyGainPerSec
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 9088657057911931762, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
       propertyPath: 'CostToUpgradeMaxMoneyPercent.Array.data[1]'
       value: 0.742857

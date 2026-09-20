@@ -6,21 +6,19 @@ public class MasterBalancingScript : MonoBehaviour
     [Header("1. Clan Roster")]
     public ClanStats[] all_clan_stats;
 
-    [Header("2. Global Power Stats")]
+    [Header("2. Global Power Stats (display only)")]
     public float Global_AvgPower;
-    public float MinPowerOffset; 
+    public int Global_TotalUnitCount;
 
-    [Header("3. Global Stat Averages")]
-    public int   Global_TotalUnitCount;
-    public float Global_AvgHP;
-    public float Global_AvgKB_MaxHealth;
-    public float Global_AvgMoveSpeed;
-    public float Global_AvgKB_Dmg;
-    public float Global_AvgAtk_Dmg;
-    public float Global_AvgEndlag;
-    public float Global_AvgRange;
+    [Header("2b. Calibration")]
+    [Tooltip("Added to every unit's raw simulated power (vs BalancingGrapher.AnchorUnit) so numbers " +
+             "stay positive for cost purposes. Right-click this component and choose 'Recalibrate Min " +
+             "Power Offset' after changing the anchor or adding a new weakest unit — it no longer " +
+             "recomputes every frame, since that was the mechanism causing one unit's stat change to " +
+             "silently re-price every other unit.")]
+    public float MinPowerOffset;
 
-    [Header("4. Character Balancers")]
+    [Header("3. Character Balancers")]
     public CharacterStatBalancer[] all_balancers;
 
     private BalancingGrapher grapher;
@@ -35,31 +33,10 @@ public class MasterBalancingScript : MonoBehaviour
             if (grapher == null) grapher = gameObject.AddComponent<BalancingGrapher>();
         }
 
-        // Pass 1: Compute Raw Stat Averages
-        ComputeGlobalAverages();
+        if (grapher.AnchorUnit == null) return; // nothing to compare against yet — assign one in the Inspector
 
-        // Pass 2: Find the Lowest Raw Power to determine Offset
-        float minPowerFound = 0;
-        
-        if (all_balancers != null)
-        {
-            foreach (var bal in all_balancers)
-            {
-                if (bal?.Stats == null) continue;
-                var s = bal.Stats;
-                float raw = CharacterStatBalancer.CalculatePowerRaw(
-                    s._AttackDamage, s._ExtraEndlag, s._MoveSpeed, s._KnockBackDamage, s._MaxHealth, s._KnockBackMaxHealth, s._HorizontalRange,
-                    grapher.Weight_AttackDamage, grapher.Weight_AttackEndlag, grapher.Weight_MoveSpeed, grapher.Weight_KnockBackDamage, 
-                    grapher.Weight_MaxHealth, grapher.Weight_KnockBackHealth, grapher.Weight_HorizontalRange,
-                    Global_AvgHP, Global_AvgKB_MaxHealth, Global_AvgMoveSpeed, Global_AvgKB_Dmg, Global_AvgAtk_Dmg, Global_AvgEndlag, Global_AvgRange,
-                    grapher.Base_Velocity, grapher.SimulationDistance
-                );
-                if (raw < minPowerFound) minPowerFound = raw;
-            }
-        }
-        MinPowerOffset = Mathf.Abs(minPowerFound) + 1f;
+        var anchor = PowerMath.GetProfile(grapher.AnchorUnit);
 
-        // Pass 3: Final Update with Offset
         float totalPowerSum = 0;
         int activeUnits = 0;
 
@@ -67,17 +44,10 @@ public class MasterBalancingScript : MonoBehaviour
         {
             if (all_clan_stats[i] == null) continue;
 
-            all_clan_stats[i].UpdateAverages(
-                grapher.Weight_AttackDamage, grapher.Weight_AttackEndlag, grapher.Weight_MoveSpeed, grapher.Weight_KnockBackDamage,
-                grapher.Weight_MaxHealth, grapher.Weight_KnockBackHealth, grapher.Weight_HorizontalRange, 1f,
-                Global_AvgHP, Global_AvgKB_MaxHealth, Global_AvgMoveSpeed, Global_AvgKB_Dmg, Global_AvgAtk_Dmg, Global_AvgEndlag, Global_AvgRange,
-                grapher.Base_Velocity, 45f, grapher.SimulationDistance,
-                grapher.Max_MoveSpeed, grapher.Max_Endlag, grapher.Max_Range, grapher.Max_Health, grapher.Max_Damage, grapher.Max_KBDamage, grapher.Max_KBHealth,
-                MinPowerOffset 
-            );
+            all_clan_stats[i].UpdateAverages(grapher, anchor, MinPowerOffset);
 
             totalPowerSum += all_clan_stats[i].TotalLevel;
-            activeUnits++;
+            activeUnits += all_clan_stats[i].all_stats_scripts?.Length ?? 0;
         }
 
         if (all_balancers != null)
@@ -90,49 +60,48 @@ public class MasterBalancingScript : MonoBehaviour
             }
         }
 
+        Global_TotalUnitCount = activeUnits;
         Global_AvgPower = activeUnits > 0 ? totalPowerSum / activeUnits : 0;
         SyncDisplayComponents();
         UpdateLevelDisplays();
     }
 
-    void ComputeGlobalAverages()
+    // Scans the FULL roster (all_clan_stats + all_balancers) — previously this
+    // only scanned all_balancers, so the offset was calibrated off whichever
+    // few units happened to have a live CharacterStatBalancer in the scene,
+    // then silently applied to every unit in every clan.
+    [ContextMenu("Recalibrate Min Power Offset")]
+    public void RecalibrateOffset()
     {
-        float tHP = 0, tKBH = 0, tMove = 0, tKBD = 0, tAD = 0, tEnd = 0, tRange = 0;
-        int count = 0;
+        if (grapher == null) grapher = GetComponent<BalancingGrapher>();
+        if (grapher == null || grapher.AnchorUnit == null) return;
 
-        foreach (var clan in all_clan_stats)
+        var anchor = PowerMath.GetProfile(grapher.AnchorUnit);
+        float minPowerFound = 0f;
+
+        void Check(ScriptableStats s)
         {
-            if (clan?.all_stats_scripts == null) continue;
-            foreach (var cd in clan.all_stats_scripts)
-            {
-                if (cd == null || cd.scriptableStats == null) continue;
-                var s = cd.scriptableStats;
-                tHP += s._MaxHealth; tKBH += s._KnockBackMaxHealth; tMove += s._MoveSpeed;
-                tKBD += s._KnockBackDamage; tAD += s._AttackDamage; tEnd += s._ActionCooldown;
-                tRange += s._HorizontalRange;
-                count++;
-            }
+            var result = CharacterStatBalancer.CalculatePower(s, anchor,
+                grapher.Weight_AttackDamage, grapher.Weight_AttackEndlag, grapher.Weight_MoveSpeed, grapher.Weight_KnockBackDamage,
+                grapher.Weight_MaxHealth, grapher.Weight_KnockBackHealth, grapher.Weight_HorizontalRange, grapher.Weight_AOE,
+                grapher.Base_Velocity, grapher.SimulationDistance, 0f);
+            if (result.Power < minPowerFound) minPowerFound = result.Power;
         }
+
+        if (all_clan_stats != null)
+            foreach (var clan in all_clan_stats)
+            {
+                if (clan?.all_stats_scripts == null) continue;
+                foreach (var cd in clan.all_stats_scripts)
+                    if (cd?.scriptableStats != null) Check(cd.scriptableStats);
+            }
 
         if (all_balancers != null)
-        {
             foreach (var bal in all_balancers)
-            {
-                if (bal?.Stats == null) continue;
-                var s = bal.Stats;
-                tHP += s._MaxHealth; tKBH += s._KnockBackMaxHealth; tMove += s._MoveSpeed;
-                tKBD += s._KnockBackDamage; tAD += s._AttackDamage; tEnd += s._ActionCooldown;
-                tRange += s._HorizontalRange;
-                count++;
-            }
-        }
+                if (bal?.Stats != null) Check(bal.Stats);
 
-        if (count == 0) return;
-        Global_TotalUnitCount = count;
-        Global_AvgHP = tHP / count; Global_AvgKB_MaxHealth = tKBH / count;
-        Global_AvgMoveSpeed = tMove / count; Global_AvgKB_Dmg = tKBD / count;
-        Global_AvgAtk_Dmg = tAD / count; Global_AvgEndlag = tEnd / count;
-        Global_AvgRange = tRange / count;
+        MinPowerOffset = Mathf.Abs(minPowerFound) + 1f;
+        Debug.Log($"[MasterBalancingScript] Recalibrated MinPowerOffset = {MinPowerOffset:F2}");
     }
 
     void SyncDisplayComponents()

@@ -5,6 +5,7 @@ public class ResourceOrbBuilding : MonoBehaviour
 {
     [SerializeField] ResourceSpawner[] resourceSpawners;
     [SerializeField] ResourceChange[] resourceChange;
+    public float AIWeight;
     
  
     public void ApplyEffect()

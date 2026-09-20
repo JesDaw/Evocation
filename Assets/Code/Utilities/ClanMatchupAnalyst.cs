@@ -1,5 +1,12 @@
 using UnityEngine;
 
+// Intentionally different from the anchor-based cost system: this compares
+// ClanA's actual roster against ClanB's actual roster (and vice versa) for
+// matchup/RPS exploration, not for pricing. Using each clan's own live
+// average here is correct for "does clan A beat clan B on average" — it's
+// only the cost-calibration system (MasterBalancingScript/ClanStats) that
+// needed a fixed reference instead of a moving one. Flag if you'd rather
+// this also use a fixed anchor for some other reason.
 [ExecuteInEditMode]
 public class ClanMatchupAnalyst : MonoBehaviour
 {
@@ -14,8 +21,10 @@ public class ClanMatchupAnalyst : MonoBehaviour
     public float ClanB_Advantage;
     [TextArea(3, 5)] public string Analysis_B;
 
-    [Header("Global Correction")]
-    public float LocalMinOffset; // The shift applied to these specific results
+    [Header("Calibration")]
+    [Tooltip("Right-click this component and choose 'Recalibrate Local Offset' after changing either " +
+             "clan's roster — no longer recomputed every frame, same reasoning as MasterBalancingScript.")]
+    public float LocalMinOffset;
 
     [SerializeField] BalancingGrapher grapher;
 
@@ -23,73 +32,74 @@ public class ClanMatchupAnalyst : MonoBehaviour
     {
         if (ClanA == null || ClanB == null) return;
         if (grapher == null) grapher = GetComponent<BalancingGrapher>();
+        if (grapher == null) return;
 
-        // 1. Get Clan B's Averages to test Clan A against
-        float bHP = ClanB.AvgHP;
-        float bKBH = ClanB.AvgKB_HP;
-        float bMove = ClanB.AvgMove;
-        float bKBD = ClanB.AvgKB_Dmg;
-        float bAtk = ClanB.AvgAtk_Dmg;
-        float bEnd = ClanB.AvgEndlag;
-        float bRng = ClanB.AvgRange;
+        var avgB = ProfileOf(ClanB);
+        var avgA = ProfileOf(ClanA);
 
-        // 2. Get Clan A's Averages to test Clan B against
-        float aHP = ClanA.AvgHP;
-        float aKBH = ClanA.AvgKB_HP;
-        float aMove = ClanA.AvgMove;
-        float aKBD = ClanA.AvgKB_Dmg;
-        float aAtk = ClanA.AvgAtk_Dmg;
-        float aEnd = ClanA.AvgEndlag;
-        float aRng = ClanA.AvgRange;
+        float sumA = SumPower(ClanA, avgB);
+        float sumB = SumPower(ClanB, avgA);
 
-        float minPowerFound = 0;
-
-        // 3. Simulate Clan A units against Clan B averages (Pass 1: Find Min)
-        float rawPowerA = 0;
-        foreach(var cd in ClanA.all_stats_scripts)
-        {
-            if (cd == null) continue;
-            var s = cd.scriptableStats;
-            float p = CharacterStatBalancer.CalculatePowerRaw(
-                s._AttackDamage, s._ExtraEndlag, s._MoveSpeed, s._KnockBackDamage, s._MaxHealth, s._KnockBackMaxHealth, s._HorizontalRange,
-                grapher.Weight_AttackDamage, grapher.Weight_AttackEndlag, grapher.Weight_MoveSpeed, grapher.Weight_KnockBackDamage, 
-                grapher.Weight_MaxHealth, grapher.Weight_KnockBackHealth, grapher.Weight_HorizontalRange,
-                bHP, bKBH, bMove, bKBD, bAtk, bEnd, bRng,
-                grapher.Base_Velocity, grapher.SimulationDistance
-            );
-            rawPowerA += p;
-            if (p < minPowerFound) minPowerFound = p;
-        }
-
-        // 4. Simulate Clan B units against Clan A averages (Pass 1: Find Min)
-        float rawPowerB = 0;
-        foreach(var cd in ClanB.all_stats_scripts)
-        {
-            if (cd == null) continue;
-            var s = cd.scriptableStats;
-            float p = CharacterStatBalancer.CalculatePowerRaw(
-                s._AttackDamage, s._ExtraEndlag, s._MoveSpeed, s._KnockBackDamage, s._MaxHealth, s._KnockBackMaxHealth, s._HorizontalRange,
-                grapher.Weight_AttackDamage, grapher.Weight_AttackEndlag, grapher.Weight_MoveSpeed, grapher.Weight_KnockBackDamage, 
-                grapher.Weight_MaxHealth, grapher.Weight_KnockBackHealth, grapher.Weight_HorizontalRange,
-                aHP, aKBH, aMove, aKBD, aAtk, aEnd, aRng,
-                grapher.Base_Velocity, grapher.SimulationDistance
-            );
-            rawPowerB += p;
-            if (p < minPowerFound) minPowerFound = p;
-        }
-
-        // Calculate the offset for this specific matchup
-        LocalMinOffset = Mathf.Abs(minPowerFound) + 1f;
-
-        // 5. Calculate Final Averages with the offset applied
-        // We add the offset to the total sum * unit count to apply it to every unit
         float countA = ClanA.all_stats_scripts.Length;
         float countB = ClanB.all_stats_scripts.Length;
 
-        ClanA_Advantage = (rawPowerA + (LocalMinOffset * countA)) / countA;
-        ClanB_Advantage = (rawPowerB + (LocalMinOffset * countB)) / countB;
+        ClanA_Advantage = (sumA + (LocalMinOffset * countA)) / countA;
+        ClanB_Advantage = (sumB + (LocalMinOffset * countB)) / countB;
 
         Analysis_A = $"{ClanA.ClanTheme} vs {ClanB.ClanTheme} local power: {ClanA_Advantage:F2} (Offset: +{LocalMinOffset:F1})";
         Analysis_B = $"{ClanB.ClanTheme} vs {ClanA.ClanTheme} local power: {ClanB_Advantage:F2} (Offset: +{LocalMinOffset:F1})";
+    }
+
+    PowerMath.UnitProfile ProfileOf(ClanStats c) => new PowerMath.UnitProfile
+    {
+        Atk = c.AvgAtk_Dmg, Move = c.AvgMove, KBD = c.AvgKB_Dmg,
+        HP = c.AvgHP, KBH = c.AvgKB_HP, Range = c.AvgRange, Cooldown = c.AvgCooldown,
+        MaxTargets = 1 // a clan average doesn't have a meaningful "average AOE cap" — treated as single-target
+    };
+
+    float SumPower(ClanStats clan, PowerMath.UnitProfile opponentAvg)
+    {
+        float sum = 0f;
+        foreach (var cd in clan.all_stats_scripts)
+        {
+            if (cd?.scriptableStats == null) continue;
+            var result = CharacterStatBalancer.CalculatePower(cd.scriptableStats, opponentAvg,
+                grapher.Weight_AttackDamage, grapher.Weight_AttackEndlag, grapher.Weight_MoveSpeed, grapher.Weight_KnockBackDamage,
+                grapher.Weight_MaxHealth, grapher.Weight_KnockBackHealth, grapher.Weight_HorizontalRange, grapher.Weight_AOE,
+                grapher.Base_Velocity, grapher.SimulationDistance, 0f);
+            sum += result.Power;
+        }
+        return sum;
+    }
+
+    [ContextMenu("Recalibrate Local Offset")]
+    public void RecalibrateOffset()
+    {
+        if (ClanA == null || ClanB == null) return;
+        if (grapher == null) grapher = GetComponent<BalancingGrapher>();
+        if (grapher == null) return;
+
+        var avgB = ProfileOf(ClanB);
+        var avgA = ProfileOf(ClanA);
+
+        float minFound = 0f;
+
+        void CheckAll(ClanStats clan, PowerMath.UnitProfile opponentAvg)
+        {
+            foreach (var cd in clan.all_stats_scripts)
+            {
+                if (cd?.scriptableStats == null) continue;
+                var result = CharacterStatBalancer.CalculatePower(cd.scriptableStats, opponentAvg,
+                    grapher.Weight_AttackDamage, grapher.Weight_AttackEndlag, grapher.Weight_MoveSpeed, grapher.Weight_KnockBackDamage,
+                    grapher.Weight_MaxHealth, grapher.Weight_KnockBackHealth, grapher.Weight_HorizontalRange, grapher.Weight_AOE,
+                    grapher.Base_Velocity, grapher.SimulationDistance, 0f);
+                if (result.Power < minFound) minFound = result.Power;
+            }
+        }
+        CheckAll(ClanA, avgB);
+        CheckAll(ClanB, avgA);
+
+        LocalMinOffset = Mathf.Abs(minFound) + 1f;
+        Debug.Log($"[ClanMatchupAnalyst] Recalibrated LocalMinOffset = {LocalMinOffset:F2}");
     }
 }

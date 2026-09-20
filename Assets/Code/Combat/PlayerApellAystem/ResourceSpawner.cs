@@ -16,6 +16,7 @@ public class ResourceSpawner : MonoBehaviour
     ResourceType originalResourceType;
     [SerializeField] string collectionSound = "spawnTroop";
     [SerializeField] bool DebugLogs;
+    [Range(1,1.5f)] public float AIWeight;
     bool resourceIsCollectable = false;
     bool playerIsInCollectionRange = false;
     float timer = 0;
