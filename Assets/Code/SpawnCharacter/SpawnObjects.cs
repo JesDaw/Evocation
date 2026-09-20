@@ -91,19 +91,28 @@ public class SpawnObjects : MonoBehaviour
 
         if (!SpawnForFree)
         {
-            if (Money.Instance == null || stats == null)
+            if (Money.Instance == null || Money.AIInstance == null|| stats == null)
             {
                 Debug.LogWarning("Missing references for player spawn!");
                 return null;
             }
+           
 
-            if (Money.Instance.CurrentMoney < stats._spawnCost)
+            if (this == EnemyInstance)
             {
-                if (DebugLogs) Debug.Log($"Not enough money! Need {stats._spawnCost}, have {Money.Instance.CurrentMoney}");
-                return null;
+                if (Money.AIInstance.CurrentMoney < stats._spawnCost) return null;
+                Money.AIInstance.spendMoney(stats._spawnCost);
+            }
+            else 
+            {
+                if (Money.Instance.CurrentMoney < stats._spawnCost)
+                {
+                    if (DebugLogs) Debug.Log($"Not enough money! Need {stats._spawnCost}, have {Money.Instance.CurrentMoney}");
+                    return null;
+                }
+                Money.Instance.spendMoney(stats._spawnCost);
             }
 
-            Money.Instance.spendMoney(stats._spawnCost);
         }
 
         GameObject spawnedUnit = SpawnCPU(stats);
@@ -212,7 +221,6 @@ public class SpawnObjects : MonoBehaviour
         onSpawn?.Invoke(spawnedUnit);
 
         if (DebugLogs) Debug.Log($"Spawned {unitTag} on layer: {LayerMask.LayerToName(spawnedUnit.layer)}");
-        if (UnitTracker.Instance != null) UnitTracker.Instance.AddUnit(spawnedUnit);
 
         return spawnedUnit;
     }

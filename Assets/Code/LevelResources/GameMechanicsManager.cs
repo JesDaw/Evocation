@@ -149,14 +149,14 @@ public class GameMechanicsManager : MonoBehaviour
     
     public void SetEnemySpawningActive(bool active)
     {
-        if (SpawnObjects.EnemyInstance == null)
+        if (AILevelHarness.Instance == null)
         {
-            if (showDebugLogs)
-                Debug.LogWarning("[GameMechanicsManager] Enemy spawner not found!");
+            Debug.LogWarning("[GameMechanicsManager] Enemy spawner not found!");
             return;
         }
         
-        SpawnObjects.EnemyInstance.SpawningIsActive = active;
+        if (active) AILevelHarness.Instance.StartAI();
+        else AILevelHarness.Instance.StopAI();
         if (showDebugLogs) 
             Debug.Log($"[GameMechanicsManager] Enemy spawning {(active ? "activated" : "deactivated")}");
     }

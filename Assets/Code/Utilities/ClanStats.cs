@@ -8,18 +8,18 @@ public class ClanStats : ScriptableObject
 
     public CharacterData[] all_stats_scripts;
 
-    [Header("Clan Level Totals")]
+    [Header("Clan Level Totals (LevelBalancerMath system — see chat notes)")]
     public float TotalLevel;
     public float SumAttack;
     public float SumDefense;
     public float SumSpaceControl;
     public float AvgAttackFrequency;
 
-    [Header("Individual Stat Averages")]
+    [Header("Individual Stat Averages (display only — no longer feeds cost calc)")]
     public float AvgMove;
     public float AvgKB_Dmg;
     public float AvgAtk_Dmg;
-    public float AvgEndlag;
+    public float AvgCooldown;
     public float AvgHP;
     public float AvgKB_HP;
     public float AvgRange;
@@ -27,51 +27,46 @@ public class ClanStats : ScriptableObject
     [Header("Value Analysis")]
     public float[] UnitValueDiscrepancies;
 
-    public void UpdateAverages(
-        float wAtk, float wEnd, float wMove, float wKB_Dmg, float wHP, float wKB_HP, float wRange, float wAOE,
-        float avgHP, float avgKB_HP, float avgMove, float avgKB_Dmg,
-        float avgAtk, float avgEndlag, float avgRange,
-        float baseVelocity, float baseAngle,
-        float universalSimDist, 
-        float mMove, float mEnd, float mRange, float mHP, float mAtk, float mKBD, float mKBH,
-        float powerOffset)
+    public void UpdateAverages(BalancingGrapher g, PowerMath.UnitProfile anchor, float powerOffset)
     {
         if (all_stats_scripts == null || all_stats_scripts.Length == 0) return;
 
         float tAttack = 0, tDefense = 0, tSpaceControl = 0, tAttackFreq = 0, tLevel = 0;
-        float tMove = 0, tKBD = 0, tAD = 0, tEnd = 0, tHP = 0, tKBH = 0, tRng = 0;
-        
+        float tMove = 0, tKBD = 0, tAtk = 0, tCooldown = 0, tHP = 0, tKBH = 0, tRng = 0;
+
         UnitValueDiscrepancies = new float[all_stats_scripts.Length];
 
         for (int i = 0; i < all_stats_scripts.Length; i++)
         {
             var cd = all_stats_scripts[i];
-            if (cd == null) continue;
+            if (cd == null || cd.scriptableStats == null) continue;
             var s = cd.scriptableStats;
 
-            float calculatedPower = CharacterStatBalancer.CalculatePower(
-                s, wAtk, wEnd, wMove, wKB_Dmg, wHP, wKB_HP, wRange,
-                avgHP, avgKB_HP, avgMove, avgKB_Dmg, avgAtk, avgEndlag, avgRange,
-                baseVelocity, universalSimDist, powerOffset);
-            
-            s._CalculatedPower = calculatedPower;
-            s._ValueDiscrepancy = calculatedPower - s._spawnCost;
+            var result = CharacterStatBalancer.CalculatePower(s, anchor,
+                g.Weight_AttackDamage, g.Weight_AttackEndlag, g.Weight_MoveSpeed, g.Weight_KnockBackDamage,
+                g.Weight_MaxHealth, g.Weight_KnockBackHealth, g.Weight_HorizontalRange, g.Weight_AOE,
+                g.Base_Velocity, g.SimulationDistance, powerOffset);
 
+            s._CalculatedPower = result.Power;
+            s._ValueDiscrepancy = result.Power - s._spawnCost;
             UnitValueDiscrepancies[i] = s._ValueDiscrepancy;
 
+            // Legacy LevelBalancerMath totals — s.Attack/s.Defense/etc are populated
+            // in a separate pass by MasterBalancingScript.PopulateLevelFields.
             tAttack += s.Attack;
             tDefense += s.Defense;
             tSpaceControl += s.SpaceControl;
             tAttackFreq += s.AttackFrequency;
             tLevel += s.Level_Total;
 
-            tMove += s._MoveSpeed;
-            tKBD  += s._KnockBackDamage;
-            tAD   += s._AttackDamage;
-            tEnd  += s._ActionCooldown;
-            tHP   += s._MaxHealth;
-            tKBH  += s._KnockBackMaxHealth;
-            tRng  += s._HorizontalRange;
+            var profile = PowerMath.GetProfile(s);
+            tMove += profile.Move;
+            tKBD  += profile.KBD;
+            tAtk  += profile.Atk;
+            tCooldown += profile.Cooldown;
+            tHP   += profile.HP;
+            tKBH  += profile.KBH;
+            tRng  += profile.Range;
         }
 
         int count = all_stats_scripts.Length;
@@ -83,8 +78,8 @@ public class ClanStats : ScriptableObject
 
         AvgMove = tMove / count;
         AvgKB_Dmg = tKBD / count;
-        AvgAtk_Dmg = tAD / count;
-        AvgEndlag = tEnd / count;
+        AvgAtk_Dmg = tAtk / count;
+        AvgCooldown = tCooldown / count;
         AvgHP = tHP / count;
         AvgKB_HP = tKBH / count;
         AvgRange = tRng / count;

@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxTimeRemaining: 600
   RemainingTimeSeconds: 0
+  ElapsedTimeSeconds: 0
   timerText: {fileID: 0}
   _TimeHitZero:
     m_PersistentCalls:
@@ -134,9 +135,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moneyText: {fileID: 0}
-  aIMoneyManager: {fileID: 0}
-  CurrentMoney: 0
+  InitialMoneyGainPerSec: 1
   MoneyGainPerSec: 1
+  StartingMoneyPercentOfMax: 0
+  CurrentMoney: 0
+  CurrentMaxMoneyIndex: 0
+  MaxMoney: c8000000900100005802000020030000e8030000
+  CostToUpgradeMaxMoneyPercent:
+  - 0.75
+  - 0.74285716
+  - 0.76
+  - 0.861
+  - 0.75
+  NextMoneyUpgradePrice: 0
+  PriceToUbgradeUGUI: {fileID: 0}
+  MoneyUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+  IsAI: 0
+  DebugLogs: 0
 --- !u!1 &7882854399823812923
 GameObject:
   m_ObjectHideFlags: 0

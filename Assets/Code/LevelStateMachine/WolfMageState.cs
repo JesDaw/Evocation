@@ -61,7 +61,7 @@ public class WolfMageState : LevelState
             }
         }
 
-        AISpawnerController.Instance.SetMoodByName("Phase 2");
+        //AISpawnerController.Instance.SetMoodByName("Phase 2");
         //Debug.Log("Spawning boss");
         SpawnObjects.EnemyInstance.Spawn(BossStats, true);
         

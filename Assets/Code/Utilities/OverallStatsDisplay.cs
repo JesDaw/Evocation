@@ -62,7 +62,7 @@ public class OverallStatsDisplay : MonoBehaviour
         MoveSpeed       = Clan.AvgMove;
         KnockbackDmg    = Clan.AvgKB_Dmg;
         AttackDmg       = Clan.AvgAtk_Dmg;
-        AttackEndlag    = Clan.AvgEndlag;
+        AttackEndlag    = Clan.AvgCooldown;
         MaxHP           = Clan.AvgHP;
         KnockbackHP     = Clan.AvgKB_HP;
         HorizontalRange = Clan.AvgRange;
