@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8895353071518785995}
   - component: {fileID: 1329148231718204338}
   - component: {fileID: 2547321255410244214}
-  - component: {fileID: 7416436087660143904}
+  - component: {fileID: 549284712406724799}
   m_Layer: 0
   m_Name: ResourceBuilding
   m_TagString: Blank
@@ -147,7 +147,7 @@ MonoBehaviour:
   EnemyBuilding: {fileID: 11400000, guid: c21cbf4d40adfb240be6fb5ffdae3ec5, type: 2}
   isAmenity: 1
   DebugLogs: 0
---- !u!114 &7416436087660143904
+--- !u!114 &549284712406724799
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -159,6 +159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9bd868c7c7004aebbd386561c0eda56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::ResourceOrbBuilding
+  AIWeight: 0
   resourceSpawners: []
   resourceChange: []
 --- !u!1 &8079531889648487433
@@ -410,7 +411,7 @@ PrefabInstance:
     - target: {fileID: 4077327004687175018, guid: f18b8ae2771bd4011b72510901c1aadf, type: 3}
       propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 7416436087660143904}
+      objectReference: {fileID: 0}
     - target: {fileID: 4077327004687175018, guid: f18b8ae2771bd4011b72510901c1aadf, type: 3}
       propertyPath: interactAction.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -423,10 +424,6 @@ PrefabInstance:
       propertyPath: endInteractAction.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4077327004687175018, guid: f18b8ae2771bd4011b72510901c1aadf, type: 3}
-      propertyPath: endInteractAction.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 7416436087660143904}
     - target: {fileID: 4077327004687175018, guid: f18b8ae2771bd4011b72510901c1aadf, type: 3}
       propertyPath: endInteractAction.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
