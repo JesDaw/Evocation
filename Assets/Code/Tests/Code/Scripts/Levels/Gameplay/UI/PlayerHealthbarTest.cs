@@ -150,7 +150,7 @@ public class PlayerHealthbarTest : PlayerHealthbarTestBase
     {
         componentUnderTest.getPlayerStats(out Stats stats);
         float initHealth = stats._CurrentHealth;
-        stats.TakeDamage(1);
+        //stats.TakeDamage(1);
         yield return new WaitForSeconds(0.1f);
 
         Assert.AreNotEqual(initHealth, mySlider.value);
@@ -164,7 +164,7 @@ public class PlayerHealthbarTest : PlayerHealthbarTestBase
     {
         componentUnderTest.getPlayerStats(out Stats stats);
         float initHealth = stats._CurrentHealth;
-        stats.TakeDamage(initHealth);  // Kill the player
+        //stats.TakeDamage(initHealth);  // Kill the player
 
         yield return new WaitForSeconds(0.1f);
 

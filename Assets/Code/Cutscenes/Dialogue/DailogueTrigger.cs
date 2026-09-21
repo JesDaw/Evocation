@@ -1,0 +1,48 @@
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class DailogueTrigger : MonoBehaviour // multiple pages
+{
+    public List<Dialogue> Slides = new List<Dialogue>(); 
+    [SerializeField] public DialogueChoice[] EndOfLines;
+    public UltEvents.UltEvent DefultEvent;
+
+    void Start()
+    {
+        /*foreach (var slide in Slides)
+        {
+            foreach (var line in slide.Lines) 
+            {
+                if (line.alternitiveTextBox == null) continue;
+                if (!string.IsNullOrEmpty(line.alternitiveTextBox.text)) line.Line = line.alternitiveTextBox.text; // breaks if there are multiple lines with same text box
+                line.alternitiveTextBox.text = "";
+            }
+        } */ 
+    }
+    public void TriggerDailogue(InputAction.CallbackContext context)
+    {
+        if (!context.started || DialogueManager.Instance.DialogueActive) return;
+        TriggerDailogue();
+    }
+    
+    public void TriggerDailogue()
+    {
+        DialogueManager.Instance.StartDialogue(Slides, this);
+    }
+    public void EndDialogueDefultEvent() 
+    { 
+        DefultEvent?.Invoke();
+    }
+    
+    public void EndDialogue(int eventToCall) 
+    { 
+        EndOfLines[eventToCall].ultEvent?.Invoke();
+    }
+}
+[System.Serializable]
+public class DialogueChoice
+{
+    public string Text = "null";
+    public UltEvents.UltEvent ultEvent;
+}

@@ -1,0 +1,266 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class PlayerStateMachine : MonoBehaviour
+{
+    [SerializeField] public Stats _playerStats;
+    [SerializeField] Rigidbody2D _rb;
+    [Header("Animations")]
+    [SerializeField] AnimationEventsController _animatorController;
+    [SerializeField] public Animator _animator;
+    [Header("Debug")]
+    public bool DebugLogs = false;
+
+    [HideInInspector] public Stats _AttackingStats;
+
+    private bool _isActive = false; //this is what determins which character is controlable 
+    public PlayerBaseState _currentState;
+    PlayerBaseState _pendingResumeState;
+    PlayerStateFactory _states;
+    PlayerCommander _commander;
+    
+    int playerId;
+
+    //==========================================getters and setters=================================================
+    public ScriptableStats ScrStats { get { return _playerStats.scriptableStats; } }
+    public Stats PlayerStats { get { return _playerStats; } }
+    public Animator Animator { get { return _animator; } }
+    public AnimationEventsController AnimatorController { get { return _animatorController; } }
+    public PlayerCommander PlayerCommander { get { return _commander; } }
+    public Rigidbody2D Rb { get { return _rb; } }
+   // public int PlayerID { get; set; }
+
+    public bool IsMovementPressed { get { return _commander.IsCmdActive(ContinuousPlayerCommand.Move); } }
+    public float MovementContext
+    {
+        get
+        {
+            PlayerCommandData? data;
+            if (_commander.IsCmdActive(ContinuousPlayerCommand.Move, out data))
+                return data.Value.AsVector2.Value.x;
+            return 0;
+        }
+    }
+    public bool IsAttackPressed { get { return _commander.IsCmdPending(DiscretePlayerCommand.Attack); } }
+    public bool IsClimbing  { get { return _commander.IsCmdActive(ContinuousPlayerCommand.Climb); } }
+    public bool IsKnockedBack { get { return _commander.IsCmdPending(DiscretePlayerCommand.KnockBack); } }
+    public PlayerBaseState CurrentState { get { return _currentState; } set { _currentState = value; } }
+    [HideInInspector] public bool isFacingRight = true;
+
+    void Awake()
+    {
+        _states = new PlayerStateFactory(this);
+        _currentState = _states.Idle();
+        _currentState.EnterState();
+    }
+
+    void Start()
+    {
+        FindFreeCam();
+        InitializePlayerStats();
+
+        if (GlobalInputManager.Instance != null) SubscribeToInputs();
+    }
+
+    void InitializePlayerStats()
+    {
+        if (_playerStats.scriptableStats == null)
+        {
+            Debug.LogWarning("[PlayerStateMachine] No ScriptableStats assigned to player!");
+            return;
+        }
+
+        _playerStats._Enemy = false;
+        _playerStats.SetTag("Player");
+
+        _playerStats.targetTags.Clear();
+        _playerStats.AddTargetTag("Enemy");
+
+        _playerStats.InitializeStats();
+    }
+
+    void OnEnable() { }
+
+    void OnDisable()
+    {
+        UnsubscribeFromInputs();
+    }
+
+    void SubscribeToInputs()
+    {
+        if (GlobalInputManager.Instance == null)
+        {
+            Debug.LogWarning("[PlayerStateMachine] Player can't find the GlobalInputManager");
+            return;
+        }
+
+        var playerActions = GlobalInputManager.Instance.InputActions.Player;
+        playerActions.Move.performed   += OnMove;
+        playerActions.Move.canceled    += OnMove;
+        playerActions.Attack.performed += OnAttack;
+        playerActions.AutoMove.performed += StartAutoMoveToLocation;
+
+        if (DebugLogs) Debug.Log("[PlayerStateMachine] Player subscribed to inputs");
+    }
+
+    void UnsubscribeFromInputs()
+    {
+        if (GlobalInputManager.Instance == null) return;
+
+        var playerActions = GlobalInputManager.Instance.InputActions.Player;
+        playerActions.Move.performed   -= OnMove;
+        playerActions.Move.canceled    -= OnMove;
+        playerActions.Attack.performed -= OnAttack;
+        playerActions.AutoMove.performed -= StartAutoMoveToLocation;
+    }
+
+    public void FindFreeCam()
+    {
+        foreach (var obj in Resources.FindObjectsOfTypeAll<GameObject>())
+        {
+            CameraControlSwitcher ccs = obj.GetComponent<CameraControlSwitcher>();
+            if (ccs != null)
+            {
+                _commander = new PlayerCommander(ccs.FreeCamIsActive);
+                break;
+            }
+        }
+    }
+
+    void Update()
+    {
+
+        _playerStats.TickActionCooldowns(Time.deltaTime);
+        _currentState.UpdateStates();
+    }
+
+    public void UpdateCurrentStateToKnockback()
+    {
+        _pendingResumeState = (_currentState is PlayerAutoMoveState) ? _states.AutoMove() : null;
+
+        _currentState = _states.KnockedBack();
+        _currentState.EnterState();
+    }
+
+    public void SetActive(bool active)
+    {
+        _isActive = active;
+
+        if (active)
+            SyncContinuousInputs();
+        else
+            _commander?.ClearAllCommands();
+    }
+
+    void SyncContinuousInputs()
+    {
+        if (GlobalInputManager.Instance == null || _commander == null) return;
+
+        var playerActions = GlobalInputManager.Instance.InputActions.Player;
+        Vector2 moveValue = playerActions.Move.ReadValue<Vector2>();
+        if (moveValue != Vector2.zero)
+        {
+            _commander.SetActiveCmd(ContinuousPlayerCommand.Move, true, new PlayerCommandData(moveValue));
+            if (DebugLogs) Debug.Log($"[PlayerStateMachine] Synced Move input on activation: {moveValue}");
+        }
+    }
+
+    void replaceAnimation()
+    {
+        Transform _Rig = transform.Find("Appearance")?.Find("Rig");
+        if (_Rig == null || ScrStats._animator == null)
+        {
+            Debug.LogWarning("[PlayerStateMachine] No Player Rig for animation.");
+            return;
+        }
+
+        for (int i = 0; i < ScrStats._Sprites.Length; ++i)
+        {
+            var spriteData = ScrStats._Sprites[i];
+            string rigName = null;
+
+            switch (spriteData.Key)
+            {
+                case animationRigs.animationKey.Idle:      rigName = "IdleRig";      break;
+                case animationRigs.animationKey.Running:   rigName = "RunningRig";   break;
+                case animationRigs.animationKey.Knockback: rigName = "KnockbackRig"; break;
+                case animationRigs.animationKey.Attack:    rigName = "AttackingRig"; break;
+                default: continue;
+            }
+
+            var existing = _Rig.Find(rigName);
+            if (existing != null) Destroy(existing.gameObject);
+
+            spriteData.Rig.transform.position = new Vector3(
+                spriteData.Offset.x,
+                spriteData.Offset.y,
+                spriteData.Rig.transform.position.z);
+
+            spriteData.Rig.transform.rotation = Quaternion.Euler(0, 180, 0);
+
+            GameObject newRig = Instantiate(spriteData.Rig, _Rig);
+            newRig.name = rigName;
+
+            if (rigName != "RunningRig") newRig.SetActive(false);
+        }
+
+        Animator.runtimeAnimatorController = ScrStats._animator;
+    }
+
+    public void StartAutoMoveToLocation(InputAction.CallbackContext context)
+    {
+        if (DebugLogs) Debug.Log($"[PlayerStateMachine] AutoMove received — active:{_isActive}, freecam:{CameraControlSwitcher.Instance.FreeCamIsActive}");
+        if (!_isActive || CameraControlSwitcher.Instance.FreeCamIsActive) return;
+
+        _commander.OnAutoMove(context);
+    }
+
+    public PlayerBaseState ConsumePendingResumeState()
+    {
+        var s = _pendingResumeState;
+        _pendingResumeState = null;
+        return s;
+    }
+
+    
+
+
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        if (DebugLogs) Debug.Log($"[PlayerStateMachine] Move received — active:{_isActive}, freecam:{CameraControlSwitcher.Instance.FreeCamIsActive}");
+        if (!_isActive || CameraControlSwitcher.Instance.FreeCamIsActive) return;
+        _commander.OnMove(context);
+    }
+
+    public void OnAttack(InputAction.CallbackContext context)
+    {
+        if (!_isActive || CameraControlSwitcher.Instance.FreeCamIsActive) return;
+
+        var timers = _playerStats._ActionCooldownTimers;
+        if (timers != null && timers.Count > 0 && timers[0] > 0f) return;
+
+        _commander.OnAttack(context);
+    }
+
+    public void PlayAnimationState(PlayerAnimationDefinition animationDefinition)
+    {
+        if (animationDefinition == null)
+        {
+            Debug.LogWarning($"[PlayerStateMachine] No animation definition found");
+            return;
+        }
+
+        var animState = (PlayerAnimatingState)_states.Animating();
+        animState.QueueAnimation(animationDefinition);
+
+        _currentState = animState;
+        _currentState.EnterState();
+    }
+
+    public void EndCurrentAnimation()
+    {
+        if (_currentState is PlayerAnimatingState animState) animState.RequestEnd();
+    }
+}
