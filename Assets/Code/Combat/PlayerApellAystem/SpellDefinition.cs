@@ -39,15 +39,11 @@ public class SpellDefinition : ScriptableObject
 
     [SerializeField] protected bool DebugLogs = false;
 
-    public virtual IEnumerator RunCastSequence(
-        SpellCaster caster,
-        Vector3 castPosition)
+    public virtual IEnumerator RunCastSequence(SpellCaster caster, Vector3 castPosition)
     {
         FModAudioManager.instance.PlaySoundByName(castSoundName);
 
-        GameObject vfx = spellVFX != null
-            ? Instantiate(spellVFX, castPosition, Quaternion.identity)
-            : null;
+        GameObject vfx = spellVFX != null ? Instantiate(spellVFX, castPosition, Quaternion.identity) : null;
 
         float elapsed = 0f;
 
@@ -57,7 +53,7 @@ public class SpellDefinition : ScriptableObject
             yield return null;
         }
 
-        ResolveHit(caster, castPosition);
+        ApplySpellEffect(caster, castPosition);
 
         while (elapsed < animationDuration)
         {
@@ -65,13 +61,10 @@ public class SpellDefinition : ScriptableObject
             yield return null;
         }
 
-        if (vfx != null)
-            Destroy(vfx);
+        if (vfx != null) Destroy(vfx);
     }
 
-    protected void ResolveHit(
-        SpellCaster caster,
-        Vector3 castPosition)
+    protected void ApplySpellEffect(SpellCaster caster, Vector3 castPosition)
     {
         Stats casterStats = caster.CasterStats;
 
@@ -83,32 +76,20 @@ public class SpellDefinition : ScriptableObject
 
         if (action == null)
         {
-            Debug.LogError(
-                $"[{SpellName}] CombatAction is NULL on the SpellDefinition."
-            );
+            Debug.LogError($"[{SpellName}] CombatAction is NULL on the SpellDefinition." );
             return;
         }
 
         if (castMode == SpellCastMode.SelfCast)
         {
-            CombatLogic.ExecuteActionOnTarget(
-                casterStats,
-                action,
-                casterStats
-            );
+            CombatLogic.ExecuteActionOnTarget(casterStats, action, casterStats);
         }
         else
         {
-            CombatLogic.ExecuteActionAtPosition(
-                casterStats,
-                action,
-                castPosition,
-                Radius
-            );
+            CombatLogic.ExecuteActionAtPosition(casterStats, action, castPosition, Radius);
         }
 
-        if (DebugLogs)
-            Debug.Log($"{SpellName} resolved at {castPosition}");
+        if (DebugLogs) Debug.Log($"{SpellName} resolved at {castPosition}");
 
         OtherEffects();
     }

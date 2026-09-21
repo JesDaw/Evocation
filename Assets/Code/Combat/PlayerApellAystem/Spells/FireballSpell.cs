@@ -72,7 +72,7 @@ public class FireballSpell : SpellDefinition
 
                 if (!hitResolved && elapsed >= hitResolveTime)
                 {
-                    ResolveHit(caster, castPosition);
+                    ApplySpellEffect(caster, castPosition);
                     CameraEffects.Instance.Shake(cameraShakeForce);
                     hitResolved = true;
                 }
@@ -80,7 +80,7 @@ public class FireballSpell : SpellDefinition
                 yield return null;
             }
 
-            if (!hitResolved) ResolveHit(caster, castPosition);
+            if (!hitResolved) ApplySpellEffect(caster, castPosition);
         }
         finally
         {

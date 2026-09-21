@@ -1,14 +1,11 @@
 using UnityEngine;
 
 
-public class ResourceOrbBuilding : MonoBehaviour
-{
+public class ResourceOrbBuilding : MapStructure
+{ 
     [SerializeField] ResourceSpawner[] resourceSpawners;
-    [SerializeField] ResourceChange[] resourceChange;
-    public float AIWeight;
-    
- 
-    public void ApplyEffect()
+    [SerializeField] ResourceChange[] resourceChange; 
+    public override void ApplyEffect()
     {
         //building effects
         foreach (var resource in resourceSpawners)
@@ -25,7 +22,7 @@ public class ResourceOrbBuilding : MonoBehaviour
         }
     }
 
-   public void RevertEffect()
+   public override void RevertEffect()
     {
        foreach (var resource in resourceSpawners)
         {
