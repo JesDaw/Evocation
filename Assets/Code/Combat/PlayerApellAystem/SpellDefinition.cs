@@ -8,7 +8,7 @@ public enum SpellCastMode
     SelfCast
 }
 
-[CreateAssetMenu(menuName = "Spells/Spell Definition", fileName = "New Spell")]
+[CreateAssetMenu(menuName = "Spells/New Spell", fileName = "New Spell")]
 public class SpellDefinition : ScriptableObject
 {
     [Header("Info")]
