@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum SpellCastMode
@@ -26,8 +27,11 @@ public class SpellDefinition : ScriptableObject
     public float Radius = 2f;
 
     [Header("Effect")]
-    [Tooltip("Same data CPU combat actions use - targeting, health change, knockback, status effects, zones.")]
-    public CombatAction action;
+    [Tooltip("Dumbed-down, spell-only version of CombatAction. Translated into a real CombatAction at runtime.")]
+    public SpellEffectData spellEffect;
+
+    CombatAction _runtimeAction;
+    CombatAction Action => _runtimeAction ??= spellEffect.ToCombatAction();
 
     [Header("Timing")]
     public float hitboxDelay = 0.5f;
@@ -74,19 +78,19 @@ public class SpellDefinition : ScriptableObject
             return;
         }
 
-        if (action == null)
+        if (spellEffect == null)
         {
-            Debug.LogError($"[{SpellName}] CombatAction is NULL on the SpellDefinition." );
+            Debug.LogError($"[{SpellName}] SpellEffectData is NULL on the SpellDefinition.");
             return;
         }
 
         if (castMode == SpellCastMode.SelfCast)
         {
-            CombatLogic.ExecuteActionOnTarget(casterStats, action, casterStats);
+            CombatLogic.ExecuteActionOnTarget(casterStats, Action, casterStats);
         }
         else
         {
-            CombatLogic.ExecuteActionAtPosition(casterStats, action, castPosition, Radius);
+            CombatLogic.ExecuteActionAtPosition(casterStats, Action, castPosition, Radius);
         }
 
         if (DebugLogs) Debug.Log($"{SpellName} resolved at {castPosition}");
@@ -96,3 +100,42 @@ public class SpellDefinition : ScriptableObject
 
     protected virtual void OtherEffects() {}
 }
+
+[System.Serializable]
+public class SpellEffectData
+{
+    [Header("Targeting")]
+    public bool targetFriendly = false;
+    public int maxTargets = 1;
+
+    [Header("Effect")]
+    [Tooltip("Negative = damage, positive = healing.")]
+    public float healthChange = -20f;
+    public float knockback = 0f;
+    public List<StatusEffect> effectsOnHit = new();
+
+    [Header("Zone (optional)")]
+    public AreaEffectData zoneData;
+    public SpellZoneMode zoneMode = SpellZoneMode.None;
+    public bool zoneSticky = false;
+    public bool excludeCasterFromZone = true;
+
+    public CombatAction ToCombatAction() => new CombatAction
+    {
+        actionName        = "Spell",
+        targetFriendly    = targetFriendly,
+        maxTargets        = maxTargets,
+        ScaleEffectsWithUsersStats = false,
+        healthChangePercent  = healthChange,
+        knockbackPercent = knockback,
+        effectsOnHit      = effectsOnHit,
+        zoneData          = zoneData,
+        zoneSpawnPosition = zoneMode == SpellZoneMode.AroundCastPoint ? ZoneSpawnPosition.Self
+                           : zoneMode == SpellZoneMode.OnEachTarget   ? ZoneSpawnPosition.Touch
+                           : ZoneSpawnPosition.Self,
+        zoneSticky        = zoneSticky,
+        excludeCasterFromZone = excludeCasterFromZone,
+    };
+}
+
+public enum SpellZoneMode { None, AroundCastPoint, OnEachTarget }

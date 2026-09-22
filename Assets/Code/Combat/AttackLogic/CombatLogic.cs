@@ -50,13 +50,7 @@ public static class CombatLogic
             }
         }
 
-        float healthChange =
-            attacker._AttackDamage *
-            action.healthChangePercent;
-
-        float knockbackChange =
-            attacker._KnockBackDamage *
-            action.knockbackPercent;
+        var (healthChange, knockbackChange) = GetEffectMagnitude(attacker, action);
 
         if (action.zoneSpawnPosition != ZoneSpawnPosition.Projectile)
         {
@@ -127,13 +121,7 @@ public static class CombatLogic
 
         targets.RemoveAll(t => t == null || t._IsDead);
 
-        float healthChange =
-            attacker._AttackDamage *
-            action.healthChangePercent;
-
-        float knockbackChange =
-            attacker._KnockBackDamage *
-            action.knockbackPercent;
+        var (healthChange, knockbackChange) = GetEffectMagnitude(attacker, action);
 
         int count = 0;
 
@@ -196,13 +184,7 @@ public static class CombatLogic
         CombatAction action,
         Stats target)
     {
-        float healthChange =
-            attacker._AttackDamage *
-            action.healthChangePercent;
-
-        float knockbackChange =
-            attacker._KnockBackDamage *
-            action.knockbackPercent;
+        var (healthChange, knockbackChange) = GetEffectMagnitude(attacker, action);
 
         ExecuteSingle(
             attacker,
@@ -210,6 +192,24 @@ public static class CombatLogic
             target,
             healthChange,
             knockbackChange
+        );
+    }
+
+    /// <summary>
+    /// Computes the health/knockback change an action deals. When
+    /// action.ScaleEffectsWithUsersStats is true (the default, used by CPU actions),
+    /// healthChangePercent/knockbackPercent are multipliers on the attacker's stats.
+    /// When false (used by spells via SpellEffectData.ToCombatAction), the fields are
+    /// read as flat, caster-independent values instead.
+    /// </summary>
+    static (float health, float knockback) GetEffectMagnitude(Stats attacker, CombatAction action)
+    {
+        if (!action.ScaleEffectsWithUsersStats)
+            return (action.healthChangePercent, action.knockbackPercent);
+
+        return (
+            attacker._AttackDamage * action.healthChangePercent,
+            attacker._KnockBackDamage * action.knockbackPercent
         );
     }
 
@@ -287,9 +287,7 @@ public static class CombatLogic
         CombatAction action,
         List<Stats> targets)
     {
-        float healthChange = attacker._AttackDamage * action.healthChangePercent;
-
-        float knockbackChange = attacker._KnockBackDamage * action.knockbackPercent;
+        var (healthChange, knockbackChange) = GetEffectMagnitude(attacker, action);
 
         int count = 0;
         foreach (Stats t in targets)
