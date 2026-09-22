@@ -9,19 +9,17 @@ public class AreaEffectZone : MonoBehaviour
     public List<string> targetTags = new List<string>();
 
     Stats _caster;
-    Transform _stickyTarget;
     bool _excludeCaster;
     bool _isSticky;
+    Transform _stickyTarget;
     public bool IsSticky => _isSticky;
     List<string> _targetTagsOverride;
-
     float _lifeTimer;
     float _refreshTimer;
     bool _initialized;
-
-    bool _isOneShot;
-    HashSet<Stats> _alreadyHit = new HashSet<Stats>();
-
+    bool _isOneShot; // is this really needed? just track that the lifespan is 0
+    GameObject zoneVisuals;
+    HashSet<Stats> _alreadyHit = new HashSet<Stats>(); // why HashSet why not just list?
     public void Initialize(AreaEffectData areaEffectData, Stats caster, Transform stickyTarget, bool excludeCaster, bool? stickyOverride = null, List<string> targetTagsOverride = null)
     {
         data = areaEffectData;
@@ -30,10 +28,16 @@ public class AreaEffectZone : MonoBehaviour
         _excludeCaster = excludeCaster;
         _isSticky = stickyOverride ?? (data != null && data.sticky);
         _targetTagsOverride = targetTagsOverride;
-        Boot();
+        ActivateField();
+    }
+     void Start()
+    {
+        if (data.zoneVisualPrefab != null) zoneVisuals = Instantiate(data.zoneVisualPrefab, transform);
+        zoneVisuals.SetActive(false);
+        if (!_initialized && data != null) ActivateField();
     }
 
-    public void Boot()
+    public void ActivateField() 
     {
         if (data == null)
         {
@@ -46,50 +50,56 @@ public class AreaEffectZone : MonoBehaviour
         _refreshTimer = 0f;
         _initialized = true;
 
-        if (data.zoneVisualPrefab != null)
-            Instantiate(data.zoneVisualPrefab, transform);
+        EenableZoneVisuals();
 
-        if (_isOneShot)
-        {
-            ProcessOverlap();
-        }
+        if (_isOneShot) ApplyEffectsToTargets();
+    }
+    void EenableZoneVisuals()
+    {
+        // other effects
+        zoneVisuals.SetActive(true);
     }
 
-    void Start()
+    public void DeactivateField()
     {
-        if (!_initialized && data != null)
-            Boot();
+        _initialized = false;
+        DisableZoneVisuals();
+    }
+
+    void DisableZoneVisuals()
+    {
+        zoneVisuals.SetActive(false);
     }
 
     void Update()
     {
         if (!_initialized || _isOneShot) return;
+        CheckStickToTarget();
+        UpdateRefreshTimer();
+        ItterateLifeSpan();
+        
+    }
 
-        if (_isSticky && _stickyTarget != null)
-            transform.position = _stickyTarget.position;
+    void CheckStickToTarget()
+    {
+        if (_isSticky && _stickyTarget != null) transform.position = _stickyTarget.position;
+    }
 
-        if (data.zoneLifespan > 0f)
-        {
-            _lifeTimer += Time.deltaTime;
-            if (_lifeTimer >= data.zoneLifespan)
-            {
-                Destroy(gameObject);
-                return;
-            }
-        }
-
-        _refreshTimer += Time.deltaTime;
-        if (_refreshTimer >= data.refreshInterval)
+    void UpdateRefreshTimer()
+    {
+        _refreshTimer += Time.deltaTime; 
+        if (_refreshTimer >= data.refreshInterval) 
         {
             _refreshTimer = 0f;
-            ProcessOverlap();
+            ApplyEffectsToTargets();
         }
     }
 
-    void ProcessOverlap()
+    
+
+    void ApplyEffectsToTargets()
     {
         List<Stats> targets = GatherTargets();
-//        Debug.Log($"[Zone] {data.name} at {transform.position}: found {targets.Count} targets");
 
         int applied = 0;
         foreach (Stats target in targets)
@@ -97,7 +107,6 @@ public class AreaEffectZone : MonoBehaviour
             if (data.maxTargets >= 0 && applied >= data.maxTargets) break;
             if (_isOneShot && _alreadyHit.Contains(target)) continue;
 
-//            Debug.Log($"[Zone] {data.name} applying effects to {target.gameObject.name}");
             ApplyEffectsTo(target);
 
             if (_isOneShot) _alreadyHit.Add(target);
@@ -106,14 +115,13 @@ public class AreaEffectZone : MonoBehaviour
 
         if (_isOneShot) Destroy(gameObject);
     }
-
     List<Stats> GatherTargets()
     {
         List<string> tagsToUse = _targetTagsOverride ?? targetTags;
 
         if (tagsToUse == null || tagsToUse.Count == 0)
         {
-            Debug.LogWarning($"AreaEffectZone on {gameObject.name}: No target tags configured.");
+            Debug.LogError($"AreaEffectZone on {gameObject.name}: No target tags configured.");
             return new List<Stats>();
         }
 
@@ -121,18 +129,11 @@ public class AreaEffectZone : MonoBehaviour
 
         if (data.shape == ZoneShape.Circle)
         {
-            return AttackDetection.FindTargetsInCircle(
-                transform.position, data.circleRadius, tagsToUse, casterFilter);
+            return AttackDetection.FindTargetsInCircle(transform.position, data.circleRadius, tagsToUse, casterFilter);
         }
         else
         {
-            List<IDamageable> raw = AttackDetection.FindTargetsInBox(
-                transform.position, data.boxSize, tagsToUse, casterFilter);
-
-            List<Stats> result = new List<Stats>(raw.Count);
-            foreach (var d in raw)
-                if (d is Stats s) result.Add(s);
-            return result;
+            return AttackDetection.FindTargetsInBox(transform.position, data.boxSize, tagsToUse, casterFilter);
         }
     }
 
@@ -140,15 +141,26 @@ public class AreaEffectZone : MonoBehaviour
     {
         if (data.effects == null || data.effects.Length == 0) return;
 
-        if (data.applicationMode == ZoneApplicationMode.All)
+        if (data.applicationMode == ZoneApplicationMode.All) 
         {
-            foreach (var effect in data.effects)
-                target.statusEffectManager.ApplyEffect(effect, effect.duration);
+            foreach (var effect in data.effects) target.statusEffectManager.ApplyEffect(effect, effect.duration);
         }
         else
         {
             StatusEffect chosen = data.effects[Random.Range(0, data.effects.Length)];
             target.statusEffectManager.ApplyEffect(chosen, chosen.duration);
+        }
+    }
+    void ItterateLifeSpan()
+    {
+        if (data.zoneLifespan > 0f)
+        {
+            _lifeTimer += Time.deltaTime;
+            if (_lifeTimer >= data.zoneLifespan)
+            {
+                Destroy(gameObject);
+                return;
+            }
         }
     }
 

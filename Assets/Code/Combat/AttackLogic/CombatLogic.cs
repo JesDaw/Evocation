@@ -366,32 +366,31 @@ public static class CombatLogic
                 ps.trajectoryCurve,
                 ps.axisCorrectionCurve,
                 ps.speedCurve,
-                hit =>
+                hitStats =>
                 {
-                    if (hit is Stats hitStats)
+                    if (hitStats == null) return;
+
+                    if (healthChange != 0f)
                     {
-                        if (healthChange != 0f)
-                        {
-                            hitStats.AlterHealth(
-                                healthChange,
-                                new DamageSource(attacker._Enemy, DamageSource.DamageType.Ranged, attacker.gameObject.transform.position)
-                            );
-                        }
-
-                        if (knockbackChange != 0f)
-                        {
-                            hitStats.AlterKnockback(
-                                knockbackChange,
-                                attacker._Enemy
-                            );
-                        }
-
-                        ApplyEffectsToTarget(
-                            attacker,
-                            action,
-                            hitStats
+                        hitStats.AlterHealth(
+                            healthChange,
+                            new DamageSource(attacker._Enemy, DamageSource.DamageType.Ranged, attacker.gameObject.transform.position)
                         );
                     }
+
+                    if (knockbackChange != 0f)
+                    {
+                        hitStats.AlterKnockback(
+                            knockbackChange,
+                            attacker._Enemy
+                        );
+                    }
+
+                    ApplyEffectsToTarget(
+                        attacker,
+                        action,
+                        hitStats
+                    );
                 }
             );
         }
