@@ -9,7 +9,7 @@ public enum SpellCastMode
     SelfCast
 }
 
-[CreateAssetMenu(menuName = "Spells/Spell Definition", fileName = "New Spell")]
+[CreateAssetMenu(menuName = "Spells/New Spell", fileName = "New Spell")]
 public class SpellDefinition : ScriptableObject
 {
     [Header("Info")]
@@ -31,7 +31,7 @@ public class SpellDefinition : ScriptableObject
     public SpellEffectData spellEffect;
 
     CombatAction _runtimeAction;
-    CombatAction Action => _runtimeAction ??= spellEffect.ToCombatAction();
+    CombatAction Action => spellEffect.ToCombatAction();
 
     [Header("Timing")]
     public float hitboxDelay = 0.5f;
@@ -90,6 +90,7 @@ public class SpellDefinition : ScriptableObject
         }
         else
         {
+            Debug.Log(Action.healthChangePercent);
             CombatLogic.ExecuteActionAtPosition(casterStats, Action, castPosition, Radius);
         }
 
@@ -120,22 +121,25 @@ public class SpellEffectData
     public bool zoneSticky = false;
     public bool excludeCasterFromZone = true;
 
-    public CombatAction ToCombatAction() => new CombatAction
-    {
-        actionName        = "Spell",
-        targetFriendly    = targetFriendly,
-        maxTargets        = maxTargets,
-        ScaleEffectsWithUsersStats = false,
-        healthChangePercent  = healthChange,
-        knockbackPercent = knockback,
-        effectsOnHit      = effectsOnHit,
-        zoneData          = zoneData,
-        zoneSpawnPosition = zoneMode == SpellZoneMode.AroundCastPoint ? ZoneSpawnPosition.Self
-                           : zoneMode == SpellZoneMode.OnEachTarget   ? ZoneSpawnPosition.Touch
-                           : ZoneSpawnPosition.Self,
-        zoneSticky        = zoneSticky,
-        excludeCasterFromZone = excludeCasterFromZone,
-    };
+    public CombatAction ToCombatAction() { 
+        Debug.Log("Combat Action Activated!");
+        return new CombatAction
+        {
+            actionName        = "Spell",
+            targetFriendly    = targetFriendly,
+            maxTargets        = maxTargets,
+            ScaleEffectsWithUsersStats = false,
+            healthChangePercent  = healthChange,
+            knockbackPercent = knockback,
+            effectsOnHit      = effectsOnHit,
+            zoneData          = zoneData,
+            zoneSpawnPosition = zoneMode == SpellZoneMode.AroundCastPoint ? ZoneSpawnPosition.Self
+                            : zoneMode == SpellZoneMode.OnEachTarget   ? ZoneSpawnPosition.Touch
+                            : ZoneSpawnPosition.Self,
+            zoneSticky        = zoneSticky,
+            excludeCasterFromZone = excludeCasterFromZone,
+        };
+    }
 }
 
 public enum SpellZoneMode { None, AroundCastPoint, OnEachTarget }

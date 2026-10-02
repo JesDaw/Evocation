@@ -206,12 +206,12 @@ public class Stats : MonoBehaviour
     {
         if (damageHandler != null)
         {
-            if (amount < 0f)
+            if (amount < 0f) 
             {
+                Debug.Log($"Took damage: {gameObject.name}");
                 damageHandler.TakeDamage(-amount, 0f, source ?? new DamageSource(DamageSource.DamageType.Melee));
             }
-            else if (amount > 0f)
-                damageHandler.Heal(amount);
+            else if (amount > 0f) damageHandler.Heal(amount);
         }
     }
 
