@@ -36,7 +36,7 @@ public class AreaEffectZone : MonoBehaviour
         zoneVisuals.SetActive(false);
         if (!_initialized && data != null) ActivateField();
     }
-
+    #region activation and deactivation
     public void ActivateField() 
     {
         if (data == null)
@@ -70,7 +70,8 @@ public class AreaEffectZone : MonoBehaviour
     {
         zoneVisuals.SetActive(false);
     }
-
+    #endregion
+    #region loop when the zone is active
     void Update()
     {
         if (!_initialized || _isOneShot) return;
@@ -94,9 +95,6 @@ public class AreaEffectZone : MonoBehaviour
             ApplyEffectsToTargets();
         }
     }
-
-    
-
     void ApplyEffectsToTargets()
     {
         List<Stats> targets = GatherTargets();
@@ -163,7 +161,8 @@ public class AreaEffectZone : MonoBehaviour
             }
         }
     }
-
+    #endregion
+    #region Debug
     void OnDrawGizmos()
     {
         if (data == null) return;
@@ -189,4 +188,5 @@ public class AreaEffectZone : MonoBehaviour
         UnityEditor.Handles.Label(labelPos, $"[{data.name}]\nTags: {tagStr}\nExcludeCaster: {_excludeCaster}\nSticky: {_isSticky}\nRefresh: {data.refreshInterval}s");
 #endif
     }
+    #endregion
 }
