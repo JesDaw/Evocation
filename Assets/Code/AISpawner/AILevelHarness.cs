@@ -140,15 +140,8 @@ public class AILevelHarness : MonoBehaviour
 
             cu.moneyUtility = Mathf.Clamp((float)Money.AIInstance.CurrentMoney / character._spawnCost, 0f, 1f);
             cu.spawnCooldownUtility = 1f - (characterCooldownHandler.CooldownRemaining(character) / character._spawnCooldown);
-
-            // Reward whichever candidate consumes the largest share of the
-            // available budget without exceeding it -- NOT the cheapest.
-            // budget/cost would saturate at 1 for every affordable candidate
-            // and lose all signal; cost/budget keeps differentiating them.
-            cu.expendatureRateUtility = (moneyBudget > 0f)
-                ? Mathf.Clamp01(character._spawnCost / moneyBudget)
-                : 0f;
-            cu.expendatureRateisOverMax = character._spawnCost > moneyBudget;
+            cu.expendatureRateUtility = (moneyBudget > 0f) ? Mathf.Clamp01(character._spawnCost / moneyBudget): 0f;
+            cu.overBudget = character._spawnCost > moneyBudget;
 
             cu.expectedOutcomeRaw = UnitTracker.Instance.CalculateOverallExpectedOutcome(character, AIWeighted: true, relaventZone: aiSpawnZone);
 
@@ -169,24 +162,23 @@ public class AILevelHarness : MonoBehaviour
             if (showDebugLogs) cu.Print(moneyBudget);
         }
 
-        CharacterUtility best = characterUtilities.OrderByDescending(cu => cu.totalUtility).First();
-        if (showDebugLogs) Debug.Log($"highestCharacterUtility: {best.totalUtility} ({best.character.name})");
+        CharacterUtility bestCharacter = characterUtilities.OrderByDescending(cu => cu.totalUtility).First();
+        if (showDebugLogs) Debug.Log($"highestCharacterUtility: {bestCharacter.totalUtility} ({bestCharacter.character.name})");
 
-        if (!best.expendatureRateisOverMax)
+        if (!bestCharacter.overBudget)
         {
-            GameObject spawned = SpawnObjects.EnemyInstance.Spawn(best.character);
+            GameObject spawned = SpawnObjects.EnemyInstance.Spawn(bestCharacter.character);
             if (spawned != null)
             {
-                characterCooldownHandler.StartCooldown(best.character);
-                moneyBudget -= best.character._spawnCost;
-                if (moneyBudget < 0f) moneyBudget = 0f;
+                characterCooldownHandler.StartCooldown(bestCharacter.character);
+                moneyBudget -= bestCharacter.character._spawnCost;
             }
-            if (showDebugLogs) Debug.Log($"Spawn Character wins: {best.character.name}. moneyBudget remaining: {moneyBudget}");
+            if (showDebugLogs) Debug.Log($"Spawn Character wins: {bestCharacter.character.name}. moneyBudget remaining: {moneyBudget}");
         }
         else
         {
             Money.AIInstance.UpgradeMaxMoney();
-            if (showDebugLogs) Debug.Log($"Spawn Character wins but is over budget so not spawning: {best.character.name}. So trying to upgrade money. moneyBudget carries over: {moneyBudget}");
+            if (showDebugLogs) Debug.Log($"Spawn Character wins but is over budget so not spawning: {bestCharacter.character.name}. So trying to upgrade money. moneyBudget carries over: {moneyBudget}");
         }
     }
 }
@@ -213,7 +205,7 @@ public class CharacterUtility
     public float moneyUtility;
     public float spawnCooldownUtility;
     public float expendatureRateUtility;
-    public bool expendatureRateisOverMax = false;
+    public bool overBudget = false;
     public float expectedOutcomeRaw;
     public float expectedOutcomeUtility;
     public float totalUtility;

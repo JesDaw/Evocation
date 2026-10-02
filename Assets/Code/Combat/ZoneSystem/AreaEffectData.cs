@@ -13,7 +13,7 @@ public class AreaEffectData : ScriptableObject
     public int maxTargets = -1;
 
     [Header("Duration")]
-    public float zoneLifespan = 0f;
+    public float zoneLifespan = 0f; 
     public bool sticky = false;
 
     [Header("Effects")]

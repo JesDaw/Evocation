@@ -25,8 +25,6 @@ public static class AreaEffectLogic
         zone.Initialize(data, caster, stickyTarget, excludeCaster, stickyOverride, targetTags);
 
         string tagStr = targetTags != null ? string.Join(",", targetTags) : "null";
-//        Debug.Log($"[Zone] Spawned '{data.name}' at {position}, tags=[{tagStr}], excludeCaster={excludeCaster}, sticky={zone.IsSticky}");
-
         return zone;
     }
 }

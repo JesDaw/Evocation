@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Stats : MonoBehaviour, IDamageable
+public class Stats : MonoBehaviour
 {
     [Header("Configuration")]
     public ScriptableStats scriptableStats;
@@ -236,14 +236,6 @@ public class Stats : MonoBehaviour, IDamageable
         
     }
 
-
-    void IDamageable.TakeDamage(float damage, float knockback_damage, DamageSource source)
-    {
-        TakeDamage(damage, knockback_damage, source);
-    }
-
-    GameObject IDamageable.gameObject => gameObject;
-    Transform IDamageable.transform => transform;
 
     //What is this stuff even for??==========
 
