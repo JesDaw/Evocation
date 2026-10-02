@@ -1,16 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class AttackDetection
+public static class AttackDetection // FindTargetsInBox and FindTargetsInCircle should both return the same type
 {
-    public static List<IDamageable> FindTargetsInBox(
+    public static List<Stats> FindTargetsInBox(
         Vector2 center,
         Vector2 size,
         List<string> targetTags,
         Stats attacker = null,
         bool allowSelf = false)
     {
-        List<IDamageable> targets = new List<IDamageable>();
+        List<Stats> targets = new List<Stats>();
         Collider2D[] hits = Physics2D.OverlapBoxAll(center, size, 0f);
 
         foreach (string targetTag in targetTags)
@@ -19,12 +19,12 @@ public static class AttackDetection
             {
                 if (hit.CompareTag(targetTag))
                 {
-                    IDamageable targetDamageable = hit.GetComponent<IDamageable>();
-                    bool isAttacker = (targetDamageable == (IDamageable)attacker);
+                    Stats targetStats = hit.GetComponent<Stats>();
+                    bool isAttacker = (targetStats == attacker);
 
-                    if (targetDamageable != null && (!isAttacker || allowSelf) && !targets.Contains(targetDamageable))
+                    if (targetStats != null && (!isAttacker || allowSelf) && !targets.Contains(targetStats))
                     {
-                        targets.Add(targetDamageable);
+                        targets.Add(targetStats);
                     }
                 }
             }
@@ -61,14 +61,14 @@ public static class AttackDetection
         return targets;
     }
 
-    public static IDamageable FindClosestTarget(Vector2 position, List<IDamageable> targets)
+    public static Stats FindClosestTarget(Vector2 position, List<Stats> targets)
     {
         if (targets == null || targets.Count == 0) return null;
 
-        IDamageable closest = null;
+        Stats closest = null;
         float closestDistance = float.MaxValue;
 
-        foreach (IDamageable target in targets)
+        foreach (Stats target in targets)
         {
             float distance = Vector2.Distance(position, target.transform.position);
             if (distance < closestDistance)

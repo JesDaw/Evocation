@@ -7,14 +7,14 @@ public class CombatAction
     [Header("Identity")]
     public string actionName = "Action";
 
-    [Header("Priority")]
+    [Header("CPU Priority")]
     [Tooltip("Higher = preferred when multiple actions are candidates. Must be unique per character.")]
     public int priority = 0;
     [Tooltip("If true, this action's detection range defines when the CPU stops moving forward. " +
             "Use this on your highest-priority offensive action.")]
     public bool definesStoppingRange = false;
 
-    [Header("Detection")]
+    [Header("Hit Box")]
     [Tooltip("Multiplier on character horizontal range stat. 1.0 = same as base range, 2.0 = double")]
     public float rangePercent = 1f;
     [Tooltip("If true, the detection circle is offset forward in the facing direction")]
@@ -28,6 +28,8 @@ public class CombatAction
     public int maxTargets = 1;
     [Tooltip("Seconds before this action can fire again")]
     public float castCooldown = 2f;
+
+    public bool ScaleEffectsWithUsersStats = true;
 
     [Header("Health Change")]
     [Tooltip("Multiplier on character attack damage. Negative = damage, Positive = healing, 0 = no change")]

@@ -11,7 +11,7 @@ public class Projectile : MonoBehaviour
     AnimationCurve heightCurve;
     AnimationCurve axisCurve;
     AnimationCurve speedCurve;
-    Action<IDamageable> onHitAction;
+    Action<Stats> onHitAction;
 
     Vector3 startPoint;
     Vector3 moveDir;
@@ -20,7 +20,7 @@ public class Projectile : MonoBehaviour
     [SerializeField] GameObject ProjectileImpact;
 
     public void InitializeProjectile(Transform target, float speed, float maxHeight,
-        AnimationCurve h, AnimationCurve a, AnimationCurve s, Action<IDamageable> onHit)
+        AnimationCurve h, AnimationCurve a, AnimationCurve s, Action<Stats> onHit)
     {
         this.target = target;
         this.maxMoveSpeed = speed;
