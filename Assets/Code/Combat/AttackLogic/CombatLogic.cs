@@ -99,25 +99,11 @@ public static class CombatLogic
         return true;
     }
 
-    public static bool ExecuteActionAtPosition(
-        Stats attacker,
-        CombatAction action,
-        Vector2 position,
-        float radius,
-        List<string> targetTagsOverride = null)
+    public static bool ExecuteActionAtPosition(Stats attacker, CombatAction action, Vector2 position, float radius, List<string> targetTagsOverride = null)
     {
-        List<string> tags =
-            targetTagsOverride ??
-            GetTargetTags(attacker, action);
+        List<string> tags = targetTagsOverride ?? GetTargetTags(attacker, action);
 
-        List<Stats> targets =
-            AttackDetection.FindTargetsInCircle(
-                position,
-                radius,
-                tags,
-                attacker,
-                allowSelf: action.targetFriendly
-            );
+        List<Stats> targets = AttackDetection.FindTargetsInCircle(position, radius,tags, attacker, allowSelf: action.targetFriendly);
 
         targets.RemoveAll(t => t == null || t._IsDead);
 
@@ -127,19 +113,17 @@ public static class CombatLogic
 
         foreach (Stats t in targets)
         {
-            if (action.maxTargets >= 0 &&
-                count >= action.maxTargets)
-            {
-                break;
-            }
+            if (action.maxTargets >= 0 && count >= action.maxTargets) break;
+
+
+            Debug.Log($"Target Detected: {t.name}");
 
             count++;
 
             if (healthChange != 0f)
             {
-                t.AlterHealth(
-                    healthChange,
-                    new DamageSource(attacker._Enemy, DamageSource.DamageType.Spell, attacker.gameObject.transform.position)
+                Debug.Log($"Health change != 0: {t.name}");
+                t.AlterHealth(healthChange, new DamageSource(attacker._Enemy, DamageSource.DamageType.Spell, attacker.gameObject.transform.position)
                     {
                         IsEnemy = attacker._Enemy
                     }
@@ -204,13 +188,9 @@ public static class CombatLogic
     /// </summary>
     static (float health, float knockback) GetEffectMagnitude(Stats attacker, CombatAction action)
     {
-        if (!action.ScaleEffectsWithUsersStats)
-            return (action.healthChangePercent, action.knockbackPercent);
+        if (!action.ScaleEffectsWithUsersStats) return (action.healthChangePercent, action.knockbackPercent);
 
-        return (
-            attacker._AttackDamage * action.healthChangePercent,
-            attacker._KnockBackDamage * action.knockbackPercent
-        );
+        return ( attacker._AttackDamage * action.healthChangePercent, attacker._KnockBackDamage * action.knockbackPercent);
     }
 
     static List<Stats> GetTargetsInRange(
