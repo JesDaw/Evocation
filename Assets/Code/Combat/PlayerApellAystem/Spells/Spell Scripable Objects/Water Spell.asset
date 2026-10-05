@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23f73bdf0380144178c0f20862a39316, type: 3}
+  m_Name: Water Spell
+  m_EditorClassIdentifier: CodeAssembly::SpellDefinition
+  SpellName: Water Spell
+  Icon: {fileID: 5835908597264880414, guid: 7ae807dfe56d63248a129d5cb3d86e93, type: 3}
+  Description: Speed boost, slight rejuvenation
+  castMode: 0
+  Cost: 0
+  Radius: 10
+  spellEffect:
+    targetFriendly: 1
+    maxTargets: 1
+    healthChange: 20
+    knockback: 0
+    effectsOnHit:
+    - {fileID: 11400000, guid: d0a850b02e8cf49cea4d102340ca64ed, type: 2}
+    - {fileID: 11400000, guid: 25adcb725abd541db89b1bfa620cd9c2, type: 2}
+    zoneData: {fileID: 0}
+    zoneMode: 0
+    zoneSticky: 0
+    excludeCasterFromZone: 0
+  hitboxDelay: 0
+  animationDuration: 1
+  spellVFX: {fileID: 0}
+  castSoundName: explosion
+  DebugLogs: 0

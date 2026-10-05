@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23f73bdf0380144178c0f20862a39316, type: 3}
+  m_Name: Flower Spell
+  m_EditorClassIdentifier: CodeAssembly::SpellDefinition
+  SpellName: Flower Spell
+  Icon: {fileID: 7678244964128812302, guid: 55eb8296bf05bd448bfc1425cd0d64e5, type: 3}
+  Description: 'Spawns flower that spreads pollen in AOE (Sleep effect, healing effect,
+    poison effect?)
+
+'
+  castMode: 0
+  Cost: 0
+  Radius: 2
+  spellEffect:
+    targetFriendly: 0
+    maxTargets: 1
+    healthChange: -20
+    knockback: 0
+    effectsOnHit:
+    - {fileID: 11400000, guid: e12f1a7e99ab441f39f8fc06115d763f, type: 2}
+    - {fileID: 11400000, guid: 3fa9fa5eb3d3bfa46914fb7d671ac8e2, type: 2}
+    - {fileID: 11400000, guid: 3fa9fa5eb3d3bfa46914fb7d671ac8e2, type: 2}
+    zoneData: {fileID: 0}
+    zoneMode: 0
+    zoneSticky: 0
+    excludeCasterFromZone: 1
+  hitboxDelay: 0.5
+  animationDuration: 1
+  spellVFX: {fileID: 0}
+  castSoundName: explosion
+  DebugLogs: 0
