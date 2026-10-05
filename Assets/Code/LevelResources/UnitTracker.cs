@@ -8,7 +8,7 @@ public class UnitTracker : MonoBehaviour
 {
     public static UnitTracker Instance { get; private set; }
 
-    [SerializeField] MapZone[] zones;
+    [SerializeField] public MapZone[] zones;
     [SerializeField] Transform PlayerBase;
     [SerializeField] Transform EnemyBase;
     [SerializeField] UnityEvent WinGame;
