@@ -12,117 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23f73bdf0380144178c0f20862a39316, type: 3}
   m_Name: New Spell
   m_EditorClassIdentifier: CodeAssembly::SpellDefinition
-  SpellName: 
-  Icon: {fileID: 0}
-  Description: 
+  SpellName: Test Spell
+  Icon: {fileID: -350212567091872799, guid: fa38cc473caeef54b9e1d66d821b5886, type: 3}
+  Description: This is just a test spell. It is made to just test the speel system
   castMode: 0
   Cost: 0
   Radius: 2
-  action:
-    actionName: Action
-    priority: 0
-    definesStoppingRange: 0
-    rangePercent: 1
-    extendsForward: 0
+  spellEffect:
     targetFriendly: 0
-    targetCondition: 0
     maxTargets: 1
-    castCooldown: 2
-    healthChangePercent: 0
-    knockbackPercent: 0
-    zoneSpawnPosition: 0
-    projectileSettings:
-      prefab: {fileID: 0}
-      speed: 15
-      maxHeight: 2
-      trajectoryCurve:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 0
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 0.5
-          value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 1
-          value: 0
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      axisCorrectionCurve:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 0
-          inSlope: 0
-          outSlope: 1
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 1
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      speedCurve:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-    effectsOnHit: []
+    healthChange: 0
+    knockback: 0
+    effectsOnHit:
+    - {fileID: 11400000, guid: e12f1a7e99ab441f39f8fc06115d763f, type: 2}
     zoneData: {fileID: 0}
+    zoneMode: 0
     zoneSticky: 0
     excludeCasterFromZone: 1
-    applicationMode: 0
-  hitboxDelay: 0.5
+  hitboxDelay: 0
   animationDuration: 1
   spellVFX: {fileID: 0}
   castSoundName: explosion
-  DebugLogs: 0
+  DebugLogs: 1
