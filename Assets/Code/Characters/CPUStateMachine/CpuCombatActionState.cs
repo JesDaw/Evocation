@@ -62,17 +62,13 @@ public class CpuCombatActionState : CpuBaseState
                 if (!_hasTriggeredAttack && _context._AnimatorController.ShouldAttack())
                 {
                     _hasTriggeredAttack = true;
-                    Stats target = _context._ActionTarget;
 
-                    if (target != null && !target._IsDead)
+                    bool hitSomething = CombatLogic.CalculateHitbox(_context._Stats, _action);
+
+                    if (hitSomething && _actionIndex >= 0 && _actionIndex < _context._Stats._ActionCooldownTimers.Count)
                     {
-                        bool hitSomething = CombatLogic.ExecuteAction(_context._Stats, _action, target, recheckTargets: true);
-
-                        if (hitSomething && _actionIndex >= 0 && _actionIndex < _context._Stats._ActionCooldownTimers.Count)
-                        {
-                            float effectiveCooldown = _context._Stats._ActionCooldown * _action.castCooldown;
-                            _context._Stats._ActionCooldownTimers[_actionIndex] = effectiveCooldown;
-                        }
+                        float effectiveCooldown = _context._Stats._ActionCooldown * _action.castCooldown;
+                        _context._Stats._ActionCooldownTimers[_actionIndex] = effectiveCooldown;
                     }
 
                     _timer = 0f;

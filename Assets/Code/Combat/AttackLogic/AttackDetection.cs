@@ -1,14 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class AttackDetection // FindTargetsInBox and FindTargetsInCircle should both return the same type
+public static class AttackDetection //These could just be colliders
 {
-    public static List<Stats> FindTargetsInBox(
-        Vector2 center,
-        Vector2 size,
-        List<string> targetTags,
-        Stats attacker = null,
-        bool allowSelf = false)
+    public static List<Stats> FindTargetsInBox(Vector2 center, Vector2 size, List<string> targetTags, Stats attacker = null, bool allowSelf = false)
     {
         List<Stats> targets = new List<Stats>();
         Collider2D[] hits = Physics2D.OverlapBoxAll(center, size, 0f);
@@ -32,12 +27,7 @@ public static class AttackDetection // FindTargetsInBox and FindTargetsInCircle 
         return targets;
     }
 
-    public static List<Stats> FindTargetsInCircle(
-        Vector2 center, 
-        float radius, 
-        List<string> targetTags,
-        Stats attacker = null,
-        bool allowSelf = false)
+    public static List<Stats> FindTargetsInCircle(Vector2 center,  float radius, List<string> targetTags, Stats attacker = null, bool allowSelf = false)
     {
         List<Stats> targets = new List<Stats>();
         Collider2D[] hits = Physics2D.OverlapCircleAll(center, radius);
