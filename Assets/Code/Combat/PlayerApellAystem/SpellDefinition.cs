@@ -86,12 +86,12 @@ public class SpellDefinition : ScriptableObject
 
         if (castMode == SpellCastMode.SelfCast)
         {
-            CombatLogic.ExecuteActionOnTarget(casterStats, Action, casterStats);
+            CombatLogic.ExecuteActionOnSelf(casterStats, Action);
         }
         else
         {
             Debug.Log(Action.healthChangePercent);
-            CombatLogic.ExecuteActionAtPosition(casterStats, Action, castPosition, Radius);
+            CombatLogic.ExicuteCombatAction(casterStats, Action, castPosition, Radius);
         }
 
         if (DebugLogs) Debug.Log($"{SpellName} resolved at {castPosition}");

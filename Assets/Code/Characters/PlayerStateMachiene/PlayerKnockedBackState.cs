@@ -32,12 +32,12 @@ public class PlayerKnockedBackState : PlayerBaseState
     void ApplyKnockback()
     {
         if (Ctx.Rb == null) return;
-        DamageSource lastHit = Ctx.PlayerStats.LastHitBy;
-        
+        Vector3 lastHitPosition = Ctx.PlayerStats.LastHitPosition;
+
         bool knockedToTheLeft = false;
-        if (lastHit != null && lastHit.sourcePosition != Vector3.zero)
+        if (lastHitPosition != Vector3.zero)
         {
-            float delta = Ctx.transform.position.x - lastHit.sourcePosition.x;
+            float delta = Ctx.transform.position.x - lastHitPosition.x;
             knockedToTheLeft = delta >= 0f ? false : true;
         }
         else

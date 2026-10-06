@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerAttackState : PlayerBaseState
@@ -10,7 +9,6 @@ public class PlayerAttackState : PlayerBaseState
 
     // Resolved once in EnterState — can't shift mid-execution
     CombatAction _action;
-    Stats _target;
 
     public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory)
         : base(currentContext, playerStateFactory)
@@ -27,7 +25,6 @@ public class PlayerAttackState : PlayerBaseState
         _timer = 0f;
 
         _action = ResolveAction();
-        _target = _action != null ? FindClosestTarget(_action) : null;
     }
 
     public override void UpdateState()
@@ -39,9 +36,9 @@ public class PlayerAttackState : PlayerBaseState
             case AttackPhase.Startup:
                 if (Ctx.AnimatorController.ShouldAttack())
                 {
-                    if (_action != null && _target != null && !_target._IsDead)
+                    if (_action != null)
                     {
-                        CombatLogic.ExecuteAction(Ctx.PlayerStats, _action, _target);
+                        CombatLogic.CalculateHitbox(Ctx.PlayerStats, _action);
 
                         if (Ctx.PlayerStats._ActionCooldownTimers != null &&
                             Ctx.PlayerStats._ActionCooldownTimers.Count > 0)
@@ -104,31 +101,5 @@ public class PlayerAttackState : PlayerBaseState
             return null;
         }
         return actions[0];
-    }
-
-    Stats FindClosestTarget(CombatAction action)
-    {
-        bool facingLeft = !Ctx.isFacingRight;
-        float effectiveRange = Ctx.PlayerStats._HorizontalRange * action.rangePercent;
-
-        Vector2 center = action.extendsForward
-            ? CombatLogic.CalculateAttackCenter(
-                Ctx.transform.position,
-                facingLeft,
-                new Vector2(effectiveRange, 0f))
-            : (Vector2)Ctx.transform.position;
-
-        List<string> targetTags = CombatLogic.GetTargetTags(Ctx.PlayerStats, action);
-        List<Stats> candidates  = AttackDetection.FindTargetsInCircle(
-            center, effectiveRange, targetTags, Ctx.PlayerStats);
-
-        candidates.RemoveAll(t => t == null || t._IsDead);
-        if (candidates.Count == 0) return null;
-
-        candidates.Sort((a, b) =>
-            Vector2.Distance(Ctx.transform.position, a.transform.position)
-                .CompareTo(Vector2.Distance(Ctx.transform.position, b.transform.position)));
-
-        return candidates[0];
     }
 }

@@ -28,10 +28,8 @@ public class IterativeStatusEffect : StatusEffect
         //For damage and healing
         if (damagePerTick > 0)
         {
-            // Damage
-            DamageSource source = new DamageSource(DamageSource.DamageType.StatusEffect);
-            source.IsEnemy = target._Enemy; // This should be set by whoever applied it
-            target.damageHandler.TakeDamage(damagePerTick, 0, source);
+            // Damage — no meaningful source position for a status-effect tick.
+            target.damageHandler.TakeDamage(damagePerTick, 0);
         }
         else if (damagePerTick < 0)
         {

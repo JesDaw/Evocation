@@ -14,14 +14,14 @@ public class DamageHandler : MonoBehaviour
         stats = statsComponent;
     }
 
-    public void TakeDamage(float damage, float knockback_damage, DamageSource attackedBy = null)
+    public void TakeDamage(float damage, float knockback_damage, Vector3 sourcePosition = default)
     {
         if (DebugLogs) Debug.Log($"{gameObject.name}: Taking {damage} damage");
         if (stats == null) return;
         if (stats.IsInvincible()) return;
 
         stats._CurrentHealth -= damage;
-        Debug.Log($"{gameObject.name} Health = {stats._CurrentHealth}");
+//        Debug.Log($"{gameObject.name} Health = {stats._CurrentHealth}");
         if (FModAudioManager.instance != null)FModAudioManager.instance.PlaySoundByName("takeDamage", transform.position, 1, 15, "Volume", 1f);
 
         stats.OnDamage?.Invoke();
@@ -31,16 +31,11 @@ public class DamageHandler : MonoBehaviour
             DamageTriggerInvoked = true;
         }
 
-        stats.LastHitBy = attackedBy;
+        stats.LastHitPosition = sourcePosition;
+        stats._KnockBackHealth -= knockback_damage;
 
-        if (attackedBy != null)
-        {
-            stats.OnWitFlagDamage?.Invoke(attackedBy.IsEnemy);
-            stats._KnockBackHealth -= knockback_damage;
-
-            Transform target = GetComponentInChildren<AnimationDrivenVFXController>()?.transform;
-            if(target is not null &&ImpactParticleSpawner.Instance != null) ImpactParticleSpawner.Instance.PlaySmallImpactParticle(target.position, Vector3.one, Quaternion.identity);
-        }
+        Transform target = GetComponentInChildren<AnimationDrivenVFXController>()?.transform;
+        if(target is not null &&ImpactParticleSpawner.Instance != null) ImpactParticleSpawner.Instance.PlaySmallImpactParticle(target.position, Vector3.one, Quaternion.identity);
 
         if (stats.entityHealthbar != null) stats.entityHealthbar.UpdateHealth();
 
@@ -68,9 +63,6 @@ public class DamageHandler : MonoBehaviour
 
         stats._CurrentHealth = 0;
         stats._IsDead = true;
-
-        if (stats.LastHitBy != null)
-            stats.OnWitFlagDeath?.Invoke(stats.LastHitBy.IsEnemy);
 
         TriggerKnockback();
         stats.OnDeath?.Invoke();

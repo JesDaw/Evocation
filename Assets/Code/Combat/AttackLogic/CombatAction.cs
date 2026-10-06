@@ -23,6 +23,9 @@ public class CombatAction
     [Header("Targeting")]
     [Tooltip("If true, targets allies of the caster. If false, targets enemies")]
     public bool targetFriendly = false;
+    [Tooltip("If true, the caster itself can be hit by this action. Independent of targetFriendly — " +
+             "e.g. a friendly chain-heal that shouldn't hit the caster, or an AOE that shouldn't hit self.")]
+    public bool includeSelf = false;
     public ActionTargetCondition targetCondition = ActionTargetCondition.All;
     [Tooltip("If > 1, hits multiple targets in range (AOE). 1 = single target only")]
     public int maxTargets = 1;
@@ -42,7 +45,8 @@ public class CombatAction
     [Header("Delivery")]
     [Tooltip("Self = zone spawns at caster (aura). Touch = melee zone on target. Projectile = fires projectile toward target")]
     public ZoneSpawnPosition zoneSpawnPosition = ZoneSpawnPosition.Self;
-    [Tooltip("Projectile settings — used only when zoneSpawnPosition is Projectile")]
+    public bool UseProjectile = false;
+    [Tooltip("Projectile settings — used only when UseProjectile is true")]
     public ProjectileSettings projectileSettings;
 
     [Header("Effects")]

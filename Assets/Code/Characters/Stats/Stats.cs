@@ -52,7 +52,6 @@ public class Stats : MonoBehaviour
 
     [Header("Events")]
     [SerializeField] internal UltEvents.UltEvent OnDeath, OnDamage, OnKnocked;
-    [SerializeField] internal UltEvents.UltEvent<bool> OnWitFlagDeath, OnWitFlagDamage;
     [SerializeField] public UnityEvent OnStatsInitialized;
     public UnityEvent DamageTrigger;
     public float DamageTriggerAmount = -100.0f;
@@ -67,7 +66,8 @@ public class Stats : MonoBehaviour
     [HideInInspector] public Animator animator;
     
 
-    public DamageSource LastHitBy { get; set; }
+    /// <summary>World-space position of whatever last dealt damage. Used for knockback direction.</summary>
+    public Vector3 LastHitPosition { get; set; }
 
     void Awake()
     {
@@ -202,16 +202,16 @@ public class Stats : MonoBehaviour
         }
     }
 
-    public void AlterHealth(float amount, DamageSource source = null)
+    public void AlterHealth(float amount, Vector3 sourcePosition = default)
     {
         if (damageHandler != null)
         {
-            if (amount < 0f) 
+            if (amount < 0f)
             {
-                Debug.Log($"Took damage: {gameObject.name}");
-                damageHandler.TakeDamage(-amount, 0f, source ?? new DamageSource(DamageSource.DamageType.Melee));
+                damageHandler.TakeDamage(-amount, 0f, sourcePosition);
             }
-            else if (amount > 0f) damageHandler.Heal(amount);
+            else if (amount > 0f)
+                damageHandler.Heal(amount);
         }
     }
 
@@ -226,16 +226,13 @@ public class Stats : MonoBehaviour
         }
     }
 
-    public void TakeDamage(float damage, float knockback_damage, DamageSource attackedBy = null)
+    public void TakeDamage(float damage, float knockback_damage, Vector3 sourcePosition = default)
     {
-        
         if (damageHandler != null)
         {
-            damageHandler.TakeDamage(damage, knockback_damage, attackedBy);
+            damageHandler.TakeDamage(damage, knockback_damage, sourcePosition);
         }
-        
     }
-
 
     //What is this stuff even for??==========
 
