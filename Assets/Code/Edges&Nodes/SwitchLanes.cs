@@ -37,6 +37,8 @@ public class SwitchLanes : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
+        
+
         if (IsCharacter(collision.gameObject) >= 0)
         {
             if (DebugLogs) Debug.Log($"{collision.gameObject.name} entered lane switch. Previous layer: {LayerMask.LayerToName(collision.gameObject.layer)}");
@@ -46,7 +48,12 @@ public class SwitchLanes : MonoBehaviour
                 if (DebugLogs) Debug.Log($"Adding {collision.gameObject.name} to characters in range list");
                 charactersInRange.Add(collision.gameObject);
             }
-            SetCharacterLayer(collision.gameObject, IsCharacter(collision.gameObject));
+            if (ForkExitBoxCollider.IsTouching(collision))
+            {
+                SetCharacterLayer(collision.gameObject, IsCharacter(collision.gameObject), true);
+                return;
+            }
+            else SetCharacterLayer(collision.gameObject, IsCharacter(collision.gameObject));
 
             if (DebugLogs) Debug.Log($"{collision.gameObject.name} layer is now: {LayerMask.LayerToName(collision.gameObject.layer)}");
         }
@@ -100,7 +107,7 @@ public class SwitchLanes : MonoBehaviour
         }
     }
  
-     void SetCharacterLayer(GameObject character, int CharacterTeam)
+     void SetCharacterLayer(GameObject character, int CharacterTeam, bool UseForkExitLayer = false)
     {
         int offset = 0;
         if (CharacterTeam == 0) offset = 0;      // Allies
@@ -109,7 +116,7 @@ public class SwitchLanes : MonoBehaviour
         
 
         int layerId;
-        if ((isAILaneSwitcher && (CharacterTeam == 0 || CharacterTeam == 1)) || (!isAILaneSwitcher && CharacterTeam == 2))
+        if (UseForkExitLayer)
         {
             layerId = ForkExitLayernumber;
         }
