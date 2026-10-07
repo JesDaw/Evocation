@@ -210,8 +210,7 @@ public class Stats : MonoBehaviour
             {
                 damageHandler.TakeDamage(-amount, 0f, sourcePosition);
             }
-            else if (amount > 0f)
-                damageHandler.Heal(amount);
+            else if (amount > 0f) damageHandler.Heal(amount);
         }
     }
 

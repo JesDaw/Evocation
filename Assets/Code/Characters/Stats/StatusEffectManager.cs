@@ -17,11 +17,6 @@ public class StatusEffectManager : MonoBehaviour
         stats = statsComponent;
     }
 
-    void Update()
-    {
-        ProcessEffects(Time.deltaTime);
-    }
-
     public void AddEffect(StatusEffect effect)
     {
         if (effect == null) return;
@@ -54,34 +49,6 @@ public class StatusEffectManager : MonoBehaviour
         onEffectApplied?.Invoke(effect);
     }
 
-    public void RemoveEffect(StatusEffect effect)
-    {
-        ActiveStatusEffect active = activeEffects.Find(e => e.effectData == effect);
-        if (active != null)
-        {
-            RemoveVisualForEffect(active);
-            effect.OnRemove(stats);
-            activeEffects.Remove(active);
-            onEffectRemoved?.Invoke(effect);
-        }
-    }
-
-    public void ClearAllEffects()
-    {
-        foreach (var effect in activeEffects)
-        {
-            RemoveVisualForEffect(effect);
-            effect.effectData.OnRemove(stats);
-            onEffectRemoved?.Invoke(effect.effectData);
-        }
-        activeEffects.Clear();
-    }
-
-    public bool HasEffect(StatusEffect effect)
-    {
-        return activeEffects.Exists(e => e.effectData == effect);
-    }
-
     public void ApplyEffect(StatusEffect effect, float durationOverride)
     {
         if (effect == null) return;
@@ -112,50 +79,6 @@ public class StatusEffectManager : MonoBehaviour
         onEffectApplied?.Invoke(effect);
     }
 
-    public List<ActiveStatusEffect> GetActiveEffects()
-    {
-        return new List<ActiveStatusEffect>(activeEffects);
-    }
-
-    private void ProcessEffects(float deltaTime)
-    {
-        for (int i = activeEffects.Count - 1; i >= 0; i--)
-        {
-            ActiveStatusEffect effect = activeEffects[i];
-            
-            effect.timeRemaining -= deltaTime;
-
-            if (effect.effectData is IterativeStatusEffect iterative)
-            {
-                effect.nextTickTime -= deltaTime;
-                
-                if (effect.nextTickTime <= 0f)
-                {
-                    for (int stack = 0; stack < effect.stackCount; stack++)
-                    {
-                        effect.effectData.OnTick(stats, deltaTime);
-                    }
-                    
-                    onEffectTick?.Invoke(effect.effectData);
-                    
-                    effect.nextTickTime = iterative.tickInterval;
-                }
-            }
-            else
-            {
-                effect.effectData.OnTick(stats, deltaTime);
-            }
-
-            if (effect.IsExpired())
-            {
-                RemoveVisualForEffect(effect);
-                effect.effectData.OnRemove(stats);
-                onEffectRemoved?.Invoke(effect.effectData);
-                activeEffects.RemoveAt(i);
-            }
-        }
-    }
-
     private void SpawnVisualForEffect(ActiveStatusEffect activeEffect)
     {
         if (activeEffect.effectData.particleEffectPrefab != null)
@@ -171,6 +94,90 @@ public class StatusEffectManager : MonoBehaviour
             }
         }
     }
+
+    void Update()
+    {
+        ProcessEffects(Time.deltaTime);
+    }
+
+    void ProcessEffects(float deltaTime)
+    {
+        
+        for (int i = activeEffects.Count - 1; i >= 0; i--)
+        {
+            ActiveStatusEffect effect = activeEffects[i];
+            
+            effect.timeRemaining -= deltaTime;
+
+            if (effect.effectData is IterativeStatusEffect iterative)
+            {
+                Debug.Log("IterativeStatusEffect");
+                effect.nextTickTime -= deltaTime;
+                Debug.Log($"{effect.nextTickTime}");
+                
+                if (effect.nextTickTime <= 0f)
+                {
+                    Debug.Log("effect.nextTickTime <= 0f");
+                    for (int stack = 0; stack < effect.stackCount; stack++)
+                    {
+                        Debug.Log("Calling OnTick");
+                        effect.effectData.OnTick(stats, deltaTime);
+                    }
+                    
+                    onEffectTick?.Invoke(effect.effectData);
+                    
+                    effect.nextTickTime = iterative.tickInterval;
+                }
+            }
+            else
+            {
+                Debug.Log("StaticStatusEffect");
+                effect.effectData.OnTick(stats, deltaTime);
+            }
+
+            if (effect.IsExpired())
+            {
+                RemoveVisualForEffect(effect);
+                effect.effectData.OnRemove(stats);
+                onEffectRemoved?.Invoke(effect.effectData);
+                activeEffects.RemoveAt(i);
+            }
+        }
+    }
+
+    public List<ActiveStatusEffect> GetActiveEffects()
+    {
+        return new List<ActiveStatusEffect>(activeEffects);
+    }
+    public bool HasEffect(StatusEffect effect)
+    {
+        return activeEffects.Exists(e => e.effectData == effect);
+    }
+
+    public void RemoveEffect(StatusEffect effect)
+    {
+        ActiveStatusEffect active = activeEffects.Find(e => e.effectData == effect);
+        if (active != null)
+        {
+            RemoveVisualForEffect(active);
+            effect.OnRemove(stats);
+            activeEffects.Remove(active);
+            onEffectRemoved?.Invoke(effect);
+        }
+    }
+
+    public void ClearAllEffects()
+    {
+        foreach (var effect in activeEffects)
+        {
+            RemoveVisualForEffect(effect);
+            effect.effectData.OnRemove(stats);
+            onEffectRemoved?.Invoke(effect.effectData);
+        }
+        activeEffects.Clear();
+    }
+
+    
     private void RemoveVisualForEffect(ActiveStatusEffect activeEffect)
     {
         if (activeEffect.visualInstance != null)

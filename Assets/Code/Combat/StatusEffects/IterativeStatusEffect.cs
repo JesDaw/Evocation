@@ -1,20 +1,16 @@
 using UnityEngine.Events;
 using UnityEngine;
 
-/// <summary>
-/// Status effects that apply their effect repeatedly over time (DoT, HoT, etc.)
-/// </summary>
 [CreateAssetMenu(fileName = "New Iterative Effect", menuName = "Status Effects/Iterative Effect")]
 public class IterativeStatusEffect : StatusEffect
 {
     [Header("Iterative Settings")]
     public float tickInterval = 1f; 
-    public float damagePerTick = 5f; 
-    public bool canKill = true; // if we want to do minecraft poison maybe
-    //if we needed some special actions on tick
+    public float HealthChangePerTick = 5f; 
+    public bool canKill = true; 
 
     [Header("Stacking")]
-    [SerializeField] private bool allowStacking = false;
+    [SerializeField] bool allowStacking = false;
     //[SerializeField] private int maxStacks = 3;
 
     public override void OnApply(Stats target)
@@ -23,28 +19,10 @@ public class IterativeStatusEffect : StatusEffect
         Debug.Log($"{effectName} applied to {target.gameObject.name}");
     }
 
-    public override void OnTick(Stats target, float deltaTime) // This is called by StatusEffectManager
+    public override void OnTick(Stats target, float deltaTime) //called by StatusEffectManager
     {
-        //For damage and healing
-        if (damagePerTick > 0)
-        {
-            // Damage — no meaningful source position for a status-effect tick.
-            target.damageHandler.TakeDamage(damagePerTick, 0);
-        }
-        else if (damagePerTick < 0)
-        {
-            // Healing
-            target.damageHandler.Heal(damagePerTick);
-            
-            // Prevent healing from killing
-            // Do we need this? i'll just remove it for now...
-            /*
-            if (!canKill && target._CurrentHealth < 1f)
-            {
-                target._CurrentHealth = 1f;
-            }
-            */
-        }
+        Debug.Log("tick");
+        target.AlterHealth(HealthChangePerTick);
     }
 
     public override void OnRemove(Stats target)
@@ -64,7 +42,7 @@ public class IterativeStatusEffect : StatusEffect
 }
 
 [System.Serializable]
-public class ActiveIterativeEffect : ActiveStatusEffect
+public class ActiveIterativeEffect : ActiveStatusEffect // what is this for?
 {
     public UnityEvent<Stats> specialOnTick;
     public IterativeStatusEffect IterativeData => effectData as IterativeStatusEffect;

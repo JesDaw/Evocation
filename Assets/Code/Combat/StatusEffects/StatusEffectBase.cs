@@ -4,7 +4,7 @@ public abstract class StatusEffect : ScriptableObject
 {
     [Header("Basic Info")]
     public string effectName = "Status Effect";
-    public Sprite icon;
+    public Sprite icon; // this is not needed i think
     
     [Header("Duration")]
     public float duration = 5f;

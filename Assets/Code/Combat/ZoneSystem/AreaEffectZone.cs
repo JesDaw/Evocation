@@ -57,7 +57,7 @@ public class AreaEffectZone : MonoBehaviour
     void EenableZoneVisuals()
     {
         // other effects
-        zoneVisuals.SetActive(true);
+        if (zoneVisuals != null) zoneVisuals.SetActive(true);
     }
 
     public void DeactivateField()
