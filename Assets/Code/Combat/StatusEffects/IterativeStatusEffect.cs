@@ -21,7 +21,6 @@ public class IterativeStatusEffect : StatusEffect
 
     public override void OnTick(Stats target, float deltaTime) //called by StatusEffectManager
     {
-        Debug.Log("tick");
         target.AlterHealth(HealthChangePerTick);
     }
 
