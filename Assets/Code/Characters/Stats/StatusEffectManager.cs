@@ -17,65 +17,24 @@ public class StatusEffectManager : MonoBehaviour
         stats = statsComponent;
     }
 
-    public void AddEffect(StatusEffect effect)
+    public void AddEffect(StatusEffect effect, float? durationOverride = null)
     {
         if (effect == null) return;
+        float duration = durationOverride ?? effect.duration;
 
-        if (effect.CanStack())
+        ActiveStatusEffect existing = activeEffects.Find(e => e.effectData == effect);
+        if (existing != null)
         {
-            ActiveStatusEffect existing = activeEffects.Find(e => e.effectData == effect);
-            if (existing != null)
-            {
-                existing.stackCount++;
-                existing.timeRemaining = effect.duration;
-                return;
-            }
-        }
-        else
-        {
-            ActiveStatusEffect existing = activeEffects.Find(e => e.effectData == effect);
-            if (existing != null)
-            {
-                existing.timeRemaining = effect.duration;
-                return;
-            }
+            if (effect.CanStack()) existing.stackCount++;
+            existing.timeRemaining = duration;
+            return;
         }
 
-        ActiveStatusEffect newEffect = effect.CreateInstance();
-        activeEffects.Add(newEffect);
-        SpawnVisualForEffect(newEffect);
-        
-        effect.OnApply(stats);
-        onEffectApplied?.Invoke(effect);
-    }
-
-    public void ApplyEffect(StatusEffect effect, float durationOverride)
-    {
-        if (effect == null) return;
-
-        for (int i = 0; i < activeEffects.Count; i++)
-        {
-            if (activeEffects[i].effectData == effect)
-            {
-                var refreshed = activeEffects[i];
-                refreshed.timeRemaining = durationOverride;
-                activeEffects[i] = refreshed;
-
-                if (effect is IterativeStatusEffect iterativeData && activeEffects[i] is ActiveIterativeEffect iterInstance)
-                {
-                    iterInstance.nextTickTime = iterativeData.tickInterval;
-                    activeEffects[i] = iterInstance;
-                }
-
-                return;
-            }
-        }
-
-        effect.OnApply(stats);
         ActiveStatusEffect instance = effect.CreateInstance();
-        instance.timeRemaining = durationOverride;
+        instance.timeRemaining = duration;
         activeEffects.Add(instance);
         SpawnVisualForEffect(instance);
+        effect.OnApply(stats);
         onEffectApplied?.Invoke(effect);
     }
 
@@ -111,16 +70,12 @@ public class StatusEffectManager : MonoBehaviour
 
             if (effect.effectData is IterativeStatusEffect iterative)
             {
-                Debug.Log("IterativeStatusEffect");
                 effect.nextTickTime -= deltaTime;
-                Debug.Log($"{effect.nextTickTime}");
                 
                 if (effect.nextTickTime <= 0f)
                 {
-                    Debug.Log("effect.nextTickTime <= 0f");
                     for (int stack = 0; stack < effect.stackCount; stack++)
                     {
-                        Debug.Log("Calling OnTick");
                         effect.effectData.OnTick(stats, deltaTime);
                     }
                     
@@ -131,7 +86,6 @@ public class StatusEffectManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("StaticStatusEffect");
                 effect.effectData.OnTick(stats, deltaTime);
             }
 

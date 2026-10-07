@@ -18,6 +18,9 @@ public class AreaEffectData : ScriptableObject
 
     [Header("Effects")]
     public StatusEffect[] effects;
+    [Tooltip("This is just here because using status effects for damage and stuff like that when it only applies if you are in a zone is weird")]
+
+    public int HealthChangePerTick = 0;
     public float refreshInterval = 0.5f;
     public ZoneApplicationMode applicationMode = ZoneApplicationMode.All;
 

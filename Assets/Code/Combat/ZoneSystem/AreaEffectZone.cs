@@ -6,8 +6,7 @@ public class AreaEffectZone : MonoBehaviour
     public AreaEffectData data;
 
     [Header("Targeting")]
-    public List<string> targetTags = new List<string>();
-
+    public List<string> targetTags = new List<string>();    
     Stats _caster;
     bool _excludeCaster;
     bool _isSticky;
@@ -97,11 +96,13 @@ public class AreaEffectZone : MonoBehaviour
     }
     void ApplyEffectsToTargets()
     {
+        
         List<Stats> targets = GatherTargets();
 
         int applied = 0;
         foreach (Stats target in targets)
         {
+           
             if (data.maxTargets >= 0 && applied >= data.maxTargets) break;
             if (_isOneShot && _alreadyHit.Contains(target)) continue;
 
@@ -137,16 +138,17 @@ public class AreaEffectZone : MonoBehaviour
 
     void ApplyEffectsTo(Stats target)
     {
+        target.AlterHealth(data.HealthChangePerTick);
         if (data.effects == null || data.effects.Length == 0) return;
 
         if (data.applicationMode == ZoneApplicationMode.All) 
         {
-            foreach (var effect in data.effects) target.statusEffectManager.ApplyEffect(effect, effect.duration);
+            foreach (var effect in data.effects) target.statusEffectManager.AddEffect(effect, effect.duration);
         }
         else
         {
             StatusEffect chosen = data.effects[Random.Range(0, data.effects.Length)];
-            target.statusEffectManager.ApplyEffect(chosen, chosen.duration);
+            target.statusEffectManager.AddEffect(chosen, chosen.duration);
         }
     }
     void ItterateLifeSpan()
