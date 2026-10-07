@@ -10,7 +10,7 @@ public class AreaEffectData : ScriptableObject
     public float circleRadius = 3f;
 
     [Header("Targeting")]
-    public int maxTargets = -1;
+    public int maxTargets = 100;    
 
     [Header("Duration")]
     public float zoneLifespan = 0f; 
