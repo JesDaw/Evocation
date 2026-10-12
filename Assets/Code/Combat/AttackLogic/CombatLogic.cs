@@ -66,13 +66,40 @@ public static class CombatLogic
         return candidates;
     }
 
-    public static List<string> GetTargetTags(Stats attacker, CombatAction action)
+    public static List<string> GetTargetTags(Stats attacker, CombatAction action, bool? ZoneTargetsEnemies = null)
     {
         List<string> tags = new List<string>();
+        if (ZoneTargetsEnemies == null)
+        {
+            if (action.targetFriendly)
+            {
+                if (attacker._Enemy)
+                {
+                    tags.Add("Enemy");
+                }
+                else
+                {
+                    tags.Add("Allies");
+                    tags.Add("Player");
+                }
+            }
+            else
+            {
+                if (attacker._Enemy)
+                {
+                    tags.Add("Player");
+                    tags.Add("Allies");
+                }
+                else
+                {
+                    tags.Add("Enemy");
+                }
+            }
 
-        if (action.targetFriendly)
+        }
+        else 
         {
-            if (attacker._Enemy)
+            if (ZoneTargetsEnemies == true)
             {
                 tags.Add("Enemy");
             }
@@ -82,18 +109,7 @@ public static class CombatLogic
                 tags.Add("Player");
             }
         }
-        else
-        {
-            if (attacker._Enemy)
-            {
-                tags.Add("Player");
-                tags.Add("Allies");
-            }
-            else
-            {
-                tags.Add("Enemy");
-            }
-        }
+
 
         return tags;
     }
@@ -179,7 +195,7 @@ public static class CombatLogic
         if (action.zoneData == null || action.zoneSpawnPosition != ZoneSpawnPosition.Touch) return;
 
         Transform sticky = action.zoneSticky ? target.transform : null;
-        List<string> tags = GetTargetTags(attacker, action);
+        List<string> tags = GetTargetTags(attacker, action, action.ZoneTargetsEnemies);
 
         AreaEffectLogic.SpawnZone(
             action.zoneData,

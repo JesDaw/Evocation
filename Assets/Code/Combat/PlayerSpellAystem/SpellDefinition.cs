@@ -120,6 +120,7 @@ public class SpellEffectData
     public SpellZoneMode zoneMode = SpellZoneMode.None;
     public bool zoneSticky = false;
     public bool excludeCasterFromZone = true;
+    public bool zoneTargetsEnemies = false;
 
     public CombatAction ToCombatAction() { 
         Debug.Log("Combat Action Activated!");
@@ -131,6 +132,7 @@ public class SpellEffectData
             ScaleEffectsWithUsersStats = false,
             healthChangePercent  = healthChange,
             knockbackPercent = knockback,
+            ZoneTargetsEnemies = zoneTargetsEnemies,
             effectsOnHit      = effectsOnHit,
             zoneData          = zoneData,
             zoneSpawnPosition = zoneMode == SpellZoneMode.AroundCastPoint ? ZoneSpawnPosition.Self
