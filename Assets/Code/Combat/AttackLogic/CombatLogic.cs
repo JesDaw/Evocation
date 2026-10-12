@@ -169,6 +169,7 @@ public static class CombatLogic
             foreach (var effect in action.effectsOnHit)
             {
                 target.statusEffectManager.AddEffect(effect, effect.duration);
+                Debug.Log( effect + "Effect has been applied");
             }
         }
     }
