@@ -45,6 +45,7 @@ public class CombatAction
     [Header("Delivery")]
     [Tooltip("Self = zone spawns at caster (aura). Touch = melee zone on target. Projectile = fires projectile toward target")]
     public ZoneSpawnPosition zoneSpawnPosition = ZoneSpawnPosition.Self;
+    public bool ZoneTargetsEnemies = false;
     public bool UseProjectile = false;
     [Tooltip("Projectile settings — used only when UseProjectile is true")]
     public ProjectileSettings projectileSettings;
