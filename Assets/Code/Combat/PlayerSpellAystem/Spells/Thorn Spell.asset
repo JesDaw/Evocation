@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23f73bdf0380144178c0f20862a39316, type: 3}
+  m_Name: Thorn Spell
+  m_EditorClassIdentifier: CodeAssembly::SpellDefinition
+  SpellName: Thorn Spell
+  Icon: {fileID: 4810461850720948963, guid: 55eb8296bf05bd448bfc1425cd0d64e5, type: 3}
+  Description: Covers a friendly troop in thorns. Physical attacks to troop hurt
+    attacker
+  castMode: 0
+  Cost: 0
+  Radius: 2
+  spellEffect:
+    targetFriendly: 1
+    maxTargets: 100
+    healthChange: 0
+    knockback: 0
+    effectsOnHit:
+    - {fileID: 0}
+    zoneData: {fileID: 11400000, guid: 3bb16b37301c74720a19756d10170162, type: 2}
+    zoneMode: 2
+    zoneSticky: 1
+    excludeCasterFromZone: 1
+  hitboxDelay: 0
+  animationDuration: 1
+  spellVFX: {fileID: 0}
+  castSoundName: explosion
+  DebugLogs: 0

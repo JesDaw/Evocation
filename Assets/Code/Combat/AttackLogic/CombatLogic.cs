@@ -164,9 +164,12 @@ public static class CombatLogic
 
     static void ApplyStatusEffects(Stats attacker, CombatAction action, Stats target)
     {
-        foreach (var effect in action.effectsOnHit)
+        if (action.effectsOnHit.Count != 0)
         {
-            target.statusEffectManager.AddEffect(effect, effect.duration);
+            foreach (var effect in action.effectsOnHit)
+            {
+                target.statusEffectManager.AddEffect(effect, effect.duration);
+            }
         }
     }
 
