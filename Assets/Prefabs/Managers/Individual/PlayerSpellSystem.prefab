@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5991983189651631630}
   - component: {fileID: 8340520491679727397}
   - component: {fileID: 1279739322845690954}
+  - component: {fileID: 8101670449007390260}
   m_Layer: 0
   m_Name: Rectical
   m_TagString: Untagged
@@ -112,6 +113,28 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
+--- !u!114 &8101670449007390260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1331225986964854547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15f37258a0c58af4b8043019b85bd3f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::RecticalSnap
+  groundTargetMask:
+    serializedVersion: 2
+    m_Bits: 7168
+  enemyTargetMask:
+    serializedVersion: 2
+    m_Bits: 458752
+  enemyPositions: []
+  rayLength: 5
+  sphereLength: 3
+  DebugDrawing: 0
 --- !u!1 &2512346747509638594
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,4 +323,35 @@ MonoBehaviour:
     EndingAnimation: 
     IsContinuous: 1
     Cancelable: 0
+  recticalSnap: {fileID: 8101670449007390260}
+  OnSpellCastEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: GlobalVolumeChanger, CodeAssembly
+        m_MethodName: SpellCast
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnSpellCastExit:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: GlobalVolumeChanger, CodeAssembly
+        m_MethodName: ResetSpell
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   DebugLogs: 0

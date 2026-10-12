@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class SpellCaster : MonoBehaviour
 {
@@ -17,11 +18,16 @@ public class SpellCaster : MonoBehaviour
     [SerializeField] RectTransform screenReticleUI;
     [SerializeField] float lookSensitivity = 8f;
     [SerializeField] PlayerAnimationDefinition playerAnimationDefinition;
-    [SerializeField] bool DebugLogs = false;
+    [SerializeField] RecticalSnap recticalSnap;
     bool returnToFreeCam;
 
     Vector2 _screenReticlePos;
     Action<InputAction.CallbackContext> _castHandler;
+    [Header("Events")]
+    [SerializeField] UnityEvent OnSpellCastEnter;
+    [SerializeField] UnityEvent OnSpellCastExit;
+    [Header("Debug")]
+    [SerializeField] bool DebugLogs = false;
 
     public Stats CasterStats => ActivePlayer.Instance.CurrentPlayer != null
         ? ActivePlayer.Instance.CurrentPlayer.GetComponent<Stats>()
@@ -62,11 +68,13 @@ public class SpellCaster : MonoBehaviour
             if (SpellSwapper.Instance.CurrentSpell.castMode == SpellCastMode.Aimed) // means we use the aiming logic not that we are already aiming
             {
                 EnterAimCamera();
+                OnSpellCastEnter.Invoke();
             }
         }
         else
         {
             ExitAimCamera();
+            OnSpellCastExit.Invoke();
         }
     }
 
@@ -123,7 +131,7 @@ public class SpellCaster : MonoBehaviour
 
         if (screenReticleUI != null) screenReticleUI.position = _screenReticlePos;
 
-        detectionRadiusObject.position = ScreenPointToWorldOnGamePlane(_screenReticlePos);
+        detectionRadiusObject.position = recticalSnap.SnapToGround(ScreenPointToWorldOnGamePlane(_screenReticlePos));
     }
 
     Vector3 ScreenPointToWorldOnGamePlane(Vector2 screenPos)
