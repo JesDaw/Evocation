@@ -15,8 +15,6 @@ public class StaticStatusEffect : StatusEffect
 
     public float horizontalRangeMultiplier = 1f;
 
-    public float animationSpeedMultiplier = 1f;
-
     public float castSpeedMultiplier = 1f;
 
     [Header("Stacking")]
@@ -82,8 +80,7 @@ public class StaticStatusEffect : StatusEffect
             snap.horizontalRange * horizontalRangeMultiplier,
             target._AttackRange.y);
 
-        if (target.animator != null)
-            target.animator.speed = snap.animationSpeed * animationSpeedMultiplier;
+        if (target.animator != null) target.animator.speed = snap.animationSpeed * moveSpeedMultiplier;
 
         target._CastSpeedMultiplier = snap.castSpeedMultiplier * castSpeedMultiplier;
     }

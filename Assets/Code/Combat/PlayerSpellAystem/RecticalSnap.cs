@@ -35,8 +35,7 @@ public class RecticalSnap : MonoBehaviour
 
         for(int I = 1; I < enemyPositions.Count; I++)
         {
-            if(minDistance < Vector3.Distance(minDistancePosition, enemyPositions[I]));
-                minDistancePosition = enemyPositions[I];
+            if(minDistance < Vector3.Distance(minDistancePosition, enemyPositions[I])) minDistancePosition = enemyPositions[I];
         }
         
         return minDistancePosition;
