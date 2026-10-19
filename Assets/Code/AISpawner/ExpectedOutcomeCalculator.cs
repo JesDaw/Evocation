@@ -31,32 +31,34 @@ public static class ExpectedOutcomeCalculator
     static TeamState ExtractTeamData(List<Stats> team, ScriptableStats extraCharacter = null)
     {
         TeamState state = new TeamState();
-        if (team == null || team.Count == 0) return state;
 
         float normalDpsSum = 0f;
         float normalHpSum = 0f;
         float aoeDpsSum = 0f;
         float aoeHpSum = 0f;
 
-        foreach (var unit in team)
+        if (team != null)
         {
-            if (unit == null || unit._IsDead) continue;
-
-            var profile = PowerMath.GetProfile(unit);
-            float unitDps = PowerMath.GetDPS(profile);
-            float unitHp = Mathf.Max(1f, profile.HP);
-
-            if (unit._IsAOE)
+            foreach (var unit in team)
             {
-                state.aoeCount++;
-                aoeDpsSum += unitDps;
-                aoeHpSum += unitHp;
-            }
-            else
-            {
-                state.normalCount++;
-                normalDpsSum += unitDps;
-                normalHpSum += unitHp;
+                if (unit == null || unit._IsDead) continue;
+
+                var profile = PowerMath.GetProfile(unit);
+                float unitDps = PowerMath.GetDPS(profile);
+                float unitHp = Mathf.Max(1f, profile.HP);
+
+                if (unit._IsAOE)
+                {
+                    state.aoeCount++;
+                    aoeDpsSum += unitDps;
+                    aoeHpSum += unitHp;
+                }
+                else
+                {
+                    state.normalCount++;
+                    normalDpsSum += unitDps;
+                    normalHpSum += unitHp;
+                }
             }
         }
 
@@ -66,7 +68,7 @@ public static class ExpectedOutcomeCalculator
             float unitDps = PowerMath.GetDPS(profile);
             float unitHp = Mathf.Max(1f, profile.HP);
 
-            if (PowerMath.IsAOE(extraCharacter.combatActions)) 
+            if (PowerMath.IsAOE(extraCharacter.combatActions))
             {
                 state.aoeCount++;
                 aoeDpsSum += unitDps;
@@ -85,7 +87,6 @@ public static class ExpectedOutcomeCalculator
             state.avgNormalDps = normalDpsSum / state.normalCount;
             state.avgNormalHp = normalHpSum / state.normalCount;
         }
-
         if (state.aoeCount > 0)
         {
             state.avgAoeDps = aoeDpsSum / state.aoeCount;
