@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using TMPro;
+using UnityEngine.UI;
 
 /// <summary>
 /// Owns the spell list and which one is selected. Swapping is blocked while
@@ -16,6 +18,10 @@ public class SpellSwapper : MonoBehaviour
     public UnityEvent OnSwapSpells;
 
     [SerializeField] int currentIndex = 0;
+    [SerializeField] TextMeshProUGUI totalMana;
+    [SerializeField] TextMeshProUGUI cost;
+    [SerializeField] Slider ManaBarImage;
+    [SerializeField] Image spellIconHolder; 
     [SerializeField] bool DebugLogs;
 
     public SpellDefinition CurrentSpell;
@@ -34,8 +40,7 @@ public class SpellSwapper : MonoBehaviour
 
         currentIndex = Mathf.Clamp(currentIndex, 0, spells.Count - 1);
         CurrentSpell = spells[currentIndex];
-
-        UpdateMagicUIFunctions.Instance.UpdateSpellGUI(CurrentSpell);
+        UpdateSpellGUI();
         OnSwapSpells.Invoke();
     }
 
@@ -45,6 +50,10 @@ public class SpellSwapper : MonoBehaviour
 
         input.SwapSpell1.performed += SwapForward;
         input.SwapSpell2.performed += SwapBackward;
+    }
+    void OnDestroy()
+    {
+        UnsubscribeFromInputs();
     }
 
     void UnsubscribeFromInputs()
@@ -57,6 +66,8 @@ public class SpellSwapper : MonoBehaviour
         input.SwapSpell1.performed -= SwapForward;
         input.SwapSpell2.performed -= SwapBackward;
     }
+
+    #region switching
 
     void SwapForward(InputAction.CallbackContext context)
     {
@@ -88,13 +99,23 @@ public class SpellSwapper : MonoBehaviour
 
         CurrentSpell = spells[currentIndex];
 
-        UpdateMagicUIFunctions.Instance.UpdateSpellGUI(CurrentSpell);
+        UpdateSpellGUI();
         OnSwapSpells.Invoke();
         if (DebugLogs) Debug.Log($"Event invoked");
     }
+    #endregion
 
-    void OnDestroy()
+    void UpdateSpellGUI()
     {
-        UnsubscribeFromInputs();
+        cost.text = CurrentSpell.Cost.ToString();
+        spellIconHolder.sprite = CurrentSpell.Icon;
     }
+
+    public void UpdateTotalMana(int _totalMana)
+    {
+        totalMana.text = "Mana: " + _totalMana.ToString();
+        ManaBarImage.value = (float)_totalMana / 100;
+    }
+
+
 }
