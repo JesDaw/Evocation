@@ -1,152 +1,197 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Estimates the result of a battle using a lightweight Lanchester-inspired model.
+/// Sign convention is kept compatible with the existing AI:
+/// positive = Player/Allies favored, negative = AI/Enemy favored.
+/// </summary>
 public static class ExpectedOutcomeCalculator
 {
-    struct TeamState
-    {
-        public float normalCount;
-        public float aoeCount;
-        public float avgNormalDps;
-        public float avgAoeDps;
-        public float avgNormalHp;
-        public float avgAoeHp;
+    // A practical cap: range advantage matters, but shouldn't make a unit effectively
+    // invulnerable just because its opponent is slow or stationary.
+    const float MaxOpeningLeadSeconds = 3f;
+    const float MinimumClosingSpeed = 0.25f;
+    const float MinimumFightDuration = 1f;
+    const float MinimumDps = 0.01f;
 
-        public readonly float TotalCount => normalCount + aoeCount;
+    /// <summary>
+    /// Shared normalized profile used for both existing units and spawn candidates.
+    /// maxTargets == int.MaxValue represents unlimited AOE targeting.
+    /// </summary>
+    public struct CombatProfile
+    {
+        public float dps;
+        public float hp;
+        public float range;
+        public float moveSpeed;
+        public int maxTargets;
+
+        public bool IsAOE => maxTargets != 1;
+
+        public CombatProfile(float dps, float hp, float range, float moveSpeed, int maxTargets)
+        {
+            this.dps = Mathf.Max(0f, dps);
+            this.hp = Mathf.Max(0f, hp);
+            this.range = Mathf.Max(0f, range);
+            this.moveSpeed = Mathf.Max(0f, moveSpeed);
+            this.maxTargets = maxTargets <= 0 ? int.MaxValue : maxTargets;
+        }
     }
 
     /// <summary>
-    /// Returns positive float for Player win, negative float for AI win, and 0 for a tie.
+    /// Returns a signed estimate of the battle outcome. Positive favors the Player team;
+    /// negative favors the AI team. The magnitude scales with army size and relative strength.
     /// </summary>
-    public static float CalculateExpectedOutcome(List<Stats> aiTeam, List<Stats> playerTeam, ScriptableStats extraCharacter = null)
+    public static float CalculateExpectedOutcome(List<Stats> aiTeam, List<Stats> playerTeam, ScriptableStats extraCharacter = null, int extraCharacterCopies = 1)
     {
-        TeamState aiState = ExtractTeamData(aiTeam, extraCharacter);
-        TeamState playerState = ExtractTeamData(playerTeam);
-
-        SimulateBattle(ref aiState, ref playerState);
-
-        return ComputeOutcomeScore(aiState, playerState);
-    }
-    static TeamState ExtractTeamData(List<Stats> team, ScriptableStats extraCharacter = null)
-    {
-        TeamState state = new TeamState();
-
-        float normalDpsSum = 0f;
-        float normalHpSum = 0f;
-        float aoeDpsSum = 0f;
-        float aoeHpSum = 0f;
-
-        if (team != null)
-        {
-            foreach (var unit in team)
-            {
-                if (unit == null || unit._IsDead) continue;
-
-                var profile = PowerMath.GetProfile(unit);
-                float unitDps = PowerMath.GetDPS(profile);
-                float unitHp = Mathf.Max(1f, profile.HP);
-
-                if (unit._IsAOE)
-                {
-                    state.aoeCount++;
-                    aoeDpsSum += unitDps;
-                    aoeHpSum += unitHp;
-                }
-                else
-                {
-                    state.normalCount++;
-                    normalDpsSum += unitDps;
-                    normalHpSum += unitHp;
-                }
-            }
-        }
-
+        var aiProfiles = BuildLiveProfiles(aiTeam);
         if (extraCharacter != null)
         {
-            var profile = PowerMath.GetProfile(extraCharacter);
-            float unitDps = PowerMath.GetDPS(profile);
-            float unitHp = Mathf.Max(1f, profile.HP);
-
-            if (PowerMath.IsAOE(extraCharacter.combatActions))
-            {
-                state.aoeCount++;
-                aoeDpsSum += unitDps;
-                aoeHpSum += unitHp;
-            }
-            else
-            {
-                state.normalCount++;
-                normalDpsSum += unitDps;
-                normalHpSum += unitHp;
-            }
+            CombatProfile candidateProfile = BuildCandidateProfile(extraCharacter);
+            for (int i = 0; i < Mathf.Max(0, extraCharacterCopies); i++)
+                aiProfiles.Add(candidateProfile);
         }
 
-        if (state.normalCount > 0)
+        var playerProfiles = BuildLiveProfiles(playerTeam);
+        return EvaluateProfiles(aiProfiles, playerProfiles);
+    }
+
+    /// <summary>
+    /// Public pure-math entry point, also useful for automated matchup tests.
+    /// </summary>
+    public static float EvaluateProfiles(List<CombatProfile> aiTeam, List<CombatProfile> playerTeam)
+    {
+        if (aiTeam == null) aiTeam = new List<CombatProfile>();
+        if (playerTeam == null) playerTeam = new List<CombatProfile>();
+
+        float aiHp = TotalHp(aiTeam);
+        float playerHp = TotalHp(playerTeam);
+        if (aiHp <= 0f && playerHp <= 0f) return 0f;
+        if (aiHp <= 0f) return playerTeam.Count;
+        if (playerHp <= 0f) return -aiTeam.Count;
+
+        float aiStrength = CalculateArmyStrength(aiTeam, playerTeam);
+        float playerStrength = CalculateArmyStrength(playerTeam, aiTeam);
+        float totalStrength = aiStrength + playerStrength;
+        if (totalStrength <= 0f) return 0f;
+
+        // Keep the previous API's signed, survivor-like scale without running a long
+        // frame-by-frame simulation. This also lets a swarm gain nonlinear value because
+        // both its combined damage and combined durability grow with its headcount.
+        float relativeAdvantage = (playerStrength - aiStrength) / totalStrength;
+        return relativeAdvantage * (aiTeam.Count + playerTeam.Count);
+    }
+
+    public static CombatProfile BuildCandidateProfile(ScriptableStats candidate)
+    {
+        if (candidate == null) return new CombatProfile();
+
+        PowerMath.UnitProfile profile = PowerMath.GetProfile(candidate);
+        return new CombatProfile(
+            PowerMath.GetDPS(profile),
+            profile.HP,
+            profile.Range,
+            profile.Move,
+            profile.MaxTargets);
+    }
+
+    static List<CombatProfile> BuildLiveProfiles(List<Stats> team)
+    {
+        var profiles = new List<CombatProfile>();
+        if (team == null) return profiles;
+
+        foreach (Stats unit in team)
         {
-            state.avgNormalDps = normalDpsSum / state.normalCount;
-            state.avgNormalHp = normalHpSum / state.normalCount;
+            if (unit == null || unit._IsDead || unit.scriptableStats == null) continue;
+
+            PowerMath.UnitProfile profile = PowerMath.GetProfile(unit);
+            float currentHp = unit._CurrentHealth > 0f ? unit._CurrentHealth : 0f;
+            if (currentHp <= 0f) continue;
+
+            // Use the same PowerMath profile fields as a candidate, but use current HP
+            // for a live unit because damaged units should contribute less durability.
+            profiles.Add(new CombatProfile(
+                PowerMath.GetDPS(profile),
+                currentHp,
+                profile.Range,
+                profile.Move,
+                profile.MaxTargets));
         }
-        if (state.aoeCount > 0)
+
+        return profiles;
+    }
+
+    static float CalculateArmyStrength(List<CombatProfile> attackers, List<CombatProfile> defenders)
+    {
+        if (attackers.Count == 0 || defenders.Count == 0) return 0f;
+
+        float defenderHp = TotalHp(defenders);
+        float defenderDps = CalculateBaseDps(defenders, attackers.Count);
+        float expectedFightDuration = defenderHp / Mathf.Max(defenderDps, MinimumDps);
+        expectedFightDuration = Mathf.Max(MinimumFightDuration, expectedFightDuration);
+
+        float attackerDps = 0f;
+        float averageDefenderRange = AverageRange(defenders);
+        float averageDefenderSpeed = AverageSpeed(defenders);
+
+        foreach (CombatProfile attacker in attackers)
         {
-            state.avgAoeDps = aoeDpsSum / state.aoeCount;
-            state.avgAoeHp = aoeHpSum / state.aoeCount;
+            float targetCount = EffectiveTargetCount(attacker, defenders.Count);
+            float openingLead = CalculateOpeningLead(attacker, averageDefenderRange, averageDefenderSpeed);
+            float rangeMultiplier = 1f + openingLead / expectedFightDuration;
+            attackerDps += attacker.dps * targetCount * rangeMultiplier;
         }
 
-        return state;
+        return attackerDps * TotalHp(attackers);
     }
 
-    static void SimulateBattle(ref TeamState ai, ref TeamState player, float timeStep = 0.01f, int maxTicks = 100000)
+    static float CalculateBaseDps(List<CombatProfile> team, int opposingUnitCount)
     {
-        int tick = 0;
-        while (ai.TotalCount > 0f && player.TotalCount > 0f && tick < maxTicks)
-        {
-            float aiDamage = CalculateTeamDamage(ai, player.TotalCount) * timeStep;
-            float playerDamage = CalculateTeamDamage(player, ai.TotalCount) * timeStep;
-
-            ApplyDamage(ref player, aiDamage);
-            ApplyDamage(ref ai, playerDamage);
-
-            tick++;
-        }
+        float total = 0f;
+        foreach (CombatProfile unit in team)
+            total += unit.dps * EffectiveTargetCount(unit, opposingUnitCount);
+        return total;
     }
 
-    static float CalculateTeamDamage(TeamState attacker, float targetCount)
+    static float EffectiveTargetCount(CombatProfile attacker, int opposingUnitCount)
     {
-        float singleTargetDps = attacker.normalCount * attacker.avgNormalDps;
-        // AOE units hit the opponent's entire remaining headcount — intentional,
-        // now that maxTargets is being set to unlimited across the board.
-        float aoeDps = attacker.aoeCount * attacker.avgAoeDps * targetCount;
-        return singleTargetDps + aoeDps;
+        if (!attacker.IsAOE) return 1f;
+        if (opposingUnitCount <= 0) return 0f;
+        return Mathf.Min(opposingUnitCount, attacker.maxTargets);
     }
 
-    static void ApplyDamage(ref TeamState defender, float incomingDamage)
+    static float CalculateOpeningLead(CombatProfile attacker, float defenderRange, float defenderSpeed)
     {
-        float totalUnits = defender.TotalCount;
-        if (totalUnits <= 0f) return;
+        float rangeAdvantage = attacker.range - defenderRange;
+        if (rangeAdvantage <= 0f) return 0f;
 
-        float normalRatio = defender.normalCount / totalUnits;
-        float aoeRatio = defender.aoeCount / totalUnits;
-
-        float normalDamage = incomingDamage * normalRatio;
-        float aoeDamage = incomingDamage * aoeRatio;
-
-        if (defender.avgNormalHp > 0f)
-            defender.normalCount -= normalDamage / defender.avgNormalHp;
-        if (defender.avgAoeHp > 0f)
-            defender.aoeCount -= aoeDamage / defender.avgAoeHp;
-
-        if (defender.normalCount < 0f) defender.normalCount = 0f;
-        if (defender.aoeCount < 0f) defender.aoeCount = 0f;
+        // Both sides are assumed to close distance. This is deliberately an estimate,
+        // not a replacement for the actual movement/combat systems.
+        float closingSpeed = Mathf.Max(MinimumClosingSpeed, attacker.moveSpeed + defenderSpeed);
+        return Mathf.Clamp(rangeAdvantage / closingSpeed, 0f, MaxOpeningLeadSeconds);
     }
 
-    static float ComputeOutcomeScore(TeamState ai, TeamState player)
+    static float TotalHp(List<CombatProfile> team)
     {
-        float aiRemaining = ai.TotalCount;
-        float playerRemaining = player.TotalCount;
+        float total = 0f;
+        foreach (CombatProfile unit in team) total += Mathf.Max(0f, unit.hp);
+        return total;
+    }
 
-        if (playerRemaining > 0f && aiRemaining <= 0f) return playerRemaining;
-        if (aiRemaining > 0f && playerRemaining <= 0f) return -aiRemaining;
-        return 0f;
+    static float AverageRange(List<CombatProfile> team)
+    {
+        if (team.Count == 0) return 0f;
+        float total = 0f;
+        foreach (CombatProfile unit in team) total += unit.range;
+        return total / team.Count;
+    }
+
+    static float AverageSpeed(List<CombatProfile> team)
+    {
+        if (team.Count == 0) return 0f;
+        float total = 0f;
+        foreach (CombatProfile unit in team) total += unit.moveSpeed;
+        return total / team.Count;
     }
 }

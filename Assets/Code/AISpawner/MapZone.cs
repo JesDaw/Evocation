@@ -9,11 +9,12 @@ public class MapZone : MonoBehaviour
     [HideInInspector] public List<GameObject> EnemyUnits = new List<GameObject>();
     [HideInInspector] public List<GameObject> PlayerUnits = new List<GameObject>();
     [HideInInspector] public List<GameObject> AllyUnits = new List<GameObject>();
+
     float enemyPower = 0f;
-    float allyPower = 0f; 
-    Dictionary<GameObject, float> unitPower = new Dictionary<GameObject, float>();
+    float allyPower = 0f;
+    readonly Dictionary<GameObject, float> unitPower = new Dictionary<GameObject, float>();
     [SerializeField] ResourceSpawner[] resourceSpawners;
-    [HideInInspector] public float totalAIIncentive = 0; 
+    [HideInInspector] public float totalAIIncentive = 0f;
 
     Collider2D zoneCollider;
     Vector3 Center => zoneCollider != null ? zoneCollider.bounds.center : transform.position;
@@ -23,13 +24,16 @@ public class MapZone : MonoBehaviour
     {
         zoneCollider = GetComponent<Collider2D>();
     }
+
     void Start()
     {
-        if (startingPlayer != null)
+        if (startingPlayer != null) AddCharacterToList(startingPlayer);
+
+        if (resourceSpawners == null) return;
+        foreach (var spawner in resourceSpawners)
         {
-            AddCharacterToList(startingPlayer);
+            if (spawner != null) totalAIIncentive += spawner.AIWeight;
         }
-        foreach (var spawner in resourceSpawners) totalAIIncentive += spawner.AIWeight;
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -38,84 +42,125 @@ public class MapZone : MonoBehaviour
         AddCharacterToList(collision.gameObject);
     }
 
-    void AddCharacterToList(GameObject gameObject)
+    void AddCharacterToList(GameObject obj)
     {
-        GameObject obj = gameObject;
-        float power = obj.GetComponent<Stats>().scriptableStats._CalculatedPower;
+        if (obj == null || unitPower.ContainsKey(obj)) return;
+
+        Stats stats = obj.GetComponent<Stats>();
+        if (stats == null || stats.scriptableStats == null) return;
+
+        float power = stats.scriptableStats._CalculatedPower;
         unitPower[obj] = power;
 
-        if (gameObject.CompareTag("Allies"))
+        if (obj.CompareTag("Allies"))
         {
-            if (!AllyUnits.Contains(obj)) AllyUnits.Add(obj);
+            AllyUnits.Add(obj);
             allyPower += power;
             if (DebugLogs) Debug.Log($"Adding ally to ally list. Ally Power = {allyPower}");
         }
-        else if (gameObject.CompareTag("Player"))
+        else if (obj.CompareTag("Player"))
         {
-            if (!PlayerUnits.Contains(obj)) PlayerUnits.Add(obj);
+            PlayerUnits.Add(obj);
             allyPower += power;
             if (DebugLogs) Debug.Log($"Adding player to player list. Ally Power = {allyPower}");
         }
-        else if (gameObject.CompareTag("Enemy"))
+        else if (obj.CompareTag("Enemy"))
         {
-            if (!EnemyUnits.Contains(obj)) EnemyUnits.Add(obj);
+            EnemyUnits.Add(obj);
             enemyPower += power;
-            if (DebugLogs) Debug.Log($"Adding player to enemy list. EnemyPower = {enemyPower}");
+            if (DebugLogs) Debug.Log($"Adding enemy to enemy list. Enemy Power = {enemyPower}");
         }
+
         if (DebugLogs) Debug.Log($"Ally power - Enemy power = {allyPower - enemyPower}");
     }
 
     void OnTriggerExit2D(Collider2D collision)
     {
-        GameObject obj = collision.gameObject;
-        float power = unitPower.TryGetValue(obj, out var p) ? p : 0f;
+        RemoveCharacter(collision.gameObject);
+    }
+
+    void RemoveCharacter(GameObject obj)
+    {
+        if (obj == null) return;
+        float power = unitPower.TryGetValue(obj, out float storedPower) ? storedPower : 0f;
         unitPower.Remove(obj);
 
-        if (collision.CompareTag("Allies"))
+        if (AllyUnits.Remove(obj)) allyPower -= power;
+        if (PlayerUnits.Remove(obj)) allyPower -= power;
+        if (EnemyUnits.Remove(obj)) enemyPower -= power;
+    }
+
+    void PruneInvalidUnits()
+    {
+        // Rebuild the small cache from the current lists. This prevents destroyed or
+        // invalid units from leaving stale power in CenterOfPower().
+        EnemyUnits.RemoveAll(obj => obj == null || obj.GetComponent<Stats>() == null || obj.GetComponent<Stats>().scriptableStats == null);
+        PlayerUnits.RemoveAll(obj => obj == null || obj.GetComponent<Stats>() == null || obj.GetComponent<Stats>().scriptableStats == null);
+        AllyUnits.RemoveAll(obj => obj == null || obj.GetComponent<Stats>() == null || obj.GetComponent<Stats>().scriptableStats == null);
+
+        unitPower.Clear();
+        enemyPower = 0f;
+        allyPower = 0f;
+        RebuildPowerForList(EnemyUnits, false);
+        RebuildPowerForList(PlayerUnits, true);
+        RebuildPowerForList(AllyUnits, true);
+    }
+
+    void RebuildPowerForList(List<GameObject> units, bool isAlly)
+    {
+        foreach (GameObject obj in units)
         {
-            if (AllyUnits.Remove(obj)) allyPower -= power;
-        }
-        else if (collision.CompareTag("Player"))
-        {
-            if (PlayerUnits.Remove(obj)) allyPower -= power;
-        }
-        else if (collision.CompareTag("Enemy"))
-        {
-            if (EnemyUnits.Remove(obj)) enemyPower -= power;
+            Stats stats = obj.GetComponent<Stats>();
+            float power = stats.scriptableStats._CalculatedPower;
+            unitPower[obj] = power;
+            if (isAlly) allyPower += power;
+            else enemyPower += power;
         }
     }
 
-    public float ExpectedOutcome(ScriptableStats extraCharacter = null, bool useLaneSwitchingIncentives = false)
+    public float ExpectedOutcome(ScriptableStats extraCharacter = null, bool useLaneSwitchingIncentives = false, int extraCharacterCopies = 1)
     {
-        List<Stats> enemyTeam = EnemyUnits.Select(u => u.GetComponent<Stats>()).ToList();
-        List<Stats> playerTeam = PlayerUnits.Select(u => u.GetComponent<Stats>()).ToList();
-        playerTeam.AddRange(AllyUnits.Select(u => u.GetComponent<Stats>()));
-        
-        float result = ExpectedOutcomeCalculator.CalculateExpectedOutcome(enemyTeam, playerTeam, extraCharacter);
+        PruneInvalidUnits();
+        List<Stats> enemyTeam = GetValidStats(EnemyUnits);
+        List<Stats> playerTeam = GetValidStats(PlayerUnits);
+        playerTeam.AddRange(GetValidStats(AllyUnits));
+
+        float result = ExpectedOutcomeCalculator.CalculateExpectedOutcome(enemyTeam, playerTeam, extraCharacter, extraCharacterCopies);
         if (useLaneSwitchingIncentives) result *= totalAIIncentive;
         return result;
-        
+    }
+
+    List<Stats> GetValidStats(List<GameObject> units)
+    {
+        var result = new List<Stats>();
+        foreach (GameObject obj in units)
+        {
+            if (obj == null) continue;
+            Stats stats = obj.GetComponent<Stats>();
+            if (stats != null && !stats._IsDead) result.Add(stats);
+        }
+        return result;
     }
 
     public float CenterOfPower()
     {
+        PruneInvalidUnits();
         float totalPower = enemyPower + allyPower;
         if (totalPower <= 0f) return Center.x;
 
-        float weightedPositionSum = 0f;
-        weightedPositionSum += SumWeightedX(EnemyUnits);
-        weightedPositionSum += SumWeightedX(PlayerUnits);
-        weightedPositionSum += SumWeightedX(AllyUnits);
-
+        float weightedPositionSum = SumWeightedX(EnemyUnits)
+            + SumWeightedX(PlayerUnits)
+            + SumWeightedX(AllyUnits);
         return weightedPositionSum / totalPower;
     }
 
     float SumWeightedX(List<GameObject> units)
     {
         float sum = 0f;
-        for (int i = 0; i < units.Count; i++)
+        foreach (GameObject obj in units)
         {
-            sum += units[i].transform.position.x * unitPower[units[i]];
+            if (obj != null && unitPower.TryGetValue(obj, out float power))
+                sum += obj.transform.position.x * power;
         }
         return sum;
     }
