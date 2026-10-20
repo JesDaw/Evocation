@@ -16,7 +16,7 @@ public class ManaSystem : MonoBehaviour
     public void IncreaseMana(int _amt)
     {
         PlayerMana += _amt;
-        UpdateMagicUIFunctions.Instance.UpdateTotalMana(PlayerMana);
+        SpellSwapper.Instance.UpdateTotalMana(PlayerMana);
         OnManaChanged?.Invoke();
     }
 
@@ -25,7 +25,7 @@ public class ManaSystem : MonoBehaviour
         if(PlayerMana >= _amt)
         {
             PlayerMana -= (int)_amt;
-            UpdateMagicUIFunctions.Instance.UpdateTotalMana(PlayerMana);
+            SpellSwapper.Instance.UpdateTotalMana(PlayerMana);
             OnManaChanged?.Invoke();
             return true;
         }
