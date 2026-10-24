@@ -1,44 +1,60 @@
+
 using System.Collections.Generic;
 using UnityEngine;
 
-// Central place for turning base stats + CombatAction data into a combat
-// profile. The "raw" method is the ONE implementation of this math — both
-// ScriptableStats (design-time) and Stats (live, runtime) go through it via
-// thin overloads below, instead of each keeping its own copy of the
-// cooldown/DPS formula.
+/// <summary>
+/// Shared calculations for design-time and runtime combat profiles.
+/// </summary>
 public static class PowerMath
 {
-    // Works on the raw list so both ScriptableStats.combatActions and
-    // Stats._CombatActions can share this. Uses definesStoppingRange (already
-    // documented on CombatAction as meant for "your highest-priority
-    // offensive action") as the primary signal.
-    public static CombatAction GetPrimaryOffensiveAction(List<CombatAction> actions)
+    public static CombatAction GetPrimaryOffensiveAction(
+        List<CombatAction> actions)
     {
-        if (actions == null || actions.Count == 0) return null;
-        if (actions.Count == 1) return actions[0];
+        if (actions == null || actions.Count == 0)
+            return null;
 
-        var flagged = actions.Find(a => a.definesStoppingRange);
-        if (flagged != null) return flagged;
+        CombatAction fallback = null;
 
-        var fallback = actions.Find(a => !a.targetFriendly && a.healthChangePercent < 0f);
-        return fallback ?? actions[0];
+        foreach (CombatAction action in actions)
+        {
+            if (action == null)
+                continue;
+
+            if (fallback == null)
+                fallback = action;
+
+            if (action.definesStoppingRange)
+                return action;
+        }
+
+        if (fallback == null)
+            return null;
+
+        foreach (CombatAction action in actions)
+        {
+            if (action == null)
+                continue;
+
+            if (!action.targetFriendly &&
+                action.healthChangePercent < 0f)
+                return action;
+        }
+
+        return fallback;
     }
 
-    // True if the primary offensive action hits anything other than exactly
-    // one target — works whether maxTargets is a small cap or the "unlimited"
-    // sentinel (<= 0).
     public static bool IsAOE(List<CombatAction> actions)
     {
-        var primary = GetPrimaryOffensiveAction(actions);
+        CombatAction primary = GetPrimaryOffensiveAction(actions);
+
         return primary != null && primary.maxTargets != 1;
     }
 
-    // Friendly-targeted or healing (positive healthChangePercent) actions are
-    // utility, not combat power. Rough heuristic — refine once effectsOnHit's
-    // actual StatusEffect data is available.
-    public static bool IsUtilityAction(CombatAction a)
+    public static bool IsUtilityAction(CombatAction action)
     {
-        return a.targetFriendly || a.healthChangePercent > 0f;
+        return action != null &&
+               (action.targetFriendly ||
+                action.healthChangePercent > 0f);
     }
 
     [System.Serializable]
@@ -51,91 +67,165 @@ public static class PowerMath
         public float KBH;
         public float Range;
         public float Cooldown;
-        public int MaxTargets; // int.MaxValue represents "unlimited" (maxTargets <= 0 on the action)
+
+        // int.MaxValue represents unlimited targets.
+        public int MaxTargets;
     }
 
-    // THE single implementation of "base stats scaled by primary action" —
-    // everything else calls into this one.
     public static UnitProfile GetProfileFromRaw(
-        int attackDamage, float moveSpeed, float knockBackDamage,
-        float maxHealth, float knockBackMaxHealth, float horizontalRange,
-        float actionCooldown, List<CombatAction> combatActions)
+        int attackDamage,
+        float moveSpeed,
+        float knockBackDamage,
+        float maxHealth,
+        float knockBackMaxHealth,
+        float horizontalRange,
+        float actionCooldown,
+        List<CombatAction> combatActions)
     {
-        var action = GetPrimaryOffensiveAction(combatActions);
+        CombatAction action =
+            GetPrimaryOffensiveAction(combatActions);
 
         if (action == null)
         {
-            // No CombatAction data — fall back to raw base stats (equivalent
-            // to every percent being 100%).
             return new UnitProfile
             {
-                Atk = attackDamage,
-                Move = moveSpeed,
-                KBD = knockBackDamage,
-                HP = maxHealth,
-                KBH = knockBackMaxHealth,
-                Range = horizontalRange,
-                Cooldown = Mathf.Max(actionCooldown, 0.01f),
+                Atk = Mathf.Max(0f, attackDamage),
+                Move = Mathf.Max(0f, moveSpeed),
+                KBD = Mathf.Max(0f, knockBackDamage),
+                HP = Mathf.Max(0f, maxHealth),
+                KBH = Mathf.Max(0f, knockBackMaxHealth),
+                Range = Mathf.Max(0f, horizontalRange),
+                Cooldown = Mathf.Max(0.01f, actionCooldown),
                 MaxTargets = 1
             };
         }
 
         return new UnitProfile
         {
-            Atk = attackDamage * Mathf.Abs(action.healthChangePercent),
-            Move = moveSpeed,
-            KBD = knockBackDamage * action.knockbackPercent,
-            HP = maxHealth,
-            KBH = knockBackMaxHealth,
-            Range = horizontalRange * action.rangePercent,
-            // Confirmed real formula (from CpuCombatActionState): _ActionCooldown * action.castCooldown.
-            Cooldown = Mathf.Max(actionCooldown * action.castCooldown, 0.01f),
-            MaxTargets = action.maxTargets <= 0 ? int.MaxValue : action.maxTargets
+            Atk = Mathf.Max(
+                0f,
+                attackDamage * Mathf.Abs(action.healthChangePercent)),
+
+            Move = Mathf.Max(0f, moveSpeed),
+
+            KBD = Mathf.Max(
+                0f,
+                knockBackDamage * action.knockbackPercent),
+
+            HP = Mathf.Max(0f, maxHealth),
+
+            KBH = Mathf.Max(0f, knockBackMaxHealth),
+
+            Range = Mathf.Max(
+                0f,
+                horizontalRange * action.rangePercent),
+
+            // Matches the existing runtime cooldown formula.
+            Cooldown = Mathf.Max(
+                0.01f,
+                actionCooldown * action.castCooldown),
+
+            MaxTargets = action.maxTargets <= 0
+                ? int.MaxValue
+                : action.maxTargets
         };
     }
 
-    public static UnitProfile GetProfile(ScriptableStats s)
+    public static UnitProfile GetProfile(ScriptableStats stats)
     {
-        return GetProfileFromRaw(s._AttackDamage, s._MoveSpeed, s._KnockBackDamage,
-            s._MaxHealth, s._KnockBackMaxHealth, s._HorizontalRange, s._ActionCooldown, s.combatActions);
+        if (stats == null)
+            return new UnitProfile();
+
+        return GetProfileFromRaw(
+            stats._AttackDamage,
+            stats._MoveSpeed,
+            stats._KnockBackDamage,
+            stats._MaxHealth,
+            stats._KnockBackMaxHealth,
+            stats._HorizontalRange,
+            stats._ActionCooldown,
+            stats.combatActions);
     }
 
-    // Runtime overload — same math, fed from the live spawned unit's mirrored fields.
-    public static UnitProfile GetProfile(Stats s)
+    public static UnitProfile GetProfile(Stats stats)
     {
-        return GetProfileFromRaw(s._AttackDamage, s._MoveSpeed, s._KnockBackDamage,
-            s._MaxHealth, s._KnockBackMaxHealth, s._HorizontalRange, s._ActionCooldown, s._CombatActions);
+        if (stats == null)
+            return new UnitProfile();
+
+        return GetProfileFromRaw(
+            stats._AttackDamage,
+            stats._MoveSpeed,
+            stats._KnockBackDamage,
+            stats._MaxHealth,
+            stats._KnockBackMaxHealth,
+            stats._HorizontalRange,
+            stats._ActionCooldown,
+            stats._CombatActions);
     }
 
-    public static float GetDPS(UnitProfile profile) => profile.Atk / profile.Cooldown;
-
-    // ROUGH FIRST PASS — heals valued as heal-per-second, status effects a flat
-    // placeholder weight each (StatusEffect's own fields aren't visible yet).
-    public static float GetUtilityPower(int attackDamage, float actionCooldown, List<CombatAction> combatActions,
-        float healWeight = 1f, float statusEffectWeight = 5f)
+    public static float GetDPS(UnitProfile profile)
     {
-        if (combatActions == null) return 0f;
+        return Mathf.Max(0f, profile.Atk) /
+               Mathf.Max(0.01f, profile.Cooldown);
+    }
+
+    public static float GetUtilityPower(
+        int attackDamage,
+        float actionCooldown,
+        List<CombatAction> combatActions,
+        float healWeight = 1f,
+        float statusEffectWeight = 5f)
+    {
+        if (combatActions == null)
+            return 0f;
 
         float utility = 0f;
-        foreach (var a in combatActions)
-        {
-            if (!IsUtilityAction(a)) continue;
 
-            if (a.healthChangePercent > 0f)
+        foreach (CombatAction action in combatActions)
+        {
+            if (!IsUtilityAction(action))
+                continue;
+
+            if (action.healthChangePercent > 0f)
             {
-                float healAmount = attackDamage * a.healthChangePercent;
-                float cooldown = Mathf.Max(actionCooldown * a.castCooldown, 0.01f);
-                utility += (healAmount / cooldown) * healWeight;
+                float healAmount =
+                    attackDamage * action.healthChangePercent;
+
+                float cooldown = Mathf.Max(
+                    0.01f,
+                    actionCooldown * action.castCooldown);
+
+                utility +=
+                    (healAmount / cooldown) * healWeight;
             }
 
-            utility += (a.effectsOnHit?.Count ?? 0) * statusEffectWeight;
+            utility +=
+                (action.effectsOnHit?.Count ?? 0) *
+                statusEffectWeight;
         }
+
         return utility;
     }
 
-    public static float GetUtilityPower(ScriptableStats s) =>
-        GetUtilityPower(s._AttackDamage, s._ActionCooldown, s.combatActions);
+    public static float GetUtilityPower(ScriptableStats stats)
+    {
+        if (stats == null)
+            return 0f;
 
-    public static float GetUtilityPower(Stats s) =>
-        GetUtilityPower(s._AttackDamage, s._ActionCooldown, s._CombatActions);
+        return GetUtilityPower(
+            stats._AttackDamage,
+            stats._ActionCooldown,
+            stats.combatActions);
+    }
+
+    public static float GetUtilityPower(Stats stats)
+    {
+        if (stats == null)
+            return 0f;
+
+        return GetUtilityPower(
+            stats._AttackDamage,
+            stats._ActionCooldown,
+            stats._CombatActions);
+    }
 }

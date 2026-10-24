@@ -1,5 +1,6 @@
 using UnityEngine;
 
+//This seems to be dead code
 public class DamageSource
 {
     public bool IsEnemy;

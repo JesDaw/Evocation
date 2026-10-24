@@ -216,7 +216,7 @@ public class Stats : MonoBehaviour
 
     public void AlterKnockback(float amount, bool isEnemySource)
     {
-        _KnockBackHealth += amount;
+        _KnockBackHealth -= amount; // should this be - or + idk
 
         if (_KnockBackHealth <= 0f)
         {

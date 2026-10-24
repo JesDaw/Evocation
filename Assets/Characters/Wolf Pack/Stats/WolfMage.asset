@@ -19,14 +19,14 @@ MonoBehaviour:
   SpawnSoundName: WolfMage
   _spawnCost: 150
   _spawnCooldown: 10
-  Level_Total: 151.6923
-  Level_Discrepancy: 146.6923
-  _CalculatedPower: -1.468704
-  _ValueDiscrepancy: -6.468704
-  Attack: 1
-  Defense: 140
-  SpaceControl: 3
-  AttackFrequency: 7.6923075
+  Level_Total: 44.647793
+  Level_Discrepancy: -105.3522
+  _CalculatedPower: 28.895515
+  _ValueDiscrepancy: -121.104485
+  Attack: 11.732402
+  Defense: 31.130001
+  SpaceControl: 1.771306
+  AttackFrequency: 0.014084507
   _AttackDamage: 5
   _KnockBackDamage: 1
   _MoveSpeed: 4
@@ -45,12 +45,16 @@ MonoBehaviour:
     rangePercent: 10
     extendsForward: 1
     targetFriendly: 0
+    includeSelf: 0
     targetCondition: 0
     maxTargets: 1
     castCooldown: 2
+    ScaleEffectsWithUsersStats: 1
     healthChangePercent: -1
     knockbackPercent: -1
     zoneSpawnPosition: 2
+    ZoneTargetsEnemies: 0
+    UseProjectile: 0
     projectileSettings:
       prefab: {fileID: 318654882376287491, guid: 813b3c5eadcac43348d4a81c02b0c029, type: 3}
       speed: 5
@@ -165,12 +169,16 @@ MonoBehaviour:
     rangePercent: 2
     extendsForward: 0
     targetFriendly: 1
+    includeSelf: 0
     targetCondition: 1
     maxTargets: 5
     castCooldown: 10
+    ScaleEffectsWithUsersStats: 1
     healthChangePercent: 0
     knockbackPercent: 0
     zoneSpawnPosition: 0
+    ZoneTargetsEnemies: 0
+    UseProjectile: 0
     projectileSettings:
       prefab: {fileID: 6072924362752908747, guid: e36c33467359d0a44aa4493b4d80e7d9, type: 3}
       speed: 1
