@@ -31,7 +31,7 @@ public class DialogueManager : MonoBehaviour
 
     int slideCount = -1; 
     int lineCount = 0;
-    DailogueTrigger _dailogueTrigger;
+    DialogueTrigger _dialogueTrigger;
     public bool DialogueActive { get; private set; }
     public static DialogueManager Instance { get; private set; }
 
@@ -80,10 +80,10 @@ public class DialogueManager : MonoBehaviour
         uiActions.ConfirmDialogue.performed -= OnConfirmDialoguePressed;
     }
 
-    public void StartDialogue(List<Dialogue> slides, DailogueTrigger trigger)
+    public void StartDialogue(List<Dialogue> slides, DialogueTrigger trigger)
     {
         dialogueSlides = slides;
-        _dailogueTrigger = trigger;
+        _dialogueTrigger = trigger;
         slideCount = -1;
         lineCount = 0;
         DialogueActive = true;
@@ -310,7 +310,7 @@ public class DialogueManager : MonoBehaviour
         DialogueLine currentLine = dialogueSlides[slideCount].Lines[lineCount];
         currentLine.LineEndEvent?.Invoke();
 
-        if (_dailogueTrigger.EndOfLines.Length > 0 && IsLastLineOfLastSlide()) OpenChoiceBox();
+        if (_dialogueTrigger.EndOfLines.Length > 0 && IsLastLineOfLastSlide()) OpenChoiceBox();
     }
 
     public void OpenChoiceBox()
@@ -318,13 +318,13 @@ public class DialogueManager : MonoBehaviour
         ChoiceBox.SetActive(true);
         ChoiceBoxIsOpen = true;
         int ChoiceIndex = 0;
-        foreach (DialogueChoice choice in _dailogueTrigger.EndOfLines)
+        foreach (DialogueChoice choice in _dialogueTrigger.EndOfLines)
         {
             GameObject choiceInstance = Instantiate(Choice, ChoiceBox.transform);
             TextMeshProUGUI tmpText = choiceInstance.GetComponentInChildren<TextMeshProUGUI>();
             if (tmpText != null) tmpText.text = choice.Text;
 
-            DiologueChoiceWrapper ChoiceNumber = choiceInstance.GetComponentInChildren<DiologueChoiceWrapper>();
+            DialogueChoiceWrapper ChoiceNumber = choiceInstance.GetComponentInChildren<DialogueChoiceWrapper>();
             if (ChoiceNumber != null)
             {
                 ChoiceNumber.ChoiceIndex = ChoiceIndex;
@@ -338,10 +338,10 @@ public class DialogueManager : MonoBehaviour
     {
         if (DialogueActive == false) return;
         DeactivateDialogueBox();
-        _dailogueTrigger.EndDialogueDefultEvent();
-        if (_dailogueTrigger.EndOfLines.Length > 0)
+        _dialogueTrigger.EndDialogueDefultEvent();
+        if (_dialogueTrigger.EndOfLines.Length > 0)
         {
-            _dailogueTrigger.EndDialogue(CurrentChoiceIndex);
+            _dialogueTrigger.EndDialogue(CurrentChoiceIndex);
         }
     }
 

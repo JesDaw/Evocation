@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class DailogueTrigger : MonoBehaviour // multiple pages
+public class DialogueTrigger : MonoBehaviour // multiple pages
 {
     public List<Dialogue> Slides = new List<Dialogue>(); 
     [SerializeField] public DialogueChoice[] EndOfLines;
