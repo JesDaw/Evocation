@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -24,11 +23,11 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] bool ShowDebugLogs = false;
 
     List<Dialogue> dialogueSlides = new List<Dialogue>();
-    Coroutine _typeLineCoroutine;
-    string _currentLine;
-    string _currentPrefix; 
-    TMP_Text _currentTargetBox;
-    Dictionary<TMP_Text, string> _boxAccumulatedText = new Dictionary<TMP_Text, string>();
+    // Text boxes get a DialogueTextSurface (TMPEffects reveal + effects) the first time they are used.
+    Dictionary<TMP_Text, DialogueTextSurface> _surfaces = new Dictionary<TMP_Text, DialogueTextSurface>();
+    DialogueTextSurface _currentSurface;
+    bool _lineFinished = true;
+    string _currentTypingSound;
 
     int slideCount = -1; 
     int lineCount = 0;
@@ -88,7 +87,6 @@ public class DialogueManager : MonoBehaviour
         slideCount = -1;
         lineCount = 0;
         DialogueActive = true;
-        _boxAccumulatedText.Clear();
 
         if (ShowDebugLogs) Debug.Log($"slides = {slides.Count}, trigger = {trigger.gameObject.name}");
 
@@ -107,7 +105,7 @@ public class DialogueManager : MonoBehaviour
 
     void OnConfirmDialoguePressedLogic()
     {
-        if (_typeLineCoroutine != null)
+        if (!_lineFinished)
         {
             SkipToEndOfLine();
             return;
@@ -137,8 +135,7 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        if (_typeLineCoroutine != null) StopCoroutine(_typeLineCoroutine);
-        _typeLineCoroutine = StartCoroutine(TypeLine());
+        ShowLine();
     }
 
     void DisplayNextSlide()
@@ -190,20 +187,29 @@ public class DialogueManager : MonoBehaviour
         return line.alternitiveTextBox != null ? line.alternitiveTextBox : dialogueText;
     }
 
+    DialogueTextSurface GetSurface(TMP_Text box)
+    {
+        if (_surfaces.TryGetValue(box, out DialogueTextSurface surface) && surface != null) return surface;
+
+        surface = box.GetComponent<DialogueTextSurface>();
+        if (surface == null) surface = box.gameObject.AddComponent<DialogueTextSurface>();
+        surface.RevealFinished += OnSurfaceRevealFinished;
+        surface.CharacterShown += OnSurfaceCharacterShown;
+        _surfaces[box] = surface;
+        return surface;
+    }
+
     void ClearSlideTextBoxes(int slideIndex)
     {
         if (slideIndex < 0 || slideIndex >= dialogueSlides.Count) return;
 
         Dialogue slide = dialogueSlides[slideIndex];
-        bool slideUsedUniversalBox = false;
 
         foreach (DialogueLine line in slide.Lines)
         {
             TMP_Text box = GetTargetTextBox(line);
             if (box == null) continue;
-            box.text = "";
-            _boxAccumulatedText[box] = "";
-            if (box == dialogueText) slideUsedUniversalBox = true;
+            GetSurface(box).Clear();
         }
 
         if (slide.alternitiveCanvasGroup != null)
@@ -211,12 +217,6 @@ public class DialogueManager : MonoBehaviour
             slide.alternitiveCanvasGroup.alpha = 0f;
             slide.alternitiveCanvasGroup.interactable = false;
             slide.alternitiveCanvasGroup.blocksRaycasts = false;
-        }
-
-        if (slideUsedUniversalBox)
-        {
-            dialogueText.text = "";
-            _boxAccumulatedText[dialogueText] = "";
         }
     }
 
@@ -237,7 +237,7 @@ public class DialogueManager : MonoBehaviour
         return line.CharacterOverride != null ? line.CharacterOverride : slide.Character;
     }
 
-    IEnumerator TypeLine()
+    void ShowLine()
     {
         Dialogue slide = dialogueSlides[slideCount];
         DialogueLine currentLine = slide.Lines[lineCount];
@@ -245,29 +245,21 @@ public class DialogueManager : MonoBehaviour
 
         ApplyCharacterToNameText(character);
 
-        _currentLine = currentLine.Line;
-        _currentTargetBox = GetTargetTextBox(currentLine);
+        TMP_Text targetBox = GetTargetTextBox(currentLine);
 
+        // Activate the box before its surface is used: TMPEffects needs an active GameObject.
         bool usingUniversalBox = currentLine.alternitiveTextBox == null;
         DialogueBox.SetActive(usingUniversalBox);
 
-        _currentTargetBox.color = character != null ? character.textColor : defaultTextColor;
+        targetBox.color = character != null ? character.textColor : defaultTextColor;
 
         if (character != null && character.fontAsset != null)
         {
-            _currentTargetBox.font = character.fontAsset;
+            targetBox.font = character.fontAsset;
         }
-        _currentTargetBox.fontSize = character != null ? character.fontSize : defaultFontSize;
+        targetBox.fontSize = character != null ? character.fontSize : defaultFontSize;
 
-        if (!_boxAccumulatedText.TryGetValue(_currentTargetBox, out _currentPrefix))
-        {
-            _currentPrefix = "";
-        }
-
-        if (!string.IsNullOrEmpty(_currentPrefix)) _currentPrefix += " ";
-
-        float delay = character != null ? character.TextSpeed : defaultTextSpeed;
-        string typingSound = character != null ? character.Voice : "";
+        _currentTypingSound = character != null ? character.Voice : "";
 
         if (InteractionMinigameManager.Instance != null)
         {
@@ -275,40 +267,45 @@ public class DialogueManager : MonoBehaviour
             InteractionMinigameManager.Instance.SetCharacterFace(currentLine.CharacterFace);
         }
 
+        _currentSurface = GetSurface(targetBox);
+        _currentSurface.SetRevealDelay(character != null ? character.TextSpeed : defaultTextSpeed);
+        _lineFinished = false;
+
         currentLine.LineStartEvent?.Invoke();
 
-        string typedSoFar = "";
-        foreach (char c in _currentLine)
-        {
-            if (ShowDebugLogs) Debug.Log("Typing");
-            while (UILogic.GameIsPaused)
-            {
-                if (ShowDebugLogs) Debug.Log("Paused");
-                yield return null;
-            }
-            typedSoFar += c;
-            _currentTargetBox.text = _currentPrefix + typedSoFar;
-            if (!string.IsNullOrEmpty(typingSound)) FModAudioManager.instance.PlaySoundByName(typingSound);
-            yield return new WaitForSecondsRealtime(delay);
-        }
+        // Lines in the same slide and box keep the earlier lines on screen, as before.
+        if (_currentSurface.HasText) _currentSurface.Append(currentLine.Line);
+        else _currentSurface.Show(currentLine.Line);
 
-        _typeLineCoroutine = null;
-        _boxAccumulatedText[_currentTargetBox] = _currentPrefix + _currentLine;
-        currentLine.LineEndEvent?.Invoke();
+        if (ShowDebugLogs) Debug.Log($"[DialogueManager] slide {slideCount} line {lineCount} -> {targetBox.name}");
 
-        if (_dailogueTrigger.EndOfLines.Length > 0 && IsLastLineOfLastSlide()) OpenChoiceBox();
+        // Empty lines never start the writer, so nothing would report them finished.
+        if (!_currentSurface.IsRevealing) OnLineFinished();
     }
 
     void SkipToEndOfLine()
     {
-        StopCoroutine(_typeLineCoroutine);
-        _typeLineCoroutine = null;
+        if (_currentSurface == null) return;
+        _currentSurface.Skip();
+        if (!_currentSurface.IsRevealing) OnLineFinished();
+    }
 
-        if (_currentTargetBox != null)
-        {
-            _currentTargetBox.text = _currentPrefix + _currentLine;
-            _boxAccumulatedText[_currentTargetBox] = _currentPrefix + _currentLine;
-        }
+    void OnSurfaceRevealFinished(DialogueTextSurface surface)
+    {
+        if (surface == _currentSurface) OnLineFinished();
+    }
+
+    void OnSurfaceCharacterShown(DialogueTextSurface surface, char character)
+    {
+        if (surface != _currentSurface || string.IsNullOrEmpty(_currentTypingSound) || char.IsWhiteSpace(character)) return;
+        FModAudioManager.instance.PlaySoundByName(_currentTypingSound);
+    }
+
+    // Runs once per line, whether the reveal finished on its own or was skipped.
+    void OnLineFinished()
+    {
+        if (_lineFinished || !DialogueActive) return;
+        _lineFinished = true;
 
         DialogueLine currentLine = dialogueSlides[slideCount].Lines[lineCount];
         currentLine.LineEndEvent?.Invoke();
@@ -358,9 +355,9 @@ public class DialogueManager : MonoBehaviour
         DialogueActive = false;
         slideCount = -1;
         lineCount = 0;
-        _typeLineCoroutine = null;
-        _boxAccumulatedText.Clear();
-        dialogueText.text = "";
+        _currentSurface = null;
+        _lineFinished = true;
+        GetSurface(dialogueText).Clear();
         nameText.text = "";
 
         ChoiceBox.SetActive(false);

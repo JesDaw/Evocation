@@ -64,17 +64,7 @@ public static class TMPEffectsValidationSceneBuilder
         validationObject.FindProperty("surfaceA").objectReferenceValue = surfaceA;
         validationObject.FindProperty("surfaceB").objectReferenceValue = surfaceB;
         validationObject.FindProperty("statusText").objectReferenceValue = status;
-        validationObject.FindProperty("animationDatabase").objectReferenceValue = animationDatabase;
-        validationObject.FindProperty("commandDatabase").objectReferenceValue = commandDatabase;
         validationObject.ApplyModifiedPropertiesWithoutUndo();
-
-        validationObject.Update();
-        if (validationObject.FindProperty("animationDatabase").objectReferenceValue == null ||
-            validationObject.FindProperty("commandDatabase").objectReferenceValue == null)
-        {
-            Debug.LogError("[TMPEffectsValidationSceneBuilder] Database references did not stick; scene not saved.");
-            return;
-        }
 
         EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene(), ScenePath);
         Debug.Log($"[TMPEffectsValidationSceneBuilder] Built {ScenePath}. Enter Play mode to run the checks.");

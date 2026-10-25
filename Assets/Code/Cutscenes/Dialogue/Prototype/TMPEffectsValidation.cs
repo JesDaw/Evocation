@@ -1,55 +1,49 @@
 using System.Collections.Generic;
 using TMPEffects.Components;
-using TMPEffects.Databases.AnimationDatabase;
-using TMPEffects.Databases.CommandDatabase;
 using TMPEffects.TMPEvents;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// Throwaway Phase 2 test: checks what TMPEffects handles on its own before we design the real text surface.
+// Throwaway test scene driver, now running everything through DialogueTextSurface.
 // Confirm = skip / advance, P = toggle UILogic.GameIsPaused, R = restart.
 public class TMPEffectsValidation : MonoBehaviour
 {
     [SerializeField] TMP_Text surfaceA;
     [SerializeField] TMP_Text surfaceB;
     [SerializeField] TMP_Text statusText;
-    [Tooltip("Assigned at runtime: TMPEffects' 'use default database' only works through its Inspector.")]
-    [SerializeField] TMPAnimationDatabase animationDatabase;
-    [SerializeField] TMPCommandDatabase commandDatabase;
     [SerializeField] float inactiveAlpha = 0.35f;
-    [SerializeField] float alphaFadeSpeed = 4f;
+    [SerializeField] float fadeDuration = 0.3f;
+
+    enum Mode { Show, Append }
 
     struct Step
     {
         public string Label;
         public int Surface; // 0 = A, 1 = B
+        public Mode Mode;
         public string Text;
     }
 
     readonly Step[] _steps =
     {
-        new Step { Label = "1/6 Reveal + per-word effects", Surface = 0,
+        new Step { Label = "1/7 Reveal + per-word effects", Surface = 0, Mode = Mode.Show,
             Text = "<+fade>Text reveals progressively, <wave>these words wave</wave>, and <shake>this part shakes</shake>.</+fade>" },
-        new Step { Label = "2/6 Stacked effects", Surface = 0,
+        new Step { Label = "2/7 Append (first sentence must NOT retype)", Surface = 0, Mode = Mode.Append,
+            Text = "<+fade>This sentence is <palette>appended</palette> after it.</+fade>" },
+        new Step { Label = "3/7 Stacked effects", Surface = 0, Mode = Mode.Show,
             Text = "<+fade>Stacked: <wave><palette>wave and palette together</palette></wave>, then <+grow><funky>a different reveal</funky></+grow>.</+fade>" },
-        new Step { Label = "3/6 Events + commands", Surface = 0,
+        new Step { Label = "4/7 Events + commands", Surface = 0, Mode = Mode.Show,
             Text = "An event fires here<?expression=angry> and the writer pauses<!wait=1> for a second before it continues." },
-        new Step { Label = "4/6 Reuse (no leftover effects)", Surface = 0,
+        new Step { Label = "5/7 Reuse (no leftover effects)", Surface = 0, Mode = Mode.Show,
             Text = "Plain text on the same surface. Nothing here should still wave, shake or change colour." },
-        new Step { Label = "5/6 Two surfaces, previous dimmed", Surface = 1,
+        new Step { Label = "6/7 Two surfaces, previous dimmed", Surface = 1, Mode = Mode.Show,
             Text = "<+move>A second sentence on its own surface. The previous one stays visible, dimmed.</+move>" },
-        new Step { Label = "6/6 Swap focus + skip", Surface = 0,
+        new Step { Label = "7/7 Swap focus + skip", Surface = 0, Mode = Mode.Show,
             Text = "<+fade>Focus returns to the first surface. <jump>Press confirm mid-line</jump> to test skipping.</+fade>" },
     };
 
-    TMP_Text[] _surfaces;
-    TMPWriter[] _writers;
-    TMPAnimator[] _animators;
-    CanvasGroup[] _groups;
-    float[] _targetAlpha;
-    bool[] _wasWritingBeforePause;
-
+    DialogueTextSurface[] _surfaces;
     InputSystem_Actions _input;
     readonly List<string> _log = new List<string>();
     int _stepIndex = -1;
@@ -57,33 +51,17 @@ public class TMPEffectsValidation : MonoBehaviour
 
     void Awake()
     {
-        _surfaces = new[] { surfaceA, surfaceB };
-        _writers = new TMPWriter[2];
-        _animators = new TMPAnimator[2];
-        _groups = new CanvasGroup[2];
-        _targetAlpha = new float[2];
-        _wasWritingBeforePause = new bool[2];
-
-        // Fall back to the built-in databases imported into Assets/TMPEffects/Resources.
-        if (animationDatabase == null) animationDatabase = Resources.Load<TMPAnimationDatabase>("Databases/DefaultAnimationDatabase");
-        if (commandDatabase == null) commandDatabase = Resources.Load<TMPCommandDatabase>("Databases/DefaultCommandDatabase");
-
+        _surfaces = new DialogueTextSurface[2];
+        TMP_Text[] texts = { surfaceA, surfaceB };
         for (int i = 0; i < 2; i++)
         {
-            _writers[i] = _surfaces[i].GetComponent<TMPWriter>();
-            _animators[i] = _surfaces[i].GetComponent<TMPAnimator>();
-            _groups[i] = _surfaces[i].GetComponent<CanvasGroup>();
-
-            // The game pauses with UILogic.GameIsPaused, not Time.timeScale, so the writer runs on unscaled time.
-            _writers[i].UseScaledTime = false;
+            // Added at runtime on purpose: this is how DialogueManager will attach surfaces to existing text boxes.
+            _surfaces[i] = texts[i].GetComponent<DialogueTextSurface>();
+            if (_surfaces[i] == null) _surfaces[i] = texts[i].gameObject.AddComponent<DialogueTextSurface>();
 
             string surfaceName = i == 0 ? "A" : "B";
-            _writers[i].OnTextEvent.AddListener(args => OnTextEvent(surfaceName, args));
-            _writers[i].OnFinishWriter.AddListener(_ => Log($"{surfaceName}: writer finished"));
-            _writers[i].OnSkipWriter.AddListener((_, index) => Log($"{surfaceName}: skipped to index {index}"));
-
-            _surfaces[i].text = "";
-            _groups[i].alpha = 0f;
+            _surfaces[i].RevealFinished += _ => Log($"{surfaceName}: reveal finished");
+            _surfaces[i].TextEvent += (_, args) => OnTextEvent(surfaceName, args);
         }
 
         _input = new InputSystem_Actions();
@@ -93,23 +71,12 @@ public class TMPEffectsValidation : MonoBehaviour
 
     void Start()
     {
-        AssignDatabases();
-        Advance();
-    }
-
-    // Must run after the TMPWriter/TMPAnimator OnEnable (which creates their Mediator), so not in Awake.
-    void AssignDatabases()
-    {
         for (int i = 0; i < 2; i++)
         {
-            if (animationDatabase != null) _animators[i].SetDatabase(animationDatabase);
-            if (commandDatabase != null) _writers[i].SetDatabase(commandDatabase);
-            if (_animators[i].Database == null || _writers[i].Database == null)
-            {
-                Debug.LogError($"[TMPEffectsValidation] {_surfaces[i].name} has no TMPEffects database, so no effects or commands will work. " +
-                    "Check that Assets/TMPEffects/Resources was imported.");
-            }
+            _surfaces[i].Clear();
+            _surfaces[i].SetOpacity(0f);
         }
+        Advance();
     }
 
     void OnDestroy()
@@ -125,11 +92,10 @@ public class TMPEffectsValidation : MonoBehaviour
         if (keyboard != null && keyboard.pKey.wasPressedThisFrame) UILogic.GameIsPaused = !UILogic.GameIsPaused;
         if (keyboard != null && keyboard.rKey.wasPressedThisFrame) Restart();
 
-        HandlePause();
-
-        for (int i = 0; i < 2; i++)
+        if (UILogic.GameIsPaused != _wasPaused)
         {
-            _groups[i].alpha = Mathf.MoveTowards(_groups[i].alpha, _targetAlpha[i], alphaFadeSpeed * Time.unscaledDeltaTime);
+            _wasPaused = UILogic.GameIsPaused;
+            Log(_wasPaused ? "Paused (surfaces stop revealing + animating)" : "Resumed");
         }
 
         RefreshStatus();
@@ -139,10 +105,11 @@ public class TMPEffectsValidation : MonoBehaviour
     {
         if (!context.performed || UILogic.GameIsPaused) return;
 
-        TMPWriter writer = CurrentWriter();
-        if (writer != null && writer.IsWriting)
+        DialogueTextSurface surface = CurrentSurface();
+        if (surface != null && surface.IsRevealing)
         {
-            writer.SkipWriter();
+            surface.Skip();
+            Log("Skipped");
             return;
         }
         Advance();
@@ -163,56 +130,32 @@ public class TMPEffectsValidation : MonoBehaviour
 
         for (int i = 0; i < 2; i++)
         {
-            bool isActive = i == step.Surface;
-            bool hasText = !string.IsNullOrEmpty(_surfaces[i].text);
-            _targetAlpha[i] = isActive ? 1f : (hasText ? inactiveAlpha : 0f);
+            if (i == step.Surface) _surfaces[i].SetOpacity(1f, fadeDuration);
+            else if (_surfaces[i].HasText) _surfaces[i].SetOpacity(inactiveAlpha, fadeDuration);
         }
 
-        // WriteOnNewText (on by default) restarts the writer whenever the text content changes.
-        _surfaces[step.Surface].text = step.Text;
+        DialogueTextSurface surface = _surfaces[step.Surface];
+        if (step.Mode == Mode.Append) surface.Append(step.Text);
+        else surface.Show(step.Text);
 
-        if (_stepIndex == 3) LogReuseCheck(step.Surface);
+        if (_stepIndex == 4) LogReuseCheck(surface);
     }
 
     void Restart()
     {
         for (int i = 0; i < 2; i++)
         {
-            _surfaces[i].text = "";
-            _groups[i].alpha = 0f;
-            _targetAlpha[i] = 0f;
+            _surfaces[i].Clear();
+            _surfaces[i].SetOpacity(0f);
         }
         _log.Clear();
         _stepIndex = -1;
         Advance();
     }
 
-    void HandlePause()
+    void LogReuseCheck(DialogueTextSurface surface)
     {
-        bool paused = UILogic.GameIsPaused;
-        if (paused == _wasPaused) return;
-        _wasPaused = paused;
-
-        for (int i = 0; i < 2; i++)
-        {
-            if (paused)
-            {
-                _wasWritingBeforePause[i] = _writers[i].IsWriting;
-                _writers[i].StopWriter();
-                _animators[i].StopAnimating();
-            }
-            else
-            {
-                if (_wasWritingBeforePause[i]) _writers[i].StartWriter();
-                _animators[i].StartAnimating();
-            }
-        }
-        Log(paused ? "Paused (writer + animator stopped)" : "Resumed");
-    }
-
-    void LogReuseCheck(int surface)
-    {
-        TMPAnimator animator = _animators[surface];
+        TMPAnimator animator = surface.GetComponent<TMPAnimator>();
         int basic = animator.BasicTags?.Count ?? -1;
         int show = animator.ShowTags?.Count ?? -1;
         string result = basic == 0 && show == 0 ? "PASS" : "CHECK";
@@ -225,10 +168,10 @@ public class TMPEffectsValidation : MonoBehaviour
         Log($"{surfaceName}: event '?{args.Tag.Name}' value '{value}' at index {args.Indices.StartIndex}");
     }
 
-    TMPWriter CurrentWriter()
+    DialogueTextSurface CurrentSurface()
     {
         if (_stepIndex < 0 || _stepIndex >= _steps.Length) return null;
-        return _writers[_steps[_stepIndex].Surface];
+        return _surfaces[_steps[_stepIndex].Surface];
     }
 
     void Log(string message)
@@ -241,10 +184,10 @@ public class TMPEffectsValidation : MonoBehaviour
     void RefreshStatus()
     {
         if (statusText == null) return;
-        TMPWriter writer = CurrentWriter();
-        string state = UILogic.GameIsPaused ? "PAUSED" : (writer != null && writer.IsWriting ? "writing" : "idle");
+        DialogueTextSurface surface = CurrentSurface();
+        string state = UILogic.GameIsPaused ? "PAUSED" : (surface != null && surface.IsRevealing ? "revealing" : "idle");
         statusText.text =
-            "<b>TMPEffects validation</b>   Confirm: skip/next   P: pause   R: restart\n" +
+            "<b>DialogueTextSurface test</b>   Confirm: skip/next   P: pause   R: restart\n" +
             $"State: {state}\n\n" +
             string.Join("\n", _log);
     }
