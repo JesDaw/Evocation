@@ -76,6 +76,56 @@ public class ScriptableStats : ScriptableObject
         level += 1;
         xp_to_next_lvl *= Mathf.Pow((1+ExpCostMultiplier), level);
     }
+
+    #if UNITY_EDITOR
+    void OnValidate()
+    {
+        // 1. Try to get config from BalanceConfig asset in the project
+        BalanceConfig config = null;
+        string[] guids = UnityEditor.AssetDatabase.FindAssets("t:BalanceConfig");
+        if (guids.Length > 0)
+        {
+            string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
+            config = UnityEditor.AssetDatabase.LoadAssetAtPath<BalanceConfig>(path);
+        }
+
+        ScriptableStats anchor = config != null ? config.anchorUnit : null;
+        BalanceSimulationRunner.CobbDouglasElasticities el = config != null 
+            ? config.elasticities 
+            : default;
+
+        // If no BalanceConfig asset exists yet, check the scene runner
+        if (anchor == null)
+        {
+            var runner = FindFirstObjectByType<BalanceSimulationRunner>();
+            if (runner != null)
+            {
+                anchor = runner.anchorUnit;
+                el = runner.elasticities;
+            }
+        }
+
+        // Safety fallback: ensure scaleConstant is never 0
+        if (el.scaleConstant <= 0f) el.scaleConstant = 1.0f;
+        if (el.e_Health <= 0f && el.e_DPS <= 0f)
+        {
+            el.e_Health = 0.8f;
+            el.e_DPS = 1.0f;
+            el.e_Range = 0.5f;
+            el.e_MoveSpeed = 0.3f;
+        }
+
+        if (anchor != null && anchor != this)
+        {
+            float anchorCost = anchor._spawnCost > 0 ? anchor._spawnCost : 50f;
+            _CalculatedPower = BalanceSimulationRunner.EvaluateEstimatedPower(this, anchor, el, anchorCost);
+            _ValueDiscrepancy = _CalculatedPower - _spawnCost;
+            Level_Total = _CalculatedPower;
+            Level_Discrepancy = _ValueDiscrepancy;
+        }
+    }
+#endif
+
 }
 
 [System.Serializable]
