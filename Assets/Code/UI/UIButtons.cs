@@ -109,6 +109,8 @@ public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public void OnPointerClick(PointerEventData eventData)
     {
         //ClickSound();
+        // The click itself can hide this button (e.g. a dialogue choice closing the choice box).
+        if (!isActiveAndEnabled) return;
         StartCoroutine(ClickAnimation());
         
     }

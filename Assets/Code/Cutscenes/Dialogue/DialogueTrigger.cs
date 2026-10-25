@@ -2,11 +2,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class DailogueTrigger : MonoBehaviour // multiple pages
+public class DialogueTrigger : MonoBehaviour // multiple pages
 {
     public List<Dialogue> Slides = new List<Dialogue>(); 
     [SerializeField] public DialogueChoice[] EndOfLines;
     public UltEvents.UltEvent DefultEvent;
+    [Tooltip("Fired by <?Name> tags in this trigger's lines, at that exact character (e.g. <?door>). " +
+        "face, body and sound are built in and handled by DialogueManager.")]
+    public List<DialogueTextEvent> TextEvents = new List<DialogueTextEvent>();
 
     void Start()
     {
@@ -35,9 +38,21 @@ public class DailogueTrigger : MonoBehaviour // multiple pages
         DefultEvent?.Invoke();
     }
     
-    public void EndDialogue(int eventToCall) 
-    { 
+    public void EndDialogue(int eventToCall)
+    {
+        if (eventToCall < 0 || eventToCall >= EndOfLines.Length) return;
         EndOfLines[eventToCall].ultEvent?.Invoke();
+    }
+
+    public bool TryInvokeTextEvent(string eventName)
+    {
+        foreach (DialogueTextEvent textEvent in TextEvents)
+        {
+            if (!string.Equals(textEvent.Name, eventName, System.StringComparison.OrdinalIgnoreCase)) continue;
+            textEvent.Event?.Invoke();
+            return true;
+        }
+        return false;
     }
 }
 [System.Serializable]
@@ -45,4 +60,10 @@ public class DialogueChoice
 {
     public string Text = "null";
     public UltEvents.UltEvent ultEvent;
+}
+[System.Serializable]
+public class DialogueTextEvent
+{
+    public string Name;
+    public UltEvents.UltEvent Event;
 }

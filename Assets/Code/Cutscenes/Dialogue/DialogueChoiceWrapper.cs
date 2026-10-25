@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public class DiologueChoiceWrapper : MonoBehaviour
+public class DialogueChoiceWrapper : MonoBehaviour
 {
     [HideInInspector] public int ChoiceIndex = 0;
     public void SelectChoice()
     {
         if (DialogueManager.Instance == null)
         {
-            Debug.LogWarning($"[{this}.DiologueChoiceWrapper] can't find DialogueManager");
+            Debug.LogWarning($"[{this}.DialogueChoiceWrapper] can't find DialogueManager");
 
         }
 
