@@ -7,6 +7,9 @@ public class Dialogue // full pages
     public CharacterDialogueInfo Character;
     public DialogueLine[] Lines;
     public CanvasGroup alternitiveCanvasGroup;
+    [Tooltip("Optional. Lines without an Alternitive Text Box become separate sentences on screen " +
+        "(spawned under the DialogueManager's Sentence Container) instead of using the dialogue box.")]
+    public DialoguePresentationStyle presentationStyle;
 
     
     

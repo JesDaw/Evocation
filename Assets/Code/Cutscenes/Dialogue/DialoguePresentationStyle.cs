@@ -10,6 +10,8 @@ public class DialoguePresentationStyle : ScriptableObject
     public DialogueTextSurface sentencePrefab;
     [Tooltip("Width and height of each sentence, in canvas units.")]
     public Vector2 sentenceSize = new Vector2(900f, 200f);
+    [Tooltip("Vertical gap between sentences that stack down from the top of the Sentence Container.")]
+    public float sentenceSpacing = 16f;
 
     [Header("Typography")]
     [Tooltip("Leave empty to keep the speaker's font (CharacterDialogueInfo) or TMP's default.")]

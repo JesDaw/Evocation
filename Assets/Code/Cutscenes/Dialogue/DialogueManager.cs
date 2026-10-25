@@ -20,6 +20,10 @@ public class DialogueManager : MonoBehaviour
     public string defaultTypingSound = "dialogueType";
     public TMP_FontAsset defaultFontAsset;
     public float defaultFontSize = 36f;
+    [Header("Cinematic sentences")]
+    [Tooltip("Parent for sentences spawned by slides that use a Presentation Style. " +
+        "Must not be inside DialogueBox, which is hidden for those slides.")]
+    [SerializeField] RectTransform sentenceContainer;
     [Header("Debug")]
     [SerializeField] bool ShowDebugLogs = false;
 
@@ -29,6 +33,16 @@ public class DialogueManager : MonoBehaviour
     DialogueTextSurface _currentSurface;
     bool _lineFinished = true;
     string _currentTypingSound;
+
+    // Sentences spawned for Presentation Style slides; returned to the pool when the slide ends.
+    class SpawnedSentence
+    {
+        public DialogueTextSurface Surface;
+        public DialogueTextSurface Prefab; // null for sentences built in code
+    }
+    List<SpawnedSentence> _activeSentences = new List<SpawnedSentence>();
+    List<SpawnedSentence> _sentencePool = new List<SpawnedSentence>();
+    float _nextSentenceY;
 
     int slideCount = -1; 
     int lineCount = 0;
@@ -201,8 +215,92 @@ public class DialogueManager : MonoBehaviour
         return surface;
     }
 
+    DialoguePresentationStyle GetPresentationStyle(Dialogue slide, DialogueLine line)
+    {
+        if (line.alternitiveTextBox != null || slide.presentationStyle == null) return null;
+        if (sentenceContainer == null)
+        {
+            Debug.LogWarning("[DialogueManager] A slide uses a Presentation Style but no Sentence Container is assigned; using the dialogue box.");
+            return null;
+        }
+        return slide.presentationStyle;
+    }
+
+    DialogueTextSurface SpawnSentence(DialoguePresentationStyle style)
+    {
+        sentenceContainer.gameObject.SetActive(true);
+
+        SpawnedSentence sentence = null;
+        for (int i = _sentencePool.Count - 1; i >= 0; i--)
+        {
+            if (_sentencePool[i].Surface == null)
+            {
+                _sentencePool.RemoveAt(i);
+                continue;
+            }
+            if (_sentencePool[i].Prefab != style.sentencePrefab) continue;
+            sentence = _sentencePool[i];
+            _sentencePool.RemoveAt(i);
+            break;
+        }
+        if (sentence == null) sentence = CreateSentence(style.sentencePrefab);
+
+        // Active before use: TMPEffects needs an active GameObject.
+        sentence.Surface.gameObject.SetActive(true);
+        sentence.Surface.transform.SetAsLastSibling();
+        _activeSentences.Add(sentence);
+        return sentence.Surface;
+    }
+
+    SpawnedSentence CreateSentence(DialogueTextSurface prefab)
+    {
+        TMP_Text text;
+        if (prefab != null)
+        {
+            text = Instantiate(prefab, sentenceContainer).Text;
+        }
+        else
+        {
+            GameObject sentenceObject = new GameObject("Sentence", typeof(RectTransform));
+            sentenceObject.transform.SetParent(sentenceContainer, false);
+            TextMeshProUGUI tmp = sentenceObject.AddComponent<TextMeshProUGUI>();
+            tmp.raycastTarget = false;
+            text = tmp;
+        }
+
+        // Positioned from the container's top-left corner.
+        RectTransform rect = text.rectTransform;
+        rect.anchorMin = new Vector2(0f, 1f);
+        rect.anchorMax = new Vector2(0f, 1f);
+        rect.pivot = new Vector2(0f, 1f);
+
+        return new SpawnedSentence { Surface = GetSurface(text), Prefab = prefab };
+    }
+
+    // Stacks each new sentence below the previous one.
+    void PlaceSentence(DialogueTextSurface surface, DialoguePresentationStyle style)
+    {
+        surface.Text.rectTransform.anchoredPosition = new Vector2(0f, _nextSentenceY);
+        _nextSentenceY -= surface.Text.preferredHeight + style.sentenceSpacing;
+    }
+
+    void ReleaseSentences()
+    {
+        foreach (SpawnedSentence sentence in _activeSentences)
+        {
+            if (sentence.Surface == null) continue;
+            sentence.Surface.Clear();
+            sentence.Surface.gameObject.SetActive(false);
+            _sentencePool.Add(sentence);
+        }
+        _activeSentences.Clear();
+        _nextSentenceY = 0f;
+    }
+
     void ClearSlideTextBoxes(int slideIndex)
     {
+        ReleaseSentences();
+
         if (slideIndex < 0 || slideIndex >= dialogueSlides.Count) return;
 
         Dialogue slide = dialogueSlides[slideIndex];
@@ -247,11 +345,14 @@ public class DialogueManager : MonoBehaviour
 
         ApplyCharacterToNameText(character);
 
-        TMP_Text targetBox = GetTargetTextBox(currentLine);
+        DialoguePresentationStyle style = GetPresentationStyle(slide, currentLine);
 
         // Activate the box before its surface is used: TMPEffects needs an active GameObject.
-        bool usingUniversalBox = currentLine.alternitiveTextBox == null;
+        bool usingUniversalBox = currentLine.alternitiveTextBox == null && style == null;
         DialogueBox.SetActive(usingUniversalBox);
+
+        _currentSurface = style != null ? SpawnSentence(style) : GetSurface(GetTargetTextBox(currentLine));
+        TMP_Text targetBox = _currentSurface.Text;
 
         targetBox.color = character != null ? character.textColor : defaultTextColor;
 
@@ -260,6 +361,7 @@ public class DialogueManager : MonoBehaviour
             targetBox.font = character.fontAsset;
         }
         targetBox.fontSize = character != null ? character.fontSize : defaultFontSize;
+        if (style != null) style.ApplyTo(targetBox);
 
         _currentTypingSound = character != null ? character.Voice : "";
 
@@ -269,14 +371,19 @@ public class DialogueManager : MonoBehaviour
             InteractionMinigameManager.Instance.SetCharacterFace(currentLine.CharacterFace);
         }
 
-        _currentSurface = GetSurface(targetBox);
         _currentSurface.SetRevealDelay(character != null ? character.TextSpeed : defaultTextSpeed);
         _lineFinished = false;
 
         currentLine.LineStartEvent?.Invoke();
 
+        if (style != null)
+        {
+            // One surface per sentence, so earlier sentences stay on screen untouched.
+            _currentSurface.Show(style.FormatLine(currentLine.Line));
+            PlaceSentence(_currentSurface, style);
+        }
         // Lines in the same slide and box keep the earlier lines on screen, as before.
-        if (_currentSurface.HasText) _currentSurface.Append(currentLine.Line);
+        else if (_currentSurface.HasText) _currentSurface.Append(currentLine.Line);
         else _currentSurface.Show(currentLine.Line);
 
         if (ShowDebugLogs) Debug.Log($"[DialogueManager] slide {slideCount} line {lineCount} -> {targetBox.name}");
