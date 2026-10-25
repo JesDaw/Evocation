@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPEffects.TMPEvents;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -195,6 +196,7 @@ public class DialogueManager : MonoBehaviour
         if (surface == null) surface = box.gameObject.AddComponent<DialogueTextSurface>();
         surface.RevealFinished += OnSurfaceRevealFinished;
         surface.CharacterShown += OnSurfaceCharacterShown;
+        surface.TextEvent += OnSurfaceTextEvent;
         _surfaces[box] = surface;
         return surface;
     }
@@ -295,6 +297,45 @@ public class DialogueManager : MonoBehaviour
         if (surface == _currentSurface) OnLineFinished();
     }
 
+    // <?face=N>, <?body=N> and <?sound=name> are built in; any other <?Name> runs the matching
+    // TextEvents entry on the current DialogueTrigger. Events still fire when the line is skipped.
+    void OnSurfaceTextEvent(DialogueTextSurface surface, TMPEventArgs args)
+    {
+        if (surface != _currentSurface || _dialogueTrigger == null) return;
+
+        string eventName = args.Tag.Name;
+        string value = args.Tag.Parameters != null && args.Tag.Parameters.TryGetValue("", out string v) ? v : "";
+        if (ShowDebugLogs) Debug.Log($"[DialogueManager] text event <?{eventName}={value}>");
+
+        switch (eventName.ToLowerInvariant())
+        {
+            case "face":
+            case "body":
+                if (!int.TryParse(value, out int id))
+                {
+                    Debug.LogWarning($"[DialogueManager] <?{eventName}={value}> needs a number, in trigger '{_dialogueTrigger.name}'.");
+                    return;
+                }
+                if (InteractionMinigameManager.Instance == null)
+                {
+                    Debug.LogWarning($"[DialogueManager] <?{eventName}> used but there is no InteractionMinigameManager in the scene.");
+                    return;
+                }
+                if (eventName.ToLowerInvariant() == "face") InteractionMinigameManager.Instance.SetCharacterFace(id);
+                else InteractionMinigameManager.Instance.SetCharacterBody(id);
+                return;
+            case "sound":
+                FModAudioManager.instance.PlaySoundByName(value);
+                return;
+        }
+
+        if (!_dialogueTrigger.TryInvokeTextEvent(eventName))
+        {
+            Debug.LogWarning($"[DialogueManager] No Text Event named '{eventName}' on trigger '{_dialogueTrigger.name}'. " +
+                "Add it to the trigger's Text Events list.");
+        }
+    }
+
     void OnSurfaceCharacterShown(DialogueTextSurface surface, char character)
     {
         if (surface != _currentSurface || string.IsNullOrEmpty(_currentTypingSound) || char.IsWhiteSpace(character)) return;
@@ -337,11 +378,13 @@ public class DialogueManager : MonoBehaviour
     public void EndDialogue(int CurrentChoiceIndex = 0)
     {
         if (DialogueActive == false) return;
+        // Keep a local reference: DefultEvent may start another dialogue, which replaces _dialogueTrigger.
+        DialogueTrigger endingTrigger = _dialogueTrigger;
         DeactivateDialogueBox();
-        _dialogueTrigger.EndDialogueDefultEvent();
-        if (_dialogueTrigger.EndOfLines.Length > 0)
+        endingTrigger.EndDialogueDefultEvent();
+        if (endingTrigger.EndOfLines.Length > 0)
         {
-            _dialogueTrigger.EndDialogue(CurrentChoiceIndex);
+            endingTrigger.EndDialogue(CurrentChoiceIndex);
         }
     }
 
