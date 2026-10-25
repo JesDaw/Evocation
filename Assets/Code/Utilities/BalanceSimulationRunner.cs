@@ -9,50 +9,42 @@ using UnityEditor;
 public class BalanceSimulationRunner : MonoBehaviour
 {
     [Header("1. Spawner References")]
-    [Tooltip("The Allied SpawnObjects component (spawns test characters on player/allied side).")]
+    [Tooltip("The Allied SpawnObjects component (spawns test characters on player side).")]
     public SpawnObjects alliedSpawner;
 
     [Tooltip("The Enemy SpawnObjects component (spawns Anchor units on enemy side).")]
     public SpawnObjects enemySpawner;
 
-    [Header("2. Game Roster (Clans & Characters)")]
-    [Tooltip("The fixed baseline unit that every character in the game is tested against.")]
+    [Header("2. Game Roster")]
+    [Tooltip("The fixed baseline unit every character is compared against (100% baseline).")]
     public ScriptableStats anchorUnit;
 
-    [Tooltip("All ClanStats assets in the game. Every character inside these clans will be simulated.")]
+    [Tooltip("All ClanStats assets in the game.")]
     public ClanStats[] all_clan_stats;
 
-    [Tooltip("Optional individual characters to test and calibrate in addition to the clans above.")]
+    [Tooltip("Optional individual characters to test in addition to the clans above.")]
     public List<ScriptableStats> extraUnitsToTest = new List<ScriptableStats>();
 
     [Header("3. Cost & Power Scaling")]
     [Tooltip("Scales simulated Anchor-Equivalents into Spawn Cost units. If 0, uses AnchorUnit._spawnCost.")]
     public float costPerAnchorEquivalent = 0f;
 
-    [Tooltip("If true, automatically writes the empirical simulation score + level breakdown into each character's ScriptableStats asset when finished.")]
+    [Tooltip("Automatically writes the empirical score & Cobb-Douglas breakdown into each ScriptableStats asset when finished.")]
     public bool autoUpdateScriptableStats = true;
 
     [Header("4. Simulation Mode & Outlier Protection")]
-    [Tooltip("How many times to test each character. 3+ uses Median/Trimmed-Mean to throw out physics outliers.")]
+    [Tooltip("How many times to test each character. 3+ uses Median/Trimmed-Mean to filter physics flukes.")]
     [Range(1, 9)] public int repeatsPerUnit = 3;
 
-    [Tooltip("FALSE = Only tests your real characters. TRUE = Also runs randomized stat clones of the Anchor for extra regression stability.")]
+    [Tooltip("FALSE = Only tests your real characters. TRUE = Also runs randomized stat variations of the Anchor for extra regression stability.")]
     public bool includeSyntheticTrials = false;
-
-    [Tooltip("Number of randomized Anchor clones to test if synthetic trials are enabled.")]
     public int syntheticTrialCount = 20;
 
     [Header("5. Battle Rules & Speed")]
-    [Tooltip("Fast-forwards Unity physics during the simulation (6–10 is the sweet spot).")]
     [Range(1f, 20f)] public float simulationTimeScale = 8f;
-
-    [Tooltip("0 = Sequential 1v1 Gauntlet (a new Anchor spawns when the current one dies). > 0 = Continuous Swarm.")]
+    [Tooltip("0 = Sequential 1v1 Gauntlet (new Anchor spawns when current one dies). > 0 = Continuous Swarm.")]
     public float anchorStreamInterval = 0f;
-
-    [Tooltip("Maximum game-seconds a single battle can last before timing out.")]
     public float maxTrialDuration = 45f;
-
-    [Tooltip("Maximum number of Anchors a single unit can kill before ending the trial as a decisive win.")]
     public int maxAnchorsPerTrial = 15;
 
     [Header("6. Live Progress (Read-Only)")]
@@ -60,8 +52,12 @@ public class BalanceSimulationRunner : MonoBehaviour
     public string currentStatus = "Idle";
     public List<TrialResult> results = new List<TrialResult>();
 
-    [Header("7. Solved Stat Weights (Output)")]
-    public SolvedWeights solvedWeights;
+    [Header("7. Solved Cobb-Douglas Elasticities (Exponents)")]
+    [Tooltip("Solved multiplicative elasticities. Power Ratio = (HP_ratio^e_HP) * (DPS_ratio^e_DPS) * ...")]
+    public CobbDouglasElasticities elasticities;
+    [Header("Configuration Asset")]
+    [Tooltip("The BalanceConfig asset in your project. The runner will automatically write solved elasticities here!")]
+    public BalanceConfig balanceConfig;
 
     private List<GameObject> _activeSpawnedObjects = new List<GameObject>();
 
@@ -70,7 +66,12 @@ public class BalanceSimulationRunner : MonoBehaviour
     {
         public string unitName;
         public ScriptableStats statsAsset;
-        public float hp, atk, move, range, freq, kbd, kbh;
+        public float hpRatio;
+        public float dpsRatio;
+        public float rangeRatio;
+        public float moveRatio;
+        public float kbdRatio;
+        public float kbhRatio;
         public float anchorsKilledEquivalent;
         public float timeSurvived;
         public float normalizedLanePush;
@@ -79,19 +80,34 @@ public class BalanceSimulationRunner : MonoBehaviour
     }
 
     [System.Serializable]
-    public struct SolvedWeights
+    public struct CobbDouglasElasticities
     {
-        public float w_MaxHealth;
-        public float w_AttackDamage;
-        public float w_AttackFrequency;
-        public float w_MoveSpeed;
-        public float w_HorizontalRange;
-        public float w_KnockBackDamage;
-        public float w_KnockBackHealth;
+        [Tooltip("Elasticity exponent for MaxHealth. 1.0 means +10% HP = +10% Power.")]
+        public float e_Health;
+
+        [Tooltip("Elasticity exponent for combined Offensive DPS (Atk * Freq).")]
+        public float e_DPS;
+
+        [Tooltip("Elasticity exponent for Horizontal Range.")]
+        public float e_Range;
+
+        [Tooltip("Elasticity exponent for Move Speed.")]
+        public float e_MoveSpeed;
+
+        [Tooltip("Elasticity exponent for KnockBack DPS (KBD * Freq).")]
+        public float e_KBD;
+
+        [Tooltip("Elasticity exponent for KnockBack Max Health (Poise).")]
+        public float e_KBH;
+
+        [Tooltip("Overall scaling multiplier (Anchor multiplier, usually ~1.0).")]
+        public float scaleConstant;
+
+        [Tooltip("Goodness of fit (0 to 1). Closer to 1.0 means the formula accurately predicts the simulation.")]
         public float rSquared;
     }
 
-    [ContextMenu("Auto-Grab References from Scene")]
+    [ContextMenu("Auto-Grab References from Project")]
     public void AutoWireReferences()
     {
         if (alliedSpawner == null) alliedSpawner = SpawnObjects.PlayerInstance;
@@ -109,7 +125,18 @@ public class BalanceSimulationRunner : MonoBehaviour
                 if (c != null && !clans.Contains(c)) clans.Add(c);
             }
             all_clan_stats = clans.ToArray();
-            Debug.Log($"[BalanceSim] Auto-found {all_clan_stats.Length} ClanStats assets in project.");
+            Debug.Log($"[BalanceSim] Found {all_clan_stats.Length} ClanStats assets in project.");
+#endif
+        }
+        if (balanceConfig == null)
+        {
+#if UNITY_EDITOR
+            string[] guids = AssetDatabase.FindAssets("t:BalanceConfig");
+            if (guids.Length > 0)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guids[0]);
+                balanceConfig = AssetDatabase.LoadAssetAtPath<BalanceConfig>(path);
+            }
 #endif
         }
     }
@@ -118,7 +145,7 @@ public class BalanceSimulationRunner : MonoBehaviour
     {
         if (!Application.isPlaying)
         {
-            Debug.LogWarning("[BalanceSim] Enter PLAY MODE first to run the live simulation!");
+            Debug.LogWarning("[BalanceSim] Enter PLAY MODE first to run the simulation!");
             return;
         }
         if (isRunning) return;
@@ -185,6 +212,17 @@ public class BalanceSimulationRunner : MonoBehaviour
 
         float anchorCostScale = GetEffectiveAnchorCostScale();
 
+        // Baseline stats of the Anchor
+        var anchorProfile = PowerMath.GetProfile(anchorUnit);
+        float anchorCycle = GetTrueAttackCycleSeconds(anchorUnit);
+        float anchorFreq = 1f / Mathf.Max(anchorCycle, 0.05f);
+        float anchorDPS = Mathf.Max(anchorProfile.Atk * anchorFreq, 0.1f);
+        float anchorRange = Mathf.Max(GetTrueStoppingRange(anchorUnit), 0.1f);
+        float anchorMove = Mathf.Max(anchorProfile.Move, 0.1f);
+        float anchorKBD = Mathf.Max(anchorProfile.KBD * anchorFreq, 0.1f);
+        float anchorKBH = Mathf.Max(anchorProfile.KBH, 0.1f);
+        float anchorHP = Mathf.Max(anchorProfile.HP, 0.1f);
+
         for (int i = 0; i < testPool.Count; i++)
         {
             ScriptableStats candidate = testPool[i];
@@ -211,6 +249,9 @@ public class BalanceSimulationRunner : MonoBehaviour
             var profile = PowerMath.GetProfile(candidate);
             float trueCycleSec = GetTrueAttackCycleSeconds(candidate);
             float freq = 1f / Mathf.Max(trueCycleSec, 0.05f);
+            float dps = profile.Atk * freq;
+            float range = GetTrueStoppingRange(candidate);
+            float kbd = profile.KBD * freq;
 
             float compositeScore = avgAnchors + (avgPush * 0.5f);
             float utilityBonus = PowerMath.GetUtilityPower(candidate);
@@ -222,13 +263,12 @@ public class BalanceSimulationRunner : MonoBehaviour
             {
                 unitName = candidate.name,
                 statsAsset = isTempClone ? null : candidate,
-                hp = profile.HP,
-                atk = profile.Atk,
-                move = profile.Move,
-                range = GetTrueStoppingRange(candidate),
-                freq = freq,
-                kbd = profile.KBD,
-                kbh = profile.KBH,
+                hpRatio = profile.HP / anchorHP,
+                dpsRatio = dps / anchorDPS,
+                rangeRatio = range / anchorRange,
+                moveRatio = profile.Move / anchorMove,
+                kbdRatio = kbd / anchorKBD,
+                kbhRatio = profile.KBH / anchorKBH,
                 anchorsKilledEquivalent = avgAnchors,
                 timeSurvived = avgTime,
                 normalizedLanePush = avgPush,
@@ -240,15 +280,60 @@ public class BalanceSimulationRunner : MonoBehaviour
         Time.timeScale = originalTimeScale;
         foreach (var c in tempClonesToDestroy) Destroy(c);
 
-        SolveMultivariableRegression();
+        // Solve the log-transformed Cobb-Douglas elasticities
+        SolveCobbDouglasRegression();
 
         if (autoUpdateScriptableStats)
         {
             UpdateAllScriptableStatsAndClans();
         }
 
-        currentStatus = $"Done! Updated {results.Count} units. R² = {solvedWeights.rSquared:F3}";
+        currentStatus = $"Done! Calibrated {results.Count} units. Cobb-Douglas R² = {elasticities.rSquared:F3}";
         isRunning = false;
+    }
+
+    /// <summary>
+    /// Instantly calculates estimated power for any unit in the Inspector without running Play Mode.
+    /// </summary>
+    public static float EvaluateEstimatedPower(ScriptableStats unit, ScriptableStats anchor, CobbDouglasElasticities e, float anchorCost)
+    {
+        if (unit == null || anchor == null) return 0f;
+
+        var uProf = PowerMath.GetProfile(unit);
+        var aProf = PowerMath.GetProfile(anchor);
+
+        float uFreq = 1f / Mathf.Max(GetTrueAttackCycleSeconds(unit), 0.05f);
+        float aFreq = 1f / Mathf.Max(GetTrueAttackCycleSeconds(anchor), 0.05f);
+
+        float uDPS = Mathf.Max(uProf.Atk * uFreq, 0.01f);
+        float aDPS = Mathf.Max(aProf.Atk * aFreq, 0.01f);
+
+        float hpRatio    = Mathf.Max(uProf.HP / Mathf.Max(aProf.HP, 1f), 0.01f);
+        float dpsRatio   = Mathf.Max(uDPS / aDPS, 0.01f);
+        float rangeRatio = Mathf.Max(GetTrueStoppingRange(unit) / Mathf.Max(GetTrueStoppingRange(anchor), 0.1f), 0.01f);
+        float moveRatio  = Mathf.Max(uProf.Move / Mathf.Max(aProf.Move, 0.1f), 0.01f);
+        float kbdRatio   = Mathf.Max((uProf.KBD * uFreq) / Mathf.Max(aProf.KBD * aFreq, 0.01f), 0.01f);
+        float kbhRatio   = Mathf.Max(uProf.KBH / Mathf.Max(aProf.KBH, 1f), 0.01f);
+
+        // Fallbacks so an uncalibrated runner doesn't multiply by zero
+        float scale = e.scaleConstant > 0.001f ? e.scaleConstant : 1.0f;
+        float eHP   = e.e_Health > 0f ? e.e_Health : 0.8f;
+        float eDPS  = e.e_DPS > 0f ? e.e_DPS : 1.0f;
+        float eRng  = e.e_Range;
+        float eMove = e.e_MoveSpeed;
+        float eKBD  = e.e_KBD;
+        float eKBH  = e.e_KBH;
+
+        float powerRatio = scale
+                         * Mathf.Pow(hpRatio, eHP)
+                         * Mathf.Pow(dpsRatio, eDPS)
+                         * Mathf.Pow(rangeRatio, eRng)
+                         * Mathf.Pow(moveRatio, eMove)
+                         * Mathf.Pow(kbdRatio, eKBD)
+                         * Mathf.Pow(kbhRatio, eKBH);
+
+        float utility = PowerMath.GetUtilityPower(unit);
+        return (powerRatio * anchorCost) + utility;
     }
 
     [ContextMenu("Recalculate & Save All ScriptableStats Assets")]
@@ -270,37 +355,21 @@ public class BalanceSimulationRunner : MonoBehaviour
         {
             if (s == null) continue;
 
-            var profile = PowerMath.GetProfile(s);
-            float trueCycleSec = GetTrueAttackCycleSeconds(s);
-            float freq = 1f / Mathf.Max(trueCycleSec, 0.05f);
-            float trueRange = GetTrueStoppingRange(s);
-
-            float wHP   = Mathf.Max(solvedWeights.w_MaxHealth, 0.001f) * anchorCostScale;
-            float wAtk  = Mathf.Max(solvedWeights.w_AttackDamage, 0.001f) * anchorCostScale;
-            float wFreq = Mathf.Max(solvedWeights.w_AttackFrequency, 0.001f) * anchorCostScale;
-            float wMove = Mathf.Max(solvedWeights.w_MoveSpeed, 0.001f) * anchorCostScale;
-            float wRng  = Mathf.Max(solvedWeights.w_HorizontalRange, 0.001f) * anchorCostScale;
-            float wKBD  = Mathf.Max(solvedWeights.w_KnockBackDamage, 0.001f) * anchorCostScale;
-            float wKBH  = Mathf.Max(solvedWeights.w_KnockBackHealth, 0.001f) * anchorCostScale;
-
-            s.Attack          = (profile.Atk * wAtk) + (profile.KBD * wKBD);
-            s.Defense         = (profile.HP * wHP) + (profile.KBH * wKBH);
-            s.SpaceControl    = (trueRange * wRng) + (profile.Move * wMove);
-            s.AttackFrequency = freq * wFreq;
-            s.Level_Total     = s.Attack + s.Defense + s.SpaceControl + s.AttackFrequency;
-            s.Level_Discrepancy = s.Level_Total - s._spawnCost;
-
-            float utilityPower = PowerMath.GetUtilityPower(s);
+            // If we simulated this unit, use the empirical score; otherwise estimate via Cobb-Douglas
             if (simLookup.TryGetValue(s, out TrialResult simResult))
             {
                 s._CalculatedPower = simResult.scaledCalculatedPower;
             }
             else
             {
-                s._CalculatedPower = s.Level_Total + utilityPower;
+                s._CalculatedPower = EvaluateEstimatedPower(s, anchorUnit, elasticities, anchorCostScale);
             }
 
             s._ValueDiscrepancy = s._CalculatedPower - s._spawnCost;
+
+            // Store level totals
+            s.Level_Total = s._CalculatedPower;
+            s.Level_Discrepancy = s._ValueDiscrepancy;
 
 #if UNITY_EDITOR
             EditorUtility.SetDirty(s);
@@ -315,10 +384,8 @@ public class BalanceSimulationRunner : MonoBehaviour
             {
                 if (clan == null || clan.all_stats_scripts == null) continue;
 
-                float tAttack = 0f, tDefense = 0f, tSpace = 0f, tFreq = 0f, tLevel = 0f;
-                float tMove = 0f, tKBD = 0f, tAtk = 0f, tCooldown = 0f, tHP = 0f, tKBH = 0f, tRng = 0f;
+                float tLevel = 0f, tMove = 0f, tKBD = 0f, tAtk = 0f, tCooldown = 0f, tHP = 0f, tKBH = 0f, tRng = 0f;
                 int validCount = 0;
-
                 clan.UnitValueDiscrepancies = new float[clan.all_stats_scripts.Length];
 
                 for (int i = 0; i < clan.all_stats_scripts.Length; i++)
@@ -328,13 +395,8 @@ public class BalanceSimulationRunner : MonoBehaviour
 
                     ScriptableStats s = cd.scriptableStats;
                     validCount++;
-
                     clan.UnitValueDiscrepancies[i] = s._ValueDiscrepancy;
-                    tAttack  += s.Attack;
-                    tDefense += s.Defense;
-                    tSpace   += s.SpaceControl;
-                    tFreq    += s.AttackFrequency;
-                    tLevel   += s._CalculatedPower;
+                    tLevel += s._CalculatedPower;
 
                     var prof = PowerMath.GetProfile(s);
                     tMove     += prof.Move;
@@ -347,12 +409,7 @@ public class BalanceSimulationRunner : MonoBehaviour
                 }
 
                 int div = Mathf.Max(1, validCount);
-                clan.TotalLevel         = tLevel;
-                clan.SumAttack          = tAttack;
-                clan.SumDefense         = tDefense;
-                clan.SumSpaceControl    = tSpace;
-                clan.AvgAttackFrequency = tFreq / div;
-
+                clan.TotalLevel  = tLevel;
                 clan.AvgMove     = tMove / div;
                 clan.AvgKB_Dmg   = tKBD / div;
                 clan.AvgAtk_Dmg  = tAtk / div;
@@ -370,7 +427,127 @@ public class BalanceSimulationRunner : MonoBehaviour
 #if UNITY_EDITOR
         AssetDatabase.SaveAssets();
 #endif
-        Debug.Log($"<b>[BalanceSim] Updated & Saved {updatedCount} ScriptableStats assets!</b>");
+        Debug.Log($"<b>[BalanceSim] Updated & Saved {updatedCount} ScriptableStats using Cobb-Douglas Elasticities!</b>");
+    }
+
+    // Solves: ln(Score) = ln(Scale) + e_HP*ln(HP_ratio) + e_DPS*ln(DPS_ratio) + ...
+    private void SolveCobbDouglasRegression()
+    {
+        int n = results.Count;
+        int p = 7; // 1 intercept (ln Scale) + 6 elasticity exponents
+        if (n < 3) return;
+
+        double[,] X = new double[n, p];
+        double[] Y = new double[n];
+
+        for (int i = 0; i < n; i++)
+        {
+            var r = results[i];
+            X[i, 0] = 1.0;
+            X[i, 1] = System.Math.Log(System.Math.Max(r.hpRatio, 0.01));
+            X[i, 2] = System.Math.Log(System.Math.Max(r.dpsRatio, 0.01));
+            X[i, 3] = System.Math.Log(System.Math.Max(r.rangeRatio, 0.01));
+            X[i, 4] = System.Math.Log(System.Math.Max(r.moveRatio, 0.01));
+            X[i, 5] = System.Math.Log(System.Math.Max(r.kbdRatio, 0.01));
+            X[i, 6] = System.Math.Log(System.Math.Max(r.kbhRatio, 0.01));
+
+            Y[i] = System.Math.Log(System.Math.Max(r.compositePowerScore, 0.01));
+        }
+
+        double[,] XtX = new double[p, p];
+        double[] XtY = new double[p];
+
+        for (int j = 0; j < p; j++)
+        {
+            for (int k = 0; k < p; k++)
+            {
+                double sum = 0;
+                for (int i = 0; i < n; i++) sum += X[i, j] * X[i, k];
+                if (j == k && j > 0) sum += 0.05; // Ridge regularization
+                XtX[j, k] = sum;
+            }
+
+            double sumY = 0;
+            for (int i = 0; i < n; i++) sumY += X[i, j] * Y[i];
+            XtY[j] = sumY;
+        }
+
+        double[] beta = GaussianElimination(XtX, XtY, p);
+
+        double meanY = 0;
+        for (int i = 0; i < n; i++) meanY += Y[i];
+        meanY /= n;
+
+        double ssTot = 0, ssRes = 0;
+        for (int i = 0; i < n; i++)
+        {
+            double yPred = 0;
+            for (int j = 0; j < p; j++) yPred += X[i, j] * beta[j];
+            ssRes += (Y[i] - yPred) * (Y[i] - yPred);
+            ssTot += (Y[i] - meanY) * (Y[i] - meanY);
+        }
+        double r2 = ssTot > 1e-6 ? System.Math.Max(0.0, 1.0 - (ssRes / ssTot)) : 1.0;
+
+        elasticities = new CobbDouglasElasticities
+        {
+            scaleConstant = (float)System.Math.Exp(beta[0]),
+            e_Health      = Mathf.Max((float)beta[1], 0f),
+            e_DPS         = Mathf.Max((float)beta[2], 0f),
+            e_Range       = Mathf.Max((float)beta[3], 0f),
+            e_MoveSpeed   = Mathf.Max((float)beta[4], 0f),
+            e_KBD         = Mathf.Max((float)beta[5], 0f),
+            e_KBH         = Mathf.Max((float)beta[6], 0f),
+            rSquared      = (float)r2
+        };
+
+#if UNITY_EDITOR
+        if (balanceConfig != null)
+        {
+            balanceConfig.anchorUnit = anchorUnit;
+            balanceConfig.anchorCost = GetEffectiveAnchorCostScale();
+            balanceConfig.elasticities = elasticities;
+            EditorUtility.SetDirty(balanceConfig);
+            AssetDatabase.SaveAssets();
+            Debug.Log($"<b>[BalanceSim] Successfully calibrated and saved to '{balanceConfig.name}'!</b>");
+        }
+#endif
+
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLine($"<b>[BalanceSim] Cobb-Douglas Elasticities Solved (N={n}, R²={r2:F3})</b>");
+        sb.AppendLine($"  Formula: PowerRatio = {elasticities.scaleConstant:F2} * (HP^{elasticities.e_Health:F2}) * (DPS^{elasticities.e_DPS:F2}) * (Range^{elasticities.e_Range:F2}) * (Move^{elasticities.e_MoveSpeed:F2})");
+        Debug.Log(sb.ToString());
+    }
+
+    private double[] GaussianElimination(double[,] A, double[] b, int n)
+    {
+        double[] x = new double[n];
+        for (int i = 0; i < n; i++)
+        {
+            int maxRow = i;
+            for (int k = i + 1; k < n; k++)
+                if (System.Math.Abs(A[k, i]) > System.Math.Abs(A[maxRow, i])) maxRow = k;
+
+            for (int k = i; k < n; k++) { double tmp = A[maxRow, k]; A[maxRow, k] = A[i, k]; A[i, k] = tmp; }
+            double tmpB = b[maxRow]; b[maxRow] = b[i]; b[i] = tmpB;
+
+            if (System.Math.Abs(A[i, i]) < 1e-12) continue;
+
+            for (int k = i + 1; k < n; k++)
+            {
+                double factor = A[k, i] / A[i, i];
+                b[k] -= factor * b[i];
+                for (int j = i; j < n; j++) A[k, j] -= factor * A[i, j];
+            }
+        }
+
+        for (int i = n - 1; i >= 0; i--)
+        {
+            if (System.Math.Abs(A[i, i]) < 1e-12) { x[i] = 0; continue; }
+            double sum = b[i];
+            for (int j = i + 1; j < n; j++) sum -= A[i, j] * x[j];
+            x[i] = sum / A[i, i];
+        }
+        return x;
     }
 
     private List<ScriptableStats> GatherAllRosterUnits()
@@ -563,119 +740,6 @@ public class BalanceSimulationRunner : MonoBehaviour
         if (primary == null) return s._HorizontalRange;
         float baseReach = s._HorizontalRange * primary.rangePercent;
         return primary.extendsForward ? baseReach * 1.5f : baseReach;
-    }
-
-    private void SolveMultivariableRegression()
-    {
-        int n = results.Count;
-        int p = 7;
-        if (n == 0) return;
-
-        double[,] X = new double[n, p];
-        double[] Y = new double[n];
-        double[] statScale = new double[p];
-
-        for (int i = 0; i < n; i++)
-        {
-            var r = results[i];
-            X[i, 0] = r.hp;
-            X[i, 1] = r.atk;
-            X[i, 2] = r.freq;
-            X[i, 3] = r.move;
-            X[i, 4] = r.range;
-            X[i, 5] = r.kbd;
-            X[i, 6] = r.kbh;
-            Y[i] = r.compositePowerScore;
-
-            for (int j = 0; j < p; j++) statScale[j] += X[i, j] * X[i, j];
-        }
-
-        double[,] XtX = new double[p, p];
-        double[] XtY = new double[p];
-        double ridgeLambda = (n < p) ? 0.15 : 0.01;
-
-        for (int j = 0; j < p; j++)
-        {
-            for (int k = 0; k < p; k++)
-            {
-                double sum = 0;
-                for (int i = 0; i < n; i++) sum += X[i, j] * X[i, k];
-                if (j == k) sum += System.Math.Max(statScale[j] * ridgeLambda, 1e-3);
-                XtX[j, k] = sum;
-            }
-
-            double sumY = 0;
-            for (int i = 0; i < n; i++) sumY += X[i, j] * Y[i];
-            XtY[j] = sumY;
-        }
-
-        double[] beta = GaussianElimination(XtX, XtY, p);
-
-        double meanY = 0;
-        for (int i = 0; i < n; i++) meanY += Y[i];
-        meanY /= n;
-
-        double ssTot = 0, ssRes = 0;
-        for (int i = 0; i < n; i++)
-        {
-            double yPred = 0;
-            for (int j = 0; j < p; j++) yPred += X[i, j] * beta[j];
-            ssRes += (Y[i] - yPred) * (Y[i] - yPred);
-            ssTot += (Y[i] - meanY) * (Y[i] - meanY);
-        }
-        double r2 = ssTot > 1e-6 ? System.Math.Max(0.0, 1.0 - (ssRes / ssTot)) : 1.0;
-
-        solvedWeights = new SolvedWeights
-        {
-            w_MaxHealth        = (float)beta[0],
-            w_AttackDamage     = (float)beta[1],
-            w_AttackFrequency  = (float)beta[2],
-            w_MoveSpeed        = (float)beta[3],
-            w_HorizontalRange  = (float)beta[4],
-            w_KnockBackDamage  = (float)beta[5],
-            w_KnockBackHealth  = (float)beta[6],
-            rSquared           = (float)r2
-        };
-
-        StringBuilder sb = new StringBuilder();
-        sb.AppendLine($"<b>[BalanceSim] Calibration Complete (N={n}, R²={r2:F3})</b>");
-        foreach (var r in results)
-        {
-            sb.AppendLine($"  • <b>{r.unitName}</b>: Killed {r.anchorsKilledEquivalent:F2} Anchors | CalcPower = {r.scaledCalculatedPower:F1} (SpawnCost = {(r.statsAsset != null ? r.statsAsset._spawnCost : 0)})");
-        }
-        Debug.Log(sb.ToString());
-    }
-
-    private double[] GaussianElimination(double[,] A, double[] b, int n)
-    {
-        double[] x = new double[n];
-        for (int i = 0; i < n; i++)
-        {
-            int maxRow = i;
-            for (int k = i + 1; k < n; k++)
-                if (System.Math.Abs(A[k, i]) > System.Math.Abs(A[maxRow, i])) maxRow = k;
-
-            for (int k = i; k < n; k++) { double tmp = A[maxRow, k]; A[maxRow, k] = A[i, k]; A[i, k] = tmp; }
-            double tmpB = b[maxRow]; b[maxRow] = b[i]; b[i] = tmpB;
-
-            if (System.Math.Abs(A[i, i]) < 1e-12) continue;
-
-            for (int k = i + 1; k < n; k++)
-            {
-                double factor = A[k, i] / A[i, i];
-                b[k] -= factor * b[i];
-                for (int j = i; j < n; j++) A[k, j] -= factor * A[i, j];
-            }
-        }
-
-        for (int i = n - 1; i >= 0; i--)
-        {
-            if (System.Math.Abs(A[i, i]) < 1e-12) { x[i] = 0; continue; }
-            double sum = b[i];
-            for (int j = i + 1; j < n; j++) sum -= A[i, j] * x[j];
-            x[i] = sum / A[i, i];
-        }
-        return x;
     }
 }
 

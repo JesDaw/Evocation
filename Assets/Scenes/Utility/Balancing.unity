@@ -305,20 +305,19 @@ MonoBehaviour:
   syntheticTrialCount: 35
   simulationTimeScale: 20
   anchorStreamInterval: 0
-  maxTrialDuration: 45
+  maxTrialDuration: 100000
   maxAnchorsPerTrial: 15
   isRunning: 0
   currentStatus: "Done! Updated 6 units. R\xB2 = 0.808"
   results:
   - unitName: WolfRunner
     statsAsset: {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
-    hp: 5
-    atk: 5
-    move: 5.5
-    range: 2.25
-    freq: 1.7211704
-    kbd: 5
-    kbh: 10
+    hpRatio: 0
+    dpsRatio: 0
+    rangeRatio: 0
+    moveRatio: 0
+    kbdRatio: 0
+    kbhRatio: 0
     anchorsKilledEquivalent: 0.125
     timeSurvived: 14.813481
     normalizedLanePush: 0.70009273
@@ -326,13 +325,12 @@ MonoBehaviour:
     scaledCalculatedPower: 14.251391
   - unitName: WolfHammer
     statsAsset: {fileID: 11400000, guid: d4daadf164451854c8c5982cee62e5f9, type: 2}
-    hp: 20
-    atk: 5
-    move: 3
-    range: 3
-    freq: 0.8802817
-    kbd: 10
-    kbh: 15
+    hpRatio: 0
+    dpsRatio: 0
+    rangeRatio: 0
+    moveRatio: 0
+    kbdRatio: 0
+    kbhRatio: 0
     anchorsKilledEquivalent: 0.125
     timeSurvived: 22.893667
     normalizedLanePush: 0.56081843
@@ -340,13 +338,12 @@ MonoBehaviour:
     scaledCalculatedPower: 12.162276
   - unitName: WolfRider
     statsAsset: {fileID: 11400000, guid: 1b58dbc454df5e14c89b0997be5b88b3, type: 2}
-    hp: 30
-    atk: 15
-    move: 5.5
-    range: 3
-    freq: 0.913242
-    kbd: 15
-    kbh: 30
+    hpRatio: 0
+    dpsRatio: 0
+    rangeRatio: 0
+    moveRatio: 0
+    kbdRatio: 0
+    kbhRatio: 0
     anchorsKilledEquivalent: 2.375
     timeSurvived: 34.340595
     normalizedLanePush: 0.9634308
@@ -354,13 +351,12 @@ MonoBehaviour:
     scaledCalculatedPower: 85.70146
   - unitName: HoodGuy
     statsAsset: {fileID: 11400000, guid: b6992adb71df9b441bc53d51187ea154, type: 2}
-    hp: 15
-    atk: 10
-    move: 4
-    range: 10.5
-    freq: 0.24648754
-    kbd: 5
-    kbh: 10
+    hpRatio: 0
+    dpsRatio: 0
+    rangeRatio: 0
+    moveRatio: 0
+    kbdRatio: 0
+    kbhRatio: 0
     anchorsKilledEquivalent: 0.5
     timeSurvived: 23.173674
     normalizedLanePush: 0.65960246
@@ -368,13 +364,12 @@ MonoBehaviour:
     scaledCalculatedPower: 24.894035
   - unitName: WolfMage
     statsAsset: {fileID: 11400000, guid: 9bc80ac74d98ee645a559cbf527a224a, type: 2}
-    hp: 70
-    atk: 5
-    move: 4
-    range: 15
-    freq: 0.46948355
-    kbd: -1
-    kbh: 70
+    hpRatio: 0
+    dpsRatio: 0
+    rangeRatio: 0
+    moveRatio: 0
+    kbdRatio: 0
+    kbhRatio: 0
     anchorsKilledEquivalent: 0.625
     timeSurvived: 33.173904
     normalizedLanePush: 0.6774085
@@ -382,27 +377,27 @@ MonoBehaviour:
     scaledCalculatedPower: 28.911127
   - unitName: Anchor Character
     statsAsset: {fileID: 11400000, guid: 1f79ec6a6d5e84f2f9a2af207f529f69, type: 2}
-    hp: 40
-    atk: 10
-    move: 2.5
-    range: 2.25
-    freq: 1.7211704
-    kbd: 10
-    kbh: 20
+    hpRatio: 0
+    dpsRatio: 0
+    rangeRatio: 0
+    moveRatio: 0
+    kbdRatio: 0
+    kbhRatio: 0
     anchorsKilledEquivalent: 1.5
     timeSurvived: 45.00084
     normalizedLanePush: 0.75654364
     compositePowerScore: 1.8782718
     scaledCalculatedPower: 56.348156
-  solvedWeights:
-    w_MaxHealth: 0.007973023
-    w_AttackDamage: 0.07757186
-    w_AttackFrequency: -0.01913866
-    w_MoveSpeed: 0.011424414
-    w_HorizontalRange: -0.030018928
-    w_KnockBackDamage: 0.046220247
-    w_KnockBackHealth: 0.007323595
-    rSquared: 0.80785686
+  elasticities:
+    e_Health: 0
+    e_DPS: 0
+    e_Range: 0
+    e_MoveSpeed: 0
+    e_KBD: 0
+    e_KBH: 0
+    scaleConstant: 0
+    rSquared: 0
+  balanceConfig: {fileID: 0}
 --- !u!1 &427189086
 GameObject:
   m_ObjectHideFlags: 0

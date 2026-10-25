@@ -52,7 +52,7 @@ public class BalanceCSVExporter : MonoBehaviour
         StringBuilder csv = new StringBuilder();
 
         // ── 1. GLOBAL METADATA ──────────────────────────────────────────
-        csv.AppendLine("=== GAME BALANCE REPORT ===");
+        csv.AppendLine("GAME BALANCE REPORT ");
         csv.AppendLine($"Export Date,{System.DateTime.Now}");
         csv.AppendLine($"Anchor Unit,{(anchorUnit != null ? anchorUnit.name : "None")}");
         csv.AppendLine($"Anchor Cost,{(anchorUnit != null ? anchorUnit._spawnCost.ToString() : "0")}");
