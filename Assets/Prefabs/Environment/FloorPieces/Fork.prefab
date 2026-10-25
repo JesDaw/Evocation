@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1243639522119308570}
   - component: {fileID: 1003191711858748909}
   - component: {fileID: 5753211411378103675}
+  - component: {fileID: 2696307563885670001}
   m_Layer: 0
   m_Name: Fork
   m_TagString: Untagged
@@ -153,6 +154,27 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5, y: 10}
   m_EdgeRadius: 0
+--- !u!114 &2696307563885670001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1974277418432434437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 713fdee619a254d22a8d8f1482d81f0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::AILaneSwitcher
+  UpperZone: {fileID: 0}
+  MiddleZone: {fileID: 0}
+  LowerZone: {fileID: 0}
+  netPositiveExpectedOutcomeDiscrepancyWindow: 0
+  netNegativeExpectedOutcomeDiscrepancyWindow: 0
+  BeOptimal: 0
+  Collider: {fileID: 1003191711858748909}
+  DebugLogs: 0
+  resourceSpawners: []
 --- !u!1 &3662235145562639138
 GameObject:
   m_ObjectHideFlags: 0

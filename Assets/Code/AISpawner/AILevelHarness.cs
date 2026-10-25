@@ -218,6 +218,7 @@ public class AILevelHarness : MonoBehaviour
     {
         while (isRunning)
         {
+            if (showDebugLogs) Debug.Log("===================AI Tick Start========================");
             UpdateThreatAndBudget();
             ExicuteBestAction();
 
@@ -309,7 +310,7 @@ public class AILevelHarness : MonoBehaviour
                 $"[AI] Threat: {threatLevel:F2} | " +
                 $"Activity: {budgetPercentThisTick:F2} | " +
                 $"Budget added: {budgetAdded:F2} | " +
-                $"Virtual budget: {moneyBudget:F2} | " +
+                $"Virtual budget: {moneyBudget:F2} ({budgetPercentThisTick}% of incomeThisTick ({incomeThisTick}))| " +
                 $"Actual money: {Money.AIInstance.CurrentMoney:F2}");
         }
     }
@@ -410,6 +411,9 @@ public class AILevelHarness : MonoBehaviour
         float currentOutcome =
             UnitTracker.Instance.CalculateOverallExpectedOutcome(AIWeighted: true);
 
+        float maxAbsOutcomeDelta = 0f;
+
+        // Pass 1: Compute raw outcome deltas and non-outcome utilities
         foreach (ScriptableStats character in characters)
         {
             if (character == null)
@@ -439,7 +443,6 @@ public class AILevelHarness : MonoBehaviour
                 : Mathf.Clamp01(
                     1f - characterCooldownHandler.CooldownRemaining(character) / cooldown);
 
-            // Evaluate cheap fast-cooldown units as a committed swarm over swarmEvaluationWindow
             int swarmCopies = CalculateCandidateSwarmCopies(cost, cooldown);
             cu.evaluatedCopies = swarmCopies;
 
@@ -459,8 +462,23 @@ public class AILevelHarness : MonoBehaviour
 
             cu.expectedOutcomeRaw = currentOutcome - outcomeWithCandidate;
 
+            float absDelta = Mathf.Abs(cu.expectedOutcomeRaw);
+            if (absDelta > maxAbsOutcomeDelta)
+                maxAbsOutcomeDelta = absDelta;
+
+            characterUtilities.Add(cu);
+        }
+
+        if (characterUtilities.Count == 0)
+            return null;
+
+        // Pass 2: Normalize expectedOutcomeUtility against the best candidate delta (with outcomeUtilityScale as a minimum floor)
+        float outcomeDenominator = Mathf.Max(maxAbsOutcomeDelta, outcomeUtilityScale, 0.001f);
+
+        foreach (CharacterUtility cu in characterUtilities)
+        {
             cu.expectedOutcomeUtility = Mathf.Clamp(
-                cu.expectedOutcomeRaw / Mathf.Max(outcomeUtilityScale, 0.001f),
+                cu.expectedOutcomeRaw / outcomeDenominator,
                 -1f,
                 1f);
 
@@ -471,14 +489,8 @@ public class AILevelHarness : MonoBehaviour
                 cu.expectedOutcomeUtility
             ) / 4f;
 
-            characterUtilities.Add(cu);
-
-            if (showDebugLogs)
-                cu.Print(moneyBudget);
+            if (showDebugLogs) cu.Print(moneyBudget);
         }
-
-        if (characterUtilities.Count == 0)
-            return null;
 
         return characterUtilities
             .OrderByDescending(cu => cu.totalUtility)
@@ -548,16 +560,13 @@ public class CharacterUtility
         Debug.Log(
             $"Money: {moneyUtility:F3} | " +
             $"Cooldown: {spawnCooldownUtility:F3} | " +
-            $"Expenditure: {expendatureRateUtility:F3}");
-
-        Debug.Log(
-            $"Outcome delta: {expectedOutcomeRaw:F3} | " +
-            $"Outcome utility: {expectedOutcomeUtility:F3}");
+            $"Expenditure: {expendatureRateUtility:F3} | " +
+            $"Outcome utility: {expectedOutcomeUtility:F3} (Outcome delta: {expectedOutcomeRaw:F3})");
 
         Debug.Log(
             $"Total utility: {totalUtility:F3} | " +
             $"Cost: {character._spawnCost} | " +
             $"Virtual budget: {moneyBudget:F2} | " +
-            $"Over budget: {overBudget}");
+            $"afordable: {!overBudget}");
     }
 }
