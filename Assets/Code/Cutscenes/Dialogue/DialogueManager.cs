@@ -43,7 +43,8 @@ public class DialogueManager : MonoBehaviour
     }
     List<SpawnedSentence> _activeSentences = new List<SpawnedSentence>();
     List<SpawnedSentence> _sentencePool = new List<SpawnedSentence>();
-    float _nextSentenceY;
+    List<SpawnedSentence> _retiringSentences = new List<SpawnedSentence>();
+    Vector2 _nextSentencePosition;
 
     int slideCount = -1; 
     int lineCount = 0;
@@ -239,6 +240,20 @@ public class DialogueManager : MonoBehaviour
     {
         sentenceContainer.gameObject.SetActive(true);
 
+        // Earlier sentences dim, and the oldest leave once the style's limit is reached.
+        foreach (SpawnedSentence previous in _activeSentences)
+        {
+            if (previous.Surface != null) previous.Surface.SetOpacity(style.previousSentenceOpacity, style.fadeDuration);
+        }
+        while (style.maxVisibleSentences > 0 && _activeSentences.Count >= style.maxVisibleSentences)
+        {
+            SpawnedSentence oldest = _activeSentences[0];
+            _activeSentences.RemoveAt(0);
+            if (oldest.Surface == null) continue;
+            oldest.Surface.SetOpacity(0f, style.fadeDuration);
+            _retiringSentences.Add(oldest);
+        }
+
         SpawnedSentence sentence = null;
         for (int i = _sentencePool.Count - 1; i >= 0; i--)
         {
@@ -257,6 +272,7 @@ public class DialogueManager : MonoBehaviour
         // Active before use: TMPEffects needs an active GameObject.
         sentence.Surface.gameObject.SetActive(true);
         sentence.Surface.transform.SetAsLastSibling();
+        sentence.Surface.SetOpacity(1f);
         _activeSentences.Add(sentence);
         return sentence.Surface;
     }
@@ -286,24 +302,46 @@ public class DialogueManager : MonoBehaviour
         return new SpawnedSentence { Surface = GetSurface(text), Prefab = prefab };
     }
 
-    // Stacks each new sentence below the previous one.
-    void PlaceSentence(DialogueTextSurface surface, DialoguePresentationStyle style)
+    // Uses the line's screen position if it has one, otherwise stacks below the previous sentence.
+    void PlaceSentence(DialogueTextSurface surface, DialoguePresentationStyle style, DialogueLine line)
     {
-        surface.Text.rectTransform.anchoredPosition = new Vector2(0f, _nextSentenceY);
-        _nextSentenceY -= surface.Text.preferredHeight + style.sentenceSpacing;
+        Vector2 position = _nextSentencePosition;
+        if (line.useScreenPosition)
+        {
+            Rect area = sentenceContainer.rect;
+            position = new Vector2(line.screenPosition.x * area.width, -line.screenPosition.y * area.height);
+        }
+        surface.Text.rectTransform.anchoredPosition = position;
+        _nextSentencePosition = position - new Vector2(0f, surface.Text.preferredHeight + style.sentenceSpacing);
+    }
+
+    void Update()
+    {
+        // Sentences fading out because of Max Visible Sentences go back to the pool once invisible.
+        for (int i = _retiringSentences.Count - 1; i >= 0; i--)
+        {
+            SpawnedSentence sentence = _retiringSentences[i];
+            if (sentence.Surface != null && sentence.Surface.Opacity > 0f) continue;
+            _retiringSentences.RemoveAt(i);
+            PoolSentence(sentence);
+        }
+    }
+
+    void PoolSentence(SpawnedSentence sentence)
+    {
+        if (sentence.Surface == null) return;
+        sentence.Surface.Clear();
+        sentence.Surface.gameObject.SetActive(false);
+        _sentencePool.Add(sentence);
     }
 
     void ReleaseSentences()
     {
-        foreach (SpawnedSentence sentence in _activeSentences)
-        {
-            if (sentence.Surface == null) continue;
-            sentence.Surface.Clear();
-            sentence.Surface.gameObject.SetActive(false);
-            _sentencePool.Add(sentence);
-        }
+        foreach (SpawnedSentence sentence in _activeSentences) PoolSentence(sentence);
+        foreach (SpawnedSentence sentence in _retiringSentences) PoolSentence(sentence);
         _activeSentences.Clear();
-        _nextSentenceY = 0f;
+        _retiringSentences.Clear();
+        _nextSentencePosition = Vector2.zero;
     }
 
     void ClearSlideTextBoxes(int slideIndex)
@@ -387,7 +425,7 @@ public class DialogueManager : MonoBehaviour
         {
             // One surface per sentence, so earlier sentences stay on screen untouched.
             _currentSurface.Show(style.FormatLine(currentLine.Line));
-            PlaceSentence(_currentSurface, style);
+            PlaceSentence(_currentSurface, style, currentLine);
         }
         // Lines in the same slide and box keep the earlier lines on screen, as before.
         else if (_currentSurface.HasText) _currentSurface.Append(currentLine.Line);
