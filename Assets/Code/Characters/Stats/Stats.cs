@@ -166,9 +166,7 @@ public class Stats : MonoBehaviour
         // for every unit. Now derived from the actual primary offensive action.
         var primaryAction = PowerMath.GetPrimaryOffensiveAction(_CombatActions);
         _IsAOE = PowerMath.IsAOE(_CombatActions);
-        _MaxAOETargets = (primaryAction != null && primaryAction.maxTargets > 0)
-            ? primaryAction.maxTargets
-            : int.MaxValue; // unlimited, per the maxTargets <= 0 convention in CombatLogic
+        _MaxAOETargets = PowerMath.NormalizeMaxTargets(primaryAction);
 
         _EffectsToApply = new List<StatusEffect>();
         _IsProjectile = false;

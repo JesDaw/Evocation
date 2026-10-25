@@ -1,60 +1,88 @@
-
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Shared calculations for design-time and runtime combat profiles.
-/// </summary>
 public static class PowerMath
 {
-    public static CombatAction GetPrimaryOffensiveAction(
-        List<CombatAction> actions)
+    public const int UnlimitedTargetsThreshold = 100;
+
+    /// <summary>
+    /// Selects the primary damage-dealing offensive action.
+    /// Prefers an offensive action that also defines stopping range, then the highest-priority
+    /// enemy-damaging action, then falls back to the first non-null action.
+    /// </summary>
+    public static CombatAction GetPrimaryOffensiveAction(List<CombatAction> actions)
     {
-        if (actions == null || actions.Count == 0)
-            return null;
+        if (actions == null || actions.Count == 0) return null;
 
-        CombatAction fallback = null;
+        CombatAction bestOffensiveStopping = null;
+        CombatAction bestOffensive = null;
+        CombatAction firstValid = null;
 
-        foreach (CombatAction action in actions)
+        foreach (CombatAction a in actions)
         {
-            if (action == null)
-                continue;
+            if (a == null) continue;
+            if (firstValid == null) firstValid = a;
 
-            if (fallback == null)
-                fallback = action;
+            bool isOffensive = !a.targetFriendly && a.healthChangePercent < 0f;
+            if (!isOffensive) continue;
 
-            if (action.definesStoppingRange)
-                return action;
+            if (a.definesStoppingRange)
+            {
+                if (bestOffensiveStopping == null || a.priority > bestOffensiveStopping.priority)
+                    bestOffensiveStopping = a;
+            }
+
+            if (bestOffensive == null || a.priority > bestOffensive.priority)
+                bestOffensive = a;
         }
 
-        if (fallback == null)
-            return null;
+        return bestOffensiveStopping ?? bestOffensive ?? firstValid;
+    }
 
-        foreach (CombatAction action in actions)
+    /// <summary>
+    /// Matches CpuMoveState.HasStoppingRangeTarget: uses definesStoppingRange if any action sets it,
+    /// otherwise uses the highest-priority action.
+    /// </summary>
+    public static CombatAction GetStoppingRangeAction(List<CombatAction> actions)
+    {
+        if (actions == null || actions.Count == 0) return null;
+
+        CombatAction bestStopping = null;
+        CombatAction bestPriority = null;
+
+        foreach (CombatAction a in actions)
         {
-            if (action == null)
-                continue;
-
-            if (!action.targetFriendly &&
-                action.healthChangePercent < 0f)
-                return action;
+            if (a == null) continue;
+            if (a.definesStoppingRange)
+            {
+                if (bestStopping == null || a.priority > bestStopping.priority)
+                    bestStopping = a;
+            }
+            if (bestPriority == null || a.priority > bestPriority.priority)
+                bestPriority = a;
         }
 
-        return fallback;
+        return bestStopping ?? bestPriority;
+    }
+
+    public static int NormalizeMaxTargets(CombatAction action)
+    {
+        if (action == null) return 1;
+        if (action.maxTargets <= 0) return 0;
+        if (action.UseProjectile && action.zoneData == null) return 1;
+        return action.maxTargets > UnlimitedTargetsThreshold ? int.MaxValue : action.maxTargets;
     }
 
     public static bool IsAOE(List<CombatAction> actions)
     {
-        CombatAction primary = GetPrimaryOffensiveAction(actions);
-
-        return primary != null && primary.maxTargets != 1;
+        var primary = GetPrimaryOffensiveAction(actions);
+        return NormalizeMaxTargets(primary) > 1;
     }
 
-    public static bool IsUtilityAction(CombatAction action)
+    public static bool IsUtilityAction(CombatAction a)
     {
-        return action != null &&
-               (action.targetFriendly ||
-                action.healthChangePercent > 0f);
+        if (a == null) return false;
+        return a.targetFriendly || a.healthChangePercent > 0f || (a.effectsOnHit != null && a.effectsOnHit.Count > 0);
     }
 
     [System.Serializable]
@@ -67,165 +95,138 @@ public static class PowerMath
         public float KBH;
         public float Range;
         public float Cooldown;
-
-        // int.MaxValue represents unlimited targets.
         public int MaxTargets;
     }
 
     public static UnitProfile GetProfileFromRaw(
-        int attackDamage,
-        float moveSpeed,
-        float knockBackDamage,
-        float maxHealth,
-        float knockBackMaxHealth,
-        float horizontalRange,
-        float actionCooldown,
-        List<CombatAction> combatActions)
+        int attackDamage, float moveSpeed, float knockBackDamage,
+        float maxHealth, float knockBackMaxHealth, float horizontalRange,
+        float actionCooldown, List<CombatAction> combatActions,
+        float animationStartupMs = 0f, float animationRecoveryMs = 0f, float extraEndlagSec = 0f)
     {
-        CombatAction action =
-            GetPrimaryOffensiveAction(combatActions);
+        var offensiveAction = GetPrimaryOffensiveAction(combatActions);
+        var stoppingAction = GetStoppingRangeAction(combatActions) ?? offensiveAction;
 
-        if (action == null)
+        float safeMove = Mathf.Max(0f, moveSpeed);
+        float safeHP = Mathf.Max(0f, maxHealth);
+        float safeKBH = Mathf.Max(0f, knockBackMaxHealth);
+        float safeBaseRange = Mathf.Max(0f, horizontalRange);
+        float safeBaseCooldown = Mathf.Max(0.01f, actionCooldown);
+        float animOverheadSec = Mathf.Max(0f, (animationStartupMs + animationRecoveryMs) / 1000f) + Mathf.Max(0f, extraEndlagSec);
+
+        if (offensiveAction == null)
         {
             return new UnitProfile
             {
                 Atk = Mathf.Max(0f, attackDamage),
-                Move = Mathf.Max(0f, moveSpeed),
+                Move = safeMove,
                 KBD = Mathf.Max(0f, knockBackDamage),
-                HP = Mathf.Max(0f, maxHealth),
-                KBH = Mathf.Max(0f, knockBackMaxHealth),
-                Range = Mathf.Max(0f, horizontalRange),
-                Cooldown = Mathf.Max(0.01f, actionCooldown),
+                HP = safeHP,
+                KBH = safeKBH,
+                Range = safeBaseRange,
+                Cooldown = Mathf.Max(safeBaseCooldown + animOverheadSec, 0.05f),
                 MaxTargets = 1
             };
         }
 
+        // If the action does not damage enemies, offensive Atk is 0.
+        bool dealsEnemyDamage = !offensiveAction.targetFriendly && offensiveAction.healthChangePercent < 0f;
+        float rawAtk = dealsEnemyDamage
+            ? (offensiveAction.ScaleEffectsWithUsersStats
+                ? attackDamage * Mathf.Abs(offensiveAction.healthChangePercent)
+                : Mathf.Abs(offensiveAction.healthChangePercent))
+            : 0f;
+
+        float rawKBD = !offensiveAction.targetFriendly && offensiveAction.knockbackPercent > 0f
+            ? (offensiveAction.ScaleEffectsWithUsersStats
+                ? knockBackDamage * offensiveAction.knockbackPercent
+                : offensiveAction.knockbackPercent)
+            : 0f;
+
+        float rangeMult = Mathf.Max(0f, stoppingAction.rangePercent);
+        float effectiveRange = safeBaseRange * rangeMult;
+        if (stoppingAction.extendsForward)
+            effectiveRange *= 1.5f;
+
+        float castCooldown = Mathf.Max(0.01f, offensiveAction.castCooldown);
+        float totalCycleCooldown = Mathf.Max((safeBaseCooldown * castCooldown) + animOverheadSec, 0.05f);
+
         return new UnitProfile
         {
-            Atk = Mathf.Max(
-                0f,
-                attackDamage * Mathf.Abs(action.healthChangePercent)),
-
-            Move = Mathf.Max(0f, moveSpeed),
-
-            KBD = Mathf.Max(
-                0f,
-                knockBackDamage * action.knockbackPercent),
-
-            HP = Mathf.Max(0f, maxHealth),
-
-            KBH = Mathf.Max(0f, knockBackMaxHealth),
-
-            Range = Mathf.Max(
-                0f,
-                horizontalRange * action.rangePercent),
-
-            // Matches the existing runtime cooldown formula.
-            Cooldown = Mathf.Max(
-                0.01f,
-                actionCooldown * action.castCooldown),
-
-            MaxTargets = action.maxTargets <= 0
-                ? int.MaxValue
-                : action.maxTargets
+            Atk = Mathf.Max(0f, rawAtk),
+            Move = safeMove,
+            KBD = Mathf.Max(0f, rawKBD),
+            HP = safeHP,
+            KBH = safeKBH,
+            Range = effectiveRange,
+            Cooldown = totalCycleCooldown,
+            MaxTargets = dealsEnemyDamage ? NormalizeMaxTargets(offensiveAction) : 0
         };
     }
 
-    public static UnitProfile GetProfile(ScriptableStats stats)
+    public static UnitProfile GetProfile(ScriptableStats s)
     {
-        if (stats == null)
-            return new UnitProfile();
-
+        if (s == null) return default;
         return GetProfileFromRaw(
-            stats._AttackDamage,
-            stats._MoveSpeed,
-            stats._KnockBackDamage,
-            stats._MaxHealth,
-            stats._KnockBackMaxHealth,
-            stats._HorizontalRange,
-            stats._ActionCooldown,
-            stats.combatActions);
+            s._AttackDamage, s._MoveSpeed, s._KnockBackDamage,
+            s._MaxHealth, s._KnockBackMaxHealth, s._HorizontalRange,
+            s._ActionCooldown, s.combatActions,
+            s._AnimationStartupTime, s._AnimationRecoveryTime, s._ExtraEndlag);
     }
 
-    public static UnitProfile GetProfile(Stats stats)
+    public static UnitProfile GetProfile(Stats s)
     {
-        if (stats == null)
-            return new UnitProfile();
-
+        if (s == null) return default;
         return GetProfileFromRaw(
-            stats._AttackDamage,
-            stats._MoveSpeed,
-            stats._KnockBackDamage,
-            stats._MaxHealth,
-            stats._KnockBackMaxHealth,
-            stats._HorizontalRange,
-            stats._ActionCooldown,
-            stats._CombatActions);
+            s._AttackDamage, s._MoveSpeed, s._KnockBackDamage,
+            s._MaxHealth, s._KnockBackMaxHealth, s._HorizontalRange,
+            s._ActionCooldown, s._CombatActions,
+            s._AnimationStartupTime, s._AnimationRecoveryTime, s._ExtraEndlag);
     }
 
-    public static float GetDPS(UnitProfile profile)
-    {
-        return Mathf.Max(0f, profile.Atk) /
-               Mathf.Max(0.01f, profile.Cooldown);
-    }
+    public static float GetDPS(UnitProfile profile) =>
+        profile.MaxTargets <= 0 ? 0f : profile.Atk / Mathf.Max(profile.Cooldown, 0.05f);
 
     public static float GetUtilityPower(
-        int attackDamage,
-        float actionCooldown,
-        List<CombatAction> combatActions,
-        float healWeight = 1f,
-        float statusEffectWeight = 5f)
+        int attackDamage, float actionCooldown, List<CombatAction> combatActions,
+        float healWeight = 1f, float statusEffectWeight = 5f)
     {
-        if (combatActions == null)
-            return 0f;
+        if (combatActions == null) return 0f;
 
         float utility = 0f;
+        float safeBaseCooldown = Mathf.Max(0.01f, actionCooldown);
 
-        foreach (CombatAction action in combatActions)
+        foreach (var a in combatActions)
         {
-            if (!IsUtilityAction(action))
-                continue;
+            if (!IsUtilityAction(a)) continue;
 
-            if (action.healthChangePercent > 0f)
+            int targetCap = NormalizeMaxTargets(a);
+            float aoeSupportFactor = targetCap <= 1 ? 1f : Mathf.Min(targetCap, 4);
+
+            if (a.healthChangePercent > 0f)
             {
-                float healAmount =
-                    attackDamage * action.healthChangePercent;
-
-                float cooldown = Mathf.Max(
-                    0.01f,
-                    actionCooldown * action.castCooldown);
-
-                utility +=
-                    (healAmount / cooldown) * healWeight;
+                float healAmount = a.ScaleEffectsWithUsersStats
+                    ? Mathf.Max(0, attackDamage) * a.healthChangePercent
+                    : a.healthChangePercent;
+                float cooldown = Mathf.Max(safeBaseCooldown * Mathf.Max(0.01f, a.castCooldown), 0.05f);
+                utility += (healAmount / cooldown) * healWeight * aoeSupportFactor;
             }
 
-            utility +=
-                (action.effectsOnHit?.Count ?? 0) *
-                statusEffectWeight;
-        }
+            int validEffects = 0;
+            if (a.effectsOnHit != null)
+            {
+                foreach (var eff in a.effectsOnHit)
+                    if (eff != null) validEffects++;
+            }
 
+            utility += validEffects * statusEffectWeight * aoeSupportFactor;
+        }
         return utility;
     }
 
-    public static float GetUtilityPower(ScriptableStats stats)
-    {
-        if (stats == null)
-            return 0f;
+    public static float GetUtilityPower(ScriptableStats s) =>
+        s == null ? 0f : GetUtilityPower(s._AttackDamage, s._ActionCooldown, s.combatActions);
 
-        return GetUtilityPower(
-            stats._AttackDamage,
-            stats._ActionCooldown,
-            stats.combatActions);
-    }
-
-    public static float GetUtilityPower(Stats stats)
-    {
-        if (stats == null)
-            return 0f;
-
-        return GetUtilityPower(
-            stats._AttackDamage,
-            stats._ActionCooldown,
-            stats._CombatActions);
-    }
+    public static float GetUtilityPower(Stats s) =>
+        s == null ? 0f : GetUtilityPower(s._AttackDamage, s._ActionCooldown, s._CombatActions);
 }

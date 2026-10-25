@@ -3,6 +3,8 @@ using UnityEngine;
 
 public static class CombatLogic
 {
+    public const int UnlimitedTargetsThreshold = 100;
+
     public static void ExecuteActionOnSelf(Stats self, CombatAction action)
     {
         ApplyCombatActionToTargets(self, action, new List<Stats> { self });
@@ -26,12 +28,14 @@ public static class CombatLogic
             : (Vector2)attacker.transform.position;
     }
 
-    public static Vector2 CalculateAttackCenter(Vector2 pos, bool left, Vector2 range) => pos + new Vector2(left ? -range.x / 2f : range.x / 2f, 0f);
+    public static Vector2 CalculateAttackCenter(Vector2 pos, bool left, Vector2 range) =>
+        pos + new Vector2(left ? -range.x / 2f : range.x / 2f, 0f);
 
-    
     public static bool ExicuteCombatAction(Stats attacker, CombatAction action, Vector2 position, float radius, List<string> targetTagsOverride = null)
     {
-        //gather targets and if there is none return
+        if (attacker == null || action == null) return false;
+        if (action.maxTargets <= 0) return false;
+
         List<string> tags = targetTagsOverride ?? GetTargetTags(attacker, action);
         List<Stats> candidates = AttackDetection.FindTargetsInCircle(position, radius, tags, attacker, allowSelf: action.includeSelf);
         List<Stats> targets = FilterValidTargets(candidates, position);
@@ -39,22 +43,24 @@ public static class CombatLogic
 
         if (action.UseProjectile)
         {
-            // Projectiles only ever go at one target — the closest valid one.
+            // Projectiles target the single closest valid unit.
             SpawnProjectile(attacker, action, targets[0]);
         }
         else
         {
-            if (action.maxTargets >= 0 && targets.Count > action.maxTargets) targets = targets.GetRange(0, action.maxTargets);
+            // maxTargets > 100 counts as unlimited targets; 1..100 caps target count.
+            if (action.maxTargets <= UnlimitedTargetsThreshold && targets.Count > action.maxTargets)
+                targets = targets.GetRange(0, action.maxTargets);
+
             ApplyCombatActionToTargets(attacker, action, targets);
         }
 
-        // if the combat action is supoed to apply a zone on teh caster
         if (action.zoneSpawnPosition == ZoneSpawnPosition.Self && action.zoneData != null)
         {
             Transform sticky = action.zoneSticky ? attacker.transform : null;
             AreaEffectLogic.SpawnZone(action.zoneData, position, attacker, sticky, action.excludeCasterFromZone, action.zoneSticky, tags);
         }
-        return true; 
+        return true;
     }
 
     static List<Stats> FilterValidTargets(List<Stats> candidates, Vector2 origin)
@@ -95,9 +101,8 @@ public static class CombatLogic
                     tags.Add("Enemy");
                 }
             }
-
         }
-        else 
+        else
         {
             if (ZoneTargetsEnemies == true)
             {
@@ -110,12 +115,11 @@ public static class CombatLogic
             }
         }
 
-
         return tags;
     }
     #endregion
-    # region action effeects
 
+    #region action effects
     static void ApplyCombatActionToTargets(Stats attacker, CombatAction action, List<Stats> targets)
     {
         var (healthChange, knockbackChange) = GetEffectMagnitude(attacker, action);
@@ -137,23 +141,21 @@ public static class CombatLogic
         }
         var (healthChange, knockbackChange) = GetEffectMagnitude(attacker, action);
 
-        GameObject projGO = UnityEngine.Object.Instantiate(ps.prefab, attacker.transform.position, Quaternion.identity);
+        GameObject projGO = Object.Instantiate(ps.prefab, attacker.transform.position, Quaternion.identity);
 
         if (projGO.TryGetComponent(out Projectile p))
         {
             p.InitializeProjectile(target.transform, ps.speed, ps.maxHeight, ps.trajectoryCurve, ps.axisCorrectionCurve, ps.speedCurve, hitStats =>
-                {
-                    if (hitStats == null) return;
-                    ApplyCombatActionEffects(attacker, action, hitStats, healthChange, knockbackChange);
-                }
-            );
+            {
+                if (hitStats == null) return;
+                ApplyCombatActionEffects(attacker, action, hitStats, healthChange, knockbackChange);
+            });
         }
         else
         {
             Debug.LogWarning($"{attacker.gameObject.name}: Projectile prefab is missing a Projectile component.");
         }
     }
-
 
     static void ApplyCombatActionEffects(Stats attacker, CombatAction action, Stats target, float healthChange, float knockbackChange)
     {
@@ -180,12 +182,12 @@ public static class CombatLogic
 
     static void ApplyStatusEffects(Stats attacker, CombatAction action, Stats target)
     {
-        if (action.effectsOnHit.Count != 0)
+        if (action.effectsOnHit != null && action.effectsOnHit.Count != 0)
         {
             foreach (var effect in action.effectsOnHit)
             {
+                if (effect == null) continue;
                 target.statusEffectManager.AddEffect(effect, effect.duration);
-                Debug.Log( effect + "Effect has been applied");
             }
         }
     }
@@ -207,5 +209,5 @@ public static class CombatLogic
             tags
         );
     }
-     #endregion
+    #endregion
 }

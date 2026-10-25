@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -42,52 +43,70 @@ public class UnitTracker : MonoBehaviour
 
     public float CalculateWeightedAIThreatLevel()
     {
-        // Kept compatible with existing callers and spending curves.
         return CalculateOverallExpectedOutcome(AIWeighted: true);
     }
 
     /// <summary>
     /// Positive = Player/Allies favored, negative = AI/Enemy favored.
-    /// When AIWeighted is true, zones closer to the AI base (EnemyBase) receive more weight,
-    /// because a Player-favored battle there is a more immediate threat to the AI.
+    /// Evaluates all live units across the map weighted by distance to EnemyBase so the AI
+    /// sees incoming swarms, bosses, and allied buff targets even when aiSpawnZone is empty.
     /// </summary>
-    public float CalculateOverallExpectedOutcome(ScriptableStats extraCharacter = null, MapZone relaventZone = null, bool AIWeighted = false)
+    public float CalculateOverallExpectedOutcome(
+        ScriptableStats extraCharacter = null,
+        MapZone relaventZone = null,
+        bool AIWeighted = false,
+        int extraCharacterCopies = 1)
     {
         if (zones == null || zones.Length == 0) return 0f;
 
-        float total = 0f;
-        float maxDistance = 0f;
-        bool relevantZoneMatched = false;
-
-        if (PlayerBase != null && EnemyBase != null)
-            maxDistance = Vector3.Distance(PlayerBase.position, EnemyBase.position);
+        // Gather unique live units across all zones so units straddling zone borders aren't double-counted.
+        List<Stats> allEnemyUnits = new List<Stats>();
+        List<Stats> allPlayerUnits = new List<Stats>();
+        HashSet<Stats> seen = new HashSet<Stats>();
 
         foreach (MapZone zone in zones)
         {
             if (zone == null) continue;
-
-            bool isRelevantZone = zone == relaventZone;
-            if (isRelevantZone) relevantZoneMatched = true;
-
-            float outcome = isRelevantZone ? zone.ExpectedOutcome(extraCharacter) : zone.ExpectedOutcome();
-            float weight = 1f;
-
-            if (AIWeighted && EnemyBase != null && maxDistance > 0f)
-            {
-                float distanceToAIBase = Mathf.Abs(zone.CenterOfPower() - EnemyBase.position.x);
-                float distanceRatio = Mathf.Clamp01(distanceToAIBase / maxDistance);
-                weight = Mathf.Pow(1f - distanceRatio, 2f);
-            }
-
-            total += outcome * weight * 100f;
+            CollectValidUnits(zone.EnemyUnits, allEnemyUnits, seen);
+            CollectValidUnits(zone.PlayerUnits, allPlayerUnits, seen);
+            CollectValidUnits(zone.AllyUnits, allPlayerUnits, seen);
         }
 
-        if (relaventZone != null && !relevantZoneMatched)
+        if (AIWeighted && EnemyBase != null)
         {
-            Debug.LogWarning($"[UnitTracker] Zone '{relaventZone.name}' was passed in but is not in zones[]. The candidate unit was not included in this evaluation.");
+            float maxDistance = (PlayerBase != null)
+                ? Vector3.Distance(PlayerBase.position, EnemyBase.position)
+                : 100f;
+
+            return ExpectedOutcomeCalculator.CalculateDistanceWeightedOutcome(
+                allEnemyUnits,
+                allPlayerUnits,
+                EnemyBase.position,
+                maxDistance,
+                extraCharacter,
+                extraCharacterCopies) * 100f;
         }
 
-        return total;
+        // Unweighted fallback across zones
+        return ExpectedOutcomeCalculator.CalculateExpectedOutcome(
+            allEnemyUnits,
+            allPlayerUnits,
+            extraCharacter,
+            extraCharacterCopies) * 100f;
+    }
+
+    static void CollectValidUnits(List<GameObject> source, List<Stats> destination, HashSet<Stats> seen)
+    {
+        if (source == null) return;
+        for (int i = source.Count - 1; i >= 0; i--)
+        {
+            GameObject obj = source[i];
+            if (obj == null) continue;
+            if (!obj.TryGetComponent(out Stats stats) || stats._IsDead || stats._CurrentHealth <= 0f)
+                continue;
+            if (seen.Add(stats))
+                destination.Add(stats);
+        }
     }
 
     public void CompareUnitProximityToBases()

@@ -1,32 +1,49 @@
-using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CharacterButton : MonoBehaviour
 {
-    [HideInInspector] public CharacterData character;
-    [SerializeField] Image headshotFrame;
+    public CharacterData Character { get; private set; }
     
-    void Start ()
+    [Tooltip("Auto-fills with the child 'Loadout slot' Image if left blank")]
+    [SerializeField] Image headshotFrame;
+    [SerializeField] bool debugLogs;
+
+    void Awake()
     {
+        // If headshotFrame isn't set, or was accidentally set to the outer frame itself,
+        // automatically grab the leaf child's Image component!
+        if ((headshotFrame == null || headshotFrame.transform == transform) && transform.childCount > 0)
+        {
+            headshotFrame = transform.GetChild(0).GetComponent<Image>();
+        }
+    }
+
+    public void AssignCharacter(CharacterData newCharacter)
+    {
+        Character = newCharacter;
+        if (debugLogs) Debug.Log($"{gameObject.name} assigned character: {(Character != null ? Character.characterName : "None")}");
         UpdateFrame();
     }
 
     public void UpdateCharacterDesplay()
     {
-        CharacterSelect.Instance.UpdateCurrentDesplayedCharacter(character);
+        if (Character != null)
+            CharacterSelect.Instance.UpdateCurrentDesplayedCharacter(Character);
     }
 
     public void UpdateFrame()
     {
-        headshotFrame.enabled = true;
-        if (character != null) headshotFrame.sprite = character.headshot;
-        else headshotFrame.enabled = false;
+        if (headshotFrame == null) return;
+
+        bool hasCharacter = Character != null;
+        headshotFrame.enabled = hasCharacter;
+        headshotFrame.sprite = hasCharacter ? Character.headshot : null;
     }
 
     public void OnClick()
     {
-        if (character == null) return;
-        CharacterSelect.Instance.OnCharacterClicked(character);
+        if (Character == null) return;
+        CharacterSelect.Instance.OnCharacterClicked(Character);
     }
 }

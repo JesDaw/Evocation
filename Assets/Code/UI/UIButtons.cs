@@ -36,9 +36,9 @@ public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     [SerializeField] private Image targetImage;
     [SerializeField] private TextMeshProUGUI targetText;
     [SerializeField] private Transform targetTransform;
-    [SerializeField] private Color originalColor = Color.white;
-    [SerializeField] private Color originalTextColor = Color.white;
-    [SerializeField] private Vector3 originalScale = Vector3.one;
+    Color originalColor = Color.white;
+    Color originalTextColor = Color.white;
+    Vector3 originalScale = Vector3.one;
     [Header("Events")]
     public UltEvents.UltEvent ButtonHighlighted;
     public UltEvents.UltEvent ButtonClicked;

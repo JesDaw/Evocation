@@ -4,7 +4,6 @@ using System.Diagnostics;
 
 public class PlayerLivesDisplay : MonoBehaviour
 {
-    [SerializeField] PlayerLivesManager livesManager;
     [SerializeField] List<GameObject> torchIcons = new List<GameObject>();
     [SerializeField] List<GameObject> fire = new List<GameObject>();
     public static PlayerLivesDisplay Instance { get; set; }
@@ -28,7 +27,7 @@ public class PlayerLivesDisplay : MonoBehaviour
     void UpdateMaxLivesDesplay()
     {
         foreach (GameObject torch in torchIcons) torch.SetActive(false);
-        for (int i = 0; i < livesManager.MaxLives; i++)
+        for (int i = 0; i < PlayerLivesManager.Instance.MaxLives; i++)
         {
             if (torchIcons[i] != null)
             {
@@ -36,13 +35,13 @@ public class PlayerLivesDisplay : MonoBehaviour
             }
             else
             {
-                UnityEngine.Debug.LogError($"Icon count: {torchIcons.Count} but maxlives count {livesManager.MaxLives}");
+                UnityEngine.Debug.LogError($"Icon count: {torchIcons.Count} but maxlives count {PlayerLivesManager.Instance.MaxLives}");
             }
         }
     }
     public void UpdateTorchDisplay()
     {
-        if (livesManager == null) 
+        if (PlayerLivesManager.Instance == null) 
         {
             UnityEngine.Debug.LogWarning($"Player lives desplay on {gameObject.name} doent have a referance to the livesManager set");
             return;

@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,8 +18,14 @@ public class AILevelHarness : MonoBehaviour
     [SerializeField] float maxThreatLevel = 100f;
     [SerializeField] MapZone aiSpawnZone;
 
-    [Header("AI Scoring")]
+    [Header("AI Scoring & Multi-Spawn")]
     [SerializeField] float outcomeUtilityScale = 10f;
+    [Tooltip("Maximum number of units the AI can spawn in a single tick when combining units inside its budget.")]
+    [SerializeField, Range(1, 5)] int maxSpawnsPerTick = 3;
+    [Tooltip("Time window (seconds) used to estimate how many copies of a cheap fast-cooldown unit can be deployed as a swarm.")]
+    [SerializeField] float swarmEvaluationWindow = 4f;
+    [Tooltip("Cap on how many virtual copies a single candidate can be evaluated as when swarming.")]
+    [SerializeField] int maxSwarmCopies = 5;
 
     float threatLevel;
     float moneyBudget;
@@ -117,7 +122,6 @@ public class AILevelHarness : MonoBehaviour
             if (character == null)
                 continue;
 
-            // Don't reset an existing cooldown during a phase change.
             if (!characterCooldownHandler.nextSpawnableTime.ContainsKey(character))
                 characterCooldownHandler.nextSpawnableTime[character] = 0f;
         }
@@ -263,7 +267,6 @@ public class AILevelHarness : MonoBehaviour
         if (!ValidateConfiguration())
             return;
 
-        // The allowance cannot exceed the money currently available.
         moneyBudget = Mathf.Clamp(
             moneyBudget,
             0f,
@@ -280,8 +283,7 @@ public class AILevelHarness : MonoBehaviour
         if (phase.AdvantageActivityCurve == null ||
             phase.DisadvantageActivityCurve == null)
         {
-            Debug.LogWarning(
-                "[AI] Current phase has a missing activity curve.");
+            Debug.LogWarning("[AI] Current phase has a missing activity curve.");
             return;
         }
 
@@ -330,18 +332,83 @@ public class AILevelHarness : MonoBehaviour
         if (characters == null || characters.Length == 0)
             return;
 
-        // Reconcile the allowance with available money before scoring.
-        moneyBudget = Mathf.Clamp(
-            moneyBudget,
-            0f,
-            Mathf.Max(0f, Money.AIInstance.CurrentMoney));
+        int safeMaxSpawns = Mathf.Max(1, maxSpawnsPerTick);
 
-        List<CharacterUtility> characterUtilities =
-            new List<CharacterUtility>();
+        for (int spawnPass = 0; spawnPass < safeMaxSpawns; spawnPass++)
+        {
+            moneyBudget = Mathf.Clamp(
+                moneyBudget,
+                0f,
+                Mathf.Max(0f, Money.AIInstance.CurrentMoney));
+
+            CharacterUtility bestCharacter = SelectBestCandidate(characters);
+            if (bestCharacter == null)
+                return;
+
+            if (showDebugLogs)
+            {
+                Debug.Log(
+                    $"[AI] Pass {spawnPass + 1} Highest utility: {bestCharacter.totalUtility:F3} " +
+                    $"({bestCharacter.character.name}, SwarmEval={bestCharacter.evaluatedCopies}x)");
+            }
+
+            // If the best choice is over our current virtual budget, save up for it (and upgrade wallet if possible)
+            // rather than spending the budget on worse units.
+            if (bestCharacter.overBudget)
+            {
+                if (spawnPass == 0)
+                    Money.AIInstance.UpgradeMaxMoney();
+
+                if (showDebugLogs)
+                    Debug.Log($"[AI] Saving for '{bestCharacter.character.name}'.");
+
+                return;
+            }
+
+            // If the winning choice is still on spawn cooldown, wait for it rather than spending money elsewhere.
+            if (characterCooldownHandler.CooldownRemaining(bestCharacter.character) > 0f)
+            {
+                if (showDebugLogs)
+                    Debug.Log($"[AI] Waiting on cooldown for '{bestCharacter.character.name}'.");
+
+                return;
+            }
+
+            GameObject spawned =
+                SpawnObjects.EnemyInstance.Spawn(bestCharacter.character);
+
+            if (spawned == null)
+                return;
+
+            characterCooldownHandler.StartCooldown(bestCharacter.character);
+
+            moneyBudget = Mathf.Max(
+                0f,
+                moneyBudget - bestCharacter.character._spawnCost);
+
+            // Immediately register the newly spawned unit into aiSpawnZone so any subsequent
+            // combo spawn pass in this same tick sees the updated AI frontline!
+            if (aiSpawnZone != null)
+                aiSpawnZone.SendMessage("AddCharacterToList", spawned, SendMessageOptions.DontRequireReceiver);
+
+            if (showDebugLogs)
+            {
+                Debug.Log(
+                    $"[AI] Spawned: {bestCharacter.character.name} | " +
+                    $"Remaining virtual budget: {moneyBudget:F2}");
+            }
+
+            if (moneyBudget <= 0f)
+                return;
+        }
+    }
+
+    CharacterUtility SelectBestCandidate(ScriptableStats[] characters)
+    {
+        List<CharacterUtility> characterUtilities = new List<CharacterUtility>();
 
         float currentOutcome =
-            UnitTracker.Instance.CalculateOverallExpectedOutcome(
-                AIWeighted: true);
+            UnitTracker.Instance.CalculateOverallExpectedOutcome(AIWeighted: true);
 
         foreach (ScriptableStats character in characters)
         {
@@ -356,8 +423,7 @@ public class AILevelHarness : MonoBehaviour
                 cost < 0f || cooldown < 0f)
             {
                 if (showDebugLogs)
-                    Debug.LogWarning(
-                        $"[AI] Skipping invalid candidate: {character.name}");
+                    Debug.LogWarning($"[AI] Skipping invalid candidate: {character.name}");
 
                 continue;
             }
@@ -366,35 +432,35 @@ public class AILevelHarness : MonoBehaviour
 
             cu.moneyUtility = cost <= 0f
                 ? 1f
-                : Mathf.Clamp01(
-                    (float)Money.AIInstance.CurrentMoney / cost);
+                : Mathf.Clamp01((float)Money.AIInstance.CurrentMoney / cost);
 
             cu.spawnCooldownUtility = cooldown <= 0f
                 ? 1f
                 : Mathf.Clamp01(
-                    1f -
-                    characterCooldownHandler.CooldownRemaining(character) /
-                    cooldown);
+                    1f - characterCooldownHandler.CooldownRemaining(character) / cooldown);
 
+            // Evaluate cheap fast-cooldown units as a committed swarm over swarmEvaluationWindow
+            int swarmCopies = CalculateCandidateSwarmCopies(cost, cooldown);
+            cu.evaluatedCopies = swarmCopies;
+
+            float committedCost = cost * swarmCopies;
             cu.expendatureRateUtility = moneyBudget > 0f
-                ? Mathf.Clamp01(cost / moneyBudget)
+                ? Mathf.Clamp01(committedCost / moneyBudget)
                 : 0f;
 
-            // Keep expensive units eligible so the AI can save for them.
             cu.overBudget = cost > moneyBudget;
 
             float outcomeWithCandidate =
                 UnitTracker.Instance.CalculateOverallExpectedOutcome(
                     character,
+                    relaventZone: aiSpawnZone,
                     AIWeighted: true,
-                    relaventZone: aiSpawnZone);
+                    extraCharacterCopies: swarmCopies);
 
-            cu.expectedOutcomeRaw =
-                currentOutcome - outcomeWithCandidate;
+            cu.expectedOutcomeRaw = currentOutcome - outcomeWithCandidate;
 
             cu.expectedOutcomeUtility = Mathf.Clamp(
-                cu.expectedOutcomeRaw /
-                Mathf.Max(outcomeUtilityScale, 0.001f),
+                cu.expectedOutcomeRaw / Mathf.Max(outcomeUtilityScale, 0.001f),
                 -1f,
                 1f);
 
@@ -412,51 +478,27 @@ public class AILevelHarness : MonoBehaviour
         }
 
         if (characterUtilities.Count == 0)
-            return;
+            return null;
 
-        CharacterUtility bestCharacter =
-            characterUtilities
-                .OrderByDescending(cu => cu.totalUtility)
-                .First();
+        return characterUtilities
+            .OrderByDescending(cu => cu.totalUtility)
+            .First();
+    }
 
-        if (showDebugLogs)
-        {
-            Debug.Log(
-                $"[AI] Highest utility: {bestCharacter.totalUtility:F3} " +
-                $"({bestCharacter.character.name})");
-        }
+    int CalculateCandidateSwarmCopies(float cost, float cooldown)
+    {
+        if (cost <= 0f || moneyBudget < cost)
+            return 1;
 
-        if (bestCharacter.overBudget)
-        {
-            Money.AIInstance.UpgradeMaxMoney();
+        int affordableCopies = Mathf.FloorToInt(moneyBudget / cost);
+        int cooldownCopies = cooldown <= 0.05f
+            ? maxSwarmCopies
+            : 1 + Mathf.FloorToInt(Mathf.Max(0f, swarmEvaluationWindow) / cooldown);
 
-            if (showDebugLogs)
-                Debug.Log(
-                    $"[AI] Saving for '{bestCharacter.character.name}'.");
-
-            return;
-        }
-
-        GameObject spawned =
-            SpawnObjects.EnemyInstance.Spawn(bestCharacter.character);
-
-        if (spawned != null)
-        {
-            characterCooldownHandler.StartCooldown(
-                bestCharacter.character);
-
-            moneyBudget = Mathf.Max(
-                0f,
-                moneyBudget - bestCharacter.character._spawnCost);
-        }
-
-        if (showDebugLogs)
-        {
-            Debug.Log(
-                $"[AI] Spawn attempt: {bestCharacter.character.name} | " +
-                $"Success: {spawned != null} | " +
-                $"Virtual budget: {moneyBudget:F2}");
-        }
+        return Mathf.Clamp(
+            Mathf.Min(affordableCopies, cooldownCopies),
+            1,
+            Mathf.Max(1, maxSwarmCopies));
     }
 
     #endregion
@@ -481,8 +523,7 @@ public class CharacterCooldownHandler
         if (character == null)
             return 0f;
 
-        if (!nextSpawnableTime.TryGetValue(
-                character, out float readyTime))
+        if (!nextSpawnableTime.TryGetValue(character, out float readyTime))
             return 0f;
 
         return Mathf.Max(0f, readyTime - Time.time);
@@ -492,6 +533,7 @@ public class CharacterCooldownHandler
 public class CharacterUtility
 {
     public ScriptableStats character;
+    public int evaluatedCopies = 1;
     public float moneyUtility;
     public float spawnCooldownUtility;
     public float expendatureRateUtility;
@@ -502,7 +544,7 @@ public class CharacterUtility
 
     public void Print(float moneyBudget)
     {
-        Debug.Log($"====== Utilities for {character.name} ======");
+        Debug.Log($"====== Utilities for {character.name} (Swarm: {evaluatedCopies}x) ======");
         Debug.Log(
             $"Money: {moneyUtility:F3} | " +
             $"Cooldown: {spawnCooldownUtility:F3} | " +
