@@ -9,7 +9,8 @@ public class SceneActivity : MonoBehaviour
     [Header("Keyboard Navigation")]
     [Tooltip("The button keyboard navigation should start on when this screen becomes active. " +
              "Leave empty if this screen has no keyboard-navigable buttons.")]
-    [SerializeField] private Selectable defaultSelectedButton;
+    [SerializeField] Selectable defaultSelectedButton;
+    [SerializeField] bool hasDefaultSelectedButton = false;
 
     public UnityEvent OnActivityStart;
     public UnityEvent OnActivityStop;
@@ -20,14 +21,16 @@ public class SceneActivity : MonoBehaviour
         {
             gameObject.SetActive(true);
         }
-
-        if (defaultSelectedButton != null)
+        if (hasDefaultSelectedButton)
         {
-            var uiButton = defaultSelectedButton.GetComponent<UIButtons>();
-            if (uiButton != null && UINavigationManager.Instance != null)
-                UINavigationManager.Instance.RegisterScreenDefault(uiButton);
+            if (defaultSelectedButton != null)
+            {
+                var uiButton = defaultSelectedButton.GetComponent<UIButtons>();
+                if (uiButton != null && UINavigationManager.Instance != null)
+                    UINavigationManager.Instance.RegisterScreenDefault(uiButton);
+            }
+            if (defaultSelectedButton != null) UINavigationManager.Instance.lastHighlightedButton = defaultSelectedButton.gameObject.GetComponent<UIButtons>();
         }
-        if (defaultSelectedButton != null) UINavigationManager.Instance.lastHighlightedButton = defaultSelectedButton.gameObject.GetComponent<UIButtons>();
         OnActivityStart.Invoke();
     }
 

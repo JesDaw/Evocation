@@ -1,115 +1,269 @@
-using System.Reflection;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using TMPro;
+using ChristinaCreatesGames.UI;
+
 public class CharacterSlot : MonoBehaviour
 {
-    [SerializeField] InputActionReference SpawnButton;
-    
+    [Header("Input & Cooldown")]
+    [SerializeField] int slotNumber;
     [SerializeField] Slider cooldownImage;
-    [Header("Player Only Stuff")]
+
+    [Header("Player Only Stuff (Leave blank for CPU slots!)")]
     [SerializeField] GameObject playerPrefab;
     [SerializeField] ScriptableStats PlayerStats;
-    ScriptableStats characterStats;
-    bool cooldownFinished = false;
-    float nextSpawnableTime;
-    float CooldownRemaining;
-    [SerializeField] bool showDebugLogs = false;
+
+    [Header("Debug")]
+    [SerializeField] bool showDebugLogs = true;
+
+    // Auto-cached children on this GameplayCharacetrSlot
+    private Image headshotImage;
+    private TMP_Text priceText;
+    private HotkeyButton hotkeyButton;
+    private bool isInitialized = false;
+
+    private ScriptableStats characterStats;
+    private bool cooldownFinished = false;
+    private float nextSpawnableTime;
+    private float cooldownRemaining;
+
+    // True ONLY if this slot is the Player's own slot (has playerPrefab assigned)
+    public bool IsPlayerSlot => playerPrefab != null;
+
+
     void Awake()
     {
-        if (PlayerStats != null)
+        EnsureInitialized();
+    }
+
+    private void EnsureInitialized()
+    {
+        if (isInitialized) return;
+        isInitialized = true;
+
+        hotkeyButton = GetComponent<HotkeyButton>();
+
+        // 1. Find "CharacterHeadshot" child Image
+        Transform headshotTrans = transform.Find("CharacterHeadshot");
+        if (headshotTrans != null)
+        {
+            headshotImage = headshotTrans.GetComponent<Image>();
+            // Also auto-assign HotkeyButton's HeadshotImage so HotkeyButton.Update() never breaks!
+            if (hotkeyButton != null && hotkeyButton.HeadshotImage == null)
+                hotkeyButton.HeadshotImage = headshotImage;
+        }
+
+        // 2. Find "Price" child TMP_Text
+        Transform priceTrans = transform.Find("Price");
+        if (priceTrans != null)
+        {
+            priceText = priceTrans.GetComponent<TMP_Text>();
+        }
+
+        // 3. Find "CooldownTintSlider" child Slider if not set
+        if (cooldownImage == null)
+        {
+            Transform sliderTrans = transform.Find("CooldownTintSlider");
+            if (sliderTrans != null)
+                cooldownImage = sliderTrans.GetComponent<Slider>();
+        }
+
+        if (IsPlayerSlot && PlayerStats != null)
         {
             characterStats = PlayerStats;
         }
     }
 
-    void Start()
-    {
-        SubscribeToInput();
-    }
+    void Start() => SubscribeToInput();
+    void OnDestroy() => UnsubscribeFromInput();
 
-    void SubscribeToInput()
+    /// <summary>
+    /// Equips the CPU character AND updates CharacterHeadshot, Price, and HotkeyButton all together!
+    /// </summary>
+    public void EquipCPU(CharacterData data)
     {
-         if (GlobalInputManager.Instance == null)
+        EnsureInitialized();
+
+        if (IsPlayerSlot) return;
+
+        if (data == null || data.scriptableStats == null)
         {
-            Debug.LogError("GlobalInputManager not found! Spawning will not work.");
+            UnequipCPU();
             return;
         }
-        SpawnButton.action.performed += SpawnCharacter;
-    }
-    void OnDestroy()
-    {
-        UnsubscribeFromInput();
-    }
-    void UnsubscribeFromInput()
-    {
-        if (GlobalInputManager.Instance == null)
+
+        characterStats = data.scriptableStats;
+
+        if (headshotImage != null)
         {
-            Debug.LogError("GlobalInputManager not found! Spawning will not work.");
-            return;
+            headshotImage.gameObject.SetActive(true);
+            headshotImage.enabled = true;
+            headshotImage.sprite = data.headshot;
         }
-        SpawnButton.action.performed -= SpawnCharacter;
-    }
-    public void EquipCPU(ScriptableStats stats)
-    {
-        if (stats == null) return;
-        characterStats = stats;
+        else
+        {
+            Debug.LogError($"[CharacterSlot] Could not find 'CharacterHeadshot' Image on {gameObject.name}!", this);
+        }
+
+        if (priceText != null)
+        {
+            priceText.gameObject.SetActive(true);
+            priceText.enabled = true;
+            priceText.text = characterStats._spawnCost.ToString();
+        }
+        else
+        {
+            Debug.LogError($"[CharacterSlot] Could not find 'Price' TMP_Text on {gameObject.name}!", this);
+        }
+
+        if (hotkeyButton != null)
+        {
+            hotkeyButton._characterPrice = characterStats._spawnCost;
+        }
     }
 
     public void UnequipCPU()
     {
+        EnsureInitialized();
+
+        if (IsPlayerSlot) return;
+
         characterStats = null;
+
+        if (headshotImage != null)
+        {
+            headshotImage.enabled = false;
+            headshotImage.sprite = null;
+        }
+
+        if (priceText != null)
+        {
+            priceText.enabled = false;
+        }
+
+        if (hotkeyButton != null)
+        {
+            hotkeyButton._characterPrice = 0;
+        }
     }
+
+    void SubscribeToInput()
+    {
+        if (GlobalInputManager.Instance == null) return;
+        var Input = GlobalInputManager.Instance.InputActions.SpawnerController;
+        switch (slotNumber)
+        {
+            case 1:
+                Input.Spawn1.performed += SpawnCharacter;
+                break;
+            case 2:
+                Input.Spawn2.performed += SpawnCharacter;
+                break;
+            case 3:
+                Input.Spawn3.performed += SpawnCharacter;
+                break;
+            case 4:
+                Input.Spawn4.performed += SpawnCharacter;
+                break;
+            case 5:
+                Input.Spawn5.performed += SpawnCharacter;
+                break;
+            case 6:
+                Input.Spawn6.performed += SpawnCharacter;
+                break;
+            case 7:
+                Input.Spawn7.performed += SpawnCharacter;
+                break;
+            case 8:
+                Input.Spawn8.performed += SpawnCharacter;
+                break;
+            case 9:
+                Input.Spawn9.performed += SpawnCharacter;
+                break;
+            case 10:
+                Input.SpawnPlayer.performed += SpawnCharacter;
+                break;
+            default:
+                Debug.LogError("Invalid Character Slot Number");
+                break;
+        }
+    }
+
+    void UnsubscribeFromInput()
+    {
+        if (GlobalInputManager.Instance == null) return;
+        var Input = GlobalInputManager.Instance.InputActions.SpawnerController;
+        switch (slotNumber)
+        {
+            case 1:
+                Input.Spawn1.performed -= SpawnCharacter;
+                break;
+            case 2:
+                Input.Spawn2.performed -= SpawnCharacter;
+                break;
+            case 3:
+                Input.Spawn3.performed -= SpawnCharacter;
+                break;
+            case 4:
+                Input.Spawn4.performed -= SpawnCharacter;
+                break;
+            case 5:
+                Input.Spawn5.performed -= SpawnCharacter;
+                break;
+            case 6:
+                Input.Spawn6.performed -= SpawnCharacter;
+                break;
+            case 7:
+                Input.Spawn7.performed -= SpawnCharacter;
+                break;
+            case 8:
+                Input.Spawn8.performed -= SpawnCharacter;
+                break;
+            case 9:
+                Input.Spawn9.performed -= SpawnCharacter;
+                break;
+            case 10:
+                Input.SpawnPlayer.performed -= SpawnCharacter;
+                break;
+            default:
+                Debug.LogError("Invalid Character Slot Number");
+                break;
+        }
+    }
+
     void SpawnCharacter(InputAction.CallbackContext context)
     {
-        if (SpawnObjects.PlayerInstance == null)
-        {
-            if (showDebugLogs)Debug.LogError("No spawner assigned on player spawner!");
-            return;
-        }
-        if (characterStats == null) return;
-        if (!cooldownFinished) return;
+        Debug.Log($"SpawnCharacter called");
+        if (SpawnObjects.PlayerInstance == null) return;
+        if (characterStats == null || !cooldownFinished) return;
 
-        GameObject spawned;
-        
-        if (playerPrefab != null) 
-        {
-            spawned = SpawnObjects.PlayerInstance.SpawnPlayer(playerPrefab);
-        }
-        else
-        {
-            spawned = SpawnObjects.PlayerInstance.Spawn(characterStats);
-        }     
+        GameObject spawned = (playerPrefab != null)
+            ? SpawnObjects.PlayerInstance.SpawnPlayer(playerPrefab)
+            : SpawnObjects.PlayerInstance.Spawn(characterStats);
 
         if (spawned != null)
         {
             nextSpawnableTime = Time.time + characterStats._spawnCooldown;
             cooldownFinished = false;
             FModAudioManager.instance.PlaySoundByName("spawnTroop");
-            //FModAudioManager.instance.PlaySoundByName(characterStats.SpawnSoundName);
-            if (showDebugLogs)Debug.Log($"Player spawned: {characterStats.name}");
-        }   
+            if (showDebugLogs) Debug.Log($"Player spawned: {characterStats.name}");
+        }
     }
 
     void Update()
     {
-        if (Time.time >= nextSpawnableTime) 
+        if (Time.time >= nextSpawnableTime)
         {
-            
-            CooldownRemaining = 0f;
+            cooldownRemaining = 0f;
             cooldownFinished = true;
-            cooldownImage.value = 0;
+            if (cooldownImage != null) cooldownImage.value = 0;
         }
-        else 
+        else
         {
-            CooldownRemaining = nextSpawnableTime - Time.time;
-            UpdateCooldownImage();
+            cooldownRemaining = nextSpawnableTime - Time.time;
+            if (characterStats != null && cooldownImage != null)
+                cooldownImage.value = cooldownRemaining / characterStats._spawnCooldown;
         }
-    }
-
-    void UpdateCooldownImage()
-    {
-        if (characterStats == null) return;
-        cooldownImage.value = CooldownRemaining/characterStats._spawnCooldown;
     }
 }
