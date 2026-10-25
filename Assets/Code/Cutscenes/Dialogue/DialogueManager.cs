@@ -18,6 +18,7 @@ public class DialogueManager : MonoBehaviour
     public Color defaultNameColor = new Color(0f, 0f, 0f, 1f);
     public float defaultTextSpeed = .05f;
     public string defaultTypingSound = "dialogueType";
+    [Tooltip("Font for all dialogue text, names and choices, unless the speaker's CharacterDialogueInfo sets its own.")]
     public TMP_FontAsset defaultFontAsset;
     public float defaultFontSize = 36f;
     [Header("Cinematic sentences")]
@@ -183,8 +184,16 @@ public class DialogueManager : MonoBehaviour
         DisplayNextLine();
     }
 
+    TMP_FontAsset ResolveFont(CharacterDialogueInfo character)
+    {
+        return character != null && character.fontAsset != null ? character.fontAsset : defaultFontAsset;
+    }
+
     void ApplyCharacterToNameText(CharacterDialogueInfo character)
     {
+        TMP_FontAsset font = ResolveFont(character);
+        if (font != null) nameText.font = font;
+
         if (character != null)
         {
             nameText.text = character.CharacterName;
@@ -356,10 +365,8 @@ public class DialogueManager : MonoBehaviour
 
         targetBox.color = character != null ? character.textColor : defaultTextColor;
 
-        if (character != null && character.fontAsset != null)
-        {
-            targetBox.font = character.fontAsset;
-        }
+        TMP_FontAsset font = ResolveFont(character);
+        if (font != null) targetBox.font = font;
         targetBox.fontSize = character != null ? character.fontSize : defaultFontSize;
         if (style != null) style.ApplyTo(targetBox);
 
@@ -470,7 +477,11 @@ public class DialogueManager : MonoBehaviour
         {
             GameObject choiceInstance = Instantiate(Choice, ChoiceBox.transform);
             TextMeshProUGUI tmpText = choiceInstance.GetComponentInChildren<TextMeshProUGUI>();
-            if (tmpText != null) tmpText.text = choice.Text;
+            if (tmpText != null)
+            {
+                if (defaultFontAsset != null) tmpText.font = defaultFontAsset;
+                tmpText.text = choice.Text;
+            }
 
             DialogueChoiceWrapper ChoiceNumber = choiceInstance.GetComponentInChildren<DialogueChoiceWrapper>();
             if (ChoiceNumber != null)
