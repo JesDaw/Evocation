@@ -64,19 +64,15 @@ public class TMPEffectsValidation : MonoBehaviour
         _targetAlpha = new float[2];
         _wasWritingBeforePause = new bool[2];
 
+        // Fall back to the built-in databases imported into Assets/TMPEffects/Resources.
+        if (animationDatabase == null) animationDatabase = Resources.Load<TMPAnimationDatabase>("Databases/DefaultAnimationDatabase");
+        if (commandDatabase == null) commandDatabase = Resources.Load<TMPCommandDatabase>("Databases/DefaultCommandDatabase");
+
         for (int i = 0; i < 2; i++)
         {
             _writers[i] = _surfaces[i].GetComponent<TMPWriter>();
             _animators[i] = _surfaces[i].GetComponent<TMPAnimator>();
             _groups[i] = _surfaces[i].GetComponent<CanvasGroup>();
-
-            if (animationDatabase != null) _animators[i].SetDatabase(animationDatabase);
-            if (commandDatabase != null) _writers[i].SetDatabase(commandDatabase);
-            if (_animators[i].Database == null || _writers[i].Database == null)
-            {
-                Debug.LogError($"[TMPEffectsValidation] {_surfaces[i].name} has no TMPEffects database, so no effects or commands will work. " +
-                    "Rebuild the scene via Tools > Dialogue Prototype.");
-            }
 
             // The game pauses with UILogic.GameIsPaused, not Time.timeScale, so the writer runs on unscaled time.
             _writers[i].UseScaledTime = false;
@@ -97,7 +93,23 @@ public class TMPEffectsValidation : MonoBehaviour
 
     void Start()
     {
+        AssignDatabases();
         Advance();
+    }
+
+    // Must run after the TMPWriter/TMPAnimator OnEnable (which creates their Mediator), so not in Awake.
+    void AssignDatabases()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            if (animationDatabase != null) _animators[i].SetDatabase(animationDatabase);
+            if (commandDatabase != null) _writers[i].SetDatabase(commandDatabase);
+            if (_animators[i].Database == null || _writers[i].Database == null)
+            {
+                Debug.LogError($"[TMPEffectsValidation] {_surfaces[i].name} has no TMPEffects database, so no effects or commands will work. " +
+                    "Check that Assets/TMPEffects/Resources was imported.");
+            }
+        }
     }
 
     void OnDestroy()
