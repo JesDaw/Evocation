@@ -59,6 +59,8 @@ public class DialogueManager : MonoBehaviour
     // Lines sent from outside (YarnDialoguePresenter) instead of a DialogueTrigger's slides.
     bool _externalDialogue;
     System.Action _externalLineAdvance;
+    bool _externalAdvanceWhenRevealed;
+    System.Action<int> _externalChoiceSelected;
     public bool DialogueActive { get; private set; }
     public static DialogueManager Instance { get; private set; }
 
@@ -531,11 +533,14 @@ public class DialogueManager : MonoBehaviour
         if (GlobalInputManager.Instance != null) GlobalInputManager.Instance.SetMode(InputMode.Dialogue);
     }
 
-    // Shows one line in the dialogue box. onAdvance runs when the player confirms after the line has finished revealing.
+    // Shows one line in the dialogue box. onAdvance runs when the player confirms after the line has finished revealing,
+    // or as soon as it has finished revealing if advanceWhenRevealed (used for the line before choices).
     // characterName is shown when there is no CharacterDialogueInfo for the speaker.
-    public void ShowExternalLine(CharacterDialogueInfo character, string characterName, string text, System.Action onAdvance)
+    public void ShowExternalLine(CharacterDialogueInfo character, string characterName, string text, System.Action onAdvance,
+        bool advanceWhenRevealed = false)
     {
         _externalLineAdvance = onAdvance;
+        _externalAdvanceWhenRevealed = advanceWhenRevealed;
 
         ApplyCharacterToNameText(character);
         if (character == null) nameText.text = characterName ?? "";
@@ -556,11 +561,19 @@ public class DialogueManager : MonoBehaviour
         if (!_currentSurface.IsRevealing) OnLineFinished();
     }
 
+    // The current line stays on screen while the choices are open. onSelected gets the index into choices.
+    public void ShowExternalChoices(IList<string> choices, System.Action<int> onSelected)
+    {
+        _externalChoiceSelected = onSelected;
+        OpenChoiceBox(choices);
+    }
+
     public void EndExternalDialogue()
     {
         if (!_externalDialogue) return;
         _externalDialogue = false;
         _externalLineAdvance = null;
+        _externalChoiceSelected = null;
         DeactivateDialogueBox();
     }
 
@@ -632,7 +645,14 @@ public class DialogueManager : MonoBehaviour
     {
         if (_lineFinished || !DialogueActive) return;
         _lineFinished = true;
-        if (_externalDialogue) return;
+        if (_externalDialogue)
+        {
+            if (!_externalAdvanceWhenRevealed) return;
+            System.Action advance = _externalLineAdvance;
+            _externalLineAdvance = null;
+            advance?.Invoke();
+            return;
+        }
 
         DialogueLine currentLine = dialogueSlides[slideCount].Lines[lineCount];
         currentLine.LineEndEvent?.Invoke();
@@ -642,17 +662,24 @@ public class DialogueManager : MonoBehaviour
 
     public void OpenChoiceBox()
     {
+        var texts = new List<string>();
+        foreach (DialogueChoice choice in _dialogueTrigger.EndOfLines) texts.Add(choice.Text);
+        OpenChoiceBox(texts);
+    }
+
+    void OpenChoiceBox(IEnumerable<string> choiceTexts)
+    {
         ChoiceBox.SetActive(true);
         ChoiceBoxIsOpen = true;
         int ChoiceIndex = 0;
-        foreach (DialogueChoice choice in _dialogueTrigger.EndOfLines)
+        foreach (string choiceText in choiceTexts)
         {
             GameObject choiceInstance = Instantiate(Choice, ChoiceBox.transform);
             TextMeshProUGUI tmpText = choiceInstance.GetComponentInChildren<TextMeshProUGUI>();
             if (tmpText != null)
             {
                 if (defaultFontAsset != null) tmpText.font = defaultFontAsset;
-                tmpText.text = choice.Text;
+                tmpText.text = choiceText;
             }
 
             DialogueChoiceWrapper ChoiceNumber = choiceInstance.GetComponentInChildren<DialogueChoiceWrapper>();
@@ -663,6 +690,32 @@ public class DialogueManager : MonoBehaviour
             }
         }
         GlobalInputManager.Instance.EnableCursor();
+    }
+
+    // Called by the choice buttons (DialogueChoiceWrapper).
+    public void SelectChoice(int index)
+    {
+        if (!ChoiceBoxIsOpen) return;
+        if (!_externalDialogue)
+        {
+            EndDialogue(index);
+            return;
+        }
+
+        System.Action<int> selected = _externalChoiceSelected;
+        _externalChoiceSelected = null;
+        CloseChoiceBox();
+        selected?.Invoke(index);
+    }
+
+    void CloseChoiceBox()
+    {
+        ChoiceBox.SetActive(false);
+        ChoiceBoxIsOpen = false;
+        foreach (Transform child in ChoiceBox.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
     }
 
     public void EndDialogue(int CurrentChoiceIndex = 0)
@@ -693,11 +746,6 @@ public class DialogueManager : MonoBehaviour
         GetSurface(dialogueText).Clear();
         nameText.text = "";
 
-        ChoiceBox.SetActive(false);
-        ChoiceBoxIsOpen = false;
-        foreach (Transform child in ChoiceBox.transform)
-        {
-            GameObject.Destroy(child.gameObject);
-        }
+        CloseChoiceBox();
     }
 }

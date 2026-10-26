@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using Yarn.Unity;
@@ -84,16 +85,54 @@ public class YarnDialoguePresenter : DialoguePresenterBase
     public override async YarnTask RunLineAsync(LocalizedLine line, LineCancellationToken token)
     {
         string speaker = line.CharacterName;
-        string text = HexColourTag.Replace(line.TextWithoutCharacterName.Text.TrimStart(), "<$1=#$2>");
+        string text = PrepareText(line);
+        // Yarn's compiler tags the line right before a set of options; the choices open as soon as it is revealed.
+        bool beforeChoices = HasMetadata(line, "lastline");
         if (ShowDebugLogs) Debug.Log($"[YarnDialoguePresenter] line {line.TextID}: {speaker}: {text}");
 
         // Finishes when the player confirms after the line is revealed, or when the runner moves on by itself.
         var advanced = new YarnTaskCompletionSource();
-        DialogueManager.Instance.ShowExternalLine(FindCharacter(speaker), speaker, text, () => advanced.TrySetResult());
+        DialogueManager.Instance.ShowExternalLine(FindCharacter(speaker), speaker, text, () => advanced.TrySetResult(), beforeChoices);
         using (token.NextContentToken.Register(() => advanced.TrySetResult()))
         {
             await advanced.Task;
         }
+    }
+
+    public override async YarnTask<DialogueOption> RunOptionsAsync(DialogueOption[] dialogueOptions, LineCancellationToken token)
+    {
+        // Options whose <<if>> condition is false are hidden.
+        var available = new List<DialogueOption>();
+        var texts = new List<string>();
+        foreach (DialogueOption option in dialogueOptions)
+        {
+            if (!option.IsAvailable) continue;
+            available.Add(option);
+            texts.Add(PrepareText(option.Line));
+        }
+        if (available.Count == 0) return null;
+        if (ShowDebugLogs) Debug.Log($"[YarnDialoguePresenter] choices: {string.Join(" | ", texts)}");
+
+        var selected = new YarnTaskCompletionSource<DialogueOption>();
+        DialogueManager.Instance.ShowExternalChoices(texts, index => selected.TrySetResult(available[index]));
+        using (token.NextContentToken.Register(() => selected.TrySetResult(null)))
+        {
+            return await selected.Task;
+        }
+    }
+
+    static string PrepareText(LocalizedLine line)
+    {
+        return HexColourTag.Replace(line.TextWithoutCharacterName.Text.TrimStart(), "<$1=#$2>");
+    }
+
+    static bool HasMetadata(LocalizedLine line, string tag)
+    {
+        foreach (string metadata in line.Metadata)
+        {
+            if (string.Equals(metadata.TrimStart('#'), tag, StringComparison.OrdinalIgnoreCase)) return true;
+        }
+        return false;
     }
 
     CharacterDialogueInfo FindCharacter(string speaker)
