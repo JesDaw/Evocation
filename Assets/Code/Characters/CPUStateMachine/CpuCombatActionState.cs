@@ -33,6 +33,7 @@ public class CpuCombatActionState : CpuBaseState
         _phase = Phase.Startup;
         _timer = 0f;
         _hasTriggeredAttack = false;
+        _body.constraints = RigidbodyConstraints2D.FreezePositionX;
     }
 
     public override void UpdateState() => Tick(Time.deltaTime);
@@ -42,6 +43,9 @@ public class CpuCombatActionState : CpuBaseState
         _context._Animator.SetBool("IsAttacking", false);
         _context._ActionTarget = null;
         _context.UpdateCurrentState(CpuStateManager.State.Move);
+        //_body.constraints = originalConstraints;
+        _body.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+        _body.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
     void Tick(float deltaTime)
