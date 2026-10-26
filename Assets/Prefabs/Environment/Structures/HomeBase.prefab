@@ -532,10 +532,6 @@ MonoBehaviour:
     _PersistentCalls: []
   OnKnocked:
     _PersistentCalls: []
-  OnWitFlagDeath:
-    _PersistentCalls: []
-  OnWitFlagDamage:
-    _PersistentCalls: []
   OnStatsInitialized:
     m_PersistentCalls:
       m_Calls: []
@@ -1118,6 +1114,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 536455671690601697}
+  - component: {fileID: 4472670065591568451}
   m_Layer: 0
   m_Name: FriendHolder
   m_TagString: Untagged
@@ -1140,6 +1137,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7010236975575626099}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4472670065591568451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7173589137344077154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c92dbb18e3d78ca448bccdca952c99fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::FriendReferenceHolder
 --- !u!1 &7930072592643817302
 GameObject:
   m_ObjectHideFlags: 0

@@ -28,9 +28,9 @@ public class SpawnObjects : MonoBehaviour
     public static SpawnObjects EnemyInstance { get; private set; }
     public static SpawnObjects PlayerInstance { get; private set; }
 
-    const string ALLIES_MID_LAYER = "Allies/MidLane";
-    const string ENEMY_MID_LAYER = "Enemy/MidLane";
-    const string PLAYER_MID_LAYER = "Player/MidLane";
+    public const string ALLIES_MID_LAYER = "Allies/MidLane";
+    public const string ENEMY_MID_LAYER = "Enemy/MidLane";
+    public const string PLAYER_MID_LAYER = "Player/MidLane";
 
     public bool SpawningIsActive
     {
