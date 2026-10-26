@@ -47,7 +47,6 @@ public class Projectile : MonoBehaviour
         AnimationCurve s,
         Action<Stats> onHit)
     {
-        Debug.Log($"[Projectile] Init on '{gameObject.name}' | Time.timeScale: {Time.timeScale} | Target: {(target != null ? target.name : "NULL")} | Speed: {speed} | MaxTravelTime: {maxTravelTime}");
 
         if (target == null)
         {
@@ -92,7 +91,6 @@ public class Projectile : MonoBehaviour
 
         if (targetState != null && targetState.CurrentState == CpuStateManager.State.KnockBack)
         {
-            Debug.Log("[Projectile] Target already in KnockBack at spawn. Destroying projectile.");
             Destroy(gameObject);
             yield break;
         }
@@ -104,15 +102,9 @@ public class Projectile : MonoBehaviour
             aliveTimer += Time.deltaTime;
             frameCount++;
 
-            if (frameCount % 60 == 0)
-            {
-                Debug.Log($"[Projectile] Heartbeat | AliveTimer: {aliveTimer:F2}s / {maxTravelTime:F2}s | Progress: {currentProgress:F2} | Pos: {transform.position} | TimeScale: {Time.timeScale}");
-            }
 
-            // 1. Guaranteed Despawn on Max Travel Time
             if (aliveTimer >= maxTravelTime)
             {
-                Debug.Log($"[Projectile] Max travel time ({maxTravelTime}s) reached. Despawning.");
                 Destroy(gameObject);
                 yield break;
             }
@@ -145,14 +137,8 @@ public class Projectile : MonoBehaviour
             {
                 if (hitLiveTarget && target.TryGetComponent(out Stats targetStats))
                 {
-                    Debug.Log($"[Projectile] Hit target '{target.name}'. Applying combat effects.");
                     TriggerHit(targetStats);
                 }
-                else
-                {
-                    Debug.Log("[Projectile] Reached destination without active target hit. Cleaning up.");
-                }
-
                 Destroy(gameObject);
                 yield break;
             }
