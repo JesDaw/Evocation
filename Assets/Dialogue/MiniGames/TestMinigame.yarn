@@ -1,0 +1,64 @@
+// Test Minigame conversation. Started by the MiniGameIntro Timeline (Signal Receiver → Yarn Trigger).
+// Every ending runs the Yarn Trigger's Dialogue Ended event, which starts the scene transition.
+
+title: TestMinigame_Start
+---
+<<body 0>>
+<<face 0>>
+Ok so like I <wave>change</wave> the way the <fade>dialogue syetem</fade> worked and that basically <palette>removed</palette> all the text we had in here.
+<<style DialoguePresentationStyle>>
+I should <shake>probably</shake> just make it so we <palette>store all our text in seperate files</palette> so that doenst happen.
+<<position 0.05 0.35>>
+I didnt think that would be a <sketchy>problem</sketchy>
+<<style none>>
+But hey our <shake>dialogue chosen</shake> still stayed so the correct answer here is <sketchy>"Just wanted to check in"</sketchy>
+-> ...
+    ok well that would be minus points but im just going to end the game here bc I dont want to think of more branches rn
+-> Just wanted to check in
+    <<relationship 10>>
+    <<jump TestMinigame_CheckIn>>
+===
+
+title: TestMinigame_CheckIn
+---
+<<body 1>>
+<<face 3>>
+I mean you can <dangle>probably just guess</dangle> what the correct answers on there are we really didnt put <spread>a lot of effort</spread> into writing this originally.
+<<face 4>>
+Its just a <pivot>proof of concept.</pivot>
+-> That’s not important.
+    <<relationship -10>>
+    ok well that would be <grow>minus points</grow> but im just going to end the game here bc I dont want to think of more branches rn
+-> I'm Theo
+    <<jump TestMinigame_Theo>>
+===
+
+title: TestMinigame_Theo
+---
+<<body 0>>
+<<face 0>>
+I have <palette>no clue</palette> what we originally wrote <shake>here.</shake>
+<<face 1>>
+I need to find some <jump>dedicated writers.</jump>
+-> Dont insult me.
+    <<body 1>>
+    <<face 4>>
+    ok well that would be <grow>minus points</grow> but im just going to end the game here bc I dont want to think of more branches rn
+-> I’m just a bit rusty, that’s all.
+    <<jump TestMinigame_Rusty>>
+===
+
+title: TestMinigame_Rusty
+---
+<<body 1>>
+<<face 3>>
+This system need a <funky>reword</funky> this is so hard to work with I wrote it in a <jump>crunch.</jump>
+<<body 0>>
+<<face 0>>
+oh well games <palette>over</palette>
+<<face 1>>
+<sketchy>byeeeeeeeeeeeeeeeeee</sketchy>
+-> I’m ok.
+-> Maybe one of these days…
+    <<relationship 150>>
+===

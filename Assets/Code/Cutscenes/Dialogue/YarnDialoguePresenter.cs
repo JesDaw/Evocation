@@ -28,6 +28,8 @@ public class YarnDialoguePresenter : DialoguePresenterBase
     DialogueRunner _runner;
     bool _commandsRegistered;
     YarnTrigger _trigger;
+    // The runner also "completes" the dialogue when it is destroyed (leaving play mode, changing scene).
+    bool _shuttingDown;
 
     void Awake()
     {
@@ -41,6 +43,16 @@ public class YarnDialoguePresenter : DialoguePresenterBase
         _runner = GetComponent<DialogueRunner>();
         if (_runner == null) _runner = gameObject.AddComponent<DialogueRunner>();
         _runner.DialoguePresenters = new DialoguePresenterBase[] { this };
+    }
+
+    void OnEnable()
+    {
+        _shuttingDown = false;
+    }
+
+    void OnDisable()
+    {
+        _shuttingDown = true;
     }
 
     // trigger (optional) provides the <<event>> list and is told when the node (and anything it jumps to) has finished.
@@ -77,12 +89,12 @@ public class YarnDialoguePresenter : DialoguePresenterBase
 
     public override YarnTask OnDialogueCompleteAsync()
     {
-        DialogueManager.Instance.EndExternalDialogue();
+        if (DialogueManager.Instance != null) DialogueManager.Instance.EndExternalDialogue();
 
         // Local copy: DialogueEnded may start another dialogue, which sets a new _trigger.
         YarnTrigger trigger = _trigger;
         _trigger = null;
-        if (trigger != null) trigger.DialogueEnded?.Invoke();
+        if (trigger != null && !_shuttingDown) trigger.DialogueEnded?.Invoke();
         return YarnTask.CompletedTask;
     }
 
@@ -99,6 +111,18 @@ public class YarnDialoguePresenter : DialoguePresenterBase
         _runner.AddCommandHandler<float, float>("position", SetPosition);
         _runner.AddCommandHandler("clear", ClearText);
         _runner.AddCommandHandler<string>("event", RunEvent);
+        _runner.AddCommandHandler<int>("relationship", ChangeRelationship);
+    }
+
+    // <<relationship 10>> / <<relationship -10>>: changes the relationship of the current interaction.
+    void ChangeRelationship(int amount)
+    {
+        if (RelationshipManager.Instance == null)
+        {
+            Debug.LogWarning("[YarnDialoguePresenter] <<relationship>> used but there is no RelationshipManager in the scene.");
+            return;
+        }
+        RelationshipManager.Instance.AlterRelationshipStatus(amount);
     }
 
     void SetFace(int face)
@@ -171,7 +195,7 @@ public class YarnDialoguePresenter : DialoguePresenterBase
 
     public override async YarnTask RunLineAsync(LocalizedLine line, LineCancellationToken token)
     {
-        string speaker = line.CharacterName;
+        string speaker = GetSpeaker(line);
         string text = PrepareText(line);
         // Yarn's compiler tags the line right before a set of options; the choices open as soon as it is revealed.
         bool beforeChoices = HasMetadata(line, "lastline");
@@ -210,7 +234,17 @@ public class YarnDialoguePresenter : DialoguePresenterBase
 
     static string PrepareText(LocalizedLine line)
     {
-        return HexColourTag.Replace(line.TextWithoutCharacterName.Text.TrimStart(), "<$1=#$2>");
+        string text = GetSpeaker(line) != null ? line.TextWithoutCharacterName.Text : line.Text.Text;
+        return HexColourTag.Replace(text.TrimStart(), "<$1=#$2>");
+    }
+
+    // Yarn treats everything before the first colon as the speaker. A "name" containing a text tag
+    // means the colon was part of the line (e.g. "<palette>Hi! :3</palette>"), so the whole line is kept.
+    static string GetSpeaker(LocalizedLine line)
+    {
+        string speaker = line.CharacterName;
+        if (string.IsNullOrWhiteSpace(speaker) || speaker.Contains("<") || speaker.Contains(">")) return null;
+        return speaker;
     }
 
     static bool HasMetadata(LocalizedLine line, string tag)

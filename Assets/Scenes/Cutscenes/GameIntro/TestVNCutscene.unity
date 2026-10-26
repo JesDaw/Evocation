@@ -686,7 +686,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &648320795
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1427,9 +1427,9 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-        - m_Target: {fileID: 1032504065}
-          m_TargetAssemblyTypeName: DialogueTrigger, CodeAssembly
-          m_MethodName: TriggerDailogue
+        - m_Target: {fileID: 7123400000000000303}
+          m_TargetAssemblyTypeName: YarnTrigger, CodeAssembly
+          m_MethodName: TriggerDialogue
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -1453,9 +1453,9 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-        - m_Target: {fileID: 648320797}
-          m_TargetAssemblyTypeName: DialogueTrigger, CodeAssembly
-          m_MethodName: TriggerDailogue
+        - m_Target: {fileID: 7123400000000000313}
+          m_TargetAssemblyTypeName: YarnTrigger, CodeAssembly
+          m_MethodName: TriggerDialogue
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -2024,7 +2024,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1032504063
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3962,10 +3962,122 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2070062603}
   m_CullTransparentMesh: 1
+--- !u!1 &7123400000000000301
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7123400000000000302}
+  - component: {fileID: 7123400000000000303}
+  m_Layer: 0
+  m_Name: Yarn Dialogue (TestVN_Narration)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7123400000000000302
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7123400000000000301}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7123400000000000303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7123400000000000301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff46f0e1fa404c7f801d9e0a2fb168ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::YarnTrigger
+  startNode: TestVN_Narration
+  DialogueEnded:
+    _PersistentCalls:
+    - _Target: {fileID: 830621551}
+      _MemberName: PlayTimeline
+      _PersistentArguments: []
+  Events:
+  - Name: PlayTimeline
+    Event:
+      _PersistentCalls:
+      - _Target: {fileID: 830621551}
+        _MemberName: PlayTimeline
+        _PersistentArguments: []
+  triggerOnStart: 0
+--- !u!1 &7123400000000000311
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7123400000000000312}
+  - component: {fileID: 7123400000000000313}
+  m_Layer: 0
+  m_Name: Yarn Dialogue (TestVN_Choices)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7123400000000000312
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7123400000000000311}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7123400000000000313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7123400000000000311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff46f0e1fa404c7f801d9e0a2fb168ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::YarnTrigger
+  startNode: TestVN_Choices
+  DialogueEnded:
+    _PersistentCalls:
+    - _Target: {fileID: 830621551}
+      _MemberName: PlayTimeline
+      _PersistentArguments: []
+  Events: []
+  triggerOnStart: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 7123400000000000301}
+  - {fileID: 7123400000000000311}
   - {fileID: 2023402991}
   - {fileID: 1869896541}
   - {fileID: 268257945}

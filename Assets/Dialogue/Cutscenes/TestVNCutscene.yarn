@@ -1,0 +1,31 @@
+// Test VN Cutscene. Each node is started by a Timeline signal (Signal Receiver on the Timeline object → Yarn Trigger).
+// Each Yarn Trigger's Dialogue Ended resumes the Timeline.
+
+title: TestVN_Narration
+---
+<<style VNNarrationStyle>>
+<<position 0 -0.07>>
+The <grow><i><color=F0BF00>king</color></i></grow> of the <sketchy><color=BFE1FF>Island of Gadies</color></sketchy> stubbornly lies on his <color=red><fade>deathbed.</fade></color>
+
+While holding on to grave feelings of <pivot><color=red>anger</color></pivot> and <shake><color=orange>regret</color></shake>, he still holds on to <sketchy><size=125%><u>great pride</u></size></sketchy> and <sketchy><size=125%><u>self importance.</u></size></sketchy>
+// <?PlayTimeline> at the end resumes the Timeline when this line finishes, like the old Line End Event.
+
+Despite his condition, he <i><jump>insists</jump></i> on bearing the <size=125%><grow><palette>crown</palette></grow></size> upon his head, and barks at anyone who attempts to suggest the <color=FFF0BF><sketchy>succession of power.</sketchy></color><?PlayTimeline>
+Arms <color=50008C><fade>frail</fade></color>, speech <color=black><pivot>slurred and slow</pivot></color>, and eyes glued to the ceiling above him, while holding a <color=C9FFEB><grow>tireless glare.</grow></color>
+His movement remains <color=blue><grow>restricted</grow></color>, his head hangs heavy by the weight of the <sketchy><size=125%><color=FFF0BF>crown</color></size></sketchy> but he will not <shake><s>remove it.</s></shake>
+He <shear><color=C9C9C9>stubbornly</color></shear> insists on holding onto his <color=BAFFC1><wave>crown and title.</wave></color>
+He is well <u>aware</u> he will soon <color=green>pass</color>, and that by the tradition of the castle, his eldest son will be set to take the <sketchy><shake><color=FCBFFF>throne</color></shake></sketchy>, but he simply will not grant the <color=DDD6FF><jump>succession.</jump></color>
+<<clear>>
+<<position 0 -0.07>>
+After much <shear><swing><color=black>conflict</color></swing></shear>, the king orders the creation of a <color=FFEBA1><grow>second crown</grow></color> of a new model for his son for he will how part with his <i><u>own.</u></i>
+He orders that he is <color=543109><swing>buried</swing></color> and <u><color=A8BFFF>forever guarded</color></u> while still bearing the <sketchy>original.</sketchy>
+This seems heavy on his mind, but he makes it known that the moment his <sketchy><color=B9A1FF>crown</color></sketchy> is <dangle><color=red>removed</color></dangle> is the moment the weight will be too much for him to <color=black><size=150%><fade>bear.</size></fade></color>
+===
+
+title: TestVN_Choices
+---
+Hi hi hi <palette>HIIIIIIIIIIII! :3</palette>
+Mmmmmmm <wave><size=125%>choices!</size></wave>
+-> Option 1
+-> Option 2
+===

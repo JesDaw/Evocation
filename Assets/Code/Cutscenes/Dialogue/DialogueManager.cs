@@ -257,6 +257,18 @@ public class DialogueManager : MonoBehaviour
         return surface;
     }
 
+    // Clears a box without giving it a DialogueTextSurface: boxes are often inactive here, and TMPEffects
+    // components added to an inactive object didn't animate the first line shown afterwards.
+    // The surface is created when a line is shown, after the box has been activated.
+    void ClearTextBox(TMP_Text box)
+    {
+        DialogueTextSurface surface = _surfaces.TryGetValue(box, out DialogueTextSurface cached) && cached != null
+            ? cached
+            : box.GetComponent<DialogueTextSurface>();
+        if (surface != null) surface.Clear();
+        else box.text = "";
+    }
+
     DialoguePresentationStyle GetPresentationStyle(Dialogue slide, DialogueLine line)
     {
         if (line.alternitiveTextBox != null || slide.presentationStyle == null) return null;
@@ -447,7 +459,7 @@ public class DialogueManager : MonoBehaviour
         {
             TMP_Text box = GetTargetTextBox(line);
             if (box == null) continue;
-            GetSurface(box).Clear();
+            ClearTextBox(box);
         }
 
         if (slide.alternitiveCanvasGroup != null)
@@ -609,7 +621,7 @@ public class DialogueManager : MonoBehaviour
     public void ClearExternalText()
     {
         ReleaseSentences();
-        GetSurface(dialogueText).Clear();
+        ClearTextBox(dialogueText);
     }
 
     public void EndExternalDialogue()
@@ -795,7 +807,7 @@ public class DialogueManager : MonoBehaviour
         lineCount = 0;
         _currentSurface = null;
         _lineFinished = true;
-        GetSurface(dialogueText).Clear();
+        ClearTextBox(dialogueText);
         nameText.text = "";
 
         CloseChoiceBox();
