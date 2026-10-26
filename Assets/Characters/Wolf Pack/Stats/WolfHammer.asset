@@ -17,21 +17,21 @@ MonoBehaviour:
   RPS_Type: AOE
   OtherNotes: 
   SpawnSoundName: WolfHammer
-  _spawnCost: 65
+  _spawnCost: 20
   _spawnCooldown: 2
-  Level_Total: 12.168703
-  Level_Discrepancy: -52.8313
-  _CalculatedPower: 12.168703
-  _ValueDiscrepancy: -52.8313
+  Level_Total: 76.54039
+  Level_Discrepancy: 56.54039
+  _CalculatedPower: 76.54039
+  _ValueDiscrepancy: 56.54039
   Attack: 25.725697
   Defense: 7.837682
   SpaceControl: 1.0916848
   AttackFrequency: 0.026408453
-  _AttackDamage: 5
-  _KnockBackDamage: 10
-  _MoveSpeed: 3
-  _MaxHealth: 20
-  _KnockBackMaxHealth: 15
+  _AttackDamage: 20
+  _KnockBackDamage: 20
+  _MoveSpeed: 1.75
+  _MaxHealth: 80
+  _KnockBackMaxHealth: 60
   _HorizontalRange: 2
   _VerticalRange: 3
   _ExtraEndlag: 0
@@ -58,6 +58,7 @@ MonoBehaviour:
     projectileSettings:
       prefab: {fileID: 0}
       speed: 0
+      maxTravelTime: 5
       maxHeight: 0
       trajectoryCurve:
         serializedVersion: 2
