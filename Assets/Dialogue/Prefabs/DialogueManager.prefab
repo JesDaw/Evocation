@@ -129,8 +129,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 56f80b224f6eaf742aba875d78be0c7e, type: 2}
+  m_sharedMaterial: {fileID: 7697463550075289715, guid: 56f80b224f6eaf742aba875d78be0c7e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -266,8 +266,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: <sprite name="button_prompts_enter">
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 56f80b224f6eaf742aba875d78be0c7e, type: 2}
+  m_sharedMaterial: {fileID: 7697463550075289715, guid: 56f80b224f6eaf742aba875d78be0c7e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -481,8 +481,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: name
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 56f80b224f6eaf742aba875d78be0c7e, type: 2}
+  m_sharedMaterial: {fileID: 7697463550075289715, guid: 56f80b224f6eaf742aba875d78be0c7e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -665,6 +665,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7297776432213999232}
   - component: {fileID: 8459587077067104866}
+  - component: {fileID: 7123400000000000010}
   m_Layer: 0
   m_Name: DialogueManager
   m_TagString: Untagged
@@ -710,6 +711,27 @@ MonoBehaviour:
   defaultNameColor: {r: 1, g: 1, b: 1, a: 1}
   defaultFontAsset: {fileID: 11400000, guid: 56f80b224f6eaf742aba875d78be0c7e, type: 2}
   sentenceContainer: {fileID: 7123400000000000002}
+  ShowDebugLogs: 0
+--- !u!114 &7123400000000000010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7137158422397698142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a756adbc0b6f448cbb08022f4703ad2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::YarnDialoguePresenter
+  yarnProject: {fileID: 7545569452688597077, guid: 5bbc044992ef8c94aa6c269736bc3b2e, type: 3}
+  characters:
+  - {fileID: 11400000, guid: 6512ccf78a67e9148b762725f281e69c, type: 2}
+  - {fileID: 11400000, guid: 1afa14408df6ef34ab88f552b309d64d, type: 2}
+  - {fileID: 11400000, guid: 0cfe40d00fa4a4b25978c78660f4f2e5, type: 2}
+  presentationStyles:
+  - {fileID: 11400000, guid: 54e69756ff29459e91649885b5694760, type: 2}
+  - {fileID: 11400000, guid: 4bb89c12b71079b4dab96e326e5b2da4, type: 2}
   ShowDebugLogs: 0
 --- !u!1 &7123400000000000001
 GameObject:

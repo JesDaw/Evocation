@@ -8,9 +8,9 @@ public class DialogueChoiceWrapper : MonoBehaviour
         if (DialogueManager.Instance == null)
         {
             Debug.LogWarning($"[{this}.DialogueChoiceWrapper] can't find DialogueManager");
-
+            return;
         }
 
-        DialogueManager.Instance.EndDialogue(ChoiceIndex);
+        DialogueManager.Instance.SelectChoice(ChoiceIndex);
     }
 }

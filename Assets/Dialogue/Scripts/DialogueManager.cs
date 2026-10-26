@@ -53,9 +53,18 @@ public class DialogueManager : MonoBehaviour
     float _pendingScrollDistance;
     float _pendingScrollSpeed;
 
-    int slideCount = -1; 
+    int slideCount = -1;
     int lineCount = 0;
     DialogueTrigger _dialogueTrigger;
+    // Lines sent from outside (YarnDialoguePresenter) instead of a DialogueTrigger's slides.
+    bool _externalDialogue;
+    System.Action _externalLineAdvance;
+    bool _externalAdvanceWhenRevealed;
+    System.Action<int> _externalChoiceSelected;
+    System.Func<string, bool> _externalTextEvent;
+    DialoguePresentationStyle _externalStyle;
+    bool _externalUsePosition;
+    Vector2 _externalPosition;
     public bool DialogueActive { get; private set; }
     public static DialogueManager Instance { get; private set; }
 
@@ -132,6 +141,13 @@ public class DialogueManager : MonoBehaviour
         if (!_lineFinished)
         {
             SkipToEndOfLine();
+            return;
+        }
+        if (_externalDialogue)
+        {
+            System.Action advance = _externalLineAdvance;
+            _externalLineAdvance = null;
+            advance?.Invoke();
             return;
         }
         if (IsLastLineOfLastSlide())
@@ -214,6 +230,15 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
+    void ApplyCharacterToTextBox(TMP_Text box, CharacterDialogueInfo character)
+    {
+        box.color = character != null ? character.textColor : defaultTextColor;
+
+        TMP_FontAsset font = ResolveFont(character);
+        if (font != null) box.font = font;
+        box.fontSize = character != null ? character.fontSize : defaultFontSize;
+    }
+
     TMP_Text GetTargetTextBox(DialogueLine line)
     {
         return line.alternitiveTextBox != null ? line.alternitiveTextBox : dialogueText;
@@ -230,6 +255,18 @@ public class DialogueManager : MonoBehaviour
         surface.TextEvent += OnSurfaceTextEvent;
         _surfaces[box] = surface;
         return surface;
+    }
+
+    // Clears a box without giving it a DialogueTextSurface: boxes are often inactive here, and TMPEffects
+    // components added to an inactive object didn't animate the first line shown afterwards.
+    // The surface is created when a line is shown, after the box has been activated.
+    void ClearTextBox(TMP_Text box)
+    {
+        DialogueTextSurface surface = _surfaces.TryGetValue(box, out DialogueTextSurface cached) && cached != null
+            ? cached
+            : box.GetComponent<DialogueTextSurface>();
+        if (surface != null) surface.Clear();
+        else box.text = "";
     }
 
     DialoguePresentationStyle GetPresentationStyle(Dialogue slide, DialogueLine line)
@@ -310,14 +347,14 @@ public class DialogueManager : MonoBehaviour
         return new SpawnedSentence { Surface = GetSurface(text), Prefab = prefab };
     }
 
-    // Uses the line's screen position if it has one, otherwise stacks below the previous sentence.
-    void PlaceSentence(DialogueTextSurface surface, DialoguePresentationStyle style, DialogueLine line)
+    // Uses the screen position (0-1, top-left origin) if given, otherwise stacks below the previous sentence.
+    void PlaceSentence(DialogueTextSurface surface, DialoguePresentationStyle style, bool useScreenPosition, Vector2 screenPosition)
     {
         Vector2 position = _nextSentencePosition;
-        if (line.useScreenPosition)
+        if (useScreenPosition)
         {
             Rect area = sentenceContainer.rect;
-            position = new Vector2(line.screenPosition.x * area.width, -line.screenPosition.y * area.height);
+            position = new Vector2(screenPosition.x * area.width, -screenPosition.y * area.height);
             _stackOriginX = position.x;
             _stackIndex = 0;
         }
@@ -330,7 +367,7 @@ public class DialogueManager : MonoBehaviour
         sentence.TargetPosition = position;
         sentence.ScrollSpeed = 0f;
         // A stacked sentence arriving during a scroll starts lower and rises with the others.
-        if (!line.useScreenPosition && _pendingScrollDistance > 0f && !float.IsInfinity(_pendingScrollSpeed))
+        if (!useScreenPosition && _pendingScrollDistance > 0f && !float.IsInfinity(_pendingScrollSpeed))
         {
             surface.Text.rectTransform.anchoredPosition = position - new Vector2(0f, _pendingScrollDistance);
             sentence.ScrollSpeed = _pendingScrollSpeed;
@@ -422,7 +459,7 @@ public class DialogueManager : MonoBehaviour
         {
             TMP_Text box = GetTargetTextBox(line);
             if (box == null) continue;
-            GetSurface(box).Clear();
+            ClearTextBox(box);
         }
 
         if (slide.alternitiveCanvasGroup != null)
@@ -467,11 +504,7 @@ public class DialogueManager : MonoBehaviour
         _currentSurface = style != null ? SpawnSentence(style) : GetSurface(GetTargetTextBox(currentLine));
         TMP_Text targetBox = _currentSurface.Text;
 
-        targetBox.color = character != null ? character.textColor : defaultTextColor;
-
-        TMP_FontAsset font = ResolveFont(character);
-        if (font != null) targetBox.font = font;
-        targetBox.fontSize = character != null ? character.fontSize : defaultFontSize;
+        ApplyCharacterToTextBox(targetBox, character);
         if (style != null) style.ApplyTo(targetBox);
 
         _currentTypingSound = character != null ? character.Voice : "";
@@ -491,7 +524,7 @@ public class DialogueManager : MonoBehaviour
         {
             // One surface per sentence, so earlier sentences stay on screen untouched.
             _currentSurface.Show(style.FormatLine(currentLine.Line));
-            PlaceSentence(_currentSurface, style, currentLine);
+            PlaceSentence(_currentSurface, style, currentLine.useScreenPosition, currentLine.screenPosition);
         }
         // Lines in the same slide and box keep the earlier lines on screen, as before.
         else if (_currentSurface.HasText) _currentSurface.Append(currentLine.Line);
@@ -501,6 +534,106 @@ public class DialogueManager : MonoBehaviour
 
         // Empty lines never start the writer, so nothing would report them finished.
         if (!_currentSurface.IsRevealing) OnLineFinished();
+    }
+
+    // textEventHandler runs custom <?Name> tags in the lines; it returns false if it has no event with that name.
+    public void BeginExternalDialogue(System.Func<string, bool> textEventHandler = null)
+    {
+        _externalDialogue = true;
+        _externalLineAdvance = null;
+        _externalTextEvent = textEventHandler;
+        _externalStyle = null;
+        _externalUsePosition = false;
+        _dialogueTrigger = null;
+        dialogueSlides = new List<Dialogue>();
+        slideCount = -1;
+        lineCount = 0;
+        DialogueActive = true;
+
+        if (GlobalInputManager.Instance != null) GlobalInputManager.Instance.SetMode(InputMode.Dialogue);
+    }
+
+    // Shows one line in the dialogue box. onAdvance runs when the player confirms after the line has finished revealing,
+    // or as soon as it has finished revealing if advanceWhenRevealed (used for the line before choices).
+    // characterName is shown when there is no CharacterDialogueInfo for the speaker.
+    public void ShowExternalLine(CharacterDialogueInfo character, string characterName, string text, System.Action onAdvance,
+        bool advanceWhenRevealed = false)
+    {
+        _externalLineAdvance = onAdvance;
+        _externalAdvanceWhenRevealed = advanceWhenRevealed;
+
+        ApplyCharacterToNameText(character);
+        if (character == null) nameText.text = characterName ?? "";
+
+        DialoguePresentationStyle style = _externalStyle != null && sentenceContainer != null ? _externalStyle : null;
+
+        // Activate the box before its surface is used: TMPEffects needs an active GameObject.
+        DialogueBox.SetActive(style == null);
+        _currentSurface = style != null ? SpawnSentence(style) : GetSurface(dialogueText);
+        ApplyCharacterToTextBox(_currentSurface.Text, character);
+        if (style != null) style.ApplyTo(_currentSurface.Text);
+
+        _currentTypingSound = character != null ? character.Voice : "";
+        _currentSurface.SetRevealDelay(character != null ? character.TextSpeed : defaultTextSpeed);
+        _lineFinished = false;
+
+        if (style != null)
+        {
+            _currentSurface.Show(style.FormatLine(text));
+            PlaceSentence(_currentSurface, style, _externalUsePosition, _externalPosition);
+            _externalUsePosition = false;
+        }
+        else _currentSurface.Show(text);
+
+        if (ShowDebugLogs) Debug.Log($"[DialogueManager] external line '{text}'");
+
+        if (!_currentSurface.IsRevealing) OnLineFinished();
+    }
+
+    // The current line stays on screen while the choices are open. onSelected gets the index into choices.
+    public void ShowExternalChoices(IList<string> choices, System.Action<int> onSelected)
+    {
+        _externalChoiceSelected = onSelected;
+        OpenChoiceBox(choices);
+    }
+
+    // Following lines become sentences laid out by this style; null goes back to the dialogue box.
+    // Changing style clears the sentences on screen, like starting a new slide.
+    public void SetExternalStyle(DialoguePresentationStyle style)
+    {
+        if (style == _externalStyle) return;
+        ReleaseSentences();
+        _externalStyle = style;
+        if (style != null && sentenceContainer == null)
+        {
+            Debug.LogWarning("[DialogueManager] <<style>> used but no Sentence Container is assigned; using the dialogue box.");
+        }
+    }
+
+    // Places the next sentence at this screen position (0-1, (0, 0) is top-left); later ones stack below it.
+    public void SetExternalNextPosition(Vector2 screenPosition)
+    {
+        _externalUsePosition = true;
+        _externalPosition = screenPosition;
+    }
+
+    // Removes the sentences and box text on screen, like starting a new slide.
+    public void ClearExternalText()
+    {
+        ReleaseSentences();
+        ClearTextBox(dialogueText);
+    }
+
+    public void EndExternalDialogue()
+    {
+        if (!_externalDialogue) return;
+        _externalDialogue = false;
+        _externalLineAdvance = null;
+        _externalChoiceSelected = null;
+        _externalTextEvent = null;
+        _externalStyle = null;
+        _externalUsePosition = false;
+        DeactivateDialogueBox();
     }
 
     void SkipToEndOfLine()
@@ -519,10 +652,11 @@ public class DialogueManager : MonoBehaviour
     // TextEvents entry on the current DialogueTrigger. Events still fire when the line is skipped.
     void OnSurfaceTextEvent(DialogueTextSurface surface, TMPEventArgs args)
     {
-        if (surface != _currentSurface || _dialogueTrigger == null) return;
+        if (surface != _currentSurface) return;
 
         string eventName = args.Tag.Name;
         string value = args.Tag.Parameters != null && args.Tag.Parameters.TryGetValue("", out string v) ? v : "";
+        string source = _dialogueTrigger != null ? $"trigger '{_dialogueTrigger.name}'" : "a Yarn line";
         if (ShowDebugLogs) Debug.Log($"[DialogueManager] text event <?{eventName}={value}>");
 
         switch (eventName.ToLowerInvariant())
@@ -531,7 +665,7 @@ public class DialogueManager : MonoBehaviour
             case "body":
                 if (!int.TryParse(value, out int id))
                 {
-                    Debug.LogWarning($"[DialogueManager] <?{eventName}={value}> needs a number, in trigger '{_dialogueTrigger.name}'.");
+                    Debug.LogWarning($"[DialogueManager] <?{eventName}={value}> needs a number, in {source}.");
                     return;
                 }
                 if (InteractionMinigameManager.Instance == null)
@@ -547,6 +681,16 @@ public class DialogueManager : MonoBehaviour
                 return;
         }
 
+        if (_externalDialogue)
+        {
+            if (_externalTextEvent == null || !_externalTextEvent(eventName))
+            {
+                Debug.LogWarning($"[DialogueManager] No event named '{eventName}' for <?{eventName}> in {source}. " +
+                    "Add it to the Yarn Trigger's Events list.");
+            }
+            return;
+        }
+        if (_dialogueTrigger == null) return;
         if (!_dialogueTrigger.TryInvokeTextEvent(eventName))
         {
             Debug.LogWarning($"[DialogueManager] No Text Event named '{eventName}' on trigger '{_dialogueTrigger.name}'. " +
@@ -565,6 +709,14 @@ public class DialogueManager : MonoBehaviour
     {
         if (_lineFinished || !DialogueActive) return;
         _lineFinished = true;
+        if (_externalDialogue)
+        {
+            if (!_externalAdvanceWhenRevealed) return;
+            System.Action advance = _externalLineAdvance;
+            _externalLineAdvance = null;
+            advance?.Invoke();
+            return;
+        }
 
         DialogueLine currentLine = dialogueSlides[slideCount].Lines[lineCount];
         currentLine.LineEndEvent?.Invoke();
@@ -574,17 +726,24 @@ public class DialogueManager : MonoBehaviour
 
     public void OpenChoiceBox()
     {
+        var texts = new List<string>();
+        foreach (DialogueChoice choice in _dialogueTrigger.EndOfLines) texts.Add(choice.Text);
+        OpenChoiceBox(texts);
+    }
+
+    void OpenChoiceBox(IEnumerable<string> choiceTexts)
+    {
         ChoiceBox.SetActive(true);
         ChoiceBoxIsOpen = true;
         int ChoiceIndex = 0;
-        foreach (DialogueChoice choice in _dialogueTrigger.EndOfLines)
+        foreach (string choiceText in choiceTexts)
         {
             GameObject choiceInstance = Instantiate(Choice, ChoiceBox.transform);
             TextMeshProUGUI tmpText = choiceInstance.GetComponentInChildren<TextMeshProUGUI>();
             if (tmpText != null)
             {
                 if (defaultFontAsset != null) tmpText.font = defaultFontAsset;
-                tmpText.text = choice.Text;
+                tmpText.text = choiceText;
             }
 
             DialogueChoiceWrapper ChoiceNumber = choiceInstance.GetComponentInChildren<DialogueChoiceWrapper>();
@@ -595,6 +754,32 @@ public class DialogueManager : MonoBehaviour
             }
         }
         GlobalInputManager.Instance.EnableCursor();
+    }
+
+    // Called by the choice buttons (DialogueChoiceWrapper).
+    public void SelectChoice(int index)
+    {
+        if (!ChoiceBoxIsOpen) return;
+        if (!_externalDialogue)
+        {
+            EndDialogue(index);
+            return;
+        }
+
+        System.Action<int> selected = _externalChoiceSelected;
+        _externalChoiceSelected = null;
+        CloseChoiceBox();
+        selected?.Invoke(index);
+    }
+
+    void CloseChoiceBox()
+    {
+        ChoiceBox.SetActive(false);
+        ChoiceBoxIsOpen = false;
+        foreach (Transform child in ChoiceBox.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
     }
 
     public void EndDialogue(int CurrentChoiceIndex = 0)
@@ -622,14 +807,9 @@ public class DialogueManager : MonoBehaviour
         lineCount = 0;
         _currentSurface = null;
         _lineFinished = true;
-        GetSurface(dialogueText).Clear();
+        ClearTextBox(dialogueText);
         nameText.text = "";
 
-        ChoiceBox.SetActive(false);
-        ChoiceBoxIsOpen = false;
-        foreach (Transform child in ChoiceBox.transform)
-        {
-            GameObject.Destroy(child.gameObject);
-        }
+        CloseChoiceBox();
     }
 }
