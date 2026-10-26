@@ -20,6 +20,8 @@ public class CpuKnockBackState : CpuBaseState
         _context._Animator.Play("Knockback", 0, 0f);
         _context._Animator.SetBool("IsKnockback", true);
         //FModAudioManager.instance.PlaySoundByName("knockback");
+        rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         ApplyKnockback();
     }
 
