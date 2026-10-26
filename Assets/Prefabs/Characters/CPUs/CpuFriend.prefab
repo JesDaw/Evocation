@@ -2697,10 +2697,6 @@ MonoBehaviour:
         _Z: 0
         _W: 0
         _Object: {fileID: 0}
-  OnWitFlagDeath:
-    _PersistentCalls: []
-  OnWitFlagDamage:
-    _PersistentCalls: []
   OnStatsInitialized:
     m_PersistentCalls:
       m_Calls: []
@@ -2738,15 +2734,20 @@ MonoBehaviour:
     rangePercent: 1
     extendsForward: 0
     targetFriendly: 0
+    includeSelf: 0
     targetCondition: 0
     maxTargets: 1
     castCooldown: 2
+    ScaleEffectsWithUsersStats: 1
     healthChangePercent: 0
     knockbackPercent: 0
     zoneSpawnPosition: 0
+    ZoneTargetsEnemies: 0
+    UseProjectile: 0
     projectileSettings:
       prefab: {fileID: 0}
       speed: 15
+      maxTravelTime: 5
       maxHeight: 2
       trajectoryCurve:
         serializedVersion: 2
@@ -2836,6 +2837,7 @@ MonoBehaviour:
     applicationMode: 0
   _CurrentActionIndex: 0
   _ActionTarget: {fileID: 0}
+  _CurrentDangerSignal: {fileID: 0}
 --- !u!114 &6919732210290999509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2951,6 +2953,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8497bdc4168874ba99c8180ca3dbd99e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::DamageHandler
+  damageInterval:
+    damageInterval: 0
+  OnThreashholdPassed:
+    _PersistentCalls: []
+  DebugLogs: 0
 --- !u!1 &5384764442758481820
 GameObject:
   m_ObjectHideFlags: 0
