@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using TMPEffects.CharacterData;
 using TMPEffects.Components;
@@ -19,11 +20,16 @@ public class DialogueTextSurface : MonoBehaviour
 
     // Commands/events already ran and show tags already played, so they are removed from text being kept on screen.
     static readonly Regex OneShotTags = new Regex(@"<[!?][^>]*>|</?\+[^>]*>", RegexOptions.Compiled);
+    // Underline, strikethrough and highlight are drawn as separate geometry the writer can't hide,
+    // so they are left out while revealing and added back once the reveal finishes.
+    static readonly Regex DecorationTags = new Regex(@"</?(?:u|s|mark)(?:[ =][^>]*)?>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
     [Tooltip("Leave empty to use TMPEffects' built-in databases from Assets/TMPEffects/Resources.")]
     [SerializeField] TMPAnimationDatabase animationDatabase;
     [SerializeField] TMPCommandDatabase commandDatabase;
     [SerializeField] bool pauseWithGame = true;
+    [Tooltip("Seconds underlines, strikethroughs and highlights take to fade in once a line finishes revealing.")]
+    [SerializeField] float decorationFadeDuration = 0.4f;
     [Header("Debug")]
     [SerializeField] bool ShowDebugLogs = false;
 
@@ -40,6 +46,10 @@ public class DialogueTextSurface : MonoBehaviour
     bool _initialized;
     bool _pausedWhileRevealing;
     bool _wasPaused;
+    bool _decorationsPending;
+    // Mesh vertices that belong to no character (underline/strikethrough/highlight geometry), with their full alpha.
+    readonly List<(int mesh, int vertex, byte alpha)> _decorationVertices = new List<(int, int, byte)>();
+    float _decorationFadeTime = -1f;
     float _targetAlpha = 1f;
     float _fadeSpeed;
 
@@ -80,6 +90,15 @@ public class DialogueTextSurface : MonoBehaviour
 
         // Animations are driven here so they use unscaled time and stop while paused.
         if (!paused && _initialized && _animator.isActiveAndEnabled) _animator.UpdateAnimations(Time.unscaledDeltaTime);
+
+        // After the animator, which only rewrites character vertices, so the decoration alpha set here is kept.
+        if (!paused && _decorationFadeTime >= 0f)
+        {
+            _decorationFadeTime += Time.unscaledDeltaTime;
+            float progress = Mathf.Clamp01(_decorationFadeTime / decorationFadeDuration);
+            SetDecorationAlpha(progress);
+            if (progress >= 1f) _decorationFadeTime = -1f;
+        }
 
         if (_canvasGroup != null && !Mathf.Approximately(_canvasGroup.alpha, _targetAlpha))
         {
@@ -154,7 +173,8 @@ public class DialogueTextSurface : MonoBehaviour
     public void Show(string text)
     {
         _rawText = text ?? "";
-        Write(_rawText, 0);
+        _decorationsPending = false;
+        Write(WithoutDecorations(_rawText), 0);
     }
 
     // Keep the current text on screen and reveal only the new part after it.
@@ -170,9 +190,10 @@ public class DialogueTextSurface : MonoBehaviour
         string kept = OneShotTags.Replace(_rawText, "") + separator;
         int keptCharacters = _text.textInfo.characterCount + separator.Length;
         _rawText = kept + (text ?? "");
+        _decorationsPending = false;
 
         // Writer delay is zero across the kept part, so only the new text takes time to reveal.
-        Write("<!delay=0>" + kept + "<!delay=default>" + text, keptCharacters);
+        Write("<!delay=0>" + kept + "<!delay=default>" + WithoutDecorations(text), keptCharacters);
     }
 
     // Finish the current reveal immediately (respects <!skippable=false> sections).
@@ -194,6 +215,8 @@ public class DialogueTextSurface : MonoBehaviour
         CacheComponents();
         if (_initialized && isActiveAndEnabled) _writer.StopWriter();
         _pausedWhileRevealing = false;
+        _decorationsPending = false;
+        _decorationFadeTime = -1f;
         _rawText = "";
         _text.text = "";
         if (isActiveAndEnabled) _text.ForceMeshUpdate();
@@ -213,11 +236,73 @@ public class DialogueTextSurface : MonoBehaviour
         if (fadeDuration <= 0f) _canvasGroup.alpha = alpha;
     }
 
+    // Sets _decorationsPending when anything was removed, so OnWriterFinished restores it.
+    string WithoutDecorations(string text)
+    {
+        if (string.IsNullOrEmpty(text) || !DecorationTags.IsMatch(text)) return text;
+        _decorationsPending = true;
+        return DecorationTags.Replace(text, "");
+    }
+
+    // Re-sets the finished text with its decoration tags, everything visible and without replaying show animations.
+    void RestoreDecorations()
+    {
+        _decorationsPending = false;
+        _text.text = OneShotTags.Replace(_rawText, "");
+        _text.ForceMeshUpdate();
+        _writer.Show(0, _text.textInfo.characterCount, true);
+
+        CollectDecorationVertices();
+        if (decorationFadeDuration > 0f && _decorationVertices.Count > 0)
+        {
+            _decorationFadeTime = 0f;
+            SetDecorationAlpha(0f);
+        }
+    }
+
+    void CollectDecorationVertices()
+    {
+        _decorationVertices.Clear();
+        TMP_TextInfo info = _text.textInfo;
+        var characterVertices = new HashSet<(int, int)>();
+        for (int i = 0; i < info.characterCount; i++)
+        {
+            TMP_CharacterInfo character = info.characterInfo[i];
+            if (!character.isVisible) continue;
+            for (int j = 0; j < 4; j++) characterVertices.Add((character.materialReferenceIndex, character.vertexIndex + j));
+        }
+
+        for (int m = 0; m < info.meshInfo.Length; m++)
+        {
+            Color32[] colors = info.meshInfo[m].colors32;
+            if (colors == null) continue;
+            int count = Mathf.Min(info.meshInfo[m].vertexCount, colors.Length);
+            for (int v = 0; v < count; v++)
+            {
+                if (!characterVertices.Contains((m, v))) _decorationVertices.Add((m, v, colors[v].a));
+            }
+        }
+    }
+
+    void SetDecorationAlpha(float fraction)
+    {
+        TMP_TextInfo info = _text.textInfo;
+        foreach (var (mesh, vertex, alpha) in _decorationVertices)
+        {
+            if (mesh >= info.meshInfo.Length) continue;
+            Color32[] colors = info.meshInfo[mesh].colors32;
+            if (colors == null || vertex >= colors.Length) continue;
+            colors[vertex].a = (byte)(alpha * fraction);
+        }
+        _text.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
+    }
+
     void Write(string fullText, int alreadyVisibleCharacters)
     {
         if (!EnsureInitialized()) return;
         _writer.StopWriter();
         _pausedWhileRevealing = false;
+        _decorationFadeTime = -1f;
 
         _text.text = fullText;
         _text.ForceMeshUpdate(); // processes the tags now, which resets and hides the writer's text
@@ -253,6 +338,7 @@ public class DialogueTextSurface : MonoBehaviour
 
     void OnWriterFinished(TMPWriter writer)
     {
+        if (_decorationsPending) RestoreDecorations();
         RevealFinished?.Invoke(this);
     }
 

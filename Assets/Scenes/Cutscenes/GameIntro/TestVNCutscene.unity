@@ -744,10 +744,12 @@ MonoBehaviour:
   Slides:
   - Character: {fileID: 0}
     Lines:
-    - Line: 'HI
+    - Line: '<palette>HIIIIIIIIIIII! :3</palette>
 
 '
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
       CharacterFace: 0
@@ -756,10 +758,13 @@ MonoBehaviour:
       LineEndEvent:
         _PersistentCalls: []
     alternitiveCanvasGroup: {fileID: 0}
+    presentationStyle: {fileID: 0}
   - Character: {fileID: 0}
     Lines:
-    - Line: Choice
+    - Line: Mmmmmmm <wave><size=125%>choices!</size></wave>
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
       CharacterFace: 0
@@ -768,6 +773,7 @@ MonoBehaviour:
       LineEndEvent:
         _PersistentCalls: []
     alternitiveCanvasGroup: {fileID: 0}
+    presentationStyle: {fileID: 0}
   EndOfLines:
   - Text: Option 1
     ultEvent:
@@ -786,6 +792,7 @@ MonoBehaviour:
     - _Target: {fileID: 830621551}
       _MemberName: PlayTimeline
       _PersistentArguments: []
+  TextEvents: []
 --- !u!1 &666984861
 GameObject:
   m_ObjectHideFlags: 0
@@ -2077,7 +2084,8 @@ MonoBehaviour:
   Slides:
   - Character: {fileID: 0}
     Lines:
-    - Line: 'The king of the Island of Gadies stubbornly lies on his deathbed. '
+    - Line: 'The <grow><i><color=#F0BF00>king</color></i></grow> of the <sketchy><color=#BFE1FF>Island
+        of Gadies</color></sketchy> stubbornly lies on his <color=red><fade>deathbed.</fade></color> '
       alternitiveTextBox: {fileID: 0}
       useScreenPosition: 1
       screenPosition: {x: 0, y: -0.07}
@@ -2088,9 +2096,12 @@ MonoBehaviour:
         _PersistentCalls: []
       LineEndEvent:
         _PersistentCalls: []
-    - Line: While holding onto grave feelings of anger and regret, he still holds
-        onto great pride and self importance.
+    - Line: While holding onto grave feelings of <pivot><color=red>anger</color></pivot>
+        and <shake><color=orange>regret</color></shake>, he still holds onto <sketchy><size=125%><u>great
+        pride</u></size></sketchy> and <sketchy><size=125%><u>self importance.</u></size></sketchy>
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
       CharacterFace: 0
@@ -2098,9 +2109,13 @@ MonoBehaviour:
         _PersistentCalls: []
       LineEndEvent:
         _PersistentCalls: []
-    - Line: Despite his condition, he insists on bearing the crown upon his head,
-        and barks at anyone who attempts to suggest the succession of power.
+    - Line: Despite his condition, he <i><jump>insists</jump></i> on bearing the
+        <size=125%><grow><palette>crown</palette></grow></size> upon his head, and
+        barks at anyone who attempts to suggest the <color=#FFF0BF><sketchy>succession
+        of power.</sketchy></color>
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
       CharacterFace: 0
@@ -2111,9 +2126,12 @@ MonoBehaviour:
           _PersistentArguments: []
       LineEndEvent:
         _PersistentCalls: []
-    - Line: Arms frail, speech slurred and slow, and eyes glued to the ceiling above
-        him, while holding a tireless glare.
+    - Line: Arms <color=#50008C><fade>frail</fade></color>, speech <color=black><pivot>slurred
+        and slow</pivot></color>, and eyes glued to the ceiling above him, while
+        holding a <color=#C9FFEB><grow>tireless glare.</grow></color>
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
       CharacterFace: 0
@@ -2121,9 +2139,12 @@ MonoBehaviour:
         _PersistentCalls: []
       LineEndEvent:
         _PersistentCalls: []
-    - Line: His movement remains restricted, his head hangs heavy by the weight of
-        the crown but he will not remove it.
+    - Line: His movement remains <color=blue><grow>restricted</grow></color>, his
+        head hangs heavy by the weight of the <sketchy><size=125%><color=#FFF0BF>crown</color></size></sketchy>
+        but he will not <shake><s>remove it.</s></shake>
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
       CharacterFace: 0
@@ -2131,8 +2152,11 @@ MonoBehaviour:
         _PersistentCalls: []
       LineEndEvent:
         _PersistentCalls: []
-    - Line: He stubbornly insists on holding onto his crown and title.
+    - Line: He <shear><color=#C9C9C9>stubbornly</color></shear> insists on holding
+        onto his <color=#BAFFC1><wave>crown and title.</wave></color>
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
       CharacterFace: 0
@@ -2140,10 +2164,12 @@ MonoBehaviour:
         _PersistentCalls: []
       LineEndEvent:
         _PersistentCalls: []
-    - Line: He is well aware he will soon pass, and that by the tradition of the
-        castle, his eldest son will be set to take the throne, but he simply will
-        not grant the succession.
+    - Line: He is well <u>aware</u> he will soon <color=green>pass</color>, and that
+        by the tradition of the castle, his eldest son will be set to take the <sketchy><shake><color=#FCBFFF>throne</color></shake></sketchy>,
+        but he simply will not grant the <color=#DDD6FF><jump>succession.</jump></color>
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
       CharacterFace: 0
@@ -2155,8 +2181,9 @@ MonoBehaviour:
     presentationStyle: {fileID: 11400000, guid: 54e69756ff29459e91649885b5694760, type: 2}
   - Character: {fileID: 0}
     Lines:
-    - Line: After much conflict, the king orders the creation of a second crown of
-        a new model for his son for he will how part with his own.
+    - Line: After much <shear><swing>conflict</swing></shear>, the king orders the
+        creation of a <color=#FFEBA1><grow>second crown</grow></color> of a new model
+        for his son for he will how part with his <i><u>own.</u></i>
       alternitiveTextBox: {fileID: 0}
       useScreenPosition: 1
       screenPosition: {x: 0, y: -0.07}
@@ -2167,9 +2194,11 @@ MonoBehaviour:
         _PersistentCalls: []
       LineEndEvent:
         _PersistentCalls: []
-    - Line: He orders that he is buried and forever guarded while still bearing the
-        original.
+    - Line: He orders that he is <color=#543109><swing>buried</swing></color> and
+        <u><color=#A8BFFF>forever guarded</color></u> while still bearing the <sketchy>original.</sketchy>
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
       CharacterFace: 0
@@ -2177,9 +2206,12 @@ MonoBehaviour:
         _PersistentCalls: []
       LineEndEvent:
         _PersistentCalls: []
-    - Line: 'Heavy as his head seems, he makes known that the moment his crown is
-        removed is the moment the weight will be too much for him to bear. '
+    - Line: 'This seems heavy on his mind, but he makes it known that the moment
+        his <sketchy><color=#B9A1FF>crown</color></sketchy> is <dangle><color=red>removed</color></dangle>
+        is the moment the weight will be too much for him to <color=black><size=150%><fade>bear.</size></fade></color> '
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
       CharacterFace: 0
@@ -2195,6 +2227,7 @@ MonoBehaviour:
     - _Target: {fileID: 830621551}
       _MemberName: PlayTimeline
       _PersistentArguments: []
+  TextEvents: []
 --- !u!1 &1038406003
 GameObject:
   m_ObjectHideFlags: 0
