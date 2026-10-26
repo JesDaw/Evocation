@@ -53,9 +53,12 @@ public class DialogueManager : MonoBehaviour
     float _pendingScrollDistance;
     float _pendingScrollSpeed;
 
-    int slideCount = -1; 
+    int slideCount = -1;
     int lineCount = 0;
     DialogueTrigger _dialogueTrigger;
+    // Lines sent from outside (YarnDialoguePresenter) instead of a DialogueTrigger's slides.
+    bool _externalDialogue;
+    System.Action _externalLineAdvance;
     public bool DialogueActive { get; private set; }
     public static DialogueManager Instance { get; private set; }
 
@@ -132,6 +135,13 @@ public class DialogueManager : MonoBehaviour
         if (!_lineFinished)
         {
             SkipToEndOfLine();
+            return;
+        }
+        if (_externalDialogue)
+        {
+            System.Action advance = _externalLineAdvance;
+            _externalLineAdvance = null;
+            advance?.Invoke();
             return;
         }
         if (IsLastLineOfLastSlide())
@@ -212,6 +222,15 @@ public class DialogueManager : MonoBehaviour
             nameText.text = "";
             nameText.color = defaultNameColor;
         }
+    }
+
+    void ApplyCharacterToTextBox(TMP_Text box, CharacterDialogueInfo character)
+    {
+        box.color = character != null ? character.textColor : defaultTextColor;
+
+        TMP_FontAsset font = ResolveFont(character);
+        if (font != null) box.font = font;
+        box.fontSize = character != null ? character.fontSize : defaultFontSize;
     }
 
     TMP_Text GetTargetTextBox(DialogueLine line)
@@ -467,11 +486,7 @@ public class DialogueManager : MonoBehaviour
         _currentSurface = style != null ? SpawnSentence(style) : GetSurface(GetTargetTextBox(currentLine));
         TMP_Text targetBox = _currentSurface.Text;
 
-        targetBox.color = character != null ? character.textColor : defaultTextColor;
-
-        TMP_FontAsset font = ResolveFont(character);
-        if (font != null) targetBox.font = font;
-        targetBox.fontSize = character != null ? character.fontSize : defaultFontSize;
+        ApplyCharacterToTextBox(targetBox, character);
         if (style != null) style.ApplyTo(targetBox);
 
         _currentTypingSound = character != null ? character.Voice : "";
@@ -503,6 +518,52 @@ public class DialogueManager : MonoBehaviour
         if (!_currentSurface.IsRevealing) OnLineFinished();
     }
 
+    public void BeginExternalDialogue()
+    {
+        _externalDialogue = true;
+        _externalLineAdvance = null;
+        _dialogueTrigger = null;
+        dialogueSlides = new List<Dialogue>();
+        slideCount = -1;
+        lineCount = 0;
+        DialogueActive = true;
+
+        if (GlobalInputManager.Instance != null) GlobalInputManager.Instance.SetMode(InputMode.Dialogue);
+    }
+
+    // Shows one line in the dialogue box. onAdvance runs when the player confirms after the line has finished revealing.
+    // characterName is shown when there is no CharacterDialogueInfo for the speaker.
+    public void ShowExternalLine(CharacterDialogueInfo character, string characterName, string text, System.Action onAdvance)
+    {
+        _externalLineAdvance = onAdvance;
+
+        ApplyCharacterToNameText(character);
+        if (character == null) nameText.text = characterName ?? "";
+
+        // Activate the box before its surface is used: TMPEffects needs an active GameObject.
+        DialogueBox.SetActive(true);
+        _currentSurface = GetSurface(dialogueText);
+        ApplyCharacterToTextBox(_currentSurface.Text, character);
+
+        _currentTypingSound = character != null ? character.Voice : "";
+        _currentSurface.SetRevealDelay(character != null ? character.TextSpeed : defaultTextSpeed);
+        _lineFinished = false;
+
+        _currentSurface.Show(text);
+
+        if (ShowDebugLogs) Debug.Log($"[DialogueManager] external line '{text}'");
+
+        if (!_currentSurface.IsRevealing) OnLineFinished();
+    }
+
+    public void EndExternalDialogue()
+    {
+        if (!_externalDialogue) return;
+        _externalDialogue = false;
+        _externalLineAdvance = null;
+        DeactivateDialogueBox();
+    }
+
     void SkipToEndOfLine()
     {
         if (_currentSurface == null) return;
@@ -519,10 +580,11 @@ public class DialogueManager : MonoBehaviour
     // TextEvents entry on the current DialogueTrigger. Events still fire when the line is skipped.
     void OnSurfaceTextEvent(DialogueTextSurface surface, TMPEventArgs args)
     {
-        if (surface != _currentSurface || _dialogueTrigger == null) return;
+        if (surface != _currentSurface) return;
 
         string eventName = args.Tag.Name;
         string value = args.Tag.Parameters != null && args.Tag.Parameters.TryGetValue("", out string v) ? v : "";
+        string source = _dialogueTrigger != null ? $"trigger '{_dialogueTrigger.name}'" : "a Yarn line";
         if (ShowDebugLogs) Debug.Log($"[DialogueManager] text event <?{eventName}={value}>");
 
         switch (eventName.ToLowerInvariant())
@@ -531,7 +593,7 @@ public class DialogueManager : MonoBehaviour
             case "body":
                 if (!int.TryParse(value, out int id))
                 {
-                    Debug.LogWarning($"[DialogueManager] <?{eventName}={value}> needs a number, in trigger '{_dialogueTrigger.name}'.");
+                    Debug.LogWarning($"[DialogueManager] <?{eventName}={value}> needs a number, in {source}.");
                     return;
                 }
                 if (InteractionMinigameManager.Instance == null)
@@ -547,6 +609,11 @@ public class DialogueManager : MonoBehaviour
                 return;
         }
 
+        if (_dialogueTrigger == null)
+        {
+            Debug.LogWarning($"[DialogueManager] <?{eventName}> in {source}: only face, body and sound work in Yarn lines.");
+            return;
+        }
         if (!_dialogueTrigger.TryInvokeTextEvent(eventName))
         {
             Debug.LogWarning($"[DialogueManager] No Text Event named '{eventName}' on trigger '{_dialogueTrigger.name}'. " +
@@ -565,6 +632,7 @@ public class DialogueManager : MonoBehaviour
     {
         if (_lineFinished || !DialogueActive) return;
         _lineFinished = true;
+        if (_externalDialogue) return;
 
         DialogueLine currentLine = dialogueSlides[slideCount].Lines[lineCount];
         currentLine.LineEndEvent?.Invoke();
