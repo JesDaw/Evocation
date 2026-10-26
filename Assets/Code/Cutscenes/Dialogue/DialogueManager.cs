@@ -40,11 +40,18 @@ public class DialogueManager : MonoBehaviour
     {
         public DialogueTextSurface Surface;
         public DialogueTextSurface Prefab; // null for sentences built in code
+        public Vector2 TargetPosition;
+        public float ScrollSpeed; // canvas units per second while sliding to TargetPosition
     }
     List<SpawnedSentence> _activeSentences = new List<SpawnedSentence>();
     List<SpawnedSentence> _sentencePool = new List<SpawnedSentence>();
     List<SpawnedSentence> _retiringSentences = new List<SpawnedSentence>();
     Vector2 _nextSentencePosition;
+    // Stacked sentences count from the last positioned one, so the stagger alternates from there.
+    float _stackOriginX;
+    int _stackIndex = -1;
+    float _pendingScrollDistance;
+    float _pendingScrollSpeed;
 
     int slideCount = -1; 
     int lineCount = 0;
@@ -252,6 +259,7 @@ public class DialogueManager : MonoBehaviour
             if (oldest.Surface == null) continue;
             oldest.Surface.SetOpacity(0f, style.fadeDuration);
             _retiringSentences.Add(oldest);
+            if (style.scrollWhenFull) ScrollUpPast(oldest, style);
         }
 
         SpawnedSentence sentence = null;
@@ -310,13 +318,54 @@ public class DialogueManager : MonoBehaviour
         {
             Rect area = sentenceContainer.rect;
             position = new Vector2(line.screenPosition.x * area.width, -line.screenPosition.y * area.height);
+            _stackOriginX = position.x;
+            _stackIndex = 0;
         }
-        surface.Text.rectTransform.anchoredPosition = position;
+        else
+        {
+            _stackIndex++;
+            position.x = _stackOriginX + (_stackIndex % 2 == 1 ? style.staggerOffset : 0f);
+        }
+        SpawnedSentence sentence = _activeSentences[_activeSentences.Count - 1];
+        sentence.TargetPosition = position;
+        sentence.ScrollSpeed = 0f;
+        // A stacked sentence arriving during a scroll starts lower and rises with the others.
+        if (!line.useScreenPosition && _pendingScrollDistance > 0f && !float.IsInfinity(_pendingScrollSpeed))
+        {
+            surface.Text.rectTransform.anchoredPosition = position - new Vector2(0f, _pendingScrollDistance);
+            sentence.ScrollSpeed = _pendingScrollSpeed;
+        }
+        else surface.Text.rectTransform.anchoredPosition = position;
+        _pendingScrollDistance = 0f;
         _nextSentencePosition = position - new Vector2(0f, surface.Text.preferredHeight + style.sentenceSpacing);
+    }
+
+    // Teleprompter: everything slides up by the space the removed sentence took, so the new one lands in its place.
+    void ScrollUpPast(SpawnedSentence removed, DialoguePresentationStyle style)
+    {
+        float nextY = _activeSentences.Count > 0 ? _activeSentences[0].TargetPosition.y : _nextSentencePosition.y;
+        float distance = removed.TargetPosition.y - nextY;
+        if (distance <= 0f) return;
+
+        float speed = style.scrollDuration > 0f ? distance / style.scrollDuration : float.PositiveInfinity;
+        foreach (SpawnedSentence sentence in _activeSentences) ScrollSentence(sentence, distance, speed);
+        foreach (SpawnedSentence sentence in _retiringSentences) ScrollSentence(sentence, distance, speed);
+        _nextSentencePosition.y += distance;
+        _pendingScrollDistance += distance;
+        _pendingScrollSpeed = speed;
+    }
+
+    void ScrollSentence(SpawnedSentence sentence, float distance, float speed)
+    {
+        sentence.TargetPosition.y += distance;
+        sentence.ScrollSpeed = speed;
     }
 
     void Update()
     {
+        MoveSentencesToTargets(_activeSentences);
+        MoveSentencesToTargets(_retiringSentences);
+
         // Sentences fading out because of Max Visible Sentences go back to the pool once invisible.
         for (int i = _retiringSentences.Count - 1; i >= 0; i--)
         {
@@ -324,6 +373,20 @@ public class DialogueManager : MonoBehaviour
             if (sentence.Surface != null && sentence.Surface.Opacity > 0f) continue;
             _retiringSentences.RemoveAt(i);
             PoolSentence(sentence);
+        }
+    }
+
+    // Unscaled time, like the rest of the dialogue; scrolling stops while the game is paused.
+    void MoveSentencesToTargets(List<SpawnedSentence> sentences)
+    {
+        if (UILogic.GameIsPaused) return;
+        foreach (SpawnedSentence sentence in sentences)
+        {
+            if (sentence.Surface == null || sentence.ScrollSpeed <= 0f) continue;
+            RectTransform rect = sentence.Surface.Text.rectTransform;
+            rect.anchoredPosition = Vector2.MoveTowards(rect.anchoredPosition, sentence.TargetPosition,
+                sentence.ScrollSpeed * Time.unscaledDeltaTime);
+            if (rect.anchoredPosition == sentence.TargetPosition) sentence.ScrollSpeed = 0f;
         }
     }
 
@@ -342,6 +405,9 @@ public class DialogueManager : MonoBehaviour
         _activeSentences.Clear();
         _retiringSentences.Clear();
         _nextSentencePosition = Vector2.zero;
+        _stackOriginX = 0f;
+        _stackIndex = -1;
+        _pendingScrollDistance = 0f;
     }
 
     void ClearSlideTextBoxes(int slideIndex)
