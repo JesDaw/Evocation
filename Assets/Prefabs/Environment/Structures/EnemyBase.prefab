@@ -603,10 +603,6 @@ MonoBehaviour:
     _PersistentCalls: []
   OnKnocked:
     _PersistentCalls: []
-  OnWitFlagDeath:
-    _PersistentCalls: []
-  OnWitFlagDamage:
-    _PersistentCalls: []
   OnStatsInitialized:
     m_PersistentCalls:
       m_Calls: []
@@ -744,6 +740,10 @@ MonoBehaviour:
   tickInterval: 0.5
   maxThreatLevel: 100
   aiSpawnZone: {fileID: 0}
+  outcomeUtilityScale: 10
+  maxSpawnsPerTick: 3
+  swarmEvaluationWindow: 4
+  maxSwarmCopies: 5
   showDebugLogs: 0
 --- !u!114 &7897544504558418868
 MonoBehaviour:
@@ -758,9 +758,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moneyText: {fileID: 0}
-  InitialMoneyGainPerSec: 6
+  InitialMoneyGainPerSec: 4
   MoneyGainPerSec: 1
-  StartingMoneyPercentOfMax: 0.5
+  StartingMoneyPercentOfMax: 0.1
   CurrentMoney: 0
   CurrentMaxMoneyIndex: 0
   MaxMoney: 64000000af000000fa0000004501000090010000

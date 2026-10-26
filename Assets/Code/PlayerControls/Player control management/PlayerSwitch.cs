@@ -196,7 +196,7 @@ public class PlayerSwitch : MonoBehaviour
         DeactivateCurrentPlayer();
         activePlayerIndex = index;
         ActivatePlayer(activePlayerIndex);
-        CameraControlSwitcher.Instance.SwitchToPlayerControl();
+        //CameraControlSwitcher.Instance.SwitchToPlayerControl();
     }
 
     void DeactivateCurrentPlayer()
