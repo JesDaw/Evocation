@@ -21,5 +21,28 @@ Jack: Now pick one. The choices should pop up as soon as this line finishes typi
     <<set $askedTwice to true>>
     Jack: Alright, once more. This option disappears next time.
     <<jump YarnTest_Choices>>
-Jack: That's the end of the Yarn test. Choices work!
+Jack: Choices work! Next up: commands.
+<<jump YarnTest_Commands>>
+===
+
+title: YarnTest_Commands
+---
+<<body 0>>
+<<face 1>>
+Jack: The character's face should have changed for this line.
+<<face 2>>
+Jack: And again for this one.<?sound=dialogueType>
+<<face 0>>
+<<style VNNarrationStyle>>
+<<position 0 0.05>>
+Now the text switches to the narration style, like Test VN Cutscene.
+Each line becomes its own sentence, zigzagging down the screen.
+Older lines dim so the newest one stands out.
+This is the fourth line, so the screen is now full.
+The fifth line pushes the oldest one off and everything scrolls up.
+<<clear>>
+<<position 0.1 0.3>>
+The clear command wiped the screen, and the position command placed this line lower down.
+<<style none>>
+Jack: Back in the normal box. That's the end of the Yarn test!
 ===

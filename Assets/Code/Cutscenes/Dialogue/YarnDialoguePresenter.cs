@@ -17,6 +17,8 @@ public class YarnDialoguePresenter : DialoguePresenterBase
     [Tooltip("Matched to the speaker name before the colon in a Yarn line (\"Jack: Hi!\"), ignoring case. " +
         "Speakers not in this list still show their name, with the default colours and no voice.")]
     [SerializeField] CharacterDialogueInfo[] characters = new CharacterDialogueInfo[0];
+    [Tooltip("Styles usable with <<style Name>> in Yarn, matched by asset name, ignoring case.")]
+    [SerializeField] DialoguePresentationStyle[] presentationStyles = new DialoguePresentationStyle[0];
     [Header("Debug")]
     [SerializeField] bool ShowDebugLogs = false;
 
@@ -24,7 +26,8 @@ public class YarnDialoguePresenter : DialoguePresenterBase
     public bool IsRunning => _runner != null && _runner.IsDialogueRunning;
 
     DialogueRunner _runner;
-    Action _onComplete;
+    bool _commandsRegistered;
+    YarnTrigger _trigger;
 
     void Awake()
     {
@@ -40,8 +43,8 @@ public class YarnDialoguePresenter : DialoguePresenterBase
         _runner.DialoguePresenters = new DialoguePresenterBase[] { this };
     }
 
-    // onComplete runs once the node (and anything it jumps to) has finished.
-    public async void StartDialogue(string nodeName, Action onComplete = null)
+    // trigger (optional) provides the <<event>> list and is told when the node (and anything it jumps to) has finished.
+    public async void StartDialogue(string nodeName, YarnTrigger trigger = null)
     {
         if (yarnProject == null)
         {
@@ -55,7 +58,8 @@ public class YarnDialoguePresenter : DialoguePresenterBase
         }
 
         if (_runner.YarnProject != yarnProject) _runner.SetProject(yarnProject);
-        _onComplete = onComplete;
+        RegisterCommands();
+        _trigger = trigger;
         if (ShowDebugLogs) Debug.Log($"[YarnDialoguePresenter] starting node '{nodeName}'");
 
         try
@@ -67,7 +71,7 @@ public class YarnDialoguePresenter : DialoguePresenterBase
 
     public override YarnTask OnDialogueStartedAsync()
     {
-        DialogueManager.Instance.BeginExternalDialogue();
+        DialogueManager.Instance.BeginExternalDialogue(TryRunEvent);
         return YarnTask.CompletedTask;
     }
 
@@ -75,11 +79,94 @@ public class YarnDialoguePresenter : DialoguePresenterBase
     {
         DialogueManager.Instance.EndExternalDialogue();
 
-        // Local copy: the callback may start another dialogue, which sets a new _onComplete.
-        Action onComplete = _onComplete;
-        _onComplete = null;
-        onComplete?.Invoke();
+        // Local copy: DialogueEnded may start another dialogue, which sets a new _trigger.
+        YarnTrigger trigger = _trigger;
+        _trigger = null;
+        if (trigger != null) trigger.DialogueEnded?.Invoke();
         return YarnTask.CompletedTask;
+    }
+
+    // Registered once, after the runner has its project. Arguments are converted by Yarn (e.g. <<face 3>> → int).
+    void RegisterCommands()
+    {
+        if (_commandsRegistered) return;
+        _commandsRegistered = true;
+
+        _runner.AddCommandHandler<int>("face", SetFace);
+        _runner.AddCommandHandler<int>("body", SetBody);
+        _runner.AddCommandHandler<string>("sound", PlaySound);
+        _runner.AddCommandHandler<string>("style", SetStyle);
+        _runner.AddCommandHandler<float, float>("position", SetPosition);
+        _runner.AddCommandHandler("clear", ClearText);
+        _runner.AddCommandHandler<string>("event", RunEvent);
+    }
+
+    void SetFace(int face)
+    {
+        if (InteractionMinigameManager.Instance == null)
+        {
+            Debug.LogWarning("[YarnDialoguePresenter] <<face>> used but there is no InteractionMinigameManager in the scene.");
+            return;
+        }
+        InteractionMinigameManager.Instance.SetCharacterFace(face);
+    }
+
+    void SetBody(int body)
+    {
+        if (InteractionMinigameManager.Instance == null)
+        {
+            Debug.LogWarning("[YarnDialoguePresenter] <<body>> used but there is no InteractionMinigameManager in the scene.");
+            return;
+        }
+        InteractionMinigameManager.Instance.SetCharacterBody(body);
+    }
+
+    void PlaySound(string soundName)
+    {
+        FModAudioManager.instance.PlaySoundByName(soundName);
+    }
+
+    // <<style none>> goes back to the dialogue box.
+    void SetStyle(string styleName)
+    {
+        if (string.Equals(styleName, "none", StringComparison.OrdinalIgnoreCase))
+        {
+            DialogueManager.Instance.SetExternalStyle(null);
+            return;
+        }
+        foreach (DialoguePresentationStyle style in presentationStyles)
+        {
+            if (style == null || !string.Equals(style.name, styleName, StringComparison.OrdinalIgnoreCase)) continue;
+            DialogueManager.Instance.SetExternalStyle(style);
+            return;
+        }
+        Debug.LogWarning($"[YarnDialoguePresenter] <<style {styleName}>>: no Presentation Style with that name in the " +
+            "Yarn Dialogue Presenter's Presentation Styles list (DialogueManager prefab).");
+    }
+
+    void SetPosition(float x, float y)
+    {
+        DialogueManager.Instance.SetExternalNextPosition(new Vector2(x, y));
+    }
+
+    void ClearText()
+    {
+        DialogueManager.Instance.ClearExternalText();
+    }
+
+    void RunEvent(string eventName)
+    {
+        if (!TryRunEvent(eventName))
+        {
+            Debug.LogWarning($"[YarnDialoguePresenter] <<event {eventName}>>: no event with that name on the Yarn Trigger " +
+                $"'{(_trigger != null ? _trigger.name : "none")}'. Add it to the trigger's Events list.");
+        }
+    }
+
+    // Used by <<event Name>> and by <?Name> tags inside lines.
+    bool TryRunEvent(string eventName)
+    {
+        return _trigger != null && _trigger.TryInvokeEvent(eventName);
     }
 
     public override async YarnTask RunLineAsync(LocalizedLine line, LineCancellationToken token)

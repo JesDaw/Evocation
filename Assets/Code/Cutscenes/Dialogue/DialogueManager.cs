@@ -61,6 +61,10 @@ public class DialogueManager : MonoBehaviour
     System.Action _externalLineAdvance;
     bool _externalAdvanceWhenRevealed;
     System.Action<int> _externalChoiceSelected;
+    System.Func<string, bool> _externalTextEvent;
+    DialoguePresentationStyle _externalStyle;
+    bool _externalUsePosition;
+    Vector2 _externalPosition;
     public bool DialogueActive { get; private set; }
     public static DialogueManager Instance { get; private set; }
 
@@ -331,14 +335,14 @@ public class DialogueManager : MonoBehaviour
         return new SpawnedSentence { Surface = GetSurface(text), Prefab = prefab };
     }
 
-    // Uses the line's screen position if it has one, otherwise stacks below the previous sentence.
-    void PlaceSentence(DialogueTextSurface surface, DialoguePresentationStyle style, DialogueLine line)
+    // Uses the screen position (0-1, top-left origin) if given, otherwise stacks below the previous sentence.
+    void PlaceSentence(DialogueTextSurface surface, DialoguePresentationStyle style, bool useScreenPosition, Vector2 screenPosition)
     {
         Vector2 position = _nextSentencePosition;
-        if (line.useScreenPosition)
+        if (useScreenPosition)
         {
             Rect area = sentenceContainer.rect;
-            position = new Vector2(line.screenPosition.x * area.width, -line.screenPosition.y * area.height);
+            position = new Vector2(screenPosition.x * area.width, -screenPosition.y * area.height);
             _stackOriginX = position.x;
             _stackIndex = 0;
         }
@@ -351,7 +355,7 @@ public class DialogueManager : MonoBehaviour
         sentence.TargetPosition = position;
         sentence.ScrollSpeed = 0f;
         // A stacked sentence arriving during a scroll starts lower and rises with the others.
-        if (!line.useScreenPosition && _pendingScrollDistance > 0f && !float.IsInfinity(_pendingScrollSpeed))
+        if (!useScreenPosition && _pendingScrollDistance > 0f && !float.IsInfinity(_pendingScrollSpeed))
         {
             surface.Text.rectTransform.anchoredPosition = position - new Vector2(0f, _pendingScrollDistance);
             sentence.ScrollSpeed = _pendingScrollSpeed;
@@ -508,7 +512,7 @@ public class DialogueManager : MonoBehaviour
         {
             // One surface per sentence, so earlier sentences stay on screen untouched.
             _currentSurface.Show(style.FormatLine(currentLine.Line));
-            PlaceSentence(_currentSurface, style, currentLine);
+            PlaceSentence(_currentSurface, style, currentLine.useScreenPosition, currentLine.screenPosition);
         }
         // Lines in the same slide and box keep the earlier lines on screen, as before.
         else if (_currentSurface.HasText) _currentSurface.Append(currentLine.Line);
@@ -520,10 +524,14 @@ public class DialogueManager : MonoBehaviour
         if (!_currentSurface.IsRevealing) OnLineFinished();
     }
 
-    public void BeginExternalDialogue()
+    // textEventHandler runs custom <?Name> tags in the lines; it returns false if it has no event with that name.
+    public void BeginExternalDialogue(System.Func<string, bool> textEventHandler = null)
     {
         _externalDialogue = true;
         _externalLineAdvance = null;
+        _externalTextEvent = textEventHandler;
+        _externalStyle = null;
+        _externalUsePosition = false;
         _dialogueTrigger = null;
         dialogueSlides = new List<Dialogue>();
         slideCount = -1;
@@ -545,16 +553,25 @@ public class DialogueManager : MonoBehaviour
         ApplyCharacterToNameText(character);
         if (character == null) nameText.text = characterName ?? "";
 
+        DialoguePresentationStyle style = _externalStyle != null && sentenceContainer != null ? _externalStyle : null;
+
         // Activate the box before its surface is used: TMPEffects needs an active GameObject.
-        DialogueBox.SetActive(true);
-        _currentSurface = GetSurface(dialogueText);
+        DialogueBox.SetActive(style == null);
+        _currentSurface = style != null ? SpawnSentence(style) : GetSurface(dialogueText);
         ApplyCharacterToTextBox(_currentSurface.Text, character);
+        if (style != null) style.ApplyTo(_currentSurface.Text);
 
         _currentTypingSound = character != null ? character.Voice : "";
         _currentSurface.SetRevealDelay(character != null ? character.TextSpeed : defaultTextSpeed);
         _lineFinished = false;
 
-        _currentSurface.Show(text);
+        if (style != null)
+        {
+            _currentSurface.Show(style.FormatLine(text));
+            PlaceSentence(_currentSurface, style, _externalUsePosition, _externalPosition);
+            _externalUsePosition = false;
+        }
+        else _currentSurface.Show(text);
 
         if (ShowDebugLogs) Debug.Log($"[DialogueManager] external line '{text}'");
 
@@ -568,12 +585,42 @@ public class DialogueManager : MonoBehaviour
         OpenChoiceBox(choices);
     }
 
+    // Following lines become sentences laid out by this style; null goes back to the dialogue box.
+    // Changing style clears the sentences on screen, like starting a new slide.
+    public void SetExternalStyle(DialoguePresentationStyle style)
+    {
+        if (style == _externalStyle) return;
+        ReleaseSentences();
+        _externalStyle = style;
+        if (style != null && sentenceContainer == null)
+        {
+            Debug.LogWarning("[DialogueManager] <<style>> used but no Sentence Container is assigned; using the dialogue box.");
+        }
+    }
+
+    // Places the next sentence at this screen position (0-1, (0, 0) is top-left); later ones stack below it.
+    public void SetExternalNextPosition(Vector2 screenPosition)
+    {
+        _externalUsePosition = true;
+        _externalPosition = screenPosition;
+    }
+
+    // Removes the sentences and box text on screen, like starting a new slide.
+    public void ClearExternalText()
+    {
+        ReleaseSentences();
+        GetSurface(dialogueText).Clear();
+    }
+
     public void EndExternalDialogue()
     {
         if (!_externalDialogue) return;
         _externalDialogue = false;
         _externalLineAdvance = null;
         _externalChoiceSelected = null;
+        _externalTextEvent = null;
+        _externalStyle = null;
+        _externalUsePosition = false;
         DeactivateDialogueBox();
     }
 
@@ -622,11 +669,16 @@ public class DialogueManager : MonoBehaviour
                 return;
         }
 
-        if (_dialogueTrigger == null)
+        if (_externalDialogue)
         {
-            Debug.LogWarning($"[DialogueManager] <?{eventName}> in {source}: only face, body and sound work in Yarn lines.");
+            if (_externalTextEvent == null || !_externalTextEvent(eventName))
+            {
+                Debug.LogWarning($"[DialogueManager] No event named '{eventName}' for <?{eventName}> in {source}. " +
+                    "Add it to the Yarn Trigger's Events list.");
+            }
             return;
         }
+        if (_dialogueTrigger == null) return;
         if (!_dialogueTrigger.TryInvokeTextEvent(eventName))
         {
             Debug.LogWarning($"[DialogueManager] No Text Event named '{eventName}' on trigger '{_dialogueTrigger.name}'. " +
