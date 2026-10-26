@@ -8531,9 +8531,11 @@ MonoBehaviour:
   Slides:
   - Character: {fileID: 0}
     Lines:
-    - Line: If you dont want to do the minigame and just want to get right into the
-        actual game talk to this guy.
+    - Line: If you <shear>dont want to do the minigame</shear> and just want to get
+        right into the <palette>actual game</palette> talk to this guy.
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
       CharacterFace: 0
@@ -8542,12 +8544,14 @@ MonoBehaviour:
       LineEndEvent:
         _PersistentCalls: []
     alternitiveCanvasGroup: {fileID: 0}
+    presentationStyle: {fileID: 0}
   EndOfLines: []
   DefultEvent:
     _PersistentCalls:
     - _Target: {fileID: 591350918}
       _MemberName: PlayTimeline
       _PersistentArguments: []
+  TextEvents: []
 --- !u!1 &946795873
 GameObject:
   m_ObjectHideFlags: 0
@@ -9996,8 +10000,10 @@ MonoBehaviour:
   Slides:
   - Character: {fileID: 0}
     Lines:
-    - Line: Talk to this guy If you want to see the mini game
+    - Line: Talk to <jump>this guy</jump> If you want to see the <shear>mini game</shear>
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
       CharacterFace: 0
@@ -10006,10 +10012,14 @@ MonoBehaviour:
       LineEndEvent:
         _PersistentCalls: []
     alternitiveCanvasGroup: {fileID: 0}
+    presentationStyle: {fileID: 0}
   - Character: {fileID: 0}
     Lines:
-    - Line: In this game You will meet party members and get to know them overtime.
+    - Line: In this game, you will meet <sketchy><wave>party members</wave></sketchy>
+        and get to know them <sketchy><jump>over time!</jump></sketchy>
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
       CharacterFace: 0
@@ -10017,9 +10027,11 @@ MonoBehaviour:
         _PersistentCalls: []
       LineEndEvent:
         _PersistentCalls: []
-    - Line: The better relationship you have with them the more units from their
-        clan you can use!
+    - Line: The <palette>better relationship</palette> you have with them the more
+        <pivot>units from their clan you can use!</pivot>
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
       CharacterFace: 0
@@ -10028,11 +10040,15 @@ MonoBehaviour:
       LineEndEvent:
         _PersistentCalls: []
     alternitiveCanvasGroup: {fileID: 0}
+    presentationStyle: {fileID: 0}
   - Character: {fileID: 0}
     Lines:
-    - Line: Right now if you get a perfect score in this you can use one aditional
-        unit in the actual level called the wolf mage.
+    - Line: <b>Right now</b> if you get a <jump><color=green>perfect score</color></jump>
+        in this you can use one aditional unit in the actual level called the wolf
+        mage.
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
       CharacterFace: 0
@@ -10041,12 +10057,14 @@ MonoBehaviour:
       LineEndEvent:
         _PersistentCalls: []
     alternitiveCanvasGroup: {fileID: 0}
+    presentationStyle: {fileID: 0}
   EndOfLines: []
   DefultEvent:
     _PersistentCalls:
     - _Target: {fileID: 591350918}
       _MemberName: PlayTimeline
       _PersistentArguments: []
+  TextEvents: []
 --- !u!1 &1128305143
 GameObject:
   m_ObjectHideFlags: 0
@@ -15296,8 +15314,10 @@ MonoBehaviour:
   Slides:
   - Character: {fileID: 0}
     Lines:
-    - Line: We have 2. Which one?
+    - Line: We have <sketchy>2</sketchy>. <shear>Which one?</shear>
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
       CharacterFace: 0
@@ -15306,6 +15326,7 @@ MonoBehaviour:
       LineEndEvent:
         _PersistentCalls: []
     alternitiveCanvasGroup: {fileID: 0}
+    presentationStyle: {fileID: 0}
   EndOfLines:
   - Text: Wolves attack
     ultEvent:
@@ -15321,6 +15342,7 @@ MonoBehaviour:
         _PersistentArguments: []
   DefultEvent:
     _PersistentCalls: []
+  TextEvents: []
 --- !u!1 &1653826818
 GameObject:
   m_ObjectHideFlags: 0
@@ -16968,6 +16990,7 @@ MonoBehaviour:
   - Character: {fileID: 0}
     Lines: []
     alternitiveCanvasGroup: {fileID: 0}
+    presentationStyle: {fileID: 0}
   EndOfLines: []
   DefultEvent:
     _PersistentCalls:
@@ -16977,6 +17000,7 @@ MonoBehaviour:
     - _Target: {fileID: 367922932}
       _MemberName: ApplyPlayerCharacterMode
       _PersistentArguments: []
+  TextEvents: []
 --- !u!1 &1803423844
 GameObject:
   m_ObjectHideFlags: 0
@@ -20001,7 +20025,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1167424010692836250, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
       propertyPath: Slides.Array.data[0].Lines.Array.data[0].Line
-      value: Do you want to see one of our cutscenes (very much WIP...)?
+      value: Do you want to see one of our <palette>cutscenes</palette> <swing>(very
+        much WIP...)?</swing>
       objectReference: {fileID: 0}
     - target: {fileID: 1167424010692836250, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
       propertyPath: EndOfLines.Array.data[0].ultEvent._PersistentCalls.Array.size
@@ -20093,7 +20118,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1562767253550184170, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
       propertyPath: Slides.Array.data[0].Lines.Array.data[0].Line
-      value: Wanna see the miniagame?
+      value: Wanna <funky>see</funky> the <palette>mini game?</palette>
       objectReference: {fileID: 0}
     - target: {fileID: 1562767253550184170, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
       propertyPath: EndOfLines.Array.data[0].ultEvent._PersistentCalls.Array.size
@@ -20474,8 +20499,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5741622011223021888, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
       propertyPath: Slides.Array.data[0].Lines.Array.data[0].Line
-      value: Hello this is our hubworld. we have no assets for the actual thing yet
-        but it works :D
+      value: <sketchy><wave>Hello!!!</sketchy></wave> This is our hubworld. we have
+        <palette>no assets</palette> for the actual thing yet but it works :D
       objectReference: {fileID: 0}
     - target: {fileID: 5741622011223021888, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
       propertyPath: DefultEvent._PersistentCalls.Array.data[0]._Target
@@ -21263,7 +21288,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8727571587270366037, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
       propertyPath: Slides.Array.data[0].Lines.Array.data[0].Line
-      value: Fight me?
+      value: <palette>Fight</palette> <grow>me?</grow>
       objectReference: {fileID: 0}
     - target: {fileID: 8727571587270366037, guid: 2d42953440a394c5fb00ba525549a186, type: 3}
       propertyPath: EndOfLines.Array.data[0].ultEvent._PersistentCalls.Array.size
