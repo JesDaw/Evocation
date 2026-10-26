@@ -160,6 +160,10 @@ public static class CombatLogic
                 }
             );
         }
+        else if(projGO.TryGetComponent(out SpecialProjectile sp))
+        {
+            sp.SetAttacker(attacker);
+        }
         else
         {
             Debug.LogWarning($"{attacker.gameObject.name}: Projectile prefab is missing a Projectile component.");
