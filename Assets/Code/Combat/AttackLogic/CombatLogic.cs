@@ -145,11 +145,20 @@ public static class CombatLogic
 
         if (projGO.TryGetComponent(out Projectile p))
         {
-            p.InitializeProjectile(target.transform, ps.speed, ps.maxHeight, ps.trajectoryCurve, ps.axisCorrectionCurve, ps.speedCurve, hitStats =>
-            {
-                if (hitStats == null) return;
-                ApplyCombatActionEffects(attacker, action, hitStats, healthChange, knockbackChange);
-            });
+            p.InitializeProjectile(
+                target.transform, 
+                ps.speed, 
+                ps.maxTravelTime,
+                ps.maxHeight, 
+                ps.trajectoryCurve, 
+                ps.axisCorrectionCurve, 
+                ps.speedCurve, 
+                hitStats =>
+                {
+                    if (hitStats == null) return;
+                    ApplyCombatActionEffects(attacker, action, hitStats, healthChange, knockbackChange);
+                }
+            );
         }
         else
         {

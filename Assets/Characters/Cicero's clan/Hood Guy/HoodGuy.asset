@@ -17,25 +17,25 @@ MonoBehaviour:
   RPS_Type: 
   OtherNotes: 
   SpawnSoundName: 
-  _spawnCost: 45
+  _spawnCost: 20
   _spawnCooldown: 1
-  Level_Total: 24.900759
-  Level_Discrepancy: -20.099241
-  _CalculatedPower: 24.900759
-  _ValueDiscrepancy: -20.099241
+  Level_Total: 17.754143
+  Level_Discrepancy: -2.2458572
+  _CalculatedPower: 17.754143
+  _ValueDiscrepancy: -2.2458572
   Attack: 30.455359
   Defense: 5.6156144
   SpaceControl: 1.6505798
   AttackFrequency: 0.0073946267
-  _AttackDamage: 10
+  _AttackDamage: 15
   _KnockBackDamage: 5
   _MoveSpeed: 4
-  _MaxHealth: 15
-  _KnockBackMaxHealth: 10
+  _MaxHealth: 40
+  _KnockBackMaxHealth: 20
   _HorizontalRange: 7
   _VerticalRange: 5
-  _ExtraEndlag: 3
-  _ActionCooldown: 1
+  _ExtraEndlag: 0
+  _ActionCooldown: 3
   _KnockBackVelocity: 7
   _KnockBackAngle: 45
   combatActions:
@@ -54,10 +54,11 @@ MonoBehaviour:
     knockbackPercent: 1
     zoneSpawnPosition: 2
     ZoneTargetsEnemies: 0
-    UseProjectile: 0
+    UseProjectile: 1
     projectileSettings:
       prefab: {fileID: 603826966979394658, guid: f7b010f898d3193499b2c1ad0f0882cd, type: 3}
       speed: 10
+      maxTravelTime: 5
       maxHeight: 1
       trajectoryCurve:
         serializedVersion: 2

@@ -17,48 +17,49 @@ MonoBehaviour:
   RPS_Type: 
   OtherNotes: 
   SpawnSoundName: WolfMage
-  _spawnCost: 150
+  _spawnCost: 50
   _spawnCooldown: 10
-  Level_Total: 28.906477
-  Level_Discrepancy: -121.09352
-  _CalculatedPower: 28.906477
-  _ValueDiscrepancy: -121.09352
+  Level_Total: 67.97278
+  Level_Discrepancy: 17.972778
+  _CalculatedPower: 67.97278
+  _ValueDiscrepancy: 17.972778
   Attack: 11.72834
   Defense: 31.108942
   SpaceControl: 1.7855798
   AttackFrequency: 0.014084507
-  _AttackDamage: 5
-  _KnockBackDamage: 1
-  _MoveSpeed: 4
-  _MaxHealth: 70
+  _AttackDamage: 25
+  _KnockBackDamage: 5
+  _MoveSpeed: 3
+  _MaxHealth: 100
   _KnockBackMaxHealth: 70
-  _HorizontalRange: 1
+  _HorizontalRange: 8
   _VerticalRange: 2
   _ExtraEndlag: 0
-  _ActionCooldown: 1
+  _ActionCooldown: 2
   _KnockBackVelocity: 10
   _KnockBackAngle: 20
   combatActions:
   - actionName: Magic ball
     priority: 1
     definesStoppingRange: 1
-    rangePercent: 10
+    rangePercent: 1
     extendsForward: 1
     targetFriendly: 0
     includeSelf: 0
     targetCondition: 0
     maxTargets: 1
-    castCooldown: 2
+    castCooldown: 1
     ScaleEffectsWithUsersStats: 1
     healthChangePercent: -1
     knockbackPercent: -1
     zoneSpawnPosition: 2
     ZoneTargetsEnemies: 0
-    UseProjectile: 0
+    UseProjectile: 1
     projectileSettings:
       prefab: {fileID: 318654882376287491, guid: 813b3c5eadcac43348d4a81c02b0c029, type: 3}
-      speed: 5
-      maxHeight: 0.3
+      speed: 10
+      maxTravelTime: 5
+      maxHeight: 0.5
       trajectoryCurve:
         serializedVersion: 2
         m_Curve:
@@ -172,7 +173,7 @@ MonoBehaviour:
     includeSelf: 0
     targetCondition: 1
     maxTargets: 5
-    castCooldown: 10
+    castCooldown: 5
     ScaleEffectsWithUsersStats: 1
     healthChangePercent: 0
     knockbackPercent: 0
@@ -182,6 +183,7 @@ MonoBehaviour:
     projectileSettings:
       prefab: {fileID: 6072924362752908747, guid: e36c33467359d0a44aa4493b4d80e7d9, type: 3}
       speed: 1
+      maxTravelTime: 5
       maxHeight: 1
       trajectoryCurve:
         serializedVersion: 2

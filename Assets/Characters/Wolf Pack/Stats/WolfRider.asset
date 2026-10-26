@@ -17,25 +17,25 @@ MonoBehaviour:
   RPS_Type: Single
   OtherNotes: 
   SpawnSoundName: WolfRider
-  _spawnCost: 70
+  _spawnCost: 90
   _spawnCooldown: 3
-  Level_Total: 85.71069
-  Level_Discrepancy: 15.710693
-  _CalculatedPower: 85.71069
-  _ValueDiscrepancy: 15.710693
+  Level_Total: 95.79987
+  Level_Discrepancy: 5.7998734
+  _CalculatedPower: 95.79987
+  _ValueDiscrepancy: 5.7998734
   Attack: 56.181053
   Defense: 13.332403
   SpaceControl: 1.9264221
   AttackFrequency: 0.02739726
-  _AttackDamage: 15
-  _KnockBackDamage: 15
+  _AttackDamage: 35
+  _KnockBackDamage: 30
   _MoveSpeed: 5.5
-  _MaxHealth: 30
+  _MaxHealth: 80
   _KnockBackMaxHealth: 30
   _HorizontalRange: 2
   _VerticalRange: 3
   _ExtraEndlag: 0
-  _ActionCooldown: 1
+  _ActionCooldown: 2
   _KnockBackVelocity: 10
   _KnockBackAngle: 20
   combatActions:
@@ -58,6 +58,7 @@ MonoBehaviour:
     projectileSettings:
       prefab: {fileID: 0}
       speed: 0
+      maxTravelTime: 5
       maxHeight: 0
       trajectoryCurve:
         serializedVersion: 2

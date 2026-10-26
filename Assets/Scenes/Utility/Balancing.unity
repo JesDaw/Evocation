@@ -196,12 +196,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 17466496}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 4.1, z: -10}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 4.1000004, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1441836043}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &17466500
 MonoBehaviour:
@@ -300,104 +300,2552 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1f79ec6a6d5e84f2f9a2af207f529f69, type: 2}
   costPerAnchorEquivalent: 0
   autoUpdateScriptableStats: 1
-  repeatsPerUnit: 5
-  includeSyntheticTrials: 0
-  syntheticTrialCount: 35
-  simulationTimeScale: 20
+  includeSyntheticTrials: 1
+  syntheticTrainingUnitCount: 60
+  syntheticRandomSeed: 1729
+  trialJitterSeed: 271828
+  repeatsPerUnit: 1
+  waveReinforcementDistanceMeters: 16
+  anchorSpawnDistanceJitterMeters: 4
+  anchorHpJitterFraction: 0.2
+  anchorSpawnDelayJitterSeconds: 0.35
+  farSpawnTrialChance: 0.25
+  farSpawnExtraMeters: 25
+  simulationTimeScale: 10
+  maxTrialDuration: 60
+  maxAnchorsPerTrial: 20
+  spawnDistanceMargin: 1.5
+  territoryGroundWeightPer10Meters: 0.35
+  testBothOrientations: 1
+  combatEngagementDistance: 0
   anchorStreamInterval: 0
-  maxTrialDuration: 100000
-  maxAnchorsPerTrial: 15
+  territoryScoreScaleMeters: 5
   isRunning: 0
-  currentStatus: "Done! Updated 6 units. R\xB2 = 0.808"
+  currentStatus: "Done in 506.5s real time! (Synthetic R\xB2 = 0.590, Real Roster
+    Validation R\xB2 = -0.424)"
+  realTimeElapsedSeconds: 506.51044
+  anchorMirrorBaselineScore: 2.2020483
+  validationRSquared: -0.4235089
   results:
-  - unitName: WolfRunner
-    statsAsset: {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
-    hpRatio: 0
-    dpsRatio: 0
-    rangeRatio: 0
-    moveRatio: 0
-    kbdRatio: 0
-    kbhRatio: 0
-    anchorsKilledEquivalent: 0.125
-    timeSurvived: 14.813481
-    normalizedLanePush: 0.70009273
-    compositePowerScore: 0.47504637
-    scaledCalculatedPower: 14.251391
-  - unitName: WolfHammer
-    statsAsset: {fileID: 11400000, guid: d4daadf164451854c8c5982cee62e5f9, type: 2}
-    hpRatio: 0
-    dpsRatio: 0
-    rangeRatio: 0
-    moveRatio: 0
-    kbdRatio: 0
-    kbhRatio: 0
-    anchorsKilledEquivalent: 0.125
-    timeSurvived: 22.893667
-    normalizedLanePush: 0.56081843
-    compositePowerScore: 0.40540922
-    scaledCalculatedPower: 12.162276
-  - unitName: WolfRider
-    statsAsset: {fileID: 11400000, guid: 1b58dbc454df5e14c89b0997be5b88b3, type: 2}
-    hpRatio: 0
-    dpsRatio: 0
-    rangeRatio: 0
-    moveRatio: 0
-    kbdRatio: 0
-    kbhRatio: 0
-    anchorsKilledEquivalent: 2.375
-    timeSurvived: 34.340595
-    normalizedLanePush: 0.9634308
-    compositePowerScore: 2.8567154
-    scaledCalculatedPower: 85.70146
-  - unitName: HoodGuy
-    statsAsset: {fileID: 11400000, guid: b6992adb71df9b441bc53d51187ea154, type: 2}
-    hpRatio: 0
-    dpsRatio: 0
-    rangeRatio: 0
-    moveRatio: 0
-    kbdRatio: 0
-    kbhRatio: 0
-    anchorsKilledEquivalent: 0.5
-    timeSurvived: 23.173674
-    normalizedLanePush: 0.65960246
-    compositePowerScore: 0.8298012
-    scaledCalculatedPower: 24.894035
-  - unitName: WolfMage
-    statsAsset: {fileID: 11400000, guid: 9bc80ac74d98ee645a559cbf527a224a, type: 2}
-    hpRatio: 0
-    dpsRatio: 0
-    rangeRatio: 0
-    moveRatio: 0
-    kbdRatio: 0
-    kbhRatio: 0
-    anchorsKilledEquivalent: 0.625
-    timeSurvived: 33.173904
-    normalizedLanePush: 0.6774085
-    compositePowerScore: 0.9637042
-    scaledCalculatedPower: 28.911127
   - unitName: Anchor Character
+    clanName: AnchorBaseline
+    isSynthetic: 0
     statsAsset: {fileID: 11400000, guid: 1f79ec6a6d5e84f2f9a2af207f529f69, type: 2}
-    hpRatio: 0
-    dpsRatio: 0
-    rangeRatio: 0
-    moveRatio: 0
+    spawnCost: 30
+    rawHP: 40
+    rawAtk: 10
+    rawCycleSec: 0.581
+    rawFreq: 1.7211704
+    rawDPS: 17.211704
+    rawRange: 2.25
+    rawMove: 2.5
+    rawKBD: 10
+    rawKBDPS: 17.211704
+    rawKBH: 20
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 1
+    dpsRatio: 1
+    rangeRatio: 1
+    moveRatio: 1
+    kbdRatio: 1
+    kbhRatio: 1
+    anchorsKilledEquivalent: 1.7100952
+    timeSurvived: 21.4103
+    normalizedLanePush: 14.055801
+    compositePowerScore: 1
+    scaledCalculatedPower: 30
+    formulaPredictedPower: 19.416235
+    averageTerritoryShiftMeters: 7.8197455
+    finalTerritoryShiftMeters: 14.055801
+    averageCandidateAdvanceMeters: 14.055801
+    averageOpponentAdvanceMeters: -3.8019557
+    averageDamageDealt: 68.40381
+    averageDamageReceived: 40
+    averageOpponentSurvivalSeconds: 12.770103
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: WolfRunner
+    clanName: Wolf Clan Stats
+    isSynthetic: 0
+    statsAsset: {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
+    spawnCost: 15
+    rawHP: 20
+    rawAtk: 8
+    rawCycleSec: 0.581
+    rawFreq: 1.7211704
+    rawDPS: 13.769363
+    rawRange: 2.25
+    rawMove: 5.5
+    rawKBD: 5
+    rawKBDPS: 8.605852
+    rawKBH: 10
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.5
+    dpsRatio: 0.8
+    rangeRatio: 1
+    moveRatio: 2.2
+    kbdRatio: 0.5
+    kbhRatio: 0.5
+    anchorsKilledEquivalent: 0.4
+    timeSurvived: 5.779995
+    normalizedLanePush: 7.0257354
+    compositePowerScore: 0.29331815
+    scaledCalculatedPower: 8.799544
+    formulaPredictedPower: 5.9035735
+    averageTerritoryShiftMeters: 6.1123996
+    finalTerritoryShiftMeters: 7.0257354
+    averageCandidateAdvanceMeters: 7.0257354
+    averageOpponentAdvanceMeters: -5.2175713
+    averageDamageDealt: 16
+    averageDamageReceived: 20
+    averageOpponentSurvivalSeconds: 5.779995
+    candidateDeathRate: 1
+    opponentDeathRate: 0
+  - unitName: WolfHammer
+    clanName: Wolf Clan Stats
+    isSynthetic: 0
+    statsAsset: {fileID: 11400000, guid: d4daadf164451854c8c5982cee62e5f9, type: 2}
+    spawnCost: 20
+    rawHP: 80
+    rawAtk: 20
+    rawCycleSec: 1.136
+    rawFreq: 0.8802817
+    rawDPS: 17.605633
+    rawRange: 3
+    rawMove: 1.75
+    rawKBD: 20
+    rawKBDPS: 17.605633
+    rawKBH: 60
+    maxTargets: 10
+    utilityPower: 0
+    hpRatio: 2
+    dpsRatio: 1.0228872
+    rangeRatio: 1.3333334
+    moveRatio: 0.7
+    kbdRatio: 1.0228872
+    kbhRatio: 3
+    anchorsKilledEquivalent: 6.479668
+    timeSurvived: 60.001183
+    normalizedLanePush: 37.241035
+    compositePowerScore: 3.534484
+    scaledCalculatedPower: 106.034515
+    formulaPredictedPower: 76.791954
+    averageTerritoryShiftMeters: 18.072865
+    finalTerritoryShiftMeters: 37.241035
+    averageCandidateAdvanceMeters: 37.241035
+    averageOpponentAdvanceMeters: -13.985749
+    averageDamageDealt: 210.5892
+    averageDamageReceived: 65
+    averageOpponentSurvivalSeconds: 8.990021
+    candidateDeathRate: 0
+    opponentDeathRate: 1
+  - unitName: WolfRider
+    clanName: Wolf Clan Stats
+    isSynthetic: 0
+    statsAsset: {fileID: 11400000, guid: 1b58dbc454df5e14c89b0997be5b88b3, type: 2}
+    spawnCost: 90
+    rawHP: 80
+    rawAtk: 35
+    rawCycleSec: 2.095
+    rawFreq: 0.47732696
+    rawDPS: 16.706444
+    rawRange: 3
+    rawMove: 5.5
+    rawKBD: 30
+    rawKBDPS: 14.319809
+    rawKBH: 30
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 2
+    dpsRatio: 0.97064435
+    rangeRatio: 1.3333334
+    moveRatio: 2.2
+    kbdRatio: 0.8319809
+    kbhRatio: 1.5
+    anchorsKilledEquivalent: 11.303986
+    timeSurvived: 58.911156
+    normalizedLanePush: 102.8777
+    compositePowerScore: 6.768564
+    scaledCalculatedPower: 203.05693
+    formulaPredictedPower: 52.57779
+    averageTerritoryShiftMeters: 53.711384
+    finalTerritoryShiftMeters: 102.8777
+    averageCandidateAdvanceMeters: 102.8777
+    averageOpponentAdvanceMeters: -7.6745605
+    averageDamageDealt: 395.63947
+    averageDamageReceived: 70
+    averageOpponentSurvivalSeconds: 7.0599937
+    candidateDeathRate: 0.5
+    opponentDeathRate: 1
+  - unitName: HoodGuy
+    clanName: Wolf Clan Stats
+    isSynthetic: 0
+    statsAsset: {fileID: 11400000, guid: b6992adb71df9b441bc53d51187ea154, type: 2}
+    spawnCost: 20
+    rawHP: 40
+    rawAtk: 15
+    rawCycleSec: 3.057
+    rawFreq: 0.3271181
+    rawDPS: 4.9067717
+    rawRange: 10.5
+    rawMove: 4
+    rawKBD: 5
+    rawKBDPS: 1.6355906
+    rawKBH: 20
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 1
+    dpsRatio: 0.28508344
+    rangeRatio: 4.6666665
+    moveRatio: 1.6
+    kbdRatio: 0.09502781
+    kbhRatio: 1
+    anchorsKilledEquivalent: 1.5850952
+    timeSurvived: 17.48021
+    normalizedLanePush: 1.2307959
+    compositePowerScore: 0.73939025
+    scaledCalculatedPower: 22.181707
+    formulaPredictedPower: 7.9411964
+    averageTerritoryShiftMeters: 1.7238876
+    finalTerritoryShiftMeters: 1.2307959
+    averageCandidateAdvanceMeters: 1.2307959
+    averageOpponentAdvanceMeters: -9.190889
+    averageDamageDealt: 63.40381
+    averageDamageReceived: 40
+    averageOpponentSurvivalSeconds: 9.920038
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: WolfMage
+    clanName: Wolf Clan Stats
+    isSynthetic: 0
+    statsAsset: {fileID: 11400000, guid: 9bc80ac74d98ee645a559cbf527a224a, type: 2}
+    spawnCost: 50
+    rawHP: 100
+    rawAtk: 25
+    rawCycleSec: 2.13
+    rawFreq: 0.46948355
+    rawDPS: 11.737089
+    rawRange: 12
+    rawMove: 3
+    rawKBD: 0
+    rawKBDPS: 0
+    rawKBH: 70
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 2.5
+    dpsRatio: 0.6819249
+    rangeRatio: 5.3333335
+    moveRatio: 1.2
     kbdRatio: 0
-    kbhRatio: 0
-    anchorsKilledEquivalent: 1.5
-    timeSurvived: 45.00084
-    normalizedLanePush: 0.75654364
-    compositePowerScore: 1.8782718
-    scaledCalculatedPower: 56.348156
+    kbhRatio: 3.5
+    anchorsKilledEquivalent: 16.715393
+    timeSurvived: 60.001183
+    normalizedLanePush: 25.228981
+    compositePowerScore: 7.9918356
+    scaledCalculatedPower: 239.75507
+    formulaPredictedPower: 12.341919
+    averageTerritoryShiftMeters: 9.86845
+    finalTerritoryShiftMeters: 25.228981
+    averageCandidateAdvanceMeters: 25.228981
+    averageOpponentAdvanceMeters: -6.5148525
+    averageDamageDealt: 300.87708
+    averageDamageReceived: 45
+    averageOpponentSurvivalSeconds: 5.4299955
+    candidateDeathRate: 0
+    opponentDeathRate: 1
+  - unitName: Synthetic_001
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 112
+    rawAtk: 6
+    rawCycleSec: 0.46964273
+    rawFreq: 2.1292782
+    rawDPS: 12.775669
+    rawRange: 3.8961947
+    rawMove: 4.7149215
+    rawKBD: 8.435922
+    rawKBDPS: 17.962423
+    rawKBH: 26.759588
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 2.8
+    dpsRatio: 0.74226636
+    rangeRatio: 1.7316421
+    moveRatio: 1.8859686
+    kbdRatio: 1.0436168
+    kbhRatio: 1.3379794
+    anchorsKilledEquivalent: 2.6856647
+    timeSurvived: 44.54083
+    normalizedLanePush: 29.884167
+    compositePowerScore: 1.6946087
+    scaledCalculatedPower: 50.83826
+    formulaPredictedPower: 85.31591
+    averageTerritoryShiftMeters: 15.998911
+    finalTerritoryShiftMeters: 29.884167
+    averageCandidateAdvanceMeters: 29.884167
+    averageOpponentAdvanceMeters: -10.715128
+    averageDamageDealt: 107.42659
+    averageDamageReceived: 112
+    averageOpponentSurvivalSeconds: 15.510166
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_002
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 86
+    rawAtk: 23
+    rawCycleSec: 0.88691777
+    rawFreq: 1.1275003
+    rawDPS: 25.932507
+    rawRange: 1.6075008
+    rawMove: 2.1008306
+    rawKBD: 4.3001122
+    rawKBDPS: 4.8483777
+    rawKBH: 55.073322
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 2.15
+    dpsRatio: 1.5066786
+    rangeRatio: 0.7144448
+    moveRatio: 0.8403322
+    kbdRatio: 0.28169075
+    kbhRatio: 2.7536662
+    anchorsKilledEquivalent: 3.6689103
+    timeSurvived: 36.110634
+    normalizedLanePush: 35.196335
+    compositePowerScore: 2.2255561
+    scaledCalculatedPower: 66.766685
+    formulaPredictedPower: 20.28321
+    averageTerritoryShiftMeters: 19.289093
+    finalTerritoryShiftMeters: 35.196335
+    averageCandidateAdvanceMeters: 35.196335
+    averageOpponentAdvanceMeters: -14.111886
+    averageDamageDealt: 146.75641
+    averageDamageReceived: 86
+    averageOpponentSurvivalSeconds: 7.399995
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_003
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 28
+    rawAtk: 20
+    rawCycleSec: 0.70794237
+    rawFreq: 1.4125444
+    rawDPS: 28.250887
+    rawRange: 7.524494
+    rawMove: 2.7147455
+    rawKBD: 15.48009
+    rawKBDPS: 21.866314
+    rawKBH: 24.601803
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.7
+    dpsRatio: 1.6413765
+    rangeRatio: 3.3442197
+    moveRatio: 1.0858982
+    kbdRatio: 1.2704328
+    kbhRatio: 1.2300901
+    anchorsKilledEquivalent: 33.0718
+    timeSurvived: 60.001183
+    normalizedLanePush: 65.5597
+    compositePowerScore: 16.060678
+    scaledCalculatedPower: 481.82034
+    formulaPredictedPower: 75.65886
+    averageTerritoryShiftMeters: 33.081306
+    finalTerritoryShiftMeters: 65.5597
+    averageCandidateAdvanceMeters: 65.5597
+    averageOpponentAdvanceMeters: -7.1352463
+    averageDamageDealt: 330.718
+    averageDamageReceived: 0
+    averageOpponentSurvivalSeconds: 8.440042
+    candidateDeathRate: 0
+    opponentDeathRate: 1
+  - unitName: Synthetic_004
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 19
+    rawAtk: 7
+    rawCycleSec: 0.34955716
+    rawFreq: 2.8607624
+    rawDPS: 20.025337
+    rawRange: 1.7644758
+    rawMove: 3.2292306
+    rawKBD: 7.3380566
+    rawKBDPS: 20.992435
+    rawKBH: 54.9637
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.475
+    dpsRatio: 1.163472
+    rangeRatio: 0.78421146
+    moveRatio: 1.2916923
+    kbdRatio: 1.2196605
+    kbhRatio: 2.748185
+    anchorsKilledEquivalent: 0.35
+    timeSurvived: 5.899995
+    normalizedLanePush: 7.296392
+    compositePowerScore: 0.27491394
+    scaledCalculatedPower: 8.247418
+    formulaPredictedPower: 9.428539
+    averageTerritoryShiftMeters: 5.5913715
+    finalTerritoryShiftMeters: 7.296392
+    averageCandidateAdvanceMeters: 7.296392
+    averageOpponentAdvanceMeters: -5.1893325
+    averageDamageDealt: 14
+    averageDamageReceived: 19
+    averageOpponentSurvivalSeconds: 5.899995
+    candidateDeathRate: 1
+    opponentDeathRate: 0
+  - unitName: Synthetic_005
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 22
+    rawAtk: 12
+    rawCycleSec: 0.5778491
+    rawFreq: 1.7305557
+    rawDPS: 20.766668
+    rawRange: 6.414927
+    rawMove: 3.125938
+    rawKBD: 5.4149175
+    rawKBDPS: 9.370816
+    rawKBH: 17.783493
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.55
+    dpsRatio: 1.2065434
+    rangeRatio: 2.8510787
+    moveRatio: 1.2503752
+    kbdRatio: 0.54444444
+    kbhRatio: 0.88917464
+    anchorsKilledEquivalent: 0.9
+    timeSurvived: 10.170042
+    normalizedLanePush: 0.44320965
+    compositePowerScore: 0.41575488
+    scaledCalculatedPower: 12.472647
+    formulaPredictedPower: 24.145588
+    averageTerritoryShiftMeters: 2.9310665
+    finalTerritoryShiftMeters: 0.44320965
+    averageCandidateAdvanceMeters: 0.44320965
+    averageOpponentAdvanceMeters: -11.543575
+    averageDamageDealt: 36
+    averageDamageReceived: 22
+    averageOpponentSurvivalSeconds: 10.170042
+    candidateDeathRate: 1
+    opponentDeathRate: 0
+  - unitName: Synthetic_006
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 64
+    rawAtk: 7
+    rawCycleSec: 0.7338943
+    rawFreq: 1.362594
+    rawDPS: 9.538158
+    rawRange: 2.9212568
+    rawMove: 3.7886548
+    rawKBD: 17.756573
+    rawKBDPS: 24.195
+    rawKBH: 10.292204
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 1.6
+    dpsRatio: 0.554167
+    rangeRatio: 1.2983364
+    moveRatio: 1.5154619
+    kbdRatio: 1.4057294
+    kbhRatio: 0.5146102
+    anchorsKilledEquivalent: 2.1481647
+    timeSurvived: 36.600647
+    normalizedLanePush: 31.352606
+    compositePowerScore: 1.4738576
+    scaledCalculatedPower: 44.21573
+    formulaPredictedPower: 32.43752
+    averageTerritoryShiftMeters: 14.238092
+    finalTerritoryShiftMeters: 31.352606
+    averageCandidateAdvanceMeters: 31.352606
+    averageOpponentAdvanceMeters: -10.464198
+    averageDamageDealt: 85.92659
+    averageDamageReceived: 64
+    averageOpponentSurvivalSeconds: 14.750149
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_007
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 35
+    rawAtk: 25
+    rawCycleSec: 0.57968694
+    rawFreq: 1.725069
+    rawDPS: 43.126724
+    rawRange: 2.8375905
+    rawMove: 3.1783817
+    rawKBD: 8.739387
+    rawKBDPS: 15.076045
+    rawKBH: 10.0295725
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.875
+    dpsRatio: 2.5056627
+    rangeRatio: 1.2611513
+    moveRatio: 1.2713526
+    kbdRatio: 0.8759182
+    kbhRatio: 0.5014786
+    anchorsKilledEquivalent: 3.8689103
+    timeSurvived: 27.060429
+    normalizedLanePush: 39.5345
+    compositePowerScore: 2.3853328
+    scaledCalculatedPower: 71.55998
+    formulaPredictedPower: 44.085205
+    averageTerritoryShiftMeters: 19.976213
+    finalTerritoryShiftMeters: 39.5345
+    averageCandidateAdvanceMeters: 39.5345
+    averageOpponentAdvanceMeters: -11.592062
+    averageDamageDealt: 154.75641
+    averageDamageReceived: 35
+    averageOpponentSurvivalSeconds: 6.0099945
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_008
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 70
+    rawAtk: 8
+    rawCycleSec: 1.0534016
+    rawFreq: 0.9493056
+    rawDPS: 7.5944448
+    rawRange: 1.866182
+    rawMove: 4.058967
+    rawKBD: 6.1651106
+    rawKBDPS: 5.852574
+    rawKBH: 52.47244
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 1.75
+    dpsRatio: 0.44123724
+    rangeRatio: 0.8294142
+    moveRatio: 1.6235869
+    kbdRatio: 0.34003454
+    kbhRatio: 2.623622
+    anchorsKilledEquivalent: 0.9600952
+    timeSurvived: 19.440254
+    normalizedLanePush: 17.085396
+    compositePowerScore: 0.70756125
+    scaledCalculatedPower: 21.226837
+    formulaPredictedPower: 8.352109
+    averageTerritoryShiftMeters: 10.618813
+    finalTerritoryShiftMeters: 17.085396
+    averageCandidateAdvanceMeters: 17.085396
+    averageOpponentAdvanceMeters: -6.2165527
+    averageDamageDealt: 38.40381
+    averageDamageReceived: 70
+    averageOpponentSurvivalSeconds: 13.620123
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_009
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 100
+    rawAtk: 7
+    rawCycleSec: 0.5469784
+    rawFreq: 1.8282257
+    rawDPS: 12.79758
+    rawRange: 2.0438683
+    rawMove: 1.3779508
+    rawKBD: 10.097518
+    rawKBDPS: 18.460543
+    rawKBH: 34.524685
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 2.5
+    dpsRatio: 0.7435394
+    rangeRatio: 0.90838593
+    moveRatio: 0.5511803
+    kbdRatio: 1.0725576
+    kbhRatio: 1.7262342
+    anchorsKilledEquivalent: 1.5769796
+    timeSurvived: 37.000656
+    normalizedLanePush: 10.021252
+    compositePowerScore: 0.87542284
+    scaledCalculatedPower: 26.262686
+    formulaPredictedPower: 33.865147
+    averageTerritoryShiftMeters: 6.8247385
+    finalTerritoryShiftMeters: 10.021252
+    averageCandidateAdvanceMeters: 10.021252
+    averageOpponentAdvanceMeters: -9.637837
+    averageDamageDealt: 63.079185
+    averageDamageReceived: 100
+    averageOpponentSurvivalSeconds: 18.820242
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_010
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 33
+    rawAtk: 9
+    rawCycleSec: 0.41793284
+    rawFreq: 2.392729
+    rawDPS: 21.534561
+    rawRange: 5.0948424
+    rawMove: 5.3199153
+    rawKBD: 10.381852
+    rawKBDPS: 24.84096
+    rawKBH: 24.113968
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.825
+    dpsRatio: 1.251158
+    rangeRatio: 2.2643745
+    moveRatio: 2.1279662
+    kbdRatio: 1.4432597
+    kbhRatio: 1.2056984
+    anchorsKilledEquivalent: 1.6975952
+    timeSurvived: 20.310274
+    normalizedLanePush: 14.260973
+    compositePowerScore: 0.99758446
+    scaledCalculatedPower: 29.927534
+    formulaPredictedPower: 59.220913
+    averageTerritoryShiftMeters: 10.65345
+    finalTerritoryShiftMeters: 14.260973
+    averageCandidateAdvanceMeters: 14.260973
+    averageOpponentAdvanceMeters: -7.5456986
+    averageDamageDealt: 67.90381
+    averageDamageReceived: 33
+    averageOpponentSurvivalSeconds: 11.030064
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_011
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 52
+    rawAtk: 27
+    rawCycleSec: 0.6069444
+    rawFreq: 1.6475974
+    rawDPS: 44.48513
+    rawRange: 5.465502
+    rawMove: 5.6784716
+    rawKBD: 7.492397
+    rawKBDPS: 12.344454
+    rawKBH: 30.891567
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 1.3
+    dpsRatio: 2.5845861
+    rangeRatio: 2.429112
+    moveRatio: 2.2713885
+    kbdRatio: 0.71721274
+    kbhRatio: 1.5445783
+    anchorsKilledEquivalent: 6.4516997
+    timeSurvived: 38.050682
+    normalizedLanePush: 75.84251
+    compositePowerScore: 4.135326
+    scaledCalculatedPower: 124.05978
+    formulaPredictedPower: 125.54007
+    averageTerritoryShiftMeters: 38.05704
+    finalTerritoryShiftMeters: 75.84251
+    averageCandidateAdvanceMeters: 75.84251
+    averageOpponentAdvanceMeters: -13.154976
+    averageDamageDealt: 258.068
+    averageDamageReceived: 52
+    averageOpponentSurvivalSeconds: 5.1799955
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_012
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 29
+    rawAtk: 12
+    rawCycleSec: 0.76934814
+    rawFreq: 1.2998017
+    rawDPS: 15.59762
+    rawRange: 1.3736846
+    rawMove: 5.531313
+    rawKBD: 21.304646
+    rawKBDPS: 27.691814
+    rawKBH: 17.926807
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.725
+    dpsRatio: 0.9062217
+    rangeRatio: 0.6105265
+    moveRatio: 2.2125251
+    kbdRatio: 1.6088943
+    kbhRatio: 0.89634037
+    anchorsKilledEquivalent: 0.45
+    timeSurvived: 9.2300205
+    normalizedLanePush: 13.341864
+    compositePowerScore: 0.41641468
+    scaledCalculatedPower: 12.49244
+    formulaPredictedPower: 12.0223875
+    averageTerritoryShiftMeters: 10.401498
+    finalTerritoryShiftMeters: 13.341864
+    averageCandidateAdvanceMeters: 13.341864
+    averageOpponentAdvanceMeters: 0.2621441
+    averageDamageDealt: 18
+    averageDamageReceived: 29
+    averageOpponentSurvivalSeconds: 9.2300205
+    candidateDeathRate: 1
+    opponentDeathRate: 0
+  - unitName: Synthetic_013
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 29
+    rawAtk: 12
+    rawCycleSec: 0.7408686
+    rawFreq: 1.349767
+    rawDPS: 16.197205
+    rawRange: 5.9149437
+    rawMove: 5.708129
+    rawKBD: 6.39835
+    rawKBDPS: 8.636281
+    rawKBH: 35.9691
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.725
+    dpsRatio: 0.94105756
+    rangeRatio: 2.6288638
+    moveRatio: 2.2832515
+    kbdRatio: 0.50176793
+    kbhRatio: 1.798455
+    anchorsKilledEquivalent: 0.9
+    timeSurvived: 8.400002
+    normalizedLanePush: 6.402043
+    compositePowerScore: 0.51046634
+    scaledCalculatedPower: 15.31399
+    formulaPredictedPower: 25.440134
+    averageTerritoryShiftMeters: 5.8738127
+    finalTerritoryShiftMeters: 6.402043
+    averageCandidateAdvanceMeters: 6.402043
+    averageOpponentAdvanceMeters: -5.660393
+    averageDamageDealt: 36
+    averageDamageReceived: 29
+    averageOpponentSurvivalSeconds: 8.400002
+    candidateDeathRate: 1
+    opponentDeathRate: 0
+  - unitName: Synthetic_014
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 108
+    rawAtk: 7
+    rawCycleSec: 0.41203344
+    rawFreq: 2.4269874
+    rawDPS: 16.988913
+    rawRange: 4.089368
+    rawMove: 1.854636
+    rawKBD: 5.4438095
+    rawKBDPS: 13.212057
+    rawKBH: 9.416003
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 2.7
+    dpsRatio: 0.9870558
+    rangeRatio: 1.8174968
+    moveRatio: 0.74185437
+    kbdRatio: 0.7676205
+    kbhRatio: 0.47080016
+    anchorsKilledEquivalent: 2.4981647
+    timeSurvived: 50.800972
+    normalizedLanePush: -11.676016
+    compositePowerScore: 1.1344731
+    scaledCalculatedPower: 34.03419
+    formulaPredictedPower: 78.17783
+    averageTerritoryShiftMeters: -6.1833363
+    finalTerritoryShiftMeters: -11.676016
+    averageCandidateAdvanceMeters: -11.676016
+    averageOpponentAdvanceMeters: -21.82515
+    averageDamageDealt: 99.92659
+    averageDamageReceived: 108
+    averageOpponentSurvivalSeconds: 18.950245
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_015
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 52
+    rawAtk: 8
+    rawCycleSec: 0.7122439
+    rawFreq: 1.4040134
+    rawDPS: 11.232107
+    rawRange: 4.478434
+    rawMove: 5.541169
+    rawKBD: 8.280863
+    rawKBDPS: 11.626442
+    rawKBH: 12.091187
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 1.3
+    dpsRatio: 0.6525854
+    rangeRatio: 1.9904151
+    moveRatio: 2.2164676
+    kbdRatio: 0.6754963
+    kbhRatio: 0.6045593
+    anchorsKilledEquivalent: 1.7600952
+    timeSurvived: 22.810331
+    normalizedLanePush: 10.827877
+    compositePowerScore: 0.97140056
+    scaledCalculatedPower: 29.142017
+    formulaPredictedPower: 31.201883
+    averageTerritoryShiftMeters: 8.119305
+    finalTerritoryShiftMeters: 10.827877
+    averageCandidateAdvanceMeters: 10.827877
+    averageOpponentAdvanceMeters: -6.874757
+    averageDamageDealt: 70.40381
+    averageDamageReceived: 52
+    averageOpponentSurvivalSeconds: 12.080088
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_016
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 32
+    rawAtk: 10
+    rawCycleSec: 0.5106972
+    rawFreq: 1.9581075
+    rawDPS: 19.581074
+    rawRange: 5.450904
+    rawMove: 5.4537005
+    rawKBD: 4.8724513
+    rawKBDPS: 9.540783
+    rawKBH: 30.576454
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.8
+    dpsRatio: 1.1376604
+    rangeRatio: 2.4226239
+    moveRatio: 2.1814802
+    kbdRatio: 0.5543195
+    kbhRatio: 1.5288227
+    anchorsKilledEquivalent: 1.2100952
+    timeSurvived: 12.860104
+    normalizedLanePush: 12.503866
+    compositePowerScore: 0.7482717
+    scaledCalculatedPower: 22.44815
+    formulaPredictedPower: 32.202213
+    averageTerritoryShiftMeters: 7.923466
+    finalTerritoryShiftMeters: 12.503866
+    averageCandidateAdvanceMeters: 12.503866
+    averageOpponentAdvanceMeters: -5.935273
+    averageDamageDealt: 48.40381
+    averageDamageReceived: 32
+    averageOpponentSurvivalSeconds: 8.660009
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_017
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 66
+    rawAtk: 17
+    rawCycleSec: 0.4226551
+    rawFreq: 2.3659954
+    rawDPS: 40.221924
+    rawRange: 1.7172922
+    rawMove: 3.7087898
+    rawKBD: 5.707378
+    rawKBDPS: 13.50363
+    rawKBH: 10.2706
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 1.65
+    dpsRatio: 2.3368938
+    rangeRatio: 0.763241
+    moveRatio: 1.483516
+    kbdRatio: 0.78456086
+    kbhRatio: 0.51353
+    anchorsKilledEquivalent: 1.9475952
+    timeSurvived: 18.38023
+    normalizedLanePush: 10.715645
+    compositePowerScore: 1.0547647
+    scaledCalculatedPower: 31.642942
+    formulaPredictedPower: 47.819107
+    averageTerritoryShiftMeters: 9.263088
+    finalTerritoryShiftMeters: 10.715645
+    averageCandidateAdvanceMeters: 10.715645
+    averageOpponentAdvanceMeters: -8.075516
+    averageDamageDealt: 77.90381
+    averageDamageReceived: 66
+    averageOpponentSurvivalSeconds: 8.23
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_018
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 83
+    rawAtk: 12
+    rawCycleSec: 0.97029823
+    rawFreq: 1.0306109
+    rawDPS: 12.367331
+    rawRange: 7.2900705
+    rawMove: 1.7532276
+    rawKBD: 15.108055
+    rawKBDPS: 15.570526
+    rawKBH: 26.998293
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 2.075
+    dpsRatio: 0.7185419
+    rangeRatio: 3.2400312
+    moveRatio: 0.701291
+    kbdRatio: 0.9046475
+    kbhRatio: 1.3499147
+    anchorsKilledEquivalent: 4.912294
+    timeSurvived: 60.001183
+    normalizedLanePush: 24.92478
+    compositePowerScore: 2.6269457
+    scaledCalculatedPower: 78.80837
+    formulaPredictedPower: 86.413216
+    averageTerritoryShiftMeters: 11.727255
+    finalTerritoryShiftMeters: 24.92478
+    averageCandidateAdvanceMeters: 24.92478
+    averageOpponentAdvanceMeters: -10.741479
+    averageDamageDealt: 189.38963
+    averageDamageReceived: 80
+    averageOpponentSurvivalSeconds: 10.920061
+    candidateDeathRate: 0
+    opponentDeathRate: 1
+  - unitName: Synthetic_019
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 68
+    rawAtk: 8
+    rawCycleSec: 0.3950245
+    rawFreq: 2.5314884
+    rawDPS: 20.251907
+    rawRange: 4.601004
+    rawMove: 1.5626786
+    rawKBD: 11.164133
+    rawKBDPS: 28.261873
+    rawKBH: 31.338528
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 1.7
+    dpsRatio: 1.1766357
+    rangeRatio: 2.0448906
+    moveRatio: 0.6250714
+    kbdRatio: 1.6420149
+    kbhRatio: 1.5669264
+    anchorsKilledEquivalent: 3.2607172
+    timeSurvived: 52.301006
+    normalizedLanePush: 26.298704
+    compositePowerScore: 1.8987648
+    scaledCalculatedPower: 56.962944
+    formulaPredictedPower: 95.48572
+    averageTerritoryShiftMeters: 13.51429
+    finalTerritoryShiftMeters: 26.298704
+    averageCandidateAdvanceMeters: 26.298704
+    averageOpponentAdvanceMeters: -16.877602
+    averageDamageDealt: 122.75641
+    averageDamageReceived: 64
+    averageOpponentSurvivalSeconds: 12.770103
+    candidateDeathRate: 0.5
+    opponentDeathRate: 1
+  - unitName: Synthetic_020
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 30
+    rawAtk: 5
+    rawCycleSec: 0.47596708
+    rawFreq: 2.1009855
+    rawDPS: 10.504928
+    rawRange: 7.8596535
+    rawMove: 2.4197273
+    rawKBD: 4.1054707
+    rawKBDPS: 8.625534
+    rawKBH: 51.12575
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.75
+    dpsRatio: 0.6103363
+    rangeRatio: 3.4931793
+    moveRatio: 0.9678909
+    kbdRatio: 0.5011435
+    kbhRatio: 2.5562875
+    anchorsKilledEquivalent: 0.5
+    timeSurvived: 10.390047
+    normalizedLanePush: 3.1064076
+    compositePowerScore: 0.27643546
+    scaledCalculatedPower: 8.293064
+    formulaPredictedPower: 20.823856
+    averageTerritoryShiftMeters: 2.7303252
+    finalTerritoryShiftMeters: 3.1064076
+    averageCandidateAdvanceMeters: 3.1064076
+    averageOpponentAdvanceMeters: -8.934723
+    averageDamageDealt: 20
+    averageDamageReceived: 30
+    averageOpponentSurvivalSeconds: 10.390047
+    candidateDeathRate: 1
+    opponentDeathRate: 0
+  - unitName: Synthetic_021
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 21
+    rawAtk: 8
+    rawCycleSec: 0.34758228
+    rawFreq: 2.8770165
+    rawDPS: 23.016132
+    rawRange: 1.4191651
+    rawMove: 1.5122114
+    rawKBD: 3.0675416
+    rawKBDPS: 8.825368
+    rawKBH: 14.654441
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.525
+    dpsRatio: 1.3372372
+    rangeRatio: 0.63074005
+    moveRatio: 0.60488456
+    kbdRatio: 0.51275384
+    kbhRatio: 0.73272204
+    anchorsKilledEquivalent: 0.2
+    timeSurvived: 9.380024
+    normalizedLanePush: 2.9421597
+    compositePowerScore: 0.13758808
+    scaledCalculatedPower: 4.1276426
+    formulaPredictedPower: 5.044534
+    averageTerritoryShiftMeters: 3.3865952
+    finalTerritoryShiftMeters: 2.9421597
+    averageCandidateAdvanceMeters: 2.9421597
+    averageOpponentAdvanceMeters: -9.885397
+    averageDamageDealt: 8
+    averageDamageReceived: 21
+    averageOpponentSurvivalSeconds: 9.380024
+    candidateDeathRate: 1
+    opponentDeathRate: 0
+  - unitName: Synthetic_022
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 47
+    rawAtk: 27
+    rawCycleSec: 0.5754684
+    rawFreq: 1.7377148
+    rawDPS: 46.918297
+    rawRange: 3.6851058
+    rawMove: 6.0468283
+    rawKBD: 22.40881
+    rawKBDPS: 38.94012
+    rawKBH: 35.5746
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 1.175
+    dpsRatio: 2.725953
+    rangeRatio: 1.6378248
+    moveRatio: 2.4187312
+    kbdRatio: 2.262421
+    kbhRatio: 1.77873
+    anchorsKilledEquivalent: 48.374146
+    timeSurvived: 60.001183
+    normalizedLanePush: 148.71234
+    compositePowerScore: 24.331472
+    scaledCalculatedPower: 729.94415
+    formulaPredictedPower: 161.33423
+    averageTerritoryShiftMeters: 78.09002
+    finalTerritoryShiftMeters: 148.71234
+    averageCandidateAdvanceMeters: 148.71234
+    averageOpponentAdvanceMeters: -1.7634583
+    averageDamageDealt: 483.74146
+    averageDamageReceived: 0
+    averageOpponentSurvivalSeconds: 4.819996
+    candidateDeathRate: 0
+    opponentDeathRate: 1
+  - unitName: Synthetic_023
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 73
+    rawAtk: 18
+    rawCycleSec: 0.76281154
+    rawFreq: 1.3109398
+    rawDPS: 23.596916
+    rawRange: 4.763913
+    rawMove: 4.105404
+    rawKBD: 9.089296
+    rawKBDPS: 11.915521
+    rawKBH: 26.272472
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 1.825
+    dpsRatio: 1.3709809
+    rangeRatio: 2.1172948
+    moveRatio: 1.6421616
+    kbdRatio: 0.69229174
+    kbhRatio: 1.3136237
+    anchorsKilledEquivalent: 4.6593146
+    timeSurvived: 39.630714
+    normalizedLanePush: 47.07309
+    compositePowerScore: 2.8640938
+    scaledCalculatedPower: 85.92281
+    formulaPredictedPower: 85.19107
+    averageTerritoryShiftMeters: 24.70911
+    finalTerritoryShiftMeters: 47.07309
+    averageCandidateAdvanceMeters: 47.07309
+    averageOpponentAdvanceMeters: -11.927948
+    averageDamageDealt: 186.37259
+    averageDamageReceived: 73
+    averageOpponentSurvivalSeconds: 9.65004
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_024
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 22
+    rawAtk: 7
+    rawCycleSec: 0.36663198
+    rawFreq: 2.7275307
+    rawDPS: 19.092714
+    rawRange: 5.310635
+    rawMove: 3.5010362
+    rawKBD: 24.236717
+    rawKBDPS: 66.10639
+    rawKBH: 20.204313
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.55
+    dpsRatio: 1.1092867
+    rangeRatio: 2.3602822
+    moveRatio: 1.4004145
+    kbdRatio: 3.8407812
+    kbhRatio: 1.0102156
+    anchorsKilledEquivalent: 15.762259
+    timeSurvived: 60.001183
+    normalizedLanePush: 61.49151
+    compositePowerScore: 8.135363
+    scaledCalculatedPower: 244.06088
+    formulaPredictedPower: 60.697132
+    averageTerritoryShiftMeters: 31.440079
+    finalTerritoryShiftMeters: 61.49151
+    averageCandidateAdvanceMeters: 61.49151
+    averageOpponentAdvanceMeters: -10.887987
+    averageDamageDealt: 157.62259
+    averageDamageReceived: 0
+    averageOpponentSurvivalSeconds: 14.82015
+    candidateDeathRate: 0
+    opponentDeathRate: 1
+  - unitName: Synthetic_025
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 60
+    rawAtk: 23
+    rawCycleSec: 0.38352266
+    rawFreq: 2.6074078
+    rawDPS: 59.97038
+    rawRange: 2.155576
+    rawMove: 1.5736722
+    rawKBD: 3.3112419
+    rawKBDPS: 8.633758
+    rawKBH: 36.175743
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 1.5
+    dpsRatio: 3.484279
+    rangeRatio: 0.9580338
+    moveRatio: 0.62946886
+    kbdRatio: 0.5016213
+    kbhRatio: 1.8087871
+    anchorsKilledEquivalent: 4.4968147
+    timeSurvived: 41.800766
+    normalizedLanePush: 34.02926
+    compositePowerScore: 2.5829763
+    scaledCalculatedPower: 77.48929
+    formulaPredictedPower: 50.22761
+    averageTerritoryShiftMeters: 19.15335
+    finalTerritoryShiftMeters: 34.02926
+    averageCandidateAdvanceMeters: 34.02926
+    averageOpponentAdvanceMeters: -18.5875
+    averageDamageDealt: 179.87259
+    averageDamageReceived: 60
+    averageOpponentSurvivalSeconds: 9.550049
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_026
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 26
+    rawAtk: 22
+    rawCycleSec: 0.98588854
+    rawFreq: 1.0143135
+    rawDPS: 22.314896
+    rawRange: 1.5874903
+    rawMove: 3.8096883
+    rawKBD: 5.3973227
+    rawKBDPS: 5.474577
+    rawKBH: 13.037352
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.65
+    dpsRatio: 1.2964954
+    rangeRatio: 0.70555127
+    moveRatio: 1.5238754
+    kbdRatio: 0.31807292
+    kbhRatio: 0.65186757
+    anchorsKilledEquivalent: 0.55
+    timeSurvived: 7.9999948
+    normalizedLanePush: 6.5407434
+    compositePowerScore: 0.35372794
+    scaledCalculatedPower: 10.611838
+    formulaPredictedPower: 6.0104795
+    averageTerritoryShiftMeters: 6.2038937
+    finalTerritoryShiftMeters: 6.5407434
+    averageCandidateAdvanceMeters: 6.5407434
+    averageOpponentAdvanceMeters: -6.1671295
+    averageDamageDealt: 22
+    averageDamageReceived: 26
+    averageOpponentSurvivalSeconds: 7.9999948
+    candidateDeathRate: 1
+    opponentDeathRate: 0
+  - unitName: Synthetic_027
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 35
+    rawAtk: 15
+    rawCycleSec: 0.37865877
+    rawFreq: 2.6409001
+    rawDPS: 39.613503
+    rawRange: 1.7877519
+    rawMove: 3.8403964
+    rawKBD: 21.310242
+    rawKBDPS: 56.27822
+    rawKBH: 22.574022
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.875
+    dpsRatio: 2.3015444
+    rangeRatio: 0.7945564
+    moveRatio: 1.5361586
+    kbdRatio: 3.2697647
+    kbhRatio: 1.1287011
+    anchorsKilledEquivalent: 0.75
+    timeSurvived: 10.630053
+    normalizedLanePush: 11.868021
+    compositePowerScore: 0.52922577
+    scaledCalculatedPower: 15.876773
+    formulaPredictedPower: 59.217422
+    averageTerritoryShiftMeters: 9.326683
+    finalTerritoryShiftMeters: 11.868021
+    averageCandidateAdvanceMeters: 11.868021
+    averageOpponentAdvanceMeters: -0.5896597
+    averageDamageDealt: 30
+    averageDamageReceived: 35
+    averageOpponentSurvivalSeconds: 10.630053
+    candidateDeathRate: 1
+    opponentDeathRate: 0
+  - unitName: Synthetic_028
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 32
+    rawAtk: 14
+    rawCycleSec: 0.45156258
+    rawFreq: 2.2145324
+    rawDPS: 31.003452
+    rawRange: 4.412362
+    rawMove: 3.586067
+    rawKBD: 5.7825522
+    rawKBDPS: 12.805649
+    rawKBH: 52.332848
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.8
+    dpsRatio: 1.8013005
+    rangeRatio: 1.9610498
+    moveRatio: 1.4344268
+    kbdRatio: 0.7440082
+    kbhRatio: 2.6166425
+    anchorsKilledEquivalent: 1.6850952
+    timeSurvived: 13.400116
+    normalizedLanePush: 11.92404
+    compositePowerScore: 0.95476407
+    scaledCalculatedPower: 28.642921
+    formulaPredictedPower: 43.00862
+    averageTerritoryShiftMeters: 8.072361
+    finalTerritoryShiftMeters: 11.92404
+    averageCandidateAdvanceMeters: 11.92404
+    averageOpponentAdvanceMeters: -6.1641955
+    averageDamageDealt: 67.40381
+    averageDamageReceived: 32
+    averageOpponentSurvivalSeconds: 7.1399937
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_029
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 21
+    rawAtk: 26
+    rawCycleSec: 0.43540174
+    rawFreq: 2.2967296
+    rawDPS: 59.71497
+    rawRange: 3.1386788
+    rawMove: 1.4737585
+    rawKBD: 16.682722
+    rawKBDPS: 38.3157
+    rawKBH: 44.04477
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.525
+    dpsRatio: 3.4694397
+    rangeRatio: 1.3949684
+    moveRatio: 0.5895034
+    kbdRatio: 2.2261422
+    kbhRatio: 2.2022386
+    anchorsKilledEquivalent: 2.8731647
+    timeSurvived: 22.230318
+    normalizedLanePush: 16.984175
+    compositePowerScore: 1.5747206
+    scaledCalculatedPower: 47.24162
+    formulaPredictedPower: 57.32257
+    averageTerritoryShiftMeters: 8.518757
+    finalTerritoryShiftMeters: 16.984175
+    averageCandidateAdvanceMeters: 16.984175
+    averageOpponentAdvanceMeters: -16.562084
+    averageDamageDealt: 114.92659
+    averageDamageReceived: 21
+    averageOpponentSurvivalSeconds: 6.6299944
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_030
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 21
+    rawAtk: 9
+    rawCycleSec: 0.4620693
+    rawFreq: 2.1641774
+    rawDPS: 19.477596
+    rawRange: 5.9012074
+    rawMove: 4.7572308
+    rawKBD: 24.47789
+    rawKBDPS: 52.974495
+    rawKBH: 25.143576
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.525
+    dpsRatio: 1.1316483
+    rangeRatio: 2.6227589
+    moveRatio: 1.9028924
+    kbdRatio: 3.0778182
+    kbhRatio: 1.2571788
+    anchorsKilledEquivalent: 21.756796
+    timeSurvived: 60.001183
+    normalizedLanePush: 69.24258
+    compositePowerScore: 10.980816
+    scaledCalculatedPower: 329.42447
+    formulaPredictedPower: 60.05916
+    averageTerritoryShiftMeters: 35.934155
+    finalTerritoryShiftMeters: 69.24258
+    averageCandidateAdvanceMeters: 69.24258
+    averageOpponentAdvanceMeters: -5.113945
+    averageDamageDealt: 217.56796
+    averageDamageReceived: 0
+    averageOpponentSurvivalSeconds: 10.510052
+    candidateDeathRate: 0
+    opponentDeathRate: 1
+  - unitName: Synthetic_031
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 91
+    rawAtk: 19
+    rawCycleSec: 0.67405015
+    rawFreq: 1.4835691
+    rawDPS: 28.187813
+    rawRange: 1.4652438
+    rawMove: 1.7993813
+    rawKBD: 6.0426893
+    rawKBDPS: 8.964747
+    rawKBH: 35.62628
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 2.275
+    dpsRatio: 1.6377119
+    rangeRatio: 0.6512195
+    moveRatio: 0.7197525
+    kbdRatio: 0.5208518
+    kbhRatio: 1.7813141
+    anchorsKilledEquivalent: 3.1501603
+    timeSurvived: 39.91072
+    normalizedLanePush: 30.57525
+    compositePowerScore: 1.9165311
+    scaledCalculatedPower: 57.495934
+    formulaPredictedPower: 29.605158
+    averageTerritoryShiftMeters: 16.594461
+    finalTerritoryShiftMeters: 30.57525
+    averageCandidateAdvanceMeters: 30.57525
+    averageOpponentAdvanceMeters: -16.07002
+    averageDamageDealt: 126.00641
+    averageDamageReceived: 91
+    averageOpponentSurvivalSeconds: 7.579997
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_032
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 50
+    rawAtk: 27
+    rawCycleSec: 0.6693315
+    rawFreq: 1.494028
+    rawDPS: 40.338757
+    rawRange: 7.1157837
+    rawMove: 1.3676416
+    rawKBD: 21.740765
+    rawKBDPS: 32.48131
+    rawKBH: 16.953318
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 1.25
+    dpsRatio: 2.3436818
+    rangeRatio: 3.1625705
+    moveRatio: 0.5470566
+    kbdRatio: 1.8871642
+    kbhRatio: 0.8476659
+    anchorsKilledEquivalent: 35.788948
+    timeSurvived: 60.001183
+    normalizedLanePush: 39.33577
+    compositePowerScore: 16.877785
+    scaledCalculatedPower: 506.33356
+    formulaPredictedPower: 200.01413
+    averageTerritoryShiftMeters: 20.191265
+    finalTerritoryShiftMeters: 39.33577
+    averageCandidateAdvanceMeters: 39.33577
+    averageOpponentAdvanceMeters: -6.275223
+    averageDamageDealt: 357.88947
+    averageDamageReceived: 0
+    averageOpponentSurvivalSeconds: 5.699995
+    candidateDeathRate: 0
+    opponentDeathRate: 1
+  - unitName: Synthetic_033
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 31
+    rawAtk: 21
+    rawCycleSec: 0.6504416
+    rawFreq: 1.537417
+    rawDPS: 32.28576
+    rawRange: 3.1936388
+    rawMove: 4.232913
+    rawKBD: 15.702371
+    rawKBDPS: 24.141092
+    rawKBH: 11.259112
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.775
+    dpsRatio: 1.8758025
+    rangeRatio: 1.419395
+    moveRatio: 1.6931652
+    kbdRatio: 1.4025974
+    kbhRatio: 0.5629556
+    anchorsKilledEquivalent: 3.4689102
+    timeSurvived: 25.020382
+    normalizedLanePush: 44.08177
+    compositePowerScore: 2.2759593
+    scaledCalculatedPower: 68.27878
+    formulaPredictedPower: 47.209896
+    averageTerritoryShiftMeters: 22.450356
+    finalTerritoryShiftMeters: 44.08177
+    averageCandidateAdvanceMeters: 44.08177
+    averageOpponentAdvanceMeters: -10.0845585
+    averageDamageDealt: 138.75641
+    averageDamageReceived: 31
+    averageOpponentSurvivalSeconds: 5.649995
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_034
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 97
+    rawAtk: 15
+    rawCycleSec: 0.6661898
+    rawFreq: 1.5010737
+    rawDPS: 22.516106
+    rawRange: 3.8221016
+    rawMove: 2.8400297
+    rawKBD: 5.395342
+    rawKBDPS: 8.098805
+    rawKBH: 14.877344
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 2.425
+    dpsRatio: 1.3081857
+    rangeRatio: 1.6987119
+    moveRatio: 1.1360118
+    kbdRatio: 0.47054058
+    kbhRatio: 0.7438672
+    anchorsKilledEquivalent: 4.8253736
+    timeSurvived: 48.270912
+    normalizedLanePush: 37.908142
+    compositePowerScore: 2.7938347
+    scaledCalculatedPower: 83.81504
+    formulaPredictedPower: 66.75265
+    averageTerritoryShiftMeters: 20.960691
+    finalTerritoryShiftMeters: 37.908142
+    averageCandidateAdvanceMeters: 37.908142
+    averageOpponentAdvanceMeters: -7.2156525
+    averageDamageDealt: 193.01495
+    averageDamageReceived: 97
+    averageOpponentSurvivalSeconds: 10.710056
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_035
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 32
+    rawAtk: 20
+    rawCycleSec: 0.47212943
+    rawFreq: 2.1180632
+    rawDPS: 42.361263
+    rawRange: 6.228264
+    rawMove: 5.6729913
+    rawKBD: 21.825848
+    rawKBDPS: 46.228523
+    rawKBH: 19.608759
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.8
+    dpsRatio: 2.4611893
+    rangeRatio: 2.7681172
+    moveRatio: 2.2691965
+    kbdRatio: 2.685877
+    kbhRatio: 0.98043793
+    anchorsKilledEquivalent: 41.30179
+    timeSurvived: 60.001183
+    normalizedLanePush: 109.98672
+    compositePowerScore: 20.504238
+    scaledCalculatedPower: 615.12714
+    formulaPredictedPower: 179.62193
+    averageTerritoryShiftMeters: 57.751488
+    finalTerritoryShiftMeters: 109.98672
+    averageCandidateAdvanceMeters: 109.98672
+    averageOpponentAdvanceMeters: -5.152672
+    averageDamageDealt: 413.01788
+    averageDamageReceived: 0
+    averageOpponentSurvivalSeconds: 5.3899956
+    candidateDeathRate: 0
+    opponentDeathRate: 1
+  - unitName: Synthetic_036
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 79
+    rawAtk: 15
+    rawCycleSec: 0.6756717
+    rawFreq: 1.4800087
+    rawDPS: 22.20013
+    rawRange: 2.874183
+    rawMove: 6.060693
+    rawKBD: 4.057764
+    rawKBDPS: 6.005526
+    rawKBH: 23.693274
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 1.975
+    dpsRatio: 1.2898276
+    rangeRatio: 1.2774147
+    moveRatio: 2.424277
+    kbdRatio: 0.34892106
+    kbhRatio: 1.1846637
+    anchorsKilledEquivalent: 3.8064103
+    timeSurvived: 31.130522
+    normalizedLanePush: 49.54747
+    compositePowerScore: 2.516099
+    scaledCalculatedPower: 75.48297
+    formulaPredictedPower: 38.48258
+    averageTerritoryShiftMeters: 26.345938
+    finalTerritoryShiftMeters: 49.54747
+    averageCandidateAdvanceMeters: 49.54747
+    averageOpponentAdvanceMeters: -7.784212
+    averageDamageDealt: 152.25641
+    averageDamageReceived: 79
+    averageOpponentSurvivalSeconds: 7.489993
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_037
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 108
+    rawAtk: 14
+    rawCycleSec: 0.6065003
+    rawFreq: 1.6488037
+    rawDPS: 23.083252
+    rawRange: 1.4651978
+    rawMove: 5.1938925
+    rawKBD: 8.321316
+    rawKBDPS: 13.720217
+    rawKBH: 38.327946
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 2.7
+    dpsRatio: 1.3411369
+    rangeRatio: 0.65119904
+    moveRatio: 2.077557
+    kbdRatio: 0.7971446
+    kbhRatio: 1.9163973
+    anchorsKilledEquivalent: 2.6731648
+    timeSurvived: 28.340458
+    normalizedLanePush: 33.422523
+    compositePowerScore: 1.745172
+    scaledCalculatedPower: 52.35516
+    formulaPredictedPower: 45.855984
+    averageTerritoryShiftMeters: 19.936829
+    finalTerritoryShiftMeters: 33.422523
+    averageCandidateAdvanceMeters: 33.422523
+    averageOpponentAdvanceMeters: -9.714996
+    averageDamageDealt: 106.92659
+    averageDamageReceived: 108
+    averageOpponentSurvivalSeconds: 7.4299936
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_038
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 45
+    rawAtk: 16
+    rawCycleSec: 0.48608685
+    rawFreq: 2.0572455
+    rawDPS: 32.915928
+    rawRange: 1.5342851
+    rawMove: 1.7048161
+    rawKBD: 6.8773265
+    rawKBDPS: 14.148349
+    rawKBH: 52.518547
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 1.125
+    dpsRatio: 1.9124154
+    rangeRatio: 0.6819045
+    moveRatio: 0.6819264
+    kbdRatio: 0.82201904
+    kbhRatio: 2.6259274
+    anchorsKilledEquivalent: 1.4600952
+    timeSurvived: 15.680168
+    normalizedLanePush: 11.054649
+    compositePowerScore: 0.8387681
+    scaledCalculatedPower: 25.163044
+    formulaPredictedPower: 21.959135
+    averageTerritoryShiftMeters: 6.666818
+    finalTerritoryShiftMeters: 11.054649
+    averageCandidateAdvanceMeters: 11.054649
+    averageOpponentAdvanceMeters: -7.053097
+    averageDamageDealt: 58.40381
+    averageDamageReceived: 45
+    averageOpponentSurvivalSeconds: 9.060019
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_039
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 22
+    rawAtk: 5
+    rawCycleSec: 0.55163985
+    rawFreq: 1.8127769
+    rawDPS: 9.063885
+    rawRange: 4.776035
+    rawMove: 1.3530293
+    rawKBD: 7.509507
+    rawKBDPS: 13.613061
+    rawKBH: 13.846122
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.55
+    dpsRatio: 0.5266117
+    rangeRatio: 2.122682
+    moveRatio: 0.5412117
+    kbdRatio: 0.7909188
+    kbhRatio: 0.6923061
+    anchorsKilledEquivalent: 0.5
+    timeSurvived: 12.510096
+    normalizedLanePush: 0.12881279
+    compositePowerScore: 0.2291087
+    scaledCalculatedPower: 6.873261
+    formulaPredictedPower: 9.808349
+    averageTerritoryShiftMeters: 1.6195288
+    finalTerritoryShiftMeters: 0.12881279
+    averageCandidateAdvanceMeters: 0.12881279
+    averageOpponentAdvanceMeters: -11.881445
+    averageDamageDealt: 20
+    averageDamageReceived: 22
+    averageOpponentSurvivalSeconds: 12.510096
+    candidateDeathRate: 1
+    opponentDeathRate: 0
+  - unitName: Synthetic_040
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 24
+    rawAtk: 8
+    rawCycleSec: 0.35859928
+    rawFreq: 2.788628
+    rawDPS: 22.309025
+    rawRange: 1.6566646
+    rawMove: 6.23296
+    rawKBD: 20.813417
+    rawKBDPS: 58.040882
+    rawKBH: 21.59893
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.6
+    dpsRatio: 1.2961543
+    rangeRatio: 0.7362954
+    moveRatio: 2.493184
+    kbdRatio: 3.3721752
+    kbhRatio: 1.0799465
+    anchorsKilledEquivalent: 0.8
+    timeSurvived: 11.460072
+    normalizedLanePush: 22.60973
+    compositePowerScore: 0.72266376
+    scaledCalculatedPower: 21.679913
+    formulaPredictedPower: 25.242592
+    averageTerritoryShiftMeters: 14.191714
+    finalTerritoryShiftMeters: 22.60973
+    averageCandidateAdvanceMeters: 22.60973
+    averageOpponentAdvanceMeters: 9.91242
+    averageDamageDealt: 32
+    averageDamageReceived: 24
+    averageOpponentSurvivalSeconds: 11.460072
+    candidateDeathRate: 1
+    opponentDeathRate: 0
+  - unitName: Synthetic_041
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 26
+    rawAtk: 26
+    rawCycleSec: 0.35259342
+    rawFreq: 2.8361278
+    rawDPS: 73.73932
+    rawRange: 5.3141937
+    rawMove: 3.2186935
+    rawKBD: 9.79397
+    rawKBDPS: 27.77695
+    rawKBH: 50.078754
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.65
+    dpsRatio: 4.2842546
+    rangeRatio: 2.3618639
+    moveRatio: 1.2874774
+    kbdRatio: 1.6138408
+    kbhRatio: 2.5039377
+    anchorsKilledEquivalent: 2.8731647
+    timeSurvived: 17.420208
+    normalizedLanePush: 22.983776
+    compositePowerScore: 1.67008
+    scaledCalculatedPower: 50.102398
+    formulaPredictedPower: 133.53766
+    averageTerritoryShiftMeters: 11.783693
+    finalTerritoryShiftMeters: 22.983776
+    averageCandidateAdvanceMeters: 22.983776
+    averageOpponentAdvanceMeters: -12.79092
+    averageDamageDealt: 114.92659
+    averageDamageReceived: 26
+    averageOpponentSurvivalSeconds: 5.1999955
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_042
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 19
+    rawAtk: 5
+    rawCycleSec: 0.6122048
+    rawFreq: 1.6334404
+    rawDPS: 8.167202
+    rawRange: 4.0641527
+    rawMove: 4.616924
+    rawKBD: 7.5907497
+    rawKBDPS: 12.399037
+    rawKBH: 40.101055
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.475
+    dpsRatio: 0.47451442
+    rangeRatio: 1.8062901
+    moveRatio: 1.8467696
+    kbdRatio: 0.72038406
+    kbhRatio: 2.0050528
+    anchorsKilledEquivalent: 0.25
+    timeSurvived: 6.0899944
+    normalizedLanePush: 6.907186
+    compositePowerScore: 0.22331549
+    scaledCalculatedPower: 6.699465
+    formulaPredictedPower: 7.6583033
+    averageTerritoryShiftMeters: 5.7642407
+    finalTerritoryShiftMeters: 6.907186
+    averageCandidateAdvanceMeters: 6.907186
+    averageOpponentAdvanceMeters: -5.122054
+    averageDamageDealt: 10
+    averageDamageReceived: 19
+    averageOpponentSurvivalSeconds: 6.0899944
+    candidateDeathRate: 1
+    opponentDeathRate: 0
+  - unitName: Synthetic_043
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 22
+    rawAtk: 27
+    rawCycleSec: 0.8330204
+    rawFreq: 1.2004508
+    rawDPS: 32.41217
+    rawRange: 5.0405498
+    rawMove: 2.802073
+    rawKBD: 7.2282515
+    rawKBDPS: 8.67716
+    rawKBH: 31.815575
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.55
+    dpsRatio: 1.8831471
+    rangeRatio: 2.2402444
+    moveRatio: 1.1208292
+    kbdRatio: 0.504143
+    kbhRatio: 1.5907787
+    anchorsKilledEquivalent: 2.9481647
+    timeSurvived: 18.890242
+    normalizedLanePush: 21.978783
+    compositePowerScore: 1.6881655
+    scaledCalculatedPower: 50.644966
+    formulaPredictedPower: 26.17208
+    averageTerritoryShiftMeters: 11.052685
+    finalTerritoryShiftMeters: 21.978783
+    averageCandidateAdvanceMeters: 21.978783
+    averageOpponentAdvanceMeters: -13.383848
+    averageDamageDealt: 117.92659
+    averageDamageReceived: 22
+    averageOpponentSurvivalSeconds: 5.789995
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_044
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 59
+    rawAtk: 6
+    rawCycleSec: 0.75185865
+    rawFreq: 1.3300372
+    rawDPS: 7.9802237
+    rawRange: 6.981064
+    rawMove: 4.064697
+    rawKBD: 4.91796
+    rawKBDPS: 6.54107
+    rawKBH: 41.154865
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 1.475
+    dpsRatio: 0.46365097
+    rangeRatio: 3.102695
+    moveRatio: 1.6258787
+    kbdRatio: 0.38003615
+    kbhRatio: 2.0577433
+    anchorsKilledEquivalent: 1.1350952
+    timeSurvived: 21.4803
+    normalizedLanePush: 5.3580494
+    compositePowerScore: 0.6006349
+    scaledCalculatedPower: 18.019047
+    formulaPredictedPower: 27.61701
+    averageTerritoryShiftMeters: 4.6650186
+    finalTerritoryShiftMeters: 5.3580494
+    averageCandidateAdvanceMeters: 5.3580494
+    averageOpponentAdvanceMeters: -7.420936
+    averageDamageDealt: 45.40381
+    averageDamageReceived: 59
+    averageOpponentSurvivalSeconds: 16.57019
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_045
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 34
+    rawAtk: 10
+    rawCycleSec: 0.98897237
+    rawFreq: 1.0111506
+    rawDPS: 10.1115055
+    rawRange: 6.4485683
+    rawMove: 3.2929432
+    rawKBD: 5.1483545
+    rawKBDPS: 5.205762
+    rawKBH: 15.800724
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.85
+    dpsRatio: 0.58747846
+    rangeRatio: 2.8660305
+    moveRatio: 1.3171773
+    kbdRatio: 0.30245477
+    kbhRatio: 0.7900362
+    anchorsKilledEquivalent: 1.2100952
+    timeSurvived: 16.20018
+    normalizedLanePush: 5.3740277
+    compositePowerScore: 0.63494796
+    scaledCalculatedPower: 19.048439
+    formulaPredictedPower: 14.835503
+    averageTerritoryShiftMeters: 3.6942205
+    finalTerritoryShiftMeters: 5.3740277
+    averageCandidateAdvanceMeters: 5.3740277
+    averageOpponentAdvanceMeters: -7.4382
+    averageDamageDealt: 48.40381
+    averageDamageReceived: 34
+    averageOpponentSurvivalSeconds: 11.400072
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_046
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 70
+    rawAtk: 8
+    rawCycleSec: 0.4576115
+    rawFreq: 2.1852598
+    rawDPS: 17.482079
+    rawRange: 3.9247613
+    rawMove: 4.8815837
+    rawKBD: 2.6543667
+    rawKBDPS: 5.800481
+    rawKBH: 10.376318
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 1.75
+    dpsRatio: 1.0157088
+    rangeRatio: 1.7443384
+    moveRatio: 1.9526335
+    kbdRatio: 0.33700794
+    kbhRatio: 0.5188159
+    anchorsKilledEquivalent: 1.5600952
+    timeSurvived: 20.920288
+    normalizedLanePush: 6.107145
+    compositePowerScore: 0.80554324
+    scaledCalculatedPower: 24.166298
+    formulaPredictedPower: 35.34064
+    averageTerritoryShiftMeters: 6.0025053
+    finalTerritoryShiftMeters: 6.107145
+    averageCandidateAdvanceMeters: 6.107145
+    averageOpponentAdvanceMeters: -7.6568055
+    averageDamageDealt: 62.40381
+    averageDamageReceived: 70
+    averageOpponentSurvivalSeconds: 12.500097
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_047
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 99
+    rawAtk: 24
+    rawCycleSec: 0.3648188
+    rawFreq: 2.7410867
+    rawDPS: 65.78608
+    rawRange: 2.0518725
+    rawMove: 6.203168
+    rawKBD: 6.5501795
+    rawKBDPS: 17.95461
+    rawKBH: 9.627995
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 2.475
+    dpsRatio: 3.8221712
+    rangeRatio: 0.9119433
+    moveRatio: 2.4812672
+    kbdRatio: 1.0431628
+    kbhRatio: 0.48139971
+    anchorsKilledEquivalent: 2.2019796
+    timeSurvived: 27.09043
+    normalizedLanePush: 9.575733
+    compositePowerScore: 1.1521684
+    scaledCalculatedPower: 34.565052
+    formulaPredictedPower: 169.06232
+    averageTerritoryShiftMeters: 6.404804
+    finalTerritoryShiftMeters: 9.575733
+    averageCandidateAdvanceMeters: 9.575733
+    averageOpponentAdvanceMeters: -5.7782316
+    averageDamageDealt: 88.079185
+    averageDamageReceived: 99
+    averageOpponentSurvivalSeconds: 14.920153
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_048
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 32
+    rawAtk: 8
+    rawCycleSec: 0.49800336
+    rawFreq: 2.0080185
+    rawDPS: 16.064148
+    rawRange: 3.2419374
+    rawMove: 2.6179056
+    rawKBD: 15.348901
+    rawKBDPS: 30.820877
+    rawKBH: 24.229385
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.8
+    dpsRatio: 0.93332696
+    rangeRatio: 1.4408611
+    moveRatio: 1.0471623
+    kbdRatio: 1.7906929
+    kbhRatio: 1.2114693
+    anchorsKilledEquivalent: 1.5600952
+    timeSurvived: 21.510302
+    normalizedLanePush: 13.967102
+    compositePowerScore: 0.9304718
+    scaledCalculatedPower: 27.914154
+    formulaPredictedPower: 29.307629
+    averageTerritoryShiftMeters: 9.354429
+    finalTerritoryShiftMeters: 13.967102
+    averageCandidateAdvanceMeters: 13.967102
+    averageOpponentAdvanceMeters: -7.146523
+    averageDamageDealt: 62.40381
+    averageDamageReceived: 32
+    averageOpponentSurvivalSeconds: 12.310093
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_049
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 78
+    rawAtk: 8
+    rawCycleSec: 0.8879817
+    rawFreq: 1.1261493
+    rawDPS: 9.009194
+    rawRange: 6.0981054
+    rawMove: 2.0231287
+    rawKBD: 3.2010531
+    rawKBDPS: 3.6048636
+    rawKBH: 32.473038
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 1.95
+    dpsRatio: 0.52343416
+    rangeRatio: 2.710269
+    moveRatio: 0.8092515
+    kbdRatio: 0.20944257
+    kbhRatio: 1.6236519
+    anchorsKilledEquivalent: 1.7600952
+    timeSurvived: 24.370367
+    normalizedLanePush: 3.4356852
+    compositePowerScore: 0.8539069
+    scaledCalculatedPower: 25.617208
+    formulaPredictedPower: 22.514723
+    averageTerritoryShiftMeters: 3.2187896
+    finalTerritoryShiftMeters: 3.4356852
+    averageCandidateAdvanceMeters: 3.4356852
+    averageOpponentAdvanceMeters: -8.260621
+    averageDamageDealt: 70.40381
+    averageDamageReceived: 78
+    averageOpponentSurvivalSeconds: 13.270115
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_050
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 56
+    rawAtk: 14
+    rawCycleSec: 0.77666366
+    rawFreq: 1.2875587
+    rawDPS: 18.025822
+    rawRange: 1.9550579
+    rawMove: 1.6397125
+    rawKBD: 8.079679
+    rawKBDPS: 10.40306
+    rawKBH: 17.701986
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 1.4
+    dpsRatio: 1.0473002
+    rangeRatio: 0.8689146
+    moveRatio: 0.655885
+    kbdRatio: 0.6044178
+    kbhRatio: 0.8850993
+    anchorsKilledEquivalent: 0.9850952
+    timeSurvived: 18.930243
+    normalizedLanePush: 5.0275373
+    compositePowerScore: 0.5272632
+    scaledCalculatedPower: 15.817897
+    formulaPredictedPower: 17.349714
+    averageTerritoryShiftMeters: 2.947332
+    finalTerritoryShiftMeters: 5.0275373
+    averageCandidateAdvanceMeters: 5.0275373
+    averageOpponentAdvanceMeters: -7.231925
+    averageDamageDealt: 39.40381
+    averageDamageReceived: 56
+    averageOpponentSurvivalSeconds: 14.190136
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_051
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 63
+    rawAtk: 11
+    rawCycleSec: 0.3853389
+    rawFreq: 2.5951183
+    rawDPS: 28.5463
+    rawRange: 4.2862616
+    rawMove: 2.5177493
+    rawKBD: 10.252362
+    rawKBDPS: 26.606092
+    rawKBH: 33.51192
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 1.575
+    dpsRatio: 1.65854
+    rangeRatio: 1.9050051
+    moveRatio: 1.0070997
+    kbdRatio: 1.5458139
+    kbhRatio: 1.675596
+    anchorsKilledEquivalent: 3.2939103
+    timeSurvived: 40.380733
+    normalizedLanePush: 34.530594
+    compositePowerScore: 2.0446787
+    scaledCalculatedPower: 61.340363
+    formulaPredictedPower: 114.934555
+    averageTerritoryShiftMeters: 17.525654
+    finalTerritoryShiftMeters: 34.530594
+    averageCandidateAdvanceMeters: 34.530594
+    averageOpponentAdvanceMeters: -13.9768
+    averageDamageDealt: 131.75641
+    averageDamageReceived: 63
+    averageOpponentSurvivalSeconds: 9.760035
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_052
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 29
+    rawAtk: 14
+    rawCycleSec: 0.73555547
+    rawFreq: 1.3595167
+    rawDPS: 19.033234
+    rawRange: 4.9554315
+    rawMove: 5.11541
+    rawKBD: 15.579749
+    rawKBDPS: 21.18093
+    rawKBH: 9.336897
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.725
+    dpsRatio: 1.1058309
+    rangeRatio: 2.202414
+    moveRatio: 2.046164
+    kbdRatio: 1.2306119
+    kbhRatio: 0.46684486
+    anchorsKilledEquivalent: 2.3231647
+    timeSurvived: 21.960312
+    normalizedLanePush: 24.17838
+    compositePowerScore: 1.4392998
+    scaledCalculatedPower: 43.178993
+    formulaPredictedPower: 41.053993
+    averageTerritoryShiftMeters: 10.484893
+    finalTerritoryShiftMeters: 24.17838
+    averageCandidateAdvanceMeters: 24.17838
+    averageOpponentAdvanceMeters: -10.062571
+    averageDamageDealt: 92.92659
+    averageDamageReceived: 29
+    averageOpponentSurvivalSeconds: 7.9399967
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_053
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 25
+    rawAtk: 13
+    rawCycleSec: 0.5102448
+    rawFreq: 1.9598436
+    rawDPS: 25.477966
+    rawRange: 1.7358273
+    rawMove: 2.912611
+    rawKBD: 14.591114
+    rawKBDPS: 28.596302
+    rawKBH: 50.323235
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.625
+    dpsRatio: 1.4802698
+    rangeRatio: 0.77147883
+    moveRatio: 1.1650444
+    kbdRatio: 1.6614451
+    kbhRatio: 2.5161617
+    anchorsKilledEquivalent: 0.65
+    timeSurvived: 8.430002
+    normalizedLanePush: 9.424904
+    compositePowerScore: 0.4449819
+    scaledCalculatedPower: 13.349457
+    formulaPredictedPower: 17.871893
+    averageTerritoryShiftMeters: 6.311031
+    finalTerritoryShiftMeters: 9.424904
+    averageCandidateAdvanceMeters: 9.424904
+    averageOpponentAdvanceMeters: -3.0711517
+    averageDamageDealt: 26
+    averageDamageReceived: 25
+    averageOpponentSurvivalSeconds: 8.430002
+    candidateDeathRate: 1
+    opponentDeathRate: 0
+  - unitName: Synthetic_054
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 100
+    rawAtk: 10
+    rawCycleSec: 0.78823155
+    rawFreq: 1.2686627
+    rawDPS: 12.686626
+    rawRange: 3.5441337
+    rawMove: 5.4831657
+    rawKBD: 5.9411077
+    rawKBDPS: 7.537262
+    rawKBH: 16.000788
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 2.5
+    dpsRatio: 0.737093
+    rangeRatio: 1.5751705
+    moveRatio: 2.1932664
+    kbdRatio: 0.4379149
+    kbhRatio: 0.8000394
+    anchorsKilledEquivalent: 3.1189103
+    timeSurvived: 37.68067
+    normalizedLanePush: 40.156883
+    compositePowerScore: 2.0546331
+    scaledCalculatedPower: 61.638992
+    formulaPredictedPower: 42.21698
+    averageTerritoryShiftMeters: 19.100445
+    finalTerritoryShiftMeters: 40.156883
+    averageCandidateAdvanceMeters: 40.156883
+    averageOpponentAdvanceMeters: -8.849661
+    averageDamageDealt: 124.75641
+    averageDamageReceived: 100
+    averageOpponentSurvivalSeconds: 10.130043
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_055
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 31
+    rawAtk: 9
+    rawCycleSec: 0.34068096
+    rawFreq: 2.9352977
+    rawDPS: 26.417679
+    rawRange: 5.8012977
+    rawMove: 5.3972845
+    rawKBD: 11.609436
+    rawKBDPS: 34.077152
+    rawKBH: 28.653767
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.775
+    dpsRatio: 1.5348672
+    rangeRatio: 2.5783546
+    moveRatio: 2.1589139
+    kbdRatio: 1.9798825
+    kbhRatio: 1.4326884
+    anchorsKilledEquivalent: 1.6975952
+    timeSurvived: 19.550257
+    normalizedLanePush: 9.512167
+    compositePowerScore: 0.9221056
+    scaledCalculatedPower: 27.663168
+    formulaPredictedPower: 90.2419
+    averageTerritoryShiftMeters: 8.371208
+    finalTerritoryShiftMeters: 9.512167
+    averageCandidateAdvanceMeters: 9.512167
+    averageOpponentAdvanceMeters: -9.392079
+    averageDamageDealt: 67.90381
+    averageDamageReceived: 31
+    averageOpponentSurvivalSeconds: 10.140043
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_056
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 75
+    rawAtk: 7
+    rawCycleSec: 0.88391715
+    rawFreq: 1.1313277
+    rawDPS: 7.9192944
+    rawRange: 1.4089576
+    rawMove: 1.6573217
+    rawKBD: 16.615986
+    rawKBDPS: 18.798126
+    rawKBH: 24.327492
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 1.875
+    dpsRatio: 0.460111
+    rangeRatio: 0.62620336
+    moveRatio: 0.6629287
+    kbdRatio: 1.0921711
+    kbhRatio: 1.2163746
+    anchorsKilledEquivalent: 0.875
+    timeSurvived: 22.140316
+    normalizedLanePush: 5.7422853
+    compositePowerScore: 0.48862687
+    scaledCalculatedPower: 14.658806
+    formulaPredictedPower: 12.200609
+    averageTerritoryShiftMeters: 5.435219
+    finalTerritoryShiftMeters: 5.7422853
+    averageCandidateAdvanceMeters: 5.7422853
+    averageOpponentAdvanceMeters: -7.0808234
+    averageDamageDealt: 35
+    averageDamageReceived: 75
+    averageOpponentSurvivalSeconds: 22.140316
+    candidateDeathRate: 1
+    opponentDeathRate: 0
+  - unitName: Synthetic_057
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 68
+    rawAtk: 6
+    rawCycleSec: 0.37528965
+    rawFreq: 2.6646085
+    rawDPS: 15.987651
+    rawRange: 2.8497598
+    rawMove: 2.0677624
+    rawKBD: 12.015736
+    rawKBDPS: 32.01723
+    rawKBH: 20.045557
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 1.7
+    dpsRatio: 0.9288825
+    rangeRatio: 1.26656
+    moveRatio: 0.8271049
+    kbdRatio: 1.8602011
+    kbhRatio: 1.0022779
+    anchorsKilledEquivalent: 2.0856647
+    timeSurvived: 42.080772
+    normalizedLanePush: 25.641827
+    compositePowerScore: 1.3547062
+    scaledCalculatedPower: 40.641186
+    formulaPredictedPower: 55.692345
+    averageTerritoryShiftMeters: 11.895517
+    finalTerritoryShiftMeters: 25.641827
+    averageCandidateAdvanceMeters: 25.641827
+    averageOpponentAdvanceMeters: -14.2719755
+    averageDamageDealt: 83.42659
+    averageDamageReceived: 68
+    averageOpponentSurvivalSeconds: 17.810219
+    candidateDeathRate: 1
+    opponentDeathRate: 1
+  - unitName: Synthetic_058
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 20
+    rawAtk: 9
+    rawCycleSec: 0.35550022
+    rawFreq: 2.8129377
+    rawDPS: 25.31644
+    rawRange: 4.1960187
+    rawMove: 4.1348367
+    rawKBD: 6.7055073
+    rawKBDPS: 18.862175
+    rawKBH: 35.175777
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.5
+    dpsRatio: 1.4708852
+    rangeRatio: 1.8648973
+    moveRatio: 1.6539347
+    kbdRatio: 1.0958923
+    kbhRatio: 1.7587888
+    anchorsKilledEquivalent: 0.45
+    timeSurvived: 6.189995
+    normalizedLanePush: 6.4431376
+    compositePowerScore: 0.3067643
+    scaledCalculatedPower: 9.2029295
+    formulaPredictedPower: 27.23256
+    averageTerritoryShiftMeters: 5.398982
+    finalTerritoryShiftMeters: 6.4431376
+    averageCandidateAdvanceMeters: 6.4431376
+    averageOpponentAdvanceMeters: -5.5831547
+    averageDamageDealt: 18
+    averageDamageReceived: 20
+    averageOpponentSurvivalSeconds: 6.189995
+    candidateDeathRate: 1
+    opponentDeathRate: 0
+  - unitName: Synthetic_059
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 20
+    rawAtk: 9
+    rawCycleSec: 0.37129813
+    rawFreq: 2.6932535
+    rawDPS: 24.23928
+    rawRange: 3.3562667
+    rawMove: 1.8303556
+    rawKBD: 6.343412
+    rawKBDPS: 17.084417
+    rawKBH: 51.73706
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.5
+    dpsRatio: 1.4083022
+    rangeRatio: 1.4916741
+    moveRatio: 0.73214227
+    kbdRatio: 0.9926046
+    kbhRatio: 2.586853
+    anchorsKilledEquivalent: 0.45
+    timeSurvived: 6.8899937
+    normalizedLanePush: 4.5383873
+    compositePowerScore: 0.27648965
+    scaledCalculatedPower: 8.294689
+    formulaPredictedPower: 17.455383
+    averageTerritoryShiftMeters: 3.5562582
+    finalTerritoryShiftMeters: 4.5383873
+    averageCandidateAdvanceMeters: 4.5383873
+    averageOpponentAdvanceMeters: -7.460852
+    averageDamageDealt: 18
+    averageDamageReceived: 20
+    averageOpponentSurvivalSeconds: 6.8899937
+    candidateDeathRate: 1
+    opponentDeathRate: 0
+  - unitName: Synthetic_060
+    clanName: SyntheticTraining
+    isSynthetic: 1
+    statsAsset: {fileID: 0}
+    spawnCost: 30
+    rawHP: 29
+    rawAtk: 15
+    rawCycleSec: 0.9644843
+    rawFreq: 1.0368235
+    rawDPS: 15.552353
+    rawRange: 7.4254804
+    rawMove: 1.5353343
+    rawKBD: 6.0893955
+    rawKBDPS: 6.3136287
+    rawKBH: 18.59544
+    maxTargets: 1
+    utilityPower: 0
+    hpRatio: 0.725
+    dpsRatio: 0.9035917
+    rangeRatio: 3.3002136
+    moveRatio: 0.6141337
+    kbdRatio: 0.36682183
+    kbhRatio: 0.929772
+    anchorsKilledEquivalent: 1.3975952
+    timeSurvived: 15.120155
+    normalizedLanePush: 1.3517218
+    compositePowerScore: 0.6561643
+    scaledCalculatedPower: 19.684929
+    formulaPredictedPower: 20.436356
+    averageTerritoryShiftMeters: 1.6056296
+    finalTerritoryShiftMeters: 1.3517218
+    averageCandidateAdvanceMeters: 1.3517218
+    averageOpponentAdvanceMeters: -9.274411
+    averageDamageDealt: 55.90381
+    averageDamageReceived: 29
+    averageOpponentSurvivalSeconds: 9.510029
+    candidateDeathRate: 1
+    opponentDeathRate: 1
   elasticities:
-    e_Health: 0
-    e_DPS: 0
-    e_Range: 0
-    e_MoveSpeed: 0
-    e_KBD: 0
+    e_Health: 1.0432948
+    e_DPS: 0.84384227
+    e_Range: 0.95994645
+    e_MoveSpeed: 0.16587238
+    e_KBD: 0.5913324
     e_KBH: 0
-    scaleConstant: 0
-    rSquared: 0
-  balanceConfig: {fileID: 0}
+    scaleConstant: 0.64720786
+    rSquared: 0.59013784
+  balanceConfig: {fileID: 11400000, guid: 769162549bfe74481a2ee1bc82fb6d24, type: 2}
+  diagnosticCsvFileName: BalanceSimulationDiagnostics.csv
 --- !u!1 &427189086
 GameObject:
   m_ObjectHideFlags: 0
@@ -424,7 +2872,7 @@ Transform:
   m_GameObject: {fileID: 427189086}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: 1, w: 0}
-  m_LocalPosition: {x: 41.71122, y: -6.36482, z: 0}
+  m_LocalPosition: {x: 17, y: 1.8899994, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -534,6 +2982,144 @@ Transform:
   m_Children: []
   m_Father: {fileID: 468146596}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &873266402
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 873266403}
+  - component: {fileID: 873266405}
+  - component: {fileID: 873266404}
+  m_Layer: 11
+  m_Name: wall R
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &873266403
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 873266402}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 20, y: -0.04518032, z: 0}
+  m_LocalScale: {x: 100, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1441836043}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+--- !u!61 &873266404
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 873266402}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
+--- !u!212 &873266405
+SpriteRenderer:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 873266402}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_SpriteSortPoint: 0
 --- !u!1 &1193397776
 GameObject:
   m_ObjectHideFlags: 0
@@ -580,7 +3166,7 @@ Transform:
   m_GameObject: {fileID: 1193397776}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -8.28878, y: -8.25482, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -672,8 +3258,8 @@ Transform:
   m_GameObject: {fileID: 1265728525}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -8.28878, y: -8.25482, z: 0}
-  m_LocalScale: {x: 100, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 10000, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1441836043}
@@ -749,14 +3335,17 @@ Transform:
   m_GameObject: {fileID: 1441836042}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.28878, y: 8.25482, z: 0}
+  m_LocalPosition: {x: 8.296, y: 8.25482, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1265728527}
+  - {fileID: 1623718408}
+  - {fileID: 873266403}
   - {fileID: 1193397778}
   - {fileID: 427189087}
   - {fileID: 1568352515}
+  - {fileID: 17466499}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1568352513
@@ -807,12 +3396,150 @@ Transform:
   m_GameObject: {fileID: 1568352513}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -58.28878, y: -6.42482, z: 0}
+  m_LocalPosition: {x: -17, y: 1.8299999, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1441836043}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1623718407
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1623718408}
+  - component: {fileID: 1623718410}
+  - component: {fileID: 1623718409}
+  m_Layer: 11
+  m_Name: wall L
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1623718408
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1623718407}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: -20, y: -0.04518032, z: 0}
+  m_LocalScale: {x: 100, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1441836043}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+--- !u!61 &1623718409
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1623718407}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
+--- !u!212 &1623718410
+SpriteRenderer:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1623718407}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_SpriteSortPoint: 0
 --- !u!1 &1929949891
 GameObject:
   m_ObjectHideFlags: 0
@@ -868,6 +3595,5 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 17466499}
   - {fileID: 468146596}
   - {fileID: 1441836043}
