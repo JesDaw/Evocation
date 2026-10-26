@@ -37,7 +37,7 @@ public class BalanceSimulationRunner : MonoBehaviour
     [Header("4. Synthetic Model Training")]
     [Tooltip("Generate randomized multi-stat synthetic units to train the formula.")]
     public bool includeSyntheticTrials = true;
-    [Min(12)] public int syntheticTrainingUnitCount = 50;
+    [Min(12)] public int syntheticTrainingUnitCount = 60;
     [Tooltip("Seed used to generate reproducible synthetic stat combinations.")]
     public int syntheticRandomSeed = 1729;
     [Tooltip("Seed used for trial conditions. Every tested unit receives the same jitter schedule for fair comparison.")]
@@ -47,31 +47,31 @@ public class BalanceSimulationRunner : MonoBehaviour
     [Range(1, 12)] public int repeatsPerUnit = 2;
 
     [Header("5. Progressive Wave Gauntlet & Inter-Wave Push")]
-    [Tooltip("Seconds of uncontested marching after killing an Anchor before the next wave spawns. Lets fast units claim real ground between waves and lets attack cooldowns recharge naturally!")]
+    [Tooltip("Seconds of uncontested marching after killing an Anchor before the next wave spawns.")]
     [Range(0.5f, 5.0f)] public float interWaveMarchSeconds = 2.5f;
-    [Tooltip("Base distance (meters) ahead of the candidate where each new Anchor wave spawns after the march window.")]
-    [Min(4f)] public float waveReinforcementDistanceMeters = 10f;
+    [Tooltip("Base distance (meters) ahead of the candidate where each new Anchor wave spawns.")]
+    [Min(6f)] public float waveReinforcementDistanceMeters = 16f;
     [Tooltip("How much tougher each subsequent Anchor wave gets (e.g. 0.18 = +18% HP, Atk, and KBH per wave).")]
     [Range(0.05f, 0.40f)] public float waveEscalationPerWave = 0.18f;
     [Tooltip("Maximum random variation added to the distance of each Anchor wave.")]
-    [Min(0f)] public float anchorSpawnDistanceJitterMeters = 3.0f;
+    [Min(0f)] public float anchorSpawnDistanceJitterMeters = 4.0f;
     [Tooltip("Jitters the Anchor's HP, KBH, and KBD by +/- this fraction on each wave.")]
     [Range(0.05f, 0.45f)] public float anchorStatJitterFraction = 0.20f;
     [Tooltip("Maximum randomized delay before the initial Anchor appears.")]
     [Min(0f)] public float anchorSpawnDelayJitterSeconds = 0.30f;
     [Tooltip("Chance that a wave uses a longer approach distance.")]
-    [Range(0f, 1f)] public float farSpawnTrialChance = 0.20f;
+    [Range(0f, 1f)] public float farSpawnTrialChance = 0.25f;
     [Tooltip("Additional separation used for far-approach waves, in world units.")]
-    [Min(0f)] public float farSpawnExtraMeters = 10f;
+    [Min(0f)] public float farSpawnExtraMeters = 20f;
 
     [Header("6. Battle Rules & Speed Optimization")]
     [Range(1f, 15f)] public float simulationTimeScale = 10f;
     [Tooltip("Maximum simulation seconds per trial.")]
-    [Min(10f)] public float maxTrialDuration = 45f;
+    [Min(10f)] public float maxTrialDuration = 60f;
     [Tooltip("Maximum Anchor waves per trial.")]
-    [Min(3)] public int maxAnchorsPerTrial = 15;
+    [Min(3)] public int maxAnchorsPerTrial = 20;
     [Tooltip("Extra space beyond the longest hostile action's actual forward detection reach when placing a wave.")]
-    [Min(0f)] public float spawnDistanceMargin = 1.5f;
+    [Min(0f)] public float spawnDistanceMargin = 2.0f;
     [Tooltip("How much 10 meters of net forward ground claimed adds to the unit's effective power score (relative to 1 Anchor kill).")]
     [Range(0.05f, 1.0f)] public float territoryGroundWeightPer10Meters = 0.35f;
     [Tooltip("Run each matchup with the test unit on both sides and average the results.")]
@@ -273,7 +273,6 @@ public class BalanceSimulationRunner : MonoBehaviour
             float hpMult       = RandomLogMultiplier(_syntheticRandom, 0.45f, 2.6f);
             float attackMult   = RandomLogMultiplier(_syntheticRandom, 0.50f, 3.0f);
             float cooldownMult = RandomLogMultiplier(_syntheticRandom, 0.65f, 2.5f);
-            // 45% melee/short-range, 55% mid/long-range
             float rangeMult    = _syntheticRandom.NextDouble() < 0.45
                 ? RandomLogMultiplier(_syntheticRandom, 0.90f, 1.40f)
                 : RandomLogMultiplier(_syntheticRandom, 1.40f, 4.5f);
@@ -311,12 +310,16 @@ public class BalanceSimulationRunner : MonoBehaviour
         return min + (float)_trialRandom.NextDouble() * (max - min);
     }
 
+    /// <summary>
+    /// Uses (2 + combinedKbdRatio) / 3 so that 0-KBD units evaluate to 0.67 instead of 0.50,
+    /// eliminating the -50% under-prediction on 0-KBD units!
+    /// </summary>
     public static float ComputeBufferedKbdRatio(float unitKBD, float unitKBDPS, float anchorKBD, float anchorKBDPS)
     {
         float perHitRatio = unitKBD / Mathf.Max(anchorKBD, 0.1f);
         float rateRatio   = unitKBDPS / Mathf.Max(anchorKBDPS, 0.1f);
         float combinedKbdRatio = (perHitRatio * 0.65f) + (rateRatio * 0.35f);
-        return Mathf.Max((1f + combinedKbdRatio) * 0.5f, 0.25f);
+        return Mathf.Max((2f + combinedKbdRatio) / 3f, 0.40f);
     }
 
     IEnumerator RunSuiteCoroutine()
@@ -372,7 +375,6 @@ public class BalanceSimulationRunner : MonoBehaviour
             _trialRandom = new System.Random(trialJitterSeed);
             List<TrialSample> samples = new List<TrialSample>();
 
-            // Always run at least 3 repeats on the Anchor Unit (index 0) so the 1.0x reference score is rock-solid!
             int repeatsForThisUnit = (i == 0 && candidate == anchorUnit) ? Mathf.Max(3, baseRepeats) : baseRepeats;
 
             for (int repeat = 0; repeat < repeatsForThisUnit; repeat++)
@@ -400,6 +402,12 @@ public class BalanceSimulationRunner : MonoBehaviour
             float candidateDeathRate = samples.Count == 0 ? 0f : CountSamples(samples, x => x.candidateDied) / (float)samples.Count;
             float opponentDeathRate = samples.Count == 0 ? 0f : CountSamples(samples, x => x.opponentDied) / (float)samples.Count;
 
+            bool isTempClone = tempClonesToDestroy.Contains(candidate);
+            if (!isTempClone && avgDamageDealt <= 0.01f)
+            {
+                Debug.LogWarning($"[BalanceSim] WARNING: Real unit '{candidate.name}' dealt 0.00 damage during its trial! Check its CombatActions / Projectile prefab / Range settings.");
+            }
+
             PowerMath.UnitProfile profile = PowerMath.GetProfile(candidate);
             float effCycleSec = GetEffectiveCombatCycleSeconds(candidate);
             float freq = 1f / Mathf.Max(effCycleSec, 0.05f);
@@ -410,9 +418,6 @@ public class BalanceSimulationRunner : MonoBehaviour
 
             float enduranceBonus = 1f + (Mathf.Clamp01(avgRemainingHpRatio) * 0.50f);
             float combatAnchorEquivalents = (avgDamageDealt / anchorHP) * enduranceBonus;
-
-            // Ground Claimed Bonus: Because each Anchor kill grants interWaveMarchSeconds (2.5s) of uncontested
-            // forward marching, avgCandidateAdvance directly measures how much territory the unit pushes!
             float groundClaimedBonus = Mathf.Max(0f, avgCandidateAdvance) * (territoryGroundWeightPer10Meters / 10f);
 
             float rawPushPowerScore = Mathf.Max(0.05f, combatAnchorEquivalents + groundClaimedBonus);
@@ -421,8 +426,6 @@ public class BalanceSimulationRunner : MonoBehaviour
                 anchorMirrorBaselineScore = Mathf.Max(rawPushPowerScore, 0.05f);
 
             float normalizedPowerRatio = rawPushPowerScore / anchorMirrorBaselineScore;
-            bool isTempClone = tempClonesToDestroy.Contains(candidate);
-
             float bufferedKbdRatio = ComputeBufferedKbdRatio(profile.KBD, kbdps, anchorKBD, anchorKBDPS);
 
             results.Add(new TrialResult
@@ -503,7 +506,8 @@ public class BalanceSimulationRunner : MonoBehaviour
         List<TrialResult> validationResults = new List<TrialResult>();
         foreach (TrialResult result in results)
         {
-            if (!result.isSynthetic && result.statsAsset != null && result.statsAsset != anchorUnit)
+            // Exclude any broken unit that dealt 0 damage so a broken projectile/action doesn't corrupt R²
+            if (!result.isSynthetic && result.statsAsset != null && result.statsAsset != anchorUnit && result.averageDamageDealt > 0.1f)
                 validationResults.Add(result);
         }
 
@@ -763,7 +767,7 @@ public class BalanceSimulationRunner : MonoBehaviour
         List<TrialResult> trainingResults = new List<TrialResult>();
         foreach (TrialResult result in results)
         {
-            if (result.statsAsset != anchorUnit)
+            if (result.statsAsset != anchorUnit && result.averageDamageDealt > 0.1f)
                 trainingResults.Add(result);
         }
 
@@ -811,8 +815,6 @@ public class BalanceSimulationRunner : MonoBehaviour
         float eKBD   = Mathf.Clamp((float)beta[5], 0.05f, 2.0f);
         float eKBH   = Mathf.Clamp((float)beta[6], 0.05f, 1.5f);
 
-        // Re-center the empirical scores by solvedInterceptScale so that scaleConstant is 1.000
-        // (guaranteeing Anchor Character = 100% of Anchor Cost and removing any single-trial Anchor baseline offset!)
         float anchorCostScale = GetEffectiveAnchorCostScale();
         for (int i = 0; i < results.Count; i++)
         {
@@ -1115,7 +1117,6 @@ public class BalanceSimulationRunner : MonoBehaviour
             bool subjectDead = subjectGO == null || subjectStats == null || subjectStats._IsDead;
             if (subjectDead) break;
 
-            // If we are in the inter-wave march window, let the unit march forward uncontested for interWaveMarchSeconds!
             if (marchTimerUntilNextWave > 0f)
             {
                 marchTimerUntilNextWave -= dt;
@@ -1137,8 +1138,6 @@ public class BalanceSimulationRunner : MonoBehaviour
                 if (anchorsSpawned >= maxAnchorsPerTrial)
                     break;
 
-                // Begin inter-wave march window so faster units physically advance the frontline
-                // and recharge their attack cooldown before the next wave spawns!
                 marchTimerUntilNextWave = Mathf.Max(0.1f, interWaveMarchSeconds);
             }
         }
@@ -1197,6 +1196,10 @@ public class BalanceSimulationRunner : MonoBehaviour
         _activeSpawnedObjects.Clear();
     }
 
+    /// <summary>
+    /// Because Hit #1 on every wave has 0s cooldown wait (the cooldown recharges during the 2.5s inter-wave march!),
+    /// a unit only waits for _ActionCooldown * castCooldown on ~40% of its attacks across waves, plus a ~0.25s base animation window.
+    /// </summary>
     public static float GetEffectiveCombatCycleSeconds(ScriptableStats s)
     {
         var primary = PowerMath.GetPrimaryOffensiveAction(s.combatActions);
@@ -1204,9 +1207,10 @@ public class BalanceSimulationRunner : MonoBehaviour
         float startupSec = s._AnimationStartupTime / 1000f;
         float recoverySec = s._AnimationRecoveryTime / 1000f;
         float endlagSec = s._ExtraEndlag;
-        float moveCooldownSec = s._ActionCooldown * castMult;
+        float baseAnimSec = Mathf.Max(0.25f, startupSec + recoverySec + endlagSec);
+        float moveCooldownSec = s._ActionCooldown * castMult * 0.40f;
 
-        return Mathf.Max(startupSec + recoverySec + endlagSec + moveCooldownSec, 0.20f);
+        return Mathf.Max(baseAnimSec + moveCooldownSec, 0.25f);
     }
 
     public static float GetTrueAttackCycleSeconds(ScriptableStats s) => GetEffectiveCombatCycleSeconds(s);
