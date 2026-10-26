@@ -168,9 +168,12 @@ MonoBehaviour:
   Slides:
   - Character: {fileID: 0}
     Lines:
-    - Line: 'I mean you can probably just guess what the correct answers on there
-        are we really didnt put a lot of effort into writing this originally. '
+    - Line: 'I mean you can <dangle>probably just guess</dangle> what the correct
+        answers on there are we really didnt put <spread>a lot of effort</spread>
+        into writing this originally. '
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 1
       CharacterFace: 3
@@ -178,8 +181,10 @@ MonoBehaviour:
         _PersistentCalls: []
       LineEndEvent:
         _PersistentCalls: []
-    - Line: Its just a proof of concept.
+    - Line: Its just a <pivot>proof of concept.</pivot>
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 1
       CharacterFace: 4
@@ -188,6 +193,7 @@ MonoBehaviour:
       LineEndEvent:
         _PersistentCalls: []
     alternitiveCanvasGroup: {fileID: 0}
+    presentationStyle: {fileID: 0}
   EndOfLines:
   - Text: "That\u2019s not important."
     ultEvent:
@@ -214,6 +220,7 @@ MonoBehaviour:
         _PersistentArguments: []
   DefultEvent:
     _PersistentCalls: []
+  TextEvents: []
 --- !u!1 &113437165
 GameObject:
   m_ObjectHideFlags: 0
@@ -262,9 +269,11 @@ MonoBehaviour:
   Slides:
   - Character: {fileID: 0}
     Lines:
-    - Line: ok well that would be minus points but im just going to end the game
-        here bc I dont want to think of more branches rn
+    - Line: ok well that would be <grow>minus points</grow> but im just going to
+        end the game here bc I dont want to think of more branches rn
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 1
       CharacterFace: 4
@@ -273,12 +282,14 @@ MonoBehaviour:
       LineEndEvent:
         _PersistentCalls: []
     alternitiveCanvasGroup: {fileID: 0}
+    presentationStyle: {fileID: 0}
   EndOfLines: []
   DefultEvent:
     _PersistentCalls:
     - _Target: {fileID: 1147954489}
       _MemberName: TriggerDailogue
       _PersistentArguments: []
+  TextEvents: []
 --- !u!1 &122271930
 GameObject:
   m_ObjectHideFlags: 0
@@ -327,15 +338,18 @@ MonoBehaviour:
   - Character: {fileID: 0}
     Lines: []
     alternitiveCanvasGroup: {fileID: 0}
+    presentationStyle: {fileID: 0}
   - Character: {fileID: 0}
     Lines: []
     alternitiveCanvasGroup: {fileID: 0}
+    presentationStyle: {fileID: 0}
   EndOfLines: []
   DefultEvent:
     _PersistentCalls:
     - _Target: {fileID: 141166755}
       _MemberName: StartTransition
       _PersistentArguments: []
+  TextEvents: []
 --- !u!1 &141166752
 GameObject:
   m_ObjectHideFlags: 0
@@ -832,9 +846,12 @@ MonoBehaviour:
   Slides:
   - Character: {fileID: 0}
     Lines:
-    - Line: Ok so like I change the way the dialogue syetem worked and that basically
-        removed all the text we had in here.
+    - Line: Ok so like I <wave>change</wave> the way the <fade>dialogue syetem</fade>
+        worked and that basically <palette>removed</palette> all the text we had
+        in here.
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
       CharacterFace: 0
@@ -843,11 +860,14 @@ MonoBehaviour:
       LineEndEvent:
         _PersistentCalls: []
     alternitiveCanvasGroup: {fileID: 0}
+    presentationStyle: {fileID: 0}
   - Character: {fileID: 0}
     Lines:
-    - Line: I should probably just make it so we store all our text in seperate files
-        so that doenst happen.
+    - Line: I should <shake>probably</shake> just make it so we <palette>store all
+        our text in seperate files</palette> so that doenst happen.
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
       CharacterFace: 0
@@ -855,10 +875,10 @@ MonoBehaviour:
         _PersistentCalls: []
       LineEndEvent:
         _PersistentCalls: []
-    - Line: I didnt think that would be a problem
+    - Line: I didnt think that would be a <sketchy>problem</sketchy>
       alternitiveTextBox: {fileID: 0}
       useScreenPosition: 1
-      screenPosition: {x: 0.35, y: 0.55}
+      screenPosition: {x: 0.05, y: 0.35}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
       CharacterFace: 0
@@ -870,9 +890,11 @@ MonoBehaviour:
     presentationStyle: {fileID: 11400000, guid: 4bb89c12b71079b4dab96e326e5b2da4, type: 2}
   - Character: {fileID: 0}
     Lines:
-    - Line: But hey our dialogue choised still stayed so the correct answer here
-        is "Just wanted to check in"
+    - Line: But hey our <shake>dialogue chosen</shake> still stayed so the correct
+        answer here is "Just wanted to check in"
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
       CharacterFace: 0
@@ -881,6 +903,7 @@ MonoBehaviour:
       LineEndEvent:
         _PersistentCalls: []
     alternitiveCanvasGroup: {fileID: 0}
+    presentationStyle: {fileID: 0}
   EndOfLines:
   - Text: ...
     ultEvent:
@@ -918,6 +941,7 @@ MonoBehaviour:
           _Object: {fileID: 0}
   DefultEvent:
     _PersistentCalls: []
+  TextEvents: []
 --- !u!4 &315996493
 Transform:
   m_ObjectHideFlags: 0
@@ -1288,12 +1312,14 @@ MonoBehaviour:
   - Character: {fileID: 0}
     Lines: []
     alternitiveCanvasGroup: {fileID: 0}
+    presentationStyle: {fileID: 0}
   EndOfLines: []
   DefultEvent:
     _PersistentCalls:
     - _Target: {fileID: 1960779944}
       _MemberName: TriggerDailogue
       _PersistentArguments: []
+  TextEvents: []
 --- !u!1 &657874206
 GameObject:
   m_ObjectHideFlags: 0
@@ -1545,6 +1571,8 @@ MonoBehaviour:
     - Line: ok well that would be minus points but im just going to end the game
         here bc I dont want to think of more branches rn
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
       CharacterFace: 0
@@ -1553,12 +1581,14 @@ MonoBehaviour:
       LineEndEvent:
         _PersistentCalls: []
     alternitiveCanvasGroup: {fileID: 0}
+    presentationStyle: {fileID: 0}
   EndOfLines: []
   DefultEvent:
     _PersistentCalls:
     - _Target: {fileID: 141166755}
       _MemberName: StartTransition
       _PersistentArguments: []
+  TextEvents: []
 --- !u!1 &1090432564
 GameObject:
   m_ObjectHideFlags: 0
@@ -1653,12 +1683,14 @@ MonoBehaviour:
   - Character: {fileID: 0}
     Lines: []
     alternitiveCanvasGroup: {fileID: 0}
+    presentationStyle: {fileID: 0}
   EndOfLines: []
   DefultEvent:
     _PersistentCalls:
     - _Target: {fileID: 141166755}
       _MemberName: StartTransition
       _PersistentArguments: []
+  TextEvents: []
 --- !u!1 &1180439138
 GameObject:
   m_ObjectHideFlags: 0
@@ -1692,18 +1724,23 @@ MonoBehaviour:
   - Character: {fileID: 0}
     Lines: []
     alternitiveCanvasGroup: {fileID: 0}
+    presentationStyle: {fileID: 0}
   - Character: {fileID: 0}
     Lines: []
     alternitiveCanvasGroup: {fileID: 0}
+    presentationStyle: {fileID: 0}
   - Character: {fileID: 0}
     Lines: []
     alternitiveCanvasGroup: {fileID: 0}
+    presentationStyle: {fileID: 0}
   - Character: {fileID: 0}
     Lines: []
     alternitiveCanvasGroup: {fileID: 0}
+    presentationStyle: {fileID: 0}
   - Character: {fileID: 0}
     Lines: []
     alternitiveCanvasGroup: {fileID: 0}
+    presentationStyle: {fileID: 0}
   EndOfLines: []
   DefultEvent:
     _PersistentCalls:
@@ -1721,6 +1758,7 @@ MonoBehaviour:
     - _Target: {fileID: 122271932}
       _MemberName: TriggerDailogue
       _PersistentArguments: []
+  TextEvents: []
 --- !u!4 &1180439140
 Transform:
   m_ObjectHideFlags: 0
@@ -2128,23 +2166,27 @@ MonoBehaviour:
   Slides:
   - Character: {fileID: 0}
     Lines:
-    - Line: ok well that would be minus points but im just going to end the game
-        here bc I dont want to think of more branches rn
+    - Line: ok well that would be <grow>minus points</grow> but im just going to
+        end the game here bc I dont want to think of more branches rn
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 1
-      CharacterFace: 2
+      CharacterFace: 4
       LineStartEvent:
         _PersistentCalls: []
       LineEndEvent:
         _PersistentCalls: []
     alternitiveCanvasGroup: {fileID: 0}
+    presentationStyle: {fileID: 0}
   EndOfLines: []
   DefultEvent:
     _PersistentCalls:
     - _Target: {fileID: 141166755}
       _MemberName: StartTransition
       _PersistentArguments: []
+  TextEvents: []
 --- !u!1 &1768316031
 GameObject:
   m_ObjectHideFlags: 0
@@ -2177,8 +2219,10 @@ MonoBehaviour:
   Slides:
   - Character: {fileID: 0}
     Lines:
-    - Line: I have no clue what we originally wrote here.
+    - Line: I have <palette>no clue</palette> what we originally wrote <shake>here.</shake>
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
       CharacterFace: 0
@@ -2186,8 +2230,10 @@ MonoBehaviour:
         _PersistentCalls: []
       LineEndEvent:
         _PersistentCalls: []
-    - Line: I need to find some dedicated writers.
+    - Line: I need to find some <jump>dedicated writers.</jump>
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
       CharacterFace: 1
@@ -2196,6 +2242,7 @@ MonoBehaviour:
       LineEndEvent:
         _PersistentCalls: []
     alternitiveCanvasGroup: {fileID: 0}
+    presentationStyle: {fileID: 0}
   EndOfLines:
   - Text: Dont insult me.
     ultEvent:
@@ -2211,6 +2258,7 @@ MonoBehaviour:
         _PersistentArguments: []
   DefultEvent:
     _PersistentCalls: []
+  TextEvents: []
 --- !u!4 &1768316033
 Transform:
   m_ObjectHideFlags: 0
@@ -2281,12 +2329,14 @@ MonoBehaviour:
   - Character: {fileID: 0}
     Lines: []
     alternitiveCanvasGroup: {fileID: 0}
+    presentationStyle: {fileID: 0}
   EndOfLines: []
   DefultEvent:
     _PersistentCalls:
     - _Target: {fileID: 141166755}
       _MemberName: StartTransition
       _PersistentArguments: []
+  TextEvents: []
 --- !u!1 &2029670156
 GameObject:
   m_ObjectHideFlags: 0
@@ -2319,9 +2369,11 @@ MonoBehaviour:
   Slides:
   - Character: {fileID: 0}
     Lines:
-    - Line: This system need a reword this is so hard to work with I wrote it in
-        a crunch.
+    - Line: This system need a <funky>reword</funky> this is so hard to work with
+        I wrote it in a <jump>crunch.</jump>
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 1
       CharacterFace: 3
@@ -2329,8 +2381,10 @@ MonoBehaviour:
         _PersistentCalls: []
       LineEndEvent:
         _PersistentCalls: []
-    - Line: 'oh well games over '
+    - Line: 'oh well games <palette>over</palette> '
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
       CharacterFace: 0
@@ -2338,8 +2392,10 @@ MonoBehaviour:
         _PersistentCalls: []
       LineEndEvent:
         _PersistentCalls: []
-    - Line: byeeeeeeeeeeeeeeeeee
+    - Line: <sketchy>byeeeeeeeeeeeeeeeeee</sketchy>
       alternitiveTextBox: {fileID: 0}
+      useScreenPosition: 0
+      screenPosition: {x: 0, y: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
       CharacterFace: 1
@@ -2348,6 +2404,7 @@ MonoBehaviour:
       LineEndEvent:
         _PersistentCalls: []
     alternitiveCanvasGroup: {fileID: 0}
+    presentationStyle: {fileID: 0}
   EndOfLines:
   - Text: "I\u2019m ok."
     ultEvent:
@@ -2363,6 +2420,7 @@ MonoBehaviour:
         _PersistentArguments: []
   DefultEvent:
     _PersistentCalls: []
+  TextEvents: []
 --- !u!4 &2029670158
 Transform:
   m_ObjectHideFlags: 0
