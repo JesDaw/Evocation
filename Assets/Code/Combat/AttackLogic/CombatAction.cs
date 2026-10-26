@@ -68,6 +68,8 @@ public class ProjectileSettings
 {
     public GameObject prefab;
     [Range(0, 100)] public float speed = 15f;
+    [Tooltip("Maximum travel time in seconds before despawning")]
+    public float maxTravelTime = 5f;
     [Range(0, 10)] public float maxHeight = 2f;
     public AnimationCurve trajectoryCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
     public AnimationCurve axisCorrectionCurve = AnimationCurve.Linear(0, 0, 1, 1);
