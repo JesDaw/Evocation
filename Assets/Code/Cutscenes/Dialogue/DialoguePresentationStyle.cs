@@ -10,6 +10,10 @@ public class DialoguePresentationStyle : ScriptableObject
     public DialogueTextSurface sentencePrefab;
     [Tooltip("Width and height of each sentence, in canvas units.")]
     public Vector2 sentenceSize = new Vector2(900f, 200f);
+    [Tooltip("Vertical gap between sentences that stack down from the top of the Sentence Container.")]
+    public float sentenceSpacing = 16f;
+    [Tooltip("Every other stacked sentence is shifted right by this much, for a zigzag layout. 0 = straight column.")]
+    public float staggerOffset = 0f;
 
     [Header("Typography")]
     [Tooltip("Leave empty to keep the speaker's font (CharacterDialogueInfo) or TMP's default.")]
@@ -28,6 +32,10 @@ public class DialoguePresentationStyle : ScriptableObject
     public float fadeDuration = 0.3f;
     [Tooltip("Oldest sentences are removed beyond this many. 0 = keep all until the slide ends.")]
     public int maxVisibleSentences = 0;
+    [Tooltip("Teleprompter: when Max Visible Sentences is reached, the remaining sentences slide up into the removed one's space.")]
+    public bool scrollWhenFull = false;
+    [Tooltip("Seconds the slide-up takes.")]
+    public float scrollDuration = 0.4f;
 
     public string FormatLine(string line)
     {

@@ -53,6 +53,7 @@ public class DialogueTextSurface : MonoBehaviour
     }
     public bool IsRevealing => _writer != null && (_writer.IsWriting || _pausedWhileRevealing);
     public bool HasText => !string.IsNullOrEmpty(_rawText);
+    public float Opacity => _canvasGroup != null ? _canvasGroup.alpha : 1f;
 
     void Awake()
     {
