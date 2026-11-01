@@ -5468,6 +5468,16 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7159327817168516471, guid: 4cfecefd1f25e480e9777df454a9c0a0, type: 3}
   m_PrefabInstance: {fileID: 5077276219896925452}
   m_PrefabAsset: {fileID: 0}
+--- !u!20 &4542028521943587297 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 8754607563919414509, guid: 4cfecefd1f25e480e9777df454a9c0a0, type: 3}
+  m_PrefabInstance: {fileID: 5077276219896925452}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &4826583734780406699 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 328027782950758055, guid: 4cfecefd1f25e480e9777df454a9c0a0, type: 3}
+  m_PrefabInstance: {fileID: 5077276219896925452}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6423329570709980636 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2256967398346246352, guid: 4cfecefd1f25e480e9777df454a9c0a0, type: 3}
@@ -6365,6 +6375,10 @@ PrefabInstance:
       propertyPath: DamageTrigger.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 9077498507217924113}
+    - target: {fileID: 3930441314402462479, guid: cb4b0edb38c44461ea35b1d49fbba33f, type: 3}
+      propertyPath: lockApparentSize
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6363576245524820244, guid: cb4b0edb38c44461ea35b1d49fbba33f, type: 3}
       propertyPath: m_LocalAABB.m_Center.x
       value: 6.509426
@@ -8073,6 +8087,14 @@ PrefabInstance:
       propertyPath: m_Points.Array.data[58].y
       value: -0.019682001
       objectReference: {fileID: 0}
+    - target: {fileID: 7739616646438476637, guid: cb4b0edb38c44461ea35b1d49fbba33f, type: 3}
+      propertyPath: cameraBounds
+      value: 
+      objectReference: {fileID: 4826583734780406699}
+    - target: {fileID: 7739616646438476637, guid: cb4b0edb38c44461ea35b1d49fbba33f, type: 3}
+      propertyPath: outputCamera
+      value: 
+      objectReference: {fileID: 4542028521943587297}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
