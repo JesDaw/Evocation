@@ -1,26 +1,43 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Put on a rough sprite/plane.
-///
-/// Apparent-size lock: while on, whenever you change ONLY the object's depth (its Z, since the
-/// camera looks down +Z), the object is rescaled AND its offset from the camera axis (its X/Y as
-/// seen from the reference point) is scaled by the same ratio, so it keeps the same size and screen
-/// position as seen from the reference point. In Edit mode, the reference point is the point inside
-/// the camera bounds BoxCollider closest to the object (closest X, Y and Z). In Play mode, the
-/// reference point is the live camera position.
-///
-/// How it stays undo-safe and stable: the lock keeps an "anchor" (the object's settled state
-/// plus the camera pose it was measured from). A depth-only change is always computed from the
-/// anchor, never incrementally. Any other change (you move X/Y, change scale yourself, undo,
-/// redo, camera moves) simply re-anchors to the new state.
-///
-/// Sorting order: optionally set to -Z * sortingOrderPerUnit, every Update.
-///
-/// Bounds convention: the object's rectangle is the Renderer's localBounds (SpriteRenderer incl.
-/// pivot and tiled/sliced size). If there is no usable renderer, proxySize is used. The rectangle
-/// is treated as a plane parallel to the camera.
-/// </summary>
+public enum EnvironmentAssetRole
+{
+    PaintedLayer,
+    PositionableGroup,
+    ReusableProp,
+    GroundOrSpriteShape
+}
+
+public struct EnvironmentAssetSpec
+{
+    public bool isValid;
+    public string error;
+
+    public Vector2 worldSize;
+    public float depthAtClosestCamera;
+    public float depthAtFarthestCamera;
+
+    public Vector3 closestCameraPose;
+    public Vector3 farthestCameraPose;
+
+    public Vector2 maxProjectedPixels;
+    public Vector2 minProjectedPixels;
+    public Vector2 liveCameraProjectedPixels;
+    public bool hasLiveCameraProjection;
+
+    public Vector2Int recommendedSourcePixels;
+    public float recommendedPPU;
+
+    public bool hasCurrentSprite;
+    public Vector2Int currentSpritePixels;
+    public float currentSpritePPU;
+    public bool isUndersized;
+    public bool exceedsMaxTextureSize;
+
+    public string warnings;
+}
+
 [ExecuteAlways]
 [DisallowMultipleComponent]
 public class EnvironmentArtAsset : MonoBehaviour
@@ -28,6 +45,14 @@ public class EnvironmentArtAsset : MonoBehaviour
     [Tooltip("Found automatically (parent first, then anywhere in the scene). Assign manually to override.")]
     public EnvironmentArtSettings settings;
 
+    [Header("Asset Classification")]
+    [Tooltip("How the artist should treat this object in Procreate / Unity.")]
+    public EnvironmentAssetRole role = EnvironmentAssetRole.PaintedLayer;
+
+    [Tooltip("Optional notes exported to the artist specification sheet.")]
+    public string artistNotes = "";
+
+    [Header("Apparent-Size Lock")]
     [Tooltip("When on, changing only this object's Z keeps its on-screen size and position (as seen from the reference point).")]
     public bool lockApparentSize;
 
@@ -43,7 +68,7 @@ public class EnvironmentArtAsset : MonoBehaviour
 
     // ---- Lock state. Not serialized: rebuilt on load/enable. Public only so the Inspector can show it. ----
     [System.NonSerialized] public bool hasAnchor;
-    [System.NonSerialized] public Vector3 anchorCameraPosition;   // the reference point: closest point of bounds in edit mode, live camera in play mode
+    [System.NonSerialized] public Vector3 anchorCameraPosition;
     [System.NonSerialized] public Quaternion anchorCameraRotation = Quaternion.identity;
     [System.NonSerialized] public float anchorFieldOfView = 40f;
     [System.NonSerialized] public float anchorDepth;
@@ -52,9 +77,9 @@ public class EnvironmentArtAsset : MonoBehaviour
 
     bool anchorUsedBounds;
     Bounds anchorBounds;
-    Vector3 anchorLateral;     // world-space offset of the object from the camera axis, at anchor time
+    Vector3 anchorLateral;
     bool hasLast;
-    Vector3 lastPosition;      // state after our last write / last observed settled state
+    Vector3 lastPosition;
     Vector3 lastScale;
     Renderer cachedRenderer;
     readonly Vector3[] cornerBuffer = new Vector3[4];
@@ -158,7 +183,6 @@ public class EnvironmentArtAsset : MonoBehaviour
         Vector3 pos = transform.position;
         Vector3 scale = transform.localScale;
 
-        // First frame with the lock on: capture the current state as the baseline.
         if (!hasLast)
         {
             SetAnchor(pos, scale, cam);
@@ -168,8 +192,6 @@ public class EnvironmentArtAsset : MonoBehaviour
             return;
         }
 
-        // If the active reference changed (bounds edited in Edit mode, or live camera moved in Play mode),
-        // re-anchor the settled state.
         if (ReferenceChanged(cam))
         {
             SetAnchor(lastPosition, lastScale, cam);
@@ -180,10 +202,9 @@ public class EnvironmentArtAsset : MonoBehaviour
         bool scaleSame = Vector3.Distance(scale, lastScale) <= PositionTolerance(scale);
         if (posSame && scaleSame)
         {
-            return; // nothing changed
+            return;
         }
 
-        // Is this a pure depth change (nothing perpendicular to the camera axis, scale untouched)?
         bool depthOnly = false;
         Vector3 forward = anchorCameraRotation * Vector3.forward;
         if (hasAnchor && scaleSame)
@@ -195,7 +216,6 @@ public class EnvironmentArtAsset : MonoBehaviour
 
         if (!depthOnly)
         {
-            // You moved X/Y, rescaled, undid/redid, etc. Accept it as the new baseline.
             SetAnchor(pos, scale, cam);
             lastPosition = pos;
             lastScale = scale;
@@ -205,7 +225,6 @@ public class EnvironmentArtAsset : MonoBehaviour
         float newDepth = Vector3.Dot(pos - anchorCameraPosition, forward);
         if (newDepth <= EnvironmentArtSettings.NearEpsilon)
         {
-            // Crossed the camera plane: leave the object alone; the Inspector explains why.
             hasAnchor = false;
             lastPosition = pos;
             lastScale = scale;
@@ -242,7 +261,6 @@ public class EnvironmentArtAsset : MonoBehaviour
                 || Vector3.Distance(b.center, anchorBounds.center) > 1e-4f
                 || Vector3.Distance(b.size, anchorBounds.size) > 1e-4f;
         }
-        // In Play mode (or when no bounds are assigned): the reference is the live camera position.
         return anchorUsedBounds || Vector3.Distance(cam.transform.position, anchorCameraPosition) > PositionTolerance(cam.transform.position);
     }
 
@@ -274,13 +292,12 @@ public class EnvironmentArtAsset : MonoBehaviour
         }
     }
 
-    // Float tolerance that grows with magnitude (positions near Z = 3000 have ~0.0002 precision).
     static float PositionTolerance(Vector3 value)
     {
         return 1e-5f + 2e-6f * value.magnitude;
     }
 
-    // ------------------------------------------------------------------ bounds
+    // ------------------------------------------------------------------ bounds & specs
 
     public Bounds GetLocalBounds()
     {
@@ -296,7 +313,6 @@ public class EnvironmentArtAsset : MonoBehaviour
         return new Bounds(Vector3.zero, new Vector3(proxySize.x, proxySize.y, 0f));
     }
 
-    /// <summary>Fills 4 world-space corners of the object's current rectangle (array length must be 4).</summary>
     public void GetWorldCorners(Vector3[] corners)
     {
         Bounds b = GetLocalBounds();
@@ -308,7 +324,6 @@ public class EnvironmentArtAsset : MonoBehaviour
         corners[3] = transform.TransformPoint(new Vector3(c.x + e.x, c.y - e.y, c.z));
     }
 
-    /// <summary>Same, but for a hypothetical world position and local scale (parent assumed unrotated/unskewed).</summary>
     void GetWorldCornersAt(Vector3 position, Vector3 localScale, Vector3[] corners)
     {
         Bounds b = GetLocalBounds();
@@ -322,11 +337,126 @@ public class EnvironmentArtAsset : MonoBehaviour
         corners[3] = m.MultiplyPoint3x4(new Vector3(c.x + e.x, c.y - e.y, c.z));
     }
 
-    /// <summary>World size of the rectangle (width, height), ignoring rotation.</summary>
     public Vector2 GetWorldSize()
     {
         Bounds b = GetLocalBounds();
         Vector3 s = transform.lossyScale;
         return new Vector2(b.size.x * Mathf.Abs(s.x), b.size.y * Mathf.Abs(s.y));
+    }
+
+    /// <summary>
+    /// Computes the full artist specification (closest/farthest camera poses, max projected pixels,
+    /// recommended canvas size, recommended PPU at unit scale, and warnings).
+    /// </summary>
+    public EnvironmentAssetSpec CalculateSpec()
+    {
+        EnvironmentAssetSpec spec = new EnvironmentAssetSpec();
+        if (settings == null)
+        {
+            spec.isValid = false;
+            spec.error = "Missing EnvironmentArtSettings.";
+            return spec;
+        }
+
+        if (!settings.Validate(out string err))
+        {
+            spec.isValid = false;
+            spec.error = err;
+            return spec;
+        }
+
+        Camera cam = settings.ResolveCamera();
+        Quaternion camRot = cam.transform.rotation;
+        Vector3 forward = camRot * Vector3.forward;
+        float fov = cam.fieldOfView;
+
+        GetWorldCorners(cornerBuffer);
+        spec.worldSize = GetWorldSize();
+        // ... (rest of the method remains identical)
+
+        // Determine closest and farthest camera poses to this object.
+        if (settings.TryGetCameraBounds(out Bounds camBounds))
+        {
+            spec.closestCameraPose = camBounds.ClosestPoint(transform.position);
+            spec.farthestCameraPose = new Vector3(
+                Mathf.Clamp(transform.position.x, camBounds.min.x, camBounds.max.x),
+                Mathf.Clamp(transform.position.y, camBounds.min.y, camBounds.max.y),
+                camBounds.min.z
+            );
+        }
+        else
+        {
+            spec.closestCameraPose = cam.transform.position;
+            spec.farthestCameraPose = cam.transform.position;
+        }
+
+        spec.depthAtClosestCamera = Vector3.Dot(transform.position - spec.closestCameraPose, forward);
+        spec.depthAtFarthestCamera = Vector3.Dot(transform.position - spec.farthestCameraPose, forward);
+
+        if (spec.depthAtClosestCamera <= EnvironmentArtSettings.NearEpsilon)
+        {
+            spec.isValid = false;
+            spec.error = "Object is inside or behind the closest camera plane.";
+            return spec;
+        }
+
+        Matrix4x4 closestView = EnvironmentArtSettings.GetViewMatrix(spec.closestCameraPose, camRot);
+        if (!settings.TryProject(closestView, fov, cornerBuffer, out spec.maxProjectedPixels, out string projErr))
+        {
+            spec.isValid = false;
+            spec.error = projErr;
+            return spec;
+        }
+
+        Matrix4x4 farthestView = EnvironmentArtSettings.GetViewMatrix(spec.farthestCameraPose, camRot);
+        if (!settings.TryProject(farthestView, fov, cornerBuffer, out spec.minProjectedPixels, out _))
+        {
+            spec.minProjectedPixels = spec.maxProjectedPixels;
+        }
+
+        spec.hasLiveCameraProjection = settings.TryProject(cam.worldToCameraMatrix, fov, cornerBuffer, out spec.liveCameraProjectedPixels, out _);
+
+        // Recommended source pixels = max projected pixels * quality multiplier
+        float mult = Mathf.Max(0.1f, settings.pixelDensityMultiplier);
+        int recW = Mathf.Max(1, Mathf.CeilToInt(spec.maxProjectedPixels.x * mult));
+        int recH = Mathf.Max(1, Mathf.CeilToInt(spec.maxProjectedPixels.y * mult));
+        spec.recommendedSourcePixels = new Vector2Int(recW, recH);
+
+        // Recommended PPU so that replacing the sprite and resetting scale to (1,1,1) keeps exact worldSize
+        spec.recommendedPPU = spec.worldSize.x > 0.0001f
+            ? recW / spec.worldSize.x
+            : 100f;
+
+        List<string> warningList = new List<string>();
+
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        if (sr != null && sr.sprite != null)
+        {
+            spec.hasCurrentSprite = true;
+            Rect rect = sr.sprite.rect;
+            spec.currentSpritePixels = new Vector2Int(Mathf.RoundToInt(rect.width), Mathf.RoundToInt(rect.height));
+            spec.currentSpritePPU = sr.sprite.pixelsPerUnit;
+
+            if (spec.currentSpritePixels.x < spec.recommendedSourcePixels.x * 0.95f ||
+                spec.currentSpritePixels.y < spec.recommendedSourcePixels.y * 0.95f)
+            {
+                spec.isUndersized = true;
+                warningList.Add($"Undersized sprite ({spec.currentSpritePixels.x}x{spec.currentSpritePixels.y} px < recommended {recW}x{recH} px)");
+            }
+        }
+        else
+        {
+            warningList.Add("No Sprite assigned (using proxy/renderer bounds)");
+        }
+
+        if (recW > settings.maxTextureSizeWarning || recH > settings.maxTextureSizeWarning)
+        {
+            spec.exceedsMaxTextureSize = true;
+            warningList.Add($"Exceeds max texture size threshold ({settings.maxTextureSizeWarning} px)");
+        }
+
+        spec.warnings = warningList.Count > 0 ? string.Join("; ", warningList) : "OK";
+        spec.isValid = true;
+        return spec;
     }
 }

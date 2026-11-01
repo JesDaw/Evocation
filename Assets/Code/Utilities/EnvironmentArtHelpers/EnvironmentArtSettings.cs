@@ -15,6 +15,15 @@ public class EnvironmentArtSettings : MonoBehaviour
     [Tooltip("Your camera confiner BoxCollider. In Edit mode, the size lock measures from the point inside this box that is closest to the object. In Play mode (or if empty), the live camera position is used instead.")]
     public BoxCollider cameraBounds;
 
+    [Header("Quality & Thresholds")]
+    [Tooltip("Multiplier applied to maximum projected screen pixels when recommending source canvas dimensions (1.0 = 1:1 pixel match at closest camera pose).")]
+    [Min(0.1f)]
+    public float pixelDensityMultiplier = 1f;
+
+    [Tooltip("Warn when an asset's recommended source width or height exceeds this pixel limit (e.g. Procreate layer cap or Unity max texture size).")]
+    [Min(256)]
+    public int maxTextureSizeWarning = 4096;
+
     public const float NearEpsilon = 0.01f;
 
     public Camera ResolveCamera()

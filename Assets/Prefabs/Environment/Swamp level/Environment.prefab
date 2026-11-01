@@ -82,10 +82,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::EnvironmentArtSettings
   outputCamera: {fileID: 0}
-  referenceResolution: {x: 1920, y: 1080}
-  referenceCameraPosition: {x: 0, y: 0, z: -30}
-  referenceCameraEulerAngles: {x: 0, y: 0, z: 0}
-  referenceFieldOfView: 40
+  referenceResolution: {x: 3840, y: 2160}
+  cameraBounds: {fileID: 0}
+  pixelDensityMultiplier: 1
+  maxTextureSizeWarning: 4096
 --- !u!1 &2117688273963695737
 GameObject:
   m_ObjectHideFlags: 0
@@ -305,13 +305,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d251a65864e44b5ab071f659c2b6273, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CodeAssembly::EnvironmentArtAsset
+  settings: {fileID: 0}
+  role: 0
+  artistNotes: 
   lockApparentSize: 0
   proxySize: {x: 1, y: 1}
-  hasReference: 0
-  referenceCameraPosition: {x: 0, y: 0, z: 0}
-  referenceDepth: 0
-  referenceScale: {x: 0, y: 0, z: 0}
-  referenceProjectedPixels: {x: 0, y: 0}
+  autoSortingOrder: 1
+  sortingOrderPerUnit: 1
 --- !u!1 &4265879450884020914
 GameObject:
   m_ObjectHideFlags: 0

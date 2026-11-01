@@ -2,8 +2,8 @@ using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// Inspector for EnvironmentArtAsset: lock status, sorting readout, and the
-/// calculation-vs-camera verification readout.
+/// Inspector for EnvironmentArtAsset: lock status, sorting readout, artist pixel/PPU specs,
+/// and the calculation-vs-camera verification readout.
 /// </summary>
 [CustomEditor(typeof(EnvironmentArtAsset))]
 public class EnvironmentArtAssetEditor : Editor
@@ -12,7 +12,7 @@ public class EnvironmentArtAssetEditor : Editor
 
     public override bool RequiresConstantRepaint()
     {
-        return true; // keeps the numbers live while dragging in the Scene view
+        return true;
     }
 
     public override void OnInspectorGUI()
@@ -38,7 +38,6 @@ public class EnvironmentArtAssetEditor : Editor
         Quaternion rotation = cam.transform.rotation;
         Vector3 forward = rotation * Vector3.forward;
 
-        // Reference point: the locked anchor's if there is one, otherwise the active reference point right now.
         Vector3 referencePoint = asset.lockApparentSize && asset.hasAnchor
             ? asset.anchorCameraPosition
             : settings.GetReferenceCameraPosition(asset.transform.position);
@@ -57,6 +56,8 @@ public class EnvironmentArtAssetEditor : Editor
         }
 
         DrawLock(asset, settings);
+        EditorGUILayout.Space();
+        DrawArtistSpecs(asset);
         EditorGUILayout.Space();
         DrawVerification(asset, settings, cam, referencePoint, depth);
     }
@@ -92,7 +93,6 @@ public class EnvironmentArtAssetEditor : Editor
         EditorGUILayout.LabelField("Anchor scale", asset.anchorScale.ToString("F4"));
         EditorGUILayout.LabelField("Anchor projected size", FormatPixels(asset.anchorProjectedPixels));
 
-        // Direct check of the lock: project the object as it is now from the anchor's reference point.
         asset.GetWorldCorners(corners);
         Matrix4x4 anchorView = EnvironmentArtSettings.GetViewMatrix(asset.anchorCameraPosition, asset.anchorCameraRotation);
         if (settings.TryProject(anchorView, asset.anchorFieldOfView, corners, out Vector2 nowPixels, out _))
@@ -107,6 +107,36 @@ public class EnvironmentArtAssetEditor : Editor
         EditorGUILayout.HelpBox("Change only Z and the object keeps its size and screen position as seen from the reference point. " + modeNote, MessageType.None);
     }
 
+    // EnvironmentArtAssetEditor.DrawArtistSpecs
+    void DrawArtistSpecs(EnvironmentArtAsset asset)
+    {
+        EditorGUILayout.LabelField("Artist Specifications & PPU", EditorStyles.boldLabel);
+        EnvironmentAssetSpec spec = asset.CalculateSpec();
+        if (!spec.isValid)
+        {
+            EditorGUILayout.HelpBox(spec.error, MessageType.Warning);
+            return;
+        }
+
+        EditorGUILayout.LabelField("Intended World Size", $"{spec.worldSize.x:F2} x {spec.worldSize.y:F2} units");
+        EditorGUILayout.LabelField("Max Projected Size (Closest)", FormatPixels(spec.maxProjectedPixels));
+        EditorGUILayout.LabelField("Min Projected Size (Farthest)", FormatPixels(spec.minProjectedPixels));
+        EditorGUILayout.LabelField("Recommended Canvas Size", $"{spec.recommendedSourcePixels.x} x {spec.recommendedSourcePixels.y} px");
+        EditorGUILayout.LabelField("Recommended Final PPU (at scale 1)", spec.recommendedPPU.ToString("F2"));
+
+        if (spec.hasCurrentSprite)
+        {
+            EditorGUILayout.LabelField("Current Sprite Pixels / PPU", $"{spec.currentSpritePixels.x} x {spec.currentSpritePixels.y} px  @  {spec.currentSpritePPU:F1} PPU");
+            float importPPUForCurrentTexture = spec.worldSize.x > 0.0001f ? spec.currentSpritePixels.x / spec.worldSize.x : 100f;
+            EditorGUILayout.LabelField("PPU to Reset Scale Now", importPPUForCurrentTexture.ToString("F2"));
+        }
+
+        if (spec.isUndersized || spec.exceedsMaxTextureSize)
+        {
+            EditorGUILayout.HelpBox(spec.warnings, MessageType.Warning);
+        }
+    }
+
     // EnvironmentArtAssetEditor.DrawVerification
     void DrawVerification(EnvironmentArtAsset asset, EnvironmentArtSettings settings, Camera cam, Vector3 referencePoint, float depth)
     {
@@ -114,11 +144,9 @@ public class EnvironmentArtAssetEditor : Editor
 
         asset.GetWorldCorners(corners);
 
-        // A: closed-form formula at the reference point.
         Vector2 formula = asset.GetWorldSize() * settings.GetPixelsPerWorldUnit(depth, cam.fieldOfView);
         EditorGUILayout.LabelField("A. Formula at reference point", FormatPixels(formula));
 
-        // B: our own matrix projection from the reference point.
         Matrix4x4 ownView = EnvironmentArtSettings.GetViewMatrix(referencePoint, cam.transform.rotation);
         bool haveB = settings.TryProject(ownView, cam.fieldOfView, corners, out Vector2 matrixOwn, out string errB);
         if (haveB)
@@ -131,7 +159,6 @@ public class EnvironmentArtAssetEditor : Editor
             EditorGUILayout.HelpBox("B: " + errB, MessageType.Warning);
         }
 
-        // C: Unity's own camera matrix, from wherever the live camera currently is.
         bool haveC = settings.TryProject(cam.worldToCameraMatrix, cam.fieldOfView, corners, out Vector2 matrixUnity, out string errC);
         if (haveC)
         {
@@ -156,7 +183,6 @@ public class EnvironmentArtAssetEditor : Editor
         }
     }
 
-    // EnvironmentArtAssetEditor.FormatPixels
     static string FormatPixels(Vector2 p)
     {
         return p.x.ToString("F1") + " x " + p.y.ToString("F1") + " px";

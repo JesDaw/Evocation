@@ -319,6 +319,7 @@ GameObject:
   m_Component:
   - component: {fileID: 111793128924161105}
   - component: {fileID: 5498706390936886679}
+  - component: {fileID: 1955128890052394611}
   m_Layer: 0
   m_Name: Swamp level background_0
   m_TagString: Untagged
@@ -388,7 +389,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -300
+  m_SortingOrder: -3000
   m_MaskInteraction: 0
   m_Sprite: {fileID: -7475677900765164556, guid: 360c6a509aef54f7f9db8aa66be84078, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -400,6 +401,25 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &1955128890052394611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1125158542119241388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d251a65864e44b5ab071f659c2b6273, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::EnvironmentArtAsset
+  settings: {fileID: 1943916746531715504}
+  role: 0
+  artistNotes: 
+  lockApparentSize: 0
+  proxySize: {x: 1, y: 1}
+  autoSortingOrder: 1
+  sortingOrderPerUnit: 1
 --- !u!1 &1554177626194932798
 GameObject:
   m_ObjectHideFlags: 0
@@ -6337,7 +6357,7 @@ PrefabInstance:
       objectReference: {fileID: 194853556423707731}
     - target: {fileID: 457641037637570440, guid: cb4b0edb38c44461ea35b1d49fbba33f, type: 3}
       propertyPath: showDebugLogs
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 532431513643387356, guid: cb4b0edb38c44461ea35b1d49fbba33f, type: 3}
       propertyPath: OnDeath._PersistentCalls.Array.data[0]._Target
@@ -6376,8 +6396,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 9077498507217924113}
     - target: {fileID: 3930441314402462479, guid: cb4b0edb38c44461ea35b1d49fbba33f, type: 3}
+      propertyPath: role
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3930441314402462479, guid: cb4b0edb38c44461ea35b1d49fbba33f, type: 3}
+      propertyPath: settings
+      value: 
+      objectReference: {fileID: 1943916746531715504}
+    - target: {fileID: 3930441314402462479, guid: cb4b0edb38c44461ea35b1d49fbba33f, type: 3}
       propertyPath: lockApparentSize
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6363576245524820244, guid: cb4b0edb38c44461ea35b1d49fbba33f, type: 3}
       propertyPath: m_LocalAABB.m_Center.x
@@ -7037,15 +7065,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7031996765519448141, guid: cb4b0edb38c44461ea35b1d49fbba33f, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7031996765519448141, guid: cb4b0edb38c44461ea35b1d49fbba33f, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7031996765519448141, guid: cb4b0edb38c44461ea35b1d49fbba33f, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7031996765519448141, guid: cb4b0edb38c44461ea35b1d49fbba33f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 7213113232172063338, guid: cb4b0edb38c44461ea35b1d49fbba33f, type: 3}
       propertyPath: m_ColliderSegment.Array.size
@@ -8142,6 +8174,17 @@ PrefabInstance:
       addedObject: {fileID: 819035765770850024}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cb4b0edb38c44461ea35b1d49fbba33f, type: 3}
+--- !u!114 &1943916746531715504 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7739616646438476637, guid: cb4b0edb38c44461ea35b1d49fbba33f, type: 3}
+  m_PrefabInstance: {fileID: 8183754853862793965}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d660a6477ebb46b09c58ced41f222f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::EnvironmentArtSettings
 --- !u!4 &2217187002767732768 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8023037919407870669, guid: cb4b0edb38c44461ea35b1d49fbba33f, type: 3}
