@@ -32,13 +32,21 @@ public class HealthBarGradient : BaseMeshEffect
     [Range(0f, 1f)] [SerializeField] float leftBrightness = 0.9f;
 
     [Header("Ripple")]
-    [Min(0.01f)] [SerializeField] float rippleSeconds = 4f;
+    [Min(0.01f)] [SerializeField] float rippleSeconds = 3f;
     [Tooltip("Length of one ripple, as a fraction of the bar.")]
     [Min(0.01f)] [SerializeField] float rippleLength = 0.6f;
-    [Tooltip("How far the ripple shifts the color along the health scale.")]
+    [Tooltip("How far the ripple shifts the color along the health scale. This is what shows between green and red.")]
     [Range(0f, 0.5f)] [SerializeField] float rippleColorShift = 0.05f;
-    [Tooltip("How much the ripple changes brightness, so it still shows when the bar is one solid color.")]
+    [Tooltip("How much the ripple changes brightness.")]
     [Range(0f, 0.5f)] [SerializeField] float rippleBrightness = 0.06f;
+    [Tooltip("Ripple color while the bar is solid healthy color.")]
+    [SerializeField] Color rippleHealthyColor = new Color(0.05f, 0.75f, 0.58f);
+    [Tooltip("Ripple color while the bar is solid critical color.")]
+    [SerializeField] Color rippleCriticalColor = new Color(0.85f, 0.08f, 0.38f);
+    [Tooltip("How far past Healthy Above and Critical Below the ripple colors take to fade out, as a fraction of health.")]
+    [Min(0.01f)] [SerializeField] float rippleColorFade = 0.1f;
+    [Tooltip("How strongly the ripple colors show at the peak of each ripple.")]
+    [Range(0f, 1f)] [SerializeField] float rippleStrength = 0.6f;
 
     readonly List<UIVertex> _stream = new List<UIVertex>();
     readonly UIVertex[] _quad = new UIVertex[4];
@@ -60,6 +68,7 @@ public class HealthBarGradient : BaseMeshEffect
 
         Rect rect = graphic.rectTransform.rect;
         float fill = CurrentFill();
+        Color rippleColor = EvaluateRippleColor(fill, out float rippleAmount);
 
         vh.GetUIVertexStream(_stream);
         vh.Clear();
@@ -80,10 +89,10 @@ public class HealthBarGradient : BaseMeshEffect
                 float start = (float)column / columns;
                 float end = (float)(column + 1) / columns;
 
-                _quad[0] = Tint(LerpVertex(bottomLeft, bottomRight, start), rect, fill);
-                _quad[1] = Tint(LerpVertex(topLeft, topRight, start), rect, fill);
-                _quad[2] = Tint(LerpVertex(topLeft, topRight, end), rect, fill);
-                _quad[3] = Tint(LerpVertex(bottomLeft, bottomRight, end), rect, fill);
+                _quad[0] = Tint(LerpVertex(bottomLeft, bottomRight, start), rect, fill, rippleColor, rippleAmount);
+                _quad[1] = Tint(LerpVertex(topLeft, topRight, start), rect, fill, rippleColor, rippleAmount);
+                _quad[2] = Tint(LerpVertex(topLeft, topRight, end), rect, fill, rippleColor, rippleAmount);
+                _quad[3] = Tint(LerpVertex(bottomLeft, bottomRight, end), rect, fill, rippleColor, rippleAmount);
                 vh.AddUIVertexQuad(_quad);
             }
         }
@@ -102,16 +111,25 @@ public class HealthBarGradient : BaseMeshEffect
             : Color.Lerp(criticalColor, warningColor, t * 2f);
     }
 
-    UIVertex Tint(UIVertex vertex, Rect rect, float fill)
+    // The ripple colors only show near solid green or solid red, so they never mix with each other.
+    Color EvaluateRippleColor(float health, out float amount)
+    {
+        float healthy = Mathf.InverseLerp(healthyAbove - rippleColorFade, healthyAbove, health);
+        float critical = Mathf.InverseLerp(criticalBelow + rippleColorFade, criticalBelow, health);
+        amount = Mathf.Max(healthy, critical);
+        return healthy > critical ? rippleHealthyColor : rippleCriticalColor;
+    }
+
+    UIVertex Tint(UIVertex vertex, Rect rect, float fill, Color rippleColor, float rippleAmount)
     {
         float position = Mathf.InverseLerp(rect.xMin, rect.xMax, vertex.position.x);
-        float ripple = Mathf.Sin((position / rippleLength - Time.time / rippleSeconds) * Mathf.PI * 2f);
+        float wave = Mathf.Sin((position / rippleLength - Time.time / rippleSeconds) * Mathf.PI * 2f);
+        float ripple = Mathf.SmoothStep(0f, 1f, (wave + 1f) * 0.5f);
 
-        float scale = fill + colorSpread * Mathf.Max(0f, fill - position) + rippleColorShift * ripple;
-        Color healthColor = EvaluateHealthColor(scale);
-
-        float brightness = Mathf.Lerp(leftBrightness, 1f, position) * (1f + rippleBrightness * ripple);
+        Color healthColor = EvaluateHealthColor(fill + colorSpread * Mathf.Max(0f, fill - position) + rippleColorShift * wave);
+        float brightness = Mathf.Lerp(leftBrightness, 1f, position) * (1f + rippleBrightness * wave);
         Color color = new Color(healthColor.r * brightness, healthColor.g * brightness, healthColor.b * brightness);
+        color = Color.Lerp(color, rippleColor, ripple * rippleStrength * rippleAmount);
 
         vertex.color = (Color)vertex.color * color;
         return vertex;
