@@ -24,7 +24,12 @@ public class CharacterSelect : MonoBehaviour
     [Header("Character Summary UI")]
     [SerializeField] TMP_Text characterNameText;
     [SerializeField] TMP_Text characterDescriptionText;
+    [SerializeField] TMP_Text characterStatsText;
     [SerializeField] Image characterImage;
+
+    [Header("Character Summary Style")]
+    [Tooltip("TMPEffects tag for the name, without the angle brackets. Needs a TMPAnimator on the name text.")]
+    [SerializeField] string nameEffect = "wave amp=4";
 
     [Header("Party Status UI")]
     [SerializeField] TMP_Text partyCountText;
@@ -82,6 +87,22 @@ public class CharacterSelect : MonoBehaviour
         if (maxMessage != null) maxMessage.SetActive(false);
         UpdateSelectableUI();
         UpdatePartyUI();
+        ShowDefaultCharacter();
+    }
+
+    // Fills the summary with the first unlocked character until the player picks one.
+    void ShowDefaultCharacter()
+    {
+        if (loadoutSlotsUI == null) return;
+
+        foreach (CharacterButton slot in loadoutSlotsUI)
+        {
+            if (slot.Character != null)
+            {
+                ShowCharacterInfo(slot.Character);
+                return;
+            }
+        }
     }
 
     void UpdateSelectableUI()
@@ -150,8 +171,22 @@ public class CharacterSelect : MonoBehaviour
             characterImage.enabled = true;
             characterImage.sprite = character.portrait;
         }
-        if (characterNameText != null) characterNameText.text = character.characterName;
-        if (characterDescriptionText != null) characterDescriptionText.text = character.description;
+        if (characterNameText != null) characterNameText.text = WithEffect(character.characterName, nameEffect);
+
+        // The first line says what the character does, and the lines after it are its stats.
+        int lineEnd = character.description.IndexOf('\n');
+        string firstLine = lineEnd < 0 ? character.description : character.description.Substring(0, lineEnd);
+        string stats = lineEnd < 0 ? "" : character.description.Substring(lineEnd + 1);
+        if (character.scriptableStats != null) stats += $"\nCost: {character.scriptableStats._spawnCost}";
+
+        if (characterDescriptionText != null) characterDescriptionText.text = firstLine;
+        if (characterStatsText != null) characterStatsText.text = stats;
+    }
+
+    static string WithEffect(string text, string effect)
+    {
+        if (string.IsNullOrEmpty(effect)) return text;
+        return $"<{effect}>{text}</{effect.Split(' ')[0]}>";
     }
 
     public void AddCharacterToParty(CharacterData character)
