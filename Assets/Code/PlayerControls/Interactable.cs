@@ -51,6 +51,7 @@ public class Interactable : MonoBehaviour
     {
         // Unsubscribe when disabled
         UnsubscribeFromInputs();
+        if (InteractionIconDisplay.Instance != null) InteractionIconDisplay.Instance.Hide(InteractionNotificationIcon);
     }
 
     void SubscribeToInputs()
@@ -115,12 +116,14 @@ public class Interactable : MonoBehaviour
         if (LocationClaimed) return;
         _iconIsActive = true;
         InteractionNotificationIcon.SetActive(_iconIsActive);
+        if (InteractionIconDisplay.Instance != null) InteractionIconDisplay.Instance.Show(InteractionNotificationIcon);
     }
 
     void ToggleIconOff()
     {
         _iconIsActive = false;
         InteractionNotificationIcon.SetActive(_iconIsActive);
+        if (InteractionIconDisplay.Instance != null) InteractionIconDisplay.Instance.Hide(InteractionNotificationIcon);
     }
     void Update()
     {
