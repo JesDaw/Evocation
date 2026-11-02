@@ -13,114 +13,22 @@ MonoBehaviour:
   m_Name: Fireball Spell
   m_EditorClassIdentifier: CodeAssembly::FireballSpell
   SpellName: 
-  Icon: {fileID: -724805922, guid: 215687feeab0b7445b4a1cd86c82c2e1, type: 3}
+  Icon: {fileID: -1177800854577438346, guid: 4d3940160cdb94dd3b8e2ee063f03a56, type: 3}
   Description: 
   castMode: 0
   Cost: 10
   Radius: 5
-  action:
-    actionName: Action
-    priority: 0
-    definesStoppingRange: 0
-    rangePercent: 1
-    extendsForward: 0
+  spellEffect:
     targetFriendly: 0
-    targetCondition: 0
-    maxTargets: 100
-    castCooldown: 2
-    healthChangePercent: -20
-    knockbackPercent: 1
-    zoneSpawnPosition: 0
-    projectileSettings:
-      prefab: {fileID: 0}
-      speed: 15
-      maxHeight: 2
-      trajectoryCurve:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 0
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 0.5
-          value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 1
-          value: 0
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      axisCorrectionCurve:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 0
-          inSlope: 0
-          outSlope: 1
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 1
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      speedCurve:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
+    maxTargets: 1
+    healthChange: -20
+    knockback: 0
     effectsOnHit: []
     zoneData: {fileID: 0}
+    zoneMode: 0
     zoneSticky: 0
     excludeCasterFromZone: 1
-    applicationMode: 0
+    zoneTargetsEnemies: 0
   hitboxDelay: 0.75
   animationDuration: 3
   spellVFX: {fileID: 3105354740991630867, guid: ed09d713b37a894489efe4e0bd1e585c, type: 3}
