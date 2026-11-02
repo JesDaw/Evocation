@@ -302,7 +302,8 @@ public class GlobalInputManager : MonoBehaviour
         EnableMagicControls();
         DisableMenuNavigation();
         EnableCursor();
-        
+        _inputActions.Player.Interact.Enable();
+
     }
 
     public void ApplySpellAimMode()
