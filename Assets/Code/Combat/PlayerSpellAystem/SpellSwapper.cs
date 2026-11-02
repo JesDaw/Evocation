@@ -115,7 +115,7 @@ public class SpellSwapper : MonoBehaviour
 
     public void UpdateTotalMana(int _totalMana)
     {
-        totalMana.text = "Mana: " + _totalMana.ToString();
+        totalMana.text = _totalMana.ToString();
         ManaBarImage.value = (float)_totalMana / 100;
     }
 
