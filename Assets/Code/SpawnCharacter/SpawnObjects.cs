@@ -21,6 +21,16 @@ public class SpawnObjects : MonoBehaviour
     [SerializeField] Transform playerContainer;
     [SerializeField] Transform spawnLocation;
 
+    [Header("Spawn Tint")]
+    [Tooltip("Color multiplied onto every unit this spawner creates (white = no change).")]
+    [SerializeField] Color unitTint = Color.white;
+    [Tooltip("How strongly Unit Tint is applied. 0 = off, 1 = full tint color.")]
+    [Range(0f, 1f)] [SerializeField] float unitTintStrength = 1f;
+    [Tooltip("Color for heroes this spawner creates (only used by the player's spawner).")]
+    [SerializeField] Color heroTint = Color.white;
+    [Tooltip("How strongly Hero Tint is applied. 0 = off, 1 = full tint color.")]
+    [Range(0f, 1f)] [SerializeField] float heroTintStrength = 1f;
+
     [Header("Events")]
     [SerializeField] UnityEvent<GameObject> onSpawn;
     [SerializeField] bool DebugLogs = false;
@@ -74,6 +84,13 @@ public class SpawnObjects : MonoBehaviour
 
         if (Money.Instance == null)
             Debug.LogWarning("[SpawnObjects] No player Money instance found.");
+
+        // Heroes placed in the scene (the starting hero) weren't spawned by us, so tint them here to match.
+        if (!enemySpawner && PlayerInstance == this && PlayerSwitch.Instance != null)
+        {
+            foreach (GameObject hero in PlayerSwitch.Instance.Players)
+                if (hero != null) ApplySpawnTint(hero, heroTint, heroTintStrength);
+        }
     }
 
     void OnDestroy()
@@ -226,6 +243,7 @@ public class SpawnObjects : MonoBehaviour
 
         SetCharacterLayer(spawnedUnit);
         RandomizeAppearancePosition(spawnedUnit);
+        ApplySpawnTint(spawnedUnit, unitTint, unitTintStrength);
 
         onSpawn?.Invoke(spawnedUnit);
 
@@ -324,6 +342,7 @@ public class SpawnObjects : MonoBehaviour
             money.spendMoney(playerStats._spawnCost);
 
         SetCharacterLayer(spawnedPlayer, true);
+        ApplySpawnTint(spawnedPlayer, heroTint, heroTintStrength);
 
         if (PlayerSwitch.Instance != null)
             PlayerSwitch.Instance.AddPlayer(spawnedPlayer);
@@ -343,6 +362,35 @@ public class SpawnObjects : MonoBehaviour
         }
 
         return spawnedPlayer;
+    }
+
+    #endregion
+
+    #region Spawn Tint
+
+    void ApplySpawnTint(GameObject spawned, Color tint, float strength)
+    {
+        if (strength <= 0f || tint == Color.white) return;
+        StartCoroutine(TintNextFrame(spawned, tint, strength));
+    }
+
+    // CPUs build their animation rigs in CpuStateManager.Startup(), which runs the frame after spawning
+    // and replaces the prefab's placeholder sprites. Tinting right away would be lost, so wait a frame.
+    System.Collections.IEnumerator TintNextFrame(GameObject spawned, Color tint, float strength)
+    {
+        yield return null;
+        if (spawned == null) yield break;
+
+        foreach (var sr in spawned.GetComponentsInChildren<SpriteRenderer>(true))
+        {
+            Color c = sr.color;
+            // Keep alpha so fades still work.
+            sr.color = new Color(
+                Mathf.Lerp(c.r, c.r * tint.r, strength),
+                Mathf.Lerp(c.g, c.g * tint.g, strength),
+                Mathf.Lerp(c.b, c.b * tint.b, strength),
+                c.a);
+        }
     }
 
     #endregion
