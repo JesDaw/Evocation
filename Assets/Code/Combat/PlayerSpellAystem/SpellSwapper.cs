@@ -34,6 +34,8 @@ public class SpellSwapper : MonoBehaviour
     void Start()
     {
         SubscribeToInputs();
+        if (ManaSystem.Instance != null && totalMana != null && ManaBarImage != null)
+            UpdateTotalMana(ManaSystem.Instance.PlayerMana);
         if (DebugLogs) Debug.Log($"spells.Count = {spells.Count}");
         if (spells.Count == 0)
             return;
@@ -113,7 +115,7 @@ public class SpellSwapper : MonoBehaviour
 
     public void UpdateTotalMana(int _totalMana)
     {
-        totalMana.text = "Mana: " + _totalMana.ToString();
+        totalMana.text = _totalMana.ToString();
         ManaBarImage.value = (float)_totalMana / 100;
     }
 
