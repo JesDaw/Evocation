@@ -100,6 +100,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4688038934161243652}
+  - component: {fileID: 2723483782607948796}
+  - component: {fileID: 1673793179833942004}
   m_Layer: 0
   m_Name: Effect Zone
   m_TagString: Untagged
@@ -124,6 +126,35 @@ Transform:
   - {fileID: 3573490243843528856}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2723483782607948796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3105354740991630867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f55490edaa0745c6b1536872ca654ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::AreaEffectZone
+  data: {fileID: 0}
+  targetTags: []
+--- !u!114 &1673793179833942004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3105354740991630867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80975596a7d304753ae5c8c9dedd4f22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::ZoneVisual
+  ringRenderer: {fileID: 4097547480408747240}
+  fillRenderer: {fileID: 5828824758589966449}
+  baseDiameter: 1
 --- !u!1 &8653391405536025370
 GameObject:
   m_ObjectHideFlags: 0
