@@ -40,7 +40,7 @@ public class HealthBarGradient : BaseMeshEffect
     [Tooltip("How much the ripple changes brightness.")]
     [Range(0f, 0.5f)] [SerializeField] float rippleBrightness = 0.06f;
     [Tooltip("Ripple color while the bar is solid healthy color.")]
-    [SerializeField] Color rippleHealthyColor = new Color(0.05f, 0.75f, 0.58f);
+    [SerializeField] Color rippleHealthyColor = new Color(0.05f, 0.7f, 0.7f);
     [Tooltip("Ripple color while the bar is solid critical color.")]
     [SerializeField] Color rippleCriticalColor = new Color(0.85f, 0.08f, 0.38f);
     [Tooltip("How far past Healthy Above and Critical Below the ripple colors take to fade out, as a fraction of health.")]
