@@ -62,6 +62,7 @@ public class PlayerStateMachine : MonoBehaviour
         InitializePlayerStats();
 
         if (GlobalInputManager.Instance != null) SubscribeToInputs();
+        Animator.SetFloat("RunningSpeed", ScrStats._MoveSpeed);
     }
 
     void InitializePlayerStats()
@@ -240,7 +241,7 @@ public class PlayerStateMachine : MonoBehaviour
 
         var timers = _playerStats._ActionCooldownTimers;
         if (timers != null && timers.Count > 0 && timers[0] > 0f) return;
-
+        
         _commander.OnAttack(context);
     }
 
