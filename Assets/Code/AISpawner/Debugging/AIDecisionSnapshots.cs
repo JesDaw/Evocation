@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 
 namespace AIDecisionTrace
 {
@@ -80,6 +81,40 @@ namespace AIDecisionTrace
         public float totalUtility;
         public bool isSelected;
         public int rank;                       // 1 = highest total utility (ties keep array order)
+
+        // ---- Stage 1.5 --------------------------------------------------------------------
+        /// <summary>First-seen stats of this unit (shared object; null if the asset reference was missing).</summary>
+        public AIUnitSnapshot unit;
+
+        // Everything below is DIAGNOSTIC ONLY: derived from the fields above, never fed back to the AI.
+
+        /// <summary>The AI's score is the plain average of four utilities.</summary>
+        public const int UtilityTermCount = 4;
+
+        public bool UsedMultipleCopies { get { return swarmCopies > 1; } }
+
+        /// <summary>outcomeRaw / spawnCost. NOTE: outcomeRaw covers swarmCopies virtual copies, so for swarms prefer the swarm/per-copy variants. NaN when cost is 0 or less.</summary>
+        public float ImprovementPerUnitCost { get { return spawnCost > 0f ? outcomeRaw / spawnCost : float.NaN; } }
+
+        /// <summary>outcomeRaw / (spawnCost x copies): improvement per currency actually hypothesised. NaN when cost is 0 or less.</summary>
+        public float ImprovementPerSwarmCost { get { return committedCost > 0f ? outcomeRaw / committedCost : float.NaN; } }
+
+        /// <summary>outcomeRaw / copies: average improvement per virtual copy (the gain is not linear in copies).</summary>
+        public float ImprovementPerCopy { get { return swarmCopies > 0 ? outcomeRaw / swarmCopies : float.NaN; } }
+
+        public float ContribMoney { get { return moneyUtility / UtilityTermCount; } }
+        public float ContribCooldown { get { return cooldownUtility / UtilityTermCount; } }
+        public float ContribRate { get { return expenditureUtility / UtilityTermCount; } }
+        public float ContribOutcome { get { return outcomeUtility / UtilityTermCount; } }
+
+        /// <summary>Fraction of the total score contributed by a term (NaN when total is 0).</summary>
+        public float ShareOfTotal(float contribution) { return totalUtility != 0f ? contribution / totalUtility : float.NaN; }
+
+        public bool AffordableSwarmActual { get { return actualMoney >= committedCost; } }
+        public bool AffordableSwarmVirtual { get { return committedCost <= virtualBudget; } }
+
+        /// <summary>Outcome utility sits at the top of its [-1, 1] range.</summary>
+        public bool OutcomeSaturated { get { return outcomeUtility >= 0.999f; } }
     }
 
     /// <summary>One iteration of the spawn-pass loop inside ExicuteBestAction.</summary>
@@ -129,6 +164,52 @@ namespace AIDecisionTrace
                     case AIPassOutcome.SpawnFailed: return "Spawn FAILED: " + n;
                     default: return outcome.ToString();
                 }
+            }
+        }
+
+        // ---- Stage 1.5 diagnostic-only helpers ---------------------------------------------
+
+        /// <summary>
+        /// Which term set the outcome denominator: "MaxDelta" (largest |raw delta| in the pass),
+        /// "ScaleFloor" (outcomeUtilityScale was larger) or "Epsilon" (both tiny). Derived from stored values.
+        /// </summary>
+        public string DenominatorSource(float outcomeUtilityScale)
+        {
+            if (maxAbsOutcomeDelta >= outcomeUtilityScale && maxAbsOutcomeDelta >= 0.001f) return "MaxDelta";
+            if (outcomeUtilityScale >= 0.001f) return "ScaleFloor";
+            return "Epsilon";
+        }
+
+        /// <summary>True when this candidate's |raw delta| equals the pass maximum, i.e. it defines the normalization.</summary>
+        public bool IsPassMaxDelta(AICandidateSnapshot c)
+        {
+            return c != null && Mathf.Abs(c.outcomeRaw) >= maxAbsOutcomeDelta - 1e-6f;
+        }
+
+        public AICandidateSnapshot RunnerUp
+        {
+            get
+            {
+                for (int i = 0; i < candidates.Count; i++)
+                    if (candidates[i].rank == 2) return candidates[i];
+                return null;
+            }
+        }
+
+        /// <summary>Candidate with the highest improvement per swarm cost (ignores NaN). Diagnostic only.</summary>
+        public AICandidateSnapshot MostEfficientCandidate
+        {
+            get
+            {
+                AICandidateSnapshot best = null;
+                float bestValue = float.NegativeInfinity;
+                for (int i = 0; i < candidates.Count; i++)
+                {
+                    float v = candidates[i].ImprovementPerSwarmCost;
+                    if (float.IsNaN(v)) continue;
+                    if (v > bestValue) { bestValue = v; best = candidates[i]; }
+                }
+                return best;
             }
         }
 

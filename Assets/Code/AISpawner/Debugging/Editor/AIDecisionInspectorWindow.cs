@@ -40,7 +40,7 @@ public class AIDecisionInspectorWindow : EditorWindow
     {
         "Rank by total utility (1 = best). Ties keep Characters-array order.",
         "Selected = the candidate the AI chose this pass (always the highest total utility).",
-        "Unit asset name. Click to ping the asset.",
+        "Unit asset name.",
         "Spawn cost (_spawnCost).",
         "Actual money (Money.AIInstance.CurrentMoney) >= cost.",
         "Cost <= virtual budget. The AI's own 'overBudget' flag is the inverse of this.",
@@ -80,6 +80,9 @@ public class AIDecisionInspectorWindow : EditorWindow
     [SerializeField] int sortColumn = ColTotal;
     [SerializeField] bool sortDescending = true;
     [SerializeField] int capacity = AIDecisionRecorder.DefaultCapacity;
+    [SerializeField] string inspectedUnit = "";   // candidate shown in the details panel ("" = the selected one)
+    [SerializeField] bool detailsFoldout = true;
+    [SerializeField] bool profileFoldout = true;
 
     // ---------------------------------------------------------------- transient state
     Vector2 historyScroll;
@@ -514,6 +517,7 @@ public class AIDecisionInspectorWindow : EditorWindow
         }
 
         GUILayout.Space(2f);
+        GUILayout.Label("Click a row to inspect that candidate below. Click a column header to sort.", EditorStyles.miniLabel);
         DrawCandidateTable(p);
 
         AICandidateSnapshot s = p.Selected;
@@ -527,6 +531,8 @@ public class AIDecisionInspectorWindow : EditorWindow
                 s.outcomeWithCandidate.ToString("F2") + ")";
             EditorGUILayout.HelpBox(formula, MessageType.None);
         }
+
+        DrawCandidateDetails(t, p);
 
         if (p.skippedCandidates.Count > 0)
             EditorGUILayout.HelpBox("Skipped (invalid cost/cooldown): " + string.Join(", ", p.skippedCandidates.ToArray()), MessageType.Warning);
@@ -609,12 +615,36 @@ public class AIDecisionInspectorWindow : EditorWindow
         else if (alternate)
             EditorGUI.DrawRect(r, new Color(0.5f, 0.5f, 0.5f, 0.08f));
 
+        if (ReferenceEquals(c, FindInspected(pass)))
+        {
+            Color oc = new Color(0.30f, 0.60f, 1.00f, 0.95f);
+            EditorGUI.DrawRect(new Rect(r.x, r.y, r.width, 1f), oc);
+            EditorGUI.DrawRect(new Rect(r.x, r.yMax - 1f, r.width, 1f), oc);
+            EditorGUI.DrawRect(new Rect(r.x, r.y, 1f, r.height), oc);
+            EditorGUI.DrawRect(new Rect(r.xMax - 1f, r.y, 1f, r.height), oc);
+        }
+
+        // Drawn before the cells so it never sits on top of anything else.
+        if (GUI.Button(r, GUIContent.none, GUIStyle.none))
+            inspectedUnit = c.unitName;
+
         float x = r.x;
         for (int col = 0; col < ColWidths.Length; col++)
         {
             DrawCell(new Rect(x, r.y, ColWidths[col], r.height), c, col);
             x += ColWidths[col];
         }
+    }
+
+    AICandidateSnapshot FindInspected(AIPassSnapshot p)
+    {
+        if (!string.IsNullOrEmpty(inspectedUnit))
+        {
+            for (int i = 0; i < p.candidates.Count; i++)
+                if (p.candidates[i].unitName == inspectedUnit) return p.candidates[i];
+        }
+        if (p.Selected != null) return p.Selected;
+        return p.candidates.Count > 0 ? p.candidates[0] : null;
     }
 
     void DrawCell(Rect cell, AICandidateSnapshot c, int col)
@@ -628,8 +658,6 @@ public class AIDecisionInspectorWindow : EditorWindow
             case ColSel: text = c.isSelected ? "YES" : ""; break;
             case ColUnit:
                 GUI.Label(cell, new GUIContent(c.unitName, c.unitName), style);
-                if (c.unitAsset != null && GUI.Button(cell, new GUIContent("", "Click to ping the asset"), GUIStyle.none))
-                    EditorGUIUtility.PingObject(c.unitAsset);
                 return;
             case ColCost: text = c.spawnCost.ToString("0.##"); break;
             case ColActual: text = c.affordableActual ? "Yes" : "No"; style = c.affordableActual ? cellYes : cellNo; break;
@@ -647,6 +675,225 @@ public class AIDecisionInspectorWindow : EditorWindow
 
         GUI.Label(cell, text, style);
     }
+
+    // ================================================================ candidate details (Stage 1.5)
+
+    void DrawCandidateDetails(AITickSnapshot t, AIPassSnapshot p)
+    {
+        AICandidateSnapshot c = FindInspected(p);
+        if (c == null) return;
+
+        string title = "Candidate details: " + c.unitName + (c.isSelected ? "   [SELECTED]" : "   [not selected]");
+        detailsFoldout = EditorGUILayout.Foldout(detailsFoldout, title, true, foldoutBold);
+        if (!detailsFoldout) return;
+
+        EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+
+        // ---- utility breakdown -------------------------------------------------------
+        Sub("Utility breakdown   (the AI's score is the plain average of four utilities)");
+        DrawTermRow("Money utility", c.moneyUtility, c.ContribMoney, c.ShareOfTotal(c.ContribMoney));
+        DrawTermRow("Cooldown utility", c.cooldownUtility, c.ContribCooldown, c.ShareOfTotal(c.ContribCooldown));
+        DrawTermRow("Expenditure-rate utility", c.expenditureUtility, c.ContribRate, c.ShareOfTotal(c.ContribRate));
+        DrawTermRow("Outcome utility", c.outcomeUtility, c.ContribOutcome, c.ShareOfTotal(c.ContribOutcome));
+        Line("TOTAL utility", c.totalUtility.ToString("F3") + "   (rank " + c.rank + " of " + p.candidates.Count + ")");
+
+        // ---- raw expected outcome ----------------------------------------------------
+        Sub("Raw expected outcome   (tracker scale; + = player favored, - = AI favored)");
+        Line("Baseline (current battlefield)", c.baselineOutcome.ToString("F2"));
+        Line("With " + c.swarmCopies + " virtual cop" + (c.swarmCopies == 1 ? "y" : "ies") + " of this unit", c.outcomeWithCandidate.ToString("F2"));
+        Line("Raw predicted improvement  (baseline - with)", c.outcomeRaw.ToString("F2") + "   (+ = improves the AI's position)");
+
+        // ---- normalized utility ------------------------------------------------------
+        Sub("Normalized utility");
+        Line("Outcome denominator", p.outcomeDenominator.ToString("F3") + "   (set by " + p.DenominatorSource(t.outcomeUtilityScale) + ")");
+        Line("Outcome utility  (raw / denominator)", c.outcomeUtility.ToString("F3"));
+        Line("Has the largest |raw| in this pass", YesNo(p.IsPassMaxDelta(c)));
+        Line("Outcome utility saturated at 1.0", YesNo(c.OutcomeSaturated));
+
+        // ---- marginal gain -----------------------------------------------------------
+        Sub("Marginal gain");
+        Line("Virtual copies evaluated",
+            c.swarmCopies + (c.UsedMultipleCopies
+                ? "   (the raw improvement covers ALL copies; only one unit is spawned per pass)"
+                : "   (single unit)"));
+        Line("Raw improvement, all copies", c.outcomeRaw.ToString("F2"));
+        Line("Raw improvement per copy", Fx(c.ImprovementPerCopy, "F2"));
+
+        // ---- economic efficiency -----------------------------------------------------
+        Sub("Economic efficiency   (diagnostic only - the AI does not use it)");
+        Line("Spawn cost / hypothetical swarm cost", c.spawnCost.ToString("0.##") + "  /  " + c.committedCost.ToString("0.##"));
+        Line("Improvement per unit cost  (raw / cost)", Fx(c.ImprovementPerUnitCost, "F2"));
+        Line("Improvement per swarm cost  (raw / (cost x copies))", Fx(c.ImprovementPerSwarmCost, "F2"));
+        AICandidateSnapshot eff = p.MostEfficientCandidate;
+        Line("Efficiency rank in this pass",
+            EfficiencyRank(p, c) + " of " + p.candidates.Count + (eff != null ? "   (most efficient: " + eff.unitName + ")" : ""));
+
+        // ---- affordability -----------------------------------------------------------
+        Sub("Real affordability   (actual money)");
+        Line("Actual money", c.actualMoney.ToString());
+        Line("Can pay for 1 unit", YesNo(c.affordableActual));
+        Line("Can pay for the hypothetical swarm", YesNo(c.AffordableSwarmActual));
+
+        Sub("Virtual-budget affordability   (what the AI is currently allowed to spend)");
+        Line("Virtual budget", c.virtualBudget.ToString("F2"));
+        Line("1 unit fits  (the AI's own over-budget test)", YesNo(c.affordableVirtual));
+        Line("Hypothetical swarm fits", YesNo(c.AffordableSwarmVirtual));
+
+        // ---- margin ------------------------------------------------------------------
+        AICandidateSnapshot sel = p.Selected;
+        if (sel != null && !ReferenceEquals(sel, c))
+        {
+            Sub("Gap to the selected candidate (" + sel.unitName + ")");
+            DrawMargin(c, sel, "Selected minus this one");
+        }
+        else if (c.isSelected && p.RunnerUp != null)
+        {
+            Sub("Why it beat the runner-up (" + p.RunnerUp.unitName + ")");
+            DrawMargin(c, p.RunnerUp, "This one minus runner-up");
+        }
+
+        // ---- combat profile ----------------------------------------------------------
+        GUILayout.Space(4f);
+        profileFoldout = EditorGUILayout.Foldout(profileFoldout, "Combat profile   (first-seen snapshot)", true, foldoutBold);
+        if (profileFoldout) DrawUnitProfile(c);
+
+        EditorGUILayout.EndVertical();
+        GUILayout.Space(2f);
+    }
+
+    // "a" - "b" per term, expressed as score contribution (utility / 4)
+    void DrawMargin(AICandidateSnapshot a, AICandidateSnapshot b, string caption)
+    {
+        Line("Money term", Signed(a.ContribMoney - b.ContribMoney));
+        Line("Cooldown term", Signed(a.ContribCooldown - b.ContribCooldown));
+        Line("Expenditure-rate term", Signed(a.ContribRate - b.ContribRate));
+        Line("Outcome term", Signed(a.ContribOutcome - b.ContribOutcome));
+        Line("Total score difference   (" + caption + ")", Signed(a.totalUtility - b.totalUtility));
+    }
+
+    void DrawTermRow(string label, float utility, float contribution, float share)
+    {
+        Rect r = GUILayoutUtility.GetRect(1f, 18f, GUILayout.ExpandWidth(true));
+        float x = r.x;
+
+        GUI.Label(new Rect(x, r.y, 180f, r.height), label, cellStyle);
+        x += 180f;
+        GUI.Label(new Rect(x, r.y, 60f, r.height), utility.ToString("F3"), cellBold);
+        x += 62f;
+
+        Rect bar = new Rect(x, r.y + 4f, 180f, r.height - 8f);
+        EditorGUI.DrawRect(bar, new Color(0.5f, 0.5f, 0.5f, 0.20f));
+        float fill = Mathf.Clamp01(Mathf.Abs(utility));
+        EditorGUI.DrawRect(new Rect(bar.x, bar.y, bar.width * fill, bar.height),
+            utility >= 0f ? new Color(0.30f, 0.70f, 0.40f, 0.9f) : new Color(0.85f, 0.30f, 0.30f, 0.9f));
+        x += 190f;
+
+        string pct = float.IsNaN(share) ? "n/a" : (share * 100f).ToString("F0") + "%";
+        GUI.Label(new Rect(x, r.y, 300f, r.height), "adds " + contribution.ToString("F3") + " to the score  (" + pct + " of total)", cellStyle);
+    }
+
+    void DrawUnitProfile(AICandidateSnapshot c)
+    {
+        AIUnitSnapshot u = c.unit;
+        if (u == null)
+        {
+            EditorGUILayout.HelpBox("No stats snapshot for this candidate (the unit asset reference was missing).", MessageType.Warning);
+            return;
+        }
+
+        EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+
+        Line("First observed", "tick #" + u.firstSeenTick + ", t = " + u.firstSeenTime.ToString("F1") + "s   (later asset edits are not reflected here)");
+        Line("Theme / RPS type / ODS", Txt(u.theme) + "  /  " + Txt(u.rpsType) + "  /  " + Txt(u.ods));
+        Line("Spawn cost / cooldown", u.spawnCost.ToString("0.##") + "  /  " + u.spawnCooldown.ToString("0.##") + "s");
+        Line("Calculated power / value discrepancy", u.calculatedPower.ToString("F2") + "  /  " + u.valueDiscrepancy.ToString("F2") + "   (stored in the asset by the balance tools; may be stale)");
+
+        GUILayout.Space(2f);
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("", GUILayout.Width(EditorGUIUtility.labelWidth));
+        GUILayout.Label("AI model (PowerMath)", EditorStyles.boldLabel, GUILayout.Width(150f));
+        GUILayout.Label("Balance sim", EditorStyles.boldLabel, GUILayout.Width(110f));
+        EditorGUILayout.EndHorizontal();
+        CmpRow("Attack cycle (s)", u.aiCycleSec, u.balsimCycleSec);
+        CmpRow("DPS", u.aiDps, u.balsimDps);
+        CmpRow("Stopping range", u.aiRange, u.balsimStoppingRange);
+
+        GUILayout.Space(2f);
+        Line("Max health / knockback durability", u.maxHealth.ToString("F1") + "  /  " + u.knockbackMaxHealth.ToString("F1"));
+        Line("Attack damage (raw / AI per hit)", u.attackDamage.ToString("F1") + "  /  " + u.aiAtk.ToString("F1"));
+        Line("Knockback damage (raw / AI)", u.knockbackDamage.ToString("F1") + "  /  " + u.aiKnockbackDamage.ToString("F1"));
+        Line("Move speed", u.moveSpeed.ToString("F2"));
+        Line("Horizontal range (raw)", u.horizontalRange.ToString("F2"));
+        Line("Max attack targets (AI model)", u.aiMaxTargets == int.MaxValue ? "unlimited" : u.aiMaxTargets.ToString());
+        Line("AOE (AI model)", YesNo(u.aiIsAoe));
+        Line("Support / utility power", u.utilityPower.ToString("F2"));
+
+        if (u.hasPrimaryAction)
+        {
+            Line("Primary action",
+                u.primaryKind + ";  health change " + u.primaryHealthChangePercent.ToString("0.##") + (u.primaryScalesWithUserStats ? " (x attack stat)" : " (flat)") +
+                ";  knockback " + u.primaryKnockbackPercent.ToString("0.##") + ";  cast cooldown x" + u.primaryCastCooldown.ToString("0.##"));
+            Line("Primary action targeting",
+                "maxTargets raw/normalized " + u.primaryMaxTargetsRaw + "/" + (u.primaryMaxTargetsNormalized == int.MaxValue ? "unlimited" : u.primaryMaxTargetsNormalized.ToString()) +
+                ";  projectile " + YesNo(u.primaryUseProjectile) + ";  zone data " + YesNo(u.primaryHasZoneData) +
+                ";  targets friendly " + YesNo(u.primaryTargetFriendly) + ";  effects on hit " + u.primaryEffectsOnHitCount);
+        }
+        else
+        {
+            Line("Primary action", "none found (PowerMath falls back to raw stats)");
+        }
+
+        if (u.hasStoppingAction)
+        {
+            Line("Stopping-range action",
+                (u.stoppingSameAsPrimary ? "same as primary" : "different action") + ";  defines stopping range " + YesNo(u.stoppingDefinesStoppingRange) +
+                ";  range x" + u.stoppingRangePercent.ToString("0.##") + (u.stoppingExtendsForward ? " (extends forward, x1.5)" : ""));
+        }
+
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+        if (GUILayout.Button("Ping unit asset", GUILayout.Width(110f)) && c.unitAsset != null)
+            EditorGUIUtility.PingObject(c.unitAsset);
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.EndVertical();
+    }
+
+    static void CmpRow(string label, float aiValue, float simValue)
+    {
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label(label, GUILayout.Width(EditorGUIUtility.labelWidth));
+        GUILayout.Label(Fx(aiValue, "F2"), GUILayout.Width(150f));
+        GUILayout.Label(Fx(simValue, "F2"), GUILayout.Width(110f));
+        EditorGUILayout.EndHorizontal();
+    }
+
+    static int EfficiencyRank(AIPassSnapshot p, AICandidateSnapshot c)
+    {
+        float v = c.ImprovementPerSwarmCost;
+        if (float.IsNaN(v)) return p.candidates.Count;
+        int rank = 1;
+        for (int i = 0; i < p.candidates.Count; i++)
+        {
+            float o = p.candidates[i].ImprovementPerSwarmCost;
+            if (!float.IsNaN(o) && o > v) rank++;
+        }
+        return rank;
+    }
+
+    static string Fx(float v, string format)
+    {
+        return (float.IsNaN(v) || float.IsInfinity(v)) ? "n/a" : v.ToString(format);
+    }
+
+    static string Signed(float v)
+    {
+        return (v >= 0f ? "+" : "") + v.ToString("F3");
+    }
+
+    static string YesNo(bool v) { return v ? "Yes" : "No"; }
+
+    static string Txt(string s) { return string.IsNullOrEmpty(s) ? "-" : s; }
 
     // ================================================================ small helpers
 

@@ -202,6 +202,37 @@ namespace AIDecisionTrace
                         tag + ties + " other candidate(s) tie with '" + sel.unitName + "' for the highest utility; the Characters array order decided.");
                 }
 
+                // ---- Stage 1.5: observations only, nothing here influences the AI ----
+                if (sel.OutcomeSaturated)
+                {
+                    if (p.DenominatorSource(t.outcomeUtilityScale) == "MaxDelta" && p.IsPassMaxDelta(sel))
+                    {
+                        Add(o, AIDiagnosticSeverity.Info,
+                            tag + "Outcome utility of '" + sel.unitName + "' is 1.00 because it has the largest raw improvement in this pass (" +
+                            sel.outcomeRaw.ToString("F1") + "). Outcome utilities are divided by the best candidate's delta, so the winner reads 1.0 whenever it " +
+                            "exceeds outcomeUtilityScale; the clamp itself never cuts anything off. Its absolute size is no longer visible in the score.");
+                    }
+                    else
+                    {
+                        Add(o, AIDiagnosticSeverity.Info, tag + "Outcome utility of '" + sel.unitName + "' is saturated at 1.0.");
+                    }
+                }
+
+                if (sel.UsedMultipleCopies)
+                {
+                    Add(o, AIDiagnosticSeverity.Info,
+                        tag + "'" + sel.unitName + "' was scored as " + sel.swarmCopies + " virtual copies (hypothetical cost " + sel.committedCost.ToString("0.##") +
+                        "), but only one unit is spawned per pass. Raw improvement per copy: " + sel.ImprovementPerCopy.ToString("F1") + ".");
+                }
+
+                AICandidateSnapshot eff = p.MostEfficientCandidate;
+                if (eff != null && eff != sel && !float.IsNaN(sel.ImprovementPerSwarmCost))
+                {
+                    Add(o, AIDiagnosticSeverity.Info,
+                        tag + "Selected '" + sel.unitName + "' gives " + sel.ImprovementPerSwarmCost.ToString("F2") + " raw improvement per currency; '" +
+                        eff.unitName + "' would give " + eff.ImprovementPerSwarmCost.ToString("F2") + " (diagnostic only - efficiency is not a selection criterion).");
+                }
+
                 // Sanity check of the instrumentation itself: the AI averages four terms.
                 float expected = (sel.moneyUtility + sel.cooldownUtility + sel.expenditureUtility + sel.outcomeUtility) / 4f;
                 if (Mathf.Abs(expected - sel.totalUtility) > 1e-3f)

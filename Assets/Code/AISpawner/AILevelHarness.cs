@@ -609,6 +609,7 @@ public class AILevelHarness : MonoBehaviour
                 {
                     unitName = character.name,
                     unitAsset = character,
+                    unit = AIDecisionRecorder.GetOrCreateUnit(character), // [AI-INSPECTOR 1.5] first-sight stats, once per unit
                     spawnCost = cost,
                     spawnCooldown = cooldown,
                     cooldownRemaining = characterCooldownHandler.CooldownRemaining(character), // same frame => same value used above
@@ -723,6 +724,47 @@ public class AILevelHarness : MonoBehaviour
                 snap.phaseCharacterCount = phase.Characters != null ? phase.Characters.Length : 0;
             }
         }
+
+        // [AI-INSPECTOR 1.5] one-off session context (scene, clan, phase roster, settings)
+        if (AIDecisionRecorder.Session == null)
+            AIDecisionRecorder.Session = BuildSessionMetadata();
+    }
+
+    AISessionMetadata BuildSessionMetadata()
+    {
+        AISessionMetadata m = new AISessionMetadata
+        {
+            sceneName = gameObject.scene.name,
+            aiClanName = aiClan != null ? aiClan.name : "(none)",
+            aiSpawnZoneName = aiSpawnZone != null ? aiSpawnZone.name : "(none)",
+            unityVersion = Application.unityVersion,
+            startedUtc = System.DateTime.UtcNow.ToString("o"),
+            startGameTime = Time.time,
+            startFrame = Time.frameCount,
+            timeScale = Time.timeScale,
+            tickInterval = tickInterval,
+            maxThreatLevel = maxThreatLevel,
+            outcomeUtilityScale = outcomeUtilityScale,
+            maxSpawnsPerTick = maxSpawnsPerTick,
+            swarmEvaluationWindow = swarmEvaluationWindow,
+            maxSwarmCopies = maxSwarmCopies
+        };
+
+        if (aiClan != null && aiClan.Phases != null)
+        {
+            for (int i = 0; i < aiClan.Phases.Length; i++)
+            {
+                AIClanPhase phase = aiClan.Phases[i];
+                if (phase == null) continue;
+
+                AISessionPhase sp = new AISessionPhase { index = i, name = phase.Name };
+                if (phase.Characters != null)
+                    foreach (ScriptableStats c in phase.Characters)
+                        sp.unitNames.Add(c != null ? c.name : "(null)");
+                m.phases.Add(sp);
+            }
+        }
+        return m;
     }
 
     void RecordPassEnd(AITickSnapshot snap, AIPassSnapshot pass, AIPassOutcome outcome, AITickEnd tickEnd)

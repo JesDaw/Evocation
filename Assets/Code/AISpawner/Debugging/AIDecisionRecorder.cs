@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AIDecisionTrace
@@ -21,6 +22,9 @@ namespace AIDecisionTrace
         static int tickCounter;
         static AITickSnapshot lastPushed;
 
+        // Stage 1.5: first-sight unit stats and one-off session metadata.
+        static readonly Dictionary<ScriptableStats, AIUnitSnapshot> units = new Dictionary<ScriptableStats, AIUnitSnapshot>();
+
         /// <summary>When false (default) the AI harness captures nothing.</summary>
         public static bool Enabled { get; set; }
 
@@ -33,6 +37,27 @@ namespace AIDecisionTrace
         {
             get { return buffer.Length; }
             set { SetCapacity(value); }
+        }
+
+        /// <summary>Settings/context captured on the first recorded tick of a session (null until then).</summary>
+        public static AISessionMetadata Session { get; set; }
+
+        public static int UnitCount { get { return units.Count; } }
+
+        public static IEnumerable<AIUnitSnapshot> Units { get { return units.Values; } }
+
+        /// <summary>
+        /// Returns the first-sight stats for a unit, capturing them on first request. Only called while
+        /// recording, and at most once per unit per session (no per-tick cost, no combat evaluation).
+        /// </summary>
+        public static AIUnitSnapshot GetOrCreateUnit(ScriptableStats asset)
+        {
+            if (asset == null) return null;
+            AIUnitSnapshot u;
+            if (units.TryGetValue(asset, out u)) return u;
+            u = AIUnitSnapshot.Capture(asset, tickCounter, Time.time);
+            units[asset] = u;
+            return u;
         }
 
         public static AITickSnapshot Latest
@@ -92,6 +117,8 @@ namespace AIDecisionTrace
             start = 0;
             count = 0;
             lastPushed = null;
+            units.Clear();
+            Session = null;
             Version++;
         }
 
