@@ -73,14 +73,29 @@ public class SpellSwapper : MonoBehaviour
 
     void SwapForward(InputAction.CallbackContext context)
     {
+        if (!CanSwap(context)) return;
         if (DebugLogs) Debug.Log($"Swap forward");
         Switch(true);
     }
 
     void SwapBackward(InputAction.CallbackContext context)
     {
+        if (!CanSwap(context)) return;
         if (DebugLogs) Debug.Log($"Swap Back");
         Switch(false);
+    }
+
+    static bool CanSwap(InputAction.CallbackContext context)
+    {
+        // No swapping mid-aim or mid-cast: the aimed spell's radius and cost are already locked in.
+        if (SpellCaster.Instance != null && SpellCaster.Instance.IsBusy) return false;
+
+        // In free cam the mouse wheel zooms, so it shouldn't also change spells.
+        bool fromMouse = context.control != null && context.control.device is Mouse;
+        if (fromMouse && GlobalInputManager.Instance != null && GlobalInputManager.Instance.CurrentMode == InputMode.FreeCam)
+            return false;
+
+        return true;
     }
 
     void Switch(bool forward)

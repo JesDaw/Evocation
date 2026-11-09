@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
@@ -44,43 +45,56 @@ public class SpellCaster : MonoBehaviour
 
     void SubscribeToInputs()
     {
-        GlobalInputManager.Instance.InputActions.MagicController.AimSpell.performed += ToggleAimSpell;
+        GlobalInputManager.Instance.InputActions.MagicController.AimSpell.performed += OnAimPressed;
         GlobalInputManager.Instance.InputActions.MagicController.CastSpell.performed += CommitCast;
     }
 
     void OnDestroy() => UnsubscribeFromInputs();
     void UnsubscribeFromInputs()
     {
-        GlobalInputManager.Instance.InputActions.MagicController.AimSpell.performed -= ToggleAimSpell;
+        if (GlobalInputManager.Instance == null) return;
+        GlobalInputManager.Instance.InputActions.MagicController.AimSpell.performed -= OnAimPressed;
         GlobalInputManager.Instance.InputActions.MagicController.CastSpell.performed -= CommitCast;
     }
     #endregion
     #region aiming
-    void ToggleAimSpell(InputAction.CallbackContext context)
+    // The button being held to aim (Right Mouse). Polled in Update rather than using the action's
+    // "canceled" callback, because switching input modes re-enables the action mid-hold and the
+    // release would never be reported.
+    ButtonControl _heldAimButton;
+
+    // Aim button (hold Right Mouse):
+    //   Aimed spell  -> aim while held, release to cancel, Left Mouse to cast.
+    //   Self-cast    -> cast immediately (e.g. heal).
+    void OnAimPressed(InputAction.CallbackContext context)
     {
-        /*if (ActivePlayer.Instance.CurrentPlayer == null)
+        if (CurrentState != State.Idle) return;
+
+        var spell = SpellSwapper.Instance.CurrentSpell;
+        if (spell == null) return;
+
+        if (spell.castMode == SpellCastMode.Aimed)
         {
-            ExitAimCamera();
-            return;
-        }*/
-        if (CurrentState == State.Idle)
-        {
-            if (SpellSwapper.Instance.CurrentSpell.castMode == SpellCastMode.Aimed) // means we use the aiming logic not that we are already aiming
+            if (ManaSystem.Instance == null || ManaSystem.Instance.PlayerMana < spell.Cost)
             {
-                EnterAimCamera();
-                OnSpellCastEnter.Invoke();
+                if (DebugLogs) Debug.Log($"Not enough mana to aim {spell.SpellName}");
+                return;
             }
-            else if (ActivePlayer.Instance.CurrentPlayer != null)
-            {
-                // Self-cast spells (e.g. heal) need no aiming, so the aim key casts them right away.
-                StartCoroutine(RunCastSequence(SpellSwapper.Instance.CurrentSpell, ActivePlayer.Instance.CurrentPlayer.transform.position));
-            }
+            _heldAimButton = context.control as ButtonControl;
+            EnterAimCamera();
+            OnSpellCastEnter.Invoke();
         }
-        else if (CurrentState == State.Aiming) // ignore presses while a spell is mid-cast
+        else if (ActivePlayer.Instance.CurrentPlayer != null)
         {
-            ExitAimCamera();
-            OnSpellCastExit.Invoke();
+            StartCoroutine(RunCastSequence(spell, ActivePlayer.Instance.CurrentPlayer.transform.position));
         }
+    }
+
+    void CancelAim()
+    {
+        _heldAimButton = null;
+        ExitAimCamera();
+        OnSpellCastExit.Invoke();
     }
 
     void EnterAimCamera()
@@ -124,6 +138,12 @@ public class SpellCaster : MonoBehaviour
     void Update()
     {
         if (CurrentState != State.Aiming) return;
+
+        if (_heldAimButton != null && !_heldAimButton.isPressed)
+        {
+            CancelAim();
+            return;
+        }
         SpellAimMovement();
     }
 
@@ -162,24 +182,40 @@ public class SpellCaster : MonoBehaviour
     }
     #endregion
     #region Casting
-    void CommitCast(InputAction.CallbackContext context) 
+    // Cast button (Left Mouse). Also the Attack button, so it only does something while aiming.
+    void CommitCast(InputAction.CallbackContext context)
     {
-        if (SpellSwapper.Instance.CurrentSpell == null) return;
-        // Left click is also Attack, so a click only casts while a spell is being aimed.
-        if (context.control != null && context.control.device is Mouse && CurrentState != State.Aiming) return;
-        if (CurrentState == State.Aiming && SpellSwapper.Instance.CurrentSpell.castMode == SpellCastMode.Aimed)
+        if (CurrentState != State.Aiming) return;
+        var spell = SpellSwapper.Instance.CurrentSpell;
+        if (spell == null || spell.castMode != SpellCastMode.Aimed) return;
+
+        if (ManaSystem.Instance == null || ManaSystem.Instance.PlayerMana < spell.Cost)
         {
-            StartCoroutine(RunCastSequence(SpellSwapper.Instance.CurrentSpell, detectionRadiusObject.position));
-            if (aimVisual != null) aimVisual.enabled = false;
-            detectionRadiusObject.gameObject.SetActive(false);
-            GlobalInputManager.Instance.SetMode(InputMode.FreeCam);
-        }
-        if (CurrentState != State.Aiming && SpellSwapper.Instance.CurrentSpell.castMode == SpellCastMode.Aimed)
-        {
+            if (DebugLogs) Debug.Log($"Not enough mana for {spell.SpellName}");
+            CancelAim();
             return;
         }
-        
-        StartCoroutine(RunCastSequence(SpellSwapper.Instance.CurrentSpell, ActivePlayer.Instance.CurrentPlayer.transform.position));
+
+        Vector3 target = detectionRadiusObject.position;
+        _heldAimButton = null;
+        detectionRadiusObject.gameObject.SetActive(false);
+        if (aimVisual != null) aimVisual.enabled = false;
+        OnSpellCastExit.Invoke();
+
+        // Stay in free cam while the spell plays so the player sees it land, then hand control back.
+        GlobalInputManager.Instance.SetMode(InputMode.FreeCam);
+        StartCoroutine(CastAimedThenRestoreControl(spell, target));
+    }
+
+    IEnumerator CastAimedThenRestoreControl(SpellDefinition spell, Vector3 target)
+    {
+        yield return StartCoroutine(RunCastSequence(spell, target));
+        CurrentState = State.Idle;
+        PlaySpellAnimation(false);
+
+        // Return to the hero if that's where the player aimed from, unless they've switched cameras themselves.
+        if (!returnToFreeCam && CameraControlSwitcher.Instance != null && CameraControlSwitcher.Instance.FreeCamIsActive)
+            CameraControlSwitcher.Instance.SwitchToPlayerControl();
     }
 
     IEnumerator RunCastSequence(SpellDefinition spell, Vector3 castPosition)

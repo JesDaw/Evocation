@@ -32,6 +32,8 @@ public class TutorialHints : MonoBehaviour
         [Tooltip("Input actions as \"Map/Action\", e.g. Player/Move. Using any one of them completes the hint.")]
         public string[] Actions;
         public ShowWhen Condition = ShowWhen.ControlsAvailable;
+        [Tooltip("Only show after the hint above this one in the list has been completed.")]
+        public bool AfterPreviousHint;
 
         public Hint() { }
         public Hint(string message, ShowWhen condition, params string[] actions)
@@ -95,9 +97,11 @@ public class TutorialHints : MonoBehaviour
             ShowWhen.InFreeCam, "Camera/Move", "Camera/Zoom"),
         new Hint("<b><u>V</u></b> to exit free cam mode",
             ShowWhen.InFreeCam, "ControlManager/ToggleCameraControl"),
-        new Hint("<b><u>R</u></b> to use a spell",
+        new Hint("Hold <b><u>Right Click</u></b> to use a spell",
             ShowWhen.CanAffordSpell, "MagicController/AimSpell"),
-        new Hint("<b><u>Left Click</u></b> to cast the spell",
+        new Hint("<sprite name=\"button_prompts_q\"> or <b><u>Mouse Wheel Up</u></b> to switch spells",
+            ShowWhen.ControlsAvailable, "MagicController/SwapSpell1", "MagicController/SwapSpell2") { AfterPreviousHint = true },
+        new Hint("<b><u>Left Click</u></b> to cast, let go of <b><u>Right Click</u></b> to cancel",
             ShowWhen.AimingSpell, "MagicController/CastSpell"),
         new Hint("<b><u>Z</u></b> and <b><u>X</u></b> to cycle through heroes",
             ShowWhen.HasMultipleHeroes, "ControlManager/PreviousPlayer", "ControlManager/NextPlayer"),
@@ -323,6 +327,11 @@ public class TutorialHints : MonoBehaviour
     bool CanShow(Hint hint)
     {
         if (Time.timeScale <= 0f) return false;
+        if (hint.AfterPreviousHint)
+        {
+            int index = hints.IndexOf(hint);
+            if (index > 0 && !hints[index - 1].Done) return false;
+        }
         if (!AnyActionEnabled(hint)) return false;
         return ConditionMet(hint);
     }
