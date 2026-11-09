@@ -88,19 +88,22 @@ public class SpellSwapper : MonoBehaviour
         Switch(true);
     }
 
-    // SwapSpell1 is a pass-through action, so this gets every scroll event. One flick of the wheel = one switch:
-    // the first bit of scroll switches straight away, and the rest of that flick is ignored.
+    // SwapSpell1 is a pass-through action on the scroll wheel's up/down axis, so this gets every scroll event.
+    // Wheel up = next spell, wheel down = previous. One flick of the wheel = one switch: the first bit of
+    // scroll switches straight away, and the rest of that flick is ignored.
     void OnScroll(InputAction.CallbackContext context)
     {
-        if (context.ReadValue<float>() <= 0f) return;
+        float scroll = context.ReadValue<float>();
+        if (Mathf.Approximately(scroll, 0f)) return;
 
         float now = Time.unscaledTime;
         bool newFlick = now - _lastScrollTime > scrollGestureGap;
         _lastScrollTime = now;
         if (!newFlick || !CanSwap(context)) return;
 
-        if (DebugLogs) Debug.Log($"Swap forward (scroll)");
-        Switch(true);
+        bool forward = scroll > 0f;
+        if (DebugLogs) Debug.Log($"Swap {(forward ? "forward" : "back")} (scroll)");
+        Switch(forward);
     }
 
     void SwapBackward(InputAction.CallbackContext context)

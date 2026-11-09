@@ -103,7 +103,7 @@ public class TutorialHints : MonoBehaviour
         // Spell hints only count while on screen: spells are the least obvious controls, so don't let a stray input skip them.
         new Hint("Hold <b><u>Right Click</u></b> to use a spell",
             ShowWhen.CanAffordSpell, "MagicController/AimSpell") { OnlyCountWhileShown = true },
-        new Hint("<sprite name=\"button_prompts_q\"> or <b><u>Mouse Wheel Up</u></b> to switch spells",
+        new Hint("<sprite name=\"button_prompts_q\"> or <b><u>Mouse Wheel</u></b> to switch spells",
             ShowWhen.ControlsAvailable, "MagicController/SwapSpell1", "MagicController/SwapSpell2") { AfterPreviousHint = true, OnlyCountWhileShown = true },
         new Hint("<b><u>Left Click</u></b> to cast, let go of <b><u>Right Click</u></b> to cancel",
             ShowWhen.AimingSpell, "MagicController/CastSpell") { OnlyCountWhileShown = true },
