@@ -23,6 +23,8 @@ public class TutorialHints : MonoBehaviour
         AimingSpell,
         HasMultipleHeroes,
         CanAffordSpell,      // enough mana for the currently selected spell
+        NoHeroAlive,         // every hero has died
+        InFreeCamWithHero,   // in free cam and there's a hero to go back to
     }
 
     [Serializable]
@@ -37,6 +39,8 @@ public class TutorialHints : MonoBehaviour
         [Tooltip("Only complete when the control is used while this hint is on screen, so an accidental " +
                  "press/scroll before the hint appears doesn't skip it.")]
         public bool OnlyCountWhileShown;
+        [Tooltip("Never completes: shows every time its condition is met (e.g. each time the hero dies) and hides when it isn't.")]
+        public bool ShowEveryTime;
 
         public Hint() { }
         public Hint(string message, ShowWhen condition, params string[] actions)
@@ -85,6 +89,9 @@ public class TutorialHints : MonoBehaviour
 
     static List<Hint> DefaultHints() => new List<Hint>
     {
+        // First in the list so it wins over every other hint while the player has no hero.
+        new Hint("Your hero is down! Press <b><u>F</u></b> to respawn",
+            ShowWhen.NoHeroAlive, "SpawnerController/SpawnPlayer") { ShowEveryTime = true },
         new Hint("<sprite name=\"button_prompts_a\"> and <sprite name=\"button_prompts_d\"> to move",
             ShowWhen.ControlsAvailable, "Player/Move"),
         new Hint("<b><u>Left Click</u></b> to attack",
@@ -94,12 +101,13 @@ public class TutorialHints : MonoBehaviour
             "SpawnerController/Spawn3", "SpawnerController/Spawn4", "SpawnerController/Spawn5"),
         new Hint("<b><u>F</u></b> to buy an extra life",
             ShowWhen.ControlsAvailable, "SpawnerController/SpawnPlayer"),
+        // Free cam hints also only count while on screen, e.g. so WASD already held when entering free cam doesn't skip its hint.
         new Hint("<b><u>V</u></b> for free cam mode",
-            ShowWhen.ControlsAvailable, "ControlManager/ToggleCameraControl"),
+            ShowWhen.ControlsAvailable, "ControlManager/ToggleCameraControl") { OnlyCountWhileShown = true },
         new Hint("<sprite name=\"button_prompts_w\"><sprite name=\"button_prompts_a\"><sprite name=\"button_prompts_s\"><sprite name=\"button_prompts_d\"> to move the camera, <b><u>Mouse Wheel</u></b> to zoom",
-            ShowWhen.InFreeCam, "Camera/Move", "Camera/Zoom"),
+            ShowWhen.InFreeCam, "Camera/Move", "Camera/Zoom") { OnlyCountWhileShown = true },
         new Hint("<b><u>V</u></b> to exit free cam mode",
-            ShowWhen.InFreeCam, "ControlManager/ToggleCameraControl"),
+            ShowWhen.InFreeCamWithHero, "ControlManager/ToggleCameraControl") { OnlyCountWhileShown = true },
         // Spell hints only count while on screen: spells are the least obvious controls, so don't let a stray input skip them.
         new Hint("Hold <b><u>Right Click</u></b> to use a spell",
             ShowWhen.CanAffordSpell, "MagicController/AimSpell") { OnlyCountWhileShown = true },
@@ -251,7 +259,7 @@ public class TutorialHints : MonoBehaviour
     void OnHintActionUsed(Hint hint)
     {
         // Uses last frame's state: the same press may flip the mode this frame (e.g. V leaving free cam).
-        if (hint.Done || !hint.ConditionMetLastFrame) return;
+        if (hint.ShowEveryTime || hint.Done || !hint.ConditionMetLastFrame) return;
         // "On screen" = this hint is the one being shown and is at least half faded in.
         if (hint.OnlyCountWhileShown && (_shownHint != hint || _group.alpha < 0.5f)) return;
         hint.Done = true;
@@ -288,13 +296,14 @@ public class TutorialHints : MonoBehaviour
             Hint next = NextShowableHint();
             if (next == null)
             {
-                if (hints.TrueForAll(h => h.Done || h.ResolvedActions.Count == 0)) break;
+                // Keep running while any show-every-time hint (e.g. respawn) could still be needed.
+                if (hints.TrueForAll(h => !h.ShowEveryTime && (h.Done || h.ResolvedActions.Count == 0))) break;
                 yield return null;
                 continue;
             }
 
             yield return Show(next);
-            if (!next.Done) yield return new WaitForSecondsRealtime(gapBetweenHints);
+            if (!next.Done && !SituationalHintWaiting()) yield return new WaitForSecondsRealtime(gapBetweenHints);
         }
 
         if (DebugLogs) Debug.Log("[TutorialHints] All hints completed");
@@ -308,6 +317,8 @@ public class TutorialHints : MonoBehaviour
         while (true)
         {
             bool canShow = CanShow(hint);
+            // A situational hint (died, entered free cam, started aiming) interrupts a general one.
+            if (canShow && !IsSituational(hint) && SituationalHintWaiting()) canShow = false;
             float target = canShow && !hint.Done ? 1f : 0f;
             float fadeTime = hint.Done ? CompletedFadeOutTime : fadeDuration;
 
@@ -333,8 +344,16 @@ public class TutorialHints : MonoBehaviour
         return null;
     }
 
+    bool SituationalHintWaiting()
+    {
+        foreach (var hint in hints)
+            if (!hint.Done && IsSituational(hint) && CanShow(hint)) return true;
+        return false;
+    }
+
     static bool IsSituational(Hint hint) =>
-        hint.Condition == ShowWhen.InFreeCam || hint.Condition == ShowWhen.AimingSpell;
+        hint.Condition == ShowWhen.InFreeCam || hint.Condition == ShowWhen.InFreeCamWithHero ||
+        hint.Condition == ShowWhen.AimingSpell || hint.Condition == ShowWhen.NoHeroAlive;
 
     bool CanShow(Hint hint)
     {
@@ -368,6 +387,10 @@ public class TutorialHints : MonoBehaviour
                 return HeroCount() > 1;
             case ShowWhen.CanAffordSpell:
                 return CanAffordCurrentSpell();
+            case ShowWhen.NoHeroAlive:
+                return PlayerSwitch.Instance != null && HeroCount() == 0;
+            case ShowWhen.InFreeCamWithHero:
+                return input.CurrentMode == InputMode.FreeCam && HeroCount() > 0;
             default:
                 return true;
         }
