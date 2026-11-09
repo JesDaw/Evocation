@@ -62,6 +62,7 @@ public class PlayerStateMachine : MonoBehaviour
         InitializePlayerStats();
 
         if (GlobalInputManager.Instance != null) SubscribeToInputs();
+        Animator.SetFloat("RunningSpeed", ScrStats._MoveSpeed);
     }
 
     void InitializePlayerStats()

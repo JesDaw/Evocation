@@ -480,6 +480,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1531360414695026343, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
   m_PrefabInstance: {fileID: 9083601090002705357}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1885368800 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5996215108909788614, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+  m_PrefabInstance: {fileID: 9083601090002705357}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1885368790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52a191579c8909249a64041882f904ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::PlayerSpecialEffects
 --- !u!114 &1905828215 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5984999223359508899, guid: b5db421dab6c34668bf11752b7e1988f, type: 3}
@@ -604,8 +615,32 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2323189019643058405, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
-      propertyPath: DamageTrigger.m_PersistentCalls.m_Calls.Array.size
+      propertyPath: OnDamage._PersistentCalls.Array.size
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2323189019643058405, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: OnDealDamage._PersistentCalls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2323189019643058405, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: OnDamage._PersistentCalls.Array.data[0]._Target
+      value: 
+      objectReference: {fileID: 1885368800}
+    - target: {fileID: 2323189019643058405, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: DamageTrigger.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2323189019643058405, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: OnDamage._PersistentCalls.Array.data[0]._MemberName
+      value: Apply
+      objectReference: {fileID: 0}
+    - target: {fileID: 2323189019643058405, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: OnDealDamage._PersistentCalls.Array.data[0]._Target
+      value: 
+      objectReference: {fileID: 1885368800}
+    - target: {fileID: 2323189019643058405, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: OnDealDamage._PersistentCalls.Array.data[0]._MemberName
+      value: Apply
       objectReference: {fileID: 0}
     - target: {fileID: 2323189019643058405, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
       propertyPath: DamageTrigger.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -614,7 +649,7 @@ PrefabInstance:
     - target: {fileID: 2323189019643058405, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
       propertyPath: DamageTrigger.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 9083601090002705361}
+      objectReference: {fileID: 1885368800}
     - target: {fileID: 2323189019643058405, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
       propertyPath: DamageTrigger.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -753,6 +788,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5943513762457910184, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5996215108909788614, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
+      propertyPath: debug
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6242257251039589565, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
@@ -941,17 +980,6 @@ Camera:
   m_CorrespondingSourceObject: {fileID: 1109552001869827901, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
   m_PrefabInstance: {fileID: 9083601090002705357}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &9083601090002705361 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5996215108909788614, guid: 286d34cd2e37d418da682dceb8892073, type: 3}
-  m_PrefabInstance: {fileID: 9083601090002705357}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1885368790}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52a191579c8909249a64041882f904ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: CodeAssembly::PlayerSpecialEffects
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

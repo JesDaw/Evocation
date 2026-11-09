@@ -19,10 +19,10 @@ MonoBehaviour:
   SpawnSoundName: 
   _spawnCost: 100
   _spawnCooldown: 20
-  Level_Total: 0
-  Level_Discrepancy: 0
-  _CalculatedPower: 0
-  _ValueDiscrepancy: 0
+  Level_Total: 15.365201
+  Level_Discrepancy: -84.634796
+  _CalculatedPower: 15.365201
+  _ValueDiscrepancy: -84.634796
   Attack: 0
   Defense: 0
   SpaceControl: 0
@@ -45,15 +45,20 @@ MonoBehaviour:
     rangePercent: 1
     extendsForward: 1
     targetFriendly: 0
+    includeSelf: 0
     targetCondition: 0
     maxTargets: 1
     castCooldown: 0
+    ScaleEffectsWithUsersStats: 1
     healthChangePercent: -1
     knockbackPercent: 1
     zoneSpawnPosition: 1
+    ZoneTargetsEnemies: 0
+    UseProjectile: 0
     projectileSettings:
       prefab: {fileID: 0}
       speed: 0
+      maxTravelTime: 5
       maxHeight: 0
       trajectoryCurve:
         serializedVersion: 2
@@ -81,7 +86,7 @@ MonoBehaviour:
   _Rotate: 0
   _animator: {fileID: 0}
   _Sprites: []
-  _AnimationMoveSpeed: 1
+  _AnimationMoveSpeed: 1.2
   vfx: []
   vfxOffsets: []
   _AnimationStartupTime: 25
