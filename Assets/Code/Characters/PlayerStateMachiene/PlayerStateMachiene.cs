@@ -240,7 +240,7 @@ public class PlayerStateMachine : MonoBehaviour
 
         var timers = _playerStats._ActionCooldownTimers;
         if (timers != null && timers.Count > 0 && timers[0] > 0f) return;
-
+        
         _commander.OnAttack(context);
     }
 
