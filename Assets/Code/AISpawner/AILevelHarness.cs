@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using AIDecisionTrace; // [AI-INSPECTOR]
 
 public class AILevelHarness : MonoBehaviour
 {
@@ -12,6 +13,11 @@ public class AILevelHarness : MonoBehaviour
     int currentPhaseIndex = 0;
 
     public static AILevelHarness Instance { get; private set; }
+
+    // [AI-INSPECTOR] read-only views for the Editor window (no behaviour change)
+    public bool IsRunning => isRunning;
+    public int CurrentPhaseIndex => currentPhaseIndex;
+    public float VirtualBudget => moneyBudget;
 
     public float tickInterval = 0.5f;
 
@@ -26,6 +32,9 @@ public class AILevelHarness : MonoBehaviour
     [SerializeField] float swarmEvaluationWindow = 4f;
     [Tooltip("Cap on how many virtual copies a single candidate can be evaluated as when swarming.")]
     [SerializeField] int maxSwarmCopies = 5;
+
+    // [AI-INSPECTOR] was an inline literal (3f) in UpdateThreatAndBudget; value unchanged.
+    const float ActivityCurveMultiplier = 3f;
 
     float threatLevel;
     float moneyBudget;
@@ -219,8 +228,15 @@ public class AILevelHarness : MonoBehaviour
         while (isRunning)
         {
             if (showDebugLogs) Debug.Log("===================AI Tick Start========================");
-            UpdateThreatAndBudget();
-            ExicuteBestAction();
+
+            // [AI-INSPECTOR] null when recording is off -> every capture below is skipped
+            AITickSnapshot snap = AIDecisionRecorder.BeginTick();
+            if (snap != null) CaptureTickContext(snap);
+
+            UpdateThreatAndBudget(snap);
+            ExicuteBestAction(snap);
+
+            AIDecisionRecorder.EndTick(snap); // [AI-INSPECTOR]
 
             yield return new WaitForSeconds(
                 Mathf.Max(0.01f, tickInterval));
@@ -260,18 +276,39 @@ public class AILevelHarness : MonoBehaviour
 
     #region Budget and Threat
 
-    void UpdateThreatAndBudget()
+    void UpdateThreatAndBudget(AITickSnapshot snap) // [AI-INSPECTOR] added parameter (private method)
     {
         if (UnitTracker.Instance == null || Money.AIInstance == null)
+        {
+            if (snap != null) // [AI-INSPECTOR]
+            {
+                snap.updateStatus = AIUpdateStatus.SkippedMissingDependency;
+                snap.updateProblem = DescribeMissingDependencies(false);
+            }
             return;
+        }
 
         if (!ValidateConfiguration())
+        {
+            if (snap != null) // [AI-INSPECTOR]
+            {
+                snap.updateStatus = AIUpdateStatus.SkippedInvalidConfig;
+                snap.updateProblem = DescribeConfigProblem() ?? "Configuration validation failed.";
+            }
             return;
+        }
 
         moneyBudget = Mathf.Clamp(
             moneyBudget,
             0f,
             Mathf.Max(0f, Money.AIInstance.CurrentMoney));
+
+        if (snap != null) // [AI-INSPECTOR]
+        {
+            snap.actualMoneyAtUpdate = Money.AIInstance.CurrentMoney;
+            snap.moneyGainPerSec = Money.AIInstance.MoneyGainPerSec;
+            snap.virtualBudgetBeforeUpdate = moneyBudget;
+        }
 
         threatLevel = UnitTracker.Instance.CalculateWeightedAIThreatLevel();
 
@@ -279,18 +316,32 @@ public class AILevelHarness : MonoBehaviour
             ? Mathf.Clamp01(Mathf.Abs(threatLevel) / maxThreatLevel)
             : 0f;
 
+        if (snap != null) // [AI-INSPECTOR]
+        {
+            snap.threatEvaluated = true;
+            snap.rawThreat = threatLevel;
+            snap.maxThreatLevel = maxThreatLevel;
+            snap.unclampedThreatRatio = maxThreatLevel > 0f ? Mathf.Abs(threatLevel) / maxThreatLevel : 0f;
+            snap.normalizedThreat = clampedThreatRatio;
+        }
+
         var phase = aiClan.Phases[currentPhaseIndex];
 
         if (phase.AdvantageActivityCurve == null ||
             phase.DisadvantageActivityCurve == null)
         {
+            if (snap != null) snap.updateStatus = AIUpdateStatus.SkippedMissingActivityCurve; // [AI-INSPECTOR]
             Debug.LogWarning("[AI] Current phase has a missing activity curve.");
             return;
         }
 
-        float budgetPercentThisTick = (threatLevel >= 0f)
-            ? phase.DisadvantageActivityCurve.Evaluate(clampedThreatRatio) * 3f
-            : phase.AdvantageActivityCurve.Evaluate(clampedThreatRatio) * 3f;
+        // [AI-INSPECTOR] Same arithmetic as before ((cond ? A.Evaluate(x) * 3f : B.Evaluate(x) * 3f));
+        // the raw curve value is now kept in a local so it can be recorded.
+        bool useDisadvantageCurve = threatLevel >= 0f;
+        float curveValue = useDisadvantageCurve
+            ? phase.DisadvantageActivityCurve.Evaluate(clampedThreatRatio)
+            : phase.AdvantageActivityCurve.Evaluate(clampedThreatRatio);
+        float budgetPercentThisTick = curveValue * ActivityCurveMultiplier;
 
         budgetPercentThisTick = Mathf.Max(0f, budgetPercentThisTick);
 
@@ -303,6 +354,18 @@ public class AILevelHarness : MonoBehaviour
             moneyBudget + budgetAdded,
             0f,
             Mathf.Max(0f, Money.AIInstance.CurrentMoney));
+
+        if (snap != null) // [AI-INSPECTOR]
+        {
+            snap.updateStatus = AIUpdateStatus.Ok;
+            snap.curveKind = useDisadvantageCurve ? AIActivityCurveKind.Disadvantage : AIActivityCurveKind.Advantage;
+            snap.curveValue = curveValue;
+            snap.activityMultiplier = ActivityCurveMultiplier;
+            snap.activityBudgetPercent = budgetPercentThisTick;
+            snap.incomeThisTick = incomeThisTick;
+            snap.budgetAdded = budgetAdded;
+            snap.virtualBudgetAfterUpdate = moneyBudget;
+        }
 
         if (showDebugLogs)
         {
@@ -319,19 +382,38 @@ public class AILevelHarness : MonoBehaviour
 
     #region Decision Making
 
-    void ExicuteBestAction()
+    void ExicuteBestAction(AITickSnapshot snap) // [AI-INSPECTOR] added parameter (private method)
     {
         if (!ValidateConfiguration() ||
             UnitTracker.Instance == null ||
             Money.AIInstance == null ||
             SpawnObjects.EnemyInstance == null)
+        {
+            if (snap != null) // [AI-INSPECTOR]
+            {
+                string cfgProblem = DescribeConfigProblem();
+                if (cfgProblem != null)
+                {
+                    snap.executeStatus = AIExecuteStatus.SkippedInvalidConfig;
+                    snap.executeProblem = cfgProblem;
+                }
+                else
+                {
+                    snap.executeStatus = AIExecuteStatus.SkippedMissingDependency;
+                    snap.executeProblem = DescribeMissingDependencies(true);
+                }
+            }
             return;
+        }
 
         ScriptableStats[] characters =
             aiClan.Phases[currentPhaseIndex].Characters;
 
         if (characters == null || characters.Length == 0)
+        {
+            if (snap != null) snap.executeStatus = AIExecuteStatus.NoCharactersInPhase; // [AI-INSPECTOR]
             return;
+        }
 
         int safeMaxSpawns = Mathf.Max(1, maxSpawnsPerTick);
 
@@ -342,9 +424,24 @@ public class AILevelHarness : MonoBehaviour
                 0f,
                 Mathf.Max(0f, Money.AIInstance.CurrentMoney));
 
-            CharacterUtility bestCharacter = SelectBestCandidate(characters);
+            AIPassSnapshot pass = null; // [AI-INSPECTOR]
+            if (snap != null)
+            {
+                pass = new AIPassSnapshot
+                {
+                    passIndex = spawnPass,
+                    actualMoneyBefore = Money.AIInstance.CurrentMoney,
+                    virtualBudgetBefore = moneyBudget
+                };
+                snap.passes.Add(pass);
+            }
+
+            CharacterUtility bestCharacter = SelectBestCandidate(characters, pass);
             if (bestCharacter == null)
+            {
+                RecordPassEnd(snap, pass, AIPassOutcome.NoValidCandidates, AITickEnd.PassEndedTick); // [AI-INSPECTOR]
                 return;
+            }
 
             if (showDebugLogs)
             {
@@ -358,20 +455,35 @@ public class AILevelHarness : MonoBehaviour
             if (bestCharacter.overBudget)
             {
                 if (spawnPass == 0)
+                {
+                    int tierBefore = pass != null ? Money.AIInstance.CurrentMaxMoneyIndex : 0; // [AI-INSPECTOR]
+
                     Money.AIInstance.UpgradeMaxMoney();
+
+                    if (pass != null) // [AI-INSPECTOR]
+                    {
+                        pass.walletUpgradeAttempted = true;
+                        pass.walletUpgraded = Money.AIInstance.CurrentMaxMoneyIndex != tierBefore;
+                    }
+                }
 
                 if (showDebugLogs)
                     Debug.Log($"[AI] Saving for '{bestCharacter.character.name}'.");
 
+                RecordPassEnd(snap, pass, AIPassOutcome.SavingOverBudget, AITickEnd.PassEndedTick); // [AI-INSPECTOR]
                 return;
             }
 
             // If the winning choice is still on spawn cooldown, wait for it rather than spending money elsewhere.
+            if (pass != null) // [AI-INSPECTOR]
+                pass.cooldownRemainingAtDecision = characterCooldownHandler.CooldownRemaining(bestCharacter.character);
+
             if (characterCooldownHandler.CooldownRemaining(bestCharacter.character) > 0f)
             {
                 if (showDebugLogs)
                     Debug.Log($"[AI] Waiting on cooldown for '{bestCharacter.character.name}'.");
 
+                RecordPassEnd(snap, pass, AIPassOutcome.WaitingOnCooldown, AITickEnd.PassEndedTick); // [AI-INSPECTOR]
                 return;
             }
 
@@ -379,7 +491,10 @@ public class AILevelHarness : MonoBehaviour
                 SpawnObjects.EnemyInstance.Spawn(bestCharacter.character);
 
             if (spawned == null)
+            {
+                RecordPassEnd(snap, pass, AIPassOutcome.SpawnFailed, AITickEnd.PassEndedTick); // [AI-INSPECTOR]
                 return;
+            }
 
             characterCooldownHandler.StartCooldown(bestCharacter.character);
 
@@ -392,6 +507,12 @@ public class AILevelHarness : MonoBehaviour
             if (aiSpawnZone != null)
                 aiSpawnZone.SendMessage("AddCharacterToList", spawned, SendMessageOptions.DontRequireReceiver);
 
+            if (pass != null) // [AI-INSPECTOR]
+            {
+                pass.spawnedObjectName = spawned.name;
+                pass.spawnZoneNotified = aiSpawnZone != null;
+            }
+
             if (showDebugLogs)
             {
                 Debug.Log(
@@ -400,16 +521,24 @@ public class AILevelHarness : MonoBehaviour
             }
 
             if (moneyBudget <= 0f)
+            {
+                RecordPassEnd(snap, pass, AIPassOutcome.Spawned, AITickEnd.BudgetExhausted); // [AI-INSPECTOR]
                 return;
+            }
+
+            // [AI-INSPECTOR] provisional: overwritten by the next pass if the loop continues
+            RecordPassEnd(snap, pass, AIPassOutcome.Spawned, AITickEnd.MaxPassesReached);
         }
     }
 
-    CharacterUtility SelectBestCandidate(ScriptableStats[] characters)
+    CharacterUtility SelectBestCandidate(ScriptableStats[] characters, AIPassSnapshot pass) // [AI-INSPECTOR] added parameter (private method)
     {
         List<CharacterUtility> characterUtilities = new List<CharacterUtility>();
 
         float currentOutcome =
             UnitTracker.Instance.CalculateOverallExpectedOutcome(AIWeighted: true);
+
+        if (pass != null) pass.baselineOutcome = currentOutcome; // [AI-INSPECTOR]
 
         float maxAbsOutcomeDelta = 0f;
 
@@ -417,7 +546,10 @@ public class AILevelHarness : MonoBehaviour
         foreach (ScriptableStats character in characters)
         {
             if (character == null)
+            {
+                if (pass != null) pass.nullCharacterEntries++; // [AI-INSPECTOR]
                 continue;
+            }
 
             float cost = character._spawnCost;
             float cooldown = character._spawnCooldown;
@@ -428,6 +560,9 @@ public class AILevelHarness : MonoBehaviour
             {
                 if (showDebugLogs)
                     Debug.LogWarning($"[AI] Skipping invalid candidate: {character.name}");
+
+                if (pass != null) // [AI-INSPECTOR]
+                    pass.skippedCandidates.Add($"{character.name} (cost={cost}, cooldown={cooldown})");
 
                 continue;
             }
@@ -466,6 +601,32 @@ public class AILevelHarness : MonoBehaviour
             if (absDelta > maxAbsOutcomeDelta)
                 maxAbsOutcomeDelta = absDelta;
 
+            // [AI-INSPECTOR] Capture the values computed above. Must stay adjacent to
+            // characterUtilities.Add(cu) so pass.candidates[i] corresponds to characterUtilities[i].
+            if (pass != null)
+            {
+                pass.candidates.Add(new AICandidateSnapshot
+                {
+                    unitName = character.name,
+                    unitAsset = character,
+                    spawnCost = cost,
+                    spawnCooldown = cooldown,
+                    cooldownRemaining = characterCooldownHandler.CooldownRemaining(character), // same frame => same value used above
+                    actualMoney = Money.AIInstance.CurrentMoney,
+                    virtualBudget = moneyBudget,
+                    affordableActual = Money.AIInstance.CurrentMoney >= cost,
+                    affordableVirtual = !cu.overBudget,
+                    swarmCopies = swarmCopies,
+                    committedCost = committedCost,
+                    moneyUtility = cu.moneyUtility,
+                    cooldownUtility = cu.spawnCooldownUtility,
+                    expenditureUtility = cu.expendatureRateUtility,
+                    baselineOutcome = currentOutcome,
+                    outcomeWithCandidate = outcomeWithCandidate,
+                    outcomeRaw = cu.expectedOutcomeRaw
+                });
+            }
+
             characterUtilities.Add(cu);
         }
 
@@ -492,9 +653,31 @@ public class AILevelHarness : MonoBehaviour
             if (showDebugLogs) cu.Print(moneyBudget);
         }
 
-        return characterUtilities
+        // [AI-INSPECTOR] was: return characterUtilities.OrderByDescending(cu => cu.totalUtility).First();
+        CharacterUtility best = characterUtilities
             .OrderByDescending(cu => cu.totalUtility)
             .First();
+
+        if (pass != null) // [AI-INSPECTOR]
+        {
+            pass.maxAbsOutcomeDelta = maxAbsOutcomeDelta;
+            pass.outcomeDenominator = outcomeDenominator;
+
+            for (int i = 0; i < characterUtilities.Count; i++)
+            {
+                CharacterUtility util = characterUtilities[i];
+                AICandidateSnapshot s = pass.candidates[i];
+                s.outcomeUtility = util.expectedOutcomeUtility;
+                s.totalUtility = util.totalUtility;
+            }
+
+            int bestIndex = characterUtilities.IndexOf(best);
+            pass.selectedIndex = bestIndex;
+            if (bestIndex >= 0) pass.candidates[bestIndex].isSelected = true;
+            pass.AssignRanks();
+        }
+
+        return best;
     }
 
     int CalculateCandidateSwarmCopies(float cost, float cooldown)
@@ -511,6 +694,69 @@ public class AILevelHarness : MonoBehaviour
             Mathf.Min(affordableCopies, cooldownCopies),
             1,
             Mathf.Max(1, maxSwarmCopies));
+    }
+
+    #endregion
+
+    #region AI Inspector instrumentation helpers
+
+    // [AI-INSPECTOR] Everything in this region is only reached when a snapshot exists (recording on).
+
+    void CaptureTickContext(AITickSnapshot snap)
+    {
+        snap.tickInterval = tickInterval;
+        snap.maxThreatLevel = maxThreatLevel;
+        snap.outcomeUtilityScale = outcomeUtilityScale;
+        snap.maxSpawnsPerTick = maxSpawnsPerTick;
+        snap.swarmEvaluationWindow = swarmEvaluationWindow;
+        snap.maxSwarmCopies = maxSwarmCopies;
+        snap.aiSpawnZoneAssigned = aiSpawnZone != null;
+        snap.phaseIndex = currentPhaseIndex;
+
+        if (aiClan != null && aiClan.Phases != null)
+        {
+            snap.phaseCount = aiClan.Phases.Length;
+            if (currentPhaseIndex >= 0 && currentPhaseIndex < aiClan.Phases.Length && aiClan.Phases[currentPhaseIndex] != null)
+            {
+                AIClanPhase phase = aiClan.Phases[currentPhaseIndex];
+                snap.phaseName = phase.Name;
+                snap.phaseCharacterCount = phase.Characters != null ? phase.Characters.Length : 0;
+            }
+        }
+    }
+
+    void RecordPassEnd(AITickSnapshot snap, AIPassSnapshot pass, AIPassOutcome outcome, AITickEnd tickEnd)
+    {
+        if (snap == null || pass == null) return;
+
+        int actual = Money.AIInstance != null ? Money.AIInstance.CurrentMoney : 0;
+
+        pass.outcome = outcome;
+        pass.virtualBudgetAfter = moneyBudget;
+        pass.actualMoneyAfter = actual;
+
+        snap.tickEnd = tickEnd;
+        snap.virtualBudgetAtEnd = moneyBudget;
+        snap.actualMoneyAtEnd = actual;
+    }
+
+    string DescribeMissingDependencies(bool includeSpawner)
+    {
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        if (UnitTracker.Instance == null) sb.Append("UnitTracker.Instance is null. ");
+        if (Money.AIInstance == null) sb.Append("Money.AIInstance is null. ");
+        if (includeSpawner && SpawnObjects.EnemyInstance == null) sb.Append("SpawnObjects.EnemyInstance is null. ");
+        return sb.ToString().Trim();
+    }
+
+    /// <summary>Returns null when the configuration is valid.</summary>
+    string DescribeConfigProblem()
+    {
+        if (aiClan == null) return "aiClan is not assigned.";
+        if (aiClan.Phases == null || aiClan.Phases.Length == 0) return "AIClan has no phases.";
+        if (currentPhaseIndex < 0 || currentPhaseIndex >= aiClan.Phases.Length)
+            return $"Current phase index {currentPhaseIndex} is out of range (0..{aiClan.Phases.Length - 1}).";
+        return null;
     }
 
     #endregion
