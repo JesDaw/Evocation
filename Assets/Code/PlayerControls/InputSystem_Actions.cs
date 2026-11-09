@@ -166,7 +166,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""6eae8079-70d3-4c51-833b-3d2d887a0546"",
-                    ""path"": ""<Keyboard>/space"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -177,7 +177,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""f45519a4-d59b-48b0-b77d-ca78c271a7e4"",
-                    ""path"": ""<Keyboard>/enter"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -188,7 +188,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""f13a3007-2ab2-4212-b58f-b3af7fe618b1"",
-                    ""path"": ""<Keyboard>/w"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -274,39 +274,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""1D Axis"",
-                    ""id"": ""13be570a-04af-45c4-9960-ca8609c9599b"",
-                    ""path"": ""1DAxis"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Zoom"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""negative"",
-                    ""id"": ""4a35b1d5-fb21-45e8-aaa7-c0d17da1a704"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Zoom"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""positive"",
-                    ""id"": ""7c06d7d2-f841-43f3-a0e3-b6db25a76582"",
-                    ""path"": ""<Keyboard>/q"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Zoom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -582,7 +549,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""56e4bec5-0a38-49e3-8abf-bd519a501952"",
-                    ""path"": ""<Keyboard>/rightShift"",
+                    ""path"": ""<Keyboard>/x"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -593,7 +560,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""73b02fb0-555d-42f4-8655-a634192bb901"",
-                    ""path"": ""<Keyboard>/leftShift"",
+                    ""path"": ""<Keyboard>/z"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -604,7 +571,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""a3890f55-7b60-4505-a02e-a02e19b3b541"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Keyboard>/v"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -615,7 +582,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""c4d85c2c-2b3d-4e7d-8acb-aea3ea4c9af0"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""path"": ""<Keyboard>/c"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
@@ -779,7 +746,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""d1f32552-9e20-4d33-a9d4-7a1e3bd74fd1"",
-                    ""path"": ""<Keyboard>/6"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -790,7 +757,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""567977ef-2058-40bb-9b62-81f3f6e6d7b8"",
-                    ""path"": ""<Keyboard>/7"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -801,7 +768,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""50ce01a9-3c38-4d30-8a9b-a572df4b468f"",
-                    ""path"": ""<Keyboard>/8"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -812,7 +779,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""f95cdce5-d9d5-4c74-a6d9-85fcb2ddd01c"",
-                    ""path"": ""<Keyboard>/9"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -823,7 +790,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""0d2c03be-28b6-4cf9-8e88-1f258281cca9"",
-                    ""path"": ""<Keyboard>/0"",
+                    ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -848,7 +815,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""SwapSpell1"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""a244d41b-c9ad-4c8f-ac7e-77b37128e037"",
                     ""expectedControlType"": """",
                     ""processors"": """",
@@ -887,7 +854,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""ee106646-4bf2-426f-a4cb-02eb09526ded"",
-                    ""path"": ""<Keyboard>/f"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -907,97 +874,20 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""2D Vector"",
-                    ""id"": ""0d449e4a-5009-41a3-b209-be313c7a73fb"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Look"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""80030cce-e61a-4521-aab2-590f70cc6227"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Look"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""da7121e8-8281-4c59-86ce-daaba23688a1"",
-                    ""path"": ""<AndroidJoystick>/stick/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Look"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""08785f66-36d4-4aca-b258-300185c6ce76"",
-                    ""path"": ""<NimbusGamepadHid>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Look"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""67049924-90d0-4f93-9b20-66b1ac1d1f30"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Look"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": """",
                     ""id"": ""3e0d1230-78b8-4daa-b33c-7de18a950227"",
-                    ""path"": ""<Keyboard>/c"",
+                    ""path"": ""<Mouse>/scroll/y"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""SwapSpell1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""ff74fb83-d1e1-4cd6-9ebd-c21332dea6c8"",
-                    ""path"": ""<Keyboard>/rightArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SwapSpell1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""3b519c03-7db8-4068-903f-ab4dbe5931a2"",
-                    ""path"": ""<Keyboard>/x"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SwapSpell2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""383e9d8b-f821-4c1f-8844-2ba544236af1"",
-                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1008,59 +898,11 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""d79782a0-6611-40de-b1f0-984abcd7f0a4"",
-                    ""path"": ""<Keyboard>/r"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""AimSpell"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
-            ""name"": ""Test"",
-            ""id"": ""141a12e8-214d-428d-8934-cc184fbab0c8"",
-            ""actions"": [
-                {
-                    ""name"": ""test1 (H)"",
-                    ""type"": ""Button"",
-                    ""id"": ""a913f0fc-fed9-4df2-a485-dd81ec86684c"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""test2 (J)"",
-                    ""type"": ""Button"",
-                    ""id"": ""d5b93875-192c-4998-a237-7872dd664313"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""5cd6dd4b-8591-4fe4-9490-024a587fd92c"",
-                    ""path"": ""<Keyboard>/h"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""test1 (H)"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""860d01e0-b470-414c-9ca4-60e3e77fc487"",
-                    ""path"": ""<Keyboard>/j"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""test2 (J)"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1174,10 +1016,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_MagicController_SwapSpell2 = m_MagicController.FindAction("SwapSpell2", throwIfNotFound: true);
         m_MagicController_AimSpell = m_MagicController.FindAction("AimSpell", throwIfNotFound: true);
         m_MagicController_CastSpell = m_MagicController.FindAction("CastSpell", throwIfNotFound: true);
-        // Test
-        m_Test = asset.FindActionMap("Test", throwIfNotFound: true);
-        m_Test_test1H = m_Test.FindAction("test1 (H)", throwIfNotFound: true);
-        m_Test_test2J = m_Test.FindAction("test2 (J)", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
@@ -1188,7 +1026,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         UnityEngine.Debug.Assert(!m_ControlManager.enabled, "This will cause a leak and performance issues, InputSystem_Actions.ControlManager.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_SpawnerController.enabled, "This will cause a leak and performance issues, InputSystem_Actions.SpawnerController.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_MagicController.enabled, "This will cause a leak and performance issues, InputSystem_Actions.MagicController.Disable() has not been called.");
-        UnityEngine.Debug.Assert(!m_Test.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Test.Disable() has not been called.");
     }
 
     /// <summary>
@@ -2122,113 +1959,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="MagicControllerActions" /> instance referencing this action map.
     /// </summary>
     public MagicControllerActions @MagicController => new MagicControllerActions(this);
-
-    // Test
-    private readonly InputActionMap m_Test;
-    private List<ITestActions> m_TestActionsCallbackInterfaces = new List<ITestActions>();
-    private readonly InputAction m_Test_test1H;
-    private readonly InputAction m_Test_test2J;
-    /// <summary>
-    /// Provides access to input actions defined in input action map "Test".
-    /// </summary>
-    public struct TestActions
-    {
-        private @InputSystem_Actions m_Wrapper;
-
-        /// <summary>
-        /// Construct a new instance of the input action map wrapper class.
-        /// </summary>
-        public TestActions(@InputSystem_Actions wrapper) { m_Wrapper = wrapper; }
-        /// <summary>
-        /// Provides access to the underlying input action "Test/test1H".
-        /// </summary>
-        public InputAction @test1H => m_Wrapper.m_Test_test1H;
-        /// <summary>
-        /// Provides access to the underlying input action "Test/test2J".
-        /// </summary>
-        public InputAction @test2J => m_Wrapper.m_Test_test2J;
-        /// <summary>
-        /// Provides access to the underlying input action map instance.
-        /// </summary>
-        public InputActionMap Get() { return m_Wrapper.m_Test; }
-        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
-        public void Enable() { Get().Enable(); }
-        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
-        public void Disable() { Get().Disable(); }
-        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
-        public bool enabled => Get().enabled;
-        /// <summary>
-        /// Implicitly converts an <see ref="TestActions" /> to an <see ref="InputActionMap" /> instance.
-        /// </summary>
-        public static implicit operator InputActionMap(TestActions set) { return set.Get(); }
-        /// <summary>
-        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
-        /// </summary>
-        /// <param name="instance">Callback instance.</param>
-        /// <remarks>
-        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
-        /// </remarks>
-        /// <seealso cref="TestActions" />
-        public void AddCallbacks(ITestActions instance)
-        {
-            if (instance == null || m_Wrapper.m_TestActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_TestActionsCallbackInterfaces.Add(instance);
-            @test1H.started += instance.OnTest1H;
-            @test1H.performed += instance.OnTest1H;
-            @test1H.canceled += instance.OnTest1H;
-            @test2J.started += instance.OnTest2J;
-            @test2J.performed += instance.OnTest2J;
-            @test2J.canceled += instance.OnTest2J;
-        }
-
-        /// <summary>
-        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
-        /// </summary>
-        /// <remarks>
-        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
-        /// </remarks>
-        /// <seealso cref="TestActions" />
-        private void UnregisterCallbacks(ITestActions instance)
-        {
-            @test1H.started -= instance.OnTest1H;
-            @test1H.performed -= instance.OnTest1H;
-            @test1H.canceled -= instance.OnTest1H;
-            @test2J.started -= instance.OnTest2J;
-            @test2J.performed -= instance.OnTest2J;
-            @test2J.canceled -= instance.OnTest2J;
-        }
-
-        /// <summary>
-        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="TestActions.UnregisterCallbacks(ITestActions)" />.
-        /// </summary>
-        /// <seealso cref="TestActions.UnregisterCallbacks(ITestActions)" />
-        public void RemoveCallbacks(ITestActions instance)
-        {
-            if (m_Wrapper.m_TestActionsCallbackInterfaces.Remove(instance))
-                UnregisterCallbacks(instance);
-        }
-
-        /// <summary>
-        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
-        /// </summary>
-        /// <remarks>
-        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
-        /// </remarks>
-        /// <seealso cref="TestActions.AddCallbacks(ITestActions)" />
-        /// <seealso cref="TestActions.RemoveCallbacks(ITestActions)" />
-        /// <seealso cref="TestActions.UnregisterCallbacks(ITestActions)" />
-        public void SetCallbacks(ITestActions instance)
-        {
-            foreach (var item in m_Wrapper.m_TestActionsCallbackInterfaces)
-                UnregisterCallbacks(item);
-            m_Wrapper.m_TestActionsCallbackInterfaces.Clear();
-            AddCallbacks(instance);
-        }
-    }
-    /// <summary>
-    /// Provides a new <see cref="TestActions" /> instance referencing this action map.
-    /// </summary>
-    public TestActions @Test => new TestActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     /// <summary>
     /// Provides access to the input control scheme.
@@ -2565,27 +2295,5 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnCastSpell(InputAction.CallbackContext context);
-    }
-    /// <summary>
-    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Test" which allows adding and removing callbacks.
-    /// </summary>
-    /// <seealso cref="TestActions.AddCallbacks(ITestActions)" />
-    /// <seealso cref="TestActions.RemoveCallbacks(ITestActions)" />
-    public interface ITestActions
-    {
-        /// <summary>
-        /// Method invoked when associated input action "test1 (H)" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnTest1H(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "test2 (J)" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnTest2J(InputAction.CallbackContext context);
     }
 }

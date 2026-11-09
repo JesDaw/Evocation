@@ -73,6 +73,31 @@ public class CharacterSlot : MonoBehaviour
         {
             characterStats = PlayerStats;
         }
+
+        if (IsPlayerSlot) ShowNewLifePrice();
+    }
+
+    /// <summary>
+    /// Shows what a new life costs above the hero slot. Uses the same stats SpawnObjects.SpawnPlayer charges.
+    /// </summary>
+    void ShowNewLifePrice()
+    {
+        var prefabStats = playerPrefab.GetComponent<Stats>();
+        ScriptableStats costStats = prefabStats != null && prefabStats.scriptableStats != null
+            ? prefabStats.scriptableStats
+            : PlayerStats;
+        if (costStats == null) return;
+
+        if (priceText != null)
+        {
+            priceText.gameObject.SetActive(true);
+            priceText.enabled = true;
+            priceText.text = costStats._spawnCost.ToString();
+        }
+
+        // Greys out the headshot when the player can't afford it, same as the ally slots.
+        if (hotkeyButton != null)
+            hotkeyButton._characterPrice = costStats._spawnCost;
     }
 
     void Start() => SubscribeToInput();

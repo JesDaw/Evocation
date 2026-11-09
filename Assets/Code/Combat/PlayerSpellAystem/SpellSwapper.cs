@@ -71,16 +71,59 @@ public class SpellSwapper : MonoBehaviour
 
     #region switching
 
+    [Tooltip("The scroll wheel must be still for this long (seconds) before the next scroll switches spells again. " +
+             "Stops one fast flick from skipping past several spells.")]
+    [SerializeField] float scrollGestureGap = 0.15f;
+    float _lastScrollTime = float.NegativeInfinity;
+
     void SwapForward(InputAction.CallbackContext context)
     {
+        if (context.control != null && context.control.device is Mouse)
+        {
+            OnScroll(context);
+            return;
+        }
+        if (!CanSwap(context)) return;
         if (DebugLogs) Debug.Log($"Swap forward");
         Switch(true);
     }
 
+    // SwapSpell1 is a pass-through action on the scroll wheel's up/down axis, so this gets every scroll event.
+    // Wheel up = next spell, wheel down = previous. One flick of the wheel = one switch: the first bit of
+    // scroll switches straight away, and the rest of that flick is ignored.
+    void OnScroll(InputAction.CallbackContext context)
+    {
+        float scroll = context.ReadValue<float>();
+        if (Mathf.Approximately(scroll, 0f)) return;
+
+        float now = Time.unscaledTime;
+        bool newFlick = now - _lastScrollTime > scrollGestureGap;
+        _lastScrollTime = now;
+        if (!newFlick || !CanSwap(context)) return;
+
+        bool forward = scroll > 0f;
+        if (DebugLogs) Debug.Log($"Swap {(forward ? "forward" : "back")} (scroll)");
+        Switch(forward);
+    }
+
     void SwapBackward(InputAction.CallbackContext context)
     {
+        if (!CanSwap(context)) return;
         if (DebugLogs) Debug.Log($"Swap Back");
         Switch(false);
+    }
+
+    static bool CanSwap(InputAction.CallbackContext context)
+    {
+        // No swapping mid-aim or mid-cast: the aimed spell's radius and cost are already locked in.
+        if (SpellCaster.Instance != null && SpellCaster.Instance.IsBusy) return false;
+
+        // In free cam the mouse wheel zooms, so it shouldn't also change spells.
+        bool fromMouse = context.control != null && context.control.device is Mouse;
+        if (fromMouse && GlobalInputManager.Instance != null && GlobalInputManager.Instance.CurrentMode == InputMode.FreeCam)
+            return false;
+
+        return true;
     }
 
     void Switch(bool forward)
