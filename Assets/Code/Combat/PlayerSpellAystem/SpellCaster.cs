@@ -70,8 +70,13 @@ public class SpellCaster : MonoBehaviour
                 EnterAimCamera();
                 OnSpellCastEnter.Invoke();
             }
+            else if (ActivePlayer.Instance.CurrentPlayer != null)
+            {
+                // Self-cast spells (e.g. heal) need no aiming, so the aim key casts them right away.
+                StartCoroutine(RunCastSequence(SpellSwapper.Instance.CurrentSpell, ActivePlayer.Instance.CurrentPlayer.transform.position));
+            }
         }
-        else
+        else if (CurrentState == State.Aiming) // ignore presses while a spell is mid-cast
         {
             ExitAimCamera();
             OnSpellCastExit.Invoke();
@@ -160,6 +165,8 @@ public class SpellCaster : MonoBehaviour
     void CommitCast(InputAction.CallbackContext context) 
     {
         if (SpellSwapper.Instance.CurrentSpell == null) return;
+        // Left click is also Attack, so a click only casts while a spell is being aimed.
+        if (context.control != null && context.control.device is Mouse && CurrentState != State.Aiming) return;
         if (CurrentState == State.Aiming && SpellSwapper.Instance.CurrentSpell.castMode == SpellCastMode.Aimed)
         {
             StartCoroutine(RunCastSequence(SpellSwapper.Instance.CurrentSpell, detectionRadiusObject.position));

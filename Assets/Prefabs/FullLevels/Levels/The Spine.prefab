@@ -636,7 +636,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Press <sprite name="button_prompts_e"> to switch to free cam OR respawn
+  m_text: Press <b><u>V</u></b> to switch to free cam OR respawn
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 56f80b224f6eaf742aba875d78be0c7e, type: 2}
   m_sharedMaterial: {fileID: 7697463550075289715, guid: 56f80b224f6eaf742aba875d78be0c7e, type: 2}
@@ -1115,8 +1115,8 @@ MonoBehaviour:
     alternitiveCanvasGroup: {fileID: 0}
   - Character: {fileID: 0}
     Lines:
-    - Line: move player left and right with A and D press space to attack (Player
-        is super weak tho)
+    - Line: Move left and right with A and D. Left click to attack (your hero is
+        pretty weak on their own though)
       alternitiveTextBox: {fileID: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
@@ -1125,9 +1125,8 @@ MonoBehaviour:
         _PersistentCalls: []
       LineEndEvent:
         _PersistentCalls: []
-    - Line: Spawn characters with money by using the numbers 1-9. Spawn more player
-        characters with the number 0 (they cost 100 I forgot to actually desplay
-        that price)
+    - Line: Spawn allies with gold using the number keys 1-5. Press F to buy an extra
+        life (costs 100 gold)
       alternitiveTextBox: {fileID: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
@@ -1136,17 +1135,8 @@ MonoBehaviour:
         _PersistentCalls: []
       LineEndEvent:
         _PersistentCalls: []
-    - Line: if you have multiple player characetr swap between controling them with
-        left and right shift
-      alternitiveTextBox: {fileID: 0}
-      CharacterOverride: {fileID: 0}
-      CharacterBody: 0
-      CharacterFace: 0
-      LineStartEvent:
-        _PersistentCalls: []
-      LineEndEvent:
-        _PersistentCalls: []
-    - Line: Press 'W' to have player character auto run back to your base
+    - Line: If you have more than one hero, press Z and X to switch which one you
+        are controlling
       alternitiveTextBox: {fileID: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
@@ -1202,8 +1192,8 @@ MonoBehaviour:
     alternitiveCanvasGroup: {fileID: 0}
   - Character: {fileID: 0}
     Lines:
-    - Line: Lastly you can toggle free cam mode by pressing E (once youa ctually
-        starty playing)
+    - Line: Lastly, press V to switch to free cam and look around the map (once you
+        actually start playing). Press V again to go back to your hero
       alternitiveTextBox: {fileID: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
@@ -1212,7 +1202,7 @@ MonoBehaviour:
         _PersistentCalls: []
       LineEndEvent:
         _PersistentCalls: []
-    - Line: Press space to zoom out and press shift to zoom in while in free cam
+    - Line: In free cam, move with WASD and zoom with the mouse wheel
       alternitiveTextBox: {fileID: 0}
       CharacterOverride: {fileID: 0}
       CharacterBody: 0
