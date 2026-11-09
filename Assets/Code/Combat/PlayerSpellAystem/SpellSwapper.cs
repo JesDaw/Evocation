@@ -71,10 +71,35 @@ public class SpellSwapper : MonoBehaviour
 
     #region switching
 
+    [Tooltip("The scroll wheel must be still for this long (seconds) before the next scroll switches spells again. " +
+             "Stops one fast flick from skipping past several spells.")]
+    [SerializeField] float scrollGestureGap = 0.15f;
+    float _lastScrollTime = float.NegativeInfinity;
+
     void SwapForward(InputAction.CallbackContext context)
     {
+        if (context.control != null && context.control.device is Mouse)
+        {
+            OnScroll(context);
+            return;
+        }
         if (!CanSwap(context)) return;
         if (DebugLogs) Debug.Log($"Swap forward");
+        Switch(true);
+    }
+
+    // SwapSpell1 is a pass-through action, so this gets every scroll event. One flick of the wheel = one switch:
+    // the first bit of scroll switches straight away, and the rest of that flick is ignored.
+    void OnScroll(InputAction.CallbackContext context)
+    {
+        if (context.ReadValue<float>() <= 0f) return;
+
+        float now = Time.unscaledTime;
+        bool newFlick = now - _lastScrollTime > scrollGestureGap;
+        _lastScrollTime = now;
+        if (!newFlick || !CanSwap(context)) return;
+
+        if (DebugLogs) Debug.Log($"Swap forward (scroll)");
         Switch(true);
     }
 

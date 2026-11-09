@@ -34,6 +34,9 @@ public class TutorialHints : MonoBehaviour
         public ShowWhen Condition = ShowWhen.ControlsAvailable;
         [Tooltip("Only show after the hint above this one in the list has been completed.")]
         public bool AfterPreviousHint;
+        [Tooltip("Only complete when the control is used while this hint is on screen, so an accidental " +
+                 "press/scroll before the hint appears doesn't skip it.")]
+        public bool OnlyCountWhileShown;
 
         public Hint() { }
         public Hint(string message, ShowWhen condition, params string[] actions)
@@ -97,12 +100,13 @@ public class TutorialHints : MonoBehaviour
             ShowWhen.InFreeCam, "Camera/Move", "Camera/Zoom"),
         new Hint("<b><u>V</u></b> to exit free cam mode",
             ShowWhen.InFreeCam, "ControlManager/ToggleCameraControl"),
+        // Spell hints only count while on screen: spells are the least obvious controls, so don't let a stray input skip them.
         new Hint("Hold <b><u>Right Click</u></b> to use a spell",
-            ShowWhen.CanAffordSpell, "MagicController/AimSpell"),
+            ShowWhen.CanAffordSpell, "MagicController/AimSpell") { OnlyCountWhileShown = true },
         new Hint("<sprite name=\"button_prompts_q\"> or <b><u>Mouse Wheel Up</u></b> to switch spells",
-            ShowWhen.ControlsAvailable, "MagicController/SwapSpell1", "MagicController/SwapSpell2") { AfterPreviousHint = true },
+            ShowWhen.ControlsAvailable, "MagicController/SwapSpell1", "MagicController/SwapSpell2") { AfterPreviousHint = true, OnlyCountWhileShown = true },
         new Hint("<b><u>Left Click</u></b> to cast, let go of <b><u>Right Click</u></b> to cancel",
-            ShowWhen.AimingSpell, "MagicController/CastSpell"),
+            ShowWhen.AimingSpell, "MagicController/CastSpell") { OnlyCountWhileShown = true },
         new Hint("<b><u>Z</u></b> and <b><u>X</u></b> to cycle through heroes",
             ShowWhen.HasMultipleHeroes, "ControlManager/PreviousPlayer", "ControlManager/NextPlayer"),
     };
@@ -248,6 +252,8 @@ public class TutorialHints : MonoBehaviour
     {
         // Uses last frame's state: the same press may flip the mode this frame (e.g. V leaving free cam).
         if (hint.Done || !hint.ConditionMetLastFrame) return;
+        // "On screen" = this hint is the one being shown and is at least half faded in.
+        if (hint.OnlyCountWhileShown && (_shownHint != hint || _group.alpha < 0.5f)) return;
         hint.Done = true;
         if (DebugLogs) Debug.Log($"[TutorialHints] Completed: {hint.Message}");
     }
@@ -261,6 +267,7 @@ public class TutorialHints : MonoBehaviour
     }
 
     bool _combatStarted;
+    Hint _shownHint;
 
     bool CombatHasStarted()
     {
@@ -296,6 +303,7 @@ public class TutorialHints : MonoBehaviour
     IEnumerator Show(Hint hint)
     {
         _label.text = hint.Message;
+        _shownHint = hint;
 
         while (true)
         {
@@ -306,7 +314,11 @@ public class TutorialHints : MonoBehaviour
             _group.alpha = Mathf.MoveTowards(_group.alpha, target, Time.unscaledDeltaTime / Mathf.Max(0.01f, fadeTime));
 
             // Fully faded out because it's done, or because its controls went away (dialogue, pause, cutscene).
-            if (target == 0f && _group.alpha <= 0f) yield break;
+            if (target == 0f && _group.alpha <= 0f)
+            {
+                _shownHint = null;
+                yield break;
+            }
             yield return null;
         }
     }

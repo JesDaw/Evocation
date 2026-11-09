@@ -815,7 +815,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""SwapSpell1"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""a244d41b-c9ad-4c8f-ac7e-77b37128e037"",
                     ""expectedControlType"": """",
                     ""processors"": """",
