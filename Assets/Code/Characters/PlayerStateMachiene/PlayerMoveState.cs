@@ -2,13 +2,17 @@ using UnityEngine;
 
 public class PlayerMoveState : PlayerBaseState
 {
+    PlayerStateMachine context;
+
     public PlayerMoveState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory)
     {
         IsRootState = true;
+        context = currentContext;
     }
     
     public override void UpdateState()
     {
+        context.Animator.SetFloat("RunningSpeed", context.ScrStats._AnimationMoveSpeed * (context.PlayerStats._MoveSpeed/context.ScrStats._MoveSpeed));
         HandleMove();
         CheckSwitchStates();
     }

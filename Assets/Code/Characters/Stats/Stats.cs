@@ -51,7 +51,11 @@ public class Stats : MonoBehaviour
     [HideInInspector] public int _spawnCost;
 
     [Header("Events")]
-    [SerializeField] internal UltEvents.UltEvent OnDeath, OnDamage, OnKnocked;
+    [SerializeField] internal UltEvents.UltEvent OnDeath;
+    [SerializeField] internal UltEvents.UltEvent OnDamage;
+    [SerializeField] internal UltEvents.UltEvent OnKnocked;
+    [SerializeField] internal UltEvents.UltEvent OnDealDamage;
+
     [SerializeField] public UnityEvent OnStatsInitialized;
     public UnityEvent DamageTrigger;
     public float DamageTriggerAmount = -100.0f;

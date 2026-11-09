@@ -21,6 +21,7 @@ public class AnimationEventsController : MonoBehaviour
     public void attackAnimationEnd()
     {
         shouldAttack = true;
+        CharacterStats.OnDealDamage.Invoke();
     }
 
     public void ResetAttackSignal()

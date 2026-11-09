@@ -23,7 +23,6 @@ public class CpuMoveState : CpuBaseState
         bool facingLeft = _Transform.right.x < 0;
         bool shouldStop = IsBlockedByUnit(facingLeft) || HasStoppingRangeTarget(facingLeft);
         _context._Animator.SetBool("IsRunning", !shouldStop);
-        _context._Animator.SetFloat("RunningSpeed", _context._ScrStats._AnimationMoveSpeed);
     }
 
     public override void UpdateState() => Moving();
@@ -36,6 +35,8 @@ public class CpuMoveState : CpuBaseState
 
     void Moving()
     {
+        _context._Animator.SetFloat("RunningSpeed", _context._ScrStats._AnimationMoveSpeed * (_context._Stats._MoveSpeed/_context._ScrStats._MoveSpeed));
+
         _Stats.TickActionCooldowns(Time.deltaTime);
         bool facingLeft = _Transform.right.x < 0;
 
