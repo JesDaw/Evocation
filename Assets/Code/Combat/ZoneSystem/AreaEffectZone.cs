@@ -6,7 +6,7 @@ public class AreaEffectZone : MonoBehaviour
     public AreaEffectData data;
 
     [Header("Targeting")]
-    public List<string> targetTags = new List<string>();    
+    public List<string> targetTags = new List<string>();
     Stats _caster;
     bool _excludeCaster;
     bool _isSticky;
@@ -16,9 +16,11 @@ public class AreaEffectZone : MonoBehaviour
     float _lifeTimer;
     float _refreshTimer;
     bool _initialized;
-    bool _isOneShot; // is this really needed? just track that the lifespan is 0
-    GameObject zoneVisuals;
-    HashSet<Stats> _alreadyHit = new HashSet<Stats>(); // why HashSet why not just list?
+    bool _isOneShot; // lifespan can't replace this: one-shot is driven by refreshInterval <= 0
+    GameObject zoneVisualObj;
+    ZoneVisual zoneVisual;
+    HashSet<Stats> _alreadyHit = new HashSet<Stats>();
+
     public void Initialize(AreaEffectData areaEffectData, Stats caster, Transform stickyTarget, bool excludeCaster, bool? stickyOverride = null, List<string> targetTagsOverride = null)
     {
         data = areaEffectData;
@@ -29,14 +31,15 @@ public class AreaEffectZone : MonoBehaviour
         _targetTagsOverride = targetTagsOverride;
         ActivateField();
     }
-     void Start()
+
+    // Fallback for zones placed in a scene by hand with data assigned in the inspector
+    void Start()
     {
-        if (data.zoneVisualPrefab != null) zoneVisuals = Instantiate(data.zoneVisualPrefab, transform);
-        zoneVisuals.SetActive(false);
         if (!_initialized && data != null) ActivateField();
     }
+
     #region activation and deactivation
-    public void ActivateField() 
+    public void ActivateField()
     {
         if (data == null)
         {
@@ -49,14 +52,33 @@ public class AreaEffectZone : MonoBehaviour
         _refreshTimer = 0f;
         _initialized = true;
 
-        EenableZoneVisuals();
+        EnableZoneVisuals();
 
         if (_isOneShot) ApplyEffectsToTargets();
     }
-    void EenableZoneVisuals()
+
+    void EnableZoneVisuals()
     {
-        // other effects
-        if (zoneVisuals != null) zoneVisuals.SetActive(true);
+        // Spawn once, then reuse on re-activation
+        if (zoneVisualObj == null && data.zoneVisualPrefab != null)
+        {
+            zoneVisualObj = Instantiate(data.zoneVisualPrefab, transform);
+            zoneVisualObj.transform.localPosition = Vector3.zero;
+            zoneVisual = zoneVisualObj.GetComponent<ZoneVisual>();
+
+            if (zoneVisual == null)
+                Debug.LogWarning($"AreaEffectZone on {gameObject.name}: zoneVisualPrefab has no ZoneVisual component on its root, so size/colors won't be applied.");
+        }
+
+        if (zoneVisual != null)
+        {
+            zoneVisual.Setup(data);
+            zoneVisual.Show();
+        }
+        else if (zoneVisualObj != null)
+        {
+            zoneVisualObj.SetActive(true);
+        }
     }
 
     public void DeactivateField()
@@ -67,17 +89,17 @@ public class AreaEffectZone : MonoBehaviour
 
     void DisableZoneVisuals()
     {
-        zoneVisuals.SetActive(false);
+        if (zoneVisualObj != null) zoneVisualObj.SetActive(false);
     }
     #endregion
+
     #region loop when the zone is active
     void Update()
     {
         if (!_initialized || _isOneShot) return;
         CheckStickToTarget();
         UpdateRefreshTimer();
-        ItterateLifeSpan();
-        
+        IterateLifeSpan();
     }
 
     void CheckStickToTarget()
@@ -87,22 +109,21 @@ public class AreaEffectZone : MonoBehaviour
 
     void UpdateRefreshTimer()
     {
-        _refreshTimer += Time.deltaTime; 
-        if (_refreshTimer >= data.refreshInterval) 
+        _refreshTimer += Time.deltaTime;
+        if (_refreshTimer >= data.refreshInterval)
         {
             _refreshTimer = 0f;
             ApplyEffectsToTargets();
         }
     }
+
     void ApplyEffectsToTargets()
     {
-        
         List<Stats> targets = GatherTargets();
 
         int applied = 0;
         foreach (Stats target in targets)
         {
-           
             if (data.maxTargets >= 0 && applied >= data.maxTargets) break;
             if (_isOneShot && _alreadyHit.Contains(target)) continue;
 
@@ -112,8 +133,13 @@ public class AreaEffectZone : MonoBehaviour
             applied++;
         }
 
-        if (_isOneShot) Destroy(gameObject);
+        if (_isOneShot)
+        {
+            _initialized = false;
+            Destroy(gameObject, Mathf.Max(0f, data.oneShotVisualDuration));
+        }
     }
+
     List<Stats> GatherTargets()
     {
         List<string> tagsToUse = _targetTagsOverride ?? targetTags;
@@ -141,7 +167,7 @@ public class AreaEffectZone : MonoBehaviour
         target.AlterHealth(data.HealthChangePerTick);
         if (data.effects == null || data.effects.Length == 0) return;
 
-        if (data.applicationMode == ZoneApplicationMode.All) 
+        if (data.applicationMode == ZoneApplicationMode.All)
         {
             foreach (var effect in data.effects) target.statusEffectManager.AddEffect(effect, effect.duration);
         }
@@ -151,7 +177,8 @@ public class AreaEffectZone : MonoBehaviour
             target.statusEffectManager.AddEffect(chosen, chosen.duration);
         }
     }
-    void ItterateLifeSpan()
+
+    void IterateLifeSpan()
     {
         if (data.zoneLifespan > 0f)
         {
@@ -159,27 +186,22 @@ public class AreaEffectZone : MonoBehaviour
             if (_lifeTimer >= data.zoneLifespan)
             {
                 Destroy(gameObject);
-                return;
             }
         }
     }
     #endregion
+
     #region Debug
-    void OnDrawGizmos()
-    {
-        if (data == null) return;
-
-        Gizmos.color = data.gizmoColor;
-
-        if (data.shape == ZoneShape.Circle)
-            Gizmos.DrawSphere(transform.position, data.circleRadius);
-        else
-            Gizmos.DrawCube(transform.position, new Vector3(data.boxSize.x, data.boxSize.y, 0.1f));
-    }
-
     void OnDrawGizmosSelected()
     {
         if (data == null) return;
+
+        Gizmos.color = new Color(data.gizmoColor.r, data.gizmoColor.g, data.gizmoColor.b, 1f);
+
+        if (data.shape == ZoneShape.Circle)
+            Gizmos.DrawWireSphere(transform.position, data.circleRadius);
+        else
+            Gizmos.DrawWireCube(transform.position, new Vector3(data.boxSize.x, data.boxSize.y, 0.1f));
 
         List<string> debugTags = _targetTagsOverride ?? targetTags;
         string tagStr = debugTags != null && debugTags.Count > 0 ? string.Join(",", debugTags) : "NONE";
