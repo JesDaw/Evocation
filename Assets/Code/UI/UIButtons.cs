@@ -201,6 +201,23 @@ public class UIButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         FModAudioManager.instance.PlaySoundByName("removeCharacterFromParty");
     }
 
+    /// <summary>
+    /// Back button for menu screens: returns to whichever SceneActivity opened this one
+    /// (e.g. Settings -> Pause in game, Settings -> Main Menu on the title screen).
+    /// Finds the scene's SceneActivityManager itself, so it works inside shared prefabs
+    /// like the Settings Canvas where the manager can't be referenced directly.
+    /// </summary>
+    public void GoBack()
+    {
+        var sceneMgr = FindFirstObjectByType<SceneActivityManager>();
+        if (sceneMgr == null)
+        {
+            Debug.LogWarning($"[UIButtons] {name}: no SceneActivityManager in the scene, can't go back.", this);
+            return;
+        }
+        sceneMgr.ActivatePreviousSAWithFade();
+    }
+
     public void QuitGame()
     {
 #if UNITY_EDITOR

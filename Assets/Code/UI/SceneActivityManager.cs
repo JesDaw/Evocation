@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -147,9 +148,9 @@ public class SceneActivityManager : MonoBehaviour
         if (changeHistory.Count > 0)
         {
             string targetName = changeHistory.Pop();
-            isNavigatingBack = true; 
-            FadeOutThenIn(FindActivity(targetName), .3f);
-            isNavigatingBack = false; 
+            // The switch happens later in the fade callback, so pass the "going back" flag along
+            // instead of setting it here (it would already be reset by the time Activate runs).
+            FadeOutThenIn(FindActivity(targetName), .3f, navigatingBack: true);
         }
         else
         {
@@ -252,19 +253,23 @@ public class SceneActivityManager : MonoBehaviour
         FadeOutThenIn(nextActivity.gameObject, .3f);
     }
 
-    void FadeOutThenIn(GameObject toObj, float duration)
+    void FadeOutThenIn(GameObject toObj, float duration, bool navigatingBack = false)
     {
-        if (currentActivity.gameObject == null || toObj == null) return;
+        if (currentActivity == null || toObj == null) return;
+        // Menu fades must ignore Time.timeScale: the pause menu sets it to 0, which would
+        // freeze the fade forever and leave the button looking like it did nothing.
         VisualEffectsManager.Instance.FadeOut(currentActivity.gameObject, duration, () =>
         {
-            
+
             var cg = toObj.GetComponent<CanvasGroup>();
             if (cg != null) { cg.alpha = 0f; }
             cg = currentActivity.gameObject.GetComponent<CanvasGroup>();
             if (cg != null) { cg.alpha = 1f; }
+            isNavigatingBack = navigatingBack;
             Activate(toObj, true);
-            VisualEffectsManager.Instance.FadeIn(toObj, duration);
-        });
+            isNavigatingBack = false;
+            VisualEffectsManager.Instance.FadeIn(toObj, duration)?.SetUpdate(true);
+        })?.SetUpdate(true);
     }
 
     // Unity seems to have a problem with optional arguments so this is a
