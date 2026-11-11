@@ -230,7 +230,23 @@ public class SpellCaster : MonoBehaviour
 
         CurrentState = State.Casting;
         PlaySpellAnimation(false);
+
+        // Hero glows in the spell's color and (optionally) gets an aura for the length of the cast.
+        GameObject hero = ActivePlayer.Instance.CurrentPlayer;
+        GameObject aura = null;
+        if (hero != null)
+        {
+            if (spell.casterGlowStrength > 0f)
+            {
+                if (!hero.TryGetComponent(out DamageFlash flash)) flash = hero.AddComponent<DamageFlash>();
+                flash.Flash(spell.hypeColor, spell.casterGlowStrength, 0.45f, true);
+            }
+            if (spell.casterAuraVFX != null) aura = Instantiate(spell.casterAuraVFX, hero.transform);
+        }
+
         yield return StartCoroutine(spell.RunCastSequence(this, castPosition));
+
+        if (aura != null) Destroy(aura);
         CurrentState = State.Idle;
     }
     #endregion
