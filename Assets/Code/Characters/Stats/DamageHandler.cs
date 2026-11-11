@@ -9,6 +9,17 @@ public class DamageHandler : MonoBehaviour
     public UltEvents.UltEvent OnThreashholdPassed;
     [SerializeField] bool DebugLogs;
 
+    DamageFlash damageFlash;
+    DamageFlash Flasher
+    {
+        get
+        {
+            if (damageFlash == null && !TryGetComponent(out damageFlash))
+                damageFlash = gameObject.AddComponent<DamageFlash>();
+            return damageFlash;
+        }
+    }
+
     public void Initialize(Stats statsComponent)
     {
         stats = statsComponent;
@@ -21,6 +32,7 @@ public class DamageHandler : MonoBehaviour
         if (stats.IsInvincible()) return;
 
         stats._CurrentHealth -= damage;
+        if (damage > 0f) Flasher.Flash();
 //        Debug.Log($"{gameObject.name} Health = {stats._CurrentHealth}");
         if (FModAudioManager.instance != null)FModAudioManager.instance.PlaySoundByName("takeDamage", transform.position, 1, 15, "Volume", 1f);
 
