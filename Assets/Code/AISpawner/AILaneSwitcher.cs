@@ -56,9 +56,18 @@ public class AILaneSwitcher : MonoBehaviour
         float netExpectedOutcome = expectedValues.Sum();
         if (DebugLogs) Debug.Log($"lane expected outcomes (negative = AI favor): lowest = {lowest}, highest = {highest}, net = {netExpectedOutcome}");
         
-        float discrepancyWindow = netExpectedOutcome >= 0 
-            ? netPositiveExpectedOutcomeDiscrepancyWindow 
-            : netNegativeExpectedOutcomeDiscrepancyWindow;
+        float positiveWindow = netPositiveExpectedOutcomeDiscrepancyWindow;
+        float negativeWindow = netNegativeExpectedOutcomeDiscrepancyWindow;
+        AIClan activeClan = AILevelHarness.Instance != null ? AILevelHarness.Instance.aiClan : null;
+        if (activeClan != null && activeClan.useClanLaneRoutingSettings)
+        {
+            positiveWindow = activeClan.netPositiveExpectedOutcomeDiscrepancyWindow;
+            negativeWindow = activeClan.netNegativeExpectedOutcomeDiscrepancyWindow;
+        }
+
+        float discrepancyWindow = netExpectedOutcome >= 0
+            ? positiveWindow
+            : negativeWindow;
 
         float laneSpread = highest - lowest;
 

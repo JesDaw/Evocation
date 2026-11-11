@@ -19,7 +19,7 @@ using AIDecisionTrace;
 
 public static class AIDecisionExporter
 {
-    public const int SchemaVersion = 2;
+    public const int SchemaVersion = 3;
 
     static readonly CultureInfo Inv = CultureInfo.InvariantCulture;
 
@@ -66,7 +66,10 @@ public static class AIDecisionExporter
             "stallStreak", "summary",
             // --- appended in schema 2 ---
             "phaseCharacterCount", "outcomeUtilityScale", "maxSpawnsPerTick", "swarmEvaluationWindow", "maxSwarmCopies",
-            "aiSpawnZoneAssigned", "stallUnit");
+            "aiSpawnZoneAssigned", "stallUnit",
+            // --- appended in schema 3 ---
+            "legacyNormalizedThreat", "relativeMilitaryAdvantage", "relativeThreatForActivity",
+            "relativeActivityModeEnabled", "militaryAdvantage", "defensiveUrgencyPressure");
 
         // ------------------------------------------------------------ candidates
         CsvTable cands = new CsvTable(
@@ -111,7 +114,9 @@ public static class AIDecisionExporter
                 I(t.passes.Count), I(t.SpawnCount), T(t.tickEnd.ToString()), N(t.virtualBudgetAtEnd), I(t.actualMoneyAtEnd),
                 I(t.stallStreakTicks), T(t.Summary),
                 I(t.phaseCharacterCount), N(t.outcomeUtilityScale), I(t.maxSpawnsPerTick), N(t.swarmEvaluationWindow), I(t.maxSwarmCopies),
-                B(t.aiSpawnZoneAssigned), T(t.stallUnitName));
+                B(t.aiSpawnZoneAssigned), T(t.stallUnitName),
+                N(t.legacyNormalizedThreat), N(t.relativeMilitaryAdvantage), N(t.relativeThreatForActivity),
+                B(t.relativeActivityModeEnabled), N(t.militaryAdvantage), N(t.defensiveUrgencyPressure));
 
             for (int pi = 0; pi < t.passes.Count; pi++)
             {

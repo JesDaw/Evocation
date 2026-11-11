@@ -22,6 +22,10 @@ public class AILevelHarness : MonoBehaviour
     public float tickInterval = 0.5f;
 
     [SerializeField] float maxThreatLevel = 100f;
+
+    [Header("Experimental: Threat Activity Input")]
+    [Tooltip("OFF: legacy clamp(|rawThreat| / maxThreatLevel). ON: use the zone-normalized relative military advantage in [-1,1] for activity-curve selection and input only. Requires UnitTracker zone-separated outcomes; candidate scoring remains untouched.")]
+    [SerializeField] bool useRelativeThreatForActivity = false;
     [SerializeField] MapZone aiSpawnZone;
 
     [Header("AI Scoring & Multi-Spawn")]
@@ -312,17 +316,34 @@ public class AILevelHarness : MonoBehaviour
 
         threatLevel = UnitTracker.Instance.CalculateWeightedAIThreatLevel();
 
-        float clampedThreatRatio = maxThreatLevel > 0f
-            ? Mathf.Clamp01(Mathf.Abs(threatLevel) / maxThreatLevel)
+        float legacyRatio = maxThreatLevel > 0f
+            ? Mathf.Abs(threatLevel) / maxThreatLevel
             : 0f;
+        float relativeThreat = (useRelativeThreatForActivity || snap != null)
+            ? UnitTracker.Instance.CalculateRelativeThreatForActivity()
+            : 0f;
+        // The experimental input is a bounded relative comparison, not a remapping
+        // of the historical x100 threat. Its sign determines which curve to use.
+        bool relativeModeActive = useRelativeThreatForActivity &&
+                                  UnitTracker.Instance.ZoneSeparatedOutcomesEnabled;
+        float activitySignedThreat = relativeModeActive ? relativeThreat : threatLevel;
+        float clampedThreatRatio = relativeModeActive
+            ? Mathf.Clamp01(Mathf.Abs(relativeThreat))
+            : Mathf.Clamp01(legacyRatio);
 
         if (snap != null) // [AI-INSPECTOR]
         {
             snap.threatEvaluated = true;
             snap.rawThreat = threatLevel;
             snap.maxThreatLevel = maxThreatLevel;
-            snap.unclampedThreatRatio = maxThreatLevel > 0f ? Mathf.Abs(threatLevel) / maxThreatLevel : 0f;
+            snap.unclampedThreatRatio = legacyRatio;
             snap.normalizedThreat = clampedThreatRatio;
+            snap.legacyNormalizedThreat = Mathf.Clamp01(legacyRatio);
+            snap.relativeMilitaryAdvantage = UnitTracker.Instance.CalculateRelativeMilitaryAdvantage();
+            snap.relativeThreatForActivity = relativeThreat;
+            snap.relativeActivityModeEnabled = relativeModeActive;
+            snap.militaryAdvantage = UnitTracker.Instance.CalculateMilitaryAdvantage();
+            snap.defensiveUrgencyPressure = UnitTracker.Instance.CalculateDefensiveUrgencyPressure();
         }
 
         var phase = aiClan.Phases[currentPhaseIndex];
@@ -337,7 +358,7 @@ public class AILevelHarness : MonoBehaviour
 
         // [AI-INSPECTOR] Same arithmetic as before ((cond ? A.Evaluate(x) * 3f : B.Evaluate(x) * 3f));
         // the raw curve value is now kept in a local so it can be recorded.
-        bool useDisadvantageCurve = threatLevel >= 0f;
+        bool useDisadvantageCurve = activitySignedThreat >= 0f;
         float curveValue = useDisadvantageCurve
             ? phase.DisadvantageActivityCurve.Evaluate(clampedThreatRatio)
             : phase.AdvantageActivityCurve.Evaluate(clampedThreatRatio);

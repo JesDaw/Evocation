@@ -454,6 +454,12 @@ public class AIDecisionInspectorWindow : EditorWindow
             Line("[RAW] maxThreatLevel (setting)", t.maxThreatLevel.ToString("F2"));
             Line("[RAW] |threat| / maxThreatLevel  (unclamped)", t.unclampedThreatRatio.ToString("F3"));
             Line("[NORMALIZED] Threat ratio fed to curve (0..1)", t.normalizedThreat.ToString("F3"));
+            Line("Relative activity mode", t.relativeActivityModeEnabled ? "ENABLED" : "legacy");
+            Line("Legacy curve input (0..1)", t.legacyNormalizedThreat.ToString("F3"));
+            Line("Relative military advantage (-1..1)", t.relativeMilitaryAdvantage.ToString("F3"));
+            Line("Relative activity threat (-1..1)", t.relativeThreatForActivity.ToString("F3"));
+            Line("Unweighted military score (x100)", t.militaryAdvantage.ToString("F2"));
+            Line("Defensive urgency premium (x100)", t.defensiveUrgencyPressure.ToString("F2"));
         }
 
         Sub("Activity");

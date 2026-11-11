@@ -263,7 +263,14 @@ namespace AIDecisionTrace
         public float rawThreat;                // value the AI used (tracker already multiplies by 100)
         public float maxThreatLevel;
         public float unclampedThreatRatio;     // |rawThreat| / maxThreatLevel (derived, for saturation check)
-        public float normalizedThreat;         // clampedThreatRatio the AI used
+        public float normalizedThreat;         // 0..1 input actually fed to activity curve
+        // Step 4: sampled at decision time, without changing old fields.
+        public float legacyNormalizedThreat;   // legacy clamped input for side-by-side comparison
+        public float relativeMilitaryAdvantage; // signed [-1,1], no urgency
+        public float relativeThreatForActivity; // signed [-1,1], with optional urgency
+        public bool relativeActivityModeEnabled;
+        public float militaryAdvantage;        // Step 3 unweighted x100 zone score
+        public float defensiveUrgencyPressure; // Step 3 x100 urgency premium
         public AIActivityCurveKind curveKind;
         public float curveValue;               // raw curve.Evaluate(normalizedThreat)
         public float activityMultiplier;       // hard-coded x3 in AILevelHarness
