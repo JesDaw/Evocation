@@ -20,10 +20,19 @@ public class DamageFlash : MonoBehaviour
     readonly Dictionary<SpriteRenderer, Color> baseColors = new();
     readonly List<SpriteRenderer> renderers = new();
     Coroutine flashRoutine;
+    Color activeColor;
 
-    public void Flash()
+    /// <summary>The standard damage flash, using the Inspector settings.</summary>
+    public void Flash() => Flash(flashColor, flashStrength, flashDuration, false);
+
+    /// <summary>
+    /// A one-off flash in any color, e.g. the hero glowing in a spell's color when casting.
+    /// Use unscaled time when the flash should ignore slow-mo.
+    /// </summary>
+    public void Flash(Color color, float strength, float duration, bool unscaledTime)
     {
-        if (flashStrength <= 0f || !isActiveAndEnabled) return;
+        if (strength <= 0f || !isActiveAndEnabled) return;
+        activeColor = color;
 
         // Re-collect every hit: CPU rigs are built after spawning, so the renderer set can change.
         // Renderers already mid-flash keep the base color cached on the first hit.
@@ -34,17 +43,17 @@ public class DamageFlash : MonoBehaviour
         }
 
         if (flashRoutine != null) StopCoroutine(flashRoutine);
-        flashRoutine = StartCoroutine(FlashRoutine());
+        flashRoutine = StartCoroutine(FlashRoutine(strength, Mathf.Max(duration, 0.01f), unscaledTime));
     }
 
-    IEnumerator FlashRoutine()
+    IEnumerator FlashRoutine(float strength, float duration, bool unscaledTime)
     {
         float t = 0f;
-        while (t < flashDuration)
+        while (t < duration)
         {
-            Apply(flashStrength * (1f - t / flashDuration));
+            Apply(strength * (1f - t / duration));
             yield return null;
-            t += Time.deltaTime;
+            t += unscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
         }
 
         Restore();
@@ -59,9 +68,9 @@ public class DamageFlash : MonoBehaviour
             if (sr == null) continue;
             Color b = pair.Value;
             sr.color = new Color(
-                Mathf.Lerp(b.r, flashColor.r, amount),
-                Mathf.Lerp(b.g, flashColor.g, amount),
-                Mathf.Lerp(b.b, flashColor.b, amount),
+                Mathf.Lerp(b.r, activeColor.r, amount),
+                Mathf.Lerp(b.g, activeColor.g, amount),
+                Mathf.Lerp(b.b, activeColor.b, amount),
                 sr.color.a);
         }
     }
