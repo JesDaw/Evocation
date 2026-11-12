@@ -1,0 +1,145 @@
+plan,phase,startedAt,endedAt,startFrame,clan,source,objective,orderedUnits,plannedCount,completedCount,result,explanation,initialMoney,initialBudget,initiative,economicPatience,waveConcentration,counterplayStatus,directorReason,economicExplanation,initiativeExplanation,rankingReport,candidatesCaptured,eventsCaptured,planTicksCaptured,lastSpawnAt
+1,0,9.940286,22.0054569,1307,"Wolf Clan AI","Automatic","StabilizeFront","Flower Girl -> Flower Girl -> Flower Girl",3,3,"Completed","All 3 units deployed. First-to-second gap: 4.52s. [Plan contains 3 units; the two-unit launch forecast is not applicable. Using intentional sequential purchasing.]",10,10,0,0.5,0.5,"Active","Wave concentration 0.50; operational goal StabilizeFront; selected Flower Girl -> Flower Girl; evaluated 16 ordered pairs; heuristic score 0.737; relative player advantage 1.00. merit 0.558, final score 0.737, second-best score 0.586; pair cost 30; estimated saving 5.0s; patience 0.50; real money 10; virtual budget 10; effective income 4/s. Time is a ranking estimate, not an execution deadline. initiative 0.00 (0 counter, 1 doctrine); selected doctrine 0.558; counter 0.939 (gain 5.668, best gain 6.036); blended 0.939; final economic score 0.737; zones evaluated 1. Unweighted calculator estimate; no status-effect simulation or path forecasting. Extended to 3 ordered purchases (sequential execution after the pair).","merit 0.558, final score 0.737, second-best score 0.586; pair cost 30; estimated saving 5.0s; patience 0.50; real money 10; virtual budget 10; effective income 4/s. Time is a ranking estimate, not an execution deadline.","initiative 0.00 (0 counter, 1 doctrine); selected doctrine 0.558; counter 0.939 (gain 5.668, best gain 6.036); blended 0.939; final economic score 0.737; zones evaluated 1. Unweighted calculator estimate; no status-effect simulation or path forecasting.","Pairs 16; initiative 0.00; economics ON; player snapshots 1.
+Counterplay available: score is positive improvement normalized within eligible pairs.
+DOCTRINE (raw merit)
+  1. WolfMage -> Flower Girl | rankScore 0.754 | cost 105 | doctrine 0.754 | counter 1.000 | gain 6.036 | final 0.460
+  2. WolfMage -> WolfMage | rankScore 0.750 | cost 180 | doctrine 0.750 | counter 0.948 | gain 5.725 | final 0.308
+  3. WolfMage -> HoodGuy | rankScore 0.747 | cost 110 | doctrine 0.747 | counter 0.740 | gain 4.465 | final 0.331
+COUNTERPLAY (normalized gain)
+  1. Flower Girl -> WolfMage | rankScore 1.000 | cost 105 | doctrine 0.554 | counter 1.000 | gain 6.036 | final 0.460
+  2. WolfMage -> Flower Girl | rankScore 1.000 | cost 105 | doctrine 0.754 | counter 1.000 | gain 6.036 | final 0.460
+  3. WolfMage -> WolfMage | rankScore 0.948 | cost 180 | doctrine 0.750 | counter 0.948 | gain 5.725 | final 0.308
+FINAL (after initiative + economics)
+  1. Flower Girl -> Flower Girl [SELECTED] | rankScore 0.737 | cost 30 | doctrine 0.558 | counter 0.939 | gain 5.668 | final 0.737
+  2. Flower Girl -> HoodGuy | rankScore 0.586 | cost 35 | doctrine 0.551 | counter 0.782 | gain 4.720 | final 0.586
+  3. HoodGuy -> Flower Girl | rankScore 0.586 | cost 35 | doctrine 0.551 | counter 0.782 | gain 4.720 | final 0.586
+Rankings show foundation pairs only; later plan extensions are not included.
+",16,9,34,22.0054569
+2,0,27.0256042,35.57319,7903,"Wolf Clan AI","Automatic","BuildBreakthrough","Flower Girl -> Flower Girl -> Flower Girl",3,3,"Completed","All 3 units deployed. First-to-second gap: 3.01s. [Plan contains 3 units; the two-unit launch forecast is not applicable. Using intentional sequential purchasing.]",33,20.9335938,0,0.5,0.5,"Active","Wave concentration 0.50; operational goal BuildBreakthrough; selected Flower Girl -> Flower Girl; evaluated 16 ordered pairs; heuristic score 0.791; relative player advantage 0.31. merit 0.602, final score 0.791, second-best score 0.611; pair cost 30; estimated saving 2.3s; patience 0.50; real money 33; virtual budget 20.93; effective income 4/s. Time is a ranking estimate, not an execution deadline. initiative 0.00 (0 counter, 1 doctrine); selected doctrine 0.602; counter 0.933 (gain 5.932, best gain 6.361); blended 0.933; final economic score 0.791; zones evaluated 4. Unweighted calculator estimate; no status-effect simulation or path forecasting. Extended to 3 ordered purchases (sequential execution after the pair).","merit 0.602, final score 0.791, second-best score 0.611; pair cost 30; estimated saving 2.3s; patience 0.50; real money 33; virtual budget 20.93; effective income 4/s. Time is a ranking estimate, not an execution deadline.","initiative 0.00 (0 counter, 1 doctrine); selected doctrine 0.602; counter 0.933 (gain 5.932, best gain 6.361); blended 0.933; final economic score 0.791; zones evaluated 4. Unweighted calculator estimate; no status-effect simulation or path forecasting.","Pairs 16; initiative 0.00; economics ON; player snapshots 4.
+Counterplay available: score is positive improvement normalized within eligible pairs.
+DOCTRINE (raw merit)
+  1. WolfMage -> HoodGuy | rankScore 0.709 | cost 110 | doctrine 0.709 | counter 0.707 | gain 4.497 | final 0.330
+  2. Flower Girl -> HoodGuy | rankScore 0.683 | cost 35 | doctrine 0.683 | counter 0.757 | gain 4.812 | final 0.611
+  3. HoodGuy -> HoodGuy | rankScore 0.677 | cost 40 | doctrine 0.677 | counter 0.334 | gain 2.127 | final 0.257
+COUNTERPLAY (normalized gain)
+  1. Flower Girl -> WolfMage | rankScore 1.000 | cost 105 | doctrine 0.647 | counter 1.000 | gain 6.361 | final 0.481
+  2. WolfMage -> Flower Girl | rankScore 1.000 | cost 105 | doctrine 0.628 | counter 1.000 | gain 6.361 | final 0.481
+  3. WolfMage -> WolfMage | rankScore 0.941 | cost 180 | doctrine 0.673 | counter 0.941 | gain 5.986 | final 0.316
+FINAL (after initiative + economics)
+  1. Flower Girl -> Flower Girl [SELECTED] | rankScore 0.791 | cost 30 | doctrine 0.602 | counter 0.933 | gain 5.932 | final 0.791
+  2. Flower Girl -> HoodGuy | rankScore 0.611 | cost 35 | doctrine 0.683 | counter 0.757 | gain 4.812 | final 0.611
+  3. HoodGuy -> Flower Girl | rankScore 0.611 | cost 35 | doctrine 0.596 | counter 0.757 | gain 4.812 | final 0.611
+Rankings show foundation pairs only; later plan extensions are not included.
+",16,9,27,35.57319
+3,0,40.6092072,55.73612,10125,"Wolf Clan AI","Automatic","BuildBreakthrough","Flower Girl -> Flower Girl -> Flower Girl",3,3,"Completed","All 3 units deployed. First-to-second gap: 7.58s. [Plan contains 3 units; the two-unit launch forecast is not applicable. Using intentional sequential purchasing.]",41,15.6454525,0,0.5,0.5,"Active","Wave concentration 0.50; operational goal BuildBreakthrough; selected Flower Girl -> Flower Girl; evaluated 16 ordered pairs; heuristic score 0.747; relative player advantage 0.13. merit 0.602, final score 0.747, second-best score 0.591; pair cost 30; estimated saving 3.9s; patience 0.50; real money 41; virtual budget 15.65; effective income 3.69/s. Time is a ranking estimate, not an execution deadline. initiative 0.00 (0 counter, 1 doctrine); selected doctrine 0.602; counter 0.922 (gain 5.452, best gain 5.911); blended 0.922; final economic score 0.747; zones evaluated 4. Unweighted calculator estimate; no status-effect simulation or path forecasting. Extended to 3 ordered purchases (sequential execution after the pair).","merit 0.602, final score 0.747, second-best score 0.591; pair cost 30; estimated saving 3.9s; patience 0.50; real money 41; virtual budget 15.65; effective income 3.69/s. Time is a ranking estimate, not an execution deadline.","initiative 0.00 (0 counter, 1 doctrine); selected doctrine 0.602; counter 0.922 (gain 5.452, best gain 5.911); blended 0.922; final economic score 0.747; zones evaluated 4. Unweighted calculator estimate; no status-effect simulation or path forecasting.","Pairs 16; initiative 0.00; economics ON; player snapshots 4.
+Counterplay available: score is positive improvement normalized within eligible pairs.
+DOCTRINE (raw merit)
+  1. WolfMage -> HoodGuy | rankScore 0.709 | cost 110 | doctrine 0.709 | counter 0.769 | gain 4.545 | final 0.341
+  2. Flower Girl -> HoodGuy | rankScore 0.683 | cost 35 | doctrine 0.683 | counter 0.768 | gain 4.539 | final 0.591
+  3. HoodGuy -> HoodGuy | rankScore 0.677 | cost 40 | doctrine 0.677 | counter 0.445 | gain 2.629 | final 0.326
+COUNTERPLAY (normalized gain)
+  1. Flower Girl -> WolfMage | rankScore 1.000 | cost 105 | doctrine 0.647 | counter 1.000 | gain 5.911 | final 0.456
+  2. WolfMage -> Flower Girl | rankScore 1.000 | cost 105 | doctrine 0.628 | counter 1.000 | gain 5.911 | final 0.456
+  3. WolfMage -> WolfMage | rankScore 0.982 | cost 180 | doctrine 0.673 | counter 0.982 | gain 5.806 | final 0.312
+FINAL (after initiative + economics)
+  1. Flower Girl -> Flower Girl [SELECTED] | rankScore 0.747 | cost 30 | doctrine 0.602 | counter 0.922 | gain 5.452 | final 0.747
+  2. Flower Girl -> HoodGuy | rankScore 0.591 | cost 35 | doctrine 0.683 | counter 0.768 | gain 4.539 | final 0.591
+  3. HoodGuy -> Flower Girl | rankScore 0.591 | cost 35 | doctrine 0.596 | counter 0.768 | gain 4.539 | final 0.591
+Rankings show foundation pairs only; later plan extensions are not included.
+",16,9,40,55.73612
+4,0,60.7756,67.32706,13002,"Wolf Clan AI","Automatic","BuildBreakthrough","Flower Girl -> Flower Girl -> Flower Girl",3,3,"Completed","All 3 units deployed. First-to-second gap: 2.52s. [Plan contains 3 units; the two-unit launch forecast is not applicable. Using intentional sequential purchasing.]",76,19.7937183,0,0.5,0.5,"Active","Wave concentration 0.50; operational goal BuildBreakthrough; selected Flower Girl -> Flower Girl; evaluated 16 ordered pairs; heuristic score 0.722; relative player advantage 0.27. merit 0.602, final score 0.722, second-best score 0.496; pair cost 30; estimated saving 2.6s; patience 0.50; real money 76; virtual budget 19.79; effective income 4/s. Time is a ranking estimate, not an execution deadline. initiative 0.00 (0 counter, 1 doctrine); selected doctrine 0.602; counter 0.858 (gain 3.969, best gain 4.624); blended 0.858; final economic score 0.722; zones evaluated 3. Unweighted calculator estimate; no status-effect simulation or path forecasting. Extended to 3 ordered purchases (sequential execution after the pair).","merit 0.602, final score 0.722, second-best score 0.496; pair cost 30; estimated saving 2.6s; patience 0.50; real money 76; virtual budget 19.79; effective income 4/s. Time is a ranking estimate, not an execution deadline.","initiative 0.00 (0 counter, 1 doctrine); selected doctrine 0.602; counter 0.858 (gain 3.969, best gain 4.624); blended 0.858; final economic score 0.722; zones evaluated 3. Unweighted calculator estimate; no status-effect simulation or path forecasting.","Pairs 16; initiative 0.00; economics ON; player snapshots 3.
+Counterplay available: score is positive improvement normalized within eligible pairs.
+DOCTRINE (raw merit)
+  1. WolfMage -> HoodGuy | rankScore 0.709 | cost 110 | doctrine 0.709 | counter 0.581 | gain 2.688 | final 0.270
+  2. Flower Girl -> HoodGuy | rankScore 0.683 | cost 35 | doctrine 0.683 | counter 0.620 | gain 2.866 | final 0.496
+  3. HoodGuy -> HoodGuy | rankScore 0.677 | cost 40 | doctrine 0.677 | counter 0.049 | gain 0.228 | final 0.038
+COUNTERPLAY (normalized gain)
+  1. Flower Girl -> WolfMage | rankScore 1.000 | cost 105 | doctrine 0.647 | counter 1.000 | gain 4.624 | final 0.479
+  2. WolfMage -> Flower Girl | rankScore 1.000 | cost 105 | doctrine 0.628 | counter 1.000 | gain 4.624 | final 0.479
+  3. WolfMage -> WolfMage | rankScore 0.932 | cost 180 | doctrine 0.673 | counter 0.932 | gain 4.309 | final 0.312
+FINAL (after initiative + economics)
+  1. Flower Girl -> Flower Girl [SELECTED] | rankScore 0.722 | cost 30 | doctrine 0.602 | counter 0.858 | gain 3.969 | final 0.722
+  2. Flower Girl -> HoodGuy | rankScore 0.496 | cost 35 | doctrine 0.683 | counter 0.620 | gain 2.866 | final 0.496
+  3. HoodGuy -> Flower Girl | rankScore 0.496 | cost 35 | doctrine 0.596 | counter 0.620 | gain 2.866 | final 0.496
+Rankings show foundation pairs only; later plan extensions are not included.
+",16,9,23,67.32706
+5,0,72.3606644,77.4048157,14692,"Wolf Clan AI","Automatic","StabilizeFront","Flower Girl -> Flower Girl -> Flower Girl",3,3,"Completed","All 3 units deployed. First-to-second gap: 2.02s. [Plan contains 3 units; the two-unit launch forecast is not applicable. Using intentional sequential purchasing.]",76,22.1007671,0,0.5,0.5,"Active","Wave concentration 0.50; operational goal StabilizeFront; selected Flower Girl -> Flower Girl; evaluated 16 ordered pairs; heuristic score 0.765; relative player advantage 0.39. merit 0.558, final score 0.765, second-best score 0.614; pair cost 30; estimated saving 2.0s; patience 0.50; real money 76; virtual budget 22.1; effective income 4/s. Time is a ranking estimate, not an execution deadline. initiative 0.00 (0 counter, 1 doctrine); selected doctrine 0.558; counter 0.894 (gain 5.879, best gain 6.576); blended 0.894; final economic score 0.765; zones evaluated 5. Unweighted calculator estimate; no status-effect simulation or path forecasting. Extended to 3 ordered purchases (sequential execution after the pair).","merit 0.558, final score 0.765, second-best score 0.614; pair cost 30; estimated saving 2.0s; patience 0.50; real money 76; virtual budget 22.1; effective income 4/s. Time is a ranking estimate, not an execution deadline.","initiative 0.00 (0 counter, 1 doctrine); selected doctrine 0.558; counter 0.894 (gain 5.879, best gain 6.576); blended 0.894; final economic score 0.765; zones evaluated 5. Unweighted calculator estimate; no status-effect simulation or path forecasting.","Pairs 16; initiative 0.00; economics ON; player snapshots 5.
+Counterplay available: score is positive improvement normalized within eligible pairs.
+DOCTRINE (raw merit)
+  1. WolfMage -> Flower Girl | rankScore 0.754 | cost 105 | doctrine 0.754 | counter 1.000 | gain 6.576 | final 0.483
+  2. WolfMage -> WolfMage | rankScore 0.750 | cost 180 | doctrine 0.750 | counter 0.960 | gain 6.313 | final 0.323
+  3. WolfMage -> HoodGuy | rankScore 0.747 | cost 110 | doctrine 0.747 | counter 0.741 | gain 4.874 | final 0.348
+COUNTERPLAY (normalized gain)
+  1. Flower Girl -> WolfMage | rankScore 1.000 | cost 105 | doctrine 0.554 | counter 1.000 | gain 6.576 | final 0.483
+  2. WolfMage -> Flower Girl | rankScore 1.000 | cost 105 | doctrine 0.754 | counter 1.000 | gain 6.576 | final 0.483
+  3. WolfMage -> WolfMage | rankScore 0.960 | cost 180 | doctrine 0.750 | counter 0.960 | gain 6.313 | final 0.323
+FINAL (after initiative + economics)
+  1. Flower Girl -> Flower Girl [SELECTED] | rankScore 0.765 | cost 30 | doctrine 0.558 | counter 0.894 | gain 5.879 | final 0.765
+  2. Flower Girl -> HoodGuy | rankScore 0.614 | cost 35 | doctrine 0.551 | counter 0.755 | gain 4.962 | final 0.614
+  3. HoodGuy -> Flower Girl | rankScore 0.614 | cost 35 | doctrine 0.551 | counter 0.755 | gain 4.962 | final 0.614
+Rankings show foundation pairs only; later plan extensions are not included.
+",16,9,20,77.4048157
+6,0,82.44966,87.4873,16068,"Wolf Clan AI","Automatic","BuildBreakthrough","Flower Girl -> Flower Girl -> Flower Girl",3,3,"Completed","All 3 units deployed. First-to-second gap: 1.01s. [Plan contains 3 units; the two-unit launch forecast is not applicable. Using intentional sequential purchasing.]",71,25.1262016,0,0.5,0.5,"Active","Wave concentration 0.50; operational goal BuildBreakthrough; selected Flower Girl -> Flower Girl; evaluated 16 ordered pairs; heuristic score 0.758; relative player advantage 0.35. merit 0.602, final score 0.758, second-best score 0.581; pair cost 30; estimated saving 1.2s; patience 0.50; real money 71; virtual budget 25.13; effective income 4/s. Time is a ranking estimate, not an execution deadline. initiative 0.00 (0 counter, 1 doctrine); selected doctrine 0.602; counter 0.866 (gain 4.154, best gain 4.797); blended 0.866; final economic score 0.758; zones evaluated 5. Unweighted calculator estimate; no status-effect simulation or path forecasting. Extended to 3 ordered purchases (sequential execution after the pair).","merit 0.602, final score 0.758, second-best score 0.581; pair cost 30; estimated saving 1.2s; patience 0.50; real money 71; virtual budget 25.13; effective income 4/s. Time is a ranking estimate, not an execution deadline.","initiative 0.00 (0 counter, 1 doctrine); selected doctrine 0.602; counter 0.866 (gain 4.154, best gain 4.797); blended 0.866; final economic score 0.758; zones evaluated 5. Unweighted calculator estimate; no status-effect simulation or path forecasting.","Pairs 16; initiative 0.00; economics ON; player snapshots 5.
+Counterplay available: score is positive improvement normalized within eligible pairs.
+DOCTRINE (raw merit)
+  1. WolfMage -> HoodGuy | rankScore 0.709 | cost 110 | doctrine 0.709 | counter 0.657 | gain 3.153 | final 0.313
+  2. Flower Girl -> HoodGuy | rankScore 0.683 | cost 35 | doctrine 0.683 | counter 0.699 | gain 3.351 | final 0.581
+  3. HoodGuy -> HoodGuy | rankScore 0.677 | cost 40 | doctrine 0.677 | counter 0.228 | gain 1.096 | final 0.181
+COUNTERPLAY (normalized gain)
+  1. Flower Girl -> WolfMage | rankScore 1.000 | cost 105 | doctrine 0.647 | counter 1.000 | gain 4.797 | final 0.489
+  2. WolfMage -> Flower Girl | rankScore 1.000 | cost 105 | doctrine 0.628 | counter 1.000 | gain 4.797 | final 0.489
+  3. WolfMage -> WolfMage | rankScore 0.938 | cost 180 | doctrine 0.673 | counter 0.938 | gain 4.498 | final 0.318
+FINAL (after initiative + economics)
+  1. Flower Girl -> Flower Girl [SELECTED] | rankScore 0.758 | cost 30 | doctrine 0.602 | counter 0.866 | gain 4.154 | final 0.758
+  2. Flower Girl -> HoodGuy | rankScore 0.581 | cost 35 | doctrine 0.683 | counter 0.699 | gain 3.351 | final 0.581
+  3. HoodGuy -> Flower Girl | rankScore 0.581 | cost 35 | doctrine 0.596 | counter 0.699 | gain 3.351 | final 0.581
+Rankings show foundation pairs only; later plan extensions are not included.
+",16,9,20,87.4873
+7,0,92.51653,95.04268,17476,"Wolf Clan AI","Automatic","StabilizeFront","Flower Girl -> Flower Girl -> Flower Girl",3,3,"Completed","All 3 units deployed. First-to-second gap: 1.01s. [Plan contains 3 units; the two-unit launch forecast is not applicable. Using intentional sequential purchasing.]",66,31.26691,0,0.5,0.5,"Active","Wave concentration 0.50; operational goal StabilizeFront; selected Flower Girl -> Flower Girl; evaluated 16 ordered pairs; heuristic score 0.773; relative player advantage 0.48. merit 0.558, final score 0.773, second-best score 0.566; pair cost 30; estimated saving 0.0s; patience 0.50; real money 66; virtual budget 31.27; effective income 4/s. Time is a ranking estimate, not an execution deadline. initiative 0.00 (0 counter, 1 doctrine); selected doctrine 0.558; counter 0.850 (gain 3.729, best gain 4.386); blended 0.850; final economic score 0.773; zones evaluated 5. Unweighted calculator estimate; no status-effect simulation or path forecasting. Extended to 3 ordered purchases (sequential execution after the pair).","merit 0.558, final score 0.773, second-best score 0.566; pair cost 30; estimated saving 0.0s; patience 0.50; real money 66; virtual budget 31.27; effective income 4/s. Time is a ranking estimate, not an execution deadline.","initiative 0.00 (0 counter, 1 doctrine); selected doctrine 0.558; counter 0.850 (gain 3.729, best gain 4.386); blended 0.850; final economic score 0.773; zones evaluated 5. Unweighted calculator estimate; no status-effect simulation or path forecasting.","Pairs 16; initiative 0.00; economics ON; player snapshots 5.
+Counterplay available: score is positive improvement normalized within eligible pairs.
+DOCTRINE (raw merit)
+  1. WolfMage -> Flower Girl | rankScore 0.754 | cost 105 | doctrine 0.754 | counter 1.000 | gain 4.386 | final 0.502
+  2. WolfMage -> WolfMage | rankScore 0.750 | cost 180 | doctrine 0.750 | counter 0.907 | gain 3.978 | final 0.314
+  3. WolfMage -> HoodGuy | rankScore 0.747 | cost 110 | doctrine 0.747 | counter 0.577 | gain 2.531 | final 0.281
+COUNTERPLAY (normalized gain)
+  1. Flower Girl -> WolfMage | rankScore 1.000 | cost 105 | doctrine 0.554 | counter 1.000 | gain 4.386 | final 0.502
+  2. WolfMage -> Flower Girl | rankScore 1.000 | cost 105 | doctrine 0.754 | counter 1.000 | gain 4.386 | final 0.502
+  3. WolfMage -> WolfMage | rankScore 0.907 | cost 180 | doctrine 0.750 | counter 0.907 | gain 3.978 | final 0.314
+FINAL (after initiative + economics)
+  1. Flower Girl -> Flower Girl [SELECTED] | rankScore 0.773 | cost 30 | doctrine 0.558 | counter 0.850 | gain 3.729 | final 0.773
+  2. Flower Girl -> HoodGuy | rankScore 0.566 | cost 35 | doctrine 0.551 | counter 0.650 | gain 2.853 | final 0.566
+  3. HoodGuy -> Flower Girl | rankScore 0.566 | cost 35 | doctrine 0.551 | counter 0.650 | gain 2.853 | final 0.566
+Rankings show foundation pairs only; later plan extensions are not included.
+",16,9,15,95.04268
+8,0,100.131859,103.155716,18496,"Wolf Clan AI","Automatic","StabilizeFront","Flower Girl -> Flower Girl -> Flower Girl",3,3,"Completed","All 3 units deployed. First-to-second gap: 1.00s. [Plan contains 3 units; the two-unit launch forecast is not applicable. Using intentional sequential purchasing.]",50,30.6364174,0,0.5,0.5,"Active","Wave concentration 0.50; operational goal StabilizeFront; selected Flower Girl -> Flower Girl; evaluated 16 ordered pairs; heuristic score 0.774; relative player advantage 0.38. merit 0.558, final score 0.774, second-best score 0.570; pair cost 30; estimated saving 0.0s; patience 0.50; real money 50; virtual budget 30.64; effective income 4/s. Time is a ranking estimate, not an execution deadline. initiative 0.00 (0 counter, 1 doctrine); selected doctrine 0.558; counter 0.852 (gain 3.773, best gain 4.431); blended 0.852; final economic score 0.774; zones evaluated 5. Unweighted calculator estimate; no status-effect simulation or path forecasting. Extended to 3 ordered purchases (sequential execution after the pair).","merit 0.558, final score 0.774, second-best score 0.570; pair cost 30; estimated saving 0.0s; patience 0.50; real money 50; virtual budget 30.64; effective income 4/s. Time is a ranking estimate, not an execution deadline.","initiative 0.00 (0 counter, 1 doctrine); selected doctrine 0.558; counter 0.852 (gain 3.773, best gain 4.431); blended 0.852; final economic score 0.774; zones evaluated 5. Unweighted calculator estimate; no status-effect simulation or path forecasting.","Pairs 16; initiative 0.00; economics ON; player snapshots 5.
+Counterplay available: score is positive improvement normalized within eligible pairs.
+DOCTRINE (raw merit)
+  1. WolfMage -> Flower Girl | rankScore 0.754 | cost 105 | doctrine 0.754 | counter 1.000 | gain 4.431 | final 0.501
+  2. WolfMage -> WolfMage | rankScore 0.750 | cost 180 | doctrine 0.750 | counter 0.908 | gain 4.021 | final 0.313
+  3. WolfMage -> HoodGuy | rankScore 0.747 | cost 110 | doctrine 0.747 | counter 0.584 | gain 2.588 | final 0.284
+COUNTERPLAY (normalized gain)
+  1. Flower Girl -> WolfMage | rankScore 1.000 | cost 105 | doctrine 0.554 | counter 1.000 | gain 4.431 | final 0.501
+  2. WolfMage -> Flower Girl | rankScore 1.000 | cost 105 | doctrine 0.754 | counter 1.000 | gain 4.431 | final 0.501
+  3. WolfMage -> WolfMage | rankScore 0.908 | cost 180 | doctrine 0.750 | counter 0.908 | gain 4.021 | final 0.313
+FINAL (after initiative + economics)
+  1. Flower Girl -> Flower Girl [SELECTED] | rankScore 0.774 | cost 30 | doctrine 0.558 | counter 0.852 | gain 3.773 | final 0.774
+  2. Flower Girl -> HoodGuy | rankScore 0.570 | cost 35 | doctrine 0.551 | counter 0.658 | gain 2.917 | final 0.570
+  3. HoodGuy -> Flower Girl | rankScore 0.570 | cost 35 | doctrine 0.551 | counter 0.658 | gain 2.917 | final 0.570
+Rankings show foundation pairs only; later plan extensions are not included.
+",16,9,16,103.155716
+9,0,108.195107,-1,19638,"Wolf Clan AI","Automatic","BuildBreakthrough","Flower Girl -> Flower Girl -> Flower Girl",3,2,"Active",,37,26.6496315,0,0.5,0.5,"Active","Wave concentration 0.50; operational goal BuildBreakthrough; selected Flower Girl -> Flower Girl; evaluated 16 ordered pairs; heuristic score 0.753; relative player advantage 0.35. merit 0.602, final score 0.753, second-best score 0.562; pair cost 30; estimated saving 0.8s; patience 0.50; real money 37; virtual budget 26.65; effective income 4/s. Time is a ranking estimate, not an execution deadline. initiative 0.00 (0 counter, 1 doctrine); selected doctrine 0.602; counter 0.850 (gain 3.752, best gain 4.412); blended 0.850; final economic score 0.753; zones evaluated 5. Unweighted calculator estimate; no status-effect simulation or path forecasting. Extended to 3 ordered purchases (sequential execution after the pair).","merit 0.602, final score 0.753, second-best score 0.562; pair cost 30; estimated saving 0.8s; patience 0.50; real money 37; virtual budget 26.65; effective income 4/s. Time is a ranking estimate, not an execution deadline.","initiative 0.00 (0 counter, 1 doctrine); selected doctrine 0.602; counter 0.850 (gain 3.752, best gain 4.412); blended 0.850; final economic score 0.753; zones evaluated 5. Unweighted calculator estimate; no status-effect simulation or path forecasting.","Pairs 16; initiative 0.00; economics ON; player snapshots 5.
+Counterplay available: score is positive improvement normalized within eligible pairs.
+DOCTRINE (raw merit)
+  1. WolfMage -> HoodGuy | rankScore 0.709 | cost 110 | doctrine 0.709 | counter 0.637 | gain 2.808 | final 0.305
+  2. Flower Girl -> HoodGuy | rankScore 0.683 | cost 35 | doctrine 0.683 | counter 0.668 | gain 2.948 | final 0.562
+  3. HoodGuy -> HoodGuy | rankScore 0.677 | cost 40 | doctrine 0.677 | counter 0.162 | gain 0.713 | final 0.129
+COUNTERPLAY (normalized gain)
+  1. Flower Girl -> WolfMage | rankScore 1.000 | cost 105 | doctrine 0.647 | counter 1.000 | gain 4.412 | final 0.493
+  2. WolfMage -> Flower Girl | rankScore 1.000 | cost 105 | doctrine 0.628 | counter 1.000 | gain 4.412 | final 0.493
+  3. WolfMage -> WolfMage | rankScore 0.947 | cost 180 | doctrine 0.673 | counter 0.947 | gain 4.177 | final 0.323
+FINAL (after initiative + economics)
+  1. Flower Girl -> Flower Girl [SELECTED] | rankScore 0.753 | cost 30 | doctrine 0.602 | counter 0.850 | gain 3.752 | final 0.753
+  2. Flower Girl -> HoodGuy | rankScore 0.562 | cost 35 | doctrine 0.683 | counter 0.668 | gain 2.948 | final 0.562
+  3. HoodGuy -> Flower Girl | rankScore 0.562 | cost 35 | doctrine 0.596 | counter 0.668 | gain 2.948 | final 0.562
+Rankings show foundation pairs only; later plan extensions are not included.
+",16,6,10,109.201538

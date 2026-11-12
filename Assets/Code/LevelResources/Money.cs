@@ -20,6 +20,10 @@ public class Money : MonoBehaviour
     [SerializeField] bool IsAI;
     [SerializeField] bool DebugLogs = false;
     
+    // Read-only wallet capacity used by the experimental push launch forecast.
+    public int CurrentMoneyCapacity => MaxMoney != null && CurrentMaxMoneyIndex >= 0 &&
+        CurrentMaxMoneyIndex < MaxMoney.Length ? MaxMoney[CurrentMaxMoneyIndex] : 0;
+
     public bool MoneyIsActive
     {
         get { return _money_is_active; }

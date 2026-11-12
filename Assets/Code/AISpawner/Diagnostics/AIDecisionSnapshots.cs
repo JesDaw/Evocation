@@ -283,6 +283,11 @@ namespace AIDecisionTrace
         public AITickEnd tickEnd;
         public float virtualBudgetAtEnd;
         public int actualMoneyAtEnd;
+        // Plan-mode overlay: populated by the recorder at tick completion. These
+        // fields do not affect AI decisions, and survive when passes.Count == 0.
+        public int planNumber;
+        public string planStage, planWaitCategory, planWaitReason, planNextUnit;
+        public int planStep, planLength;
 
         // set by the recorder when the tick is stored
         public AIPassOutcome stallOutcome;
@@ -326,7 +331,13 @@ namespace AIDecisionTrace
                 return sb.ToString();
             }
 
-            if (passes.Count == 0) sb.Append("(no passes)");
+            if (passes.Count == 0)
+            {
+                if (planNumber > 0)
+                    sb.Append("Plan #").Append(planNumber).Append(" ")
+                      .Append(planStage).Append(" [").Append(planWaitCategory).Append("]");
+                else sb.Append("(no passes)");
+            }
             for (int i = 0; i < passes.Count; i++)
             {
                 if (i > 0) sb.Append("  >  ");

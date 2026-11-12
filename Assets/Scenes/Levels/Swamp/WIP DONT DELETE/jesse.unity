@@ -392,6 +392,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!1 &1731948913 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8868124601909000352, guid: 3687d8483f0c749cda2112fe17d268e5, type: 3}
+  m_PrefabInstance: {fileID: 4726028083898450811}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1731948917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1731948913}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05cd513908cae4742a40ee1504c023a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::AITacticalPlanExecutor
+  enablePlanExecution: 1
+  frontline: {fileID: 11400000, guid: cdea1fad630890643bd06917f053e5e1, type: 2}
+  followup: {fileID: 11400000, guid: 205e822ea4b6f44beae82b1a1e013210, type: 2}
+  useIncomeAwareLaunch: 1
+  maxDeploymentGapSeconds: 2
+  incomeSafetySeconds: 0.5
+  assumedFollowupActivityMultiplier: 0
+  automaticallyRearm: 1
+  rearmDelaySeconds: 5
+  maxPlanDurationSeconds: 120
+  cancelOnLevelPhaseChange: 1
+  logTransitions: 1
+--- !u!114 &1731948919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1731948913}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da8625dc82fbd425d99960c7b453666b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::AIStrategicDirector
+  enableAutomaticComposition: 1
+  defensiveReactionThreshold: 0.35
+  maxCombinedPushCost: 0
+  enableVariableSizedPlans: 1
+  maxUnitsPerPlan: 4
+  enableEconomicPlanValuation: 1
+  investmentWeight: 0.65
+  savingDelayWeight: 0.75
+  referenceSavingSeconds: 20
+  lastEconomicExplanation: Economics not yet evaluated.
+  enableInitiativeCounterplay: 1
+  lastInitiativeExplanation: Initiative counterplay has not been evaluated.
+  enableRankingDiagnostics: 1
+  lastRankingReport: No plan ranking captured yet.
+  logRankingReport: 1
+  logChoices: 1
 --- !u!114 &1838360906 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3912903141320137415, guid: 3687d8483f0c749cda2112fe17d268e5, type: 3}
@@ -525,7 +582,7 @@ PrefabInstance:
       objectReference: {fileID: 1838360906}
     - target: {fileID: 8632089556329016677, guid: 3687d8483f0c749cda2112fe17d268e5, type: 3}
       propertyPath: showDebugLogs
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8632089556329016677, guid: 3687d8483f0c749cda2112fe17d268e5, type: 3}
       propertyPath: useRelativeThreatForActivity
@@ -542,7 +599,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8868124601909000352, guid: 3687d8483f0c749cda2112fe17d268e5, type: 3}
+      insertIndex: 2
+      addedObject: {fileID: 1731948917}
+    - targetCorrespondingSourceObject: {fileID: 8868124601909000352, guid: 3687d8483f0c749cda2112fe17d268e5, type: 3}
+      insertIndex: 3
+      addedObject: {fileID: 1731948919}
   m_SourcePrefab: {fileID: 100100000, guid: 3687d8483f0c749cda2112fe17d268e5, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

@@ -19,7 +19,7 @@ using AIDecisionTrace;
 
 public static class AIDecisionExporter
 {
-    public const int SchemaVersion = 3;
+    public const int SchemaVersion = 4;
 
     static readonly CultureInfo Inv = CultureInfo.InvariantCulture;
 
@@ -69,7 +69,9 @@ public static class AIDecisionExporter
             "aiSpawnZoneAssigned", "stallUnit",
             // --- appended in schema 3 ---
             "legacyNormalizedThreat", "relativeMilitaryAdvantage", "relativeThreatForActivity",
-            "relativeActivityModeEnabled", "militaryAdvantage", "defensiveUrgencyPressure");
+            "relativeActivityModeEnabled", "militaryAdvantage", "defensiveUrgencyPressure",
+            // --- appended in schema 4 ---
+            "planNumber", "planStage", "planStep", "planLength", "planWaitCategory", "planNextUnit", "planWaitReason");
 
         // ------------------------------------------------------------ candidates
         CsvTable cands = new CsvTable(
@@ -116,7 +118,9 @@ public static class AIDecisionExporter
                 I(t.phaseCharacterCount), N(t.outcomeUtilityScale), I(t.maxSpawnsPerTick), N(t.swarmEvaluationWindow), I(t.maxSwarmCopies),
                 B(t.aiSpawnZoneAssigned), T(t.stallUnitName),
                 N(t.legacyNormalizedThreat), N(t.relativeMilitaryAdvantage), N(t.relativeThreatForActivity),
-                B(t.relativeActivityModeEnabled), N(t.militaryAdvantage), N(t.defensiveUrgencyPressure));
+                B(t.relativeActivityModeEnabled), N(t.militaryAdvantage), N(t.defensiveUrgencyPressure),
+                I(t.planNumber), T(t.planStage), I(t.planStep), I(t.planLength),
+                T(t.planWaitCategory), T(t.planNextUnit), T(t.planWaitReason));
 
             for (int pi = 0; pi < t.passes.Count; pi++)
             {
@@ -280,12 +284,22 @@ public static class AIDecisionExporter
         AddKv(session, "ticksFile", ticksName);
         AddKv(session, "candidatesFile", candName);
         AddKv(session, "unitsFile", unitsName);
+        AddKv(session, "plansFile", stamp + "_plans.csv");
+        AddKv(session, "planCandidatesFile", stamp + "_plan_candidates.csv");
+        AddKv(session, "planEventsFile", stamp + "_plan_events.csv");
+        AddKv(session, "planTicksFile", stamp + "_plan_ticks.csv");
+        AddKv(session, "note_planHistory", "Plan captures are retained independently of tick ring rollover, up to 500 plans. Open inspector and enable Record before starting AI.");
+        AddKv(session, "note_waitCategory", "Wait categories are diagnostic inferences. Exact cooldown requires a recorded pass or a future authoritative cooldown API.");
 
         // ------------------------------------------------------------ write + validate
         WriteAndValidate(dir, ticksName, ticks);
         WriteAndValidate(dir, candName, cands);
         WriteAndValidate(dir, unitsName, unitsTable);
         WriteAndValidate(dir, sessionName, session);
+        // Plan history has its own lifecycle and is intentionally not limited to 200 ticks.
+        // Appends four new CSVs without changing existing tick/candidate/unit columns.
+        AIPlanDiagnosticsExporter.Export(stamp);
+        AIOperationalCSVExporter.Export(stamp);
 
         Debug.Log("[AI Inspector] Exported " + n + " ticks, " + cands.Rows + " candidate rows, " + unitsTable.Rows + " units to " + dir);
         EditorUtility.RevealInFinder(Path.Combine(dir, ticksName));

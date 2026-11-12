@@ -75,6 +75,13 @@ public class AIDecisionInspectorWindow : EditorWindow
     [SerializeField] bool following = true;
     [SerializeField] bool recording = true;
     [SerializeField] bool showHistory = true;
+    [SerializeField] bool showPlanHistory = false;
+    [SerializeField] bool showOperationHistory = false;
+    [SerializeField] int selectedOperationId = -1;
+    [SerializeField] int selectedPlanNumber = -1;
+    [SerializeField] bool planCandidatesFoldout = true;
+    [SerializeField] bool planEventsFoldout = true;
+    [SerializeField] bool planTickFoldout = true;
     [SerializeField] bool onlySpawnTicks = false;
     [SerializeField] bool overviewFoldout = true;
     [SerializeField] int sortColumn = ColTotal;
@@ -89,6 +96,8 @@ public class AIDecisionInspectorWindow : EditorWindow
     Vector2 detailScroll;
     AITickSnapshot pinned;
     AITickSnapshot displayed;          // cached on Layout so Layout/Repaint see identical data
+    AIPlanSnapshot displayedPlan;
+    AIOperationalObservation displayedOperation;
     AITickSnapshot diagnosticsFor;
     readonly List<AIDiagnostic> diagnostics = new List<AIDiagnostic>();
     readonly List<AITickSnapshot> historyView = new List<AITickSnapshot>();
@@ -99,6 +108,7 @@ public class AIDecisionInspectorWindow : EditorWindow
     int liveMoney;
 
     int lastVersion = -1;
+    int lastOperationalVersion = -1;
     double lastRepaintTime;
 
     GUIStyle cellStyle, cellBold, cellYes, cellNo, rowStyle, foldoutBold;
@@ -132,7 +142,8 @@ public class AIDecisionInspectorWindow : EditorWindow
         // Re-assert after domain reloads / play-mode transitions.
         if (recording && !AIDecisionRecorder.Enabled) AIDecisionRecorder.Enabled = true;
 
-        bool dirty = AIDecisionRecorder.Version != lastVersion;
+        bool dirty = AIDecisionRecorder.Version != lastVersion || AIOperationalObserver.Version != lastOperationalVersion;
+        lastOperationalVersion = AIOperationalObserver.Version;
         if (dirty) lastVersion = AIDecisionRecorder.Version;
 
         double now = EditorApplication.timeSinceStartup;
@@ -184,6 +195,22 @@ public class AIDecisionInspectorWindow : EditorWindow
     void RefreshLayoutCache()
     {
         displayed = following ? AIDecisionRecorder.Latest : pinned;
+        displayedOperation = null;
+        if (showOperationHistory)
+        {
+            var observations = AIOperationalObserver.History;
+            if (following && observations.Count > 0) displayedOperation = observations[observations.Count - 1];
+            else
+                for (int i = observations.Count - 1; i >= 0; i--)
+                    if (observations[i].id == selectedOperationId) { displayedOperation = observations[i]; break; }
+        }
+        displayedPlan = null;
+        if (showPlanHistory)
+        {
+            var plans = AIDecisionRecorder.Plans;
+            if (following && plans.Count > 0) displayedPlan = plans[plans.Count - 1];
+            else displayedPlan = AIDecisionRecorder.GetPlan(selectedPlanNumber);
+        }
 
         liveHarness = AILevelHarness.Instance;
         Money ai = Money.AIInstance;
@@ -245,6 +272,7 @@ public class AIDecisionInspectorWindow : EditorWindow
         if (GUILayout.Button("Clear", EditorStyles.toolbarButton, GUILayout.Width(50)))
         {
             AIDecisionRecorder.Clear();
+            AIOperationalObserver.ClearHistory();
             pinned = null;
             diagnosticsFor = null;
         }
@@ -264,12 +292,28 @@ public class AIDecisionInspectorWindow : EditorWindow
             EditorPrefs.SetInt(PrefCapacity, capacity);
         }
 
-        onlySpawnTicks = GUILayout.Toggle(onlySpawnTicks, "Spawn ticks only", EditorStyles.toolbarButton, GUILayout.Width(110f));
+        bool newPlanView = GUILayout.Toggle(showPlanHistory, "Plans", EditorStyles.toolbarButton, GUILayout.Width(52));
+        if (newPlanView != showPlanHistory)
+        {
+            showPlanHistory = newPlanView;
+            if (showPlanHistory) showOperationHistory = false;
+            following = true;
+        }
+        bool newOperationsView = GUILayout.Toggle(showOperationHistory, "Operations", EditorStyles.toolbarButton, GUILayout.Width(84));
+        if (newOperationsView != showOperationHistory)
+        {
+            showOperationHistory = newOperationsView;
+            if (showOperationHistory) showPlanHistory = false;
+            following = true;
+        }
+        if (!showPlanHistory && !showOperationHistory)
+            onlySpawnTicks = GUILayout.Toggle(onlySpawnTicks, "Spawn ticks only", EditorStyles.toolbarButton, GUILayout.Width(110f));
         showHistory = GUILayout.Toggle(showHistory, "History list", EditorStyles.toolbarButton, GUILayout.Width(80f));
 
         GUILayout.FlexibleSpace();
         GUILayout.Label(
-            AIDecisionRecorder.Count + "/" + AIDecisionRecorder.Capacity + " ticks   |   " + (following ? "LIVE" : "PAUSED (display frozen, AI unaffected)"),
+            (showOperationHistory ? AIOperationalObserver.History.Count + " operation observations" : showPlanHistory ? AIDecisionRecorder.Plans.Count + " plans" : AIDecisionRecorder.Count + "/" + AIDecisionRecorder.Capacity + " ticks") +
+            "   |   " + (following ? "LIVE" : "PAUSED (display frozen, AI unaffected)"),
             EditorStyles.miniLabel);
 
         EditorGUILayout.EndHorizontal();
@@ -283,6 +327,41 @@ public class AIDecisionInspectorWindow : EditorWindow
         GUILayout.Label("History (newest first)", EditorStyles.boldLabel);
 
         historyScroll = EditorGUILayout.BeginScrollView(historyScroll, GUILayout.Width(HistoryWidth));
+        if (showOperationHistory)
+        {
+            var observations = AIOperationalObserver.History;
+            for (int i = observations.Count - 1; i >= 0; i--)
+            {
+                AIOperationalObservation o = observations[i];
+                if (GUILayout.Button(new GUIContent("#" + o.id + "  " + o.time.ToString("F1") + "s  " + o.chosen, o.chosen), EditorStyles.miniButton))
+                {
+                    selectedOperationId = o.id;
+                    following = false;
+                }
+            }
+            EditorGUILayout.EndScrollView();
+            EditorGUILayout.EndVertical();
+            return;
+        }
+        if (showPlanHistory)
+        {
+            var plans = AIDecisionRecorder.Plans;
+            for (int i = plans.Count - 1; i >= 0; i--)
+            {
+                AIPlanSnapshot plan = plans[i];
+                string label = "#" + plan.number + "  " + plan.startedAt.ToString("F1") + "s  " +
+                    plan.completed + "/" + plan.plannedCount + "  " + plan.result;
+                if (GUILayout.Button(new GUIContent(label, plan.orderedUnits),
+                    displayedPlan == plan ? EditorStyles.toolbarButton : EditorStyles.miniButton))
+                {
+                    selectedPlanNumber = plan.number;
+                    following = false;
+                }
+            }
+            EditorGUILayout.EndScrollView();
+            EditorGUILayout.EndVertical();
+            return;
+        }
 
         int n = historyView.Count;
         Rect area = GUILayoutUtility.GetRect(HistoryWidth - 24f, Mathf.Max(1, n) * HistoryRowHeight, GUILayout.ExpandWidth(true));
@@ -340,7 +419,11 @@ public class AIDecisionInspectorWindow : EditorWindow
         float oldLabelWidth = EditorGUIUtility.labelWidth;
         EditorGUIUtility.labelWidth = 270f;
 
-        if (displayed == null)
+        if (showOperationHistory && displayedOperation != null)
+            DrawOperationDetail(displayedOperation);
+        else if (showPlanHistory && displayedPlan != null)
+            DrawPlanDetail(displayedPlan);
+        else if (displayed == null)
         {
             DrawEmptyState();
         }
@@ -476,6 +559,15 @@ public class AIDecisionInspectorWindow : EditorWindow
         else
         {
             Line("Activity", "n/a (" + t.updateStatus + ")");
+        }
+
+        if (t.planNumber > 0)
+        {
+            Sub("Tactical plan at this tick (historical)");
+            Line("Plan / stage", "#" + t.planNumber + " / " + t.planStage);
+            Line("Purchase step", t.planStep + " / " + t.planLength);
+            Line("Waiting / next unit", t.planWaitCategory + " / " + t.planNextUnit);
+            Line("Executor reason", t.planWaitReason);
         }
 
         Sub("Settings in effect");
@@ -900,6 +992,109 @@ public class AIDecisionInspectorWindow : EditorWindow
     static string YesNo(bool v) { return v ? "Yes" : "No"; }
 
     static string Txt(string s) { return string.IsNullOrEmpty(s) ? "-" : s; }
+
+    // ================================================================ unified plan diagnostics
+
+    void DrawOperationDetail(AIOperationalObservation o)
+    {
+        GUILayout.Label("Operational shadow evaluation #" + o.id + "  at " + o.time.ToString("F2") + "s", EditorStyles.boldLabel);
+        EditorGUILayout.HelpBox("OBSERVATION ONLY. The selected shadow proposal did not control purchases, upgrades, plan commitment, or lane routing. These utilities are provisional, not calibrated predictions of winning or capturing a location.", MessageType.Info);
+        Line("Current tactical plan", "#" + o.planNumber);
+        Line("Phase / eligible roster", o.phase + " / " + o.eligibleCount);
+        Line("Money / virtual budget / income", o.money.ToString("F1") + " / " + o.virtualBudget.ToString("F1") + " / " + o.incomeRate.ToString("F2") + "/s");
+        Line("Player money / income", o.playerMoney.ToString("F1") + " / " + o.playerIncome.ToString("F2") + "/s");
+        Line("Initiative / positional / patience", o.initiative.ToString("F2") + " / " + o.positionalValuation.ToString("F2") + " / " + o.economicPatience.ToString("F2"));
+        Line("Highest provisional utility", o.chosen);
+        GUILayout.Space(5f);
+        GUILayout.Label("Every proposal (ranked, historical values)", EditorStyles.boldLabel);
+        foreach (AIOperationCandidate p in o.proposals)
+        {
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            EditorGUILayout.LabelField((p.selected ? "[TOP SHADOW] " : "") + p.objective + " | " + p.target + " | " + p.unit, EditorStyles.boldLabel);
+            Line("Maneuver", p.maneuver);
+            Line("Utility / military / denial / economic", p.score.ToString("F3") + " / " + p.militaryBenefit.ToString("F3") + " / " + p.objectiveBenefit.ToString("F3") + " / " + p.economicBenefit.ToString("F3"));
+            Line("Baseline -> hypothetical / gain (x100)", p.baseline.ToString("F2") + " -> " + p.hypothetical.ToString("F2") + " / " + p.gain.ToString("F2"));
+            Line("Cost / estimated funding delay", p.cost.ToString("F1") + " / " + p.estimatedWait.ToString("F1") + "s");
+            Line("Units (AI / player) / static incentive", p.enemyCount + " / " + p.playerCount + " / " + p.incentive.ToString("F2"));
+            EditorGUILayout.LabelField(p.caveat, EditorStyles.wordWrappedMiniLabel);
+            EditorGUILayout.EndVertical();
+        }
+    }
+
+    void DrawPlanDetail(AIPlanSnapshot p)
+    {
+        GUILayout.Label("Plan #" + p.number + " — " + p.result, EditorStyles.boldLabel);
+        EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+        Line("Created at / phase", p.startedAt.ToString("F2") + "s / " + p.phase);
+        Line("Objective / source", p.objective + " / " + p.selectionSource);
+        Line("Ordered units", p.orderedUnits);
+        Line("Purchased", p.completed + " / " + p.plannedCount);
+        Line("Initiative / patience / wave", p.initiative.ToString("F2") + " / " +
+            p.economicPatience.ToString("F2") + " / " + p.waveConcentration.ToString("F2"));
+        Line("Counterplay", p.counterplayStatus);
+        Line("Money / budget at selection", p.initialMoney.ToString("F1") + " / " + p.initialBudget.ToString("F1"));
+        if (!string.IsNullOrEmpty(p.explanation))
+            EditorGUILayout.HelpBox(p.explanation, MessageType.None);
+        EditorGUILayout.EndVertical();
+
+        Sub("Strategic Director — captured at selection");
+        EditorGUILayout.HelpBox(string.IsNullOrEmpty(p.directorReason)
+            ? "Manual plan: no strategic director ranking." : p.directorReason, MessageType.None);
+        if (!string.IsNullOrEmpty(p.initiativeExplanation))
+            EditorGUILayout.HelpBox(p.initiativeExplanation, MessageType.None);
+        planCandidatesFoldout = EditorGUILayout.Foldout(planCandidatesFoldout,
+            "All evaluated foundation pairs (" + p.candidates.Count + ")", true, foldoutBold);
+        if (planCandidatesFoldout)
+        {
+            var ranked = new List<AIPlanCandidateSnapshot>(p.candidates);
+            ranked.Sort((a, b) => a.finalRank.CompareTo(b.finalRank));
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            GUILayout.Label("Final rank | pair | cost | doctrine | counter | raw gain | final", EditorStyles.miniBoldLabel);
+            foreach (AIPlanCandidateSnapshot c in ranked)
+            {
+                string line = c.finalRank + ". " + c.first + " -> " + c.second +
+                    (c.selected ? " [SELECTED]" : "") +
+                    "  cost " + c.cost.ToString("F0") +
+                    "  doctrine " + c.doctrine.ToString("F3") +
+                    "  counter " + c.counterNormalized.ToString("F3") +
+                    "  gain " + c.counterGain.ToString("F2") +
+                    "  final " + c.finalScore.ToString("F3");
+                GUILayout.Label(line, EditorStyles.wordWrappedMiniLabel);
+            }
+            EditorGUILayout.EndVertical();
+            EditorGUILayout.HelpBox("Doctrine and counter ranks for every candidate, including those outside the top three, are retained in _plan_candidates.csv.", MessageType.Info);
+        }
+
+        planEventsFoldout = EditorGUILayout.Foldout(planEventsFoldout,
+            "Execution events (" + p.events.Count + ")", true, foldoutBold);
+        if (planEventsFoldout)
+        {
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            foreach (AIPlanEventSnapshot e in p.events)
+                GUILayout.Label(e.time.ToString("F2") + "s [" + e.kind + "] " +
+                    e.stage + " " + e.completed + "/" + e.planned + " — " + e.message,
+                    EditorStyles.wordWrappedMiniLabel);
+            EditorGUILayout.EndVertical();
+        }
+
+        planTickFoldout = EditorGUILayout.Foldout(planTickFoldout,
+            "Funding and wait timeline (" + p.ticks.Count + " samples)", true, foldoutBold);
+        if (planTickFoldout)
+        {
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            if (p.ticks.Count > 0)
+            {
+                AIPlanTickSnapshot latest = p.ticks[p.ticks.Count - 1];
+                Line("Last stage / wait cause", latest.stage + " / " + latest.waitCategory);
+                Line("Next purchase / cost", latest.nextUnit + " / " + latest.nextCost.ToString("F1"));
+                Line("Actual / virtual", latest.money.ToString("F1") + " / " + latest.virtualBudget.ToString("F1"));
+                Line("Shortfall actual / virtual", latest.remainingActual.ToString("F1") + " / " + latest.remainingVirtual.ToString("F1"));
+                Line("Latest reason", latest.reason);
+            }
+            GUILayout.Label("Per-tick records, forecasts and wait categories are exported in _plan_ticks.csv.", EditorStyles.wordWrappedMiniLabel);
+            EditorGUILayout.EndVertical();
+        }
+    }
 
     // ================================================================ small helpers
 
