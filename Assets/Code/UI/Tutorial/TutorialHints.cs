@@ -50,6 +50,13 @@ public class TutorialHints : MonoBehaviour
             Actions = actions;
         }
 
+        public string FormatToIncludeInput()
+        {
+            //returns just 0 for now...
+            return Message.Replace("__KEY__", InputSystem.actions.FindAction(Actions[0]).GetBindingDisplayString());
+            return Message.Replace("__KEY1__", InputSystem.actions.FindAction(Actions[1]).GetBindingDisplayString());
+        }
+
         [NonSerialized] public bool Done;
         [NonSerialized] public bool ConditionMetLastFrame;
         [NonSerialized] public List<InputAction> ResolvedActions = new List<InputAction>();
@@ -90,32 +97,32 @@ public class TutorialHints : MonoBehaviour
     static List<Hint> DefaultHints() => new List<Hint>
     {
         // First in the list so it wins over every other hint while the player has no hero.
-        new Hint("Your hero is down! Press <b><u>F</u></b> to respawn",
+        new Hint("Your hero is down! Press <b><u>__KEY__</u></b> to respawn",
             ShowWhen.NoHeroAlive, "SpawnerController/SpawnPlayer") { ShowEveryTime = true },
         new Hint("<sprite name=\"button_prompts_a\"> and <sprite name=\"button_prompts_d\"> to move",
             ShowWhen.ControlsAvailable, "Player/Move"),
-        new Hint("<b><u>Left Click</u></b> to attack",
+        new Hint("<b><u>__KEY__</u></b> to attack",
             ShowWhen.ControlsAvailable, "Player/Attack"),
         new Hint("<sprite name=\"button_prompts_1\"> <voffset=0.15em>-</voffset> <sprite name=\"button_prompts_5\"> to spawn allies",
             ShowWhen.ControlsAvailable, "SpawnerController/Spawn1", "SpawnerController/Spawn2",
             "SpawnerController/Spawn3", "SpawnerController/Spawn4", "SpawnerController/Spawn5"),
-        new Hint("<b><u>F</u></b> to buy an extra life",
+        new Hint("<b><u>__KEY__</u></b> to buy an extra life",
             ShowWhen.ControlsAvailable, "SpawnerController/SpawnPlayer"),
         // Free cam hints also only count while on screen, e.g. so WASD already held when entering free cam doesn't skip its hint.
-        new Hint("<b><u>V</u></b> for free cam mode",
+        new Hint("<b><u>__KEY__</u></b> for free cam mode",
             ShowWhen.ControlsAvailable, "ControlManager/ToggleCameraControl") { OnlyCountWhileShown = true },
         new Hint("<sprite name=\"button_prompts_w\"><sprite name=\"button_prompts_a\"><sprite name=\"button_prompts_s\"><sprite name=\"button_prompts_d\"> to move the camera, <b><u>Mouse Wheel</u></b> to zoom",
             ShowWhen.InFreeCam, "Camera/Move", "Camera/Zoom") { OnlyCountWhileShown = true },
-        new Hint("<b><u>V</u></b> to exit free cam mode",
+        new Hint("<b><u>__KEY__</u></b> to exit free cam mode",
             ShowWhen.InFreeCamWithHero, "ControlManager/ToggleCameraControl") { OnlyCountWhileShown = true },
         // Spell hints only count while on screen: spells are the least obvious controls, so don't let a stray input skip them.
-        new Hint("Hold <b><u>Right Click</u></b> to use a spell",
+        new Hint("Hold <b><u>__KEY__</u></b> to use a spell",
             ShowWhen.CanAffordSpell, "MagicController/AimSpell") { OnlyCountWhileShown = true },
         new Hint("<sprite name=\"button_prompts_q\"> or <b><u>Mouse Wheel</u></b> to switch spells",
             ShowWhen.ControlsAvailable, "MagicController/SwapSpell1", "MagicController/SwapSpell2") { AfterPreviousHint = true, OnlyCountWhileShown = true },
-        new Hint("<b><u>Left Click</u></b> to cast, let go of <b><u>Right Click</u></b> to cancel",
+        new Hint("<b><u>__KEY__</u></b> to cast",
             ShowWhen.AimingSpell, "MagicController/CastSpell") { OnlyCountWhileShown = true },
-        new Hint("<b><u>Z</u></b> and <b><u>X</u></b> to cycle through heroes",
+        new Hint("<b><u>__KEY__</u></b> and <b><u>__KEY1__</u></b> to cycle through heroes",
             ShowWhen.HasMultipleHeroes, "ControlManager/PreviousPlayer", "ControlManager/NextPlayer"),
     };
 
@@ -311,7 +318,8 @@ public class TutorialHints : MonoBehaviour
 
     IEnumerator Show(Hint hint)
     {
-        _label.text = hint.Message;
+        _label.text = hint.FormatToIncludeInput();
+        if(DebugLogs) Debug.Log(hint.FormatToIncludeInput());
         _shownHint = hint;
 
         while (true)
