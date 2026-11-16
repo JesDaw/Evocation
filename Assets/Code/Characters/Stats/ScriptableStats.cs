@@ -77,21 +77,40 @@ public class ScriptableStats : ScriptableObject
         xp_to_next_lvl *= Mathf.Pow((1+ExpCostMultiplier), level);
     }
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
+    private static BalanceConfig _cachedConfig;
+
     void OnValidate()
     {
-        // 1. Try to get config from BalanceConfig asset in the project
-        BalanceConfig config = null;
-        string[] guids = UnityEditor.AssetDatabase.FindAssets("t:BalanceConfig");
-        if (guids.Length > 0)
+        // Prevent AssetDatabase calls during the asset import / refresh loop
+        if (UnityEditor.EditorApplication.isUpdating || UnityEditor.BuildPipeline.isBuildingPlayer)
+            return;
+
+        // Defer execution until after OnValidate and serialization have finished
+        UnityEditor.EditorApplication.delayCall -= DelayedValidate;
+        UnityEditor.EditorApplication.delayCall += DelayedValidate;
+    }
+
+    private void DelayedValidate()
+    {
+        // Ensure the object wasn't destroyed before the delayed call fired
+        if (this == null || UnityEditor.EditorApplication.isUpdating)
+            return;
+
+        // 1. Try to get config from cached reference or AssetDatabase
+        if (_cachedConfig == null)
         {
-            string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
-            config = UnityEditor.AssetDatabase.LoadAssetAtPath<BalanceConfig>(path);
+            string[] guids = UnityEditor.AssetDatabase.FindAssets("t:BalanceConfig");
+            if (guids.Length > 0)
+            {
+                string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
+                _cachedConfig = UnityEditor.AssetDatabase.LoadAssetAtPath<BalanceConfig>(path);
+            }
         }
 
-        ScriptableStats anchor = config != null ? config.anchorUnit : null;
-        BalanceSimulationRunner.CobbDouglasElasticities el = config != null 
-            ? config.elasticities 
+        ScriptableStats anchor = _cachedConfig != null ? _cachedConfig.anchorUnit : null;
+        BalanceSimulationRunner.CobbDouglasElasticities el = _cachedConfig != null 
+            ? _cachedConfig.elasticities 
             : default;
 
         // If no BalanceConfig asset exists yet, check the scene runner
@@ -118,10 +137,18 @@ public class ScriptableStats : ScriptableObject
         if (anchor != null && anchor != this)
         {
             float anchorCost = anchor._spawnCost > 0 ? anchor._spawnCost : 50f;
-            _CalculatedPower = BalanceSimulationRunner.EvaluateEstimatedPower(this, anchor, el, anchorCost);
-            _ValueDiscrepancy = _CalculatedPower - _spawnCost;
-            Level_Total = _CalculatedPower;
-            Level_Discrepancy = _ValueDiscrepancy;
+            float newPower = BalanceSimulationRunner.EvaluateEstimatedPower(this, anchor, el, anchorCost);
+            float newDiscrepancy = newPower - _spawnCost;
+
+            // Only dirty the asset if values actually changed
+            if (!Mathf.Approximately(_CalculatedPower, newPower) || !Mathf.Approximately(_ValueDiscrepancy, newDiscrepancy))
+            {
+                _CalculatedPower = newPower;
+                _ValueDiscrepancy = newDiscrepancy;
+                Level_Total = _CalculatedPower;
+                Level_Discrepancy = _ValueDiscrepancy;
+                UnityEditor.EditorUtility.SetDirty(this);
+            }
         }
     }
 #endif
