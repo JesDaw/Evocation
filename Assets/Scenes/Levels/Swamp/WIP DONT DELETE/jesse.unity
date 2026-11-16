@@ -449,6 +449,25 @@ MonoBehaviour:
   lastRankingReport: No plan ranking captured yet.
   logRankingReport: 1
   logChoices: 1
+--- !u!114 &1731948923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1731948913}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3b77ecbc6c6c4849bc6f88f75279920, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CodeAssembly::AIDecisionTrace.AIOperationalObserver
+  enableObservation: 1
+  sampleIntervalSeconds: 2
+  maxObservations: 400
+  outcomeGainScale: 100
+  referenceCost: 50
+  referenceWaitSeconds: 20
+  denialWeight: 0.5
 --- !u!114 &1838360906 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3912903141320137415, guid: 3687d8483f0c749cda2112fe17d268e5, type: 3}
@@ -606,6 +625,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8868124601909000352, guid: 3687d8483f0c749cda2112fe17d268e5, type: 3}
       insertIndex: 3
       addedObject: {fileID: 1731948919}
+    - targetCorrespondingSourceObject: {fileID: 8868124601909000352, guid: 3687d8483f0c749cda2112fe17d268e5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1731948923}
   m_SourcePrefab: {fileID: 100100000, guid: 3687d8483f0c749cda2112fe17d268e5, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
