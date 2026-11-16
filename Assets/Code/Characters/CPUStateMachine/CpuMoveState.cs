@@ -23,6 +23,7 @@ public class CpuMoveState : CpuBaseState
         bool facingLeft = _Transform.right.x < 0;
         bool shouldStop = IsBlockedByUnit(facingLeft) || HasStoppingRangeTarget(facingLeft);
         _context._Animator.SetBool("IsRunning", !shouldStop);
+        _Body.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
     public override void UpdateState() => Moving();
